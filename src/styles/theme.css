@@ -1,0 +1,304 @@
+@theme inline {
+  /* Fonts */
+  --font-sans: var(--font-tele-neo);
+
+  /* Colors */
+  --color-*: initial;
+
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-down: var(--brand-down);
+  --color-brand-glow: var(--brand-glow);
+
+  --color-white: var(--white);
+  --color-black: var(--black);
+  --color-transparent: var(--transparent);
+
+  --color-background-primary: var(--background-primary);
+  --color-background-secondary: var(--background-secondary);
+  --color-background-secondary-2: var(--background-secondary-2);
+  --color-background-tertiary: var(--background-tertiary);
+  --color-background-quaternary: var(--background-quaternary);
+  --color-background-highlighted: var(--background-highlighted);
+
+  --color-espresso: var(--espresso);
+  --color-steamed-milk: var(--steamed-milk);
+  --color-almond-milk: var(--almond-milk);
+  --color-milk-foam: var(--milk-foam);
+  --color-origin-bean: var(--origin-bean);
+  --color-brewed-coffee: var(--brewed-coffee);
+  --color-whole-milk: var(--whole-milk);
+  --color-almond-milk: var(--almond-milk);
+
+  --color-foreground-primary: var(--foreground-primary);
+  --color-foreground-primary-hover: var(--foreground-primary-hover);
+  --color-foreground-secondary: var(--foreground-secondary);
+  --color-foreground-secondary-2: var(--foreground-secondary-2);
+  --color-foreground-tertiary: var(--foreground-tertiary);
+  --color-foreground-quaternary: var(--foreground-quaternary);
+  --color-foreground-disabled: var(--foreground-disabled);
+  --color-foreground-selected: var(--foreground-selected);
+  --color-foreground-disabled: var(--color-foreground-disabled);
+
+  --color-border-primary: var(--border-primary);
+  --color-border-secondary: var(--border-secondary);
+  --color-border-tertiary: var(--border-tertiary);
+  --color-border-disabled: var(--border-disabled);
+  --color-border-active: var(--border-active);
+
+  --color-button-disabled: var(--button-disabled);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+  --color-error-overlay: var(--error-overlay);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-link: var(--link);
+
+  /* Border Radius */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Box Shadows */
+  --shadow-dialog: var(--shadow-dialog);
+
+  /* Widths */
+  --width-sidebar-left-open: var(--sidebar-left-open-width);
+  --width-sidebar-left-closed: var(--sidebar-left-closed-width);
+  --width-sidebar-right-open: var(--sidebar-right-open-width);
+  --width-sidebar-right-closed: var(--sidebar-right-closed-width);
+
+  /* Animations */
+  --animate-fade-in: fade-in 300ms ease-in-out forwards;
+  --animate-fade-out: fade-out 300ms ease-in-out forwards;
+
+  --animate-slow-fade-in-out: fade-in-out 12s ease-in-out infinite;
+  --animate-slow-fade-in-out-delay: fade-in-out 12s ease-in-out 6s infinite;
+
+  --animate-radiate: radiate 4s linear infinite;
+
+  --animate-vertical-grow: vertical-grow 1s ease-in-out forwards; /* change ease to steps(4, end)? */
+  --animate-vertical-grow-pause-loop: vertical-grow-pause-loop 2s ease-in-out 1s
+    forwards;
+
+  --animate-text-emerge: text-emerge 30s ease-out infinite;
+  --animate-sub-text-emerge: sub-text-emerge 30s ease-out infinite;
+
+  --animate-radiate: radiate 4s linear infinite;
+  --animate-slide-up: slide-up 500ms ease-in forwards;
+  --animate-slide-down: slide-down 500ms ease-in forwards;
+
+  --animate-vertical-grow: vertical-grow 1s ease-in-out forwards; /* change ease to steps(4, end)? */
+  --animate-vertical-grow-pause-loop: vertical-grow-pause-loop 2s ease-in-out 1s
+    forwards;
+  --animate-onetime-text-emerge: onetime-text-emerge 1.6s ease-in-out forwards;
+
+  --animate-swipe-in-out: swipe-in-out ease-in-out infinite;
+  --animate-scale-up: scale-up 4s ease-in-out forwards;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in-out {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes swipe-in-out {
+  0% {
+    opacity: 0;
+    transform: translateX(100%) scale(0.4);
+  }
+  7% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  12% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  18% {
+    opacity: 0;
+    transform: translateX(-100%) scale(0.4);
+  }
+}
+
+@keyframes radiate {
+  0% {
+    transform: scale(0);
+  }
+  20% {
+    opacity: 0.5;
+  }
+  80% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-up {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-down {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes vertical-grow {
+  0% {
+    transform: scaleY(0);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes vertical-grow-pause-loop {
+  0% {
+    transform: scaleY(0);
+    opacity: 1;
+  }
+  80% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  /* 81% {
+    transform: scaleY(1);
+    opacity: 0;
+  } */
+  /* 100% {
+    transform: scaleY(0);
+    opacity: 0;
+  } */
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+/* The whole process is long, main text shows during 0% - 2%, then stays till 18% */
+@keyframes text-emerge {
+  0% {
+    opacity: 1;
+    transform: translateY(100%);
+  }
+  2%,
+  18% {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+  20%,
+  100% {
+    opacity: 1;
+    transform: translateY(100%);
+  }
+}
+
+/* This is for subtext. Subtext shows during 0.5% - 2.5%, and stays till 18% */
+@keyframes sub-text-emerge {
+  0%,
+  0.5% {
+    opacity: 1;
+    transform: translateY(100%);
+  }
+  2.5%,
+  18% {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+  20%,
+  100% {
+    opacity: 1;
+    transform: translateY(100%);
+  }
+}
+
+@keyframes swipe-in-out {
+  0% {
+    opacity: 0;
+    transform: translateX(100%) scale(0.4);
+  }
+  7% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  12% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  18% {
+    opacity: 0;
+    transform: translateX(-100%) scale(0.4);
+  }
+}
+
+@keyframes onetime-text-emerge {
+  0% {
+    opacity: 1;
+    transform: translateY(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+}
+
+@keyframes scale-up {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
