@@ -11,8 +11,8 @@ export default function ProtectConnectActivate() {
     protect: {
       title: "Protect",
       description: "Safeguard and preserve your most valuable assets.",
-      bgColor: "bg-[#14477d]",
-      textColor: "text-[#ededed]",
+      bgColor: "bg-linear-[30deg,#308477_-9.61%,#6EF4D4_158.3%]", // background: linear-gradient(30deg, #308477 -9.61%, #6EF4D4 158.3%);
+      textColor: "text-overlook-white-text",
       blocks: [
         {
           title: "Museum-grade security",
@@ -34,8 +34,10 @@ export default function ProtectConnectActivate() {
       title: "Connect",
       description:
         "Prepare, integrate, and optimize data and assets across your organization.",
-      bgColor: "bg-[#00a88e]",
-      textColor: "text-[#ededed]",
+      bgColor:
+        "bg-linear-[221deg,#8B2269_-11.55%,#7C2C73_-0.39%,#5A468D_34.94%,#3E5AA1_68.41%,#2B69B0_103.75%,#1F72B9_137.22%,#1C75BC_174.41%]",
+      // background: linear-gradient(221deg, #8B2269 -11.55%, #7C2C73 -0.39%, #5A468D 34.94%, #3E5AA1 68.41%, #2B69B0 103.75%, #1F72B9 137.22%, #1C75BC 174.41%);
+      textColor: "text-overlook-white-text",
       blocks: [
         {
           title: "Data integration",
@@ -56,8 +58,9 @@ export default function ProtectConnectActivate() {
       title: "Activate",
       description:
         "Generate new forms of value built on a trusted data foundation.",
-      bgColor: "bg-[#1b75bc]",
-      textColor: "text-[#ededed]",
+      bgColor: "bg-linear-[227deg,#6DCFF6_-22.73%,#1B75BC_87.69%]",
+      // background: linear-gradient(227deg, #6DCFF6 -22.73%, #1B75BC 87.69%);
+      textColor: "text-overlook-white-text",
       blocks: [
         {
           title: "Analytics & insights",
@@ -80,7 +83,7 @@ export default function ProtectConnectActivate() {
 
   return (
     <div
-      className={`relative flex h-full w-full flex-col items-center justify-between py-60 ${currentSection?.bgColor || "bg-[#14477d]"}`}
+      className={`relative flex h-full w-full flex-col items-center justify-between py-60 ${currentSection?.bgColor || "bg-linear-[180deg,#00A88E_0%,#1B75BC_100%]"}`}
     >
       {/* Text Content */}
       {currentSection ? (
@@ -98,7 +101,7 @@ export default function ProtectConnectActivate() {
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center text-center">
-          <h1 className="mb-8 text-[60px] leading-[1.1] tracking-[-3px] text-[#ededed]">
+          <h1 className="text-overlook-white-text mb-8 text-[60px] leading-[1.1] tracking-[-3px]">
             Protect, Connect, Activate
           </h1>
         </div>
@@ -113,7 +116,7 @@ export default function ProtectConnectActivate() {
             className={`h-41.5 w-41.5 rotate-45 rounded-lg font-medium transition-colors ${
               activeSection === key
                 ? "bg-white/20 text-white"
-                : "bg-white/10 text-white/70 hover:bg-white/15"
+                : "bg-white/10 text-white/70 active:bg-white/15"
             }`}
           >
             <p className="-rotate-45 text-2xl">{section.title}</p>

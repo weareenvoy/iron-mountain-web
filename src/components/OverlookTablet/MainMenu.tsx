@@ -6,13 +6,13 @@ export default function MainMenu() {
   const { navigateTo } = useOverlookTabletNavigation();
 
   return (
-    <div className="flex h-full w-full flex-col items-center gap-50 bg-gradient-to-b from-[#1b75bc] to-[#00a88e] py-40">
+    <div className="flex h-full w-full flex-col items-center bg-linear-[180deg,#00A88E_0%,#1B75BC_100%] py-40">
       {/* Titles */}
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl tracking-tight text-[#ededed]">
+      <div className="flex flex-col gap-13.5 text-center">
+        <h1 className="text-overlook-white-text text-[40px] tracking-tight">
           Main Menu
         </h1>
-        <p className="text-2xl text-[#ededed]">
+        <p className="text-overlook-white-text text-2xl">
           Select a section from the menu
           <br />
           to begin exploring.
@@ -20,13 +20,13 @@ export default function MainMenu() {
       </div>
 
       {/* Grid as a whole rotate 45 deg, item text rotate -45 deg */}
-      <div className="grid rotate-45 grid-cols-2 gap-4">
+      <div className="absolute top-130 left-40 grid rotate-45 grid-cols-2 gap-4">
         {/* Item 1 */}
         <button
           onClick={() => navigateTo("protectConnectActivate")}
-          className="relative flex h-65 w-65 items-center justify-center rounded-lg bg-[#ededed]"
+          className="bg-overlook-light-bg relative flex h-65 w-65 items-center justify-center rounded-lg"
         >
-          <p className="-rotate-45 text-[20px] font-semibold whitespace-pre text-[#14477d]">
+          <p className="text-overlook-dark-blue -rotate-45 text-[27px]">
             Protect, Connect,
             <br />
             Activate
@@ -36,9 +36,9 @@ export default function MainMenu() {
         {/* Item 2 */}
         <button
           onClick={() => navigateTo("insightDXP")}
-          className="relative flex h-65 w-65 items-center justify-center rounded-lg bg-[#ededed]"
+          className="bg-overlook-light-bg relative flex h-65 w-65 items-center justify-center rounded-lg"
         >
-          <p className="-rotate-45 text-[20px] font-semibold whitespace-pre text-[#14477d]">
+          <p className="text-overlook-dark-blue -rotate-45 text-[27px]">
             Iron Mountain
             <br />
             InSight® DXP
@@ -48,9 +48,9 @@ export default function MainMenu() {
         {/* Item 3 (manually placed in column 2, row 2) */}
         <button
           onClick={() => navigateTo("customerSuccess")}
-          className="relative col-start-2 row-start-2 flex h-65 w-65 items-center justify-center rounded-lg bg-[#ededed]"
+          className="bg-overlook-light-bg relative col-start-2 row-start-2 flex h-65 w-65 items-center justify-center rounded-lg"
         >
-          <p className="-rotate-45 text-[20px] font-semibold whitespace-pre text-[#14477d]">
+          <p className="text-overlook-dark-blue -rotate-45 text-[27px]">
             Customer
             <br />
             Success Story

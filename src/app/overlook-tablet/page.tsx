@@ -17,7 +17,8 @@ type OverlookTabletView =
   | "customerSuccess";
 
 export default function OverlookTablet() {
-  const [currentView, setCurrentView] = useState<OverlookTabletView>("tabletHome");
+  const [currentView, setCurrentView] =
+    useState<OverlookTabletView>("tabletHome");
 
   const renderCurrentView = () => {
     switch (currentView) {

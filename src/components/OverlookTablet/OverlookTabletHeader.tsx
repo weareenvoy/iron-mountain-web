@@ -23,7 +23,7 @@ export function OverlookTabletHeader({
       {showBackButton && (
         <button
           onClick={onBackClick || (() => navigateTo("tabletHome"))} // Use onBackClick if provided, else default to tabletHome
-          className="flex items-center gap-3 rounded-full border border-[#ededed] px-5 py-4 text-xl font-medium text-[#ededed] transition-colors hover:bg-white/10"
+          className="border-overlook-white-text text-overlook-white-text flex items-center gap-3 rounded-full border px-5 py-4 text-xl font-medium transition-colors active:bg-white/10"
         >
           {backButtonText}
           <div className="h-6 w-6">

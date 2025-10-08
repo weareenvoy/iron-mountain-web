@@ -3,10 +3,18 @@
 @plugin "tailwindcss-animate";
 
 :root {
+  /* TODO remove these magenta colors */
   --brand-primary: oklch(0.59 0.238555 1.3126);
   --brand-hover: oklch(0.43 0.1696 359.6);
   --brand-down: oklch(0.3 0.1232 1.21);
   --brand-glow: oklch(71.22% 0.194 2.73);
+
+  /* Overlook tablet colors */
+  --overlook-light-bg: #ededed;
+  --overlook-dark-blue: #14477d;
+  --overlook-teal: #00a88e;
+  --overlook-mid-blue: #1b75bc;
+  --overlook-white-text: #ededed;
 
   --white: #fff;
   --black: #000;

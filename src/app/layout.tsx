@@ -6,30 +6,27 @@ import { Toaster } from "@/components/Toaster";
 
 import "../styles/index.css";
 
-// TODO ask for font "interstate"
-const teleNeo = localFont({
+// Font configurations
+const interstate = localFont({
   src: [
     {
-      path: "../fonts/TeleNeo-Regular.woff2",
+      path: "../fonts/InterstateRegular.woff2",
       weight: "400",
       style: "normal",
     },
+  ],
+  variable: "--font-interstate",
+});
+
+const geometria = localFont({
+  src: [
     {
-      path: "../fonts/TeleNeo-Medium.woff2",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "../fonts/TeleNeo-Bold.woff2",
-      weight: "700",
-      style: "normal",
-    },
-    {
-      path: "../fonts/TeleNeo-Extrabold.woff2",
-      weight: "800",
+      path: "../fonts/Geometria.woff2",
+      weight: "400",
       style: "normal",
     },
   ],
+  variable: "--font-geometria",
 });
 
 export const metadata: Metadata = {
@@ -57,7 +54,8 @@ export default function RootLayout({
     <html lang="en" className="h-full" data-theme="dark">
       <body
         className={cn(
-          teleNeo.className,
+          interstate.variable,
+          geometria.variable,
           "text-foreground-primary bg-background-primary antialiased",
         )}
       >
