@@ -10,11 +10,13 @@
   --brand-glow: oklch(71.22% 0.194 2.73);
 
   /* Overlook tablet colors */
-  --overlook-light-bg: #ededed;
-  --overlook-dark-blue: #14477d;
-  --overlook-teal: #00a88e;
-  --overlook-mid-blue: #1b75bc;
-  --overlook-white-text: #ededed;
+  --primary-bg-grey: #ededed;
+  --primary-im-dark-blue: #14477d;
+  --primary-im-mid-blue: #1b75bc;
+  --secondary-im-teal: #00a88e;
+  --secondary-im-purple: #8a0d71;
+  --secondary-im-orange: #f7931e;
+  --secondary-im-green: #8dc13f;
 
   --white: #fff;
   --black: #000;

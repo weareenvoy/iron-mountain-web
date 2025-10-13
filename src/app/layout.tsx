@@ -56,6 +56,7 @@ export default function RootLayout({
         className={cn(
           interstate.variable,
           geometria.variable,
+          interstate.className,
           "text-foreground-primary bg-background-primary antialiased",
         )}
       >

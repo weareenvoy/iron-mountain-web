@@ -28,7 +28,7 @@ export default function Error({
       </div>
 
       <div className="flex gap-2">
-        <Button asChild size="sm" variant="secondary">
+        <Button asChild size="sm" variant="overlook-inverted">
           <Link href="/">Home</Link>
         </Button>
 

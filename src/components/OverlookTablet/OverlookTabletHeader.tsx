@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useOverlookTabletNavigation } from "../OverlookTablet/OverlookTabletNavigation";
+import { Button } from "../Button";
 
 interface OverlookTabletHeaderProps {
   showBackButton?: boolean;
@@ -21,23 +22,13 @@ export function OverlookTabletHeader({
   return (
     <div className="absolute top-0 right-0 left-0 z-10 flex h-24 items-center justify-between p-10">
       {showBackButton && (
-        <button
+        <Button
           onClick={onBackClick || (() => navigateTo("tabletHome"))} // Use onBackClick if provided, else default to tabletHome
-          className="border-overlook-white-text text-overlook-white-text flex items-center gap-3 rounded-full border px-5 py-4 text-xl font-medium transition-colors active:bg-white/10"
+          variant="overlook-outline"
+          size="sm"
         >
           {backButtonText}
-          <div className="h-6 w-6">
-            <svg viewBox="0 0 24 24" fill="none" className="h-full w-full">
-              <path
-                d="M3 12L21 12M3 12L9 6M3 12L9 18"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </div>
-        </button>
+        </Button>
       )}
 
       <div className="h-10 w-36">

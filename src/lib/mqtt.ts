@@ -6,7 +6,7 @@ import { toast } from "sonner";
 const MQTT_BROKER_URL =
   process.env.NEXT_PUBLIC_MQTT_BROKER_URL || "mqtt://localhost:1883";
 
-const CLIENT_ID = `${process.env.NODE_ENV === "production" ? "prod" : "dev"}_iron_mountain_overlook_tablet_${Math.random().toString(16).substring(2, 10)}`;
+const CLIENT_ID = `${process.env.NODE_ENV === "production" ? "prod" : "dev"}_iron_mountain_web_${Math.random().toString(16).substring(2, 10)}`;
 
 const MQTT_OPTIONS: IClientOptions = {
   clientId: CLIENT_ID,

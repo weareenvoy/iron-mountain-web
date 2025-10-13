@@ -3,12 +3,13 @@
 import Image from "next/image";
 import { FiArrowRight } from "react-icons/fi";
 import { useOverlookTabletNavigation } from "../OverlookTablet/OverlookTabletNavigation";
+import { Button } from "../Button";
 
 export default function TabletHome() {
   const { navigateTo } = useOverlookTabletNavigation();
 
   return (
-    <div className="bg-overlook-light-bg relative flex h-full w-full flex-col p-10">
+    <div className="bg-primary-bg-grey relative flex h-full w-full flex-col p-10">
       {/* Bottom Mountain Illustration */}
       <Image
         alt="Iron Mountain illustration"
@@ -19,7 +20,7 @@ export default function TabletHome() {
       />
 
       {/* Main Content */}
-      <div className="text-overlook-dark-blue flex flex-col items-center justify-center gap-16 pt-80 text-center">
+      <div className="text-primary-im-dark-blue flex flex-col items-center justify-center gap-16 pt-80 text-center">
         <h1 className="font-geometria text-6xl leading-tight tracking-tight">
           The Overlook
           <br />
@@ -32,13 +33,15 @@ export default function TabletHome() {
       </div>
 
       {/* Bottom Action Button */}
-      <button
+      <Button
         onClick={() => navigateTo("mainMenu")}
-        className="bg-overlook-light-bg text-overlook-dark-blue absolute bottom-65 left-1/2 flex -translate-x-1/2 items-center gap-5 rounded-full px-10 py-7 text-2xl shadow-lg transition-all active:bg-[#e0e0e0]"
+        variant="overlook"
+        className="absolute bottom-65 left-1/2 -translate-x-1/2 shadow-lg"
+        size="md"
       >
         Tap to begin
         <FiArrowRight className="h-6 w-6" />
-      </button>
+      </Button>
     </div>
   );
 }

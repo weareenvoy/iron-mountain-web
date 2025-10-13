@@ -4,16 +4,17 @@
   --font-interstate: var(--font-interstate);
   --font-geometria: var(--font-geometria);
 
-  
   /* Colors */
   --color-*: initial;
-  
+
   /* Overlook Tablet Colors */
-  --color-overlook-light-bg: var(--overlook-light-bg);
-  --color-overlook-dark-blue: var(--overlook-dark-blue);
-  --color-overlook-teal: var(--overlook-teal);
-  --color-overlook-mid-blue: var(--overlook-mid-blue);
-  --color-overlook-white-text: var(--overlook-white-text);
+  --color-primary-bg-grey: var(--primary-bg-grey);
+  --color-primary-im-dark-blue: var(--primary-im-dark-blue);
+  --color-primary-im-mid-blue: var(--primary-im-mid-blue);
+  --color-secondary-im-teal: var(--secondary-im-teal);
+  --color-secondary-im-purple: var(--secondary-im-purple);
+  --color-secondary-im-orange: var(--secondary-im-orange);
+  --color-secondary-im-green: var(--secondary-im-green);
 
   --color-brand-primary: var(--brand-primary);
   --color-brand-hover: var(--brand-hover);
