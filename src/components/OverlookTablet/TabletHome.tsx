@@ -2,12 +2,9 @@
 
 import Image from "next/image";
 import { FiArrowRight } from "react-icons/fi";
-import { useOverlookTabletNavigation } from "../OverlookTablet/OverlookTabletNavigation";
 import { Button } from "../Button";
 
 export default function TabletHome() {
-  const { navigateTo } = useOverlookTabletNavigation();
-
   return (
     <div className="bg-primary-bg-grey relative flex h-full w-full flex-col p-10">
       {/* Bottom Mountain Illustration */}
@@ -34,8 +31,7 @@ export default function TabletHome() {
 
       {/* Bottom Action Button */}
       <Button
-        onClick={() => navigateTo("mainMenu")}
-        variant="overlook"
+        variant="primary"
         className="absolute bottom-65 left-1/2 -translate-x-1/2 shadow-lg"
         size="md"
       >
