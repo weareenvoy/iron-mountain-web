@@ -30,69 +30,62 @@ type ViewState =
 const sections: Record<SectionKey, Section> = {
   [SectionKey.Protect]: {
     title: "Protect",
-    description: "Safeguard and preserve your most valuable assets.",
+    description: "is it from CMS or hardcoded?",
     bgColor: "bg-linear-[30deg,#308477_-9.61%,#6EF4D4_158.3%]",
     selectedColor: "bg-secondary-im-purple",
     blocks: [
       {
-        title: "Museum-grade security",
-        description:
-          "Secure content with Smart Vault, a digital repository purpose built for rich media workflows",
+        title: "fake title 1 for protect",
+        description: "fake description 1",
       },
       {
-        title: "World-class data sanitization",
-        description:
-          "Ensures your data is protected, along with on-site and off-site destruction for all media types",
+        title: "fake title 2 for protect",
+        description: "fake description 2",
       },
       {
-        title: "Secure chain of custody",
-        description:
-          "Enhanced with certifications including GDPR, SOC 2 Type II, ISO, HIPA and FEDRAMP",
+        title: "fake title 3 for protect",
+        description: "fake description 3",
       },
     ],
   },
   [SectionKey.Connect]: {
     title: "Connect",
-    description:
-      "Prepare, integrate, and optimize data and assets across your organization.",
+    description: "is it from CMS or hardcoded?",
     bgColor:
       "bg-linear-[221deg,#8B2269_-11.55%,#7C2C73_-0.39%,#5A468D_34.94%,#3E5AA1_68.41%,#2B69B0_103.75%,#1F72B9_137.22%,#1C75BC_174.41%]",
     selectedColor: "bg-secondary-im-orange",
     blocks: [
       {
-        title: "Data integration",
-        description:
-          "Seamlessly connect and integrate your data across systems.",
+        title: "fake title 1 for connect",
+        description: "fake description 1",
       },
       {
-        title: "Digital transformation",
-        description: "Modernize your data management infrastructure.",
+        title: "fake title 2 for connect",
+        description: "fake description 2",
       },
       {
-        title: "Cloud connectivity",
-        description: "Secure cloud-based data management solutions.",
+        title: "fake title 3 for connect",
+        description: "fake description 3",
       },
     ],
   },
   [SectionKey.Activate]: {
     title: "Activate",
-    description:
-      "Generate new forms of value built on a trusted data foundation.",
+    description: "is it from CMS or hardcoded?",
     bgColor: "bg-linear-[227deg,#6DCFF6_-22.73%,#1B75BC_87.69%]",
     selectedColor: "bg-secondary-im-green",
     blocks: [
       {
-        title: "Analytics & insights",
-        description: "Transform data into actionable business insights.",
+        title: "fake title 1 for activate",
+        description: "fake description 1",
       },
       {
-        title: "AI and machine learning",
-        description: "Leverage AI to unlock hidden value in your data.",
+        title: "fake title 2 for activate",
+        description: "fake description 2",
       },
       {
-        title: "Innovation acceleration",
-        description:
-          "Accelerate innovation through data-driven decision making.",
+        title: "fake title 3 for activate",
+        description: "fake description 3",
       },
     ],
   },
