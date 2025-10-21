@@ -9,13 +9,15 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        // Overlook Tablet styles
-        overlook:
+        // Generic button styles
+        primary:
           "border border-primary-bg-grey bg-primary-bg-grey text-primary-im-dark-blue hover:bg-[#e0e0e0] active:bg-[#d0d0d0] disabled:opacity-50",
-        "overlook-inverted":
+        secondary:
           "border border-primary-im-dark-blue bg-primary-im-dark-blue text-primary-bg-grey hover:bg-[#1a5a99] active:bg-[#0f3d6b] disabled:opacity-50",
-        "overlook-outline":
+        "outline-white":
           "border border-white text-white bg-transparent hover:bg-white/10 active:bg-white/20 disabled:opacity-50",
+        outline:
+          "border border-primary-im-dark-blue text-primary-im-dark-blue bg-transparent hover:bg-primary-im-mid-blue/10 active:bg-primary-im-mid-blue/20 disabled:opacity-50",
         unstyled: "",
       },
       size: {
@@ -29,7 +31,7 @@ const buttonVariants = cva(
       },
     },
     defaultVariants: {
-      variant: "overlook",
+      variant: "primary",
       size: "md",
     },
   },
