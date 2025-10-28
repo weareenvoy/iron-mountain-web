@@ -30,6 +30,7 @@ interface BasecampProviderProps {
 
 export function BasecampProvider({ children }: BasecampProviderProps) {
   const { client } = useMqtt();
+  // TODO Same question again. We might not store moment and beat here, it might come from GEC.
   const [currentMoment, setCurrentMoment] = useState<string>("ambient");
   const [currentBeatIdx, setCurrentBeatIdx] = useState<number>(0);
   const [data, setData] = useState<BasecampData | null>(null);
@@ -41,16 +42,9 @@ export function BasecampProvider({ children }: BasecampProviderProps) {
     const fetchData = async () => {
       try {
         setLoading(true);
-        // Get tourId from URL pathname
-        const pathname = window.location.pathname;
-        const tourIdMatch = pathname.match(/\/docent\/tour\/([^\/]+)/);
-        const tourId = tourIdMatch ? tourIdMatch[1] : null;
-
-        if (!tourId) {
-          throw new Error("No tourId found in URL path");
-        }
-
-        const response = await fetch(`/api/basecamp?tourId=${tourId}`);
+      
+        // TBD how to get basecamp data.
+        const response = await fetch('/api/basecamp');
         if (!response.ok) {
           const errorData = await response.json();
           throw new Error(errorData.error || "Failed to fetch basecamp data");
@@ -58,7 +52,7 @@ export function BasecampProvider({ children }: BasecampProviderProps) {
         const basecampData = await response.json();
         setData(basecampData);
         setError(null);
-        console.log(`Fetched basecamp data for tourId: ${tourId}`);
+        console.log('Fetched basecamp data');
       } catch (err) {
         setError(err instanceof Error ? err.message : "Unknown error");
         console.error("Error fetching basecamp data:", err);

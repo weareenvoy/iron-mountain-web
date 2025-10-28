@@ -3,12 +3,12 @@ import { BasecampData } from "@/types";
 
 // Tour-specific basecamp content
 const TOUR_BASECAMP_DATA: Record<string, BasecampData> = {
-  "tour-1": {
+  "tour-001": {
     welcome: {
-      text: "Welcome to Iron Mountain - Tour 1",
+      text: "Welcome to Iron Mountain",
     },
     "problem-1": {
-      text: "What's standing in your way? - Tour 1",
+      text: "What's standing in your way?",
     },
     "problem-2": [
       {
@@ -22,7 +22,7 @@ const TOUR_BASECAMP_DATA: Record<string, BasecampData> = {
       },
     ],
     "problem-3": {
-      title: "What's holding you back? - Tour 1",
+      title: "What's holding you back?",
       "challenge-1": {
         title: "Too much complexity",
         body: "body 1",
@@ -45,28 +45,28 @@ const TOUR_BASECAMP_DATA: Record<string, BasecampData> = {
       },
     },
     possibilities: {
-      title: "Discover new possibilities - Tour 1",
+      title: "Discover new possibilities",
     },
     "possibilities-a": {
-      title: "Making data accessible - Tour 1",
+      title: "Making data accessible",
       "body-1": "Body 1",
       "body-2": "Body 2",
       "body-3": "Body 3",
     },
     "possibilities-b": {
-      title: "Optimizing your assets - Tour 1",
+      title: "Optimizing your assets",
       "body-1": "Body 1",
       "body-2": "Body 2",
       "body-3": "Body 3",
     },
     "possibilities-c": {
-      title: "Unlocking new value streams - Tour 1",
+      title: "Unlocking new value streams",
       "body-1": "Body 1",
       "body-2": "Body 2",
       "body-3": "Body 3",
     },
   },
-  "tour-2": {
+  "tour-002": {
     welcome: {
       text: "Welcome to Iron Mountain - Tour 2",
     },
@@ -131,22 +131,12 @@ const TOUR_BASECAMP_DATA: Record<string, BasecampData> = {
   },
 };
 
-// TODO TBD what the endpoint look like. Does it take a tourID?
-export async function GET(request: Request) {
+// TODO How would we know which tour basecamp is on? 
+// GEC needs to know the tourID, basecamp asks for it first, then request the tour's basecamp data??
+export async function GET() {
   try {
-    const { searchParams } = new URL(request.url);
-    const tourId = searchParams.get("tourId");
-
-    if (!tourId) {
-      return NextResponse.json(
-        { error: "tourId is required" },
-        { status: 400 },
-      );
-    }
-
-    // Temporary code. For testing purposes, if no data, return tour-001's data
-    const basecampData =
-      TOUR_BASECAMP_DATA[tourId] || TOUR_BASECAMP_DATA["tour-001"];
+    // Temporary code. Just return tour-001's data for now.
+    const basecampData = TOUR_BASECAMP_DATA["tour-001"];
     return NextResponse.json(basecampData);
   } catch (error) {
     console.error("error fetching basecamp data", error);

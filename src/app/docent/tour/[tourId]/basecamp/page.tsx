@@ -41,7 +41,7 @@ export default function BasecampPage({ params }: BasecampPageProps) {
   return (
     <MomentsAndBeats
       tourId={tourId}
-      title="Basecamp"
+      exhibitType="basecamp"
       content={BASECAMP_CONTENT}
     />
   );

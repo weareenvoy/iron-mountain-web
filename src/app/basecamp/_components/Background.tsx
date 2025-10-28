@@ -8,7 +8,7 @@ const TIME_MAPPING: Record<string, number[]> = {
   // Comment it out for now, because the ambient state might be a separate looping gif, not a part of the main video.
   // ambient: [8], // 1 beat: 0s -> 8s.
   welcome: [4, 10, 16, 26],
-  problem: [29, 46, 57, 68],
+  problem: [29, 48, 57, 68],
   possibilities: [72, 78, 88, 96, 103],
   ascend: [107, 120, 138],
 };
@@ -42,6 +42,8 @@ const getBeatTimeRange = (section: string, beatIndex: number) => {
 export default function Background() {
   const mainVideoRef = useRef<HTMLVideoElement>(null);
   const ambientVideoRef = useRef<HTMLVideoElement>(null);
+
+  // The moment and beat might come from GEC.
   const { currentMoment, currentBeatIdx } = useBasecamp();
   const [isSeeking, setIsSeeking] = useState<boolean>(false);
 
@@ -60,8 +62,7 @@ export default function Background() {
 
   // Video playback logic
   useEffect(() => {
-
-    // Ambient 
+    // Ambient
     if (currentMoment === "ambient") {
       // Pause the main video if it's playing.
       if (mainVideoRef.current) mainVideoRef.current.pause();

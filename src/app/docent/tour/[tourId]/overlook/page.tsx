@@ -58,7 +58,7 @@ export default function OverlookPage({ params }: OverlookPageProps) {
   return (
     <MomentsAndBeats
       tourId={tourId}
-      title="Overlook"
+      exhibitType="overlook"
       content={OVERLOOK_CONTENT}
     />
   );
