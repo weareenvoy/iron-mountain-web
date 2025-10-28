@@ -19,6 +19,10 @@ export default function Home() {
       title: "Kiosk 1",
       route: "/kiosk-1",
     },
+    {
+      title: "Basecamp App",
+      route: "/basecamp",
+    },
   ];
 
   return (

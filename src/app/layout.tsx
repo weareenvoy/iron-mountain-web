@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { cn } from "@/lib/utils";
-import { MqttProvider } from "@/components/MqttProvider";
+import { MqttProvider } from "@/providers/MqttProvider";
 import { Toaster } from "@/components/Toaster";
 
 import "../styles/index.css";

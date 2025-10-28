@@ -1,7 +1,4 @@
 import mqtt, { MqttClient, IClientOptions } from "mqtt";
-import { StateData, ToastData } from "@/types";
-import pubsub from "pubsub-js";
-import { toast } from "sonner";
 
 const MQTT_BROKER_URL =
   process.env.NEXT_PUBLIC_MQTT_BROKER_URL || "mqtt://localhost:1883";
@@ -13,20 +10,11 @@ const MQTT_OPTIONS: IClientOptions = {
   // connectTimeout: 2 * 1000,
 };
 
-// TODO all topic names and commands are TBD. use "xxx" as placeholder.
-export enum MqttCommand {
-  GetState = "get_state",
-}
+// TODO. All the commands and topics are TBD.
+export enum MqttCommand {}
+// GetState = "get_state",
 
-export enum MqttTopic {
-  StateData = "xxx/state_data",
-  Toast = "xxx/toast", // we might receive toast like "something is successfully updated" and we could show them in docent app.
-  Error = "xxx/error", // error, warning, info topics are for internal debugging
-  Warning = "xxx/warning",
-  Info = "xxx/info",
-}
-
-const subscriptionTopics = Object.values(MqttTopic);
+// No global topics - each route handles its own subscriptions
 
 export type MqttError = Error | mqtt.ErrorWithReasonCode;
 
@@ -36,22 +24,16 @@ type PublishArgsConfig = {
 };
 
 export type MqttServiceConfig = {
-  onReceiveState?: (state: StateData) => void;
-  onReceiveToast?: (toast: ToastData) => void;
   onConnectionChange?: (isConnected: boolean) => void;
   onError?: (error: MqttError) => void;
 };
 
 export class MqttService {
   private client: MqttClient | null = null;
-  private onReceiveState?: MqttServiceConfig["onReceiveState"];
-  private onReceiveToast?: MqttServiceConfig["onReceiveToast"];
   private onConnectionChange?: MqttServiceConfig["onConnectionChange"];
   private onError?: MqttServiceConfig["onError"];
 
   constructor(config: MqttServiceConfig) {
-    this.onReceiveState = config.onReceiveState;
-    this.onReceiveToast = config.onReceiveToast;
     this.onConnectionChange = config.onConnectionChange;
     this.onError = config.onError;
 
@@ -80,7 +62,7 @@ export class MqttService {
       this.onConnectionChange?.(false);
     });
 
-    this.client.on("message", this.handleReceiveMessage.bind(this));
+    // No global message handling - each route handles its own messages
   }
 
   public disconnect(): void {
@@ -99,45 +81,13 @@ export class MqttService {
         console.error(`Subscription to ${topic} failed:`, err);
         return;
       }
-
       console.info(`Subscribed to ${topic}`);
-
-      // TBD. We might need this to get initial state, or we would use regular fetch to get all data needed.
-      if (topic === MqttTopic.StateData) {
-        this.client?.publish(
-          "xxx/command",
-          JSON.stringify({ command_id: MqttCommand.GetState }),
-        );
-      }
     });
   }
 
   private subscribeToTopics(): void {
-    for (const topic of subscriptionTopics) {
-      this.subscribe(topic);
-    }
-  }
-
-  private handleReceiveMessage(topic: string, message: Buffer): void {
-    const parsedMessage = JSON.parse(message.toString());
-
-    console.info("Received message:", topic, parsedMessage);
-    pubsub.publish(topic, parsedMessage);
-
-    switch (topic) {
-      case MqttTopic.StateData:
-        this.onReceiveState?.(parsedMessage);
-        break;
-      case MqttTopic.Toast:
-        this.onReceiveToast?.(parsedMessage);
-        break;
-
-      default:
-        console.info("Received unknown message:", parsedMessage);
-        toast.warning(
-          `DEBUG: ${parsedMessage.error ?? "Unknown message received"}`,
-        );
-    }
+    // No global topics - each route handles its own subscriptions
+    console.info("MQTT connected - ready for custom subscriptions");
   }
 
   public publish(
@@ -173,7 +123,34 @@ export class MqttService {
     );
   }
 
-  public getCurrentState(config?: PublishArgsConfig): void {
-    this.publishCommand(MqttCommand.GetState, undefined, config);
+  // Custom subscription methods for route-specific topics
+  public subscribeToTopic(
+    topic: string,
+    handler: (message: Buffer) => void,
+  ): void {
+    this.client?.subscribe(topic, (err) => {
+      if (err) {
+        console.error(`Failed to subscribe to ${topic}:`, err);
+        return;
+      }
+      console.info(`Subscribed to custom topic: ${topic}`);
+    });
+
+    // Store the handler for this topic
+    this.client?.on("message", (receivedTopic, message) => {
+      if (receivedTopic === topic) {
+        handler(message);
+      }
+    });
+  }
+
+  public unsubscribeFromTopic(topic: string): void {
+    this.client?.unsubscribe(topic, (err) => {
+      if (err) {
+        console.error(`Failed to unsubscribe from ${topic}:`, err);
+        return;
+      }
+      console.info(`Unsubscribed from custom topic: ${topic}`);
+    });
   }
 }
