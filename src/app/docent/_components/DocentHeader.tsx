@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Button } from "@/components/Button";
 
 interface DocentHeaderProps {
   leftButton?: {
@@ -14,15 +15,20 @@ interface DocentHeaderProps {
 
 export function DocentHeader({ leftButton }: DocentHeaderProps) {
   return (
-    <div className="absolute top-0 left-0 flex h-37.5 w-full items-center justify-between px-10">
+    <div className="absolute top-0 left-0 flex h-30 w-full items-center justify-between px-5">
       {/* Left Button */}
       {leftButton && (
-        <Link
-          href={leftButton.href}
-          className="text-primary-bg-grey border-primary-bg-grey flex items-center gap-3 rounded-full border px-5 py-4 text-[20px] transition-opacity hover:opacity-80"
-        >
-          {leftButton.icon}
-          <span>{leftButton.text}</span>
+        <Link href={leftButton.href}>
+          <Button
+            variant="outline-light-grey"
+            size="sm"
+            className="flex h-13 items-center gap-3.5 px-6"
+          >
+            {leftButton.icon}
+            <span className="text-[20px] h-6.25">
+              {leftButton.text}
+            </span>
+          </Button>
         </Link>
       )}
       {!leftButton && <div />}

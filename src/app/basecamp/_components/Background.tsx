@@ -6,11 +6,11 @@ import { useBasecamp } from "./BasecampProvider";
 // Time mapping for bullet point moments.
 const TIME_MAPPING: Record<string, number[]> = {
   // Comment it out for now, because the ambient state might be a separate looping gif, not a part of the main video.
-  // ambient: [8], // 1 beat: 0s -> 8s.
-  welcome: [4, 10, 16, 26],
-  problem: [29, 48, 57, 68],
-  possibilities: [72, 78, 88, 96, 103],
-  ascend: [107, 120, 138],
+  // ambient: [8],
+  welcome: [1, 7, 12, 22],
+  problem: [26, 45, 53, 66],
+  possibilities: [70, 75, 85, 93, 100],
+  ascend: [103, 117, 134],
 };
 
 const sectionOrder = ["welcome", "problem", "possibilities", "ascend"];
@@ -44,26 +44,47 @@ export default function Background() {
   const ambientVideoRef = useRef<HTMLVideoElement>(null);
 
   // The moment and beat might come from GEC.
-  const { currentMoment, currentBeatIdx } = useBasecamp();
+  const { exhibitState } = useBasecamp();
+  const { momentId, beatIdx } = exhibitState;
   const [isSeeking, setIsSeeking] = useState<boolean>(false);
 
-  // Preload and start ambient video on mount
   useEffect(() => {
-    if (ambientVideoRef.current) {
-      ambientVideoRef.current.load();
-      ambientVideoRef.current.play().catch((err) => {
-        console.error("Error playing ambient video on mount:", err);
-      });
-    }
-    if (mainVideoRef.current) {
-      mainVideoRef.current.load();
-    }
+    const mainVideo = mainVideoRef.current;
+    const ambientVideo = ambientVideoRef.current;
+    if (!mainVideo || !ambientVideo) return;
+
+    // For dev testing, read it from an S3 bucket. Where will this be hosted in prod?
+    const mainVideoUrl = `${process.env.NEXT_PUBLIC_CDN_HOST_NAME}/BASECAMP-FPO-content.webm`;
+    const ambientVideoUrl = `${process.env.NEXT_PUBLIC_CDN_HOST_NAME}/BASECAMP-FPO-loop.webm`;
+
+    // Ambient: simple
+    ambientVideo.src = ambientVideoUrl;
+    ambientVideo.load();
+    ambientVideo.play().catch(() => {});
+
+    // Main: preload
+    mainVideo.src = mainVideoUrl;
+    mainVideo.preload = "auto";
+    mainVideo.load();
+
+    // TODO Track preload progress???
+    const onProgress = () => {
+      if (mainVideo.buffered.length > 0 && mainVideo.duration) {
+        const percent = (mainVideo.buffered.end(0) / mainVideo.duration) * 100;
+        console.log(`main vid preload: ${percent.toFixed(1)}%`);
+      }
+    };
+    mainVideo.addEventListener("progress", onProgress);
+
+    return () => {
+      mainVideo.removeEventListener("progress", onProgress);
+    };
   }, []);
 
   // Video playback logic
   useEffect(() => {
     // Ambient
-    if (currentMoment === "ambient") {
+    if (momentId === "ambient") {
       // Pause the main video if it's playing.
       if (mainVideoRef.current) mainVideoRef.current.pause();
       // Play the looping ambient video.
@@ -76,7 +97,7 @@ export default function Background() {
     } else {
       // Non-ambient: play the main video.
       if (ambientVideoRef.current) ambientVideoRef.current.pause();
-      const timeRange = getBeatTimeRange(currentMoment, currentBeatIdx);
+      const timeRange = getBeatTimeRange(momentId, beatIdx);
       if (
         mainVideoRef.current &&
         timeRange &&
@@ -88,17 +109,17 @@ export default function Background() {
           console.error("Error playing main video:", err);
         });
         console.log(
-          `Seeking to ${timeRange.start}s for ${currentMoment} beat ${currentBeatIdx}`,
+          `Seeking to ${timeRange.start}s for ${momentId} beat ${beatIdx}`,
         );
       } else {
         console.error("Invalid time range or video not ready:", {
-          currentMoment,
-          currentBeatIdx,
+          momentId,
+          beatIdx,
           timeRange,
         });
       }
     }
-  }, [currentMoment, currentBeatIdx]);
+  }, [momentId, beatIdx]);
 
   // Handle main video seeking
   useEffect(() => {
@@ -116,29 +137,24 @@ export default function Background() {
 
   // Handle main video time update for non-ambient sections
   const handleVideoTimeUpdate = () => {
-    if (!mainVideoRef.current || isSeeking || currentMoment === "ambient")
-      return;
+    if (!mainVideoRef.current || isSeeking || momentId === "ambient") return;
 
     const currentTime = mainVideoRef.current.currentTime;
-    const timeRange = getBeatTimeRange(currentMoment, currentBeatIdx);
+    const timeRange = getBeatTimeRange(momentId, beatIdx);
 
     if (timeRange && currentTime >= timeRange.end - 0.1) {
       mainVideoRef.current.pause();
-      console.log(
-        `Paused at ${currentTime}s for ${currentMoment} beat ${currentBeatIdx}`,
-      );
+      console.log(`Paused at ${currentTime}s for ${momentId} beat ${beatIdx}`);
     }
   };
 
   return (
     <>
+      {/* Video src is set in useEffect above */}
       {/* Ambient video (looping) */}
       <video
         ref={ambientVideoRef}
-        className={`h-full w-full object-cover ${currentMoment === "ambient" ? "block" : "hidden"}`}
-        // Ask where will this be hosted?
-        src={`${process.env.NEXT_PUBLIC_CDN_HOST_NAME}/basecamp_loop.webm`}
-        // src="/videos/IRM_Basecamp_Motion_R2_part_loop.mp4"
+        className={`h-full w-full object-cover ${momentId === "ambient" ? "block" : "hidden"}`}
         loop
         autoPlay
         muted
@@ -147,9 +163,7 @@ export default function Background() {
       {/* Main video background */}
       <video
         ref={mainVideoRef}
-        className={`h-full w-full object-cover ${currentMoment !== "ambient" ? "block" : "hidden"}`}
-        src={`${process.env.NEXT_PUBLIC_CDN_HOST_NAME}/basecamp_content.webm`}
-        // src="/videos/IRM_Basecamp_Motion_R2_part_content.mp4"
+        className={`h-full w-full object-cover ${momentId !== "ambient" ? "block" : "hidden"}`}
         onTimeUpdate={handleVideoTimeUpdate}
         autoPlay={false}
         muted
@@ -157,11 +171,11 @@ export default function Background() {
 
       {/* Debug info */}
       <div className="absolute top-4 left-4 rounded bg-black/50 p-2 text-white">
-        <p>Moment: {currentMoment}</p>
-        <p>BeatIdx: {currentBeatIdx}</p>
+        <p>Moment: {momentId}</p>
+        <p>BeatIdx: {beatIdx}</p>
         <p>
           Time:{" "}
-          {(currentMoment === "ambient"
+          {(momentId === "ambient"
             ? ambientVideoRef.current?.currentTime
             : mainVideoRef.current?.currentTime
           )?.toFixed(1)}

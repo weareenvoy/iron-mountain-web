@@ -11,7 +11,10 @@ const MQTT_OPTIONS: IClientOptions = {
 };
 
 // TODO. All the commands and topics are TBD.
-export enum MqttCommand {}
+export enum MqttCommand {
+  EndTour = "end_tour",
+  ResetState = "reset_state",
+}
 // GetState = "get_state",
 
 // No global topics - each route handles its own subscriptions
@@ -114,7 +117,8 @@ export class MqttService {
     console.info("Sending command:", command, args);
 
     this.publish(
-      "gec/coffee-app/command",
+      // This name is totally made up.
+      "gec/iron-mountain-web/command",
       JSON.stringify({
         command_id: command,
         command_args: args,
@@ -122,6 +126,33 @@ export class MqttService {
       config,
     );
   }
+
+
+  // TODO These 2 are copied over from tmo. They are only for docent app, should they live here?
+  public endTour(config?: PublishArgsConfig): void {
+    // Send immediately (not debounced) to avoid being canceled by navigation
+    console.info("Sending command:", MqttCommand.EndTour);
+    this.publish(
+      "gec/docent/command",
+      JSON.stringify({
+        command_id: MqttCommand.EndTour,
+        command_args: undefined,
+      }),
+      config,
+    );
+  }
+  // it's called resetState, but it's actually loading a tour.
+  public resetState(
+    tourId: string,
+    config?: PublishArgsConfig,
+  ): void {
+    this.publishCommand(
+      MqttCommand.ResetState,
+      { tour_id: tourId },
+      config,
+    );
+  }
+
 
   // Custom subscription methods for route-specific topics
   public subscribeToTopic(

@@ -4,40 +4,34 @@ import { DocentProvider } from "./_components/DocentProvider";
 import { SettingsDrawer } from "./_components/SettingsDrawer";
 import { useDocent } from "./_components/DocentProvider";
 import { usePathname } from "next/navigation";
-import { FiCast, FiSettings } from "react-icons/fi";
+import { FiSettings } from "react-icons/fi";
 import { Button } from "@/components/Button";
 
 function DocentLayoutContent({ children }: { children: React.ReactNode }) {
-  const { isSettingsOpen, setIsSettingsOpen } = useDocent();
+  const { isSettingsOpen, setIsSettingsOpen, isLoading, isConnected } =
+    useDocent();
   const pathname = usePathname();
   const isHomePage = pathname === "/docent";
-  const showCastButton =
-    pathname.includes("/overlook") || pathname.includes("/summit-room");
+
+  // Just a tiny UI improvement. Only show settings button when app is ready.
+  const isReady = !isLoading && isConnected;
 
   return (
-    <div className="relative flex h-[1133px] w-[744px] items-center justify-center bg-linear-[348deg,#00A88E_0%,#1B75BC_100%]">
+    <div className="relative flex h-[1133px] w-[744px] items-center justify-center overflow-hidden bg-linear-[348deg,#00A88E_0%,#1B75BC_100%]">
       {children}
 
-      {/* Global cast button, only show when it's overlook or summit room */}
-      {showCastButton && (
-        <div className="absolute top-[188px] left-10 z-50">
-          <Button variant="outline-white" className="h-18 w-18 rounded-full">
-            <FiCast />
-          </Button>
-        </div>
-      )}
-
       {/* Global Settings Button - Show on all pages except home */}
-      {!isHomePage && (
-        <div className="absolute top-[188px] right-10 z-50">
+      {isReady && !isHomePage && (
+        <div className="absolute top-34 right-5 z-50">
           <Button
             onClick={() => setIsSettingsOpen(true)}
-            variant="outline-white"
-            className="h-18 w-37"
+            variant="outline-light-grey"
+            size="sm"
+            className="h-13 w-40 gap-3.5"
           >
             <FiSettings size={24} />
             {/* When someone clicks it, asks for data (each exhibit's status) */}
-            <span className="text-[20px]">Settings</span>
+            <span className="h-6.25 text-xl">Settings</span>
           </Button>
         </div>
       )}

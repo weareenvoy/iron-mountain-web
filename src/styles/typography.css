@@ -52,8 +52,3 @@
   }
 }
 
-@layer components {
-  .font-page-title {
-    @apply text-brand-primary text-7xl leading-tight font-extrabold;
-  }
-}

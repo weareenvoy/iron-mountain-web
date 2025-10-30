@@ -31,7 +31,7 @@ const SUMMIT_ROOM_SLIDES = [
   },
   {
     id: 3,
-    title: "Slide 3 Content",
+    title: "Considering possibilities",
     borderColor: "border-secondary-im-purple",
   },
   {
@@ -67,7 +67,7 @@ export default function SummitRoomPage({ params }: SummitRoomPageProps) {
   const handlePrevious = () => {
     if (currentSlideIdx > 0) {
       setCurrentSlideIdx(currentSlideIdx - 1);
-      // TODO: This would send MQTT message to change slide
+      // This would send MQTT message to change slide
     }
   };
 
@@ -101,17 +101,17 @@ export default function SummitRoomPage({ params }: SummitRoomPageProps) {
       />
 
       {/* Header */}
-      <div className="mt-45 flex flex-col items-center gap-3">
-        <h1 className="text-primary-bg-grey text-center text-[60px] leading-[72px] font-normal tracking-[-0.05em]">
+      <div className="text-primary-bg-grey mt-35 flex flex-col items-center gap-[23px]">
+        <h1 className="text-center text-4xl leading-loose tracking-[-1.8px]">
           Summit room
         </h1>
-        <p className="text-primary-bg-grey text-center text-[28px] leading-[34px] font-normal tracking-[-0.05em]">
+        <p className="text-center text-xl leading-loose tracking-[-1px]">
           {currentTour?.guestName || "Tour"}
         </p>
       </div>
 
       {/* Main Content Area */}
-      <div className="mt-20 flex items-center justify-center">
+      <div className="mt-46 flex items-center justify-center">
         {isJourneyMapLaunched ? (
           <Swiper
             modules={[Navigation, Pagination, A11y]}
@@ -126,7 +126,7 @@ export default function SummitRoomPage({ params }: SummitRoomPageProps) {
               setCurrentSlideIdx(swiper.activeIndex);
             }}
             initialSlide={currentSlideIdx}
-            className="h-[441px] w-[746px]" // Make the area bigger so the box shadow is visible? Is there a better way than this?
+            className="h-[361px] w-[605px]" // Make the area bigger so the box shadow is visible
             allowTouchMove={true}
             keyboard={{
               enabled: true,
@@ -134,28 +134,28 @@ export default function SummitRoomPage({ params }: SummitRoomPageProps) {
           >
             {SUMMIT_ROOM_SLIDES.map((slide) => (
               <SwiperSlide key={slide.id}>
-                <div className="bg-primary-bg-grey relative ml-5 flex h-[391px] w-[696px] flex-col items-center justify-center rounded-[20px] shadow-[20px_20px_20px_0px_rgba(94,94,94,0.25)]">
+                <div className="bg-primary-bg-grey relative ml-5 flex h-[313px] w-[557px] flex-col items-center justify-center rounded-[16px] shadow-[16px_16px_16px_0px_rgba(94,94,94,0.25)]">
                   {slide.id === 1 ? (
                     <div className="flex h-full w-full flex-col items-center justify-center gap-8">
-                      <h2 className="text-center text-[32px] leading-[38px] font-normal tracking-[-0.05em] text-black">
+                      <h2 className="text-center text-2xl leading-[normal] tracking-[-1.2px] text-black">
                         {slide.title}
                       </h2>
                       <Image
                         src="/images/summit-root-diamonds-bg.svg"
                         alt="Journey Map Image"
-                        width={208}
-                        height={187}
+                        width={177}
+                        height={159}
                         className="absolute right-0 bottom-0"
                       />
                     </div>
                   ) : (
                     <div
-                      className={`${slide.borderColor} flex items-center gap-3 rounded-full border-4 p-10 px-6 py-7`}
+                      className={`${slide.borderColor} flex items-center gap-5 rounded-full border-2 px-8 py-5`}
                     >
                       <div
-                        className={`${slide.borderColor} h-5.5 w-5.5 rotate-45 border`}
+                        className={`${slide.borderColor} h-4.25 w-4.25 rotate-45 border`}
                       ></div>
-                      <h2 className="text-[32px] leading-[38px] font-normal tracking-[-0.05em] text-black">
+                      <h2 className="text-xl leading-[normal] tracking-[-1.2px] text-black">
                         {slide.title}
                       </h2>
                     </div>
@@ -166,9 +166,13 @@ export default function SummitRoomPage({ params }: SummitRoomPageProps) {
           </Swiper>
         ) : (
           <div className="relative mt-50 flex">
-            <div className="border-primary-im-light-blue absolute top-1/2 left-1/2 h-120 w-120 -translate-x-1/2 -translate-y-1/2 rotate-45 rounded-[40px] border-2" />
-            <Button onClick={handleLaunchJourneyMap} className="relative">
-              <span className="text-primary-im-dark-blue text-[24px] font-normal tracking-[-0.05em]">
+            <div className="border-primary-im-light-blue absolute top-1/2 left-1/2 h-82 w-82 -translate-x-1/2 -translate-y-1/2 rotate-45 rounded-[40px] border-2" />
+            <Button
+              onClick={handleLaunchJourneyMap}
+              size="sm"
+              className="relative h-17.5 w-70"
+            >
+              <span className="text-primary-im-dark-blue text-xl tracking-[-0.05em]">
                 Launch journey map
               </span>
               <FiArrowRight />
@@ -179,7 +183,7 @@ export default function SummitRoomPage({ params }: SummitRoomPageProps) {
 
       {/* Bottom buttons and counter */}
       {isJourneyMapLaunched && (
-        <div className="absolute bottom-[105px] left-1/2 flex translate-x-[-50%] flex-col items-center justify-center gap-20">
+        <div className="absolute bottom-17.5 left-1/2 flex translate-x-[-50%] flex-col items-center justify-center gap-20">
           {/* Diamond slide indicator */}
           <div className="flex items-center justify-center gap-5">
             {SUMMIT_ROOM_SLIDES.map((_, index) => {
@@ -189,7 +193,7 @@ export default function SummitRoomPage({ params }: SummitRoomPageProps) {
                 <button
                   onClick={() => handleSlideIndicatorClick(index)}
                   key={slideNumber}
-                  className={`border-primary-bg-grey h-4.75 w-4.75 rotate-45 rounded-[2px] border transition-colors ${
+                  className={`border-primary-bg-grey relative h-5.5 w-5.5 rotate-45 rounded-[2px] border-2 transition-colors ${
                     isActive ? "bg-primary-bg-grey" : "transparent"
                   }`}
                 />
@@ -202,17 +206,17 @@ export default function SummitRoomPage({ params }: SummitRoomPageProps) {
             <Button
               onClick={handlePrevious}
               disabled={currentSlideIdx === 0}
-              className="h-[88px] w-[88px] rounded-full"
+              className="size-[80px] rounded-full"
             >
-              <FiArrowLeft />
+              <FiArrowLeft className="size-[36px]" />
             </Button>
             {/* Next Button */}
             <Button
               onClick={handleNext}
               disabled={currentSlideIdx === SUMMIT_ROOM_SLIDES.length - 1}
-              className="h-[88px] w-[88px] rounded-full"
+              className="size-[80px] rounded-full"
             >
-              <FiArrowRight />
+              <FiArrowRight className="size-[36px]" />
             </Button>
           </div>
         </div>

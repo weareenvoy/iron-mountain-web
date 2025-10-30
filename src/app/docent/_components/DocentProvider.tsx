@@ -9,7 +9,7 @@ import {
 } from "react";
 import { useMqtt } from "@/providers/MqttProvider";
 import { usePathname } from "next/navigation";
-import { Tour } from "@/types";
+import { Tour, ExhibitState } from "@/types";
 
 export interface DocentContextType {
   allTours: Tour[];
@@ -21,16 +21,13 @@ export interface DocentContextType {
   refreshTours: () => Promise<void>;
   isSettingsOpen: boolean;
   setIsSettingsOpen: (open: boolean) => void;
-  // Do we store navigation state here?
-  basecampMomentIdx: number;
-  basecampBeatIdx: number;
-  overlookMomentIdx: number;
-  overlookBeatIdx: number;
+
+  // TODO store 3 exhibits' states here?
+  basecampExhibitState: ExhibitState;
+  overlookExhibitState: ExhibitState;
   summitRoomSlideIdx: number;
-  setBasecampMomentIdx: (idx: number) => void;
-  setBasecampBeatIdx: (idx: number) => void;
-  setOverlookMomentIdx: (idx: number) => void;
-  setOverlookBeatIdx: (idx: number) => void;
+  setBasecampExhibitState: (state: Partial<ExhibitState>) => void;
+  setOverlookExhibitState: (state: Partial<ExhibitState>) => void;
   setSummitRoomSlideIdx: (idx: number) => void;
 }
 
@@ -49,19 +46,25 @@ export function DocentProvider({ children }: DocentProviderProps) {
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
-  // Navigation state
-  // TODO. Do they live here? Or when we click something, we send to GEC, and GEC stores them.
-  const [basecampMomentIdx, setBasecampMomentIdx] = useState(0);
-  const [basecampBeatIdx, setBasecampBeatIdx] = useState(0);
-  const [overlookMomentIdx, setOverlookMomentIdx] = useState(0);
-  const [overlookBeatIdx, setOverlookBeatIdx] = useState(0);
+  // Beats for basecamp overlook, and slides for summit room.
+  const [basecampExhibitState, setBasecampExhibitStateRaw] =
+    useState<ExhibitState>({ momentId: "ambient", beatIdx: 0 });
+  const [overlookExhibitState, setOverlookExhibitStateRaw] =
+    useState<ExhibitState>({ momentId: "ambient", beatIdx: 0 });
   const [summitRoomSlideIdx, setSummitRoomSlideIdx] = useState(0);
+
+  const setBasecampExhibitState = (state: Partial<ExhibitState>) => {
+    setBasecampExhibitStateRaw((prev) => ({ ...prev, ...state }));
+  };
+  const setOverlookExhibitState = (state: Partial<ExhibitState>) => {
+    setOverlookExhibitStateRaw((prev) => ({ ...prev, ...state }));
+  };
 
   // Get tour data.
   const fetchTours = async () => {
     setIsLoading(true);
     try {
-      // TODO fetch schedule tours. Endpoint name and data structure is TBD.
+      // fetch schedule tours. Endpoint name and data structure is TBD.
       const response = await fetch("/api/tours", { cache: "no-store" });
       if (!response.ok) {
         throw new Error("Failed to fetch tours");
@@ -107,20 +110,11 @@ export function DocentProvider({ children }: DocentProviderProps) {
   useEffect(() => {
     if (currentTour) {
       console.log("Tour changed, resetting navigation states");
-      setBasecampMomentIdx(0);
-      setBasecampBeatIdx(0);
-      setOverlookMomentIdx(0);
-      setOverlookBeatIdx(0);
+      setBasecampExhibitStateRaw({ momentId: "ambient", beatIdx: 0 });
+      setOverlookExhibitStateRaw({ momentId: "ambient", beatIdx: 0 });
       setSummitRoomSlideIdx(0);
     }
-  }, [
-    currentTour,
-    setBasecampMomentIdx,
-    setBasecampBeatIdx,
-    setOverlookMomentIdx,
-    setOverlookBeatIdx,
-    setSummitRoomSlideIdx,
-  ]);
+  }, [currentTour]);
 
   return (
     <DocentContext.Provider
@@ -134,17 +128,11 @@ export function DocentProvider({ children }: DocentProviderProps) {
         refreshTours: fetchTours,
         isSettingsOpen,
         setIsSettingsOpen,
-
-        // Same question as above. Do they live here.
-        basecampMomentIdx,
-        basecampBeatIdx,
-        overlookMomentIdx,
-        overlookBeatIdx,
+        basecampExhibitState,
+        overlookExhibitState,
         summitRoomSlideIdx,
-        setBasecampMomentIdx,
-        setBasecampBeatIdx,
-        setOverlookMomentIdx,
-        setOverlookBeatIdx,
+        setBasecampExhibitState,
+        setOverlookExhibitState,
         setSummitRoomSlideIdx,
       }}
     >

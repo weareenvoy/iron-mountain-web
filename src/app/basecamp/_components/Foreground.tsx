@@ -18,9 +18,10 @@ const getDataKey = (moment: string, beatIdx: number): string => {
 };
 
 export default function Foreground() {
-  const { data, currentMoment, currentBeatIdx } = useBasecamp();
+  const { data, exhibitState } = useBasecamp();
+  const { momentId, beatIdx } = exhibitState;
 
-  const dataKey = getDataKey(currentMoment, currentBeatIdx);
+  const dataKey = getDataKey(momentId, beatIdx);
   const content = data && dataKey && data[dataKey as keyof BasecampData];
 
   if (!content) {

@@ -11,6 +11,12 @@ export interface StateData {
   light_controls: LightControlPreset;
 }
 
+// Navigation state for exhibits (basecamp, overlook)
+export interface ExhibitState {
+  momentId: string; // e.g., "ambient", "welcome", "case-study"
+  beatIdx: number;
+}
+
 // Used in MomentsAndBeats component.
 // A bullet point row is a moment, each moment has multiple beats.
 export interface Moment {

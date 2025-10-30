@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 import { Tour } from "@/types";
 
-// Mock data for docent schedule page. There might not be an "end time" field.
+// Mock data for docent schedule page. 
+// 1. There might not be an "end time" field. 2. date and startTime could be 1 field?
 const MOCK_TOURS: Tour[] = [
   {
     id: "tour-001",
     title: "fake title 1",
-    guestName: "fake co 1",
+    guestName: "Herman Miller",
     guestLogo: null,
     date: "2025-09-20",
     startTime: "07:00 AM",
@@ -15,7 +16,7 @@ const MOCK_TOURS: Tour[] = [
   {
     id: "tour-002",
     title: "fake title 2",
-    guestName: "fake co 2",
+    guestName: "PMU Umbrella Pharmaceuticals",
     guestLogo: null,
     date: "2025-09-20",
     startTime: "12:00 PM",
@@ -24,7 +25,7 @@ const MOCK_TOURS: Tour[] = [
   {
     id: "tour-003",
     title: "fake title 3",
-    guestName: "fake co 3",
+    guestName: "Boyer-Boyer",
     guestLogo: null,
     date: "2025-09-27",
     startTime: "03:30 PM",
@@ -33,7 +34,7 @@ const MOCK_TOURS: Tour[] = [
   {
     id: "tour-004",
     title: "fake title 4",
-    guestName: "fake co 4",
+    guestName: "Cremin-Okuneva",
     guestLogo: null,
     date: "2025-09-30",
     startTime: "01:00 PM",
@@ -51,7 +52,7 @@ const MOCK_TOURS: Tour[] = [
   {
     id: "tour-006",
     title: "fake title 6",
-    guestName: "fake co 6",
+    guestName: "Zalauf Inc.",
     guestLogo: null,
     date: "2025-10-12",
     startTime: "01:00 PM",

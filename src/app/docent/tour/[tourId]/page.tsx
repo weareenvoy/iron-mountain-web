@@ -30,23 +30,23 @@ export default function TourOverviewPage({ params }: TourOverviewPageProps) {
       />
 
       {/* Header */}
-      <div className="text-primary-bg-grey mt-45 flex flex-col items-center gap-3">
-        <h1 className="text-center text-[60px] leading-[72px] font-normal tracking-[-0.05em]">
+      <div className="text-primary-bg-grey mt-35 flex flex-col items-center gap-[23px]">
+        <h1 className="text-center text-4xl leading-loose tracking-[-1.8px]">
           Overview
         </h1>
-        <p className="text-center text-[28px] leading-[34px] font-normal tracking-[-0.05em]">
+        <p className="text-center text-xl leading-loose tracking-[-1px]">
           {currentTour?.guestName || "Tour"}
         </p>
       </div>
 
       {/* Grid as a whole rotate 45 deg, item text rotate -45 deg */}
-      <div className="absolute top-130 left-40 grid rotate-45 grid-cols-2 gap-4">
+      <div className="absolute top-110 left-25 grid rotate-45 grid-cols-2 gap-4">
         {/* Item 1 */}
         <button
           onClick={() => handleSectionClick("basecamp")}
           className="bg-primary-bg-grey relative flex h-50 w-50 items-center justify-center rounded-lg transition-opacity ease-in-out active:opacity-80"
         >
-          <p className="text-primary-im-dark-blue -rotate-45 text-[27px]">
+          <p className="text-primary-im-dark-blue -rotate-45 text-2xl">
             Basecamp
           </p>
         </button>
@@ -56,7 +56,7 @@ export default function TourOverviewPage({ params }: TourOverviewPageProps) {
           onClick={() => handleSectionClick("overlook")}
           className="bg-primary-bg-grey relative flex h-50 w-50 items-center justify-center rounded-lg transition-opacity ease-in-out active:opacity-80"
         >
-          <p className="text-primary-im-dark-blue -rotate-45 text-[27px]">
+          <p className="text-primary-im-dark-blue -rotate-45 text-2xl">
             Overlook
           </p>
         </button>
@@ -66,7 +66,7 @@ export default function TourOverviewPage({ params }: TourOverviewPageProps) {
           onClick={() => handleSectionClick("summit-room")}
           className="bg-primary-bg-grey relative col-start-2 row-start-2 flex h-50 w-50 items-center justify-center rounded-lg transition-opacity ease-in-out active:opacity-80"
         >
-          <p className="text-primary-im-dark-blue -rotate-45 text-[27px]">
+          <p className="text-primary-im-dark-blue -rotate-45 text-2xl">
             Summit Room
           </p>
         </button>

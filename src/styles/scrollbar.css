@@ -3,5 +3,6 @@
 .overflow-y-auto,
 .overflow-x-auto,
 .overflow-auto {
-  scrollbar-color: #d5d5d5 #303030;
+  scrollbar-color: #b0b0b0 #dedede;
+  scrollbar-width: thin;
 }
