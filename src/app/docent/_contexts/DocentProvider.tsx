@@ -44,6 +44,7 @@ export interface DocentContextType {
     basecamp: boolean;
     overlook: boolean;
     overlookTablet: boolean;
+    summit: boolean;
   };
 
   // Full state from GEC (combines tour, UI mode, exhibit settings)
@@ -86,6 +87,7 @@ export function DocentProvider({ children }: DocentProviderProps) {
     basecamp: !!docentAppState?.exhibits?.basecamp,
     overlook: !!docentAppState?.exhibits?.overlook,
     overlookTablet: !!docentAppState?.exhibits?.summit,
+    summit: !!docentAppState?.exhibits?.summit,
   };
 
   const setBasecampExhibitState = (state: Partial<ExhibitNavigationState>) => {
@@ -273,7 +275,7 @@ export function DocentProvider({ children }: DocentProviderProps) {
         overlookExhibitState,
         setBasecampExhibitState,
         setOverlookExhibitState,
-        // Summit Room state (local UI, user can swipe slides)
+        // Summit Room state
         summitRoomSlideIdx,
         setSummitRoomSlideIdx,
         isSummitRoomJourneyMapLaunched,

@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   FiX,
   FiVolume2,
@@ -31,7 +30,46 @@ interface ExhibitControl {
   errorMessage?: string;
 }
 
-// TODO how we get this data is not implemented yet.
+// TODO Mock data for testing. How to get this data is not implemented yet
+const MOCK_EXHIBIT_CONTROLS: ExhibitControl[] = [
+  {
+    id: "entry-way",
+    name: "Entry Way",
+    isOn: true,
+    isMuted: false,
+    hasError: false,
+  },
+  {
+    id: "basecamp",
+    name: "Basecamp",
+    isOn: true,
+    isMuted: false,
+    hasError: false,
+  },
+  {
+    id: "overlook",
+    name: "Overlook",
+    isOn: true,
+    isMuted: true,
+    hasError: false,
+  },
+  {
+    id: "solution-pathways",
+    name: "Solution Pathways",
+    isOn: true,
+    isMuted: false,
+    hasError: false,
+  },
+  {
+    id: "summit",
+    name: "Summit Room",
+    isOn: false,
+    isMuted: false,
+    hasError: true,
+    errorMessage: "Offline",
+  },
+];
+
 export function SettingsDrawer({ isOpen, onClose }: SettingsDrawerProps) {
   const { client } = useMqtt();
   const { currentTour, docentAppState, exhibitAvailability } = useDocent();
@@ -44,81 +82,14 @@ export function SettingsDrawer({ isOpen, onClose }: SettingsDrawerProps) {
     summit: "Summit Room",
   };
 
-  // Convert GEC state to exhibit controls for display
-  const exhibitControls: ExhibitControl[] = [];
-
-  if (docentAppState?.exhibits) {
-    const { basecamp, overlook, summit } = docentAppState.exhibits;
-
-    if (basecamp) {
-      const isOnline = exhibitAvailability.basecamp;
-      const isLoading = basecamp.slide === "loading";
-      const hasError = basecamp.slide === "error";
-
-      exhibitControls.push({
-        id: "basecamp",
-        name: exhibitLabels.basecamp,
-        isOn: isOnline,
-        isMuted: basecamp["volume-muted"],
-        hasError: !isOnline || hasError,
-        errorMessage: !isOnline
-          ? "Offline"
-          : hasError
-            ? "Failed to load content"
-            : isLoading
-              ? "Loading..."
-              : undefined,
-      });
-    }
-
-    if (overlook) {
-      const isOnline = exhibitAvailability.overlook;
-      const isLoading = overlook.slide === "loading";
-      const hasError = overlook.slide === "error";
-
-      exhibitControls.push({
-        id: "overlook",
-        name: exhibitLabels.overlook,
-        isOn: isOnline,
-        isMuted: overlook["volume-muted"],
-        hasError: !isOnline || hasError,
-        errorMessage: !isOnline
-          ? "Offline"
-          : hasError
-            ? "Failed to load content"
-            : isLoading
-              ? "Loading..."
-              : undefined,
-      });
-    }
-
-    if (summit) {
-      const isOnline = exhibitAvailability.overlookTablet; // Summit uses overlook-tablet's availability
-      const isLoading = summit.slide === "loading";
-      const hasError = summit.slide === "error";
-
-      exhibitControls.push({
-        id: "summit",
-        name: exhibitLabels.summit,
-        isOn: isOnline,
-        isMuted: summit["volume-muted"],
-        hasError: !isOnline || hasError,
-        errorMessage: !isOnline
-          ? "Offline"
-          : hasError
-            ? "Failed to load content"
-            : isLoading
-              ? "Loading..."
-              : undefined,
-      });
-    }
-  }
+  // TODO Convert GEC data to exhibit controls for display
+  // const exhibitControls: ExhibitControl[] = [];
 
   const handleToggleMute = (exhibitId: string) => {
     if (!client) return;
 
     // Find current muted state
-    const exhibit = exhibitControls.find((c) => c.id === exhibitId);
+    const exhibit = MOCK_EXHIBIT_CONTROLS.find((c) => c.id === exhibitId);
     if (!exhibit) return;
 
     // Send setVolume command to GEC
@@ -168,7 +139,7 @@ export function SettingsDrawer({ isOpen, onClose }: SettingsDrawerProps) {
         {/* Header */}
         <div className="mt-35 mb-19 flex items-center justify-between">
           <h2 className="text-primary-bg-grey text-4xl leading-[48px]">
-            Settings
+            Settings (this is hardcoded for now!)
           </h2>
           <Button
             variant="outline-light-grey"
@@ -182,7 +153,7 @@ export function SettingsDrawer({ isOpen, onClose }: SettingsDrawerProps) {
 
         {/* Controls List */}
         <div className="space-y-8">
-          {exhibitControls.map((control) => (
+          {MOCK_EXHIBIT_CONTROLS.map((control) => (
             <div
               key={control.id}
               className="flex h-15 items-center justify-between"

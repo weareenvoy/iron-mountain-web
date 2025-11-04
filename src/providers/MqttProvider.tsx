@@ -29,11 +29,8 @@ const getDeviceIdFromPath = (pathname: string): string => {
   if (pathname.startsWith("/basecamp")) {
     return "basecamp";
   }
-  if (pathname.startsWith("/overlook-tablet")) {
-    return "overlook-tablet";
-  }
-  if (pathname.startsWith("/kiosk")) {
-    return "kiosk-01"; // Could parse kiosk number from path if needed
+  if (pathname.startsWith("/kiosk-1")) {
+    return "kiosk-01";
   }
 
   // Default to docent-app for all other routes (/docent, /, etc.)

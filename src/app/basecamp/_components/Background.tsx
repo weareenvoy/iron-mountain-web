@@ -2,10 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useBasecamp } from "../_contexts/BasecampProvider";
+// TODO: Please read this! We will have many chopped up videos. Each beat is a separate video!
 
 // Time mapping for bullet point moments.
 // The ambient state is a going to be a looping video. It's not a perfect loop now.
-// TODO: Is it better to keep it like this, or use tons of small videos. Each beat is a separate video?
 const TIME_MAPPING: Record<string, number[]> = {
   welcome: [1, 7, 12, 22],
   problem: [26, 45, 53, 66],

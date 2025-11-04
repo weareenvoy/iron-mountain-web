@@ -71,7 +71,7 @@ type PublishArgsConfig = {
 };
 
 export type MqttServiceConfig = {
-  deviceId: string; // e.g., "docent-app", "basecamp", "overlook", "overlook-tablet"
+  deviceId: string; // e.g., "docent-app", "basecamp", "kiosk-1"
   onConnectionChange?: (isConnected: boolean) => void;
   onError?: (error: MqttError) => void;
 };

@@ -3,14 +3,14 @@
 import { useEffect, useState } from "react";
 import { FaRegCirclePlay, FaRegCirclePause } from "react-icons/fa6";
 
-import { Moment, ExhibitState } from "@/types";
+import { Moment, ExhibitNavigationState } from "@/types";
 import { useMqtt } from "@/providers/MqttProvider";
 
 // moments/beats navigation hook
 export function useMomentsNavigation(
   content: Moment[],
-  exhibitState: ExhibitState,
-  setExhibitState: (state: Partial<ExhibitState>) => void,
+  exhibitState: ExhibitNavigationState,
+  setExhibitState: (state: Partial<ExhibitNavigationState>) => void,
   exhibit: "basecamp" | "overlook",
 ) {
   const { client } = useMqtt();
@@ -74,9 +74,9 @@ export function useMomentsNavigation(
 interface MomentsAndBeatsProps {
   tourId: string;
   content: Moment[]; // hardcoded data
-  exhibitState: ExhibitState;
-  setExhibitState: (state: Partial<ExhibitState>) => void;
-  exhibit: "basecamp" | "overlook" | "overlook-tablet";
+  exhibitState: ExhibitNavigationState;
+  setExhibitState: (state: Partial<ExhibitNavigationState>) => void;
+  exhibit: "basecamp" | "overlook";
 }
 
 export function MomentsAndBeats({
