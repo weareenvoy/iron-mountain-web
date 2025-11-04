@@ -3,17 +3,13 @@
 @plugin "tailwindcss-animate";
 
 :root {
-  /* TODO remove these magenta colors */
-  --brand-primary: oklch(0.59 0.238555 1.3126);
-  --brand-hover: oklch(0.43 0.1696 359.6);
-  --brand-down: oklch(0.3 0.1232 1.21);
-  --brand-glow: oklch(71.22% 0.194 2.73);
 
   /* Overlook tablet colors */
   --primary-bg-grey: #ededed;
   --primary-im-dark-blue: #14477d;
   --primary-im-mid-blue: #1b75bc;
   --primary-im-light-blue: #6dcff6;
+  --primary-im-grey: #58595b;
   --secondary-im-teal: #00a88e;
   --secondary-im-purple: #8a0d71;
   --secondary-im-orange: #f7931e;
@@ -76,14 +72,6 @@
     -41px 22px 47px 0px rgba(0, 0, 0, 0.13),
     -10px 6px 26px 0px rgba(0, 0, 0, 0.15);
 
-  /* coffee dots */
-  --espresso: oklch(48.15% 0.07 50.07); /*#7E5239*/
-  --milk-foam: oklch(96.83% 0.04 89.69); /*#FFF4D7*/
-  --steamed-milk: oklch(92.43% 0.05 65.19); /*#FEE0C4*/
-  --whole-milk: oklch(98.51% 0 0); /* #FAFAFA*/
-  --almond-milk: oklch(98.15% 0.038 99.02); /* #FFFADD*/
-  --brewed-coffee: oklch(88.53% 0 0); /*#D9D9D9*/
-  --origin-bean: oklch(26.73% 0.052 53.56); /* #391E0B*/
 }
 
 /* Dark mode colors */

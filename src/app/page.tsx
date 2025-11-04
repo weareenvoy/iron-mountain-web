@@ -8,16 +8,16 @@ export default function Home() {
 
   const apps = [
     {
-      title: "Overlook Tablet",
-      route: "/overlook-tablet",
-    },
-    {
       title: "Docent App",
       route: "/docent",
     },
     {
       title: "Kiosk 1",
       route: "/kiosk-1",
+    },
+    {
+      title: "Basecamp App",
+      route: "/basecamp",
     },
   ];
 

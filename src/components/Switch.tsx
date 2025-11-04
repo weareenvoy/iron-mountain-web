@@ -15,26 +15,31 @@ const Switch = React.forwardRef<
   React.ElementRef<typeof SwitchPrimitives.Root>,
   SwitchProps
 >(({ className, onLabel = "On", offLabel = "Off", ...props }, ref) => (
-  <div className="flex items-center gap-2 text-2xl">
-    <div>{offLabel}</div>
+  <SwitchPrimitives.Root
+    className={cn(
+      "peer data-[state=checked]:bg-primary-im-mid-blue data-[state=unchecked]:bg-primary-im-grey relative inline-flex h-[53.6px] w-[108.87px] shrink-0 cursor-pointer items-center rounded-full px-2 transition-colors focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+      className,
+    )}
+    {...props}
+    ref={ref}
+  >
+    {/* Off label - visible when unchecked, positioned on right side */}
+    <span className="text-primary-bg-grey absolute right-5 text-center text-base transition-opacity data-[state=checked]:opacity-0 data-[state=unchecked]:opacity-100">
+      {offLabel}
+    </span>
 
-    <SwitchPrimitives.Root
+    {/* On label - visible when checked, positioned on left side */}
+    <span className="text-primary-bg-grey absolute left-5 text-center text-base transition-opacity data-[state=checked]:opacity-100 data-[state=unchecked]:opacity-0">
+      {onLabel}
+    </span>
+
+    {/* Thumb/Handle */}
+    <SwitchPrimitives.Thumb
       className={cn(
-        "peer data-[state=checked]:bg-brand-primary data-[state=unchecked]:bg-input focus-visible:ring-ring focus-visible:ring-offset-background border-foreground-primary inline-flex h-12.5 w-22.5 shrink-0 cursor-pointer items-center rounded-full border-2 transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
-        className,
+        "bg-primary-bg-grey pointer-events-none z-10 block h-[38.52px] w-[38.52px] rounded-full ring-0 transition-transform data-[state=checked]:translate-x-[54px] data-[state=unchecked]:translate-x-0",
       )}
-      {...props}
-      ref={ref}
-    >
-      <SwitchPrimitives.Thumb
-        className={cn(
-          "pointer-events-none block h-8 w-8 rounded-full bg-white ring-0 transition-transform data-[state=checked]:translate-x-12 data-[state=unchecked]:translate-x-2",
-        )}
-      />
-    </SwitchPrimitives.Root>
-
-    <div>{onLabel}</div>
-  </div>
+    />
+  </SwitchPrimitives.Root>
 ));
 Switch.displayName = SwitchPrimitives.Root.displayName;
 
