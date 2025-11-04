@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useBasecamp } from "./BasecampProvider";
+import { useBasecamp } from "../_contexts/BasecampProvider";
 
 // Time mapping for bullet point moments.
+// The ambient state is a going to be a looping video. It's not a perfect loop now.
+// TODO: Is it better to keep it like this, or use tons of small videos. Each beat is a separate video?
 const TIME_MAPPING: Record<string, number[]> = {
-  // Comment it out for now, because the ambient state might be a separate looping gif, not a part of the main video.
-  // ambient: [8],
   welcome: [1, 7, 12, 22],
   problem: [26, 45, 53, 66],
   possibilities: [70, 75, 85, 93, 100],
@@ -67,7 +67,7 @@ export default function Background() {
     mainVideo.preload = "auto";
     mainVideo.load();
 
-    // TODO Track preload progress???
+    // This tracks preload progress, but it does not help with loading.
     const onProgress = () => {
       if (mainVideo.buffered.length > 0 && mainVideo.duration) {
         const percent = (mainVideo.buffered.end(0) / mainVideo.duration) * 100;

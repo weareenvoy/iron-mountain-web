@@ -67,6 +67,15 @@ const MOCK_TOURS: Tour[] = [
     startTime: "03:00 PM",
     endTime: "04:00 PM",
   },
+  {
+    id: "tour-008",
+    title: "fake title 8",
+    guestName: "fake co 8",
+    guestLogo: null,
+    date: "2025-11-04",
+    startTime: "02:40 PM",
+    endTime: "04:00 PM",
+  }
 ];
 
 // Will replace with actual API call once BE is ready.

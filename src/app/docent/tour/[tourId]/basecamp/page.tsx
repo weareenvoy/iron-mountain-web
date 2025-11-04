@@ -7,7 +7,7 @@ import {
 } from "../../../_components/MomentsAndBeats";
 import { Moment } from "@/types";
 import { DocentHeader } from "../../../_components/DocentHeader";
-import { useDocent } from "../../../_components/DocentProvider";
+import { useDocent } from "../../../_contexts/DocentProvider";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import { Button } from "@/components/Button";
 
@@ -53,7 +53,7 @@ export default function BasecampPage({ params }: BasecampPageProps) {
       BASECAMP_CONTENT,
       basecampExhibitState,
       setBasecampExhibitState,
-      "navigation/basecamp",
+      "basecamp",
     );
 
   return (
@@ -84,7 +84,7 @@ export default function BasecampPage({ params }: BasecampPageProps) {
           content={BASECAMP_CONTENT}
           exhibitState={basecampExhibitState}
           setExhibitState={setBasecampExhibitState}
-          mqttTopic="navigation/basecamp"
+          exhibit="basecamp"
         />
       </div>
 

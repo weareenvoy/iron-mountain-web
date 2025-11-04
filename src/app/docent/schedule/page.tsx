@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { DocentHeader } from "../_components/DocentHeader";
-import { useDocent } from "../_components/DocentProvider";
+import { useDocent } from "../_contexts/DocentProvider";
+import { useMqtt } from "@/providers/MqttProvider";
 import { FiHome, FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import { GrRefresh } from "react-icons/gr";
 import { Button } from "@/components/Button";
@@ -16,8 +17,14 @@ interface TourByDate {
 
 export default function SchedulePage() {
   const router = useRouter();
-  const { allTours, isLoading, isConnected, refreshTours, setCurrentTour } =
-    useDocent();
+  const { client } = useMqtt();
+  const {
+    allTours,
+    isTourDataLoading,
+    isConnected,
+    refreshTours,
+    setCurrentTour,
+  } = useDocent();
   const [selectedTourId, setSelectedTourId] = useState<string | null>(null);
   const [currentMonthDate, setCurrentMonthDate] = useState(new Date());
   const [toursByDate, setToursByDate] = useState<Record<string, TourByDate>>(
@@ -82,11 +89,21 @@ export default function SchedulePage() {
     const tour = Object.values(toursByDate)
       .flatMap((group) => group.tours)
       .find((t) => t.id === tourId);
-    if (tour) {
+    if (tour && client) {
       setCurrentTour(tour); // Update context
-      // Send MQTT message to GEC?
-      // Route to the tour page
-      router.push(`/docent/tour/${tourId}`);
+
+      // Send load-tour command to GEC
+      client.loadTour(tourId, {
+        onSuccess: () => {
+          console.log("Successfully sent load-tour command to GEC");
+          router.push(`/docent/tour/${tourId}`);
+        },
+        onError: (err) => {
+          console.error("Failed to send load-tour command:", err);
+          // Still navigate even if MQTT fails
+          router.push(`/docent/tour/${tourId}`);
+        },
+      });
     }
   };
 
@@ -154,7 +171,7 @@ export default function SchedulePage() {
 
           {/* Tours list */}
           <div className="h-[624px] space-y-0 overflow-y-auto">
-            {isLoading ? (
+            {isTourDataLoading ? (
               <div>Loading...</div>
             ) : filteredTours.length === 0 ? (
               <div className="text-primary-im-dark-blue">

@@ -1,18 +1,32 @@
-// TODO all the data types are TBD and will be updated as design + BE are finalized.
-
-// Will there even be a StateData sent from GEC?
-export interface StateData {
-  // current_tour: Tour;
-  // current_basecamp_state: { moment: string, beat: number };
-  // current_overlook_state: ...
-  // current_kiosk_one_state: ...
-  // ...
-  // Will settings data  live here? Or nothing.
-  light_controls: LightControlPreset;
+// TODO Docent state contains all exhibits
+export interface DocentAppState {
+  exhibits?: {
+    basecamp?: ExhibitMqttState;
+    overlook?: OverlookMqttState;
+    summit?: ExhibitMqttState;
+  };
 }
 
-// Navigation state for exhibits (basecamp, overlook)
-export interface ExhibitState {
+// Full MQTT state for an exhibit (published to state/<exhibit>)
+export interface ExhibitMqttState {
+  "tour-id"?: string | null;
+  slide: string; // e.g.,   , "welcome-3", "idle", "loading", "error"
+  "volume-level": number; // 0.0 to 1.0
+  "volume-muted": boolean;
+}
+
+// Overlook MQTT state includes video play/pause state
+export interface OverlookMqttState extends ExhibitMqttState {
+  playpause?: boolean; // Video play/pause state
+}
+
+// Sync status from CTRL
+export interface SyncState {
+  status: "sync-in-progress" | "sync-complete" | "idle";
+}
+
+// UI Navigation state for exhibits (local to UI, not MQTT)
+export interface ExhibitNavigationState {
   momentId: string; // e.g., "ambient", "welcome", "case-study"
   beatIdx: number;
 }

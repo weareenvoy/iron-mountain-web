@@ -11,7 +11,7 @@ export function useMomentsNavigation(
   content: Moment[],
   exhibitState: ExhibitState,
   setExhibitState: (state: Partial<ExhibitState>) => void,
-  mqttTopic: string,
+  exhibit: "basecamp" | "overlook",
 ) {
   const { client } = useMqtt();
   const { momentId, beatIdx: currentBeatIdx } = exhibitState;
@@ -22,12 +22,15 @@ export function useMomentsNavigation(
   const publishNavigation = (momentId: string, beatIdx: number) => {
     if (!client) return;
 
-    const message = {
-      momentId,
-      beatIdx,
-    };
+    // Format: ${moment}-${beatNumber} (1-indexed)
+    const beatId = `${momentId}-${beatIdx + 1}`;
 
-    client.publish(mqttTopic, JSON.stringify(message));
+    // Send goto-beat command to exhibit
+    client.gotoBeat(exhibit, beatId, {
+      onSuccess: () => console.log(`Sent goto-beat: ${beatId} to ${exhibit}`),
+      onError: (err) =>
+        console.error(`Failed to send goto-beat to ${exhibit}:`, err),
+    });
   };
 
   const goTo = (momentId: string, beatIdx: number) => {
@@ -73,15 +76,15 @@ interface MomentsAndBeatsProps {
   content: Moment[]; // hardcoded data
   exhibitState: ExhibitState;
   setExhibitState: (state: Partial<ExhibitState>) => void;
-  mqttTopic: string;
+  exhibit: "basecamp" | "overlook" | "overlook-tablet";
 }
 
 export function MomentsAndBeats({
-  tourId,
+  tourId, // is it needed?
   content,
   exhibitState,
   setExhibitState,
-  mqttTopic,
+  exhibit,
 }: MomentsAndBeatsProps) {
   const { client } = useMqtt();
 
@@ -94,12 +97,15 @@ export function MomentsAndBeats({
   const publishNavigation = (momentId: string, beatIdx: number) => {
     if (!client) return;
 
-    const message = {
-      momentId,
-      beatIdx,
-    };
+    // Format: ${moment}-${beatNumber} (1-indexed)
+    const beatId = `${momentId}-${beatIdx + 1}`;
 
-    client.publish(mqttTopic, JSON.stringify(message));
+    // Send goto-beat command to exhibit
+    client.gotoBeat(exhibit, beatId, {
+      onSuccess: () => console.log(`Sent goto-beat: ${beatId} to ${exhibit}`),
+      onError: (err) =>
+        console.error(`Failed to send goto-beat to ${exhibit}:`, err),
+    });
   };
 
   const goTo = (momentId: string, beatIdx: number) => {
@@ -120,6 +126,7 @@ export function MomentsAndBeats({
     goTo(momentId, beatIdx);
   };
 
+  // TODO TBD on mqtt msg to details
   // Handle video state when navigating to case-study
   useEffect(() => {
     const isCaseStudyVideo = momentId === "case-study" && currentBeatIdx === 1;

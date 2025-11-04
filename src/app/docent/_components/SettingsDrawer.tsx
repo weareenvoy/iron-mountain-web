@@ -1,11 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { FiX, FiVolume2, FiVolumeX, FiExternalLink, FiArrowRight } from "react-icons/fi";
+import {
+  FiX,
+  FiVolume2,
+  FiVolumeX,
+  FiExternalLink,
+  FiArrowRight,
+} from "react-icons/fi";
 import { FaCircleCheck, FaCircleExclamation } from "react-icons/fa6";
 import { Button } from "@/components/Button";
 import Link from "next/link";
 import { useMqtt } from "@/providers/MqttProvider";
+import { useDocent } from "@/app/docent/_contexts/DocentProvider";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Switch } from "@/components/Switch";
@@ -24,66 +31,122 @@ interface ExhibitControl {
   errorMessage?: string;
 }
 
+// TODO how we get this data is not implemented yet.
 export function SettingsDrawer({ isOpen, onClose }: SettingsDrawerProps) {
   const { client } = useMqtt();
+  const { currentTour, docentAppState, exhibitAvailability } = useDocent();
   const router = useRouter();
-  // TODO Mock settings state. Very TBD. Is this data from a specific endpoint, or a json from mqtt, so we dont even need a state.
-  const [exhibitControls, setExhibitControls] = useState<ExhibitControl[]>([
-    {
-      id: "welcome-wall",
-      name: "Entryway",
-      isOn: true,
-      hasError: false,
-      isMuted: false,
-    },
-    {
-      id: "basecamp",
-      name: "Basecamp",
-      isOn: true,
-      hasError: false,
-      isMuted: false,
-    },
-    {
-      id: "overlook",
-      name: "Overlook",
-      isOn: false,
-      hasError: true,
-      errorMessage: "Failed to start program",
-      isMuted: false,
-    },
-    {
-      id: "solution-pathways",
-      name: "Solution pathways",
-      isOn: true,
-      hasError: false,
-      isMuted: false,
-    },
-    {
-      id: "summit-room",
-      name: "Summit room",
-      isOn: true,
-      hasError: false,
-      isMuted: false,
-    },
-  ]);
 
-  const handleToggleMute = (id: string) => {
-    // This would send MQTT message to control exhibit
-    setExhibitControls((prev) =>
-      prev.map((control) =>
-        control.id === id ? { ...control, isMuted: !control.isMuted } : control,
-      ),
+  // Exhibit display names (hardcoded)
+  const exhibitLabels = {
+    basecamp: "Basecamp",
+    overlook: "Overlook",
+    summit: "Summit Room",
+  };
+
+  // Convert GEC state to exhibit controls for display
+  const exhibitControls: ExhibitControl[] = [];
+
+  if (docentAppState?.exhibits) {
+    const { basecamp, overlook, summit } = docentAppState.exhibits;
+
+    if (basecamp) {
+      const isOnline = exhibitAvailability.basecamp;
+      const isLoading = basecamp.slide === "loading";
+      const hasError = basecamp.slide === "error";
+
+      exhibitControls.push({
+        id: "basecamp",
+        name: exhibitLabels.basecamp,
+        isOn: isOnline,
+        isMuted: basecamp["volume-muted"],
+        hasError: !isOnline || hasError,
+        errorMessage: !isOnline
+          ? "Offline"
+          : hasError
+            ? "Failed to load content"
+            : isLoading
+              ? "Loading..."
+              : undefined,
+      });
+    }
+
+    if (overlook) {
+      const isOnline = exhibitAvailability.overlook;
+      const isLoading = overlook.slide === "loading";
+      const hasError = overlook.slide === "error";
+
+      exhibitControls.push({
+        id: "overlook",
+        name: exhibitLabels.overlook,
+        isOn: isOnline,
+        isMuted: overlook["volume-muted"],
+        hasError: !isOnline || hasError,
+        errorMessage: !isOnline
+          ? "Offline"
+          : hasError
+            ? "Failed to load content"
+            : isLoading
+              ? "Loading..."
+              : undefined,
+      });
+    }
+
+    if (summit) {
+      const isOnline = exhibitAvailability.overlookTablet; // Summit uses overlook-tablet's availability
+      const isLoading = summit.slide === "loading";
+      const hasError = summit.slide === "error";
+
+      exhibitControls.push({
+        id: "summit",
+        name: exhibitLabels.summit,
+        isOn: isOnline,
+        isMuted: summit["volume-muted"],
+        hasError: !isOnline || hasError,
+        errorMessage: !isOnline
+          ? "Offline"
+          : hasError
+            ? "Failed to load content"
+            : isLoading
+              ? "Loading..."
+              : undefined,
+      });
+    }
+  }
+
+  const handleToggleMute = (exhibitId: string) => {
+    if (!client) return;
+
+    // Find current muted state
+    const exhibit = exhibitControls.find((c) => c.id === exhibitId);
+    if (!exhibit) return;
+
+    // Send setVolume command to GEC
+    client.setVolume(
+      exhibitId as "basecamp" | "overlook" | "summit",
+      !exhibit.isMuted,
+      {
+        onSuccess: () =>
+          console.log(`Successfully toggled mute for ${exhibitId}`),
+        onError: (err) =>
+          console.error(`Failed to toggle mute for ${exhibitId}:`, err),
+      },
     );
   };
 
   const handleEndTour = () => {
-    // This would send MQTT message to GEC
-    client?.publish("tour/end", JSON.stringify({}));
-    console.log("Ending tour");
+    if (!client || !currentTour) return;
 
-    // Go back to home page, or schedule page
-    router.push("/docent");
-    onClose();
+    // Send end-tour command to all exhibits (broadcast)
+    client.endTour({
+      onSuccess: () => {
+        console.log("Successfully sent end-tour command");
+        // Go back to home page
+        router.push("/docent");
+        onClose();
+      },
+      onError: (err) => console.error("Failed to end tour:", err),
+    });
   };
 
   const handleToggleEBCLights = (checked: boolean) => {
@@ -184,7 +247,12 @@ export function SettingsDrawer({ isOpen, onClose }: SettingsDrawerProps) {
           </div>
 
           {/* Switch to toggle EBC Lights. TODO Is the value from GEC state? */}
-          <Switch id="ebc-lights" onLabel="On" offLabel="Off" onCheckedChange={handleToggleEBCLights} />
+          <Switch
+            id="ebc-lights"
+            onLabel="On"
+            offLabel="Off"
+            onCheckedChange={handleToggleEBCLights}
+          />
         </div>
 
         {/* End Tour Button */}

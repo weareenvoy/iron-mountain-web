@@ -7,7 +7,7 @@ import {
 } from "../../../_components/MomentsAndBeats";
 import { Moment } from "@/types";
 import { DocentHeader } from "../../../_components/DocentHeader";
-import { useDocent } from "../../../_components/DocentProvider";
+import { useDocent } from "../../../_contexts/DocentProvider";
 import { FiArrowLeft, FiArrowRight, FiCast } from "react-icons/fi";
 import { Button } from "@/components/Button";
 import Image from "next/image";
@@ -73,7 +73,7 @@ export default function OverlookPage({ params }: OverlookPageProps) {
       OVERLOOK_CONTENT,
       overlookExhibitState,
       setOverlookExhibitState,
-      "navigation/overlook",
+      "overlook",
     );
 
   return (
@@ -88,30 +88,27 @@ export default function OverlookPage({ params }: OverlookPageProps) {
       />
 
       {/* Cast Button */}
-      <div className="absolute top-34 left-5 z-50">
-        <Button
-          variant="outline-light-grey"
-          size="sm"
-          className="h-18 w-18 rounded-full border-none"
+      <div className="absolute text-primary-bg-grey top-34 left-5 z-50 flex flex-col items-start">
+        <button
+          className="active: border-none p-0"
           onClick={() => setIsOverlookCastMode(!isOverlookCastMode)}
         >
           {isOverlookCastMode ? (
-            <div>
-              <FiCast size={30} />
-              <span className="h-6.25 text-xl">Pres.mode</span>
-            </div>
+            <FiCast size={30} color="#ededed" />
           ) : (
-            <div>
-              <Image
-                src="/images/cast-off.svg"
-                alt="Cast Off"
-                width={24}
-                height={24}
-              />
-              <span className="h-6.25 text-xl">Stop</span>
-            </div>
+            <Image
+              src="/images/cast-off.svg"
+              alt="Cast Off"
+              width={30}
+              height={30}
+            />
           )}
-        </Button>
+        </button>
+        {isOverlookCastMode ? (
+          <span className="h-6.25 text-sm">Start presenting</span>
+        ) : (
+          <span className="h-6.25 text-sm">Stop presenting</span>
+        )}
       </div>
 
       {/* Header */}
@@ -131,7 +128,7 @@ export default function OverlookPage({ params }: OverlookPageProps) {
           content={OVERLOOK_CONTENT}
           exhibitState={overlookExhibitState}
           setExhibitState={setOverlookExhibitState}
-          mqttTopic="navigation/overlook"
+          exhibit="overlook"
         />
       </div>
 

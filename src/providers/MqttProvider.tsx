@@ -1,6 +1,14 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, useMemo } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useMemo,
+  useRef,
+} from "react";
+import { usePathname } from "next/navigation";
 import { MqttError, MqttService } from "@/lib/mqtt";
 
 interface MqttContextType {
@@ -15,13 +23,40 @@ interface MqttProviderProps {
   children: React.ReactNode;
 }
 
+// Determine device ID based on the current route
+const getDeviceIdFromPath = (pathname: string): string => {
+  // Check if we're on a specific exhibit page
+  if (pathname.startsWith("/basecamp")) {
+    return "basecamp";
+  }
+  if (pathname.startsWith("/overlook-tablet")) {
+    return "overlook-tablet";
+  }
+  if (pathname.startsWith("/kiosk")) {
+    return "kiosk-01"; // Could parse kiosk number from path if needed
+  }
+
+  // Default to docent-app for all other routes (/docent, /, etc.)
+  return "docent-app";
+};
+
 export function MqttProvider({ children }: MqttProviderProps) {
+  const pathname = usePathname();
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState<MqttError | undefined>(undefined);
   const [client, setClient] = useState<MqttService | undefined>(undefined);
 
+  // Compute device ID from pathname - memoized so effect only runs when this changes
+  const deviceId = useMemo(() => {
+    const id = getDeviceIdFromPath(pathname);
+    return id;
+  }, [pathname]);
+
   useEffect(() => {
+    console.log(`MQTT: Connecting as ${deviceId}`);
+
     const mqttService = new MqttService({
+      deviceId,
       onConnectionChange: setIsConnected,
       onError: setError,
     });
@@ -29,9 +64,10 @@ export function MqttProvider({ children }: MqttProviderProps) {
     setClient(mqttService);
 
     return () => {
+      console.log(`MQTT: Disconnecting ${deviceId}`);
       mqttService.disconnect();
     };
-  }, []);
+  }, [deviceId]); // Only runs when deviceId changes!
 
   const value = useMemo(
     () => ({

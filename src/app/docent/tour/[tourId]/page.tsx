@@ -3,8 +3,8 @@
 import { use } from "react";
 import { useRouter } from "next/navigation";
 import { DocentHeader } from "../../_components/DocentHeader";
-import { useDocent } from "../../_components/DocentProvider";
-import { FiCalendar } from "react-icons/fi";
+import { useDocent } from "../../_contexts/DocentProvider";
+import Image from "next/image";
 interface TourOverviewPageProps {
   params: Promise<{ tourId: string }>;
 }
@@ -23,9 +23,9 @@ export default function TourOverviewPage({ params }: TourOverviewPageProps) {
       {/* Navigation */}
       <DocentHeader
         leftButton={{
-          text: "Back to schedule",
-          href: "/docent/schedule",
-          icon: <FiCalendar />,
+          text: "End tour",
+          href: "/docent",
+          icon: <Image src="/images/flag.svg" alt="Flag" width={20} height={21} />,
         }}
       />
 

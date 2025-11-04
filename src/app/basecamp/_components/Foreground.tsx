@@ -1,7 +1,7 @@
 "use client";
 
 import { BasecampData } from "@/types";
-import { useBasecamp } from "./BasecampProvider";
+import { useBasecamp } from "../_contexts/BasecampProvider";
 
 // Mapping from moment + beatIdx to data key
 const getDataKey = (moment: string, beatIdx: number): string => {

@@ -1,8 +1,9 @@
 "use client";
 
-import { use, useEffect, useRef, useState } from "react";
+import { use, useEffect, useRef } from "react";
 import { DocentHeader } from "../../../_components/DocentHeader";
-import { useDocent } from "../../../_components/DocentProvider";
+import { useDocent } from "../../../_contexts/DocentProvider";
+import { useMqtt } from "@/providers/MqttProvider";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import Image from "next/image";
 import { Button } from "@/components/Button";
@@ -48,14 +49,37 @@ const SUMMIT_ROOM_SLIDES = [
 
 export default function SummitRoomPage({ params }: SummitRoomPageProps) {
   const { tourId } = use(params);
-  const { currentTour, summitRoomSlideIdx, setSummitRoomSlideIdx } =
-    useDocent();
+  const { client } = useMqtt();
+  const {
+    currentTour,
+    summitRoomSlideIdx,
+    setSummitRoomSlideIdx,
+    isSummitRoomJourneyMapLaunched,
+    setIsSummitRoomJourneyMapLaunched,
+  } = useDocent();
 
-  const [isJourneyMapLaunched, setIsJourneyMapLaunched] = useState(false);
-  const currentSlideIdx = summitRoomSlideIdx; // Use provider state
-  const setCurrentSlideIdx = setSummitRoomSlideIdx; // Use provider setter
+  // Local UI state
+  const isJourneyMapLaunched = isSummitRoomJourneyMapLaunched;
+  const setIsJourneyMapLaunched = setIsSummitRoomJourneyMapLaunched;
+  const currentSlideIdx = summitRoomSlideIdx;
+  const setCurrentSlideIdx = setSummitRoomSlideIdx;
 
   const swiperRef = useRef<SwiperClass | null>(null); // Create a ref for Swiper instance
+
+  // Helper to send MQTT command when slide changes
+  const sendSummitSlideCommand = (slideIdx: number) => {
+    if (!client) return;
+
+    // Generate slide name based on index
+    // journey-intro for intro screen (slideIdx 0)
+    const slideName = slideIdx === 0 ? "journey-intro" : `journey-${slideIdx}`;
+
+    console.log(`Sending summit goto-beat: ${slideName}`);
+    client.gotoBeat("summit", slideName, {
+      onSuccess: () => console.log(`Summit: Navigated to ${slideName}`),
+      onError: (err) => console.error(`Summit: Failed to navigate:`, err),
+    });
+  };
 
   // Sync Swiper with currentSlideIdx
   useEffect(() => {
@@ -66,27 +90,33 @@ export default function SummitRoomPage({ params }: SummitRoomPageProps) {
 
   const handlePrevious = () => {
     if (currentSlideIdx > 0) {
-      setCurrentSlideIdx(currentSlideIdx - 1);
-      // This would send MQTT message to change slide
+      const newIdx = currentSlideIdx - 1;
+      setCurrentSlideIdx(newIdx);
+      // Send MQTT command
+      sendSummitSlideCommand(newIdx);
     }
   };
 
   const handleNext = () => {
     if (currentSlideIdx < SUMMIT_ROOM_SLIDES.length - 1) {
-      setCurrentSlideIdx(currentSlideIdx + 1);
-      // This would send MQTT message to change slide
+      const newIdx = currentSlideIdx + 1;
+      setCurrentSlideIdx(newIdx);
+      // Send MQTT command
+      sendSummitSlideCommand(newIdx);
     }
   };
 
   const handleSlideIndicatorClick = (index: number) => {
     setCurrentSlideIdx(index);
-    // This would send MQTT message to change slide
+    // Send MQTT command
+    sendSummitSlideCommand(index);
   };
 
   const handleLaunchJourneyMap = () => {
     setIsJourneyMapLaunched(true);
-    setCurrentSlideIdx(0); // Go to first slide
-    // This would send MQTT message to launch journey map
+    setCurrentSlideIdx(0);
+    // Send MQTT command (journey-intro)
+    sendSummitSlideCommand(0);
   };
 
   return (
@@ -124,6 +154,8 @@ export default function SummitRoomPage({ params }: SummitRoomPageProps) {
             }}
             onSlideChange={(swiper) => {
               setCurrentSlideIdx(swiper.activeIndex);
+              // Send MQTT command
+              sendSummitSlideCommand(swiper.activeIndex);
             }}
             initialSlide={currentSlideIdx}
             className="h-[361px] w-[605px]" // Make the area bigger so the box shadow is visible

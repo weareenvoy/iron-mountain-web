@@ -1,27 +1,25 @@
 "use client";
 
-import { DocentProvider } from "./_components/DocentProvider";
+import { DocentProvider } from "./_contexts/DocentProvider";
 import { SettingsDrawer } from "./_components/SettingsDrawer";
-import { useDocent } from "./_components/DocentProvider";
+import { useDocent } from "./_contexts/DocentProvider";
 import { usePathname } from "next/navigation";
 import { FiSettings } from "react-icons/fi";
 import { Button } from "@/components/Button";
 
 function DocentLayoutContent({ children }: { children: React.ReactNode }) {
-  const { isSettingsOpen, setIsSettingsOpen, isLoading, isConnected } =
+  const { isSettingsOpen, setIsSettingsOpen, isConnected } =
     useDocent();
   const pathname = usePathname();
   const isHomePage = pathname === "/docent";
-
-  // Just a tiny UI improvement. Only show settings button when app is ready.
-  const isReady = !isLoading && isConnected;
 
   return (
     <div className="relative flex h-[1133px] w-[744px] items-center justify-center overflow-hidden bg-linear-[348deg,#00A88E_0%,#1B75BC_100%]">
       {children}
 
+      {/* TODO when we click Settings button, ask GEC, GEC will send back latest data */}
       {/* Global Settings Button - Show on all pages except home */}
-      {isReady && !isHomePage && (
+      {isConnected && !isHomePage && (
         <div className="absolute top-34 right-5 z-50">
           <Button
             onClick={() => setIsSettingsOpen(true)}

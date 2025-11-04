@@ -1,6 +1,6 @@
 "use client";
 
-import { BasecampProvider } from "./_components/BasecampProvider";
+import { BasecampProvider } from "./_contexts/BasecampProvider";
 
 export default function BasecampLayout({
   children,
