@@ -49,8 +49,10 @@ export function BasecampProvider({ children }: BasecampProviderProps) {
   const [error, setError] = useState<null | string>(null);
 
   // Fetch basecamp content data
-  const fetchData = useCallback(async (_id?: null | string) => {
+  const fetchData = useCallback(async (id?: null | string) => {
+    console.info('Fetching basecamp data for tour:', id);
     setLoading(true);
+
     try {
       // TODO use actual API once it's ready. For now no tourId is needed in params.
       const response = await fetch('/api/basecamp');

@@ -3,6 +3,7 @@ import type { Tour } from '@/app/(tablets)/docent/_types';
 
 // Mock data for docent schedule page.
 // 1. There might not be an "end time" field. 2. date and startTime could be 1 field?
+/* eslint-disable @cspell/spellchecker */
 const MOCK_TOURS: Tour[] = [
   {
     date: '2025-09-20',
@@ -77,6 +78,7 @@ const MOCK_TOURS: Tour[] = [
     title: 'fake title 8',
   },
 ];
+/* eslint-enable @cspell/spellchecker */
 
 // Will replace with actual API call once BE is ready.
 export async function GET() {

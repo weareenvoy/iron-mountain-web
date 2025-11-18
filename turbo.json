@@ -1,6 +1,5 @@
 {
   "$schema": "https://turborepo.com/schema.json",
-  "ui": "tui",
   "tasks": {
     "analyze": {
       "env": ["ANALYZE"],
@@ -17,19 +16,19 @@
       "env": ["NODE_ENV", "VERCEL_ENV"],
       "persistent": true
     },
+    "format": {
+      "cache": false
+    },
+    "lint": {
+      "cache": true
+    },
     "start": {
       "cache": false,
       "env": ["NODE_ENV", "VERCEL_ENV"],
       "persistent": true
     },
-    "lint": {
-      "cache": true
-    },
     "types": {
       "cache": true
-    },
-    "format": {
-      "cache": false
     }
   }
 }
