@@ -1,8 +1,7 @@
 'use client';
 
-import { CirclePause, CirclePlay } from 'lucide-react';
-import { useEffect, useState } from 'react';
 import { useMqtt } from '@/components/providers/mqtt-provider';
+import CaseStudyToggle from './CaseStudyToggle';
 import type { ExhibitNavigationState, Moment } from '@/lib/_internal/types';
 
 interface MomentsAndBeatsProps {
@@ -16,9 +15,6 @@ const MomentsAndBeats = ({ content, exhibit, exhibitState, setExhibitState }: Mo
   const { client } = useMqtt();
 
   const { beatIdx: currentBeatIdx, momentId } = exhibitState;
-
-  // Edge case: Overlook's case-study video.
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
   const publishNavigation = (momentId: string, beatIdx: number) => {
     if (!client) return;
@@ -47,20 +43,6 @@ const MomentsAndBeats = ({ content, exhibit, exhibitState, setExhibitState }: Mo
     goTo(momentId, beatIdx);
   };
 
-  // TODO TBD on mqtt msg to details
-  // Handle video state when navigating to case-study
-  useEffect(() => {
-    const isCaseStudyVideo = momentId === 'case-study' && currentBeatIdx === 1;
-
-    if (isCaseStudyVideo) {
-      setIsVideoPlaying(true);
-      // send mqtt message to play video
-    } else {
-      setIsVideoPlaying(false);
-      // send mqtt message to pause video
-    }
-  }, [momentId, currentBeatIdx]);
-
   return (
     <div className="flex flex-col gap-6 px-11.5">
       {content.map(moment => {
@@ -88,22 +70,7 @@ const MomentsAndBeats = ({ content, exhibit, exhibitState, setExhibitState }: Mo
                 const isVideoBeat = moment.id === 'case-study' && beatIdx === 1;
 
                 if (isVideoBeat) {
-                  return (
-                    <button
-                      className={`text-primary-bg-grey transition-opacity ${
-                        isActiveMoment ? 'opacity-100' : 'pointer-events-none opacity-0'
-                      }`}
-                      key={beatIdx}
-                      // TODO: Send mqtt message to play/pause video
-                      onClick={() => setIsVideoPlaying(!isVideoPlaying)}
-                    >
-                      {isVideoPlaying ? (
-                        <CirclePause className="size-[40px]" />
-                      ) : (
-                        <CirclePlay className="size-[40px]" />
-                      )}
-                    </button>
-                  );
+                  return <CaseStudyToggle isActive={isActiveMoment} key={`${momentId}-${currentBeatIdx}`} />;
                 }
 
                 return (

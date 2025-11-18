@@ -49,7 +49,8 @@ export default function Background() {
   // The moment and beat might come from GEC.
   const { exhibitState } = useBasecamp();
   const { beatIdx, momentId } = exhibitState;
-  const [isSeeking, setIsSeeking] = useState<boolean>(false);
+  const isSeekingRef = useRef<boolean>(false);
+  const [displayTime, setDisplayTime] = useState<number>(0);
 
   useEffect(() => {
     const mainVideo = mainVideoRef.current;
@@ -104,7 +105,7 @@ export default function Background() {
       const mainVideo = mainVideoRef.current;
       if (!mainVideo?.currentTime) return;
       if (timeRange && Number.isFinite(timeRange.start)) {
-        setIsSeeking(true);
+        isSeekingRef.current = true;
         mainVideo.currentTime = timeRange.start ?? 0;
         mainVideo.play().catch((err: Error) => {
           console.error('Error playing main video:', err);
@@ -126,7 +127,7 @@ export default function Background() {
     if (!video) return;
 
     const handleSeeked = () => {
-      setIsSeeking(false);
+      isSeekingRef.current = false;
     };
     video.addEventListener('seeked', handleSeeked);
     return () => {
@@ -136,7 +137,7 @@ export default function Background() {
 
   // Handle main video time update for non-ambient sections
   const handleVideoTimeUpdate = () => {
-    if (!mainVideoRef.current || isSeeking || momentId === 'ambient') return;
+    if (!mainVideoRef.current || isSeekingRef.current || momentId === 'ambient') return;
 
     const currentTime = mainVideoRef.current.currentTime;
     const timeRange = getBeatTimeRange(momentId, beatIdx);
@@ -146,6 +147,38 @@ export default function Background() {
       console.info(`Paused at ${currentTime}s for ${momentId} beat ${beatIdx}`);
     }
   };
+
+  // Track and display current time without reading refs during render
+  useEffect(() => {
+    const ambient = ambientVideoRef.current;
+    const main = mainVideoRef.current;
+    if (!ambient || !main) return;
+
+    const handleAmbientTime = () => {
+      if (momentId === 'ambient') {
+        setDisplayTime(ambient.currentTime);
+      }
+    };
+    const handleMainTime = () => {
+      if (momentId !== 'ambient') {
+        setDisplayTime(main.currentTime);
+      }
+    };
+
+    ambient.addEventListener('timeupdate', handleAmbientTime);
+    main.addEventListener('timeupdate', handleMainTime);
+
+    // Initialize the display time immediately when moment changes (schedule outside effect body)
+    const rafId = requestAnimationFrame(() => {
+      setDisplayTime(momentId === 'ambient' ? ambient.currentTime : main.currentTime);
+    });
+
+    return () => {
+      ambient.removeEventListener('timeupdate', handleAmbientTime);
+      main.removeEventListener('timeupdate', handleMainTime);
+      cancelAnimationFrame(rafId);
+    };
+  }, [momentId]);
 
   return (
     <>
@@ -172,13 +205,7 @@ export default function Background() {
       <div className="absolute top-4 left-4 rounded bg-black/50 p-2 text-white">
         <p>Moment: {momentId}</p>
         <p>BeatIdx: {beatIdx}</p>
-        <p>
-          Time:{' '}
-          {(momentId === 'ambient' ? ambientVideoRef.current?.currentTime : mainVideoRef.current?.currentTime)?.toFixed(
-            1
-          )}
-          s
-        </p>
+        <p>Time: {displayTime.toFixed(1)}s</p>
       </div>
     </>
   );

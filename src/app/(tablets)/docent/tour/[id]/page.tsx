@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { use } from 'react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import Header from '@/app/(tablets)/docent/_components/ui/Header';
+
 interface TourOverviewPageProps {
   params: Promise<{ id: string }>;
 }
@@ -14,7 +15,7 @@ export default function TourOverviewPage({ params }: TourOverviewPageProps) {
   const router = useRouter();
   const currentTour = useDocent().currentTour;
 
-  const handleSectionClick = (section: string) => {
+  const handleSectionClick = (section: 'basecamp' | 'overlook' | 'summit-room') => () => {
     router.push(`/docent/tour/${id}/${section}`);
   };
 
@@ -40,7 +41,7 @@ export default function TourOverviewPage({ params }: TourOverviewPageProps) {
         {/* Item 1 */}
         <button
           className="bg-primary-bg-grey relative flex h-50 w-50 items-center justify-center rounded-lg transition-opacity ease-in-out active:opacity-80"
-          onClick={() => handleSectionClick('basecamp')}
+          onClick={handleSectionClick('basecamp')}
         >
           <p className="text-primary-im-dark-blue -rotate-45 text-2xl">Basecamp</p>
         </button>
@@ -48,7 +49,7 @@ export default function TourOverviewPage({ params }: TourOverviewPageProps) {
         {/* Item 2 */}
         <button
           className="bg-primary-bg-grey relative flex h-50 w-50 items-center justify-center rounded-lg transition-opacity ease-in-out active:opacity-80"
-          onClick={() => handleSectionClick('overlook')}
+          onClick={handleSectionClick('overlook')}
         >
           <p className="text-primary-im-dark-blue -rotate-45 text-2xl">Overlook</p>
         </button>
@@ -56,7 +57,7 @@ export default function TourOverviewPage({ params }: TourOverviewPageProps) {
         {/* Item 3 (manually placed in column 2, row 2) */}
         <button
           className="bg-primary-bg-grey relative col-start-2 row-start-2 flex h-50 w-50 items-center justify-center rounded-lg transition-opacity ease-in-out active:opacity-80"
-          onClick={() => handleSectionClick('summit-room')}
+          onClick={handleSectionClick('summit-room')}
         >
           <p className="text-primary-im-dark-blue -rotate-45 text-2xl">Summit Room</p>
         </button>

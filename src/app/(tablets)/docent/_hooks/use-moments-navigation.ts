@@ -37,21 +37,25 @@ const useMomentsNavigation = (
       goTo(momentId, currentBeatIdx - 1);
     } else if (currentMomentIdx > 0) {
       const prevMoment = content[currentMomentIdx - 1];
+      if (!prevMoment) return;
       goTo(prevMoment.id, prevMoment.beatCount - 1);
     }
   };
 
   const handleNext = () => {
-    if (currentBeatIdx < currentMoment.beatCount - 1) {
+    if (currentMoment && currentBeatIdx < currentMoment.beatCount - 1) {
       goTo(momentId, currentBeatIdx + 1);
     } else if (currentMomentIdx < content.length - 1) {
       const nextMoment = content[currentMomentIdx + 1];
+      if (!nextMoment) return;
       goTo(nextMoment.id, 0);
     }
   };
 
   const isPreviousDisabled = currentMomentIdx === 0 && currentBeatIdx === 0;
-  const isNextDisabled = currentMomentIdx === content.length - 1 && currentBeatIdx === currentMoment.beatCount - 1;
+  const isNextDisabled = currentMoment
+    ? currentMomentIdx === content.length - 1 && currentBeatIdx === currentMoment.beatCount - 1
+    : true;
 
   return {
     currentBeatIdx,

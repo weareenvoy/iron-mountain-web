@@ -2,7 +2,7 @@
 
 import { ArrowLeft, ArrowRight, House, RotateCw } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import Header from '@/app/(tablets)/docent/_components/ui/Header';
 import { useMqtt } from '@/components/providers/mqtt-provider';
@@ -20,39 +20,41 @@ export default function SchedulePage() {
   const { allTours, isConnected, isTourDataLoading, refreshTours, setCurrentTour } = useDocent();
   const [selectedTourId, setSelectedTourId] = useState<null | string>(null);
   const [currentMonthDate, setCurrentMonthDate] = useState(new Date());
-  const [toursByDate, setToursByDate] = useState<Record<string, TourByDate>>({});
-
-  useEffect(() => {
-    if (allTours.length > 0) {
-      const groupedTours = allTours.reduce(
-        (acc, tour) => {
-          // Parse date string as local date
-          const [year, month, day] = tour.date.split('-').map(Number);
-          const tourDate = new Date(year, month - 1, day); // month is 0-indexed
-          const date = tourDate.toDateString();
-          const dayOfWeek = tourDate.toLocaleDateString('en-US', {
-            weekday: 'long',
-          });
-
-          // Group tours by date, and also save a dayOfWeek to use for display later.
-          if (!acc[date]) {
-            acc[date] = { dayOfWeek: dayOfWeek, tours: [] };
-          }
-          acc[date].tours.push(tour);
-          // sort tours by startTime
-          acc[date].tours.sort((a, b) => {
-            const startTimeA = new Date(`${tour.date} ${a.startTime}`);
-            const startTimeB = new Date(`${tour.date} ${b.startTime}`);
-            return startTimeA.getTime() - startTimeB.getTime();
-          });
-          return acc;
-        },
-        {} as Record<string, TourByDate>
-      );
-      setToursByDate(groupedTours);
-    } else {
-      setToursByDate({});
+  const toursByDate = useMemo<Record<string, TourByDate>>(() => {
+    if (allTours.length === 0) {
+      return {};
     }
+    return allTours.reduce(
+      (acc, tour) => {
+        // Parse date string as local date
+        const [yearStr, monthStr, dayStr] = tour.date.split('-');
+        const year = Number.parseInt(yearStr ?? '', 10);
+        const month = Number.parseInt(monthStr ?? '', 10);
+        const day = Number.parseInt(dayStr ?? '', 10);
+        if (!Number.isFinite(year) || !Number.isFinite(month) || !Number.isFinite(day)) {
+          return acc;
+        }
+        const tourDate = new Date(year, month - 1, day); // month is 0-indexed
+        const date = tourDate.toDateString();
+        const dayOfWeek = tourDate.toLocaleDateString('en-US', {
+          weekday: 'long',
+        });
+
+        // Group tours by date, and also save a dayOfWeek to use for display later.
+        if (!acc[date]) {
+          acc[date] = { dayOfWeek: dayOfWeek, tours: [] };
+        }
+        acc[date].tours.push(tour);
+        // sort tours by startTime
+        acc[date].tours.sort((a, b) => {
+          const startTimeA = new Date(`${tour.date} ${a.startTime}`);
+          const startTimeB = new Date(`${tour.date} ${b.startTime}`);
+          return startTimeA.getTime() - startTimeB.getTime();
+        });
+        return acc;
+      },
+      {} as Record<string, TourByDate>
+    );
   }, [allTours]);
 
   // For the 4 buttons in header

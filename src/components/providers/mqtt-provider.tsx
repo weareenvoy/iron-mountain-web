@@ -48,11 +48,12 @@ export function MqttProvider({ children }: MqttProviderProps) {
 
     const mqttService = new MqttService({
       deviceId,
-      onConnectionChange: setIsConnected,
+      onConnectionChange: connected => {
+        setIsConnected(connected);
+        setClient(mqttService);
+      },
       onError: setError,
     });
-
-    setClient(mqttService);
 
     return () => {
       console.info(`MQTT: Disconnecting ${deviceId}`);
@@ -66,7 +67,7 @@ export function MqttProvider({ children }: MqttProviderProps) {
       error,
       isConnected,
     }),
-    [client, isConnected, error]
+    [client, error, isConnected]
   );
 
   return <MqttContext.Provider value={value}>{children}</MqttContext.Provider>;
