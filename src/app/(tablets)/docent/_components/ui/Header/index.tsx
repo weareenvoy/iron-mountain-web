@@ -18,7 +18,7 @@ const Header = ({ leftButton }: HeaderProps) => {
     <div className="absolute top-0 left-0 flex h-30 w-full items-center justify-between px-5">
       {/* Left Button */}
       {leftButton && (
-        <Link href={leftButton.href}>
+        <Link href={{ pathname: leftButton.href }}>
           <Button className="flex h-13 items-center gap-3.5 px-6" size="sm" variant="outline">
             {leftButton.icon}
             <span className="h-6.25 text-[20px]">{leftButton.text}</span>

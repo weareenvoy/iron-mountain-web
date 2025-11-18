@@ -1,3 +1,5 @@
+'use client';
+
 import { Settings } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
