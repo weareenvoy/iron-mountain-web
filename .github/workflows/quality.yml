@@ -62,7 +62,7 @@ jobs:
 
       # Next build → generates .next/types, and will fail on TS errors
       - name: Build check (typed routes)
-        run: pnpm build-check
+        run: pnpm next:build-check
 
       - name: Prettier (verify only)
-        run: pnpm format
+        run: pnpm next:format
