@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "ms-vscode.vscode-typescript-next",
+    "vscodeshift.material-ui-snippets",
+    "christian-kohler.npm-intellisense",
+    "esbenp.prettier-vscode",
+    "Supabase.vscode-supabase-extension",
+    "streetsidesoftware.code-spell-checker"
+  ]
+}

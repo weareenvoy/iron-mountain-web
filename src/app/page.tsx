@@ -1,23 +1,19 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
-import { Button } from "../components/Button";
+import { useRouter } from 'next/navigation';
+import { Button } from '@/components/shadcn/button';
 
 export default function Home() {
   const router = useRouter();
 
   const apps = [
     {
-      title: "Docent App",
-      route: "/docent",
+      route: '/docent',
+      title: 'Docent App',
     },
     {
-      title: "Kiosk 1",
-      route: "/kiosk-1",
-    },
-    {
-      title: "Basecamp App",
-      route: "/basecamp",
+      route: '/basecamp',
+      title: 'Basecamp App',
     },
   ];
 
@@ -25,12 +21,12 @@ export default function Home() {
     <div className="bg-background-primary flex flex-col items-center justify-center gap-10">
       {apps.map((app, index) => (
         <Button
+          className="w-full"
           key={index}
-          onClick={(e) => {
+          onClick={e => {
             e.stopPropagation();
             router.push(app.route);
           }}
-          className="w-full"
         >
           {app.title}
         </Button>

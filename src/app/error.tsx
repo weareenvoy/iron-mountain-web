@@ -1,16 +1,10 @@
-"use client"; // Error boundaries must be Client Components
+'use client'; // Error boundaries must be Client Components
 
-import { Button } from "@/components/Button";
-import Link from "next/link";
-import { useEffect } from "react";
+import Link from 'next/link';
+import { useEffect } from 'react';
+import { Button } from '@/components/shadcn/button';
 
-export default function Error({
-  error,
-  reset,
-}: {
-  error: Error & { digest?: string };
-  reset: () => void;
-}) {
+const ErrorPage = ({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) => {
   useEffect(() => {
     console.error(error);
   }, [error]);
@@ -33,15 +27,17 @@ export default function Error({
         </Button>
 
         <Button
-          size="sm"
           onClick={
             // Attempt to recover by trying to re-render the segment
             () => reset()
           }
+          size="sm"
         >
           Try again
         </Button>
       </div>
     </div>
   );
-}
+};
+
+export default ErrorPage;

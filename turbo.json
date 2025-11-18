@@ -1,0 +1,35 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "ui": "tui",
+  "tasks": {
+    "analyze": {
+      "env": ["ANALYZE"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+    },
+    "build": {
+      "env": ["NODE_ENV", "VERCEL_ENV"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+    },
+    "dev": {
+      "cache": false,
+      "env": ["NODE_ENV", "VERCEL_ENV"],
+      "persistent": true
+    },
+    "start": {
+      "cache": false,
+      "env": ["NODE_ENV", "VERCEL_ENV"],
+      "persistent": true
+    },
+    "lint": {
+      "cache": true
+    },
+    "types": {
+      "cache": true
+    },
+    "format": {
+      "cache": false
+    }
+  }
+}

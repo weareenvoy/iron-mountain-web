@@ -1,0 +1,68 @@
+name: Quality
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          # don't set cache: 'pnpm' here because pnpm isn't activated yet
+
+      # Activate pnpm via Corepack. If you later add "packageManager": "pnpm@x.y.z",
+      # corepack use will pick it up; otherwise we fall back to pnpm@10.
+      - name: Enable Corepack & activate pnpm
+        run: |
+          corepack enable
+          corepack use || corepack prepare pnpm@10 --activate
+          pnpm -v
+
+      # Fail fast on wrong lockfiles (before we spend time installing)
+      - name: Block yarn.lock / package-lock.json
+        run: |
+          test ! -f yarn.lock || (echo "❌ yarn.lock found. Use pnpm-lock.yaml." && exit 1)
+          test ! -f package-lock.json || (echo "❌ package-lock.json found. Use pnpm-lock.yaml." && exit 1)
+
+      # Cache pnpm store AFTER pnpm is available
+      - name: Get pnpm store path
+        id: pnpm-cache
+        shell: bash
+        run: echo "STORE_PATH=$(pnpm store path)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: pnpm-store-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-store-${{ runner.os }}-
+
+      - name: Install deps
+        run: pnpm i --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      # Next build → generates .next/types, and will fail on TS errors
+      - name: Build check (typed routes)
+        run: pnpm build-check
+
+      - name: Prettier (verify only)
+        run: pnpm format

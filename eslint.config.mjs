@@ -1,16 +1,168 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+import cspellPlugin from '@cspell/eslint-plugin';
+import { defineConfig, globalIgnores } from 'eslint/config';
+import nextVitals from 'eslint-config-next/core-web-vitals';
+import nextTs from 'eslint-config-next/typescript';
+import prettier from 'eslint-config-prettier/flat';
+import importPlugin from 'eslint-plugin-import';
+import perfectionist from 'eslint-plugin-perfectionist';
+import prettierPlugin from 'eslint-plugin-prettier';
+import turbo from 'eslint-plugin-turbo';
+import globals from 'globals';
+import { createRequire } from 'node:module';
+import { resolve } from 'node:path';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const require = createRequire(import.meta.url);
+const __dirname = import.meta.dirname;
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
+const eslintConfig = defineConfig([
+  // Next's flat preset (includes plugin + rules, Core Web Vitals)
+  ...nextVitals,
+  ...nextTs,
+  perfectionist.configs['recommended-natural'],
+  // Prettier at the end to neutralize stylistic rules
+  prettier,
 
-const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
-];
+  // Add any environment globals (e.g. service workers used by Next)
+  {
+    languageOptions: {
+      globals: { ...globals.browser, ...globals.serviceworker },
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: __dirname,
+      },
+    },
+    settings: { react: { version: 'detect' } },
+  },
+
+  {
+    plugins: {
+      '@cspell': cspellPlugin,
+      'import': importPlugin,
+      'prettier': prettierPlugin,
+      'turbo': turbo,
+    },
+    rules: {
+      // cspell (points at your repo-level config)
+      '@cspell/spellchecker': ['warn', { autoFix: true, cspell: require('./cspell.config.cjs') }],
+      // Flag class methods that don't use 'this', promoting simpler functions.
+      'class-methods-use-this': 'error',
+      'import/consistent-type-specifier-style': 'off',
+      'import/exports-last': 'off',
+      'import/group-exports': 'off',
+      'import/max-dependencies': 'off',
+      'import/no-anonymous-default-export': 'warn',
+      'import/no-default-export': 'off',
+      'import/no-duplicates': 'error',
+      'import/no-internal-modules': 'off',
+      'import/no-named-export': 'off',
+      'import/no-nodejs-modules': [
+        'error',
+        {
+          allow: ['node:assert/strict', 'node:fs/promises', 'node:path', 'node:url', 'node:module'],
+        },
+      ],
+      'import/no-relative-parent-imports': 'off',
+      'import/no-unassigned-import': 'off',
+      'import/no-unresolved': 'off', // TS resolver handles this
+      'import/order': ['off'], // perfectionist/sort-imports handles this
+      'import/prefer-default-export': 'off',
+      'no-console': ['error', { allow: ['error', 'info', 'warn'] }],
+      'no-duplicate-imports': 'error',
+      // Discourage 'new' keyword for side effects.
+      'no-new': 'error',
+      // Restrict extending other classes via inheritance.
+      'no-restricted-syntax': [
+        'error',
+        {
+          message: 'Use composition instead of inheritance.',
+          selector: 'ClassDeclaration[superClass]',
+        },
+      ],
+      'no-undef': 'off',
+      'no-unsafe-optional-chaining': 'error',
+      'one-var': ['error', 'never'],
+      // 1. Line Ordering (Matches import/order logic)
+      'perfectionist/sort-imports': [
+        'error',
+        {
+          // groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object', 'type'],
+          groups: [
+            ['value-builtin', 'value-external'],
+            'value-internal',
+            ['value-parent', 'value-sibling', 'value-index'],
+            ['type-parent', 'type-sibling', 'type-index'],
+            'ts-equals-import',
+            'type-internal',
+            'type-import',
+            'unknown',
+          ],
+          ignoreCase: false,
+          newlinesBetween: 0,
+          order: 'asc',
+          specialCharacters: 'remove',
+        },
+      ],
+      'perfectionist/sort-modules': ['error', { order: 'asc', type: 'unsorted' }],
+      // 2. Specifier Sorting (Matches named: { enabled: true } logic)
+      'perfectionist/sort-named-imports': [
+        'error',
+        {
+          groups: ['value-import', 'type-import'],
+          ignoreCase: false,
+          newlinesBetween: 0,
+          order: 'asc',
+        },
+      ],
+      'prefer-const': 'error',
+      'prettier/prettier': [
+        'error',
+        {
+          arrowParens: 'avoid',
+          bracketSameLine: false,
+          bracketSpacing: true,
+          experimentalTernaries: false,
+          plugins: ['prettier-plugin-tailwindcss'],
+          printWidth: 120,
+          proseWrap: 'always',
+          quoteProps: 'consistent',
+          semi: true,
+          singleQuote: true,
+          tabWidth: 2,
+          tailwindFunctions: ['clsx'],
+          tailwindPreserveWhitespace: true,
+          tailwindStylesheet: resolve(__dirname, './src/lib/tailwind/styles/globals.css'),
+          trailingComma: 'es5',
+          useTabs: false,
+        },
+      ],
+      'sort-imports': ['error', { ignoreDeclarationSort: true, ignoreMemberSort: true }], // perfectionist/sort-named-imports handles member sorting
+      'sort-keys': ['error', 'asc', { natural: true }],
+      'sort-vars': 'error',
+      // Turborepo
+      'turbo/no-undeclared-env-vars': 'warn',
+    },
+    settings: {
+      // Make import plugin TypeScript-aware + support "@/..."
+      'import/resolver': {
+        node: { extensions: ['.js', '.jsx', '.ts', '.tsx'] },
+        typescript: {
+          // respects tsconfig paths across the monorepo
+          alwaysTryTypes: true,
+          project: true,
+        },
+      },
+    },
+  },
+
+  // Override default ignores of eslint-config-next.
+  globalIgnores([
+    // Default ignores of eslint-config-next:
+    '.next/**',
+    'out/**',
+    'build/**',
+    'next-env.d.ts',
+    'lib/supabase/middleware.ts',
+  ]),
+]);
 
 export default eslintConfig;

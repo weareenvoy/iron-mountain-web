@@ -1,68 +1,68 @@
-import { NextResponse } from "next/server";
-import { BasecampData } from "@/types";
+import { NextResponse } from 'next/server';
+import { BasecampData } from '@/app/(displays)/basecamp/_types';
 
 // Mock data for a tour's basecamp content.
 const MOCK_BASECAMP_DATA: BasecampData = {
-  welcome: {
-    text: "Welcome to Iron Mountain",
+  'possibilities': {
+    title: 'Discover new possibilities',
   },
-  "problem-1": {
+  'possibilities-a': {
+    'body-1': 'Body 1',
+    'body-2': 'Body 2',
+    'body-3': 'Body 3',
+    'title': 'Making data accessible',
+  },
+  'possibilities-b': {
+    'body-1': 'Body 1',
+    'body-2': 'Body 2',
+    'body-3': 'Body 3',
+    'title': 'Unlocking new value streams',
+  },
+  'possibilities-c': {
+    'body-1': 'Body 1',
+    'body-2': 'Body 2',
+    'body-3': 'Body 3',
+    'title': 'Optimizing your assets',
+  },
+  'problem-1': {
     text: "What's standing in your way?",
   },
-  "problem-2": [
+  'problem-2': [
     {
-      percent: "20",
-      percentSubtitle: "of data remains dark",
+      percent: '20',
+      percentSubtitle: 'of data remains dark',
     },
-    { percent: "80-90", percentSubtitle: "of new data is unstructured" },
+    { percent: '80-90', percentSubtitle: 'of new data is unstructured' },
     {
-      percent: "<1%",
-      percentSubtitle: "of enterprise data is leveraged for AI",
+      percent: '<1%',
+      percentSubtitle: 'of enterprise data is leveraged for AI',
     },
   ],
-  "problem-3": {
-    title: "What's holding you back?",
-    "challenge-1": {
-      title: "Too much complexity",
-      body: "body 1",
-      icon: "icon 1",
+  'problem-3': {
+    'challenge-1': {
+      body: 'body 1',
+      icon: 'icon 1',
+      title: 'Too much complexity',
     },
-    "challenge-2": {
-      title: "Cost, Uncertain ROI",
-      body: "body 2",
-      icon: "icon 2",
+    'challenge-2': {
+      body: 'body 2',
+      icon: 'icon 2',
+      title: 'Cost, Uncertain ROI',
     },
-    "challenge-3": {
-      title: "Too many risks",
-      body: "body 3",
-      icon: "icon 3",
+    'challenge-3': {
+      body: 'body 3',
+      icon: 'icon 3',
+      title: 'Too many risks',
     },
-    "challenge-4": {
-      title: "Too few skills",
-      body: "body 4",
-      icon: "icon 4",
+    'challenge-4': {
+      body: 'body 4',
+      icon: 'icon 4',
+      title: 'Too few skills',
     },
+    'title': "What's holding you back?",
   },
-  possibilities: {
-    title: "Discover new possibilities",
-  },
-  "possibilities-a": {
-    title: "Making data accessible",
-    "body-1": "Body 1",
-    "body-2": "Body 2",
-    "body-3": "Body 3",
-  },
-  "possibilities-b": {
-    title: "Unlocking new value streams",
-    "body-1": "Body 1",
-    "body-2": "Body 2",
-    "body-3": "Body 3",
-  },
-  "possibilities-c": {
-    title: "Optimizing your assets",
-    "body-1": "Body 1",
-    "body-2": "Body 2",
-    "body-3": "Body 3",
+  'welcome': {
+    text: 'Welcome to Iron Mountain',
   },
 };
 
@@ -71,10 +71,7 @@ export async function GET() {
   try {
     return NextResponse.json(MOCK_BASECAMP_DATA);
   } catch (error) {
-    console.error("error fetching basecamp data", error);
-    return NextResponse.json(
-      { error: "Failed to fetch basecamp data" },
-      { status: 500 },
-    );
+    console.error('error fetching basecamp data', error);
+    return NextResponse.json({ error: 'Failed to fetch basecamp data' }, { status: 500 });
   }
 }

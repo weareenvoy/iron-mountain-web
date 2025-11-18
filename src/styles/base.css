@@ -1,5 +1,0 @@
-@layer base {
-  * {
-    @apply border-border-primary outline-ring/50;
-  }
-}

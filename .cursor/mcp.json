@@ -1,0 +1,27 @@
+{
+  "mcpServers": {
+    "figma": {
+      "type": "http",
+      "url": "https://mcp.figma.com/mcp",
+      "tools": ["get_design_context", "get_variable_defs", "get_screenshot", "get_code_connect_map", "get_metadata"]
+    },
+    "motion": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "motion-ai"],
+      "tools": ["get_project_context"]
+    },
+    "next-devtools": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "next-devtools-mcp@latest"],
+      "tools": ["get_page_context", "get_file_tree", "search_project"]
+    },
+    "shadcn": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "shadcn@latest", "mcp"],
+      "tools": ["get_component_context", "add_component"]
+    }
+  }
+}

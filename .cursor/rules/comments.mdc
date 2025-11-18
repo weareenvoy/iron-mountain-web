@@ -1,0 +1,8 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+
+Do not delete any commented-out code or comments. You may move or update them to match new code, but they must remain in
+the file.

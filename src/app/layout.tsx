@@ -1,63 +1,57 @@
-import type { Metadata } from "next";
-import localFont from "next/font/local";
-import { cn } from "@/lib/utils";
-import { MqttProvider } from "@/providers/MqttProvider";
-import { Toaster } from "@/components/Toaster";
-
-import "../styles/index.css";
+import localFont from 'next/font/local';
+import { MqttProvider } from '@/components/providers/mqtt-provider';
+import { Toaster } from '@/components/shadcn/sonner';
+import { cn } from '@/lib/tailwind/utils/cn';
+import type { Metadata } from 'next';
 
 // Font configurations
 const interstate = localFont({
   src: [
     {
-      path: "../fonts/InterstateRegular.woff2",
-      weight: "400",
-      style: "normal",
+      path: '../fonts/InterstateRegular.woff2',
+      style: 'normal',
+      weight: '400',
     },
   ],
-  variable: "--font-interstate",
+  variable: '--font-interstate',
 });
 
 const geometria = localFont({
   src: [
     {
-      path: "../fonts/Geometria.woff2",
-      weight: "400",
-      style: "normal",
+      path: '../fonts/Geometria.woff2',
+      style: 'normal',
+      weight: '400',
     },
   ],
-  variable: "--font-geometria",
+  variable: '--font-geometria',
 });
 
 export const metadata: Metadata = {
-  title: "Iron Mountain Overlook Tablet",
-  description: "",
+  description: '',
   robots: {
     follow: false,
     index: false,
   },
+  title: 'Iron Mountain Overlook Tablet',
 };
 
 export const viewport = {
   initialScale: 1,
-  width: "device-width",
   maximumScale: 1,
   userScalable: false,
+  width: 'device-width',
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
-    <html lang="en" className="h-full" data-theme="dark">
+    <html className="h-full" data-theme="dark" lang="en">
       <body
         className={cn(
           interstate.variable,
           geometria.variable,
           interstate.className,
-          "text-foreground-primary bg-background-primary antialiased",
+          'text-foreground-primary bg-background-primary antialiased'
         )}
       >
         <MqttProvider>{children}</MqttProvider>

@@ -1,25 +1,13 @@
 {
-    "typescript.tsdk": "node_modules/typescript/lib",
-    "tailwindCSS.classAttributes": [
-        "class",
-        "className",
-        "cn",
-    ],
-    // https://github.com/tailwindlabs/tailwindcss-intellisense/issues/868
-    "tailwindCSS.experimental.classRegex": [
-        // cva(...)
-        ["cva\\(([^)(]*(?:\\([^)(]*(?:\\([^)(]*(?:\\([^)(]*\\)[^)(]*)*\\)[^)(]*)*\\)[^)(]*)*)\\)", "'([^']*)'"],
-        ["cva\\(([^)(]*(?:\\([^)(]*(?:\\([^)(]*(?:\\([^)(]*\\)[^)(]*)*\\)[^)(]*)*\\)[^)(]*)*)\\)", "\"([^\"]*)\""],
-        ["cva\\(([^)(]*(?:\\([^)(]*(?:\\([^)(]*(?:\\([^)(]*\\)[^)(]*)*\\)[^)(]*)*\\)[^)(]*)*)\\)", "`([^`]*)`"],
-        // cx(...)
-        ["cx\\(([^)(]*(?:\\([^)(]*(?:\\([^)(]*(?:\\([^)(]*\\)[^)(]*)*\\)[^)(]*)*\\)[^)(]*)*)\\)", "'([^']*)'"],
-        ["cx\\(([^)(]*(?:\\([^)(]*(?:\\([^)(]*(?:\\([^)(]*\\)[^)(]*)*\\)[^)(]*)*\\)[^)(]*)*)\\)", "\"([^\"]*)\""],
-        ["cx\\(([^)(]*(?:\\([^)(]*(?:\\([^)(]*(?:\\([^)(]*\\)[^)(]*)*\\)[^)(]*)*\\)[^)(]*)*)\\)", "`([^`]*)`"],
-        // clsx(...)
-        ["clsx\\(([^)(]*(?:\\([^)(]*(?:\\([^)(]*(?:\\([^)(]*\\)[^)(]*)*\\)[^)(]*)*\\)[^)(]*)*)\\)", "'([^']*)'"],
-        ["clsx\\(([^)(]*(?:\\([^)(]*(?:\\([^)(]*(?:\\([^)(]*\\)[^)(]*)*\\)[^)(]*)*\\)[^)(]*)*)\\)", "\"([^\"]*)\""],
-        ["clsx\\(([^)(]*(?:\\([^)(]*(?:\\([^)(]*(?:\\([^)(]*\\)[^)(]*)*\\)[^)(]*)*\\)[^)(]*)*)\\)", "`([^`]*)`"],
-    ],
-    "editor.formatOnSave": true,
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "editor.codeActionsOnSave": ["source.fixAll.eslint", "source.fixAll.tslint"],
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnPaste": false,
+  "editor.formatOnType": false,
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file",
+  "editor.renderWhitespace": "all",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "cSpell.enabled": true,
+  "cSpell.words": ["rrule", "shadcn", "vercel"],
+  "eslint.useFlatConfig": true
 }
