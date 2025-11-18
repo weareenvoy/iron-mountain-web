@@ -11,6 +11,11 @@
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },
+    "build-check": {
+      "cache": false,
+      "env": ["NODE_ENV", "VERCEL_ENV"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+    },
     "dev": {
       "cache": false,
       "env": ["NODE_ENV", "VERCEL_ENV"],

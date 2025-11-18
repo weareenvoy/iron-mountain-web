@@ -116,7 +116,7 @@ const nextConfig: NextConfig = {
   },
   typedRoutes: true,
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
 };
 

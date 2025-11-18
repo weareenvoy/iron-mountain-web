@@ -6,6 +6,7 @@
   "scripts": {
     "analyze": "turbo run next:analyze",
     "build": "turbo run next:build",
+    "build-check": "turbo run next:build-check",
     "dev": "turbo run next:dev",
     "format": "turbo run next:format",
     "format:fix": "turbo run next:format-fix",
@@ -13,6 +14,7 @@
     "lint:fix": "pnpm run next:lint-fix",
     "next:analyze": "ANALYZE=true pnpm next build --experimental-next-config-strip-types",
     "next:build": "next build --experimental-next-config-strip-types",
+    "next:build-check": "NEXT_TELEMETRY_DISABLED=1 next build --experimental-next-config-strip-types",
     "next:dev": "next dev --experimental-next-config-strip-types",
     "next:format": "prettier . -c",
     "next:format-fix": "prettier . -w",
