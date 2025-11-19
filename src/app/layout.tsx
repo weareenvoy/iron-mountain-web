@@ -1,6 +1,5 @@
 import '@/lib/tailwind/styles/globals.css';
-import { Suspense } from 'react';
-import { MqttProvider } from '@/components/providers/mqtt-provider';
+import SwRegister from '@/components/providers/sw-register';
 import { ThemeProvider } from '@/components/providers/theme';
 import { Toaster } from '@/components/shadcn/sonner';
 import { geometria, interstate } from '@/lib/internal/fonts';
@@ -13,6 +12,7 @@ export const metadata: Metadata = {
     follow: false,
     index: false,
   },
+  themeColor: '#0B2E4E',
   title: 'Iron Mountain',
 };
 
@@ -29,19 +29,16 @@ const RootLayout = ({ children }: LayoutProps<'/'>) => {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={cn('antialiased', interstate.variable, geometria.variable)}>
-        <Suspense>
-          <MqttProvider>
-            <ThemeProvider
-              defaultTheme="system"
-              disableTransitionOnChange
-              enableColorScheme
-              enableSystem
-              themes={['dark', 'light']}
-            >
-              {children}
-            </ThemeProvider>
-          </MqttProvider>
-        </Suspense>
+        <SwRegister />
+        <ThemeProvider
+          defaultTheme="system"
+          disableTransitionOnChange
+          enableColorScheme
+          enableSystem
+          themes={['dark', 'light']}
+        >
+          {children}
+        </ThemeProvider>
         <Toaster />
       </body>
     </html>

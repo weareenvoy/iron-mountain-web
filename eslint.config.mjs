@@ -34,6 +34,16 @@ const eslintConfig = defineConfig([
     settings: { react: { version: 'detect' } },
   },
 
+  // Ensure public SW is linted without project service errors
+  {
+    files: ['public/sw.js'],
+    languageOptions: {
+      parserOptions: {
+        projectService: false,
+      },
+    },
+  },
+
   {
     plugins: {
       '@cspell': cspellPlugin,
@@ -162,6 +172,7 @@ const eslintConfig = defineConfig([
     'build/**',
     'next-env.d.ts',
     'lib/supabase/middleware.ts',
+    'public/sw.js',
   ]),
 ]);
 

@@ -1,2 +1,4 @@
 // Generate availability topic for a device
-export const getAvailabilityTopic = (deviceId: string): string => `state/${deviceId}/availability`;
+import type { DeviceId } from '../types';
+
+export const getAvailabilityTopic = (deviceId: DeviceId): string => `state/${deviceId}/availability`;

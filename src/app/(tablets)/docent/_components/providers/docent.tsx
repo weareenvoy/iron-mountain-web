@@ -12,6 +12,7 @@ import {
 } from 'react';
 import { DocentAppState, type SyncState, type Tour } from '@/app/(tablets)/docent/_types';
 import { useMqtt } from '@/components/providers/mqtt-provider';
+import { getTours } from '@/lib/internal/data/get-tours';
 import type { ExhibitNavigationState } from '@/lib/internal/types';
 import type { Route } from 'next';
 
@@ -113,12 +114,7 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
   const fetchTours = useCallback(async () => {
     setIsTourDataLoading(true);
     try {
-      // fetch schedule tours. Endpoint name and data structure is TBD.
-      const response = await fetch('/api/tours.json', { cache: 'force-cache' });
-      if (!response.ok) {
-        throw new Error('Failed to fetch tours');
-      }
-      const tours: Tour[] = await response.json();
+      const tours: Tour[] = await getTours();
       setAllTours(tours);
       setLastUpdated(new Date());
       if (currentTour && !tours.find(tour => tour.id === currentTour.id)) {

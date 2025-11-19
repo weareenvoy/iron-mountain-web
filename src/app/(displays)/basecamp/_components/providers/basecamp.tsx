@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useState, type PropsWithChildren } from 'react';
 import { useMqtt } from '@/components/providers/mqtt-provider';
+import { getBasecampData } from '@/lib/internal/data/get-basecamp';
 import type { BasecampData } from '@/app/(displays)/basecamp/_types';
 import type { ExhibitNavigationState } from '@/lib/internal/types';
 import type { ExhibitMqttState } from '@/lib/mqtt/types';
@@ -54,13 +55,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     setLoading(true);
 
     try {
-      // TODO use actual API once it's ready. For now no tourId is needed in params.
-      const response = await fetch('/api/basecamp.json', { cache: 'force-cache' });
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to fetch basecamp data');
-      }
-      const basecampData = await response.json();
+      const basecampData = await getBasecampData();
       setData(basecampData);
       setError(null);
       return true;

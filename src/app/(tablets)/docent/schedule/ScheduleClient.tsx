@@ -99,12 +99,30 @@ const ScheduleClient = () => {
     }
   };
 
-  const filteredTours = Object.entries(toursByDate).filter(([date]) => {
-    const tourDate = new Date(date);
-    return (
-      tourDate.getMonth() === currentMonthDate.getMonth() && tourDate.getFullYear() === currentMonthDate.getFullYear()
-    );
-  });
+  const filteredTours = useMemo(() => {
+    return Object.entries(toursByDate).filter(([date]) => {
+      const tourDate = new Date(date);
+      return (
+        tourDate.getMonth() === currentMonthDate.getMonth() && tourDate.getFullYear() === currentMonthDate.getFullYear()
+      );
+    });
+  }, [toursByDate, currentMonthDate]);
+
+  const currentMonthLabel = useMemo(() => {
+    return currentMonthDate.toLocaleDateString('en-US', {
+      month: 'long',
+      year: 'numeric',
+    });
+  }, [currentMonthDate]);
+
+  const leftButton = useMemo(
+    () => ({
+      href: '/docent',
+      icon: <House />,
+      text: 'Back to home',
+    }),
+    []
+  );
 
   if (!isConnected) {
     return <div>Connecting to MQTT...</div>;
@@ -113,13 +131,7 @@ const ScheduleClient = () => {
   return (
     <div className="relative flex h-full w-full flex-col overflow-hidden">
       {/* Navigation */}
-      <Header
-        leftButton={{
-          href: '/docent',
-          icon: <House />,
-          text: 'Back to home',
-        }}
-      />
+      <Header leftButton={leftButton} />
       <div className="flex h-full w-full flex-col justify-between">
         {/* Header */}
         <h1 className="text-primary-bg-grey mt-35 pl-5 text-4xl leading-loose tracking-[-1.8px]">EBC schedule</h1>
@@ -140,10 +152,7 @@ const ScheduleClient = () => {
 
               {/* Month and year */}
               <span className="text-primary-im-dark-blue text-[28px] leading-[1.2] tracking-[-1.4px]">
-                {currentMonthDate.toLocaleDateString('en-US', {
-                  month: 'long',
-                  year: 'numeric',
-                })}
+                {currentMonthLabel}
               </span>
 
               <button className="active:opacity-50" onClick={handleNextMonth}>

@@ -1,9 +1,8 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
 import { createContext, useContext, useEffect, useMemo, useState, type PropsWithChildren } from 'react';
 import { MqttService } from '@/lib/mqtt/utils/mqtt-service';
-import type { MqttError } from '@/lib/mqtt/types';
+import type { DeviceId, MqttError } from '@/lib/mqtt/types';
 
 interface MqttContextType {
   readonly client: MqttService | undefined;
@@ -13,23 +12,7 @@ interface MqttContextType {
 
 const MqttContext = createContext<MqttContextType | undefined>(undefined);
 
-type MqttProviderProps = PropsWithChildren<{
-  readonly topic?: string;
-}>;
-
-// Determine device ID based on the current route
-const getDeviceIdFromPath = (pathname: string): string => {
-  // Check if we're on a specific exhibit page
-  if (pathname.startsWith('/basecamp')) {
-    return 'basecamp';
-  }
-  if (pathname.startsWith('/kiosk-1')) {
-    return 'kiosk-01';
-  }
-
-  // Default to docent-app for all other routes (/docent, /, etc.)
-  return 'docent-app';
-};
+type MqttProviderProps = PropsWithChildren<{ readonly topic: DeviceId }>;
 
 export const useMqtt = () => {
   const context = useContext(MqttContext);
@@ -39,23 +22,16 @@ export const useMqtt = () => {
   return context;
 };
 
-export const MqttProvider = ({ children }: MqttProviderProps) => {
-  const pathname = usePathname();
+export const MqttProvider = ({ children, topic }: MqttProviderProps) => {
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState<MqttError | undefined>(undefined);
   const [client, setClient] = useState<MqttService | undefined>(undefined);
 
-  // Compute device ID from pathname - memoized so effect only runs when this changes
-  const deviceId = useMemo(() => {
-    const id = getDeviceIdFromPath(pathname);
-    return id;
-  }, [pathname]);
-
   useEffect(() => {
-    console.info(`MQTT: Connecting as ${deviceId}`);
+    console.info(`MQTT: Connecting as ${topic}`);
 
     const mqttService = new MqttService({
-      deviceId,
+      deviceId: topic,
       onConnectionChange: connected => {
         setIsConnected(connected);
         setClient(mqttService);
@@ -64,10 +40,10 @@ export const MqttProvider = ({ children }: MqttProviderProps) => {
     });
 
     return () => {
-      console.info(`MQTT: Disconnecting ${deviceId}`);
+      console.info(`MQTT: Disconnecting ${topic}`);
       mqttService.disconnect();
     };
-  }, [deviceId]); // Only runs when deviceId changes!
+  }, [topic]); // Only runs when deviceId changes!
 
   const value = useMemo(
     () => ({
