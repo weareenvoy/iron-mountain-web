@@ -3,7 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import type { BasecampData } from '@/app/(displays)/basecamp/_types';
-import type { ExhibitNavigationState } from '@/lib/_internal/types';
+import type { ExhibitNavigationState } from '@/lib/internal/types';
 import type { ExhibitMqttState } from '@/lib/mqtt/types';
 
 interface BasecampContextType {

@@ -7,6 +7,7 @@ import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import Header from '@/app/(tablets)/docent/_components/ui/Header';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { Button } from '@/components/shadcn/button';
+import { cn } from '@/lib/tailwind/utils/cn';
 import type { Tour } from '@/app/(tablets)/docent/_types';
 
 interface TourByDate {
@@ -177,40 +178,49 @@ export default function SchedulePage() {
                       const isSelected = selectedTourId === tour.id;
                       return (
                         <div
-                          className={`flex h-[100px] cursor-pointer items-center rounded-[14px] px-3 transition-colors ${
+                          className={cn(
+                            'flex h-[100px] cursor-pointer items-center rounded-[14px] px-3 transition-colors',
                             isSelected ? 'bg-white' : ''
-                          }`}
+                          )}
                           key={tour.id}
                           onClick={() => handleTourSelect(tour.id)}
                         >
                           <div className="flex flex-1 items-center gap-6">
                             <div className="flex items-center gap-0">
                               <span
-                                className={`w-[117px] text-center text-xl leading-[1.2] tracking-[-0.8px] ${
-                                  isSelected ? 'font-normal' : 'font-light'
-                                } ${isSelected ? 'text-primary-im-dark-blue' : 'text-primary-im-grey'}`}
+                                className={cn(
+                                  'w-[117px] text-center text-xl leading-[1.2] tracking-[-0.8px]',
+                                  isSelected ? 'font-normal' : 'font-light',
+                                  isSelected ? 'text-primary-im-dark-blue' : 'text-primary-im-grey'
+                                )}
                               >
                                 {tour.startTime}
                               </span>
                               <span
-                                className={`text-[23px] leading-[1.2] ${
-                                  isSelected ? 'font-normal' : 'font-light'
-                                } ${isSelected ? 'text-primary-im-dark-blue' : 'text-primary-im-grey'}`}
+                                className={cn(
+                                  'text-[23px] leading-[1.2]',
+                                  isSelected ? 'font-normal' : 'font-light',
+                                  isSelected ? 'text-primary-im-dark-blue' : 'text-primary-im-grey'
+                                )}
                               >
                                 -
                               </span>
                               <span
-                                className={`w-[117px] text-center text-xl leading-[1.2] tracking-[-0.8px] ${
-                                  isSelected ? 'font-normal' : 'font-light'
-                                } ${isSelected ? 'text-primary-im-dark-blue' : 'text-primary-im-grey'}`}
+                                className={cn(
+                                  'w-[117px] text-center text-xl leading-[1.2] tracking-[-0.8px]',
+                                  isSelected ? 'font-normal' : 'font-light',
+                                  isSelected ? 'text-primary-im-dark-blue' : 'text-primary-im-grey'
+                                )}
                               >
                                 {tour.endTime}
                               </span>
                             </div>
                             <span
-                              className={`w-[228px] text-xl leading-[1.2] tracking-[-0.8px] ${
-                                isSelected ? 'font-normal' : 'font-light'
-                              } ${isSelected ? 'text-primary-im-dark-blue' : 'text-primary-im-grey'}`}
+                              className={cn(
+                                'w-[228px] text-xl leading-[1.2] tracking-[-0.8px]',
+                                isSelected ? 'font-normal' : 'font-light',
+                                isSelected ? 'text-primary-im-dark-blue' : 'text-primary-im-grey'
+                              )}
                             >
                               {tour.guestName}
                             </span>

@@ -9,6 +9,7 @@ import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import Header from '@/app/(tablets)/docent/_components/ui/Header';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { Button } from '@/components/shadcn/button';
+import { cn } from '@/lib/tailwind/utils/cn';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -177,8 +178,8 @@ export default function SummitRoomPage({ params }: SummitRoomPageProps) {
                       />
                     </div>
                   ) : (
-                    <div className={`${slide.borderColor} flex items-center gap-5 rounded-full border-2 px-8 py-5`}>
-                      <div className={`${slide.borderColor} h-4.25 w-4.25 rotate-45 border`}></div>
+                    <div className={cn('flex items-center gap-5 rounded-full border-2 px-8 py-5', slide.borderColor)}>
+                      <div className={cn('h-4.25 w-4.25 rotate-45 border', slide.borderColor)}></div>
                       <h2 className="text-xl leading-[normal] tracking-[-1.2px] text-black">{slide.title}</h2>
                     </div>
                   )}
@@ -207,9 +208,10 @@ export default function SummitRoomPage({ params }: SummitRoomPageProps) {
               const isActive = index === currentSlideIdx;
               return (
                 <button
-                  className={`border-primary-bg-grey relative h-5.5 w-5.5 rotate-45 rounded-[2px] border-2 transition-colors ${
+                  className={cn(
+                    'border-primary-bg-grey relative h-5.5 w-5.5 rotate-45 rounded-[2px] border-2 transition-colors',
                     isActive ? 'bg-primary-bg-grey' : 'transparent'
-                  }`}
+                  )}
                   key={slideNumber}
                   onClick={() => handleSlideIndicatorClick(index)}
                 />

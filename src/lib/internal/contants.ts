@@ -11,3 +11,17 @@ export const ANIMATION_MID_DELAY_CLASS = 'delay-600';
 
 export const ANIMATION_LONG_DELAY_NUMBER = 1000;
 export const ANIMATION_LONG_DELAY_CLASS = 'delay-1000';
+
+export const APPS: {
+  readonly route: '/basecamp' | '/docent';
+  readonly title: string;
+}[] = [
+  {
+    route: '/docent',
+    title: 'Docent App',
+  },
+  {
+    route: '/basecamp',
+    title: 'Basecamp App',
+  },
+];

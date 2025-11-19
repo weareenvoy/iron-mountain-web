@@ -4,7 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
 import { DocentAppState, SyncState, Tour } from '@/app/(tablets)/docent/_types';
 import { useMqtt } from '@/components/providers/mqtt-provider';
-import type { ExhibitNavigationState } from '@/lib/_internal/types';
+import type { ExhibitNavigationState } from '@/lib/internal/types';
 
 export interface DocentContextType {
   allTours: Tour[];

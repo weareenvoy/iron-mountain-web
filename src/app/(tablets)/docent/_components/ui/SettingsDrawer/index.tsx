@@ -8,6 +8,7 @@ import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { Button } from '@/components/shadcn/button';
 import { Switch } from '@/components/shadcn/switch';
+import { cn } from '@/lib/tailwind/utils/cn';
 
 interface SettingsDrawerProps {
   isOpen: boolean;
@@ -111,7 +112,10 @@ export function SettingsDrawer({ isOpen, onClose }: SettingsDrawerProps) {
 
       {/* Drawer */}
       <div
-        className={`absolute top-0 right-0 z-50 h-full w-[600px] transform bg-[#2e2e2e] px-15 transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'} `}
+        className={cn(
+          'absolute top-0 right-0 z-50 h-full w-[600px] transform bg-[#2e2e2e] px-15 transition-transform duration-300 ease-in-out',
+          isOpen ? 'translate-x-0' : 'translate-x-full'
+        )}
       >
         {/* Header */}
         <div className="mt-35 mb-19 flex items-center justify-between">
@@ -135,7 +139,7 @@ export function SettingsDrawer({ isOpen, onClose }: SettingsDrawerProps) {
                     <CircleAlert className="size-[28px] text-[#f7931e]" />
                   )}
                   <span
-                    className={`${control.isOn ? 'text-primary-im-light-blue' : 'text-secondary-im-orange'} text-2xl`}
+                    className={cn('text-2xl', control.isOn ? 'text-primary-im-light-blue' : 'text-secondary-im-orange')}
                   >
                     {control.name}
                   </span>
@@ -149,9 +153,10 @@ export function SettingsDrawer({ isOpen, onClose }: SettingsDrawerProps) {
 
               {/* Mute/Unmute Icon Button */}
               <button
-                className={`flex h-12 w-12 items-center justify-center rounded-full transition-colors ${
+                className={cn(
+                  'flex h-12 w-12 items-center justify-center rounded-full transition-colors',
                   control.isMuted ? 'text-primary-im-grey' : 'text-primary-im-light-blue'
-                }`}
+                )}
                 onClick={() => handleToggleMute(control.id)}
               >
                 {control.isMuted ? <VolumeX className="size-[24px]" /> : <Volume2 className="size-[24px]" />}

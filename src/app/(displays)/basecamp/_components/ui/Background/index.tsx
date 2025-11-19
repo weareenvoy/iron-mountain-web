@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useBasecamp } from '@/app/(displays)/basecamp/_components/providers/basecamp';
+import { cn } from '@/lib/tailwind/utils/cn';
+
 // TODO: Please read this! We will have many chopped up videos. Each beat is a separate video!
 
 // Time mapping for bullet point moments.
@@ -186,7 +188,7 @@ export default function Background() {
       {/* Ambient video (looping) */}
       <video
         autoPlay
-        className={`h-full w-full object-cover ${momentId === 'ambient' ? 'block' : 'hidden'}`}
+        className={cn('h-full w-full object-cover', momentId === 'ambient' ? 'block' : 'hidden')}
         loop
         muted
         ref={ambientVideoRef}
@@ -195,7 +197,7 @@ export default function Background() {
       {/* Main video background */}
       <video
         autoPlay={false}
-        className={`h-full w-full object-cover ${momentId !== 'ambient' ? 'block' : 'hidden'}`}
+        className={cn('h-full w-full object-cover', momentId !== 'ambient' ? 'block' : 'hidden')}
         muted
         onTimeUpdate={handleVideoTimeUpdate}
         ref={mainVideoRef}

@@ -8,7 +8,7 @@ import Header from '@/app/(tablets)/docent/_components/ui/Header';
 import MomentsAndBeats from '@/app/(tablets)/docent/_components/ui/MomentsAndBeats';
 import useMomentsNavigation from '@/app/(tablets)/docent/_hooks/use-moments-navigation';
 import { Button } from '@/components/shadcn/button';
-import { Moment } from '@/lib/_internal/types';
+import { Moment } from '@/lib/internal/types';
 
 const OVERLOOK_CONTENT: Moment[] = [
   {

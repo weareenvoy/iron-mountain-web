@@ -1,8 +1,9 @@
 'use client';
 
 import { useMqtt } from '@/components/providers/mqtt-provider';
+import { cn } from '@/lib/tailwind/utils/cn';
 import CaseStudyToggle from './CaseStudyToggle';
-import type { ExhibitNavigationState, Moment } from '@/lib/_internal/types';
+import type { ExhibitNavigationState, Moment } from '@/lib/internal/types';
 
 interface MomentsAndBeatsProps {
   content: Moment[]; // hardcoded data
@@ -51,9 +52,10 @@ const MomentsAndBeats = ({ content, exhibit, exhibitState, setExhibitState }: Mo
         return (
           <div className="flex items-center" key={moment.id}>
             <div
-              className={`flex w-70 min-w-70 items-center gap-[12.4px] transition-opacity ${
+              className={cn(
+                'flex w-70 min-w-70 items-center gap-[12.4px] transition-opacity',
                 isActiveMoment ? 'opacity-100' : 'opacity-50'
-              }`}
+              )}
             >
               {isActiveMoment && <div className="border-primary-bg-grey h-4 w-4 rotate-45 rounded-[2px] border-2" />}
               <button
@@ -75,13 +77,14 @@ const MomentsAndBeats = ({ content, exhibit, exhibitState, setExhibitState }: Mo
 
                 return (
                   <button
-                    className={`relative flex h-[42px] w-[60px] items-center justify-center rounded-full border-[1.5px] transition-colors ${
+                    className={cn(
+                      'relative flex h-[42px] w-[60px] items-center justify-center rounded-full border-[1.5px] transition-colors',
                       isActiveBeat
                         ? 'border-primary-bg-grey bg-transparent'
                         : isActiveMoment
                           ? 'border-primary-bg-grey bg-transparent'
                           : 'border-white/0 bg-white/10'
-                    }`}
+                    )}
                     key={beatIdx}
                     onClick={e => handleBeatClick(e, beatIdx, moment.id)}
                   >

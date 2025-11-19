@@ -4,8 +4,14 @@ import Link from 'next/link';
 import { useEffect } from 'react';
 import { Button } from '@/components/shadcn/button';
 
-const ErrorPage = ({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) => {
+interface ErrorProps {
+  readonly error: Error & { digest?: string };
+  readonly reset: () => void;
+}
+
+const ErrorPage = ({ error, reset }: ErrorProps) => {
   useEffect(() => {
+    // Log the error to an error reporting service
     console.error(error);
   }, [error]);
 

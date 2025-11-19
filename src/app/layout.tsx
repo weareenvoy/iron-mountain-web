@@ -1,31 +1,10 @@
-import localFont from 'next/font/local';
+import '@/lib/tailwind/styles/globals.css';
 import { MqttProvider } from '@/components/providers/mqtt-provider';
+import { ThemeProvider } from '@/components/providers/theme';
 import { Toaster } from '@/components/shadcn/sonner';
+import { geometria, interstate } from '@/lib/internal/fonts';
 import { cn } from '@/lib/tailwind/utils/cn';
-import type { Metadata } from 'next';
-
-// Font configurations
-const interstate = localFont({
-  src: [
-    {
-      path: '../fonts/InterstateRegular.woff2',
-      style: 'normal',
-      weight: '400',
-    },
-  ],
-  variable: '--font-interstate',
-});
-
-const geometria = localFont({
-  src: [
-    {
-      path: '../fonts/Geometria.woff2',
-      style: 'normal',
-      weight: '400',
-    },
-  ],
-  variable: '--font-geometria',
-});
+import type { Metadata, Viewport } from 'next';
 
 export const metadata: Metadata = {
   description: '',
@@ -33,32 +12,37 @@ export const metadata: Metadata = {
     follow: false,
     index: false,
   },
-  title: 'Iron Mountain Overlook Tablet',
+  title: 'Iron Mountain',
 };
 
-export const viewport = {
+export const viewport: Viewport = {
   initialScale: 1,
+  interactiveWidget: 'resizes-content',
   maximumScale: 1,
+  minimumScale: 1,
   userScalable: false,
   width: 'device-width',
 };
 
-export default function RootLayout({ children }: LayoutProps<'/'>) {
+const RootLayout = ({ children }: LayoutProps<'/'>) => {
   return (
-    <html className="h-full" data-theme="dark" lang="en">
-      <body
-        className={cn(
-          interstate.variable,
-          geometria.variable,
-          interstate.className,
-          'text-foreground-primary bg-background-primary antialiased'
-        )}
-      >
-        <MqttProvider>{children}</MqttProvider>
-
-        {/* Toast Alerts */}
+    <html lang="en" suppressHydrationWarning>
+      <body className={cn('antialiased', interstate.variable, geometria.variable)}>
+        <MqttProvider>
+          <ThemeProvider
+            defaultTheme="system"
+            disableTransitionOnChange
+            enableColorScheme
+            enableSystem
+            themes={['dark', 'light']}
+          >
+            {children}
+          </ThemeProvider>
+        </MqttProvider>
         <Toaster />
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;

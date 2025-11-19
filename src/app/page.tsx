@@ -1,36 +1,17 @@
-'use client';
-
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Button } from '@/components/shadcn/button';
+import { APPS } from '@/lib/internal/contants';
 
-export default function Home() {
-  const router = useRouter();
-
-  const apps = [
-    {
-      route: '/docent',
-      title: 'Docent App',
-    },
-    {
-      route: '/basecamp',
-      title: 'Basecamp App',
-    },
-  ];
-
+const Home = () => {
   return (
     <div className="bg-background-primary flex flex-col items-center justify-center gap-10">
-      {apps.map((app, index) => (
-        <Button
-          className="w-full"
-          key={index}
-          onClick={e => {
-            e.stopPropagation();
-            router.push(app.route);
-          }}
-        >
-          {app.title}
+      {APPS.map((app, index) => (
+        <Button asChild className="w-full" key={index}>
+          <Link href={app.route}>{app.title}</Link>
         </Button>
       ))}
     </div>
   );
-}
+};
+
+export default Home;

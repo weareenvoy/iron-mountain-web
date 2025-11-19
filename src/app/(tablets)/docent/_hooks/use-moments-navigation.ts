@@ -1,5 +1,5 @@
 import { useMqtt } from '@/components/providers/mqtt-provider';
-import type { ExhibitNavigationState, Moment } from '@/lib/_internal/types';
+import type { ExhibitNavigationState, Moment } from '@/lib/internal/types';
 
 // moments/beats navigation hook
 const useMomentsNavigation = (
