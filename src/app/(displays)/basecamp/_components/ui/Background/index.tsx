@@ -1,48 +1,21 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useBasecamp } from '@/app/(displays)/basecamp/_components/providers/basecamp';
 import { cn } from '@/lib/tailwind/utils/cn';
-
-// TODO: Please read this! We will have many chopped up videos. Each beat is a separate video!
-
-// Time mapping for bullet point moments.
-// The ambient state is a going to be a looping video. It's not a perfect loop now.
-const TIME_MAPPING: Record<string, number[]> = {
-  ascend: [103, 117, 134],
-  possibilities: [70, 75, 85, 93, 100],
-  problem: [26, 45, 53, 66],
-  welcome: [1, 7, 12, 22],
-};
-
-const sectionOrder = ['welcome', 'problem', 'possibilities', 'ascend'];
-
-// Get previous moment's last time point as start time.
-const getSectionStartTime = (section: string): number => {
-  const sectionIndex = sectionOrder.indexOf(section);
-  if (sectionIndex === 0) return 0;
-  const previousSection = sectionOrder[sectionIndex - 1];
-  if (!previousSection) return 0;
-  const previousTimePoints = TIME_MAPPING[previousSection];
-  if (!previousTimePoints) return 0;
-  const lastTimePoint = previousTimePoints[previousTimePoints.length - 1];
-  if (!lastTimePoint) return 0;
-  return lastTimePoint;
-};
-
-// Calculate time range for a "beat"
-const getBeatTimeRange = (section: string, beatIndex: number) => {
-  const timePoints = TIME_MAPPING[section];
-  if (!timePoints || beatIndex >= timePoints.length || beatIndex < 0) {
-    console.error(`Invalid section or beat: ${section}, beat ${beatIndex}`);
-    return null;
-  }
-
-  const start = beatIndex === 0 ? getSectionStartTime(section) : timePoints[beatIndex - 1];
-  const end = timePoints[beatIndex];
-
-  return { end, start };
-};
+import DebugOverlay from './DebugOverlay';
+import {
+  createAmbientTimeHandler,
+  createLoadedMetadataHandler,
+  createMainTimeHandler,
+  createProgressHandler,
+  createSeekedHandler,
+  getBeatTimeRange,
+  isTimedSection,
+  seekAndPlay,
+  type Section,
+  type TimedSection,
+} from './utils';
 
 const Background = () => {
   // The moment and beat might come from GEC.
@@ -54,6 +27,32 @@ const Background = () => {
   const mainVideoRef = useRef<HTMLVideoElement>(null);
   const ambientVideoRef = useRef<HTMLVideoElement>(null);
   const isSeekingRef = useRef<boolean>(false);
+
+  // Pre-compute the current time range whenever moment/beat change
+  const timeRange = useMemo(() => {
+    if (momentId === 'ambient') return null;
+    const section = momentId as Section;
+    if (section === 'ambient') return null;
+    if (!isTimedSection(section)) {
+      return null;
+    }
+    return getBeatTimeRange(section as TimedSection, beatIdx);
+  }, [momentId, beatIdx]);
+
+  // onTimeUpdate handler (memoized)
+  const handleVideoTimeUpdate = useCallback(() => {
+    if (!mainVideoRef.current || isSeekingRef.current || momentId === 'ambient') return;
+
+    const currentTime = mainVideoRef.current.currentTime;
+    const section = momentId as Section;
+    const tr =
+      section !== 'ambient' && isTimedSection(section) ? getBeatTimeRange(section as TimedSection, beatIdx) : null;
+
+    if (tr && currentTime >= (tr.end ?? 0) - 0.1) {
+      mainVideoRef.current.pause();
+      console.info(`Paused at ${currentTime}s for ${momentId} beat ${beatIdx}`);
+    }
+  }, [beatIdx, momentId]);
 
   useEffect(() => {
     const mainVideo = mainVideoRef.current;
@@ -74,13 +73,8 @@ const Background = () => {
     mainVideo.preload = 'auto';
     mainVideo.load();
 
-    // This tracks preload progress, but it does not help with loading.
-    const onProgress = () => {
-      if (mainVideo.buffered.length > 0 && mainVideo.duration) {
-        const percent = (mainVideo.buffered.end(0) / mainVideo.duration) * 100;
-        console.info(`main vid preload: ${percent.toFixed(1)}%`);
-      }
-    };
+    // Preload progress (informational)
+    const onProgress = createProgressHandler(mainVideo);
     mainVideo.addEventListener('progress', onProgress);
 
     return () => {
@@ -92,9 +86,7 @@ const Background = () => {
   useEffect(() => {
     // Ambient
     if (momentId === 'ambient') {
-      // Pause the main video if it's playing.
       if (mainVideoRef.current) mainVideoRef.current.pause();
-      // Play the looping ambient video.
       if (ambientVideoRef.current) {
         ambientVideoRef.current.currentTime = 0; // Reset to start
         ambientVideoRef.current.play().catch(err => {
@@ -102,76 +94,57 @@ const Background = () => {
         });
       }
     } else {
-      // Non-ambient: play the main video.
       if (ambientVideoRef.current) ambientVideoRef.current.pause();
-      const timeRange = getBeatTimeRange(momentId, beatIdx);
       const mainVideo = mainVideoRef.current;
-      if (!mainVideo?.currentTime) return;
-      if (timeRange && Number.isFinite(timeRange.start)) {
-        isSeekingRef.current = true;
-        mainVideo.currentTime = timeRange.start ?? 0;
-        mainVideo.play().catch((err: Error) => {
-          console.error('Error playing main video:', err);
-        });
-        console.info(`Seeking to ${timeRange.start}s for ${momentId} beat ${beatIdx}`);
-      } else {
+      if (!mainVideo) return;
+      if (!timeRange || !Number.isFinite(timeRange.start)) {
         console.error('Invalid time range or video not ready:', {
           beatIdx,
           momentId,
           timeRange,
         });
+        return;
+      }
+
+      const label = `${momentId} beat ${beatIdx}`;
+      if (mainVideo.readyState >= 1) {
+        seekAndPlay(mainVideo, timeRange.start ?? 0, label, isSeekingRef);
+      } else {
+        const onLoaded = createLoadedMetadataHandler(mainVideo, timeRange.start ?? 0, label, isSeekingRef);
+        mainVideo.addEventListener('loadedmetadata', onLoaded, { once: true });
+        try {
+          mainVideo.load();
+        } catch {
+          // ignore
+        }
       }
     }
-  }, [momentId, beatIdx]);
+  }, [momentId, beatIdx, timeRange]);
 
   // Handle main video seeking
   useEffect(() => {
     const video = mainVideoRef.current;
     if (!video) return;
 
-    const handleSeeked = () => {
-      isSeekingRef.current = false;
-    };
+    const handleSeeked = createSeekedHandler(isSeekingRef);
     video.addEventListener('seeked', handleSeeked);
     return () => {
       video.removeEventListener('seeked', handleSeeked);
     };
   }, []);
 
-  // Handle main video time update for non-ambient sections
-  const handleVideoTimeUpdate = () => {
-    if (!mainVideoRef.current || isSeekingRef.current || momentId === 'ambient') return;
-
-    const currentTime = mainVideoRef.current.currentTime;
-    const timeRange = getBeatTimeRange(momentId, beatIdx);
-
-    if (timeRange && currentTime >= (timeRange.end ?? 0) - 0.1) {
-      mainVideoRef.current.pause();
-      console.info(`Paused at ${currentTime}s for ${momentId} beat ${beatIdx}`);
-    }
-  };
-
-  // Track and display current time without reading refs during render
+  // Handle main/ambient time updates and display
   useEffect(() => {
     const ambient = ambientVideoRef.current;
     const main = mainVideoRef.current;
     if (!ambient || !main) return;
 
-    const handleAmbientTime = () => {
-      if (momentId === 'ambient') {
-        setDisplayTime(ambient.currentTime);
-      }
-    };
-    const handleMainTime = () => {
-      if (momentId !== 'ambient') {
-        setDisplayTime(main.currentTime);
-      }
-    };
+    const handleAmbientTime = createAmbientTimeHandler(() => momentId === 'ambient', ambient, setDisplayTime);
+    const handleMainTime = createMainTimeHandler(() => momentId !== 'ambient', main, setDisplayTime);
 
     ambient.addEventListener('timeupdate', handleAmbientTime);
     main.addEventListener('timeupdate', handleMainTime);
 
-    // Initialize the display time immediately when moment changes (schedule outside effect body)
     const rafId = requestAnimationFrame(() => {
       setDisplayTime(momentId === 'ambient' ? ambient.currentTime : main.currentTime);
     });
@@ -205,11 +178,7 @@ const Background = () => {
       />
 
       {/* Debug info */}
-      <div className="absolute top-4 left-4 rounded bg-black/50 p-2 text-white">
-        <p>Moment: {momentId}</p>
-        <p>BeatIdx: {beatIdx}</p>
-        <p>Time: {displayTime.toFixed(1)}s</p>
-      </div>
+      <DebugOverlay beatIdx={beatIdx} momentId={momentId} time={displayTime} />
     </>
   );
 };

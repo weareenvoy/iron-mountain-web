@@ -1,0 +1,66 @@
+{
+  "possibilities": {
+    "title": "Discover new possibilities"
+  },
+  "possibilities-a": {
+    "body-1": "Body 1",
+    "body-2": "Body 2",
+    "body-3": "Body 3",
+    "title": "Making data accessible"
+  },
+  "possibilities-b": {
+    "body-1": "Body 1",
+    "body-2": "Body 2",
+    "body-3": "Body 3",
+    "title": "Unlocking new value streams"
+  },
+  "possibilities-c": {
+    "body-1": "Body 1",
+    "body-2": "Body 2",
+    "body-3": "Body 3",
+    "title": "Optimizing your assets"
+  },
+  "problem-1": {
+    "text": "What's standing in your way?"
+  },
+  "problem-2": [
+    {
+      "percent": "20",
+      "percentSubtitle": "of data remains dark"
+    },
+    {
+      "percent": "80-90",
+      "percentSubtitle": "of new data is unstructured"
+    },
+    {
+      "percent": "<1%",
+      "percentSubtitle": "of enterprise data is leveraged for AI"
+    }
+  ],
+  "problem-3": {
+    "challenge-1": {
+      "body": "body 1",
+      "icon": "icon 1",
+      "title": "Too much complexity"
+    },
+    "challenge-2": {
+      "body": "body 2",
+      "icon": "icon 2",
+      "title": "Cost, Uncertain ROI"
+    },
+    "challenge-3": {
+      "body": "body 3",
+      "icon": "icon 3",
+      "title": "Too many risks"
+    },
+    "challenge-4": {
+      "body": "body 4",
+      "icon": "icon 4",
+      "title": "Too few skills"
+    },
+    "title": "What's holding you back?"
+  },
+  "welcome": {
+    "text": "Welcome to Iron Mountain"
+  }
+}

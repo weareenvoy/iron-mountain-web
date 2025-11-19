@@ -3,18 +3,18 @@ import { MQTT_BASE_OPTIONS, MQTT_BROKER_URL, mqttCommands } from '../constants';
 import { createMqttMessage } from './create-mqtt-message';
 import { generateClientId } from './generate-client-id';
 import { getAvailabilityTopic } from './get-availability-topic';
-import type { MqttError, MqttServiceConfig, PublishArgsConfig } from '../types';
+import type { DeviceId, MqttError, MqttServiceConfig, PublishArgsConfig } from '../types';
 
 export class MqttService {
   private availabilityTopic: string;
   private client: MqttClient | null = null;
-  private deviceId: string;
+  private deviceId: DeviceId;
   private onConnectionChange?: MqttServiceConfig['onConnectionChange'];
   private onError?: MqttServiceConfig['onError'];
 
   constructor(config: MqttServiceConfig) {
     this.deviceId = config.deviceId;
-    this.availabilityTopic = getAvailabilityTopic(this.deviceId);
+    this.availabilityTopic = getAvailabilityTopic(config.deviceId);
     this.onConnectionChange = config.onConnectionChange;
     this.onError = config.onError;
 

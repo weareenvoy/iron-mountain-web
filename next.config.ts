@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
     /* Add your ip address here if you need to test on a device locally */
   ],
   // Enable new caching and pre-rendering behavior
-  cacheComponents: true,
+  cacheComponents: false,
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
   },
@@ -23,6 +23,7 @@ const nextConfig: NextConfig = {
     // inlineCss: true, // Disabled due to font loading issues in production
     mcpServer: true,
     optimizePackageImports: [],
+    ppr: false,
     taint: true,
     // Enable filesystem caching for `next build`
     // turbopackFileSystemCacheForBuild: true, // Available in Canary only
@@ -30,6 +31,26 @@ const nextConfig: NextConfig = {
     turbopackFileSystemCacheForDev: true,
     typedEnv: true,
     webVitalsAttribution: ['CLS', 'FCP', 'FID', 'INP', 'LCP', 'TTFB'],
+  },
+  headers: async () => {
+    return [
+      {
+        headers: [
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-Frame-Options', value: 'DENY' },
+        ],
+        source: '/(.*)',
+      },
+      {
+        headers: [
+          { key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate' },
+          { key: 'Content-Security-Policy', value: "default-src 'self'; script-src 'self'" },
+          { key: 'Content-Type', value: 'application/javascript; charset=utf-8' },
+        ],
+        source: '/sw.js',
+      },
+    ];
   },
   images: {
     formats: ['image/avif', 'image/webp'],

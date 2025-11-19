@@ -1,15 +1,18 @@
 'use client';
 
 import { ArrowLeft, ArrowRight } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { use, useEffect, useRef } from 'react';
 import { A11y, Navigation, Pagination } from 'swiper/modules';
-import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import Header from '@/app/(tablets)/docent/_components/ui/Header';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { Button } from '@/components/shadcn/button';
 import { cn } from '@/lib/tailwind/utils/cn';
+const Swiper = dynamic(() => import('swiper/react').then(m => m.Swiper), { ssr: false });
+const SwiperSlide = dynamic(() => import('swiper/react').then(m => m.SwiperSlide), { ssr: false });
+import type { SwiperClass } from 'swiper/react';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -72,6 +75,7 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
     const slideName = slideIdx === 0 ? 'journey-intro' : `journey-${slideIdx}`;
 
     console.info(`Sending summit goto-beat: ${slideName}`);
+
     client.gotoBeat('summit', slideName, {
       onError: (err: Error) => console.error(`Summit: Failed to navigate:`, err),
       onSuccess: () => console.info(`Summit: Navigated to ${slideName}`),
