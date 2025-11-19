@@ -15,7 +15,7 @@ interface TourByDate {
   readonly tours: Tour[];
 }
 
-const SchedulePage = () => {
+const SchedulePage = ({}: PageProps<'/docent/schedule'>) => {
   const router = useRouter();
   const { client } = useMqtt();
   const { allTours, isConnected, isTourDataLoading, refreshTours, setCurrentTour } = useDocent();

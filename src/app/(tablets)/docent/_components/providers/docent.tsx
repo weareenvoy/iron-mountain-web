@@ -18,6 +18,7 @@ import type { Route } from 'next';
 const isDocentRoute = (path: string): path is Route => {
   return /^\/docent\/tour\/[^/]+(?:\/(?:basecamp|overlook|summit-room))?$/.test(path);
 };
+
 export interface DocentContextType {
   readonly allTours: Tour[];
   readonly basecampExhibitState: ExhibitNavigationState;

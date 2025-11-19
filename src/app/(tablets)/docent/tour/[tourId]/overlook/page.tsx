@@ -54,12 +54,8 @@ const OVERLOOK_CONTENT: Moment[] = [
   },
 ];
 
-interface OverlookPageProps {
-  readonly params: Promise<{ readonly id: string }>;
-}
-
-const OverlookPage = ({ params }: OverlookPageProps) => {
-  const { id } = use(params);
+const OverlookPage = ({ params }: PageProps<'/docent/tour/[tourId]/overlook'>) => {
+  const { tourId } = use(params);
   const { currentTour, overlookExhibitState, setOverlookExhibitState } = useDocent();
   // TODO does this live in GEC state?
   const [isOverlookCastMode, setIsOverlookCastMode] = useState(false);
@@ -77,7 +73,7 @@ const OverlookPage = ({ params }: OverlookPageProps) => {
       {/* Navigation */}
       <Header
         leftButton={{
-          href: `/docent/tour/${id}`,
+          href: `/docent/tour/${tourId}`,
           icon: <ArrowLeft />,
           text: 'Back to menu',
         }}

@@ -16,10 +16,6 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-interface SummitRoomPageProps {
-  readonly params: Promise<{ readonly id: string }>;
-}
-
 // Summit Room has 5 slides. First slide has no border, no diamond icon, but has image. Other slides have a border and a diamond icon.
 const SUMMIT_ROOM_SLIDES = [
   {
@@ -48,8 +44,8 @@ const SUMMIT_ROOM_SLIDES = [
   },
 ];
 
-const SummitRoomPage = ({ params }: SummitRoomPageProps) => {
-  const { id } = use(params);
+const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room'>) => {
+  const { tourId } = use(params);
   const { client } = useMqtt();
   const {
     currentTour,
@@ -125,7 +121,7 @@ const SummitRoomPage = ({ params }: SummitRoomPageProps) => {
       {/* Navigation */}
       <Header
         leftButton={{
-          href: `/docent/tour/${id}`,
+          href: `/docent/tour/${tourId}`,
           icon: <ArrowLeft />,
           text: 'Back to menu',
         }}

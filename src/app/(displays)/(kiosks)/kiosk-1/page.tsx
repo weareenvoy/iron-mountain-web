@@ -1,4 +1,4 @@
-const Kiosk1Page = () => {
+const Kiosk1Page = ({}: PageProps<'/kiosk-1'>) => {
   return <div>Kiosk 1</div>;
 };
 

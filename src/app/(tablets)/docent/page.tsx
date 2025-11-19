@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Header from '@/app/(tablets)/docent/_components/ui/Header';
 import { Button } from '@/components/shadcn/button';
 
-const DocentHomePage = () => {
+const DocentHomePage = ({}: PageProps<'/docent'>) => {
   // const { isTourDataLoading, isGecStateLoading } = useDocent();
 
   return (

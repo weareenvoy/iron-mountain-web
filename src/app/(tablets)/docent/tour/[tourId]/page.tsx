@@ -6,17 +6,13 @@ import { use } from 'react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import Header from '@/app/(tablets)/docent/_components/ui/Header';
 
-interface TourOverviewPageProps {
-  readonly params: Promise<{ readonly id: string }>;
-}
-
-const TourOverviewPage = ({ params }: TourOverviewPageProps) => {
-  const { id } = use(params);
+const TourOverviewPage = ({ params }: PageProps<'/docent/tour/[tourId]'>) => {
+  const { tourId } = use(params);
   const router = useRouter();
   const currentTour = useDocent().currentTour;
 
   const handleSectionClick = (section: 'basecamp' | 'overlook' | 'summit-room') => () => {
-    router.push(`/docent/tour/${id}/${section}`);
+    router.push(`/docent/tour/${tourId}/${section}`);
   };
 
   return (

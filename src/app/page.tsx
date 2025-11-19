@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Button } from '@/components/shadcn/button';
 import { APPS } from '@/lib/internal/contants';
 
-const Home = () => {
+const Home = ({}: PageProps<'/'>) => {
   return (
     <div className="bg-background-primary flex flex-col items-center justify-center gap-10">
       {APPS.map((app, index) => (

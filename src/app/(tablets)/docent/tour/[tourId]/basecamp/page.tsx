@@ -36,12 +36,9 @@ const BASECAMP_CONTENT: Moment[] = [
     title: 'Ascend',
   },
 ];
-interface BasecampPageProps {
-  readonly params: Promise<{ readonly id: string }>;
-}
 
-const BasecampPage = ({ params }: BasecampPageProps) => {
-  const { id } = use(params);
+const BasecampPage = ({ params }: PageProps<'/docent/tour/[tourId]/basecamp'>) => {
+  const { tourId } = use(params);
   const { basecampExhibitState, currentTour, setBasecampExhibitState } = useDocent();
 
   // MomentsAndBeats navigation.
@@ -57,7 +54,7 @@ const BasecampPage = ({ params }: BasecampPageProps) => {
       {/* Navigation */}
       <Header
         leftButton={{
-          href: `/docent/tour/${id}`,
+          href: `/docent/tour/${tourId}`,
           icon: <ArrowLeft />,
           text: 'Back to menu',
         }}
