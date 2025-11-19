@@ -7,7 +7,7 @@ export const interstate = localFont({
   preload: true,
   src: [
     {
-      path: '../../../public/fonts/Interstate-Regular.woff2',
+      path: '../../../public/fonts/InterstateRegular.woff2',
       style: 'normal',
       weight: '400',
     },

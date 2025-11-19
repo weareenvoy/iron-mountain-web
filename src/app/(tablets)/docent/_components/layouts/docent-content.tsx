@@ -3,7 +3,7 @@
 import { Settings } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
-import { SettingsDrawer } from '@/app/(tablets)/docent/_components/ui/SettingsDrawer';
+import SettingsDrawer from '@/app/(tablets)/docent/_components/ui/SettingsDrawer';
 import { Button } from '@/components/shadcn/button';
 import type { PropsWithChildren } from 'react';
 
