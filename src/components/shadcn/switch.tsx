@@ -1,3 +1,5 @@
+/* eslint-disable react/function-component-definition */
+
 'use client';
 
 import * as SwitchPrimitive from '@radix-ui/react-switch';

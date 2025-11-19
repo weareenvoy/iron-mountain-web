@@ -1,3 +1,5 @@
+/* eslint-disable react/function-component-definition */
+
 import { ChevronLeftIcon, ChevronRightIcon, MoreHorizontalIcon } from 'lucide-react';
 import * as React from 'react';
 import { Button, buttonVariants } from '@/components/shadcn/button';
@@ -5,7 +7,7 @@ import { cn } from '@/lib/tailwind/utils/cn';
 
 type PaginationLinkProps = Pick<React.ComponentProps<typeof Button>, 'size'> &
   React.ComponentProps<'a'> & {
-    isActive?: boolean;
+    readonly isActive?: boolean;
   };
 
 function Pagination({ className, ...props }: React.ComponentProps<'nav'>) {

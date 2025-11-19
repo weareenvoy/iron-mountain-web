@@ -1,3 +1,5 @@
+/* eslint-disable react/function-component-definition */
+
 'use client';
 
 import { cva, type VariantProps } from 'class-variance-authority';
@@ -23,7 +25,7 @@ function FieldLegend({
   className,
   variant = 'legend',
   ...props
-}: React.ComponentProps<'legend'> & { variant?: 'label' | 'legend' }) {
+}: React.ComponentProps<'legend'> & { readonly variant?: 'label' | 'legend' }) {
   return (
     <legend
       className={cn('mb-3 font-medium', 'data-[variant=legend]:text-base', 'data-[variant=label]:text-sm', className)}
@@ -116,7 +118,7 @@ function FieldError({
   errors,
   ...props
 }: React.ComponentProps<'div'> & {
-  errors?: Array<undefined | { message?: string }>;
+  readonly errors?: Array<undefined | { message?: string }>;
 }) {
   const content = useMemo(() => {
     if (children) {
@@ -129,7 +131,7 @@ function FieldError({
 
     const uniqueErrors = [...new Map(errors.map(error => [error?.message, error])).values()];
 
-    if (uniqueErrors?.length == 1) {
+    if (uniqueErrors.length === 1) {
       return uniqueErrors[0]?.message;
     }
 
@@ -176,7 +178,7 @@ function FieldSeparator({
   className,
   ...props
 }: React.ComponentProps<'div'> & {
-  children?: React.ReactNode;
+  readonly children?: React.ReactNode;
 }) {
   return (
     <div

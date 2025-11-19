@@ -1,3 +1,5 @@
+/* eslint-disable react/function-component-definition */
+
 'use client';
 
 import { XIcon } from 'lucide-react';
@@ -40,7 +42,7 @@ function DialogContent({
   showCloseButton = true,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Content> & {
-  showCloseButton?: boolean;
+  readonly showCloseButton?: boolean;
 }) {
   return (
     <DialogPortal data-slot="dialog-portal">

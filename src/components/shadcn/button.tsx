@@ -1,3 +1,5 @@
+/* eslint-disable react/function-component-definition */
+
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Slot } from '@radix-ui/react-slot';
 import * as React from 'react';
@@ -42,7 +44,7 @@ function Button({
   ...props
 }: React.ComponentProps<'button'> &
   VariantProps<typeof buttonVariants> & {
-    asChild?: boolean;
+    readonly asChild?: boolean;
   }) {
   const Comp = asChild ? Slot : 'button';
 

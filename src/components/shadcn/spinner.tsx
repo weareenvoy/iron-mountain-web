@@ -1,3 +1,5 @@
+/* eslint-disable react/function-component-definition */
+
 import { Loader2Icon } from 'lucide-react';
 import { cn } from '@/lib/tailwind/utils/cn';
 

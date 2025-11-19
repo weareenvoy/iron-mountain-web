@@ -1,3 +1,5 @@
+/* eslint-disable react/function-component-definition */
+
 'use client';
 
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
@@ -123,7 +125,7 @@ function SelectTrigger({
   size = 'default',
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Trigger> & {
-  size?: 'default' | 'sm';
+  readonly size?: 'default' | 'sm';
 }) {
   return (
     <SelectPrimitive.Trigger

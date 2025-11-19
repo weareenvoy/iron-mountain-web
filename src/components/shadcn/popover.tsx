@@ -1,3 +1,5 @@
+/* eslint-disable react/function-component-definition */
+
 'use client';
 
 import * as PopoverPrimitive from '@radix-ui/react-popover';

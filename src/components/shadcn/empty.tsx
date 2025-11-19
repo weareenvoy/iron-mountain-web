@@ -1,3 +1,5 @@
+/* eslint-disable react/function-component-definition */
+
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/tailwind/utils/cn';
 

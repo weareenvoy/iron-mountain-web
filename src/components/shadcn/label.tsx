@@ -1,3 +1,5 @@
+/* eslint-disable react/function-component-definition */
+
 'use client';
 
 import * as LabelPrimitive from '@radix-ui/react-label';

@@ -1,3 +1,5 @@
+/* eslint-disable react/function-component-definition */
+
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Slot } from '@radix-ui/react-slot';
 import { Separator } from '@/components/shadcn/separator';
@@ -56,7 +58,7 @@ function ButtonGroupText({
   className,
   ...props
 }: React.ComponentProps<'div'> & {
-  asChild?: boolean;
+  readonly asChild?: boolean;
 }) {
   const Comp = asChild ? Slot : 'div';
 
