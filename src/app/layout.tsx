@@ -12,7 +12,6 @@ export const metadata: Metadata = {
     follow: false,
     index: false,
   },
-  themeColor: '#0B2E4E',
   title: 'Iron Mountain',
 };
 
@@ -21,6 +20,7 @@ export const viewport: Viewport = {
   interactiveWidget: 'resizes-content',
   maximumScale: 1,
   minimumScale: 1,
+  themeColor: '#0B2E4E',
   userScalable: false,
   width: 'device-width',
 };

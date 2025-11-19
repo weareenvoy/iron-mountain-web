@@ -77,7 +77,7 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
     console.info(`Sending summit goto-beat: ${slideName}`);
 
     client.gotoBeat('summit', slideName, {
-      onError: (err: Error) => console.error(`Summit: Failed to navigate:`, err),
+      onError: (err: Error) => console.error('Summit: Failed to navigate:', err),
       onSuccess: () => console.info(`Summit: Navigated to ${slideName}`),
     });
   };

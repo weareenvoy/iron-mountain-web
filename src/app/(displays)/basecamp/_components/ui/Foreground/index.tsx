@@ -53,9 +53,8 @@ const Foreground = () => {
   if (!dataKey || !data) {
     return null;
   }
-  const content = data[dataKey] as BasecampData[typeof dataKey];
 
-  if (!content) return null; // No content to show for this moment/beatIdx
+  const content = data[dataKey] as BasecampData[typeof dataKey];
 
   const render = RENDERERS[dataKey] as (d: typeof content) => ReactElement;
 

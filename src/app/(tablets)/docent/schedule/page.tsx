@@ -1,10 +1,12 @@
 import { Suspense } from 'react';
 import ScheduleClient from './ScheduleClient';
 
-export default function Page() {
+const SchedulePage = () => {
   return (
     <Suspense>
       <ScheduleClient />
     </Suspense>
   );
-}
+};
+
+export default SchedulePage;

@@ -2,3 +2,5 @@
 TTFB
 Turborepo
 weareenvoy
+shadcn
+vercel

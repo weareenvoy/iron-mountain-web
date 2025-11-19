@@ -6,11 +6,11 @@ import { getAvailabilityTopic } from './get-availability-topic';
 import type { DeviceId, MqttError, MqttServiceConfig, PublishArgsConfig } from '../types';
 
 export class MqttService {
-  private availabilityTopic: string;
+  private readonly availabilityTopic: string;
   private client: MqttClient | null = null;
-  private deviceId: DeviceId;
-  private onConnectionChange?: MqttServiceConfig['onConnectionChange'];
-  private onError?: MqttServiceConfig['onError'];
+  private readonly deviceId: DeviceId;
+  private readonly onConnectionChange?: MqttServiceConfig['onConnectionChange'];
+  private readonly onError?: MqttServiceConfig['onError'];
 
   constructor(config: MqttServiceConfig) {
     this.deviceId = config.deviceId;
@@ -45,7 +45,7 @@ export class MqttService {
         'online',
         { qos: 1, retain: true },
         {
-          onError: (err: MqttError) => console.error(`Failed to publish availability:`, err),
+          onError: (err: MqttError) => console.error('Failed to publish availability:', err),
           onSuccess: () => console.info(`Published availability: online for ${this.deviceId}`),
         }
       );

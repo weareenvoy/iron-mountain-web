@@ -194,16 +194,16 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     };
 
     // Subscribe to broadcast commands (all exhibits listen to same topics)
-    client.subscribeToTopic(`cmd/dev/all/load-tour`, handleLoadTour);
-    client.subscribeToTopic(`cmd/dev/all/go-idle`, handleGoIdle);
+    client.subscribeToTopic('cmd/dev/all/load-tour', handleLoadTour);
+    client.subscribeToTopic('cmd/dev/all/go-idle', handleGoIdle);
 
     // Also subscribe to basecamp-specific goto-beat (direct from Docent)
-    client.subscribeToTopic(`cmd/dev/basecamp/goto-beat`, handleGotoBeat);
+    client.subscribeToTopic('cmd/dev/basecamp/goto-beat', handleGotoBeat);
 
     return () => {
-      client.unsubscribeFromTopic(`cmd/dev/all/load-tour`);
-      client.unsubscribeFromTopic(`cmd/dev/all/go-idle`);
-      client.unsubscribeFromTopic(`cmd/dev/basecamp/goto-beat`);
+      client.unsubscribeFromTopic('cmd/dev/all/load-tour');
+      client.unsubscribeFromTopic('cmd/dev/all/go-idle');
+      client.unsubscribeFromTopic('cmd/dev/basecamp/goto-beat');
     };
   }, [client, fetchData, reportState]);
 
@@ -243,10 +243,10 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     };
 
     // Subscribe once on mount to get retained state
-    client.subscribeToTopic(`state/basecamp`, handleOwnState);
+    client.subscribeToTopic('state/basecamp', handleOwnState);
 
     return () => {
-      client.unsubscribeFromTopic(`state/basecamp`);
+      client.unsubscribeFromTopic('state/basecamp');
     };
   }, [client, fetchData]);
 

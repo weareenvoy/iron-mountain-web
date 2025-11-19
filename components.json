@@ -8,9 +8,6 @@
     "utils": "@/lib/utils"
   },
   "iconLibrary": "lucide",
-  "registries": {
-    "@supabase": "https://supabase.com/ui/r/{name}.json"
-  },
   "rsc": true,
   "style": "new-york",
   "tailwind": {

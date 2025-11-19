@@ -16,13 +16,13 @@ const SwRegister = () => {
       try {
         const reg = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
         // Configure runtime options for the SW
-        if (reg?.active) {
+        if (reg.active) {
           reg.active.postMessage({
             apiBase: API_BASE,
             offlineFirst: OFFLINE_FIRST,
             type: 'CONFIG',
           });
-        } else if (reg?.installing) {
+        } else if (reg.installing) {
           const onStateChange = () => {
             if (reg.installing?.state === 'activated' && reg.active) {
               reg.active.postMessage({

@@ -29,7 +29,6 @@ export const getSectionStartTime = (section: TimedSection): number => {
   const previousSection = sectionOrder[sectionIndex - 1];
   if (!previousSection) return 0;
   const previousTimePoints = TIME_MAPPING[previousSection];
-  if (!previousTimePoints) return 0;
   const lastTimePoint = previousTimePoints[previousTimePoints.length - 1];
   if (!lastTimePoint) return 0;
   return lastTimePoint;
@@ -37,7 +36,7 @@ export const getSectionStartTime = (section: TimedSection): number => {
 
 export const getBeatTimeRange = (section: TimedSection, beatIndex: number) => {
   const timePoints = TIME_MAPPING[section];
-  if (!timePoints || beatIndex >= timePoints.length || beatIndex < 0) {
+  if (beatIndex >= timePoints.length || beatIndex < 0) {
     return null;
   }
   const start = beatIndex === 0 ? getSectionStartTime(section) : timePoints[beatIndex - 1];
@@ -62,7 +61,7 @@ export const seekAndPlay = (
   isSeekingRef: React.RefObject<boolean>
 ) => {
   isSeekingRef.current = true;
-  video.currentTime = startSeconds ?? 0;
+  video.currentTime = startSeconds;
   void video
     .play()
     .then(() => {

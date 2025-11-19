@@ -157,9 +157,9 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
         // Update tour if provided and different from current
         // Get tour-id from any exhibit (they should all match)
         const tourId =
-          state?.exhibits?.basecamp?.['tour-id'] ||
-          state?.exhibits?.overlook?.['tour-id'] ||
-          state?.exhibits?.summit?.['tour-id'];
+          state.exhibits?.basecamp?.['tour-id'] ||
+          state.exhibits?.overlook?.['tour-id'] ||
+          state.exhibits?.summit?.['tour-id'];
 
         if (tourId && allTours.length > 0) {
           const tour = allTours.find(t => t.id === tourId);
@@ -189,10 +189,10 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
       }
     };
 
-    client.subscribeToTopic(`state/docent-app`, handleDocentAppState);
+    client.subscribeToTopic('state/docent-app', handleDocentAppState);
 
     return () => {
-      client.unsubscribeFromTopic(`state/docent-app`);
+      client.unsubscribeFromTopic('state/docent-app');
     };
   }, [client, allTours, currentTour?.id, pathname, router]);
 
@@ -214,10 +214,10 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
       }
     };
 
-    client.subscribeToTopic(`state/docent-app/error`, handleError);
+    client.subscribeToTopic('state/docent-app/error', handleError);
 
     return () => {
-      client.unsubscribeFromTopic(`state/docent-app/error`);
+      client.unsubscribeFromTopic('state/docent-app/error');
     };
   }, [client]);
 
@@ -243,10 +243,10 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
       }
     };
 
-    client.subscribeToTopic(`state/sync`, handleSync);
+    client.subscribeToTopic('state/sync', handleSync);
 
     return () => {
-      client.unsubscribeFromTopic(`state/sync`);
+      client.unsubscribeFromTopic('state/sync');
     };
   }, [client, fetchTours]);
 

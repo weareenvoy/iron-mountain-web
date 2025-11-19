@@ -6,6 +6,8 @@ import prettier from 'eslint-config-prettier/flat';
 import importPlugin from 'eslint-plugin-import';
 import perfectionist from 'eslint-plugin-perfectionist';
 import prettierPlugin from 'eslint-plugin-prettier';
+import reactPlugin from 'eslint-plugin-react';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import turbo from 'eslint-plugin-turbo';
 import globals from 'globals';
 import { createRequire } from 'node:module';
@@ -25,7 +27,13 @@ const eslintConfig = defineConfig([
   // Add any environment globals (e.g. service workers used by Next)
   {
     languageOptions: {
-      globals: { ...globals.browser, ...globals.serviceworker },
+      globals: {
+        ...globals.browser,
+        ...globals.serviceworker,
+        AppRoutes: 'readonly',
+        LayoutProps: 'readonly',
+        PageProps: 'readonly',
+      },
       parserOptions: {
         projectService: true,
         tsconfigRootDir: __dirname,
@@ -48,14 +56,27 @@ const eslintConfig = defineConfig([
     plugins: {
       '@cspell': cspellPlugin,
       'import': importPlugin,
+      'react': reactPlugin,
+      'react-hooks': reactHooksPlugin,
       'prettier': prettierPlugin,
       'turbo': turbo,
     },
     rules: {
       // cspell (points at your repo-level config)
       '@cspell/spellchecker': ['warn', { autoFix: true, cspell: require('./cspell.config.cjs') }],
+      '@next/next/no-img-element': 'warn',
+      '@typescript-eslint/member-ordering': ['error', { default: { order: 'alphabetically' } }],
+      '@typescript-eslint/no-deprecated': 'error',
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-unnecessary-condition': 'error',
+      '@typescript-eslint/no-unnecessary-type-conversion': 'error',
+      '@typescript-eslint/no-unused-vars': ['error', { ignoreRestSiblings: true }],
+      '@typescript-eslint/prefer-readonly': 'error',
+      '@typescript-eslint/prefer-readonly-parameter-types': 'off', // TODO: Change to error
+      '@typescript-eslint/triple-slash-reference': 'off',
       // Flag class methods that don't use 'this', promoting simpler functions.
       'class-methods-use-this': 'error',
+      'comma-dangle': ['error', 'only-multiline'],
       'import/consistent-type-specifier-style': 'off',
       'import/exports-last': 'off',
       'import/group-exports': 'off',
@@ -124,6 +145,7 @@ const eslintConfig = defineConfig([
         },
       ],
       'prefer-const': 'error',
+      'prefer-destructuring': 'off',
       'prettier/prettier': [
         'error',
         {
@@ -145,9 +167,36 @@ const eslintConfig = defineConfig([
           useTabs: false,
         },
       ],
+      'quotes': ['error', 'single', { allowTemplateLiterals: false, avoidEscape: true }],
+      'react-hooks/exhaustive-deps': 'error',
+      'react-hooks/rules-of-hooks': 'error',
+      'react/display-name': 'off',
+      // Standardize how functional components are defined.
+      'react/function-component-definition': [
+        'error',
+        {
+          namedComponents: 'arrow-function',
+          unnamedComponents: 'arrow-function',
+        },
+      ],
+      'react/jsx-curly-brace-presence': ['error', { children: 'never', propElementValues: 'always', props: 'never' }],
+      'react/jsx-filename-extension': ['error', { extensions: ['.tsx'] }],
+      'react/jsx-pascal-case': ['warn', { allowNamespace: true }],
+      'react/jsx-sort-props': 'error',
+      // Disallow nesting components inside other components.
+      // This helps prevent state loss and readability issues.
+      'react/no-unstable-nested-components': 'error',
+      'react/prefer-read-only-props': 'error',
+      'react/prop-types': 'off',
+      'react/react-in-jsx-scope': 'off',
+      'react/require-default-props': 'off',
+      'react/sort-comp': 'error',
+      'react/sort-default-props': 'error',
+      'react/sort-prop-types': 'error',
       'sort-imports': ['error', { ignoreDeclarationSort: true, ignoreMemberSort: true }], // perfectionist/sort-named-imports handles member sorting
-      'sort-keys': ['error', 'asc', { natural: true }],
+      'sort-keys': ['off'],
       'sort-vars': 'error',
+      'space-before-function-paren': ['error', { anonymous: 'always', asyncArrow: 'always', named: 'never' }],
       // Turborepo
       'turbo/no-undeclared-env-vars': 'warn',
     },
@@ -161,6 +210,7 @@ const eslintConfig = defineConfig([
           project: true,
         },
       },
+      'react': { version: 'detect' },
     },
   },
 
@@ -171,7 +221,6 @@ const eslintConfig = defineConfig([
     'out/**',
     'build/**',
     'next-env.d.ts',
-    'lib/supabase/middleware.ts',
     'public/sw.js',
   ]),
 ]);
