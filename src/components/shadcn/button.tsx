@@ -23,14 +23,17 @@ const buttonVariants = cva(
         'xl': 'h-12 rounded-full px-8 has-[>svg]:px-6',
       },
       variant: {
-        default: 'bg-primary text-primary-foreground hover:bg-primary/90',
-        destructive:
+        'default': 'bg-primary text-primary-foreground hover:bg-primary/90',
+        'destructive':
           'bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
-        ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
-        link: 'text-primary underline-offset-4 hover:underline',
-        outline:
+        'ghost': 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
+        'link': 'text-primary underline-offset-4 hover:underline',
+        'outline':
           'border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50',
-        secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+        'outline-light-grey':
+          'border border-primary-bg-grey text-primary-bg-grey bg-transparent hover:bg-primary-bg-grey/10 active:bg-primary-bg-grey/20 disabled:opacity-50',
+        'secondary': 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+        'unstyled': '',
       },
     },
   }
