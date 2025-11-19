@@ -1,4 +1,5 @@
 import '@/lib/tailwind/styles/globals.css';
+import { Suspense } from 'react';
 import { MqttProvider } from '@/components/providers/mqtt-provider';
 import { ThemeProvider } from '@/components/providers/theme';
 import { Toaster } from '@/components/shadcn/sonner';
@@ -28,17 +29,19 @@ const RootLayout = ({ children }: LayoutProps<'/'>) => {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={cn('antialiased', interstate.variable, geometria.variable)}>
-        <MqttProvider>
-          <ThemeProvider
-            defaultTheme="system"
-            disableTransitionOnChange
-            enableColorScheme
-            enableSystem
-            themes={['dark', 'light']}
-          >
-            {children}
-          </ThemeProvider>
-        </MqttProvider>
+        <Suspense>
+          <MqttProvider>
+            <ThemeProvider
+              defaultTheme="system"
+              disableTransitionOnChange
+              enableColorScheme
+              enableSystem
+              themes={['dark', 'light']}
+            >
+              {children}
+            </ThemeProvider>
+          </MqttProvider>
+        </Suspense>
         <Toaster />
       </body>
     </html>

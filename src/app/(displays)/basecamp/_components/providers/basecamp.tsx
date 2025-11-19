@@ -55,7 +55,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
 
     try {
       // TODO use actual API once it's ready. For now no tourId is needed in params.
-      const response = await fetch('/api/basecamp');
+      const response = await fetch('/api/basecamp.json', { cache: 'force-cache' });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to fetch basecamp data');

@@ -114,7 +114,7 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     setIsTourDataLoading(true);
     try {
       // fetch schedule tours. Endpoint name and data structure is TBD.
-      const response = await fetch('/api/tours', { cache: 'no-store' });
+      const response = await fetch('/api/tours.json', { cache: 'force-cache' });
       if (!response.ok) {
         throw new Error('Failed to fetch tours');
       }
