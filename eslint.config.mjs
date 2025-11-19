@@ -56,9 +56,9 @@ const eslintConfig = defineConfig([
     plugins: {
       '@cspell': cspellPlugin,
       'import': importPlugin,
+      'prettier': prettierPlugin,
       'react': reactPlugin,
       'react-hooks': reactHooksPlugin,
-      'prettier': prettierPlugin,
       'turbo': turbo,
     },
     rules: {
