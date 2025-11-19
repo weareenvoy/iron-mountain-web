@@ -11,16 +11,18 @@ import { cn } from '@/lib/tailwind/utils/cn';
 import type { Tour } from '@/app/(tablets)/docent/_types';
 
 interface TourByDate {
-  dayOfWeek: string;
-  tours: Tour[];
+  readonly dayOfWeek: string;
+  readonly tours: Tour[];
 }
 
-export default function SchedulePage() {
+const SchedulePage = () => {
   const router = useRouter();
   const { client } = useMqtt();
   const { allTours, isConnected, isTourDataLoading, refreshTours, setCurrentTour } = useDocent();
+
   const [selectedTourId, setSelectedTourId] = useState<null | string>(null);
   const [currentMonthDate, setCurrentMonthDate] = useState(new Date());
+
   const toursByDate = useMemo<Record<string, TourByDate>>(() => {
     if (allTours.length === 0) {
       return {};
@@ -79,6 +81,7 @@ export default function SchedulePage() {
     const tour = Object.values(toursByDate)
       .flatMap(group => group.tours)
       .find(t => t.id === tourId);
+
     if (tour && client) {
       setCurrentTour(tour); // Update context
 
@@ -250,4 +253,6 @@ export default function SchedulePage() {
       </div>
     </div>
   );
-}
+};
+
+export default SchedulePage;

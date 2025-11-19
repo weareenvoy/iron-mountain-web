@@ -44,15 +44,16 @@ const getBeatTimeRange = (section: string, beatIndex: number) => {
   return { end, start };
 };
 
-export default function Background() {
-  const mainVideoRef = useRef<HTMLVideoElement>(null);
-  const ambientVideoRef = useRef<HTMLVideoElement>(null);
-
+const Background = () => {
   // The moment and beat might come from GEC.
   const { exhibitState } = useBasecamp();
   const { beatIdx, momentId } = exhibitState;
-  const isSeekingRef = useRef<boolean>(false);
+
   const [displayTime, setDisplayTime] = useState<number>(0);
+
+  const mainVideoRef = useRef<HTMLVideoElement>(null);
+  const ambientVideoRef = useRef<HTMLVideoElement>(null);
+  const isSeekingRef = useRef<boolean>(false);
 
   useEffect(() => {
     const mainVideo = mainVideoRef.current;
@@ -211,4 +212,6 @@ export default function Background() {
       </div>
     </>
   );
-}
+};
+
+export default Background;

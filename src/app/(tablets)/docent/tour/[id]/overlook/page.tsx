@@ -6,9 +6,9 @@ import { use, useState } from 'react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import Header from '@/app/(tablets)/docent/_components/ui/Header';
 import MomentsAndBeats from '@/app/(tablets)/docent/_components/ui/MomentsAndBeats';
-import useMomentsNavigation from '@/app/(tablets)/docent/_hooks/use-moments-navigation';
 import { Button } from '@/components/shadcn/button';
-import { Moment } from '@/lib/internal/types';
+import useMomentsNavigation from '@/hooks/use-moments-navigation';
+import type { Moment } from '@/lib/internal/types';
 
 const OVERLOOK_CONTENT: Moment[] = [
   {
@@ -55,10 +55,10 @@ const OVERLOOK_CONTENT: Moment[] = [
 ];
 
 interface OverlookPageProps {
-  params: Promise<{ id: string }>;
+  readonly params: Promise<{ readonly id: string }>;
 }
 
-export default function OverlookPage({ params }: OverlookPageProps) {
+const OverlookPage = ({ params }: OverlookPageProps) => {
   const { id } = use(params);
   const { currentTour, overlookExhibitState, setOverlookExhibitState } = useDocent();
   // TODO does this live in GEC state?
@@ -130,4 +130,6 @@ export default function OverlookPage({ params }: OverlookPageProps) {
       </div>
     </div>
   );
-}
+};
+
+export default OverlookPage;

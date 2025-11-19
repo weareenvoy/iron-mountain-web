@@ -6,10 +6,10 @@ import CaseStudyToggle from './CaseStudyToggle';
 import type { ExhibitNavigationState, Moment } from '@/lib/internal/types';
 
 interface MomentsAndBeatsProps {
-  content: Moment[]; // hardcoded data
-  exhibit: 'basecamp' | 'overlook';
-  exhibitState: ExhibitNavigationState;
-  setExhibitState: (state: Partial<ExhibitNavigationState>) => void;
+  readonly content: Moment[]; // hardcoded data
+  readonly exhibit: 'basecamp' | 'overlook';
+  readonly exhibitState: ExhibitNavigationState;
+  readonly setExhibitState: (state: Partial<ExhibitNavigationState>) => void;
 }
 
 const MomentsAndBeats = ({ content, exhibit, exhibitState, setExhibitState }: MomentsAndBeatsProps) => {

@@ -3,7 +3,7 @@
 import Background from './_components/ui/Background';
 import Foreground from './_components/ui/Foreground';
 
-export default function BasecampPage() {
+const BasecampPage = () => {
   return (
     <div className="bg-primary-bg-grey relative flex h-[720px] w-[3840px] flex-col items-center overflow-hidden">
       {/* Foreground content */}
@@ -12,4 +12,6 @@ export default function BasecampPage() {
       <Background />
     </div>
   );
-}
+};
+
+export default BasecampPage;

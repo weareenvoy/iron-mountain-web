@@ -17,7 +17,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
 interface SummitRoomPageProps {
-  params: Promise<{ id: string }>;
+  readonly params: Promise<{ readonly id: string }>;
 }
 
 // Summit Room has 5 slides. First slide has no border, no diamond icon, but has image. Other slides have a border and a diamond icon.
@@ -48,7 +48,7 @@ const SUMMIT_ROOM_SLIDES = [
   },
 ];
 
-export default function SummitRoomPage({ params }: SummitRoomPageProps) {
+const SummitRoomPage = ({ params }: SummitRoomPageProps) => {
   const { id } = use(params);
   const { client } = useMqtt();
   const {
@@ -237,4 +237,6 @@ export default function SummitRoomPage({ params }: SummitRoomPageProps) {
       )}
     </div>
   );
-}
+};
+
+export default SummitRoomPage;

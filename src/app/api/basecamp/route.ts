@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { BasecampData } from '@/app/(displays)/basecamp/_types';
+import type { BasecampData } from '@/app/(displays)/basecamp/_types';
 
 // Mock data for a tour's basecamp content.
 const MOCK_BASECAMP_DATA: BasecampData = {

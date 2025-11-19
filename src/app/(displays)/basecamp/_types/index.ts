@@ -1,31 +1,56 @@
 export interface BasecampData {
-  'possibilities': { title: string };
-  'possibilities-a': {
-    'body-1': string;
-    'body-2': string;
-    'body-3': string;
-    'title': string;
+  readonly 'possibilities': {
+    readonly title: string;
   };
-  'possibilities-b': {
-    'body-1': string;
-    'body-2': string;
-    'body-3': string;
-    'title': string;
+  readonly 'possibilities-a': {
+    readonly 'body-1': string;
+    readonly 'body-2': string;
+    readonly 'body-3': string;
+    readonly 'title': string;
   };
-  'possibilities-c': {
-    'body-1': string;
-    'body-2': string;
-    'body-3': string;
-    'title': string;
+  readonly 'possibilities-b': {
+    readonly 'body-1': string;
+    readonly 'body-2': string;
+    readonly 'body-3': string;
+    readonly 'title': string;
   };
-  'problem-1': { text: string };
-  'problem-2': Array<{ percent: string; percentSubtitle: string }>;
-  'problem-3': {
-    'challenge-1': { body: string; icon: string; title: string };
-    'challenge-2': { body: string; icon: string; title: string };
-    'challenge-3': { body: string; icon: string; title: string };
-    'challenge-4': { body: string; icon: string; title: string };
-    'title': string;
+  readonly 'possibilities-c': {
+    readonly 'body-1': string;
+    readonly 'body-2': string;
+    readonly 'body-3': string;
+    readonly 'title': string;
   };
-  'welcome': { text: string };
+  readonly 'problem-1': {
+    readonly text: string;
+  };
+  readonly 'problem-2': {
+    readonly percent: string;
+    readonly percentSubtitle: string;
+  }[];
+  readonly 'problem-3': {
+    readonly 'challenge-1': {
+      readonly body: string;
+      readonly icon: string;
+      readonly title: string;
+    };
+    readonly 'challenge-2': {
+      readonly body: string;
+      readonly icon: string;
+      readonly title: string;
+    };
+    readonly 'challenge-3': {
+      readonly body: string;
+      readonly icon: string;
+      readonly title: string;
+    };
+    readonly 'challenge-4': {
+      readonly body: string;
+      readonly icon: string;
+      readonly title: string;
+    };
+    readonly 'title': string;
+  };
+  readonly 'welcome': {
+    readonly text: string;
+  };
 }

@@ -6,10 +6,10 @@ import { usePathname } from 'next/navigation';
 import { Button } from '@/components/shadcn/button';
 
 interface HeaderProps {
-  leftButton?: {
-    href: string;
-    icon?: React.ReactNode;
-    text: string;
+  readonly leftButton?: {
+    readonly href: string;
+    readonly icon?: React.ReactNode;
+    readonly text: string;
   };
 }
 

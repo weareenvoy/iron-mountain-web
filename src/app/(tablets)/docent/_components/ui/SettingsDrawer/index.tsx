@@ -11,17 +11,17 @@ import { Switch } from '@/components/shadcn/switch';
 import { cn } from '@/lib/tailwind/utils/cn';
 
 interface SettingsDrawerProps {
-  isOpen: boolean;
-  onClose: () => void;
+  readonly isOpen: boolean;
+  readonly onClose: () => void;
 }
 
 interface ExhibitControl {
-  errorMessage?: string;
-  hasError?: boolean;
-  id: string;
-  isMuted: boolean;
-  isOn: boolean;
-  name: string;
+  readonly errorMessage?: string;
+  readonly hasError?: boolean;
+  readonly id: string;
+  readonly isMuted: boolean;
+  readonly isOn: boolean;
+  readonly name: string;
 }
 
 // TODO Mock data for testing. How to get this data is not implemented yet
@@ -64,7 +64,7 @@ const MOCK_EXHIBIT_CONTROLS: ExhibitControl[] = [
   },
 ];
 
-export function SettingsDrawer({ isOpen, onClose }: SettingsDrawerProps) {
+const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
   const { client } = useMqtt();
   const { currentTour } = useDocent();
   const router = useRouter();
@@ -202,4 +202,6 @@ export function SettingsDrawer({ isOpen, onClose }: SettingsDrawerProps) {
       </div>
     </>
   );
-}
+};
+
+export default SettingsDrawer;

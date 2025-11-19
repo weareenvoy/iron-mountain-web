@@ -1,53 +1,73 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
-import { DocentAppState, SyncState, Tour } from '@/app/(tablets)/docent/_types';
+import {
+  createContext,
+  startTransition,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+  type PropsWithChildren,
+} from 'react';
+import { DocentAppState, type SyncState, type Tour } from '@/app/(tablets)/docent/_types';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import type { ExhibitNavigationState } from '@/lib/internal/types';
+import type { Route } from 'next';
 
+const isDocentRoute = (path: string): path is Route => {
+  return /^\/docent\/tour\/[^/]+(?:\/(?:basecamp|overlook|summit-room))?$/.test(path);
+};
 export interface DocentContextType {
-  allTours: Tour[];
-  basecampExhibitState: ExhibitNavigationState;
-  currentTour: null | Tour;
+  readonly allTours: Tour[];
+  readonly basecampExhibitState: ExhibitNavigationState;
+  readonly currentTour: null | Tour;
   // Full state from GEC (combines tour, UI mode, exhibit settings)
-  docentAppState: DocentAppState | null;
+  readonly docentAppState: DocentAppState | null;
   // Exhibit availability status
-  exhibitAvailability: {
-    basecamp: boolean;
-    overlook: boolean;
-    overlookTablet: boolean;
-    summit: boolean;
+  readonly exhibitAvailability: {
+    readonly basecamp: boolean;
+    readonly overlook: boolean;
+    readonly overlookTablet: boolean;
+    readonly summit: boolean;
   };
-  isConnected: boolean;
-  isGecStateLoading: boolean;
-  isSettingsOpen: boolean;
-  isSummitRoomJourneyMapLaunched: boolean;
-  isTourDataLoading: boolean;
+  readonly isConnected: boolean;
+  readonly isGecStateLoading: boolean;
+  readonly isSettingsOpen: boolean;
+  readonly isSummitRoomJourneyMapLaunched: boolean;
+  readonly isTourDataLoading: boolean;
 
-  lastUpdated: Date | null;
-  overlookExhibitState: ExhibitNavigationState;
-  refreshTours: () => Promise<void>;
-  setBasecampExhibitState: (state: Partial<ExhibitNavigationState>) => void;
+  readonly lastUpdated: Date | null;
+  readonly overlookExhibitState: ExhibitNavigationState;
+  readonly refreshTours: () => Promise<void>;
+  readonly setBasecampExhibitState: (state: Partial<ExhibitNavigationState>) => void;
 
-  setCurrentTour: (tour: null | Tour) => void;
-  setIsSettingsOpen: (open: boolean) => void;
-  setIsSummitRoomJourneyMapLaunched: (launched: boolean) => void;
-  setOverlookExhibitState: (state: Partial<ExhibitNavigationState>) => void;
+  readonly setCurrentTour: (tour: null | Tour) => void;
+  readonly setIsSettingsOpen: (open: boolean) => void;
+  readonly setIsSummitRoomJourneyMapLaunched: (launched: boolean) => void;
+  readonly setOverlookExhibitState: (state: Partial<ExhibitNavigationState>) => void;
 
-  setSummitRoomSlideIdx: (idx: number) => void;
+  readonly setSummitRoomSlideIdx: (idx: number) => void;
 
   // Summit Room state
-  summitRoomSlideIdx: number;
+  readonly summitRoomSlideIdx: number;
 }
 
 const DocentContext = createContext<DocentContextType | undefined>(undefined);
 
-interface DocentProviderProps {
-  children: ReactNode;
-}
+type DocentProviderProps = PropsWithChildren<{
+  readonly topic?: string; // placeholder for future props
+}>;
 
-export function DocentProvider({ children }: DocentProviderProps) {
+export const useDocent = () => {
+  const context = useContext(DocentContext);
+  if (context === undefined) {
+    throw new Error('useDocent must be used within a DocentProvider');
+  }
+  return context;
+};
+
+export const DocentProvider = ({ children }: DocentProviderProps) => {
   const { client, isConnected } = useMqtt();
   const router = useRouter();
   const pathname = usePathname();
@@ -155,9 +175,11 @@ export function DocentProvider({ children }: DocentProviderProps) {
             if (pathname.includes('/tour/')) {
               const tourPathRegex = /\/tour\/[^\/]+/;
               const newPathname = pathname.replace(tourPathRegex, `/tour/${tourId}`);
-              if (newPathname !== pathname) {
+              if (newPathname !== pathname && isDocentRoute(newPathname)) {
                 console.info(`Updating URL from ${pathname} to ${newPathname}`);
-                router.replace(newPathname);
+                startTransition(() => {
+                  router.replace(newPathname);
+                });
               }
             }
           }
@@ -270,12 +292,6 @@ export function DocentProvider({ children }: DocentProviderProps) {
       {children}
     </DocentContext.Provider>
   );
-}
+};
 
-export function useDocent() {
-  const context = useContext(DocentContext);
-  if (context === undefined) {
-    throw new Error('useDocent must be used within a DocentProvider');
-  }
-  return context;
-}
+export default DocentProvider;

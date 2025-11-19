@@ -5,9 +5,9 @@ import { use } from 'react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import Header from '@/app/(tablets)/docent/_components/ui/Header';
 import MomentsAndBeats from '@/app/(tablets)/docent/_components/ui/MomentsAndBeats';
-import useMomentsNavigation from '@/app/(tablets)/docent/_hooks/use-moments-navigation';
 import { Button } from '@/components/shadcn/button';
-import { Moment } from '@/lib/internal/types';
+import useMomentsNavigation from '@/hooks/use-moments-navigation';
+import type { Moment } from '@/lib/internal/types';
 
 const BASECAMP_CONTENT: Moment[] = [
   {
@@ -37,10 +37,10 @@ const BASECAMP_CONTENT: Moment[] = [
   },
 ];
 interface BasecampPageProps {
-  params: Promise<{ id: string }>;
+  readonly params: Promise<{ readonly id: string }>;
 }
 
-export default function BasecampPage({ params }: BasecampPageProps) {
+const BasecampPage = ({ params }: BasecampPageProps) => {
   const { id } = use(params);
   const { basecampExhibitState, currentTour, setBasecampExhibitState } = useDocent();
 
@@ -93,4 +93,6 @@ export default function BasecampPage({ params }: BasecampPageProps) {
       </div>
     </div>
   );
-}
+};
+
+export default BasecampPage;

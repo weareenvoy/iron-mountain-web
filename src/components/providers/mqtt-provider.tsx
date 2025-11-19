@@ -1,21 +1,21 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState, type PropsWithChildren } from 'react';
 import { MqttService } from '@/lib/mqtt/utils/mqtt-service';
 import type { MqttError } from '@/lib/mqtt/types';
 
 interface MqttContextType {
-  client: MqttService | undefined;
-  error: MqttError | undefined;
-  isConnected: boolean;
+  readonly client: MqttService | undefined;
+  readonly error: MqttError | undefined;
+  readonly isConnected: boolean;
 }
 
 const MqttContext = createContext<MqttContextType | undefined>(undefined);
 
-interface MqttProviderProps {
-  children: React.ReactNode;
-}
+type MqttProviderProps = PropsWithChildren<{
+  readonly topic?: string;
+}>;
 
 // Determine device ID based on the current route
 const getDeviceIdFromPath = (pathname: string): string => {
@@ -31,7 +31,15 @@ const getDeviceIdFromPath = (pathname: string): string => {
   return 'docent-app';
 };
 
-export function MqttProvider({ children }: MqttProviderProps) {
+export const useMqtt = () => {
+  const context = useContext(MqttContext);
+  if (context === undefined) {
+    throw new Error('useMqtt must be used within a MqttProvider');
+  }
+  return context;
+};
+
+export const MqttProvider = ({ children }: MqttProviderProps) => {
   const pathname = usePathname();
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState<MqttError | undefined>(undefined);
@@ -71,12 +79,4 @@ export function MqttProvider({ children }: MqttProviderProps) {
   );
 
   return <MqttContext.Provider value={value}>{children}</MqttContext.Provider>;
-}
-
-export function useMqtt() {
-  const context = useContext(MqttContext);
-  if (context === undefined) {
-    throw new Error('useMqtt must be used within a MqttProvider');
-  }
-  return context;
-}
+};

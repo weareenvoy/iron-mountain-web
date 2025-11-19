@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useState, type PropsWithChildren } from 'react';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import type { BasecampData } from '@/app/(displays)/basecamp/_types';
 import type { ExhibitNavigationState } from '@/lib/internal/types';
@@ -15,19 +15,19 @@ interface BasecampContextType {
 
 const BasecampContext = createContext<BasecampContextType | undefined>(undefined);
 
-interface BasecampProviderProps {
-  children: React.ReactNode;
-}
+type BasecampProviderProps = PropsWithChildren<{
+  readonly topic?: string; // placeholder for future props
+}>;
 
-export function useBasecamp() {
+export const useBasecamp = () => {
   const context = useContext(BasecampContext);
   if (context === undefined) {
     throw new Error('useBasecamp must be used within a BasecampProvider');
   }
   return context;
-}
+};
 
-export function BasecampProvider({ children }: BasecampProviderProps) {
+export const BasecampProvider = ({ children }: BasecampProviderProps) => {
   const { client } = useMqtt();
 
   // UI navigation state (local)
@@ -263,4 +263,6 @@ export function BasecampProvider({ children }: BasecampProviderProps) {
   };
 
   return <BasecampContext.Provider value={contextValue}>{children}</BasecampContext.Provider>;
-}
+};
+
+export default BasecampProvider;

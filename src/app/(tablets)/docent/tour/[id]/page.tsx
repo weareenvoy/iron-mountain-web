@@ -7,10 +7,10 @@ import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import Header from '@/app/(tablets)/docent/_components/ui/Header';
 
 interface TourOverviewPageProps {
-  params: Promise<{ id: string }>;
+  readonly params: Promise<{ readonly id: string }>;
 }
 
-export default function TourOverviewPage({ params }: TourOverviewPageProps) {
+const TourOverviewPage = ({ params }: TourOverviewPageProps) => {
   const { id } = use(params);
   const router = useRouter();
   const currentTour = useDocent().currentTour;
@@ -64,4 +64,6 @@ export default function TourOverviewPage({ params }: TourOverviewPageProps) {
       </div>
     </div>
   );
-}
+};
+
+export default TourOverviewPage;

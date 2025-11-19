@@ -17,7 +17,7 @@ const getDataKey = (moment: string, beatIdx: number): string => {
   return ''; // No content for this moment/beatIdx combination
 };
 
-export default function Foreground() {
+const Foreground = () => {
   const { data, exhibitState } = useBasecamp();
   const { beatIdx, momentId } = exhibitState;
 
@@ -41,9 +41,7 @@ export default function Foreground() {
         );
 
       case 'possibilities-a':
-
       case 'possibilities-b':
-
       case 'possibilities-c':
         const possibilitiesData = content as BasecampData['possibilities-a'];
         return (
@@ -82,6 +80,7 @@ export default function Foreground() {
             </div>
           </div>
         );
+
       case 'problem-3':
         const problem3Data = content as BasecampData['problem-3'];
         return (
@@ -105,6 +104,7 @@ export default function Foreground() {
             </div>
           </div>
         );
+
       case 'welcome':
         return (
           <div className="absolute inset-0 flex items-center justify-center">
@@ -120,4 +120,6 @@ export default function Foreground() {
   };
 
   return renderContent();
-}
+};
+
+export default Foreground;
