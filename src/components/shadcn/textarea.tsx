@@ -1,9 +1,9 @@
 /* eslint-disable react/function-component-definition */
 
-import * as React from 'react';
 import { cn } from '@/lib/tailwind/utils/cn';
+import type { ComponentProps } from 'react';
 
-function Textarea({ className, ...props }: React.ComponentProps<'textarea'>) {
+function Textarea({ className, ...props }: ComponentProps<'textarea'>) {
   return (
     <textarea
       className={cn(

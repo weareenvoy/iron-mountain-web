@@ -3,13 +3,13 @@
 'use client';
 
 import { cva, type VariantProps } from 'class-variance-authority';
-import * as React from 'react';
 import { Button } from '@/components/shadcn/button';
 import { Input } from '@/components/shadcn/input';
 import { Textarea } from '@/components/shadcn/textarea';
 import { cn } from '@/lib/tailwind/utils/cn';
+import type { ComponentProps, MouseEvent } from 'react';
 
-function InputGroup({ className, ...props }: React.ComponentProps<'div'>) {
+function InputGroup({ className, ...props }: ComponentProps<'div'>) {
   return (
     <div
       className={cn(
@@ -59,8 +59,8 @@ function InputGroupAddon({
   align = 'inline-start',
   className,
   ...props
-}: React.ComponentProps<'div'> & VariantProps<typeof inputGroupAddonVariants>) {
-  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+}: ComponentProps<'div'> & VariantProps<typeof inputGroupAddonVariants>) {
+  const handleClick = (event: MouseEvent<HTMLDivElement>) => {
     if ((event.target as HTMLElement).closest('button')) {
       return;
     }
@@ -99,7 +99,7 @@ function InputGroupButton({
   type = 'button',
   variant = 'ghost',
   ...props
-}: Omit<React.ComponentProps<typeof Button>, 'size'> & VariantProps<typeof inputGroupButtonVariants>) {
+}: Omit<ComponentProps<typeof Button>, 'size'> & VariantProps<typeof inputGroupButtonVariants>) {
   return (
     <Button
       className={cn(inputGroupButtonVariants({ size }), className)}
@@ -111,7 +111,7 @@ function InputGroupButton({
   );
 }
 
-function InputGroupInput({ className, ...props }: React.ComponentProps<'input'>) {
+function InputGroupInput({ className, ...props }: ComponentProps<'input'>) {
   return (
     <Input
       className={cn(
@@ -124,7 +124,7 @@ function InputGroupInput({ className, ...props }: React.ComponentProps<'input'>)
   );
 }
 
-function InputGroupText({ className, ...props }: React.ComponentProps<'span'>) {
+function InputGroupText({ className, ...props }: ComponentProps<'span'>) {
   return (
     <span
       className={cn(
@@ -136,7 +136,7 @@ function InputGroupText({ className, ...props }: React.ComponentProps<'span'>) {
   );
 }
 
-function InputGroupTextarea({ className, ...props }: React.ComponentProps<'textarea'>) {
+function InputGroupTextarea({ className, ...props }: ComponentProps<'textarea'>) {
   return (
     <Textarea
       className={cn(

@@ -1,7 +1,7 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Slot } from '@radix-ui/react-slot';
-import * as React from 'react';
 import { cn } from '@/lib/tailwind/utils/cn';
+import type { ComponentProps } from 'react';
 
 // A lot of styles are from previous apps. Will keep modifying this file as we have more design.
 const buttonVariants = cva(
@@ -46,7 +46,7 @@ const Button = ({
   size,
   variant,
   ...props
-}: React.ComponentProps<'button'> &
+}: ComponentProps<'button'> &
   VariantProps<typeof buttonVariants> & {
     readonly active?: boolean;
     readonly asChild?: boolean;

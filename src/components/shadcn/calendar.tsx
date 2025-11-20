@@ -3,22 +3,30 @@
 'use client';
 
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
-import * as React from 'react';
+import {
+  useEffect,
+  useRef,
+  type ComponentProps,
+  type HTMLAttributes,
+  type ReactNode,
+  type Ref,
+  type SVGProps,
+} from 'react';
 import { DayButton, DayPicker, getDefaultClassNames } from 'react-day-picker';
 import { Button, buttonVariants } from '@/components/shadcn/button';
 import { cn } from '@/lib/tailwind/utils/cn';
 
-type ChevronProps = React.SVGProps<SVGSVGElement> & {
+type ChevronProps = SVGProps<SVGSVGElement> & {
   readonly className?: string;
   readonly orientation?: 'down' | 'left' | 'right' | 'up';
 };
 
-type RootProps = React.HTMLAttributes<HTMLDivElement> & {
-  readonly rootRef?: React.Ref<HTMLDivElement>;
+type RootProps = HTMLAttributes<HTMLDivElement> & {
+  readonly rootRef?: Ref<HTMLDivElement>;
 };
 
-type WeekNumberProps = React.HTMLAttributes<HTMLTableCellElement> & {
-  readonly children?: React.ReactNode;
+type WeekNumberProps = HTMLAttributes<HTMLTableCellElement> & {
+  readonly children?: ReactNode;
 };
 
 function CalendarChevron({ className, orientation = 'down', ...props }: ChevronProps) {
@@ -52,8 +60,8 @@ function Calendar({
   formatters,
   showOutsideDays = true,
   ...props
-}: React.ComponentProps<typeof DayPicker> & {
-  readonly buttonVariant?: React.ComponentProps<typeof Button>['variant'];
+}: ComponentProps<typeof DayPicker> & {
+  readonly buttonVariant?: ComponentProps<typeof Button>['variant'];
 }) {
   const defaultClassNames = getDefaultClassNames();
 
@@ -146,11 +154,11 @@ function Calendar({
   );
 }
 
-function CalendarDayButton({ className, day, modifiers, ...props }: React.ComponentProps<typeof DayButton>) {
+function CalendarDayButton({ className, day, modifiers, ...props }: ComponentProps<typeof DayButton>) {
   const defaultClassNames = getDefaultClassNames();
 
-  const ref = React.useRef<HTMLButtonElement>(null);
-  React.useEffect(() => {
+  const ref = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
     if (modifiers.focused) ref.current?.focus();
   }, [modifiers.focused]);
 

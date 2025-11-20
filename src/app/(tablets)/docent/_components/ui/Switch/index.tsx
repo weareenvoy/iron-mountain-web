@@ -1,7 +1,7 @@
 'use client';
 
 import * as SwitchPrimitives from '@radix-ui/react-switch';
-import * as React from 'react';
+import { forwardRef } from 'react';
 import { cn } from '@/lib/tailwind/utils/cn';
 
 interface SwitchProps extends React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root> {
@@ -9,7 +9,7 @@ interface SwitchProps extends React.ComponentPropsWithoutRef<typeof SwitchPrimit
   readonly onLabel?: string;
 }
 
-const Switch = React.forwardRef<React.ComponentRef<typeof SwitchPrimitives.Root>, SwitchProps>(
+const Switch = forwardRef<React.ComponentRef<typeof SwitchPrimitives.Root>, SwitchProps>(
   ({ className, offLabel = 'Off', onLabel = 'On', ...props }, ref) => (
     <SwitchPrimitives.Root
       className={cn(
