@@ -4,14 +4,14 @@
 
 import { CircleIcon } from 'lucide-react';
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
-import * as React from 'react';
 import { cn } from '@/lib/tailwind/utils/cn';
+import type { ComponentProps } from 'react';
 
-function RadioGroup({ className, ...props }: React.ComponentProps<typeof RadioGroupPrimitive.Root>) {
+function RadioGroup({ className, ...props }: ComponentProps<typeof RadioGroupPrimitive.Root>) {
   return <RadioGroupPrimitive.Root className={cn('grid gap-3', className)} data-slot="radio-group" {...props} />;
 }
 
-function RadioGroupItem({ className, ...props }: React.ComponentProps<typeof RadioGroupPrimitive.Item>) {
+function RadioGroupItem({ className, ...props }: ComponentProps<typeof RadioGroupPrimitive.Item>) {
   return (
     <RadioGroupPrimitive.Item
       className={cn(
