@@ -28,10 +28,10 @@ All MQTT messages follow a standard envelope:
 interface MqttMessage<T> {
   body: T;
   meta: {
-    id: string;     // UUID
+    id: string; // UUID
     source: string; // Sender Device ID
-    ts: string;     // ISO Timestamp
-  }
+    ts: string; // ISO Timestamp
+  };
 }
 ```
 
