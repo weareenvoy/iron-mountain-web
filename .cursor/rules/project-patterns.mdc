@@ -1,0 +1,24 @@
+---
+description: Guidelines for Iron Mountain specific patterns
+globs: src/**/*.{ts,tsx}
+alwaysApply: true
+---
+
+# Project Patterns
+
+## App Structure
+- **Displays**: Code for large screens goes in `src/app/(displays)`.
+- **Tablets**: Code for controllers goes in `src/app/(tablets)`.
+- **Shared**: Reusable logic goes in `src/lib` or `src/components`.
+
+## UI Components (Shadcn)
+- Import from `@/components/shadcn/...`.
+- Do not modify the core shadcn files directly.
+- Extend them using composition or by wrapping them in a new component.
+
+## Navigation
+- Use `useMomentsNavigation` hook for linear presentation flows (Basecamp, Overlook).
+- Ensure "Beats" are 1-indexed in the UI but 0-indexed in logic if needed, but consistency is key.
+
+## State
+- Use `useMqtt` context for anything that needs to cross the network.
