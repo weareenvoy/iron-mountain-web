@@ -181,6 +181,14 @@ const eslintConfig = defineConfig([
       ],
       'react/jsx-curly-brace-presence': ['error', { children: 'never', propElementValues: 'always', props: 'never' }],
       'react/jsx-filename-extension': ['error', { extensions: ['.tsx'] }],
+      'react/jsx-no-bind': [
+        'error',
+        {
+          allowArrowFunctions: false,
+          allowBind: false,
+          allowFunctions: false,
+        },
+      ],
       'react/jsx-pascal-case': ['warn', { allowNamespace: true }],
       'react/jsx-sort-props': 'error',
       // Disallow nesting components inside other components.
