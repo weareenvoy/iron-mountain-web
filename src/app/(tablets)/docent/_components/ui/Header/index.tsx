@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Button } from '@/components/shadcn/button';
+import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 
 interface HeaderProps {
   readonly leftButton?: {
@@ -19,7 +19,7 @@ const Header = ({ leftButton }: HeaderProps) => {
       {/* Left Button */}
       {leftButton && (
         <Link href={{ pathname: leftButton.href }}>
-          <Button className="flex h-13 items-center gap-3.5 px-6" size="sm" variant="outline">
+          <Button className="flex h-13 items-center gap-3.5 px-6" size="sm" variant="outline-light-grey">
             {leftButton.icon}
             <span className="h-6.25 text-[20px]">{leftButton.text}</span>
           </Button>

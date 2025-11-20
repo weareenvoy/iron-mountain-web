@@ -5,9 +5,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
+import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
+import { Switch } from '@/app/(tablets)/docent/_components/ui/Switch';
 import { useMqtt } from '@/components/providers/mqtt-provider';
-import { Button } from '@/components/shadcn/button';
-import { Switch } from '@/components/shadcn/switch';
 import { cn } from '@/lib/tailwind/utils/cn';
 
 interface SettingsDrawerProps {
@@ -120,7 +120,7 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
         {/* Header */}
         <div className="mt-35 mb-19 flex items-center justify-between">
           <h2 className="text-primary-bg-grey text-4xl leading-[48px]">Settings (this is hardcoded for now!)</h2>
-          <Button className="mr-[-30px] h-13 gap-3.5 px-5" onClick={onClose} variant="outline">
+          <Button className="mr-[-30px] h-13 gap-3.5 px-5" onClick={onClose} variant="outline-light-grey">
             <X className="size-[24px]" />
             <span className="h-6.25 text-[20px]">Close</span>
           </Button>
@@ -132,11 +132,11 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
             <div className="flex h-15 items-center justify-between" key={control.id}>
               <div className="flex flex-col gap-1">
                 {/* Status Icon and control name*/}
-                <div className="flex items-center gap-3.5">
+                <div className="flex items-center gap-2.5">
                   {control.isOn ? (
-                    <CircleCheck className="size-[28px] text-[#8dc13f]" />
+                    <CircleCheck className="size-[36px] fill-[#8dc13f] stroke-[#2e2e2e]" />
                   ) : (
-                    <CircleAlert className="size-[28px] text-[#f7931e]" />
+                    <CircleAlert className="size-[36px] fill-[#f7931e] stroke-[#2e2e2e]" />
                   )}
                   <span
                     className={cn('text-2xl', control.isOn ? 'text-primary-im-light-blue' : 'text-secondary-im-orange')}
@@ -182,7 +182,7 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
         {/* End Tour Button */}
         <div className="my-8 border-t border-[#58595B]"></div>
         <div className="flex flex-col items-center justify-center gap-6 text-center">
-          <Button className="flex h-16 w-full text-xl" onClick={handleEndTour}>
+          <Button className="flex h-16 w-full text-xl" onClick={handleEndTour} variant="primary">
             <span>End tour & activate idle</span>
             <ArrowRight className="size-[24px]" />
           </Button>

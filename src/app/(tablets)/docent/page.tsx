@@ -1,8 +1,8 @@
 import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header from '@/app/(tablets)/docent/_components/ui/Header';
-import { Button } from '@/components/shadcn/button';
 
 const DocentHomePage = ({}: PageProps<'/docent'>) => {
   // const { isTourDataLoading, isGecStateLoading } = useDocent();
@@ -26,7 +26,7 @@ const DocentHomePage = ({}: PageProps<'/docent'>) => {
             EBC Controls
           </h1>
 
-          <p className="max-w-[572px] text-2xl tracking-[-0.05em]">
+          <p className="max-w-[572px] text-2xl leading-loose tracking-[-0.05em]">
             Manage and direct the Iron Mountain EBC experience.
           </p>
         </div>
@@ -36,6 +36,7 @@ const DocentHomePage = ({}: PageProps<'/docent'>) => {
           <Button
             className="h-full w-full"
             size="sm"
+            variant="primary"
             // TODO instead of using a loading spinner, we could disable the button when data is loading.
             // disabled={isTourDataLoading || isGecStateLoading}
           >

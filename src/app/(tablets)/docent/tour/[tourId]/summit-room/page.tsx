@@ -6,9 +6,9 @@ import Image from 'next/image';
 import { use, useEffect, useRef } from 'react';
 import { A11y, Navigation, Pagination } from 'swiper/modules';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
+import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header from '@/app/(tablets)/docent/_components/ui/Header';
 import { useMqtt } from '@/components/providers/mqtt-provider';
-import { Button } from '@/components/shadcn/button';
 import { cn } from '@/lib/tailwind/utils/cn';
 import type { SwiperClass } from 'swiper/react';
 

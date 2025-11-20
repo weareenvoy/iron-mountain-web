@@ -4,9 +4,9 @@ import { ArrowLeft, ArrowRight, House, RotateCw } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
+import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header from '@/app/(tablets)/docent/_components/ui/Header';
 import { useMqtt } from '@/components/providers/mqtt-provider';
-import { Button } from '@/components/shadcn/button';
 import { cn } from '@/lib/tailwind/utils/cn';
 import type { Tour } from '@/app/(tablets)/docent/_types';
 

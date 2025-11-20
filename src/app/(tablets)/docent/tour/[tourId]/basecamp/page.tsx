@@ -3,9 +3,9 @@
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { use } from 'react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
+import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header from '@/app/(tablets)/docent/_components/ui/Header';
 import MomentsAndBeats from '@/app/(tablets)/docent/_components/ui/MomentsAndBeats';
-import { Button } from '@/components/shadcn/button';
 import useMomentsNavigation from '@/hooks/use-moments-navigation';
 import type { Moment } from '@/lib/internal/types';
 
