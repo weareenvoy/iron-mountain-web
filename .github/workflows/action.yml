@@ -1,4 +1,6 @@
 name: 'Auto Assign'
+permissions:
+  pull-requests: write
 
 on:
   pull_request:
