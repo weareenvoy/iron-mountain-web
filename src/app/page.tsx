@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Button } from '@/components/shadcn/button';
+import { ThemeSwitcher } from '@/components/shadcn/theme-switcher';
 import { APPS } from '@/lib/internal/contants';
 
 const Home = ({}: PageProps<'/'>) => {
@@ -15,6 +16,9 @@ const Home = ({}: PageProps<'/'>) => {
               <Link href={app.route}>{app.title}</Link>
             </Button>
           ))}
+        </div>
+        <div className="flex flex-col">
+          <ThemeSwitcher />
         </div>
       </main>
     </div>
