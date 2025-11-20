@@ -11,6 +11,7 @@
   "cSpell.enabled": true,
   "cSpell.words": [],
   "eslint.useFlatConfig": true,
+  "eslint.runtime": "node",
   "[markdown]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true

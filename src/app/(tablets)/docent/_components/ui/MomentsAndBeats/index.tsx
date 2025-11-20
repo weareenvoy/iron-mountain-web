@@ -4,6 +4,7 @@ import { useMqtt } from '@/components/providers/mqtt-provider';
 import { cn } from '@/lib/tailwind/utils/cn';
 import CaseStudyToggle from './CaseStudyToggle';
 import type { ExhibitNavigationState, Moment } from '@/lib/internal/types';
+import type { MouseEvent } from 'react';
 
 interface MomentsAndBeatsProps {
   readonly content: Moment[]; // hardcoded data
@@ -39,7 +40,7 @@ const MomentsAndBeats = ({ content, exhibit, exhibitState, setExhibitState }: Mo
     goTo(momentId, 0);
   };
 
-  const handleBeatClick = (beatIdx: number, momentId: string) => (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleBeatClick = (beatIdx: number, momentId: string) => (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     goTo(momentId, beatIdx);
   };

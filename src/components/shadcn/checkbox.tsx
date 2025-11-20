@@ -1,13 +1,13 @@
 'use client';
 
 import { CheckIcon } from 'lucide-react';
-import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
+import { Indicator, Root } from '@radix-ui/react-checkbox';
 import { cn } from '@/lib/tailwind/utils/cn';
 import type { ComponentProps } from 'react';
 
-const Checkbox = ({ className, ...props }: ComponentProps<typeof CheckboxPrimitive.Root>) => {
+const Checkbox = ({ className, ...props }: ComponentProps<typeof Root>) => {
   return (
-    <CheckboxPrimitive.Root
+    <Root
       className={cn(
         'peer size-4 shrink-0 rounded-[4px] border border-input shadow-xs transition-shadow outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:bg-input/30 dark:aria-invalid:ring-destructive/40 dark:data-[state=checked]:bg-primary',
         className
@@ -15,13 +15,10 @@ const Checkbox = ({ className, ...props }: ComponentProps<typeof CheckboxPrimiti
       data-slot="checkbox"
       {...props}
     >
-      <CheckboxPrimitive.Indicator
-        className="grid place-content-center text-current transition-none"
-        data-slot="checkbox-indicator"
-      >
+      <Indicator className="grid place-content-center text-current transition-none" data-slot="checkbox-indicator">
         <CheckIcon className="size-3.5" />
-      </CheckboxPrimitive.Indicator>
-    </CheckboxPrimitive.Root>
+      </Indicator>
+    </Root>
   );
 };
 

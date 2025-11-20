@@ -4,11 +4,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
+import type { ReactNode } from 'react';
 
 interface HeaderProps {
   readonly leftButton?: {
     readonly href: string;
-    readonly icon?: React.ReactNode;
+    readonly icon?: ReactNode;
     readonly text: string;
   };
 }

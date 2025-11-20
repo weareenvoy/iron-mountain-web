@@ -5,6 +5,7 @@
 import { CircleCheckIcon, InfoIcon, Loader2Icon, OctagonXIcon, TriangleAlertIcon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { Toaster as Sonner, type ToasterProps } from 'sonner';
+import type { CSSProperties } from 'react';
 
 function Toaster({ ...props }: ToasterProps) {
   const { theme = 'system' } = useTheme();
@@ -25,7 +26,7 @@ function Toaster({ ...props }: ToasterProps) {
           '--normal-bg': 'var(--popover)',
           '--normal-border': 'var(--border)',
           '--normal-text': 'var(--popover-foreground)',
-        } as React.CSSProperties
+        } as CSSProperties
       }
       theme={theme as ToasterProps['theme']}
       {...props}

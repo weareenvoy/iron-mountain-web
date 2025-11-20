@@ -2,7 +2,7 @@
 
 'use client';
 
-import * as SeparatorPrimitive from '@radix-ui/react-separator';
+import { Root } from '@radix-ui/react-separator';
 import { cn } from '@/lib/tailwind/utils/cn';
 import type { ComponentProps } from 'react';
 
@@ -11,9 +11,9 @@ function Separator({
   decorative = true,
   orientation = 'horizontal',
   ...props
-}: ComponentProps<typeof SeparatorPrimitive.Root>) {
+}: ComponentProps<typeof Root>) {
   return (
-    <SeparatorPrimitive.Root
+    <Root
       className={cn(
         'shrink-0 bg-border data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px',
         className
