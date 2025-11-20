@@ -15,6 +15,10 @@ import {
 export function ThemeSwitcher() {
   const { setTheme, theme } = useTheme();
 
+  const setTheTheme = (theme: 'dark' | 'light' | 'system') => () => {
+    setTheme(theme);
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -25,13 +29,13 @@ export function ThemeSwitcher() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem active={theme === 'light'} onClick={() => setTheme('light')}>
+        <DropdownMenuItem active={theme === 'light'} onClick={setTheTheme('light')}>
           Light
         </DropdownMenuItem>
-        <DropdownMenuItem active={theme === 'dark'} onClick={() => setTheme('dark')}>
+        <DropdownMenuItem active={theme === 'dark'} onClick={setTheTheme('dark')}>
           Dark
         </DropdownMenuItem>
-        <DropdownMenuItem active={theme === 'system'} onClick={() => setTheme('system')}>
+        <DropdownMenuItem active={theme === 'system'} onClick={setTheTheme('system')}>
           System
         </DropdownMenuItem>
       </DropdownMenuContent>

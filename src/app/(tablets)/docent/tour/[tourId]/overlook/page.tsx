@@ -68,6 +68,10 @@ const OverlookPage = ({ params }: PageProps<'/docent/tour/[tourId]/overlook'>) =
     'overlook'
   );
 
+  const toggleOverlookCastMode = () => {
+    setIsOverlookCastMode(castMode => !castMode);
+  };
+
   return (
     <div className="relative flex h-full w-full flex-col">
       {/* Navigation */}
@@ -81,7 +85,7 @@ const OverlookPage = ({ params }: PageProps<'/docent/tour/[tourId]/overlook'>) =
 
       {/* Cast Button */}
       <div className="text-primary-bg-grey absolute top-34 left-5 z-50 flex flex-col items-start">
-        <button className="active: border-none p-0" onClick={() => setIsOverlookCastMode(!isOverlookCastMode)}>
+        <button className="active: border-none p-0" onClick={toggleOverlookCastMode}>
           {isOverlookCastMode ? (
             <Cast className="size-[30px] text-[#ededed]" />
           ) : (

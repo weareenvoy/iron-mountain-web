@@ -2,7 +2,7 @@
 
 import { ArrowLeft, ArrowRight, House, RotateCw } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type MouseEventHandler } from 'react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header from '@/app/(tablets)/docent/_components/ui/Header';
@@ -73,7 +73,7 @@ const ScheduleClient = () => {
     setCurrentMonthDate(new Date());
   };
 
-  const handleTourSelect = (tourId: string) => {
+  const handleTourSelect = (tourId: string) => () => {
     setSelectedTourId(tourId);
   };
 
@@ -98,6 +98,20 @@ const ScheduleClient = () => {
       });
     }
   };
+
+  const formatScheduleDate = (dateString: string): string => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      day: 'numeric',
+      month: 'long',
+    });
+  };
+
+  const handleLoadButtonClick =
+    (tourId: string): MouseEventHandler<HTMLButtonElement> =>
+    event => {
+      event.stopPropagation();
+      handleLoadTour(tourId);
+    };
 
   const filteredTours = useMemo(() => {
     return Object.entries(toursByDate).filter(([date]) => {
@@ -176,12 +190,7 @@ const ScheduleClient = () => {
                   {/* Day of week and date */}
                   <p className="text-primary-im-mid-blue ml-7.5 text-[18px] leading-loose">
                     <span>{dayOfWeek}, </span>
-                    <span className="text-primary-im-dark-blue">
-                      {new Date(date).toLocaleDateString('en-US', {
-                        day: 'numeric',
-                        month: 'long',
-                      })}
-                    </span>
+                    <span className="text-primary-im-dark-blue">{formatScheduleDate(date)}</span>
                   </p>
 
                   {/* Tours for the date */}
@@ -195,7 +204,7 @@ const ScheduleClient = () => {
                             isSelected ? 'bg-white' : ''
                           )}
                           key={tour.id}
-                          onClick={() => handleTourSelect(tour.id)}
+                          onClick={handleTourSelect(tour.id)}
                         >
                           <div className="flex flex-1 items-center gap-6">
                             <div className="flex items-center gap-0">
@@ -240,10 +249,7 @@ const ScheduleClient = () => {
                           {isSelected && (
                             <Button
                               className="h-[52px] w-[97px] text-xl tracking-[-1px]"
-                              onClick={e => {
-                                e.stopPropagation();
-                                handleLoadTour(tour.id);
-                              }}
+                              onClick={handleLoadButtonClick(tour.id)}
                               size="sm"
                               variant="secondary"
                             >

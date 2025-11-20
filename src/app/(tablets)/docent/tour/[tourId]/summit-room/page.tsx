@@ -108,7 +108,7 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
     }
   };
 
-  const handleSlideIndicatorClick = (index: number) => {
+  const handleSlideIndicatorClick = (index: number) => () => {
     setCurrentSlideIdx(index);
     // Send MQTT command
     sendSummitSlideCommand(index);
@@ -214,7 +214,7 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
                     isActive ? 'bg-primary-bg-grey' : 'transparent'
                   )}
                   key={slideNumber}
-                  onClick={() => handleSlideIndicatorClick(index)}
+                  onClick={handleSlideIndicatorClick(index)}
                 />
               );
             })}

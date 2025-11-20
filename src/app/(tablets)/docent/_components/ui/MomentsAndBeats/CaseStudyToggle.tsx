@@ -12,6 +12,10 @@ interface CaseStudyToggleProps {
 const CaseStudyToggle = ({ isActive }: CaseStudyToggleProps) => {
   const [isPlaying, setIsPlaying] = useState(true);
 
+  const togglePlayPause = () => {
+    setIsPlaying(playing => !playing);
+  };
+
   return (
     <button
       className={cn(
@@ -19,7 +23,7 @@ const CaseStudyToggle = ({ isActive }: CaseStudyToggleProps) => {
         isActive ? 'opacity-100' : 'pointer-events-none opacity-0'
       )}
       // TODO: Send mqtt message to play/pause video
-      onClick={() => setIsPlaying(!isPlaying)}
+      onClick={togglePlayPause}
     >
       {isPlaying ? <CirclePause className="size-[40px]" /> : <CirclePlay className="size-[40px]" />}
     </button>

@@ -10,6 +10,11 @@ interface ErrorProps {
 }
 
 const ErrorPage = ({ error, reset }: ErrorProps) => {
+  const handleReset = () => {
+    // Attempt to recover by trying to re-render the segment
+    reset();
+  };
+
   useEffect(() => {
     // Log the error to an error reporting service
     console.error(error);
@@ -32,13 +37,7 @@ const ErrorPage = ({ error, reset }: ErrorProps) => {
           <Link href="/">Home</Link>
         </Button>
 
-        <Button
-          onClick={
-            // Attempt to recover by trying to re-render the segment
-            () => reset()
-          }
-          size="sm"
-        >
+        <Button onClick={handleReset} size="sm">
           Try again
         </Button>
       </div>

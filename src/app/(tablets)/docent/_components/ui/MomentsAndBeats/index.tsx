@@ -35,12 +35,12 @@ const MomentsAndBeats = ({ content, exhibit, exhibitState, setExhibitState }: Mo
     publishNavigation(momentId, beatIdx);
   };
 
-  const handleBulletPointClick = (momentId: string) => {
+  const handleBulletPointClick = (momentId: string) => () => {
     goTo(momentId, 0);
   };
 
-  const handleBeatClick = (e: React.MouseEvent<HTMLButtonElement>, beatIdx: number, momentId: string) => {
-    e.stopPropagation();
+  const handleBeatClick = (beatIdx: number, momentId: string) => (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
     goTo(momentId, beatIdx);
   };
 
@@ -60,7 +60,7 @@ const MomentsAndBeats = ({ content, exhibit, exhibitState, setExhibitState }: Mo
               {isActiveMoment && <div className="border-primary-bg-grey h-4 w-4 rotate-45 rounded-[2px] border-2" />}
               <button
                 className="text-primary-bg-grey text-left text-[26px] leading-[1.3]"
-                onClick={() => handleBulletPointClick(moment.id)}
+                onClick={handleBulletPointClick(moment.id)}
               >
                 {moment.title}
               </button>
@@ -86,7 +86,7 @@ const MomentsAndBeats = ({ content, exhibit, exhibitState, setExhibitState }: Mo
                           : 'border-white/0 bg-white/10'
                     )}
                     key={beatIdx}
-                    onClick={e => handleBeatClick(e, beatIdx, moment.id)}
+                    onClick={handleBeatClick(beatIdx, moment.id)}
                   >
                     {isActiveBeat && <div className="animate-flash-purple-gradient absolute inset-0 rounded-full" />}
                     <span className="text-primary-bg-grey relative z-10 text-center text-xl leading-[1.2] tracking-[-1px]">

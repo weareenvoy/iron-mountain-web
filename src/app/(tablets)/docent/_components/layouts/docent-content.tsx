@@ -16,6 +16,10 @@ const DocentContent = ({ children }: PropsWithChildren) => {
   const pathname = usePathname();
   const isHomePage = pathname === '/docent';
 
+  const openSettingsDrawer = () => {
+    setIsSettingsOpen(true);
+  };
+
   return (
     <div
       className={cn(
@@ -30,12 +34,7 @@ const DocentContent = ({ children }: PropsWithChildren) => {
       {/* Global Settings Button - Show on all pages except home */}
       {isConnected && !isHomePage && (
         <div className="absolute top-34 right-5 z-50">
-          <Button
-            className="h-13 w-40 gap-3.5"
-            onClick={() => setIsSettingsOpen(true)}
-            size="sm"
-            variant="outline-light-grey"
-          >
+          <Button className="h-13 w-40 gap-3.5" onClick={openSettingsDrawer} size="sm" variant="outline-light-grey">
             <Settings className="size-[24px]" />
             {/* When someone clicks it, asks for data (each exhibit's status) */}
             <span className="h-6.25 text-xl">Settings</span>

@@ -72,7 +72,7 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
   // TODO Convert GEC data to exhibit controls for display
   // const exhibitControls: ExhibitControl[] = [];
 
-  const handleToggleMute = (exhibitId: string) => {
+  const handleToggleMute = (exhibitId: string) => () => {
     if (!client) return;
 
     // Find current muted state
@@ -157,7 +157,7 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
                   'flex h-12 w-12 items-center justify-center rounded-full transition-colors',
                   control.isMuted ? 'text-primary-im-grey' : 'text-primary-im-light-blue'
                 )}
-                onClick={() => handleToggleMute(control.id)}
+                onClick={handleToggleMute(control.id)}
               >
                 {control.isMuted ? <VolumeX className="size-[24px]" /> : <Volume2 className="size-[24px]" />}
               </button>
