@@ -1,0 +1,155 @@
+{
+  "hero": {
+    "advisorName": "Kelly Thompson",
+    "clientName": "Kinetiq Health",
+    "date": "October 12, 2025",
+    "location": "Summit Room · Boston, MA",
+    "logoAlt": "Iron Mountain",
+    "logoSrc": "/images/iron-mountain-logo-colored.svg",
+    "subtitle": "Prepared for your Iron Mountain visit",
+    "title": "Your personalized journey map"
+  },
+  "metrics": {
+    "description": "Companies continue to wrestle with fractured ecosystems, limited insight into their data estate, and growing pressure to act responsibly.",
+    "items": [
+      {
+        "description": "of enterprise data remains dark",
+        "label": "Dark data",
+        "value": "34%"
+      },
+      {
+        "description": "of new data is unstructured",
+        "label": "Unstructured content",
+        "value": "22%"
+      },
+      {
+        "description": "of leaders cite security as top barrier",
+        "label": "Security concerns",
+        "value": "87%"
+      }
+    ],
+    "title": "What’s standing in your way?"
+  },
+  "obstacles": {
+    "description": "When we talk with your teams, four pain themes surface again and again.",
+    "items": [
+      {
+        "body": "Content lives across silos and legacy systems, driving manual effort and duplicate work.",
+        "icon": "/images/summit/icons/icon-complexity.svg",
+        "title": "Too much complexity"
+      },
+      {
+        "body": "Modernization business cases stall because value capture is unclear or far from execution.",
+        "icon": "/images/summit/icons/icon-roi.svg",
+        "title": "Cost and uncertain ROI"
+      },
+      {
+        "body": "AI and regulatory pressure raise the stakes for every decision, slowing innovation cycles.",
+        "icon": "/images/summit/icons/icon-risk.svg",
+        "title": "Expanded risk surface"
+      },
+      {
+        "body": "Teams juggle day jobs with transformation initiatives and rely on a small bench of specialists.",
+        "icon": "/images/summit/icons/icon-talent.svg",
+        "title": "Limited bandwidth"
+      }
+    ],
+    "title": "What’s holding you back?"
+  },
+  "recap": {
+    "body": "Iron Mountain pairs physical and digital expertise so you can modernize securely. We help you clarify value, consolidate repositories, and activate trusted data faster.",
+    "cta": "See how the next steps align with your priorities.",
+    "title": "Recap"
+  },
+  "stories": {
+    "description": "These are proof points from customers solving similar challenges.",
+    "items": [
+      {
+        "category": "Life Sciences",
+        "description": "Digitized 12M research artifacts to unlock AI discovery and reduce cycle time by 18%.",
+        "title": "Global biotech leader"
+      },
+      {
+        "category": "Financial Services",
+        "description": "Streamlined mortgage operations by aggregating 40+ content sources into a governed lakehouse.",
+        "title": "Top 5 mortgage servicer"
+      },
+      {
+        "category": "Media & Entertainment",
+        "description": "Activated archive footage for new streaming revenue with secure, metadata-rich storage.",
+        "title": "Legacy studio"
+      }
+    ],
+    "title": "Stories of impact"
+  },
+  "strategies": [
+    {
+      "eyebrow": "Considering possibilities",
+      "items": [
+        {
+          "body": [
+            "Inventory and prioritize high-value content collections.",
+            "Retire redundant repositories to reduce cost and risk.",
+            "Establish metadata guardrails for AI readiness."
+          ],
+          "title": "Making data accessible"
+        },
+        {
+          "body": [
+            "Pair digitization with workflow automation pilots.",
+            "Co-develop business cases tied to KPIs.",
+            "Stage data for analytics and AI services."
+          ],
+          "title": "Unlocking new value streams"
+        },
+        {
+          "body": [
+            "Modernize storage tiers for performance and compliance.",
+            "Automate retention and defensible disposition.",
+            "Extend zero-trust controls across hybrid estates."
+          ],
+          "title": "Optimizing your assets"
+        }
+      ],
+      "summary": "Each path can run independently, yet the greatest momentum happens when they progress together.",
+      "title": "Considering possibilities"
+    },
+    {
+      "eyebrow": "Unlock your future",
+      "items": [
+        {
+          "body": [
+            "Pilot a governed data mesh for priority domains.",
+            "Embed sustainability reporting into data programs.",
+            "Co-create AI use cases with measurable ROI."
+          ],
+          "title": "Protect"
+        },
+        {
+          "body": [
+            "Connect Docent, Summit, and Basecamp journeys.",
+            "Enable Docent to push beats to slides in real time.",
+            "Log engagement data for continuous improvement."
+          ],
+          "title": "Connect"
+        },
+        {
+          "body": [
+            "Scale modern ingestion by region and business unit.",
+            "Broker data products to internal and partner teams.",
+            "Expand Iron Mountain managed services footprint."
+          ],
+          "title": "Grow"
+        }
+      ],
+      "summary": "You decide where to begin; we ensure the roadmap stays actionable.",
+      "title": "Unlock your future"
+    }
+  ],
+  "summary": {
+    "body": "Bring your teams, data, and ambitions together with a trusted partner.",
+    "cta": "Schedule working sessions for each workstream within the next 30 days.",
+    "title": "Next steps"
+  }
+}
+
