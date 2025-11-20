@@ -1,5 +1,7 @@
 'use client';
 
+import type { RefObject } from 'react';
+
 export type Section = 'ambient' | 'ascend' | 'possibilities' | 'problem' | 'welcome';
 export type TimedSection = Exclude<Section, 'ambient'>;
 
@@ -58,7 +60,7 @@ export const seekAndPlay = (
   video: HTMLVideoElement,
   startSeconds: number,
   label: string,
-  isSeekingRef: React.RefObject<boolean>
+  isSeekingRef: RefObject<boolean>
 ) => {
   isSeekingRef.current = true;
   video.currentTime = startSeconds;
@@ -76,12 +78,12 @@ export const createLoadedMetadataHandler = (
   video: HTMLVideoElement,
   startSeconds: number,
   label: string,
-  isSeekingRef: React.RefObject<boolean>
+  isSeekingRef: RefObject<boolean>
 ) => {
   return () => seekAndPlay(video, startSeconds, label, isSeekingRef);
 };
 
-export const createSeekedHandler = (isSeekingRef: React.RefObject<boolean>) => {
+export const createSeekedHandler = (isSeekingRef: RefObject<boolean>) => {
   return () => {
     isSeekingRef.current = false;
   };

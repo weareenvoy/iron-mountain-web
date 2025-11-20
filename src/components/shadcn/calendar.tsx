@@ -8,7 +8,7 @@ import {
   useRef,
   type ComponentProps,
   type HTMLAttributes,
-  type ReactNode,
+  type PropsWithChildren,
   type Ref,
   type SVGProps,
 } from 'react';
@@ -25,9 +25,7 @@ type RootProps = HTMLAttributes<HTMLDivElement> & {
   readonly rootRef?: Ref<HTMLDivElement>;
 };
 
-type WeekNumberProps = HTMLAttributes<HTMLTableCellElement> & {
-  readonly children?: ReactNode;
-};
+type WeekNumberProps = HTMLAttributes<HTMLTableCellElement> & PropsWithChildren;
 
 function CalendarChevron({ className, orientation = 'down', ...props }: ChevronProps) {
   if (orientation === 'left') {
