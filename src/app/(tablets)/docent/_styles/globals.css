@@ -1,0 +1,297 @@
+[data-app='docent'] {
+  /* Overrides of root variables (Docent values) */
+  --destructive: oklch(0.577 0.245 27.325);
+  --input: oklch(87.61% 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.45 0 0);
+  --ring: oklch(0.708 0 0);
+
+  /* Custom (Docent-only) */
+  /* Overlook tablet colors */
+  --primary-bg-grey: #ededed;
+  --primary-im-dark-blue: #14477d;
+  --primary-im-mid-blue: #1b75bc;
+  --primary-im-light-blue: #6dcff6;
+  --primary-im-grey: #58595b;
+  --secondary-im-teal: #00a88e;
+  --secondary-im-purple: #8a0d71;
+  --secondary-im-orange: #f7931e;
+  --secondary-im-green: #8dc13f;
+
+  --white: #fff;
+  --black: #000;
+  --transparent: transparent;
+
+  --background-primary: #fff;
+  --background-secondary: #fff;
+  --background-secondary-2: #fff;
+  --background-tertiary: #fff;
+  --background-quaternary: #fff;
+
+  --foreground-primary: #000;
+  --foreground-primary-hover: #000;
+  --foreground-secondary: #000;
+  --foreground-tertiary: #000;
+  --foreground-quaternary: #000;
+  --foreground-disabled: #000;
+  --foreground-selected: #000;
+
+  --border-primary: oklch(0 0 0);
+  --border-secondary: oklch(0.52 0 0);
+  --border-tertiary: oklch(0.84 0 0);
+  --border-disabled: oklch(0.89 0 0);
+  --border-active: oklch(0.59 0.238555 1.3126);
+
+  --success: #42be65;
+  --warning: #f1c21b;
+  --error: #fa4d56;
+
+  --destructive-foreground: oklch(0.577 0.245 27.325);
+  --link: oklch(55.65% 0.243 261.95);
+
+  --sidebar-left-open-width: 264px;
+  --sidebar-left-closed-width: 64px;
+  --sidebar-right-open-width: 287px;
+  --sidebar-right-closed-width: 64px;
+
+  --leading-tight: 0.85;
+  --leading-snug: 1;
+  --leading-normal: 1.05;
+  --leading-relaxed: 1.1;
+  --leading-loose: 1.2;
+
+  --shadow-dialog:
+    -256px 140px 82px 0px rgba(0, 0, 0, 0), -164px 89px 75px 0px rgba(0, 0, 0, 0.02),
+    -92px 50px 63px 0px rgba(0, 0, 0, 0.08), -41px 22px 47px 0px rgba(0, 0, 0, 0.13),
+    -10px 6px 26px 0px rgba(0, 0, 0, 0.15);
+}
+
+/* Dark mode colors */
+[data-theme='dark'] [data-app='docent'],
+.dark [data-app='docent'] {
+  /* Overrides of root variables (Docent values) */
+  --destructive: oklch(0.577 0.245 27.325);
+  --input: oklch(0.25 0 0);
+  --muted: oklch(7% 0 0 / 0.75); /* oklch(0.2 0 0); */
+  --muted-foreground: oklch(0.7 0 0);
+  --ring: oklch(0.4 0 0);
+
+  /* Custom (Docent-only) */
+  --background-primary: #050608;
+  --background-secondary: #0e0f12;
+  --background-tertiary: oklch(7% 0 0 / 0.25);
+  --background-quaternary: oklch(7% 0 0 / 0.55); /* #373a41; */
+  --background-quinary: #61656c;
+  --background-highlighted: #ffd3ea;
+
+  --foreground-primary: #ffffff;
+  --foreground-primary-hover: #ececed;
+  --foreground-secondary: #cecfd2;
+  --foreground-secondary-2: #22262f;
+  --foreground-tertiary: #94979c;
+  --foreground-disabled: #85888e;
+  --foreground-selected: #4e0b2f;
+
+  --border-primary: #61656c;
+  --border-secondary: #373a41;
+  --border-tertiary: #22262f;
+  --border-disabled: #373a41;
+  --border-active: #ffffff;
+
+  --button-disabled: #6a6a6a;
+
+  --success: #42be65;
+  --warning: #f1c21b;
+  --error: #fa4d56;
+  --error-overlay: #652222;
+
+  --destructive-foreground: oklch(0.577 0.245 27.325);
+  --link: #8fc4ff;
+}
+
+@theme inline {
+  /* Fonts */
+  --font-interstate: var(--font-interstate);
+  --font-geometria: var(--font-geometria);
+
+  /* Colors */
+  --color-*: initial;
+
+  /* Main colors in Figma so far. */
+  --color-primary-bg-grey: var(--primary-bg-grey);
+  --color-primary-im-dark-blue: var(--primary-im-dark-blue);
+  --color-primary-im-mid-blue: var(--primary-im-mid-blue);
+  --color-primary-im-light-blue: var(--primary-im-light-blue);
+  --color-secondary-im-teal: var(--secondary-im-teal);
+  --color-secondary-im-purple: var(--secondary-im-purple);
+  --color-secondary-im-orange: var(--secondary-im-orange);
+  --color-secondary-im-green: var(--secondary-im-green);
+  --color-primary-im-grey: var(--primary-im-grey);
+
+  --color-white: var(--white);
+  --color-black: var(--black);
+  --color-transparent: var(--transparent);
+
+  /* These colors are copied over from an old app. Will update or delete them when we have more design. */
+  --color-background-primary: var(--background-primary);
+  --color-background-secondary: var(--background-secondary);
+  --color-background-secondary-2: var(--background-secondary-2);
+  --color-background-tertiary: var(--background-tertiary);
+  --color-background-quaternary: var(--background-quaternary);
+  --color-background-highlighted: var(--background-highlighted);
+
+  --color-foreground-primary: var(--foreground-primary);
+  --color-foreground-primary-hover: var(--foreground-primary-hover);
+  --color-foreground-secondary: var(--foreground-secondary);
+  --color-foreground-secondary-2: var(--foreground-secondary-2);
+  --color-foreground-tertiary: var(--foreground-tertiary);
+  --color-foreground-quaternary: var(--foreground-quaternary);
+  --color-foreground-disabled: var(--foreground-disabled);
+  --color-foreground-selected: var(--foreground-selected);
+
+  --color-border-primary: var(--border-primary);
+  --color-border-secondary: var(--border-secondary);
+  --color-border-tertiary: var(--border-tertiary);
+  --color-border-disabled: var(--border-disabled);
+  --color-border-active: var(--border-active);
+
+  --color-button-disabled: var(--button-disabled);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+  --color-error-overlay: var(--error-overlay);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-link: var(--link);
+
+  /* Border Radius */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Box Shadows */
+  --shadow-dialog: var(--shadow-dialog);
+
+  /* Widths */
+  --width-sidebar-left-open: var(--sidebar-left-open-width);
+  --width-sidebar-left-closed: var(--sidebar-left-closed-width);
+  --width-sidebar-right-open: var(--sidebar-right-open-width);
+  --width-sidebar-right-closed: var(--sidebar-right-closed-width);
+
+  /* Animations */
+  --animate-fade-in: fade-in 300ms ease-in-out forwards;
+  --animate-fade-out: fade-out 300ms ease-in-out forwards;
+  --animate-flash-purple-gradient: flash-purple-gradient 3s ease-in-out infinite;
+}
+
+@source '../**/**/**/*.{ts,tsx}';
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@layer base {
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fade-out {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes flash-purple-gradient {
+    0% {
+      background: linear-gradient(296deg, #a2115e 28.75%, #8a0d71 82.59%);
+      opacity: 0;
+    }
+    40%,
+    60% {
+      background: linear-gradient(296deg, #a2115e 28.75%, #8a0d71 82.59%);
+      opacity: 1;
+    }
+    100% {
+      background: linear-gradient(296deg, #a2115e 28.75%, #8a0d71 82.59%);
+      opacity: 0;
+    }
+  }
+}
+
+@layer utilities {
+  .font-headline-lg {
+    @apply text-[80px] leading-normal;
+  }
+
+  .font-headline-md {
+    @apply text-5xl leading-normal;
+  }
+
+  .font-headline-sm {
+    @apply text-[28px] leading-normal;
+  }
+
+  .font-title-lg {
+    @apply text-[3.25rem] leading-normal;
+  }
+
+  .font-title-sm {
+    @apply text-2xl leading-snug;
+  }
+
+  .font-title-xs {
+    @apply text-[1.25rem] leading-tight;
+  }
+
+  .font-body-lg {
+    @apply text-[40px] leading-loose;
+  }
+
+  .font-body-md {
+    @apply text-2xl leading-loose;
+  }
+
+  .font-body-sm {
+    @apply text-[20px] leading-loose;
+  }
+
+  .font-body-xs {
+    @apply text-base leading-loose;
+  }
+
+  .font-label-md {
+    @apply text-base leading-relaxed;
+  }
+
+  .font-label-sm {
+    @apply text-sm leading-snug;
+  }
+
+  .font-label-xs {
+    @apply text-xs leading-snug;
+  }
+
+  .overflow-y-scroll,
+  .overflow-x-scroll,
+  .overflow-y-auto,
+  .overflow-x-auto,
+  .overflow-auto {
+    scrollbar-color: #b0b0b0 #dedede;
+    scrollbar-width: thin;
+  }
+}

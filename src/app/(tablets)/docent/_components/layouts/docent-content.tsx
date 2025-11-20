@@ -1,11 +1,15 @@
 'use client';
 
 import { Settings } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
-import SettingsDrawer from '@/app/(tablets)/docent/_components/ui/SettingsDrawer';
 import { Button } from '@/components/shadcn/button';
+import { Interstate } from '@/lib/internal/fonts';
+import { cn } from '@/lib/tailwind/utils/cn';
 import type { PropsWithChildren } from 'react';
+
+const SettingsDrawer = dynamic(() => import('@/app/(tablets)/docent/_components/ui/SettingsDrawer'), { ssr: false });
 
 const DocentContent = ({ children }: PropsWithChildren) => {
   const { isConnected, isSettingsOpen, setIsSettingsOpen } = useDocent();
@@ -13,7 +17,13 @@ const DocentContent = ({ children }: PropsWithChildren) => {
   const isHomePage = pathname === '/docent';
 
   return (
-    <div className="relative flex h-[1133px] w-[744px] items-center justify-center overflow-hidden bg-linear-[348deg,#00A88E_0%,#1B75BC_100%]">
+    <div
+      className={cn(
+        'text-foreground-primary bg-background-primary relative flex h-[1133px] w-[744px] items-center justify-center overflow-hidden bg-linear-[348deg,#00A88E_0%,#1B75BC_100%]',
+        Interstate.className
+      )}
+      data-app="docent"
+    >
       {children}
 
       {/* TODO when we click Settings button, ask GEC, GEC will send back latest data */}

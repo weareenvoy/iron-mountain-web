@@ -1,0 +1,27 @@
+/* Displays → Basecamp scoped variables */
+[data-app='displays-basecamp'] {
+  /* Overrides of root variables (Basecamp) */
+  /* e.g. --foreground: oklch(...); */
+
+  /* Custom (Basecamp-only) */
+  /* e.g. --basecamp-accent: #...; */
+}
+
+[data-theme='dark'] [data-app='displays-basecamp'],
+.dark [data-app='displays-basecamp'] {
+  /* Overrides of root variables (Basecamp, dark) */
+  /* e.g. --foreground: oklch(...); */
+
+  /* Custom (Basecamp-only, dark) */
+  /* e.g. --basecamp-accent: #...; */
+}
+
+@source '../**/**/**/*.{ts,tsx}';
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@layer base {
+}
+
+@layer utilities {
+}

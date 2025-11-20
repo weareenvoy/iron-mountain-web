@@ -26,7 +26,7 @@ const DocentHomePage = ({}: PageProps<'/docent'>) => {
             EBC Controls
           </h1>
 
-          <p className="max-w-[572px] text-2xl leading-loose tracking-[-0.05em]">
+          <p className="max-w-[572px] text-2xl tracking-[-0.05em]">
             Manage and direct the Iron Mountain EBC experience.
           </p>
         </div>
@@ -39,7 +39,7 @@ const DocentHomePage = ({}: PageProps<'/docent'>) => {
             // TODO instead of using a loading spinner, we could disable the button when data is loading.
             // disabled={isTourDataLoading || isGecStateLoading}
           >
-            <span className="text-2xl leading-loose tracking-[-1.2px]">Tap to begin</span>
+            <span className="text-2xl tracking-[-1.2px]">Tap to begin</span>
             <ArrowRight className="size-[24px]" />
           </Button>
         </Link>

@@ -1,5 +1,5 @@
 import mqtt, { MqttClient, type IClientOptions } from 'mqtt';
-import { MQTT_BASE_OPTIONS, MQTT_BROKER_URL, mqttCommands } from '../constants';
+import { getMqttBrokerUrl, MQTT_BASE_OPTIONS, mqttCommands } from '../constants';
 import { createMqttMessage } from './create-mqtt-message';
 import { generateClientId } from './generate-client-id';
 import { getAvailabilityTopic } from './get-availability-topic';
@@ -34,7 +34,8 @@ export class MqttService {
       },
     };
 
-    this.client = mqtt.connect(MQTT_BROKER_URL, optionsWithLWT);
+    const brokerUrl = getMqttBrokerUrl();
+    this.client = mqtt.connect(brokerUrl, optionsWithLWT);
 
     this.client.on('connect', () => {
       console.info(`MQTT connected as ${this.deviceId}`);

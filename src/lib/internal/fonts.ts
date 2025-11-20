@@ -1,7 +1,7 @@
 import localFont from 'next/font/local';
 
 // Font loaders with explicit literal values (Next.js requirement)
-export const interstate = localFont({
+export const Interstate = localFont({
   display: 'swap',
   fallback: ['Georgia, sans-serif, system-ui'],
   preload: true,
@@ -17,7 +17,7 @@ export const interstate = localFont({
   weight: '400',
 });
 
-export const geometria = localFont({
+export const Geometria = localFont({
   display: 'swap',
   fallback: ['Arial, sans-serif, system-ui'],
   preload: true,

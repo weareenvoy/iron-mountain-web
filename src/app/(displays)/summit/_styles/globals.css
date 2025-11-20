@@ -1,0 +1,27 @@
+/* Displays → Summit scoped variables */
+[data-app='displays-summit'] {
+  /* Overrides of root variables (Summit) */
+  /* e.g. --foreground: oklch(...); */
+
+  /* Custom (Summit-only) */
+  /* e.g. --summit-accent: #...; */
+}
+
+[data-theme='dark'] [data-app='displays-summit'],
+.dark [data-app='displays-summit'] {
+  /* Overrides of root variables (Summit, dark) */
+  /* e.g. --foreground: oklch(...); */
+
+  /* Custom (Summit-only, dark) */
+  /* e.g. --summit-accent: #...; */
+}
+
+@source '../**/**/**/*.{ts,tsx}';
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@layer base {
+}
+
+@layer utilities {
+}

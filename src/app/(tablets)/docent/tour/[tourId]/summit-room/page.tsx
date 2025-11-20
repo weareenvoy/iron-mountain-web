@@ -10,9 +10,10 @@ import Header from '@/app/(tablets)/docent/_components/ui/Header';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { Button } from '@/components/shadcn/button';
 import { cn } from '@/lib/tailwind/utils/cn';
+import type { SwiperClass } from 'swiper/react';
+
 const Swiper = dynamic(() => import('swiper/react').then(m => m.Swiper), { ssr: false });
 const SwiperSlide = dynamic(() => import('swiper/react').then(m => m.SwiperSlide), { ssr: false });
-import type { SwiperClass } from 'swiper/react';
 
 // Import Swiper styles
 import 'swiper/css';

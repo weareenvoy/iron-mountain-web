@@ -2,7 +2,7 @@ import '@/lib/tailwind/styles/globals.css';
 import SwRegister from '@/components/providers/sw-register';
 import { ThemeProvider } from '@/components/providers/theme';
 import { Toaster } from '@/components/shadcn/sonner';
-import { geometria, interstate } from '@/lib/internal/fonts';
+import { Geometria, Interstate } from '@/lib/internal/fonts';
 import { cn } from '@/lib/tailwind/utils/cn';
 import type { Metadata, Viewport } from 'next';
 
@@ -28,7 +28,7 @@ export const viewport: Viewport = {
 const RootLayout = ({ children }: LayoutProps<'/'>) => {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn('antialiased', interstate.variable, geometria.variable)}>
+      <body className={cn('antialiased', Interstate.variable, Geometria.variable)}>
         <SwRegister />
         <ThemeProvider
           defaultTheme="light"
