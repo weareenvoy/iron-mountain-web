@@ -10,5 +10,9 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "cSpell.enabled": true,
   "cSpell.words": [],
-  "eslint.useFlatConfig": true
+  "eslint.useFlatConfig": true,
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  }
 }
