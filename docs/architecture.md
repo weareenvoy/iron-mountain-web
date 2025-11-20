@@ -45,6 +45,7 @@ interface MqttMessage<T> {
 ### Displays (Viewers)
 
 - **Basecamp**: The main presentation display. Reacts to "beats" and "moments" triggered by the Docent.
+- **Overlook**: A customer-facing tablet that controls a specific video wall or interactive screen.
 - **Summit**: Another large format display, likely for ambient or specific journey maps.
 - **Kiosks (01-03)**: Standalone or synchronized interactive stations.
 
@@ -55,3 +56,4 @@ interface MqttMessage<T> {
 - **Styling**: Tailwind CSS v4
 - **State Management**: React Context
 - **Real-time**: MQTT.js (v5)
+- **MQTT Broker**: Mosquitto
