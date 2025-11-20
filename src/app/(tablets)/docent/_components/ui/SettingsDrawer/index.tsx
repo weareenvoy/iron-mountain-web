@@ -120,7 +120,7 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
         {/* Header */}
         <div className="mt-35 mb-19 flex items-center justify-between">
           <h2 className="text-primary-bg-grey text-4xl leading-[48px]">Settings (this is hardcoded for now!)</h2>
-          <Button className="mr-[-30px] h-13 gap-3.5 px-5" onClick={onClose} variant="outline-light-grey">
+          <Button className="mr-[-30px] h-13 gap-2.5 px-5" onClick={onClose} variant="outline-light-grey">
             <X className="size-[24px]" />
             <span className="h-6.25 text-[20px]">Close</span>
           </Button>
@@ -134,9 +134,9 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
                 {/* Status Icon and control name*/}
                 <div className="flex items-center gap-2.5">
                   {control.isOn ? (
-                    <CircleCheck className="size-[36px] fill-[#8dc13f] stroke-[#2e2e2e]" />
+                    <CircleCheck className="size-[32px] fill-[#8dc13f] stroke-[#2e2e2e]" />
                   ) : (
-                    <CircleAlert className="size-[36px] fill-[#f7931e] stroke-[#2e2e2e]" />
+                    <CircleAlert className="size-[32px] fill-[#f7931e] stroke-[#2e2e2e]" />
                   )}
                   <span
                     className={cn('text-2xl', control.isOn ? 'text-primary-im-light-blue' : 'text-secondary-im-orange')}

@@ -118,7 +118,7 @@ const ScheduleClient = () => {
   const leftButton = useMemo(
     () => ({
       href: '/docent',
-      icon: <House />,
+      icon: <House className="size-[20px]" />,
       text: 'Back to home',
     }),
     []
