@@ -184,7 +184,7 @@ const eslintConfig = defineConfig([
       'react/jsx-no-bind': [
         'error',
         {
-          allowArrowFunctions: false,
+          allowArrowFunctions: true,
           allowBind: false,
           allowFunctions: false,
         },

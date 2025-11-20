@@ -121,6 +121,16 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
     sendSummitSlideCommand(0);
   };
 
+  const handleSlideChange = (swiper: SwiperClass) => {
+    setCurrentSlideIdx(swiper.activeIndex);
+    // Send MQTT command
+    sendSummitSlideCommand(swiper.activeIndex);
+  };
+
+  const handleSwiper = (swiper: SwiperClass) => {
+    swiperRef.current = swiper;
+  };
+
   return (
     <div className="relative flex h-full w-full flex-col">
       {/* Navigation */}
@@ -150,14 +160,8 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
             }}
             modules={[Navigation, Pagination, A11y]}
             navigation={false}
-            onSlideChange={swiper => {
-              setCurrentSlideIdx(swiper.activeIndex);
-              // Send MQTT command
-              sendSummitSlideCommand(swiper.activeIndex);
-            }}
-            onSwiper={swiper => {
-              swiperRef.current = swiper; // Store Swiper instance
-            }}
+            onSlideChange={handleSlideChange}
+            onSwiper={handleSwiper}
             pagination={false}
             slidesPerView={1}
             spaceBetween={30}
