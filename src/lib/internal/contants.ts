@@ -18,10 +18,10 @@ export const APPS: {
 }[] = [
   {
     route: '/docent',
-    title: 'Docent App',
+    title: 'Docent Tablet',
   },
   {
     route: '/basecamp',
-    title: 'Basecamp App',
+    title: 'Basecamp Display',
   },
 ];
