@@ -31,7 +31,7 @@ const RootLayout = ({ children }: LayoutProps<'/'>) => {
       <body className={cn('antialiased', Interstate.variable, Geometria.variable)}>
         <SwRegister />
         <ThemeProvider
-          defaultTheme="light"
+          defaultTheme="system"
           disableTransitionOnChange
           enableColorScheme
           enableSystem
