@@ -1,0 +1,33 @@
+'use client';
+
+import { CirclePause, CirclePlay } from 'lucide-react';
+import { useState } from 'react';
+import { cn } from '@/lib/tailwind/utils/cn';
+
+interface CaseStudyToggleProps {
+  readonly isActive: boolean;
+}
+
+// Case-study play/pause toggle, resets when navigation changes via key on parent render
+const CaseStudyToggle = ({ isActive }: CaseStudyToggleProps) => {
+  const [isPlaying, setIsPlaying] = useState(true);
+
+  const togglePlayPause = () => {
+    setIsPlaying(playing => !playing);
+  };
+
+  return (
+    <button
+      className={cn(
+        'text-primary-bg-grey transition-opacity',
+        isActive ? 'opacity-100' : 'pointer-events-none opacity-0'
+      )}
+      // TODO: Send mqtt message to play/pause video
+      onClick={togglePlayPause}
+    >
+      {isPlaying ? <CirclePause className="size-[40px]" /> : <CirclePlay className="size-[40px]" />}
+    </button>
+  );
+};
+
+export default CaseStudyToggle;

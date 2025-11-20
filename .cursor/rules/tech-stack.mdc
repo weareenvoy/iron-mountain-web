@@ -1,0 +1,27 @@
+---
+description: Enforce Next.js 16, Tailwind v4, and MQTT patterns
+globs: **/*.{ts,tsx}
+alwaysApply: true
+---
+
+# Technology Stack & Rules
+
+## Next.js 16 (App Router)
+- Use Server Components by default. Add 'use client' only when necessary (interactivity, hooks).
+- Use `next/image` for all images.
+- Use `next/link` for internal navigation.
+
+## Tailwind CSS v4
+- Use utility classes for styling.
+- Do NOT use `@apply` in CSS modules unless absolutely necessary.
+- Use `clsx` or `cn` (from `@/lib/tailwind/utils/cn`) for conditional classes.
+- Colors and spacing should follow the design system tokens defined in `globals.css`.
+
+## MQTT
+- When publishing messages, ALWAYS use the types defined in `@/lib/mqtt/types.ts`.
+- Do not hardcode topic strings if they are reusable; use constants or helper functions.
+- Handle connection states gracefully (show loading/error states).
+
+## TypeScript
+- Strict mode is enabled. Avoid `any`.
+- Use `interface` for object shapes and `type` for unions/primitives.

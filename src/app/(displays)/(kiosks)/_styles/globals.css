@@ -1,0 +1,30 @@
+/* Displays → Kiosks (all) scoped variables */
+[data-app='displays-kiosks'] {
+  /* Overrides of root variables (Kiosks) */
+  /* e.g. --foreground: oklch(...); */
+
+  /* Custom (Kiosks-only) */
+  /* e.g. --kiosks-accent: #...; */
+}
+
+[data-theme='dark'] [data-app='displays-kiosks'],
+.dark [data-app='displays-kiosks'] {
+  /* Overrides of root variables (Kiosks, dark) */
+  /* e.g. --foreground: oklch(...); */
+
+  /* Custom (Kiosks-only, dark) */
+  /* e.g. --kiosks-accent: #...; */
+}
+
+@theme inline {
+}
+
+@source '../**/**/**/*.{ts,tsx}';
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@layer base {
+}
+
+@layer utilities {
+}

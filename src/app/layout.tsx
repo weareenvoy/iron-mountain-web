@@ -1,70 +1,48 @@
-import type { Metadata } from "next";
-import localFont from "next/font/local";
-import { cn } from "@/lib/utils";
-import { MqttProvider } from "@/providers/MqttProvider";
-import { Toaster } from "@/components/Toaster";
-
-import "../styles/index.css";
-
-// Font configurations
-const interstate = localFont({
-  src: [
-    {
-      path: "../fonts/InterstateRegular.woff2",
-      weight: "400",
-      style: "normal",
-    },
-  ],
-  variable: "--font-interstate",
-});
-
-const geometria = localFont({
-  src: [
-    {
-      path: "../fonts/Geometria.woff2",
-      weight: "400",
-      style: "normal",
-    },
-  ],
-  variable: "--font-geometria",
-});
+import '@/lib/tailwind/styles/globals.css';
+import SwRegister from '@/components/providers/sw-register';
+import { ThemeProvider } from '@/components/providers/theme';
+import { Toaster } from '@/components/shadcn/sonner';
+import { Geometria, Interstate } from '@/lib/internal/fonts';
+import { cn } from '@/lib/tailwind/utils/cn';
+import type { Metadata, Viewport } from 'next';
 
 export const metadata: Metadata = {
-  title: "Iron Mountain Overlook Tablet",
-  description: "",
+  description: '',
   robots: {
     follow: false,
     index: false,
   },
+  title: 'Iron Mountain',
 };
 
-export const viewport = {
+export const viewport: Viewport = {
   initialScale: 1,
-  width: "device-width",
+  interactiveWidget: 'resizes-content',
   maximumScale: 1,
+  minimumScale: 1,
+  themeColor: '#0B2E4E',
   userScalable: false,
+  width: 'device-width',
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+const RootLayout = ({ children }: LayoutProps<'/'>) => {
   return (
-    <html lang="en" className="h-full" data-theme="dark">
-      <body
-        className={cn(
-          interstate.variable,
-          geometria.variable,
-          interstate.className,
-          "text-foreground-primary bg-background-primary antialiased",
-        )}
-      >
-        <MqttProvider>{children}</MqttProvider>
-
-        {/* Toast Alerts */}
+    <html lang="en" suppressHydrationWarning>
+      <body className={cn('font-interstate antialiased', Interstate.variable, Geometria.variable)}>
+        <SwRegister />
+        <ThemeProvider
+          defaultTheme="system"
+          disableTransitionOnChange
+          enableColorScheme
+          enableSystem
+          themes={['dark', 'light']}
+        >
+          {children}
+        </ThemeProvider>
         <Toaster />
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;

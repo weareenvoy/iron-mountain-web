@@ -1,0 +1,7 @@
+# PACKAGES
+Mosquitto
+shadcn
+TTFB
+Turborepo
+vercel
+weareenvoy

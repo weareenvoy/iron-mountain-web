@@ -1,0 +1,8 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+
+Always alphabetize — applies to everything: JSON keys, object properties, destructuring, class names, CSS rules,
+JSX/HTML props, etc.

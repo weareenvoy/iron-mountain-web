@@ -1,37 +1,68 @@
-# Iron Mountain overlook tablet app
+# Iron Mountain
 
-A Next.js application for managing coffee station interactions with MQTT communication and dynamic video completion flows.
+A Next.js 16 application for managing coffee station interactions with MQTT communication and dynamic video completion
+flows.
+
+## Documentation
+
+- [**Architecture Overview**](./docs/architecture.md): System design, MQTT topics, and device roles.
+- [**Coding Patterns**](./docs/patterns.md): State management, component guidelines, and styling.
 
 ## Getting Started
 
-Install dependencies
+### Prerequisites
+
+- Node.js >= 22
+- pnpm
+
+### Installation
 
 ```bash
-yarn install
+pnpm install
 ```
+
+### Development
 
 Run the development server:
 
 ```bash
-yarn run dev
+pnpm dev
 ```
 
-For production builds:
+The development server runs on port 3000 by default.
+
+### Production
 
 ```bash
-yarn run build
-yarn run start
+pnpm build
+pnpm start
 ```
 
-The development server runs on port 3000 by default, while production starts on port 7776. You can change ports in `package.json` scripts or specify them when running: `yarn dev -p 3001` or `yarn start -p 8080`.
+## Project Structure
+
+- **`src/app`**: Next.js App Router pages.
+  - **`(displays)`**: Routes for screens (`basecamp`, `summit`, `kiosks`, `overlook`).
+  - **`(tablets)`**: Routes for controllers (`docent`, `overlook`).
+- **`src/components`**: React components.
+  - **`shadcn`**: Reusable UI primitives (Buttons, Inputs, etc.).
+  - **`ui`**: Custom components.
+  - **`providers`**: Global context providers (MQTT, Theme).
+  - **`layouts`**: Shared layout wrappers.
+- **`src/lib`**: Core logic and utilities.
+  - **`mqtt`**: MQTT client setup, types, and constants.
+  - **`internal`**: Domain-specific constants, types, and data fetching.
+  - **`shadcn`**: Shadcn utilities.
+  - **`tailwind`**: Styling utilities and global CSS.
+- **`src/hooks`**: Custom React hooks (e.g., `useMomentsNavigation`).
+- **`src/flags`**: Feature flags configuration.
 
 ## Environment Configuration
 
 Create a `.env.local` file in the root directory:
 
 ```env
-NEXT_PUBLIC_MQTT_BROKER_URL=XXX # wss://platinumtongue962:q84ECOGbpa...
-NEXT_PUBLIC_ASSET_DOMAIN=XXX # ideal-ducks-0234b33c63.media.strapiapp.com
+NEXT_PUBLIC_MQTT_BROKER_URL=wss://...
+NEXT_PUBLIC_API_BASE_URL=https://...
+NEXT_PUBLIC_CDN_HOST_NAME=https://...
+NEXT_PUBLIC_KIOSK_OFFLINE_FIRST=true
 ```
-
-For Strapi URL whitelisting in `NEXT_PUBLIC_ASSET_DOMAIN`, use the domain without port numbers (e.g., `localhost` instead of `localhost:1337`).

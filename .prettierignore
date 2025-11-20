@@ -1,0 +1,11 @@
+# deps & builds
+node_modules
+.next
+out
+build
+public
+dist
+build
+next-env.d.ts
+pnpm-lock.yaml
+pnpm-workspace.yaml

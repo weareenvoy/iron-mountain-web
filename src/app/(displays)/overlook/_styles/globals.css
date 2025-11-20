@@ -1,0 +1,27 @@
+/* Displays → Overlook scoped variables */
+[data-app='displays-overlook'] {
+  /* Overrides of root variables (Overlook) */
+  /* e.g. --foreground: oklch(...); */
+
+  /* Custom (Overlook-only) */
+  /* e.g. --overlook-accent: #...; */
+}
+
+[data-theme='dark'] [data-app='displays-overlook'],
+.dark [data-app='displays-overlook'] {
+  /* Overrides of root variables (Overlook, dark) */
+  /* e.g. --foreground: oklch(...); */
+
+  /* Custom (Overlook-only, dark) */
+  /* e.g. --overlook-accent: #...; */
+}
+
+@source '../**/**/**/*.{ts,tsx}';
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@layer base {
+}
+
+@layer utilities {
+}
