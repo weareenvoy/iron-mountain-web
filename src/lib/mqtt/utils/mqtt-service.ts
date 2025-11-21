@@ -9,6 +9,7 @@ export class MqttService {
   private readonly availabilityTopic: string;
   private client: MqttClient | null = null;
   private readonly deviceId: DeviceId;
+  private readonly messageHandlers = new Map<string, Set<(message: Buffer) => void>>();
   private readonly onConnectionChange?: MqttServiceConfig['onConnectionChange'];
   private readonly onError?: MqttServiceConfig['onError'];
 
@@ -51,8 +52,21 @@ export class MqttService {
         }
       );
 
-      this.subscribeToTopics();
+      // Resubscribe to all topics in the handler map upon reconnection
+      this.messageHandlers.forEach((_, topic) => {
+        this.client?.subscribe(topic, (err: Error | null) => {
+          if (err) console.error(`Resubscription to ${topic} failed:`, err);
+        });
+      });
+
       this.onConnectionChange?.(true);
+    });
+
+    this.client.on('message', (topic: string, message: Buffer) => {
+      const handlers = this.messageHandlers.get(topic);
+      if (handlers) {
+        handlers.forEach(handler => handler(message));
+      }
     });
 
     this.client.on('error', (err: MqttError) => {
@@ -65,8 +79,6 @@ export class MqttService {
       this.client = null;
       this.onConnectionChange?.(false);
     });
-
-    // No global message handling - each route handles its own messages
   }
 
   public disconnect(): void {
@@ -97,16 +109,6 @@ export class MqttService {
       );
     }
   }
-
-  // private subscribe(topic: string) {
-  //   this.client?.subscribe(topic, (err: MqttError) => {
-  //     if (err) {
-  //       console.error(`Subscription to ${topic} failed:`, err);
-  //       return;
-  //     }
-  //     console.info(`Subscribed to ${topic}`);
-  //   });
-  // }
 
   // Docent App → ALL: End tour (broadcast to all exhibits)
   public endTour(config?: PublishArgsConfig): void {
@@ -220,35 +222,40 @@ export class MqttService {
 
   // Custom subscription methods for route-specific topics
   public subscribeToTopic(topic: string, handler: (message: Buffer) => void): void {
-    this.client?.subscribe(topic, err => {
-      if (err) {
-        console.error(`Failed to subscribe to ${topic}:`, err);
-        return;
-      }
-      console.info(`Subscribed to custom topic: ${topic}`);
-    });
-
-    // Store the handler for this topic
-    this.client?.on('message', (receivedTopic: string, message: Buffer) => {
-      if (receivedTopic === topic) {
-        handler(message);
-      }
-    });
+    if (!this.messageHandlers.has(topic)) {
+      this.messageHandlers.set(topic, new Set());
+      // Only subscribe to the broker if this is the first handler for this topic
+      this.client?.subscribe(topic, err => {
+        if (err) {
+          console.error(`Failed to subscribe to ${topic}:`, err);
+        } else {
+          console.info(`Subscribed to custom topic: ${topic}`);
+        }
+      });
+    }
+    this.messageHandlers.get(topic)?.add(handler);
   }
 
-  public unsubscribeFromTopic(topic: string): void {
-    this.client?.unsubscribe(topic, err => {
-      if (err) {
-        console.error(`Failed to unsubscribe from ${topic}:`, err);
-        return;
-      }
-      console.info(`Unsubscribed from custom topic: ${topic}`);
-    });
-  }
+  public unsubscribeFromTopic(topic: string, handler?: (message: Buffer) => void): void {
+    const handlers = this.messageHandlers.get(topic);
+    if (!handlers) return;
 
-  // eslint-disable-next-line class-methods-use-this
-  private subscribeToTopics(): void {
-    // No global topics - each route handles its own subscriptions
-    console.info('MQTT connected - ready for custom subscriptions');
+    if (handler) {
+      handlers.delete(handler);
+    } else {
+      // If no specific handler provided, remove all (fallback behavior, though usually we want to be specific)
+      handlers.clear();
+    }
+
+    if (handlers.size === 0) {
+      this.messageHandlers.delete(topic);
+      this.client?.unsubscribe(topic, err => {
+        if (err) {
+          console.error(`Failed to unsubscribe from ${topic}:`, err);
+        } else {
+          console.info(`Unsubscribed from custom topic: ${topic}`);
+        }
+      });
+    }
   }
 }

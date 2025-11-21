@@ -1,8 +1,8 @@
 import { ArrowRight } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header from '@/app/(tablets)/docent/_components/ui/Header';
+import MountainIllustration from '@/components/ui/icons/MountainIllustration';
 
 const DocentHomePage = ({}: PageProps<'/docent'>) => {
   // const { isTourDataLoading, isGecStateLoading } = useDocent();
@@ -11,11 +11,14 @@ const DocentHomePage = ({}: PageProps<'/docent'>) => {
     <div className="bg-primary-bg-grey relative flex h-full w-full flex-col items-center overflow-hidden">
       {/* Background Illustration */}
       <div className="absolute right-0 bottom-0 left-0 h-[511px] w-full">
-        <Image alt="Mountain illustration" className="object-cover" fill src="/images/mountain-illustration.svg" />
+        <MountainIllustration
+          className="absolute inset-0 h-full w-full object-cover"
+          preserveAspectRatio="xMidYMid slice"
+        />
       </div>
 
       {/* Navigation */}
-      <Header />
+      <Header useDarkLogo />
 
       {/* Content */}
       <div className="mt-80 flex flex-col items-center gap-[235px] px-10">

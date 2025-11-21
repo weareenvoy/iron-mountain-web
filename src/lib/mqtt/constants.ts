@@ -23,7 +23,7 @@ export const getMqttBrokerUrl = (): string => {
   return `${scheme}://localhost:9001/mqtt`;
 };
 
-export const MQTT_BASE_OPTIONS: Omit<IClientOptions, 'clientId' | 'will'> = {
+export const MQTT_BASE_OPTIONS: Readonly<Omit<IClientOptions, 'clientId' | 'will'>> = {
   clean: false,
   keepalive: 30,
   reconnectPeriod: 2000,
@@ -47,4 +47,4 @@ export const mqttCommands = {
   summit: {
     gotoBeat: 'cmd/dev/summit/goto-beat',
   },
-};
+} as const;

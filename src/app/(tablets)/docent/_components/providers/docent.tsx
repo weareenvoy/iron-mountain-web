@@ -10,10 +10,10 @@ import {
   useState,
   type PropsWithChildren,
 } from 'react';
-import { DocentAppState, type SyncState, type Tour } from '@/app/(tablets)/docent/_types';
+import { DocentAppState, type SyncState } from '@/app/(tablets)/docent/_types';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getTours } from '@/lib/internal/data/get-tours';
-import type { ExhibitNavigationState } from '@/lib/internal/types';
+import type { ExhibitNavigationState, Tour } from '@/lib/internal/types';
 import type { Route } from 'next';
 
 const isDocentRoute = (path: string): path is Route => {
@@ -192,7 +192,7 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     client.subscribeToTopic('state/docent-app', handleDocentAppState);
 
     return () => {
-      client.unsubscribeFromTopic('state/docent-app');
+      client.unsubscribeFromTopic('state/docent-app', handleDocentAppState);
     };
   }, [client, allTours, currentTour?.id, pathname, router]);
 
@@ -217,7 +217,7 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     client.subscribeToTopic('state/docent-app/error', handleError);
 
     return () => {
-      client.unsubscribeFromTopic('state/docent-app/error');
+      client.unsubscribeFromTopic('state/docent-app/error', handleError);
     };
   }, [client]);
 
@@ -246,7 +246,7 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     client.subscribeToTopic('state/sync', handleSync);
 
     return () => {
-      client.unsubscribeFromTopic('state/sync');
+      client.unsubscribeFromTopic('state/sync', handleSync);
     };
   }, [client, fetchTours]);
 

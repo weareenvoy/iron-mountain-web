@@ -1,9 +1,9 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
+import LogoDark from '@/components/ui/icons/LogoDark';
+import LogoLight from '@/components/ui/icons/LogoLight';
 import type { ReactNode } from 'react';
 
 export interface HeaderProps {
@@ -12,9 +12,10 @@ export interface HeaderProps {
     readonly icon?: ReactNode;
     readonly text: string;
   };
+  readonly useDarkLogo?: boolean;
 }
 
-const Header = ({ leftButton }: HeaderProps) => {
+const Header = ({ leftButton, useDarkLogo }: HeaderProps) => {
   return (
     <div className="absolute top-0 left-0 flex h-30 w-full items-center justify-between px-5">
       {/* Left Button */}
@@ -30,23 +31,7 @@ const Header = ({ leftButton }: HeaderProps) => {
       {!leftButton && <div />}
 
       {/* Logo. Use colored one on home page, white one on other pages */}
-      {usePathname() === '/docent' ? (
-        <Image
-          alt="Iron Mountain Logo"
-          className="object-contain"
-          height={39}
-          src="/images/iron-mountain-logo-colored.svg"
-          width={150}
-        />
-      ) : (
-        <Image
-          alt="Iron Mountain Logo"
-          className="object-contain"
-          height={39}
-          src="/images/iron-mountain-logo-white.svg"
-          width={150}
-        />
-      )}
+      {useDarkLogo ? <LogoDark className="h-[39px] w-[150px]" /> : <LogoLight className="h-[39px] w-[150px]" />}
     </div>
   );
 };

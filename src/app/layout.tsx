@@ -1,4 +1,4 @@
-import '@/lib/tailwind/styles/globals.css';
+import './globals.css';
 import SwRegister from '@/components/providers/sw-register';
 import { ThemeProvider } from '@/components/providers/theme';
 import { Toaster } from '@/components/shadcn/sonner';

@@ -5,7 +5,7 @@ import Foreground from './_components/ui/Foreground';
 
 const BasecampPage = ({}: PageProps<'/basecamp'>) => {
   return (
-    <div className="bg-primary-bg-grey relative flex h-[720px] w-[3840px] flex-col items-center overflow-hidden">
+    <div className="bg-primary-bg-grey test relative flex h-[720px] w-[3840px] flex-col items-center overflow-hidden">
       {/* Foreground content */}
       <Foreground />
       {/* Background videos */}

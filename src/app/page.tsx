@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/shadcn/button';
 import { ThemeSwitcher } from '@/components/shadcn/theme-switcher';
-import { APPS } from '@/lib/internal/contants';
+import { APPS } from '@/lib/internal/constants';
 
 const Home = ({}: PageProps<'/'>) => {
   return (

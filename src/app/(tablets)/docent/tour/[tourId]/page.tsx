@@ -1,10 +1,10 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { use, useCallback, useMemo } from 'react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
+import Flag from '@/components/ui/icons/Flag';
 
 const TourOverviewPage = ({ params }: PageProps<'/docent/tour/[tourId]'>) => {
   const { tourId } = use(params);
@@ -13,7 +13,7 @@ const TourOverviewPage = ({ params }: PageProps<'/docent/tour/[tourId]'>) => {
   const leftButton = useMemo(
     (): HeaderProps['leftButton'] => ({
       href: '/docent',
-      icon: <Image alt="Flag" height={21} src="/images/flag.svg" width={20} />,
+      icon: <Flag className="h-[21px] w-[20px]" />,
       text: 'End tour',
     }),
     []
