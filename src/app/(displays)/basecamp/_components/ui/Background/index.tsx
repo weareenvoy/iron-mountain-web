@@ -12,6 +12,8 @@ const Background = () => {
 
   const mainVideoRef = useRef<HTMLVideoElement | null>(null);
   const ambientVideoRef = useRef<HTMLVideoElement | null>(null);
+  // Ref to track the specific SPAN element used for displaying the time.
+  const timeDisplayRef = useRef<HTMLSpanElement | null>(null);
   // Tracks the last played moment/beat to prevent re-triggering playback
   const lastPlayedRef = useRef<null | { id: string; idx: number }>(null);
 
@@ -20,6 +22,14 @@ const Background = () => {
   // For dev testing, read it from an S3 bucket. Where will this be hosted in prod?
   const mainVideoUrl = `${process.env.NEXT_PUBLIC_CDN_HOST_NAME}/BASECAMP-FPO-content.webm`;
   const ambientVideoUrl = `${process.env.NEXT_PUBLIC_CDN_HOST_NAME}/BASECAMP-FPO-loop.webm`;
+
+  // This function now only handles the PAUSE logic and the DIRECT DOM update for time.
+  const updateDisplayTime = (currentTime: number) => {
+    // Check if the ref target exists and update its text content directly.
+    if (timeDisplayRef.current) {
+      timeDisplayRef.current.textContent = currentTime.toFixed(1) + 's';
+    }
+  };
 
   // This tracks preload progress, but it does not help with loading.
   const progressHandler = (event: SyntheticEvent<HTMLVideoElement>) => {
@@ -32,10 +42,15 @@ const Background = () => {
 
   const timeUpdateHandler = useCallback(
     (event: SyntheticEvent<HTMLVideoElement>) => {
-      if (isSeeking || momentId === 'ambient' || !isTimedSection(momentId)) return;
+      if (momentId === 'ambient' || !isTimedSection(momentId)) return;
 
       const video = event.currentTarget;
       const currentTime = video.currentTime;
+
+      updateDisplayTime(currentTime);
+
+      if (isSeeking) return;
+
       const timeRange = getBeatTimeRange(momentId, beatIdx);
 
       if (timeRange && timeRange.end && currentTime >= timeRange.end - 0.1) {
@@ -45,6 +60,15 @@ const Background = () => {
     },
     [isSeeking, momentId, beatIdx]
   );
+
+  const ambientTimeUpdateHandler = (event: SyntheticEvent<HTMLVideoElement>) => {
+    if (momentId !== 'ambient' || isTimedSection(momentId)) return;
+
+    const video = event.currentTarget;
+    const currentTime = video.currentTime;
+
+    updateDisplayTime(currentTime);
+  };
 
   const seekingHandler = (event: SyntheticEvent<HTMLVideoElement>) => {
     const video = event.currentTarget;
@@ -81,7 +105,10 @@ const Background = () => {
     if (momentId === 'ambient') {
       if (mainVideo) mainVideo.pause();
       if (ambientVideo) {
-        ambientVideo.currentTime = 0; // Reset to start
+        const startTime = 0;
+        ambientVideo.currentTime = startTime; // Reset to start
+        // Update display time synchronously (non-breaking since it's only called once per section start)
+        updateDisplayTime(0);
         ambientVideo.play().catch(err => {
           console.error('Error playing ambient video:', err);
         });
@@ -104,12 +131,14 @@ const Background = () => {
       Number.isFinite(timeRange.start)
     ) {
       // TypeScript is now satisfied because we have explicitly checked the type.
-      mainVideo.currentTime = timeRange.start;
-
+      const startTime = timeRange.start; // Capture in variable to preserve type narrowing
+      mainVideo.currentTime = startTime;
+      // Update display time synchronously (non-breaking since it's only called once per section start)
+      updateDisplayTime(startTime);
       mainVideo.play().catch(err => {
         console.error('Error playing main video after seek:', err);
       });
-      console.info(`Seeking to ${timeRange.start}s for ${momentId} beat ${beatIdx}`);
+      console.info(`Seeking to ${startTime}s for ${momentId} beat ${beatIdx}`);
     } else {
       console.error('Invalid state or time range:', { beatIdx, momentId, timeRange });
     }
@@ -122,6 +151,7 @@ const Background = () => {
         className={cn('h-full w-full object-cover', momentId === 'ambient' ? 'block' : 'hidden')}
         loop
         muted
+        onTimeUpdate={ambientTimeUpdateHandler}
         playsInline
         ref={ambientVideoRef}
         src={ambientVideoUrl}
@@ -139,6 +169,15 @@ const Background = () => {
         ref={mainVideoRef}
         src={mainVideoUrl}
       />
+
+      {/* Debug info */}
+      <div className="absolute top-4 left-4 rounded bg-black/50 p-2 text-white">
+        <p>Moment: {momentId}</p>
+        <p>BeatIdx: {beatIdx}</p>
+        <p>
+          Time: <span ref={timeDisplayRef}>0.0s</span>
+        </p>
+      </div>
     </>
   );
 };
