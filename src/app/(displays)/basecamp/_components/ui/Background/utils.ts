@@ -1,9 +1,9 @@
 'use client';
 
+import type { BasecampSection } from '@/lib/internal/types';
 import type { RefObject } from 'react';
 
-export type Section = 'ambient' | 'ascend' | 'possibilities' | 'problem' | 'welcome';
-export type TimedSection = Exclude<Section, 'ambient'>;
+export type TimedSection = Exclude<BasecampSection, 'ambient'>;
 
 // Single source of truth: define sections with explicit order and times
 const SECTIONS: ReadonlyArray<{
@@ -44,16 +44,6 @@ export const getBeatTimeRange = (section: TimedSection, beatIndex: number) => {
   const start = beatIndex === 0 ? getSectionStartTime(section) : timePoints[beatIndex - 1];
   const end = timePoints[beatIndex];
   return { end, start };
-};
-
-// Helper handlers extracted from effects
-export const createProgressHandler = (video: HTMLVideoElement) => {
-  return () => {
-    if (video.buffered.length > 0 && video.duration) {
-      const percent = (video.buffered.end(0) / video.duration) * 100;
-      console.info(`main vid preload: ${percent.toFixed(1)}%`);
-    }
-  };
 };
 
 export const seekAndPlay = (

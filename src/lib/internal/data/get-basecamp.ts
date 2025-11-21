@@ -1,5 +1,5 @@
 import { shouldUseStaticPlaceholderData } from '@/flags/flags';
-import type { BasecampData } from '@/app/(displays)/basecamp/_types';
+import type { BasecampData } from '@/lib/internal/types';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
 

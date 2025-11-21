@@ -8,7 +8,7 @@ import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { cn } from '@/lib/tailwind/utils/cn';
-import type { Tour } from '@/app/(tablets)/docent/_types';
+import type { Tour } from '@/lib/internal/types';
 
 interface TourByDate {
   readonly dayOfWeek: string;
@@ -189,7 +189,7 @@ const SchedulePageClient = () => {
               <div className="text-primary-im-dark-blue">No tours available for this month.</div>
             ) : (
               filteredTours.map(([date, { dayOfWeek, tours }]) => (
-                <div className="flex flex-col border-t border-[#C9C9C9] py-5" key={date}>
+                <div className="flex flex-col gap-5 border-t border-[#C9C9C9] py-5" key={date}>
                   {/* Day of week and date */}
                   <p className="text-primary-im-mid-blue ml-7.5 text-[18px] leading-loose">
                     <span>{dayOfWeek}, </span>

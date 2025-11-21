@@ -1,7 +1,6 @@
 'use client';
 
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-import Image from 'next/image';
 import { use, useEffect, useMemo, useRef } from 'react';
 import { A11y, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide, type SwiperClass } from 'swiper/react';
@@ -9,6 +8,7 @@ import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
 import { useMqtt } from '@/components/providers/mqtt-provider';
+import SummitRoomDiamonds from '@/components/ui/icons/SummitRoomDiamonds';
 import { cn } from '@/lib/tailwind/utils/cn';
 
 // Import Swiper styles
@@ -174,13 +174,7 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
                       <h2 className="text-center text-2xl leading-[normal] tracking-[-1.2px] text-black">
                         {slide.title}
                       </h2>
-                      <Image
-                        alt="Journey Map Image"
-                        className="absolute right-0 bottom-0"
-                        height={159}
-                        src="/images/summit-root-diamonds-bg.svg"
-                        width={177}
-                      />
+                      <SummitRoomDiamonds className="absolute right-0 bottom-0 h-[159px] w-[177px]" />
                     </div>
                   ) : (
                     <div className={cn('flex items-center gap-5 rounded-full border-2 px-8 py-5', slide.borderColor)}>

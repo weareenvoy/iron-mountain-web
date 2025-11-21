@@ -1,13 +1,96 @@
+export type BasecampSection = 'ambient' | 'ascend' | 'possibilities' | 'problem' | 'welcome';
+export type OverlookSection =
+  | 'activate'
+  | 'ambient'
+  | 'case-study'
+  | 'connect'
+  | 'futurescape'
+  | 'insight-dxp'
+  | 'protect'
+  | 'unlock';
+
+export type Section = BasecampSection | OverlookSection;
+export type TimedSection = Exclude<Section, 'ambient'>;
+
 // UI Navigation state for exhibits (local to UI, not MQTT)
 export interface ExhibitNavigationState {
   beatIdx: number;
-  momentId: string; // e.g., "ambient", "welcome", "case-study"
+  momentId: Section; // e.g., "welcome", "ascend", "possibilities", "problem"
 }
 
 // Used in MomentsAndBeats component.
 // A bullet point row is a moment, each moment has multiple beats.
 export interface Moment {
   beatCount: number;
-  id: string; // e.g., "ambient", "welcome" for basecamp, "case-study" for overlook.
+  id: Section; // e.g., "ambient", "welcome" for basecamp, "case-study" for overlook.
   title: string; // e.g., "Ambient", "Welcome"
+}
+
+// Mock data structure.
+export interface Tour {
+  // date and startTime are 1 field or 2 fields?
+  readonly date: string;
+  readonly endTime: string; // We might not have endTime.
+  readonly guestLogo: null | string;
+  readonly guestName: string;
+  readonly id: string;
+  readonly startTime: string;
+  readonly title: string; // Is this needed?
+}
+
+export interface BasecampData {
+  readonly 'possibilities': {
+    readonly title: string;
+  };
+  readonly 'possibilities-a': {
+    readonly 'body-1': string;
+    readonly 'body-2': string;
+    readonly 'body-3': string;
+    readonly 'title': string;
+  };
+  readonly 'possibilities-b': {
+    readonly 'body-1': string;
+    readonly 'body-2': string;
+    readonly 'body-3': string;
+    readonly 'title': string;
+  };
+  readonly 'possibilities-c': {
+    readonly 'body-1': string;
+    readonly 'body-2': string;
+    readonly 'body-3': string;
+    readonly 'title': string;
+  };
+  readonly 'problem-1': {
+    readonly text: string;
+  };
+  readonly 'problem-2': {
+    readonly percent: string;
+    readonly percentSubtitle: string;
+  }[];
+  readonly 'problem-3': {
+    readonly 'challenge-1': {
+      readonly body: string;
+      readonly icon: string;
+      readonly title: string;
+    };
+    readonly 'challenge-2': {
+      readonly body: string;
+      readonly icon: string;
+      readonly title: string;
+    };
+    readonly 'challenge-3': {
+      readonly body: string;
+      readonly icon: string;
+      readonly title: string;
+    };
+    readonly 'challenge-4': {
+      readonly body: string;
+      readonly icon: string;
+      readonly title: string;
+    };
+    readonly 'title': string;
+  };
+  readonly 'welcome': {
+    readonly text: string;
+  };
 }

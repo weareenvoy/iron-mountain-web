@@ -1,5 +1,5 @@
 import { shouldUseStaticPlaceholderData } from '@/flags/flags';
-import type { Tour } from '@/app/(tablets)/docent/_types';
+import type { Tour } from '@/lib/internal/types';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
 

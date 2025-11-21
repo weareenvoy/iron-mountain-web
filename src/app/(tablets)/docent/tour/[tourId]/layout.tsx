@@ -1,5 +1,5 @@
-import tours from '../../../../../../public/api/tours.json';
-import type { Tour } from '@/app/(tablets)/docent/_types';
+import tours from '@public/api/tours.json';
+import type { Tour } from '@/lib/internal/types';
 
 export const generateStaticParams = async () => {
   const allTours = tours as Tour[];

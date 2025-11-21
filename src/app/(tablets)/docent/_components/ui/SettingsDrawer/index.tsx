@@ -1,13 +1,13 @@
 'use client';
 
 import { ArrowRight, CircleAlert, CircleCheck, ExternalLink, Volume2, VolumeX, X } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import { Switch } from '@/app/(tablets)/docent/_components/ui/Switch';
 import { useMqtt } from '@/components/providers/mqtt-provider';
+import LightBulb from '@/components/ui/icons/LightBulb';
 import { cn } from '@/lib/tailwind/utils/cn';
 
 interface SettingsDrawerProps {
@@ -170,7 +170,7 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
         <div className="flex h-15 items-center justify-between">
           <div className="flex items-center gap-3">
             {/* Lightbulb icon */}
-            <Image alt="Lightbulb" height={24} src="/images/lightbulb.svg" width={24} />
+            <LightBulb className="h-[33px] w-[24px]" />
 
             <span className="text-primary-im-light-blue text-2xl">EBC Lights</span>
           </div>

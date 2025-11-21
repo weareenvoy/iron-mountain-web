@@ -7,7 +7,7 @@ import Problem1 from './views/Problem1';
 import Problem2 from './views/Problem2';
 import Problem3 from './views/Problem3';
 import WelcomeView from './views/WelcomeView';
-import type { BasecampData } from '@/app/(displays)/basecamp/_types';
+import type { BasecampData } from '@/lib/internal/types';
 import type { ReactElement } from 'react';
 
 type DataKey =

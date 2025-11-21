@@ -3,8 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useState, type PropsWithChildren } from 'react';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getBasecampData } from '@/lib/internal/data/get-basecamp';
-import type { BasecampData } from '@/app/(displays)/basecamp/_types';
-import type { ExhibitNavigationState } from '@/lib/internal/types';
+import type { BasecampData, ExhibitNavigationState, Section } from '@/lib/internal/types';
 import type { ExhibitMqttState } from '@/lib/mqtt/types';
 
 interface BasecampContextType {
@@ -201,9 +200,9 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     client.subscribeToTopic('cmd/dev/basecamp/goto-beat', handleGotoBeat);
 
     return () => {
-      client.unsubscribeFromTopic('cmd/dev/all/load-tour');
-      client.unsubscribeFromTopic('cmd/dev/all/go-idle');
-      client.unsubscribeFromTopic('cmd/dev/basecamp/goto-beat');
+      client.unsubscribeFromTopic('cmd/dev/all/load-tour', handleLoadTour);
+      client.unsubscribeFromTopic('cmd/dev/all/go-idle', handleGoIdle);
+      client.unsubscribeFromTopic('cmd/dev/basecamp/goto-beat', handleGotoBeat);
     };
   }, [client, fetchData, reportState]);
 
@@ -228,7 +227,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
             const momentId = state.slide.substring(0, lastDashIndex);
             const beatNumber = parseInt(state.slide.substring(lastDashIndex + 1), 10);
             if (!isNaN(beatNumber) && beatNumber >= 1) {
-              setExhibitState({ beatIdx: beatNumber - 1, momentId });
+              setExhibitState({ beatIdx: beatNumber - 1, momentId: momentId as Section });
             }
           }
         }
@@ -246,7 +245,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     client.subscribeToTopic('state/basecamp', handleOwnState);
 
     return () => {
-      client.unsubscribeFromTopic('state/basecamp');
+      client.unsubscribeFromTopic('state/basecamp', handleOwnState);
     };
   }, [client, fetchData]);
 

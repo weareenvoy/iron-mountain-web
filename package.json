@@ -111,7 +111,7 @@
       "clsx"
     ],
     "tailwindPreserveWhitespace": true,
-    "tailwindStylesheet": "./src/lib/tailwind/styles/globals.css",
+    "tailwindStylesheet": "./src/app/globals.css",
     "trailingComma": "es5",
     "useTabs": false
   }
