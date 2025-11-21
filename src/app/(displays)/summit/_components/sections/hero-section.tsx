@@ -13,12 +13,12 @@ const HeroSection = ({ hero }: HeroSectionProps) => {
   ];
 
   return (
-    <section className="relative isolate overflow-hidden rounded-[2.5rem] bg-card shadow-sm">
-      <div aria-hidden className="pointer-events-none absolute right-0 hidden lg:block">
+    <section className="relative isolate overflow-visible">
+      <div aria-hidden className="pointer-events-none absolute -top-6 -right-20 hidden lg:block">
         <Image alt="" height={420} priority src="/images/summit-root-diamonds-bg2.svg" width={420} />
       </div>
 
-      <div className="relative flex flex-col gap-10 px-6 py-12 sm:px-10 lg:px-16">
+      <div className="relative flex flex-col gap-10 pb-10 pt-12">
         <Image alt={hero.logoAlt} className="h-auto w-48 sm:w-60" height={48} priority src={hero.logoSrc} width={260} />
 
         <h1

@@ -10,20 +10,20 @@
     "title": "Your personalized journey map"
   },
   "metrics": {
-    "description": "Companies continue to wrestle with fractured ecosystems, limited insight into their data estate, and growing pressure to act responsibly.",
+    "description": "",
     "items": [
       {
-        "description": "of enterprise data remains dark",
-        "label": "Dark data",
+        "description": "Stat visualized during Basecamp exploration lorem ipsum",
+        "label": "Too much complexity",
         "value": "34%"
       },
       {
-        "description": "of new data is unstructured",
-        "label": "Unstructured content",
+        "description": "Stat visualized during Basecamp exploration lorem ipsum",
+        "label": "Cost and uncertain ROI",
         "value": "22%"
       },
       {
-        "description": "of leaders cite security as top barrier",
+        "description": "Stat visualized during Basecamp exploration lorem ipsum",
         "label": "Security concerns",
         "value": "87%"
       }
@@ -31,7 +31,7 @@
     "title": "What’s standing in your way?"
   },
   "obstacles": {
-    "description": "When we talk with your teams, four pain themes surface again and again.",
+    "description": "",
     "items": [
       {
         "body": "Content lives across silos and legacy systems, driving manual effort and duplicate work.",
