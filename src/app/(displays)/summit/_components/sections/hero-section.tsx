@@ -18,8 +18,8 @@ const HeroSection = ({ hero }: HeroSectionProps) => {
         <Image alt="" height={420} priority src="/images/summit-root-diamonds-bg2.svg" width={420} />
       </div>
 
-      <div className="relative flex flex-col gap-10 pb-10 pt-12">
-        <Image alt={hero.logoAlt} className="h-auto w-48 sm:w-60" height={48} priority src={hero.logoSrc} width={260} />
+      <div className="relative flex flex-col gap-10 pt-12 pb-10">
+        <Image alt={hero.logoAlt} className="h-auto w-60 sm:w-80" height={48} priority src={hero.logoSrc} width={260} />
 
         <h1
           className="mt-[4rem] mb-[2rem] max-w-[24rem] text-4xl leading-tight font-normal text-balance text-[#58595B] sm:max-w-[30rem] sm:text-5xl lg:max-w-[36rem] lg:text-7xl"
