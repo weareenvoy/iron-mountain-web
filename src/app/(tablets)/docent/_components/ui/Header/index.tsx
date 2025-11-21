@@ -12,10 +12,10 @@ export interface HeaderProps {
     readonly icon?: ReactNode;
     readonly text: string;
   };
-  readonly useColorLogo?: boolean;
+  readonly useDarkLogo?: boolean;
 }
 
-const Header = ({ leftButton, useColorLogo }: HeaderProps) => {
+const Header = ({ leftButton, useDarkLogo }: HeaderProps) => {
   return (
     <div className="absolute top-0 left-0 flex h-30 w-full items-center justify-between px-5">
       {/* Left Button */}
@@ -31,7 +31,7 @@ const Header = ({ leftButton, useColorLogo }: HeaderProps) => {
       {!leftButton && <div />}
 
       {/* Logo. Use colored one on home page, white one on other pages */}
-      {useColorLogo ? <LogoDark className="h-[39px] w-[150px]" /> : <LogoLight className="h-[39px] w-[150px]" />}
+      {useDarkLogo ? <LogoDark className="h-[39px] w-[150px]" /> : <LogoLight className="h-[39px] w-[150px]" />}
     </div>
   );
 };

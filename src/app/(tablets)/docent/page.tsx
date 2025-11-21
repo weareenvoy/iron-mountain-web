@@ -18,7 +18,7 @@ const DocentHomePage = ({}: PageProps<'/docent'>) => {
       </div>
 
       {/* Navigation */}
-      <Header useColorLogo />
+      <Header useDarkLogo />
 
       {/* Content */}
       <div className="mt-80 flex flex-col items-center gap-[235px] px-10">
