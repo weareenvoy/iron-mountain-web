@@ -28,7 +28,7 @@ export const MQTT_BASE_OPTIONS: Omit<IClientOptions, 'clientId' | 'will'> = {
   keepalive: 30,
   reconnectPeriod: 2000,
   // connectTimeout: 2 * 1000,
-};
+} as const;
 
 export const mqttCommands = {
   basecamp: {

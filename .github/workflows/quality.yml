@@ -60,6 +60,9 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      - name: Type check
+        run: pnpm type-check
+
       # Next build → generates .next/types, and will fail on TS errors
       - name: Build check (typed routes)
         run: pnpm next:build-check

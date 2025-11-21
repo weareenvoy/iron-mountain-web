@@ -2,15 +2,15 @@
 
 import { ArrowLeft, ArrowRight, Cast } from 'lucide-react';
 import Image from 'next/image';
-import { use, useState } from 'react';
+import { use, useMemo, useState } from 'react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
-import Header from '@/app/(tablets)/docent/_components/ui/Header';
+import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
 import MomentsAndBeats from '@/app/(tablets)/docent/_components/ui/MomentsAndBeats';
 import useMomentsNavigation from '@/hooks/use-moments-navigation';
 import type { Moment } from '@/lib/internal/types';
 
-const OVERLOOK_CONTENT: Moment[] = [
+const OVERLOOK_CONTENT: Readonly<Moment[]> = [
   {
     beatCount: 1,
     id: 'ambient',
@@ -52,7 +52,7 @@ const OVERLOOK_CONTENT: Moment[] = [
     id: 'futurescape',
     title: 'Futurescape',
   },
-];
+] as const;
 
 const OverlookPage = ({ params }: PageProps<'/docent/tour/[tourId]/overlook'>) => {
   const { tourId } = use(params);
@@ -72,16 +72,19 @@ const OverlookPage = ({ params }: PageProps<'/docent/tour/[tourId]/overlook'>) =
     setIsOverlookCastMode(castMode => !castMode);
   };
 
+  const leftButton = useMemo(
+    (): HeaderProps['leftButton'] => ({
+      href: `/docent/tour/${tourId}`,
+      icon: <ArrowLeft />,
+      text: 'Back to menu',
+    }),
+    [tourId]
+  );
+
   return (
     <div className="relative flex h-full w-full flex-col">
       {/* Navigation */}
-      <Header
-        leftButton={{
-          href: `/docent/tour/${tourId}`,
-          icon: <ArrowLeft />,
-          text: 'Back to menu',
-        }}
-      />
+      <Header leftButton={leftButton} />
 
       {/* Cast Button */}
       <div className="text-primary-bg-grey absolute top-34 left-5 z-50 flex flex-col items-start">

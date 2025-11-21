@@ -8,6 +8,7 @@ export async function getBasecampData(): Promise<BasecampData> {
   const timeout = setTimeout(() => controller.abort(), 3500);
 
   try {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (shouldUseStaticPlaceholderData()) {
       const res = await fetch('/api/basecamp.json', { cache: 'force-cache' });
       clearTimeout(timeout);

@@ -3,8 +3,8 @@
 import { useEffect } from 'react';
 import { toast, type ExternalToast } from 'sonner';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
-const OFFLINE_FIRST = (process.env.NEXT_PUBLIC_KIOSK_OFFLINE_FIRST ?? 'true') === 'true';
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? ('' as const);
+const OFFLINE_FIRST = (process.env.NEXT_PUBLIC_KIOSK_OFFLINE_FIRST ?? 'true') === ('true' as const);
 
 const SwRegister = () => {
   useEffect(() => {

@@ -7,7 +7,7 @@ import type { ExhibitNavigationState, Moment } from '@/lib/internal/types';
 import type { MouseEvent } from 'react';
 
 interface MomentsAndBeatsProps {
-  readonly content: Moment[]; // hardcoded data
+  readonly content: Readonly<Moment[]>; // hardcoded data
   readonly exhibit: 'basecamp' | 'overlook';
   readonly exhibitState: ExhibitNavigationState;
   readonly setExhibitState: (state: Partial<ExhibitNavigationState>) => void;

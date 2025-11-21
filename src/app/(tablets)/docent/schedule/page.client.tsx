@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useMemo, useState, type MouseEventHandler } from 'react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
-import Header from '@/app/(tablets)/docent/_components/ui/Header';
+import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { cn } from '@/lib/tailwind/utils/cn';
 import type { Tour } from '@/app/(tablets)/docent/_types';
@@ -15,7 +15,7 @@ interface TourByDate {
   readonly tours: Tour[];
 }
 
-const ScheduleClient = () => {
+const SchedulePageClient = () => {
   const router = useRouter();
   const { client } = useMqtt();
   const { allTours, isConnected, isTourDataLoading, refreshTours, setCurrentTour } = useDocent();
@@ -27,6 +27,7 @@ const ScheduleClient = () => {
     if (allTours.length === 0) {
       return {};
     }
+
     return allTours.reduce(
       (acc, tour) => {
         // Parse date string as local date
@@ -34,9 +35,11 @@ const ScheduleClient = () => {
         const year = Number.parseInt(yearStr ?? '', 10);
         const month = Number.parseInt(monthStr ?? '', 10);
         const day = Number.parseInt(dayStr ?? '', 10);
+
         if (!Number.isFinite(year) || !Number.isFinite(month) || !Number.isFinite(day)) {
           return acc;
         }
+
         const tourDate = new Date(year, month - 1, day); // month is 0-indexed
         const date = tourDate.toDateString();
         const dayOfWeek = tourDate.toLocaleDateString('en-US', {
@@ -44,16 +47,16 @@ const ScheduleClient = () => {
         });
 
         // Group tours by date, and also save a dayOfWeek to use for display later.
-        if (!acc[date]) {
-          acc[date] = { dayOfWeek: dayOfWeek, tours: [] };
-        }
-        acc[date].tours.push(tour);
+        const group = (acc[date] ??= { dayOfWeek, tours: [] });
+        group.tours.push(tour);
+
         // sort tours by startTime
-        acc[date].tours.sort((a, b) => {
+        group.tours.sort((a, b) => {
           const startTimeA = new Date(`${tour.date} ${a.startTime}`);
           const startTimeB = new Date(`${tour.date} ${b.startTime}`);
           return startTimeA.getTime() - startTimeB.getTime();
         });
+
         return acc;
       },
       {} as Record<string, TourByDate>
@@ -130,7 +133,7 @@ const ScheduleClient = () => {
   }, [currentMonthDate]);
 
   const leftButton = useMemo(
-    () => ({
+    (): HeaderProps['leftButton'] => ({
       href: '/docent',
       icon: <House className="size-[20px]" />,
       text: 'Back to home',
@@ -270,4 +273,4 @@ const ScheduleClient = () => {
   );
 };
 
-export default ScheduleClient;
+export default SchedulePageClient;

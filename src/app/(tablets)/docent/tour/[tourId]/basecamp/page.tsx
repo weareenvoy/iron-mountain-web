@@ -1,15 +1,15 @@
 'use client';
 
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { use } from 'react';
+import { use, useMemo } from 'react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
-import Header from '@/app/(tablets)/docent/_components/ui/Header';
+import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
 import MomentsAndBeats from '@/app/(tablets)/docent/_components/ui/MomentsAndBeats';
 import useMomentsNavigation from '@/hooks/use-moments-navigation';
 import type { Moment } from '@/lib/internal/types';
 
-const BASECAMP_CONTENT: Moment[] = [
+const BASECAMP_CONTENT: Readonly<Moment[]> = [
   {
     beatCount: 1,
     id: 'ambient',
@@ -35,7 +35,7 @@ const BASECAMP_CONTENT: Moment[] = [
     id: 'ascend',
     title: 'Ascend',
   },
-];
+] as const;
 
 const BasecampPage = ({ params }: PageProps<'/docent/tour/[tourId]/basecamp'>) => {
   const { tourId } = use(params);
@@ -49,16 +49,19 @@ const BasecampPage = ({ params }: PageProps<'/docent/tour/[tourId]/basecamp'>) =
     'basecamp'
   );
 
+  const leftButton = useMemo(
+    (): HeaderProps['leftButton'] => ({
+      href: `/docent/tour/${tourId}`,
+      icon: <ArrowLeft />,
+      text: 'Back to menu',
+    }),
+    [tourId]
+  );
+
   return (
     <div className="relative flex h-full w-full flex-col">
       {/* Navigation */}
-      <Header
-        leftButton={{
-          href: `/docent/tour/${tourId}`,
-          icon: <ArrowLeft />,
-          text: 'Back to menu',
-        }}
-      />
+      <Header leftButton={leftButton} />
 
       {/* Header */}
       <div className="mt-35 flex flex-col gap-42.5">

@@ -9,6 +9,7 @@ export async function getTours(): Promise<Tour[]> {
 
   try {
     // If flag is on, prefer static JSON immediately.
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (shouldUseStaticPlaceholderData()) {
       const res = await fetch('/api/tours.json', { cache: 'force-cache' });
       clearTimeout(timeout);

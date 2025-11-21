@@ -33,7 +33,7 @@
       "env": ["NODE_ENV", "VERCEL_ENV"],
       "persistent": true
     },
-    "types": {
+    "type-check": {
       "cache": true
     }
   }

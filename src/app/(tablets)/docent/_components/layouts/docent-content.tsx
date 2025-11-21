@@ -1,15 +1,13 @@
 'use client';
 
 import { Settings } from 'lucide-react';
-import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
+import SettingsDrawer from '@/app/(tablets)/docent/_components/ui/SettingsDrawer';
 import { Interstate } from '@/lib/internal/fonts';
 import { cn } from '@/lib/tailwind/utils/cn';
 import type { PropsWithChildren } from 'react';
-
-const SettingsDrawer = dynamic(() => import('@/app/(tablets)/docent/_components/ui/SettingsDrawer'), { ssr: false });
 
 const DocentContent = ({ children }: PropsWithChildren) => {
   const { isConnected, isSettingsOpen, setIsSettingsOpen } = useDocent();
