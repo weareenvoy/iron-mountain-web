@@ -2,6 +2,8 @@ import type { SummitData } from '@/app/(displays)/summit/_types';
 import { shouldUseStaticPlaceholderData } from '@/flags/flags';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
+const SUMMIT_STATIC_DATA_VERSION = '2024-11-21';
+const SUMMIT_STATIC_ENDPOINT = `/api/summit.json?v=${SUMMIT_STATIC_DATA_VERSION}`;
 
 export const getSummitData = async (): Promise<SummitData> => {
   const controller = new AbortController();
@@ -9,7 +11,7 @@ export const getSummitData = async (): Promise<SummitData> => {
 
   try {
     if (shouldUseStaticPlaceholderData()) {
-      const response = await fetch('/api/summit.json', { cache: 'force-cache' });
+      const response = await fetch(SUMMIT_STATIC_ENDPOINT, { cache: 'force-cache' });
       clearTimeout(timeout);
       return (await response.json()) as SummitData;
     }
@@ -23,8 +25,7 @@ export const getSummitData = async (): Promise<SummitData> => {
     return (await response.json()) as SummitData;
   } catch {
     clearTimeout(timeout);
-    const response = await fetch('/api/summit.json', { cache: 'force-cache' });
+    const response = await fetch(SUMMIT_STATIC_ENDPOINT, { cache: 'force-cache' });
     return (await response.json()) as SummitData;
   }
 };
-
