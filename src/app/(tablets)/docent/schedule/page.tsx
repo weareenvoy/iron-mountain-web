@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import ScheduleClient from './ScheduleClient';
+import ScheduleClient from './page.client';
 
 const SchedulePage = () => {
   return (

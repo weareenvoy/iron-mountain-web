@@ -1,24 +1,21 @@
 'use client';
 
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import { use, useEffect, useRef } from 'react';
+import { use, useEffect, useMemo, useRef } from 'react';
 import { A11y, Navigation, Pagination } from 'swiper/modules';
+import { Swiper, SwiperSlide, type SwiperClass } from 'swiper/react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
-import Header from '@/app/(tablets)/docent/_components/ui/Header';
+import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { cn } from '@/lib/tailwind/utils/cn';
-import type { SwiperClass } from 'swiper/react';
-
-const Swiper = dynamic(() => import('swiper/react').then(m => m.Swiper), { ssr: false });
-const SwiperSlide = dynamic(() => import('swiper/react').then(m => m.SwiperSlide), { ssr: false });
 
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import 'swiper/css/a11y';
 
 // Summit Room has 5 slides. First slide has no border, no diamond icon, but has image. Other slides have a border and a diamond icon.
 const SUMMIT_ROOM_SLIDES = [
@@ -46,7 +43,7 @@ const SUMMIT_ROOM_SLIDES = [
     id: 5,
     title: 'Stories of impact',
   },
-];
+] as const;
 
 const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room'>) => {
   const { tourId } = use(params);
@@ -131,16 +128,19 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
     swiperRef.current = swiper;
   };
 
+  const leftButton = useMemo(
+    (): HeaderProps['leftButton'] => ({
+      href: `/docent/tour/${tourId}`,
+      icon: <ArrowLeft />,
+      text: 'Back to menu',
+    }),
+    [tourId]
+  );
+
   return (
     <div className="relative flex h-full w-full flex-col">
       {/* Navigation */}
-      <Header
-        leftButton={{
-          href: `/docent/tour/${tourId}`,
-          icon: <ArrowLeft />,
-          text: 'Back to menu',
-        }}
-      />
+      <Header leftButton={leftButton} />
 
       {/* Header */}
       <div className="text-primary-bg-grey mt-35 flex flex-col items-center gap-[23px]">

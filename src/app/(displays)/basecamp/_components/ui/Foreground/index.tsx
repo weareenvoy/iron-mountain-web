@@ -30,7 +30,6 @@ const getDataKey = (moment: string, beatIdx: number): DataKey | null => {
   if (moment === 'possibilities' && beatIdx === 2) return 'possibilities-a';
   if (moment === 'possibilities' && beatIdx === 3) return 'possibilities-b';
   if (moment === 'possibilities' && beatIdx === 4) return 'possibilities-c';
-
   return null; // No content for this moment/beatIdx combination
 };
 
@@ -43,7 +42,7 @@ const RENDERERS: { [K in DataKey]: (data: BasecampData[K]) => ReactElement } = {
   'problem-2': data => <Problem2 data={data} />,
   'problem-3': data => <Problem3 data={data} />,
   'welcome': data => <WelcomeView data={data} />,
-};
+} as const;
 
 const Foreground = () => {
   const { data, exhibitState } = useBasecamp();

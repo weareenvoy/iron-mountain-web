@@ -3,7 +3,7 @@ import type { ExhibitNavigationState, Moment } from '@/lib/internal/types';
 
 // moments/beats navigation hook
 const useMomentsNavigation = (
-  content: Moment[],
+  content: Readonly<Moment[]>,
   exhibitState: ExhibitNavigationState,
   setExhibitState: (state: Partial<ExhibitNavigationState>) => void,
   exhibit: 'basecamp' | 'overlook'

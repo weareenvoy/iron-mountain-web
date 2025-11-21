@@ -21,7 +21,6 @@ export interface Tour {
   readonly endTime: string; // We might not have endTime.
   readonly guestLogo: null | string;
   readonly guestName: string;
-
   readonly id: string;
   readonly startTime: string;
   readonly title: string; // Is this needed?
