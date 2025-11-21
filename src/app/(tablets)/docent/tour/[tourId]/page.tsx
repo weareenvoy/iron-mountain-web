@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { use, useMemo } from 'react';
+import { use, useCallback, useMemo } from 'react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
 
@@ -18,6 +18,10 @@ const TourOverviewPage = ({ params }: PageProps<'/docent/tour/[tourId]'>) => {
     }),
     []
   );
+
+  type TourSubPath = 'basecamp' | 'overlook' | 'summit-room';
+  type TourUrl = `/docent/tour/${string}/${TourSubPath}`;
+  const tourUrl = useCallback((path: TourSubPath): TourUrl => `/docent/tour/${tourId}/${path}`, [tourId]);
 
   return (
     <div className="relative flex h-full w-full flex-col">
@@ -35,7 +39,7 @@ const TourOverviewPage = ({ params }: PageProps<'/docent/tour/[tourId]'>) => {
         {/* Item 1 */}
         <Link
           className="bg-primary-bg-grey relative flex h-50 w-50 items-center justify-center rounded-lg transition-opacity ease-in-out active:opacity-80"
-          href={`/docent/tour/${tourId}/basecamp`}
+          href={tourUrl('basecamp')}
         >
           <p className="text-primary-im-dark-blue -rotate-45 text-2xl">Basecamp</p>
         </Link>
@@ -43,7 +47,7 @@ const TourOverviewPage = ({ params }: PageProps<'/docent/tour/[tourId]'>) => {
         {/* Item 2 */}
         <Link
           className="bg-primary-bg-grey relative flex h-50 w-50 items-center justify-center rounded-lg transition-opacity ease-in-out active:opacity-80"
-          href={`/docent/tour/${tourId}/overlook`}
+          href={tourUrl('overlook')}
         >
           <p className="text-primary-im-dark-blue -rotate-45 text-2xl">Overlook</p>
         </Link>
@@ -51,7 +55,7 @@ const TourOverviewPage = ({ params }: PageProps<'/docent/tour/[tourId]'>) => {
         {/* Item 3 (manually placed in column 2, row 2) */}
         <Link
           className="bg-primary-bg-grey relative col-start-2 row-start-2 flex h-50 w-50 items-center justify-center rounded-lg transition-opacity ease-in-out active:opacity-80"
-          href={`/docent/tour/${tourId}/summit-room`}
+          href={tourUrl('summit-room')}
         >
           <p className="text-primary-im-dark-blue -rotate-45 text-2xl">Summit Room</p>
         </Link>
