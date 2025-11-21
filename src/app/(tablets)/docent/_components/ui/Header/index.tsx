@@ -15,7 +15,7 @@ export interface HeaderProps {
   readonly useColorLogo?: boolean;
 }
 
-const Header = ({ leftButton, useColorLogo = false }: HeaderProps) => {
+const Header = ({ leftButton, useColorLogo }: HeaderProps) => {
   return (
     <div className="absolute top-0 left-0 flex h-30 w-full items-center justify-between px-5">
       {/* Left Button */}

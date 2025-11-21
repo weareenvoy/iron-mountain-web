@@ -3,7 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useState, type PropsWithChildren } from 'react';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getBasecampData } from '@/lib/internal/data/get-basecamp';
-import type { BasecampData, ExhibitNavigationState, Section } from '@/lib/internal/types';
+import { isBasecampSection, type BasecampData, type ExhibitNavigationState } from '@/lib/internal/types';
 import type { ExhibitMqttState } from '@/lib/mqtt/types';
 
 interface BasecampContextType {
@@ -178,6 +178,12 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
             return;
           }
 
+          // Validate that momentId is a valid BasecampSection
+          if (!isBasecampSection(momentId)) {
+            console.error('Invalid moment ID for Basecamp:', momentId);
+            return;
+          }
+
           // Convert 1-indexed beat number to 0-indexed
           const beatIdx = beatNumber - 1;
 
@@ -226,8 +232,12 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
           if (lastDashIndex !== -1) {
             const momentId = state.slide.substring(0, lastDashIndex);
             const beatNumber = parseInt(state.slide.substring(lastDashIndex + 1), 10);
-            if (!isNaN(beatNumber) && beatNumber >= 1) {
-              setExhibitState({ beatIdx: beatNumber - 1, momentId: momentId as Section });
+
+            // Validate that momentId is a valid BasecampSection before using it
+            if (!isNaN(beatNumber) && beatNumber >= 1 && isBasecampSection(momentId)) {
+              setExhibitState({ beatIdx: beatNumber - 1, momentId });
+            } else {
+              console.warn('Invalid slide format or moment ID:', state.slide);
             }
           }
         }

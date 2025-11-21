@@ -12,6 +12,30 @@ export type OverlookSection =
 export type Section = BasecampSection | OverlookSection;
 export type TimedSection = Exclude<Section, 'ambient'>;
 
+// Type guards for runtime validation
+const BASECAMP_SECTIONS: readonly BasecampSection[] = ['ambient', 'ascend', 'possibilities', 'problem', 'welcome'];
+const OVERLOOK_SECTIONS: readonly OverlookSection[] = [
+  'activate',
+  'ambient',
+  'case-study',
+  'connect',
+  'futurescape',
+  'insight-dxp',
+  'protect',
+  'unlock',
+];
+
+export const isBasecampSection = (value: string): value is BasecampSection => {
+  return BASECAMP_SECTIONS.includes(value as BasecampSection);
+};
+
+export const isOverlookSection = (value: string): value is OverlookSection => {
+  return OVERLOOK_SECTIONS.includes(value as OverlookSection);
+};
+
+export const isSection = (value: string): value is Section => {
+  return isBasecampSection(value) || isOverlookSection(value);
+};
 // UI Navigation state for exhibits (local to UI, not MQTT)
 export interface ExhibitNavigationState {
   beatIdx: number;
