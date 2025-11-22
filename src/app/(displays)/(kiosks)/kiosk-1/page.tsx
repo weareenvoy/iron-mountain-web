@@ -1,5 +1,6 @@
-const Kiosk1Page = ({}: PageProps<'/kiosk-1'>) => {
-  return <div>Kiosk 1</div>;
-};
+import Kiosk1View from './components/Kiosk1View';
+import kioskConfig from './kiosk-1.config.json';
 
-export default Kiosk1Page;
+export default function Kiosk1Page() {
+  return <Kiosk1View config={kioskConfig} />;
+}
