@@ -1,8 +1,9 @@
 'use client';
 
+import { useSummit } from '@/app/(displays)/summit/_components/providers/summit-provider';
 import HeroSection from '@/app/(displays)/summit/_components/sections/hero-section';
 import MetricsSection from '@/app/(displays)/summit/_components/sections/metrics-section';
-import { useSummit } from '@/app/(displays)/summit/_components/providers/summit-provider';
+import RecapSection from '@/app/(displays)/summit/_components/sections/recap-section';
 
 const SummitWebContent = () => {
   const { data, error, loading } = useSummit();
@@ -30,6 +31,12 @@ const SummitWebContent = () => {
       </div>
       <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
         <MetricsSection metrics={data.metrics} obstacles={data.obstacles} />
+      </div>
+      <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
+        <RecapSection recap={data.recap} />
+      </div>
+      <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
+        <hr className="border-t border-[#D0D0D3]" />
       </div>
     </div>
   );
