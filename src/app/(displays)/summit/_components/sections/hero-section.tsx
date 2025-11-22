@@ -22,7 +22,7 @@ const HeroSection = ({ hero }: HeroSectionProps) => {
         <Image alt={hero.logoAlt} className="h-auto w-60 sm:w-80" height={48} priority src={hero.logoSrc} width={260} />
 
         <h1
-          className="mt-[4rem] mb-[2rem] max-w-[24rem] text-4xl leading-tight font-normal text-balance text-[#58595B] sm:max-w-[30rem] sm:text-5xl lg:max-w-[36rem] lg:text-7xl"
+          className="mt-16 mb-8 max-w-[24rem] text-4xl leading-tight font-normal text-balance text-[#58595B] sm:max-w-120 sm:text-5xl lg:max-w-xl lg:text-7xl"
           style={{ fontFamily: 'var(--font-interstate)', letterSpacing: '-0.04em' }}
         >
           {hero.title}
