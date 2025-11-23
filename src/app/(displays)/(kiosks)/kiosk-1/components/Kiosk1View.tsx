@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import useKioskController from '@/components/kiosk-controller/useKioskController';
 import KioskTouchZones from './KioskTouchZones';
 import InnerEmbla from './InnerEmbla';
-import InitialScreenTemplate from '@/components/kiosk-templates/challenge/initialScreenTemplate';
+import InitialScreenTemplate from '@/components/kiosk-templates/challenge/initialScreen/initialScreenTemplate';
 import FirstScreenTemplate from '@/components/kiosk-templates/challenge/firstScreen/firstScreenTemplate';
 import SecondScreenTemplate from '@/components/kiosk-templates/challenge/secondScreen/secondScreenTemplate';
 import ThirdScreenTemplate from '@/components/kiosk-templates/challenge/thirdScreen/thirdScreenTemplate';
@@ -49,7 +49,7 @@ export default function Kiosk1View({ config }: { config?: { width: number; heigh
             {s.id === 's1' && (
               <InitialScreenTemplate
                 videoSrc="/assets/sample-video.mp4"
-                headline="Challenge — Initial"
+                headline="The GRAMMY MuseumⓇ preserves the soundtrack of history."
                 description="Initial screen description placeholder"
               />
             )}

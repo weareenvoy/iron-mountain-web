@@ -30,10 +30,8 @@ export default function ScaleWrapper({ targetWidth, targetHeight, children, back
 
   const outerStyle: React.CSSProperties = {
     width: '100vw',
-    height: '100vh',
     display: 'grid',
     placeItems: 'center',
-    overflow: 'hidden',
     background,
   };
 
