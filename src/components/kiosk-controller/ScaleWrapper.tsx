@@ -2,52 +2,36 @@
 import React from 'react';
 
 type Props = {
-  targetWidth: number;
-  targetHeight: number;
-  children: React.ReactNode;
   background?: string;
+  children: React.ReactNode;
+  targetHeight: number;
+  targetWidth: number;
 };
 
-export default function ScaleWrapper({ targetWidth, targetHeight, children, background = 'black' }: Props) {
-  const [scale, setScale] = React.useState(1);
-
-  React.useEffect(() => {
-    function update() {
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-      const s = Math.min(w / targetWidth, h / targetHeight, 1);
-      setScale(s);
-    }
-
-    update();
-    window.addEventListener('resize', update);
-    window.addEventListener('orientationchange', update);
-    return () => {
-      window.removeEventListener('resize', update);
-      window.removeEventListener('orientationchange', update);
-    };
-  }, [targetWidth, targetHeight]);
+export default function ScaleWrapper({ background = 'black', children, targetHeight, targetWidth }: Props) {
+  const scale = 0.415;
 
   const outerStyle: React.CSSProperties = {
     width: '100vw',
+    height: '100vh',
     display: 'grid',
     placeItems: 'center',
+    overflowX: 'hidden',
+    overflowY: 'auto',
     background,
   };
 
   const innerStyle: React.CSSProperties = {
     width: `${targetWidth}px`,
     height: `${targetHeight}px`,
+    willChange: 'transform',
     transform: `scale(${scale})`,
     transformOrigin: 'top left',
-    willChange: 'transform',
   };
 
   return (
     <div style={outerStyle}>
-      <div style={innerStyle}>
-        {children}
-      </div>
+      <div style={innerStyle}>{children}</div>
     </div>
   );
 }

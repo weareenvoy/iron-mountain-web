@@ -49,18 +49,8 @@ export default function InitialScreenTemplate({
 
       {/* Main Content Box */}
       <div className={styles.contentBox} data-name="Challenge Initial Screen Content Box">
-        {/* Logo Section */}
-        <div className={styles.logoContainer}>
-          <div className={styles.logoLeft}>
-            <img alt="Logo" src={imgLogoLeft} />
-          </div>
-          <div className={styles.logoRight}>
-            <img alt="Logo" src={imgLogoRight} />
-          </div>
-        </div>
-
         {/* Headline */}
-        <h1 className={styles.headline}>{headline}</h1>
+        <h1 className={styles.headline}>{renderHeadlineWithMark(headline)}</h1>
 
         {/* Quote and Attribution */}
         <div className={styles.quoteSection}>
@@ -83,6 +73,33 @@ export default function InitialScreenTemplate({
           </button>
         </div>
       </div>
+
+      {/* Logo Section (sits below the content box) */}
+      <div className={styles.logoContainer}>
+        <div className={styles.logoLeft}>
+          <img alt="Logo" src={imgLogoLeft} />
+        </div>
+        <div className={styles.logoRight}>
+          <img alt="Logo" src={imgLogoRight} />
+        </div>
+      </div>
     </div>
   );
 }
+
+const REGISTERED_MARK_REGEX = /[Ⓡ®]/;
+
+const renderHeadlineWithMark = (text: string) => {
+  const index = text.search(REGISTERED_MARK_REGEX);
+  if (index === -1) {
+    return text;
+  }
+
+  return (
+    <>
+      {text.slice(0, index)}
+      <span className={styles.registeredMark}>{text.charAt(index)}</span>
+      {text.slice(index + 1)}
+    </>
+  );
+};
