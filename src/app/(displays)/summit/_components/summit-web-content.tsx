@@ -4,6 +4,7 @@ import { useSummit } from '@/app/(displays)/summit/_components/providers/summit-
 import HeroSection from '@/app/(displays)/summit/_components/sections/hero-section';
 import MetricsSection from '@/app/(displays)/summit/_components/sections/metrics-section';
 import RecapSection from '@/app/(displays)/summit/_components/sections/recap-section';
+import StrategiesSection from '@/app/(displays)/summit/_components/sections/strategies-section';
 
 const SummitWebContent = () => {
   const { data, error, loading } = useSummit();
@@ -38,6 +39,11 @@ const SummitWebContent = () => {
       <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
         <hr className="border-t border-[#D0D0D3]" />
       </div>
+      {data.strategies[0] && (
+        <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
+          <StrategiesSection accentColor="#8A0D71" strategy={data.strategies[0]} />
+        </div>
+      )}
     </div>
   );
 };
