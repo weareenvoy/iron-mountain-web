@@ -5,7 +5,7 @@ type StrategiesSectionProps = {
   readonly strategy: SummitStrategy;
 };
 
-const StrategiesSection = ({ strategy, accentColor = '#8A0D71' }: StrategiesSectionProps) => {
+const StrategiesSection = ({ accentColor = '#8A0D71', strategy }: StrategiesSectionProps) => {
   return (
     <section className="flex flex-col gap-8">
       <div className="flex items-center gap-3 text-2xl font-semibold text-[#58595B] sm:text-3xl">
@@ -35,4 +35,3 @@ const StrategiesSection = ({ strategy, accentColor = '#8A0D71' }: StrategiesSect
 };
 
 export default StrategiesSection;
-
