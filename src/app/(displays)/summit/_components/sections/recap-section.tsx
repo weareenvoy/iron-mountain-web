@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import type { SummitRecap } from '@/app/(displays)/summit/_types';
 import type { ReactNode } from 'react';
 
@@ -10,6 +9,7 @@ type RecapSectionProps = {
     accentColor: string;
     bodyColor: string;
     iconColor?: string;
+    rightTextColor?: string;
   };
 };
 
@@ -30,12 +30,15 @@ const RecapSection = ({ actionSlot, recap, tone = DEFAULT_TONE }: RecapSectionPr
         style={{ backgroundColor: palette.accentBg, color: palette.accentColor }}
       >
         <div className="flex items-center gap-3">
-          <Image
-            alt=""
-            height={32}
-            src="/images/notification-text.svg"
-            style={{ filter: `drop-shadow(0 0 0 ${palette.iconColor})` }}
-            width={32}
+          {/* We use span instead of img because we need to pass color to the icon */}
+          <span
+            aria-hidden
+            className="inline-block h-8 w-8"
+            style={{
+              backgroundColor: palette.iconColor || palette.accentColor,
+              mask: 'url(/images/notification-text.svg) no-repeat center / contain',
+              WebkitMask: 'url(/images/notification-text.svg) no-repeat center / contain',
+            }}
           />
           <span className="text-3xl font-normal">{recap.title}</span>
         </div>
@@ -43,7 +46,7 @@ const RecapSection = ({ actionSlot, recap, tone = DEFAULT_TONE }: RecapSectionPr
       </div>
       <div
         className="flex flex-1 items-center px-8 py-6 text-base sm:px-10 sm:py-8"
-        style={{ color: palette.bodyColor }}
+        style={{ color: palette.rightTextColor || palette.bodyColor }}
       >
         {recap.body}
       </div>

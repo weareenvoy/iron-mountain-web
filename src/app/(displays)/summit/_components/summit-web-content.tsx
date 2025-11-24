@@ -44,6 +44,21 @@ const SummitWebContent = () => {
           <StrategiesSection accentColor="#8A0D71" strategy={data.strategies[0]} />
         </div>
       )}
+      <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
+        <RecapSection
+          recap={data.recap}
+          tone={{
+            accentBg: '#8A0D71',
+            accentColor: '#EDEDED',
+            bodyColor: '#EDEDED',
+            iconColor: '#EDEDED',
+            rightTextColor: '#12406A',
+          }}
+        />
+      </div>
+      <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
+        <hr className="border-t border-[#D0D0D3]" />
+      </div>
     </div>
   );
 };
