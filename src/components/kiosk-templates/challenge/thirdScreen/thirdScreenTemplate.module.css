@@ -154,15 +154,16 @@
 
 /* Navigation Arrows */
 .arrowUp {
-  position: absolute;
-  top: 1755px;
-  right: 240px;
-  width: 118.63px;
-  height: 118.63px;
-  display: flex;
   align-items: center;
+  cursor: pointer;
+  display: flex;
+  height: 118.63px;
   justify-content: center;
+  position: absolute;
+  right: 240px;
+  top: 1755px;
   transform: scaleY(-1);
+  width: 118.63px;
   z-index: 10;
 }
 
@@ -174,14 +175,15 @@
 }
 
 .arrowDown {
-  position: absolute;
-  top: 1980.37px;
-  right: 240px;
-  width: 118.63px;
-  height: 118.63px;
-  display: flex;
   align-items: center;
+  cursor: pointer;
+  display: flex;
+  height: 118.63px;
   justify-content: center;
+  position: absolute;
+  right: 240px;
+  top: 1980.37px;
+  width: 118.63px;
   z-index: 10;
 }
 

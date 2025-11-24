@@ -9,19 +9,23 @@ const imgArrowNarrowDown = 'http://localhost:3845/assets/97b897487da68eef15f83e0
 const imgVector2 = 'http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg';
 
 export interface ThirdScreenTemplateProps {
-  videoSrc?: string;
-  subheadline?: string;
   description?: string;
   metricAmount?: string;
   metricDescription?: string;
+  onNavigateDown?: () => void;
+  onNavigateUp?: () => void;
+  subheadline?: string;
+  videoSrc?: string;
 }
 
 export default function ThirdScreenTemplate({
-  videoSrc = '/_videos/v1/3742b7e5490c6c79474014f5d41e4d50fe21d59a',
-  subheadline = 'Information\n& data lifecycle',
   description = 'After multiple acquisitions with antiquated and disordered records, finding the required regulatory documentation was difficult to impossible.',
   metricAmount = '2.5M',
   metricDescription = 'paper images are being digitized.',
+  onNavigateDown,
+  onNavigateUp,
+  subheadline = 'Information\n& data lifecycle',
+  videoSrc = '/_videos/v1/3742b7e5490c6c79474014f5d41e4d50fe21d59a',
 }: ThirdScreenTemplateProps) {
   return (
     <div className={styles.container} data-node-id="5168:9928">
@@ -66,10 +70,36 @@ export default function ThirdScreenTemplate({
       </div>
 
       {/* Navigation Arrows */}
-      <div className={styles.arrowUp} data-node-id="5168:9940">
+      <div
+        aria-label="Previous"
+        className={styles.arrowUp}
+        data-node-id="5168:9940"
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            onNavigateUp?.();
+          }
+        }}
+        onPointerDown={() => onNavigateUp?.()}
+        role="button"
+        tabIndex={0}
+      >
         <img alt="Up" src={imgArrowNarrowDown} />
       </div>
-      <div className={styles.arrowDown} data-node-id="5168:9938">
+      <div
+        aria-label="Next"
+        className={styles.arrowDown}
+        data-node-id="5168:9938"
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            onNavigateDown?.();
+          }
+        }}
+        onPointerDown={() => onNavigateDown?.()}
+        role="button"
+        tabIndex={0}
+      >
         <img alt="Down" src={imgArrowNarrowDown} />
       </div>
 

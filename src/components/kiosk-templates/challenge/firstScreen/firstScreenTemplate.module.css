@@ -127,16 +127,17 @@
 
 /* Navigation Arrows */
 .arrowUp {
-  z-index: 10;
-  justify-content: center;
   align-items: center;
-  width: 118px;
-  height: 118px;
+  cursor: pointer;
   display: flex;
+  height: 118px;
+  justify-content: center;
   position: absolute;
-  top: 1760px;
   right: 120px;
+  top: 1760px;
   transform: scaleY(-1);
+  width: 118px;
+  z-index: 10;
 }
 
 .arrowUp img {
@@ -147,14 +148,15 @@
 }
 
 .arrowDown {
-  position: absolute;
-  top: 1980px;
-  right: 120px;
-  width: 118px;
-  height: 118px;
-  display: flex;
   align-items: center;
+  cursor: pointer;
+  display: flex;
+  height: 118px;
   justify-content: center;
+  position: absolute;
+  right: 120px;
+  top: 1980px;
+  width: 118px;
   z-index: 10;
 }
 

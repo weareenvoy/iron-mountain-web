@@ -7,21 +7,25 @@ const imgArrowNarrowDown = 'http://localhost:3845/assets/41b3eec6c414760c14b0a84
 const imgVector = 'http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg';
 
 export interface FirstScreenTemplateProps {
-  videoSrc?: string;
-  subheadline?: string;
   challengeLabel?: string;
+  onNavigateDown?: () => void;
+  onNavigateUp?: () => void;
   problemDescription?: string;
   savingsAmount?: string;
   savingsDescription?: string;
+  subheadline?: string;
+  videoSrc?: string;
 }
 
 export default function FirstScreenTemplate({
-  videoSrc = '/_videos/v1/3a042a38ece8bc71c733d7878d6e2f1d3104be52',
-  subheadline = 'Rich media &\n cultural heritage',
   challengeLabel = 'Challenge',
+  onNavigateDown,
+  onNavigateUp,
   problemDescription = 'The Museum needed a secure, off-site, cloud-accessible, and easily managed solution to protect its one-of-a-kind, irreplaceable footage. Storing the only master copy locally presented a high risk of losing all assets in the event of a data failure or system crash.',
   savingsAmount = '120 TB',
   savingsDescription = 'of data is safely stored and accessible for the Museum.',
+  subheadline = 'Rich media &\n cultural heritage',
+  videoSrc = '/_videos/v1/3a042a38ece8bc71c733d7878d6e2f1d3104be52',
 }: FirstScreenTemplateProps) {
   return (
     <div className={styles.container} data-node-id="5168:9882">
@@ -55,10 +59,36 @@ export default function FirstScreenTemplate({
       </div>
 
       {/* Navigation Arrows */}
-      <div className={styles.arrowUp} data-node-id="5168:9899">
+      <div
+        aria-label="Previous"
+        className={styles.arrowUp}
+        data-node-id="5168:9899"
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            onNavigateUp?.();
+          }
+        }}
+        onPointerDown={() => onNavigateUp?.()}
+        role="button"
+        tabIndex={0}
+      >
         <img alt="Up" src={imgArrowNarrowDown} />
       </div>
-      <div className={styles.arrowDown} data-node-id="5168:9897">
+      <div
+        aria-label="Next"
+        className={styles.arrowDown}
+        data-node-id="5168:9897"
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            onNavigateDown?.();
+          }
+        }}
+        onPointerDown={() => onNavigateDown?.()}
+        role="button"
+        tabIndex={0}
+      >
         <img alt="Down" src={imgArrowNarrowDown} />
       </div>
 

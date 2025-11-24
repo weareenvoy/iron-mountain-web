@@ -10,7 +10,7 @@ type Handlers = {
 
 type RegistryEntry = { id: string; handlers: Handlers };
 
-type Controller = {
+export type Controller = {
   next: () => void;
   prev: () => void;
   goTo: (i: number) => void;

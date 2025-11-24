@@ -1,21 +1,21 @@
 'use client';
 import { useContext } from 'react';
-import { ControllerContext } from './KioskController';
+import { ControllerContext, type Controller } from './KioskController';
 
-type Handlers = { next?: () => void; prev?: () => void; goTo?: (i: number) => void };
+const noopController: Controller = {
+  getRegistry: () => [],
+  goTo: () => {},
+  next: () => {},
+  prev: () => {},
+  register: () => {},
+  setRootHandlers: () => {},
+  unregister: () => {},
+};
 
-export function useKioskController() {
-  const ctx = useContext(ControllerContext as any);
+export function useKioskController(): Controller {
+  const ctx = useContext(ControllerContext);
   if (!ctx) {
-    // noop controller when provider is not present (safe for tests/dev)
-    return {
-      next: () => {},
-      prev: () => {},
-      goTo: (_: number) => {},
-      register: (_id: string, _h: Handlers) => {},
-      unregister: (_id: string) => {},
-      getRegistry: () => [] as any,
-    };
+    return noopController;
   }
 
   return ctx;
