@@ -17,11 +17,11 @@ export interface FirstScreenTemplateProps {
 
 export default function FirstScreenTemplate({
   videoSrc = '/_videos/v1/3a042a38ece8bc71c733d7878d6e2f1d3104be52',
-  subheadline = 'Information\n& data lifecycle',
+  subheadline = 'Rich media &\n cultural heritage',
   challengeLabel = 'Challenge',
-  problemDescription = 'A large healthcare organization faced significant financial risk because it could not locate the appropriate documentation to confirm the eligibility of employee pension claims. The legal system ruled the organization liable to pay claims without evidence to disprove eligibility, resulting in millions of dollars paid in ineligible pension benefits.',
-  savingsAmount = '$2M+',
-  savingsDescription = 'saved annually through the identification of "duplicate" pension payments',
+  problemDescription = 'The Museum needed a secure, off-site, cloud-accessible, and easily managed solution to protect its one-of-a-kind, irreplaceable footage. Storing the only master copy locally presented a high risk of losing all assets in the event of a data failure or system crash.',
+  savingsAmount = '120 TB',
+  savingsDescription = 'of data is safely stored and accessible for the Museum.',
 }: FirstScreenTemplateProps) {
   return (
     <div className={styles.container} data-node-id="5168:9882">

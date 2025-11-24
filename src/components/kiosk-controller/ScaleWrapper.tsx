@@ -13,12 +13,15 @@ export default function ScaleWrapper({ background = 'black', children, targetHei
 
   const outerStyle: React.CSSProperties = {
     width: '100vw',
-    height: '100vh',
-    display: 'grid',
-    placeItems: 'center',
+    minHeight: '100vh',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    flexDirection: 'column',
     overflowX: 'hidden',
     overflowY: 'auto',
     background,
+    padding: '32px 0',
   };
 
   const innerStyle: React.CSSProperties = {
