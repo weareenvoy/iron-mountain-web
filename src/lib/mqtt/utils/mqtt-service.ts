@@ -126,7 +126,7 @@ export class MqttService {
   // Docent App → Exhibit: Direct command to go to a specific beat
   public gotoBeat(exhibit: 'basecamp' | 'overlook' | 'summit', beatId: string, config?: PublishArgsConfig): void {
     const message = createMqttMessage('docent-app', {
-      beat_id: beatId,
+      'beat-id': beatId,
     });
 
     console.info(`Sending goto-beat to ${exhibit}: ${beatId}`);
@@ -173,7 +173,7 @@ export class MqttService {
     exhibit: 'basecamp' | 'overlook' | 'summit',
     state: {
       'playpause'?: boolean; // Only for overlook/summit
-      'slide': string;
+      'beat-id': string;
       'tour-id'?: null | string;
       'volume-level': number;
       'volume-muted': boolean;

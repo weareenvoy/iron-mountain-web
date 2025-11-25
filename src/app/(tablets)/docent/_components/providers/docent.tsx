@@ -151,6 +151,7 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
         const state: DocentAppState = msg.body;
         console.info('Docent: Received GEC state:', state);
 
+        // TODO TBD about data structure. I can no longer find the info in the Docs.
         // Save the full state
         setDocentAppState(state);
 
@@ -196,32 +197,7 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     };
   }, [client, allTours, currentTour?.id, pathname, router]);
 
-  // TBD Subscribe to GEC errors
-  useEffect(() => {
-    if (!client) return;
-
-    const handleError = (message: Buffer) => {
-      try {
-        const msg = JSON.parse(message.toString());
-        const errorBody = msg.body;
-        console.error('Docent: Received GEC error:', errorBody);
-
-        // Show error toast or handle error UI
-        // errorBody contains: code, detail, tour-id
-        alert(`Error: ${errorBody.code}\n${errorBody.detail}`);
-      } catch (error) {
-        console.error('Docent: Error parsing error message:', error);
-      }
-    };
-
-    client.subscribeToTopic('state/docent-app/error', handleError);
-
-    return () => {
-      client.unsubscribeFromTopic('state/docent-app/error', handleError);
-    };
-  }, [client]);
-
-  // Subscribe to CMS sync status from CTRL
+  // TODO TBD Subscribe to which topic??
   useEffect(() => {
     if (!client) return;
 
