@@ -19,9 +19,7 @@ const StrategiesSection = ({ accentColor = '#8A0D71', strategy }: StrategiesSect
             <p className="text-sm font-semibold" style={{ color: accentColor }}>
               {String(index + 1).padStart(2, '0')}
             </p>
-            <h3 className="mt-2 text-lg font-semibold" style={{ color: accentColor }}>
-              {item.title}
-            </h3>
+            <h3 className="mt-4 text-lg font-semibold text-[#4B4B4D]">{item.title}</h3>
             <ul className="mt-4 space-y-3 text-sm text-[#4B4B4D]">
               {item.body.map(point => (
                 <li key={point}>{point}</li>

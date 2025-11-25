@@ -56,11 +56,23 @@
     ],
     "title": "What’s holding you back?"
   },
-  "recap": {
-    "body": "Iron Mountain pairs physical and digital expertise so you can modernize securely. We help you clarify value, consolidate repositories, and activate trusted data faster.",
-    "cta": "See how the next steps align with your priorities.",
-    "title": "Recap"
-  },
+  "recaps": [
+    {
+      "body": "Iron Mountain pairs physical and digital expertise so you can modernize securely. We help you clarify value, consolidate repositories, and activate trusted data faster.",
+      "cta": "See how the next steps align with your priorities.",
+      "title": "Recap"
+    },
+    {
+      "body": "Unlock outcomes faster by aligning the right people, processes, and technology.",
+      "cta": "Define your go-forward roadmap.",
+      "title": "Recap"
+    },
+    {
+      "body": "Iron Mountain pairs physical and digital expertise so you can modernize securely. We help you clarify value, consolidate repositories, and activate trusted data faster.",
+      "cta": "See how the next steps align with your priorities.",
+      "title": "Recap"
+    }
+  ],
   "stories": {
     "description": "These are proof points from customers solving similar challenges.",
     "items": [

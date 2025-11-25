@@ -2,7 +2,8 @@ export interface SummitData {
   readonly hero: SummitHero;
   readonly metrics: SummitMetrics;
   readonly obstacles: SummitObstacles;
-  readonly recap: SummitRecap;
+  readonly recap?: SummitRecap; // legacy support
+  readonly recaps?: readonly SummitRecap[];
   readonly stories: SummitStories;
   readonly strategies: readonly SummitStrategy[];
   readonly summary: SummitSummary;
@@ -80,4 +81,3 @@ export interface SummitSummary {
 }
 
 export type SummitSlideScreen = 'primary' | 'secondary';
-

@@ -1,16 +1,15 @@
 'use client';
 
-import type { SummitData } from '@/app/(displays)/summit/_types';
+import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getSummitData } from '@/lib/internal/data/get-summit';
+import type { SummitData } from '@/app/(displays)/summit/_types';
 import type { ExhibitNavigationState } from '@/lib/internal/types';
 import type { ExhibitMqttState } from '@/lib/mqtt/types';
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import type { PropsWithChildren } from 'react';
 
 interface SummitContextValue {
-  readonly data: SummitData | null;
-  readonly error: string | null;
+  readonly data: null | SummitData;
+  readonly error: null | string;
   readonly exhibitState: ExhibitNavigationState;
   readonly loading: boolean;
   readonly refetch: () => Promise<boolean>;
@@ -33,8 +32,8 @@ export const useSummit = () => {
 
 export const SummitProvider = ({ children }: PropsWithChildren) => {
   const { client } = useMqtt();
-  const [data, setData] = useState<SummitData | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [data, setData] = useState<null | SummitData>(null);
+  const [error, setError] = useState<null | string>(null);
   const [exhibitState, setExhibitState] = useState<ExhibitNavigationState>(DEFAULT_EXHIBIT_STATE);
   const [loading, setLoading] = useState(true);
   const [mqttState, setMqttState] = useState<ExhibitMqttState>({
