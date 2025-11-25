@@ -1,4 +1,5 @@
 export interface SummitData {
+  readonly footerStats?: readonly string[];
   readonly hero: SummitHero;
   readonly metrics: SummitMetrics;
   readonly obstacles: SummitObstacles;

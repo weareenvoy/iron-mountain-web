@@ -27,10 +27,12 @@ const SummitWebContent = () => {
   }
 
   const recapsFromData = data.recaps ?? [];
-  const recapList: SummitRecap[] = recapsFromData.length > 0 ? [...recapsFromData] : [];
-  const fallbackRecap = (data as { recap?: SummitRecap }).recap;
-  if (!recapList.length && fallbackRecap) {
-    recapList.push(fallbackRecap);
+  const legacyRecap = (data as { recap?: SummitRecap }).recap;
+  let recapList: SummitRecap[] = [];
+  if (recapsFromData.length > 0) {
+    recapList = [...recapsFromData];
+  } else if (legacyRecap) {
+    recapList = [legacyRecap];
   }
 
   return (
@@ -110,6 +112,18 @@ const SummitWebContent = () => {
               rightTextColor: '#12406A',
             }}
           />
+        </div>
+      ) : null}
+      {data.footerStats && data.footerStats.length > 0 ? (
+        <div className="mx-auto w-full max-w-[1200px] px-4 pb-6 sm:px-8 lg:px-12">
+          <div className="grid gap-6 text-sm text-[#5B5B5B] sm:grid-cols-3">
+            {data.footerStats.map((stat: string) => (
+              <div className="flex flex-col items-start gap-3" key={stat}>
+                <div className="h-2 w-2 rounded-full bg-[#4B4B4D]" />
+                <div>{stat}</div>
+              </div>
+            ))}
+          </div>
         </div>
       ) : null}
     </div>
