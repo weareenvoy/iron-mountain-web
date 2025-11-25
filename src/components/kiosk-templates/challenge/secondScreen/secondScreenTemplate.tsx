@@ -3,8 +3,9 @@
 import styles from './secondScreenTemplate.module.css';
 
 // Asset constants from Figma MCP
-const imgVector = 'http://localhost:3845/assets/caf81e3bbca82f86954a2677e5046573cb1ee4a2.png';
 const imgArrowNarrowDown = 'http://localhost:3845/assets/a750fbdd00ef68fcb2ba9208e4bd977de111641b.svg';
+const imgHero = '';
+const imgVector = 'http://localhost:3845/assets/40afdcf461baafad39ec3925ac4fd501259151d6.png';
 const imgVector1 = 'http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg';
 
 export interface SecondScreenTemplateProps {
@@ -16,34 +17,25 @@ export interface SecondScreenTemplateProps {
   statAmount?: string;
   statDescription?: string;
   subheadline?: string;
-  topVideoSrc?: string;
+  topImageSrc?: string;
 }
 
 export default function SecondScreenTemplate({
-  bottomDescription = 'After multiple acquisitions with antiquated and disordered records, finding the required regulatory documentation was difficult to impossible.',
+  bottomDescription = 'The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.',
   bottomVideoSrc = '/_videos/v1/a532f40a2a6848e2a80788002b6cb925a1f4c3c2',
-  mainDescription = 'Disparate, unstructured records across various locations and legacy systems—including paper, microfilm, CD, and digital formats—created costly, risk-laden pension administration.',
+  mainDescription = 'The Museum also needed assistance with physical storage for a collection of historical music artifacts.',
   onNavigateDown,
   onNavigateUp,
-  statAmount = '100M+',
-  statDescription = 'A large healthcare organization faced significant financial risk because it could not locate the appropriate documentation to confirm the eligibility of employee pension claims. The legal system ruled the organization liable to pay claims without evidence to disprove eligibility, resulting in millions of dollars paid in ineligible pension benefits.',
-  subheadline = 'Information\n& data lifecycle',
-  topVideoSrc = '/_videos/v1/3742b7e5490c6c79474014f5d41e4d50fe21d59a',
+  statAmount = '',
+  statDescription = 'The Museum needed a secure, off-site, cloud-accessible, and easily managed solution to protect its one-of-a-kind, irreplaceable footage. Storing the only master copy locally presented a high risk of losing all assets in the event of a data failure or system crash.',
+  subheadline = 'Rich media &\n cultural heritage',
+  topImageSrc = imgHero,
 }: SecondScreenTemplateProps) {
   return (
     <div className={styles.container} data-node-id="5168:9907">
-      {/* Top Video Section */}
+      {/* Hero Image */}
       <div className={styles.topVideoContainer} data-node-id="5168:9909">
-        <video
-          autoPlay
-          loop
-          playsInline
-          muted
-          controlsList="nodownload"
-          className={styles.topVideo}
-        >
-          <source src={topVideoSrc} type="video/mp4" />
-        </video>
+        <img alt="" className={styles.topVideo} src={topImageSrc} />
       </div>
 
       {/* Bottom Video Section */}

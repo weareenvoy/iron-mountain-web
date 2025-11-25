@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import type { Controller } from '@/components/kiosk-controller/KioskController';
 import useKioskController from '@/components/kiosk-controller/useKioskController';
 import InnerEmbla from './InnerEmbla';
 import InitialScreenTemplate from '@/components/kiosk-templates/challenge/initialScreen/initialScreenTemplate';
@@ -17,21 +18,21 @@ const slides: Slide[] = [
 ];
 
 export default function Kiosk1View() {
-  const controller = useKioskController();
+  const controller: Controller = useKioskController();
   const [topIndex, setTopIndex] = useState(0);
 
   // Register root handlers for parallax navigation
   useEffect(() => {
     controller.setRootHandlers({
       next: () => {
-        setTopIndex((i) => Math.min(i + 1, slides.length - 1));
+        setTopIndex((i: number) => Math.min(i + 1, slides.length - 1));
         return true;
       },
       prev: () => {
-        setTopIndex((i) => Math.max(i - 1, 0));
+        setTopIndex((i: number) => Math.max(i - 1, 0));
         return true;
       },
-      goTo: (i) => {
+      goTo: (i: number) => {
         setTopIndex(Math.max(0, Math.min(i, slides.length - 1)));
         return true;
       }
@@ -71,7 +72,6 @@ export default function Kiosk1View() {
           </section>
         ))}
       </div>
-
       <div className={styles.debugControls}>
         <button onClick={() => controller.prev()}>Prev</button>
         <button onClick={() => controller.next()}>Next</button>
