@@ -93,6 +93,25 @@ const SummitWebContent = () => {
       <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
         <hr className="border-t border-[#D0D0D3]" />
       </div>
+      {data.strategies[2] && (
+        <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
+          <StrategiesSection accentColor="#1B75BC" strategy={data.strategies[2]} />
+        </div>
+      )}
+      {recapList.length > 3 ? (
+        <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
+          <RecapSection
+            recap={recapList[3]!}
+            tone={{
+              accentBg: '#1B75BC',
+              accentColor: '#FFFFFF',
+              bodyColor: '#FFFFFF',
+              iconColor: '#FFFFFF',
+              rightTextColor: '#12406A',
+            }}
+          />
+        </div>
+      ) : null}
     </div>
   );
 };

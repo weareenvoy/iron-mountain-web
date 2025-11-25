@@ -71,6 +71,11 @@
       "body": "Iron Mountain pairs physical and digital expertise so you can modernize securely. We help you clarify value, consolidate repositories, and activate trusted data faster.",
       "cta": "See how the next steps align with your priorities.",
       "title": "Recap"
+    },
+    {
+      "body": "Connect insight to action by aligning decision makers and integrating your data estate end-to-end.",
+      "cta": "Schedule workstream deep dives.",
+      "title": "Recap"
     }
   ],
   "stories": {
@@ -156,6 +161,34 @@
       ],
       "summary": "You decide where to begin; we ensure the roadmap stays actionable.",
       "title": "Unlock your future"
+    },
+    {
+      "eyebrow": "Stories of impact",
+      "items": [
+        {
+          "body": [
+            "Illustrate secure data activation for regulated industries.",
+            "Highlight measurable results from digital transformation."
+          ],
+          "title": "Large Global Bank"
+        },
+        {
+          "body": [
+            "Demonstrate modern information governance and lifecycle services.",
+            "Showcase sustainable operations."
+          ],
+          "title": "Information & data lifecycle"
+        },
+        {
+          "body": [
+            "Show rich media preservation and monetization at scale.",
+            "Prove how metadata unlocks cultural content."
+          ],
+          "title": "Rich media & cultural heritage"
+        }
+      ],
+      "summary": "Proof points that connect today’s challenges with real outcomes.",
+      "title": "Stories of impact"
     }
   ],
   "summary": {

@@ -2,7 +2,7 @@ import type { SummitData } from '@/app/(displays)/summit/_types';
 import { shouldUseStaticPlaceholderData } from '@/flags/flags';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
-const SUMMIT_STATIC_DATA_VERSION = '2024-11-23';
+const SUMMIT_STATIC_DATA_VERSION = '2024-11-23-02';
 const SUMMIT_STATIC_ENDPOINT = `/api/summit.json?v=${SUMMIT_STATIC_DATA_VERSION}`;
 
 export const getSummitData = async (): Promise<SummitData> => {
