@@ -20,12 +20,14 @@ const SchedulePageClient = () => {
   const { t } = useDocentTranslation();
   const router = useRouter();
   const { client } = useMqtt();
-  const { allTours, isConnected, isTourDataLoading, refreshTours, setCurrentTour } = useDocent();
+  const { data, isConnected, isTourDataLoading, refreshData, setCurrentTour } = useDocent();
 
   const [selectedTourId, setSelectedTourId] = useState<null | string>(null);
   const [currentMonthDate, setCurrentMonthDate] = useState(new Date());
 
   const toursByDate = useMemo<Record<string, TourByDate>>(() => {
+    const allTours = data?.tours ?? [];
+
     if (allTours.length === 0) {
       return {};
     }
@@ -63,7 +65,7 @@ const SchedulePageClient = () => {
       },
       {} as Record<string, TourByDate>
     );
-  }, [allTours]);
+  }, [data?.tours]);
 
   // For the 4 buttons in header
   const handlePreviousMonth = () => {
@@ -180,7 +182,7 @@ const SchedulePageClient = () => {
                 <ArrowRight className="size-[24px]" />
               </button>
             </div>
-            <button className="active:opacity-50" onClick={refreshTours}>
+            <button className="active:opacity-50" onClick={refreshData}>
               <RotateCw className="size-[24px]" />
             </button>
           </div>

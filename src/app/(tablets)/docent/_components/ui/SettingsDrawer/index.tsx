@@ -1,13 +1,12 @@
 'use client';
 
-import { ArrowRight, CircleAlert, CircleCheck, ExternalLink, Volume2, VolumeX, X } from 'lucide-react';
+import { ArrowRight, CircleAlert, CircleCheck, ExternalLink, Lightbulb, Volume2, VolumeX, X } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import { Switch } from '@/app/(tablets)/docent/_components/ui/Switch';
 import { useMqtt } from '@/components/providers/mqtt-provider';
-import LightBulb from '@/components/ui/icons/LightBulb';
 import { useDocentTranslation } from '@/hooks/use-docent-translation';
 import { cn } from '@/lib/tailwind/utils/cn';
 
@@ -172,13 +171,13 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
         <div className="flex h-15 items-center justify-between">
           <div className="flex items-center gap-3">
             {/* Lightbulb icon */}
-            <LightBulb className="h-[33px] w-[24px]" />
+            <Lightbulb className="size-[28px]" color="#6DCFF6" />
 
             <span className="text-primary-im-light-blue text-2xl">{t.settings.ebcLights}</span>
           </div>
 
           {/* Switch to toggle EBC Lights. TODO Is the value from GEC state? */}
-          <Switch id="ebc-lights" onCheckedChange={handleToggleEBCLights} />
+          <Switch id="ebc-lights" onCheckedChange={handleToggleEBCLights} useIcon />
         </div>
 
         {/* End Tour Button */}

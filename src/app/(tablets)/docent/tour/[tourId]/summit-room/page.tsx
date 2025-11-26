@@ -121,7 +121,7 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
 
       {/* Header */}
       <div className="text-primary-bg-grey mt-35 flex flex-col items-center gap-[23px]">
-        <h1 className="text-center text-4xl leading-loose tracking-[-1.8px]">{t.docent.tour.summitRoom}</h1>
+        <h1 className="text-center text-4xl leading-loose tracking-[-1.8px]">Summit</h1>
         <p className="text-center text-xl leading-loose tracking-[-1px]">{currentTour?.guestName || 'Tour'}</p>
       </div>
 

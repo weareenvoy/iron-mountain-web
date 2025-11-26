@@ -7,6 +7,7 @@ import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
 import MomentsAndBeats from '@/app/(tablets)/docent/_components/ui/MomentsAndBeats';
 import CastOff from '@/components/ui/icons/CastOff';
+import { useDocentTranslation } from '@/hooks/use-docent-translation';
 import useMomentsNavigation from '@/hooks/use-moments-navigation';
 import type { Moment } from '@/lib/internal/types';
 
@@ -57,6 +58,7 @@ const OVERLOOK_CONTENT: Readonly<Moment[]> = [
 const OverlookPage = ({ params }: PageProps<'/docent/tour/[tourId]/overlook'>) => {
   const { tourId } = use(params);
   const { currentTour, overlookExhibitState, setOverlookExhibitState } = useDocent();
+  const { t } = useDocentTranslation();
   // TODO does this live in GEC state?
   const [isOverlookCastMode, setIsOverlookCastMode] = useState(false);
 
@@ -76,9 +78,9 @@ const OverlookPage = ({ params }: PageProps<'/docent/tour/[tourId]/overlook'>) =
     (): HeaderProps['leftButton'] => ({
       href: `/docent/tour/${tourId}`,
       icon: <ArrowLeft />,
-      text: 'Back to menu',
+      text: t.docent.navigation.backToMenu,
     }),
-    [tourId]
+    [tourId, t]
   );
 
   return (
@@ -96,9 +98,9 @@ const OverlookPage = ({ params }: PageProps<'/docent/tour/[tourId]/overlook'>) =
           )}
         </button>
         {isOverlookCastMode ? (
-          <span className="h-6.25 text-sm">Start presenting</span>
+          <span className="h-6.25 text-sm">{t.docent.actions.startPresenting}</span>
         ) : (
-          <span className="h-6.25 text-sm">Stop presenting</span>
+          <span className="h-6.25 text-sm">{t.docent.actions.stopPresenting}</span>
         )}
       </div>
 

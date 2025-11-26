@@ -148,6 +148,7 @@ const Background = () => {
     <>
       {/* Ambient video (looping). Playback controlled in effects. */}
       <video
+        autoPlay={false}
         className={cn('h-full w-full object-cover', momentId === 'ambient' ? 'block' : 'hidden')}
         loop
         muted
@@ -159,6 +160,7 @@ const Background = () => {
 
       {/* Main video background */}
       <video
+        autoPlay={false}
         className={cn('h-full w-full object-cover', momentId !== 'ambient' ? 'block' : 'hidden')}
         muted
         onProgress={progressHandler}

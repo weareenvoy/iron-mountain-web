@@ -119,28 +119,31 @@ export interface BasecampData {
   };
 }
 
+export interface SummitSlide {
+  borderColor: null | string;
+  id: number;
+  title: string;
+}
+
+export interface DocentData {
+  slides: SummitSlide[];
+  tours: Tour[];
+}
+
 import en from '@/dictionaries/en.json';
 
 export type Dictionary = typeof en;
 
 export type Locale = 'en' | 'pt';
 
-export interface BasecampApiResponse extends BasecampData {
-  lang: Locale;
+export interface BasecampApiResponse {
+  data: BasecampData;
+  dict: Dictionary;
+  locale: Locale;
 }
 
-export interface ToursApiResponse {
-  lang: Locale;
-  tours: Tour[];
-}
-
-export interface SummitRoomSlide {
-  borderColor: null | string;
-  id: number;
-  title: string;
-}
-
-export interface SummitRoomApiResponse {
-  lang: Locale;
-  slides: SummitRoomSlide[];
+export interface DocentApiResponse {
+  data: DocentData;
+  dict: Dictionary;
+  locale: Locale;
 }

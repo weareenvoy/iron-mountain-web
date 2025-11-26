@@ -8,6 +8,8 @@
       "launchJourneyMap": "Iniciar mapa da jornada",
       "load": "Carregar",
       "settings": "Configurações",
+      "startPresenting": "Iniciar apresentação",
+      "stopPresenting": "Parar apresentação",
       "tapToBegin": "Toque para iniciar",
       "today": "Hoje"
     },
@@ -32,16 +34,7 @@
       "loading": "Carregando...",
       "noTours": "Nenhum tour disponível para este mês.",
       "title": "Agenda EBC"
-    },
-    "tour": {
-      "basecamp": "Basecamp",
-      "overlook": "Visão geral",
-      "overview": "Visão geral",
-      "summitRoom": "Sala do cume"
     }
-  },
-  "home": {
-    "appsTitle": "Aplicativos:"
   },
   "loading": {
     "basecamp": "Carregando basecamp…",

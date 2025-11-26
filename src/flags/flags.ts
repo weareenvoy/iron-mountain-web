@@ -4,13 +4,13 @@ import type { Locale } from '@/lib/internal/types';
 // Flip this to false when real endpoints are ready.
 const USE_STATIC_PLACEHOLDER = true as const;
 
-// Language override for testing. Change this to 'en' or 'pt' to force a specific language.
-// This will override the `lang` property from API responses.
+// Locale override for testing. Change this to 'en' or 'pt' to force a specific locale.
+// This will override the `locale` property from API responses.
 // Set to 'en' for English, 'pt' for Portuguese
-const LANGUAGE_OVERRIDE: Locale = 'pt';
+const LOCALE_FOR_TESTING: Locale = 'pt';
 
 // Non-flag helper for universal use (safe in any environment)
 export const shouldUseStaticPlaceholderData = () => USE_STATIC_PLACEHOLDER;
 
-// Get the language override
-export const getLanguageOverride = () => LANGUAGE_OVERRIDE;
+// Get the locale for testing
+export const getLocaleForTesting = () => LOCALE_FOR_TESTING;

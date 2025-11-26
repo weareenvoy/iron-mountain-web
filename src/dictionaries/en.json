@@ -8,6 +8,8 @@
       "launchJourneyMap": "Launch journey map",
       "load": "Load",
       "settings": "Settings",
+      "startPresenting": "Start presenting",
+      "stopPresenting": "Stop presenting",
       "tapToBegin": "Tap to begin",
       "today": "Today"
     },
@@ -32,12 +34,6 @@
       "loading": "Loading...",
       "noTours": "No tours available for this month.",
       "title": "EBC schedule"
-    },
-    "tour": {
-      "basecamp": "Basecamp",
-      "overlook": "Overlook",
-      "overview": "Overview",
-      "summitRoom": "Summit room"
     }
   },
   "home": {

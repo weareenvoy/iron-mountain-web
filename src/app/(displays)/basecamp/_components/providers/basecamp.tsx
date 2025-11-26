@@ -2,7 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useState, type PropsWithChildren } from 'react';
 import { useMqtt } from '@/components/providers/mqtt-provider';
-import { getLanguageOverride } from '@/flags/flags';
+import { getLocaleForTesting } from '@/flags/flags';
 import { getBasecampData } from '@/lib/internal/data/get-basecamp';
 import {
   isBasecampSection,
@@ -14,11 +14,12 @@ import {
 import type { ExhibitMqttState } from '@/lib/mqtt/types';
 
 interface BasecampContextType {
-  data: (BasecampData & { dict: Dictionary; lang: Locale }) | null;
+  data: BasecampData | null;
+  dict: Dictionary | null;
   error: null | string;
   exhibitState: ExhibitNavigationState;
-  lang: Locale;
   loading: boolean;
+  locale: Locale;
 }
 
 export const BasecampContext = createContext<BasecampContextType | undefined>(undefined);
@@ -42,8 +43,8 @@ export const useBasecamp = () => {
  * @returns The current locale ('en' | 'pt')
  */
 export const useLocale = (): Locale => {
-  const { lang } = useBasecamp();
-  return lang;
+  const { locale } = useBasecamp();
+  return locale;
 };
 
 export const BasecampProvider = ({ children }: BasecampProviderProps) => {
@@ -63,8 +64,9 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     'volume-muted': false,
   });
 
-  const [data, setData] = useState<(BasecampData & { dict: Dictionary; lang: Locale }) | null>(null);
-  const [lang, setLang] = useState<Locale>(getLanguageOverride());
+  const [data, setData] = useState<BasecampData | null>(null);
+  const [dict, setDict] = useState<Dictionary | null>(null);
+  const [locale, setLocale] = useState<Locale>(getLocaleForTesting());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<null | string>(null);
 
@@ -75,8 +77,9 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
 
     try {
       const basecampData = await getBasecampData();
-      setData(basecampData);
-      setLang(basecampData.lang);
+      setData(basecampData.data);
+      setDict(basecampData.dict);
+      setLocale(basecampData.locale);
       setError(null);
       return true;
     } catch (err) {
@@ -262,10 +265,11 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
 
   const contextValue = {
     data,
+    dict,
     error,
     exhibitState,
-    lang,
     loading,
+    locale,
   };
 
   return <BasecampContext.Provider value={contextValue}>{children}</BasecampContext.Provider>;
