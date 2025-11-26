@@ -26,14 +26,15 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
   const { client } = useMqtt();
   const {
     currentTour,
+    data,
     isSummitRoomJourneyMapLaunched,
     setIsSummitRoomJourneyMapLaunched,
     setSummitRoomSlideIdx,
     summitRoomSlideIdx,
-    summitRoomSlides,
   } = useDocent();
 
   // Local UI state
+  const summitRoomSlides = data?.slides ?? [];
   const isJourneyMapLaunched = isSummitRoomJourneyMapLaunched;
   const setIsJourneyMapLaunched = setIsSummitRoomJourneyMapLaunched;
   const currentSlideIdx = summitRoomSlideIdx;

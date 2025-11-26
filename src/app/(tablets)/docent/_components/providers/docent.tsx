@@ -14,7 +14,7 @@ import { DocentAppState, type SyncState } from '@/app/(tablets)/docent/_types';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getLocaleForTesting } from '@/flags/flags';
 import { getDocentData } from '@/lib/internal/data/get-docent';
-import type { Dictionary, DocentData, ExhibitNavigationState, Locale, SummitSlide, Tour } from '@/lib/internal/types';
+import type { Dictionary, DocentData, ExhibitNavigationState, Locale, Tour } from '@/lib/internal/types';
 import type { Route } from 'next';
 
 const isDocentRoute = (path: string): path is Route => {
@@ -55,7 +55,6 @@ export interface DocentContextType {
 
   // Summit Room state
   readonly summitRoomSlideIdx: number;
-  readonly summitRoomSlides: SummitSlide[];
 }
 
 export const DocentContext = createContext<DocentContextType | undefined>(undefined);
@@ -257,38 +256,32 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     }
   }, [currentTour]);
 
-  return (
-    <DocentContext.Provider
-      value={{
-        basecampExhibitState,
-        currentTour,
-        data,
-        dict,
-        docentAppState,
-        exhibitAvailability,
-        isConnected,
-        isGecStateLoading,
-        isSettingsOpen,
-        isSummitRoomJourneyMapLaunched,
-        isTourDataLoading,
-        lastUpdated,
-        locale,
-        overlookExhibitState,
-        refreshData: fetchDocentData,
-        setBasecampExhibitState,
-        setCurrentTour,
-        setIsSettingsOpen,
-        setIsSummitRoomJourneyMapLaunched,
-        setOverlookExhibitState,
-        setSummitRoomSlideIdx,
-        // Summit Room state
-        summitRoomSlideIdx,
-        summitRoomSlides: data?.slides ?? [],
-      }}
-    >
-      {children}
-    </DocentContext.Provider>
-  );
+  const contextValue = {
+    basecampExhibitState,
+    currentTour,
+    data,
+    dict,
+    docentAppState,
+    exhibitAvailability,
+    isConnected,
+    isGecStateLoading,
+    isSettingsOpen,
+    isSummitRoomJourneyMapLaunched,
+    isTourDataLoading,
+    lastUpdated,
+    locale,
+    overlookExhibitState,
+    refreshData: fetchDocentData,
+    setBasecampExhibitState,
+    setCurrentTour,
+    setIsSettingsOpen,
+    setIsSummitRoomJourneyMapLaunched,
+    setOverlookExhibitState,
+    setSummitRoomSlideIdx,
+    summitRoomSlideIdx,
+  };
+
+  return <DocentContext.Provider value={contextValue}>{children}</DocentContext.Provider>;
 };
 
 export default DocentProvider;
