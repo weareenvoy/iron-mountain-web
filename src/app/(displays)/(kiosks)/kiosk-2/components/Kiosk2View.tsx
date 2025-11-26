@@ -16,7 +16,7 @@ import ThirdScreenTemplate, {
 } from '@/components/kiosk-templates/challenge/thirdScreen/thirdScreenTemplate';
 import InnerEmbla from '../../kiosk-1/components/InnerEmbla';
 import challengeContent from '../challenges.json';
-import styles from './kiosk-2.module.css';
+// import styles from './kiosk-2.module.css';
 
 type Slide = { hasCarousel?: boolean; id: string; title: string };
 
@@ -58,10 +58,22 @@ const Kiosk2View = () => {
   }, [controller]);
 
   return (
-    <div className={styles.root}>
-      <div className={styles.parallaxContainer} data-top-index={topIndex}>
+    <div
+      // className={styles.root}
+      className="relative h-full w-full"
+    >
+      <div
+        // className={styles.parallaxContainer}
+        className="h-full w-full"
+        data-top-index={topIndex}
+      >
         {slides.map((slide, idx) => (
-          <section className={styles.slide} data-active={idx === topIndex} key={slide.id}>
+          <section
+            // className={styles.slide}
+            className="flex h-full w-full flex-col items-center justify-center"
+            data-active={idx === topIndex}
+            key={slide.id}
+          >
             {slide.id === 's1' && <InitialScreenTemplate {...challenges.initialScreen} />}
             {slide.id === 's2' && (
               <FirstScreenTemplate
@@ -88,7 +100,10 @@ const Kiosk2View = () => {
           </section>
         ))}
       </div>
-      <div className={styles.debugControls}>
+      <div
+        // className={styles.debugControls}
+        className="absolute bottom-[12px] right-[12px] z-[1000] flex gap-2"
+      >
         <button onClick={() => controller.prev()}>Prev</button>
         <button onClick={() => controller.next()}>Next</button>
       </div>

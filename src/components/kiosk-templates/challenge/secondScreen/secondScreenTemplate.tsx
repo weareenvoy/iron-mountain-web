@@ -1,6 +1,6 @@
 'use client';
 
-import styles from './secondScreenTemplate.module.css';
+// import styles from './secondScreenTemplate.module.css';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
 // Asset constants from Figma MCP
@@ -39,63 +39,133 @@ export default function SecondScreenTemplate({
   topImageSrc = imgHero,
 }: SecondScreenTemplateProps) {
   return (
-    <div className={styles.container} data-node-id="5168:9907">
+    <div
+      // className={styles.container}
+      className="relative flex h-screen w-full flex-col overflow-hidden bg-black"
+      data-node-id="5168:9907"
+    >
       {/* Hero Image */}
-      <div className={styles.topVideoContainer} data-node-id="5168:9909">
-        <img alt="" className={styles.topVideo} src={topImageSrc} />
+      <div
+        // className={styles.topVideoContainer}
+        className="absolute left-0 top-0 z-[1] h-[1291px] w-full overflow-hidden"
+        data-node-id="5168:9909"
+      >
+        <img
+          alt=""
+          // className={styles.topVideo}
+          className="absolute left-[-7.5%] top-[-5.93%] h-[117.19%] w-[124.52%] object-cover object-center"
+          src={topImageSrc}
+        />
       </div>
 
       {/* Bottom Video Section */}
-      <div className={styles.bottomVideoContainer} data-node-id="5168:9908">
+      <div
+        // className={styles.bottomVideoContainer}
+        className="absolute left-0 top-[4233px] z-[1] h-[1291px] w-full overflow-hidden"
+        data-node-id="5168:9908"
+      >
         <video
           autoPlay
           loop
           playsInline
           muted
           controlsList="nodownload"
-          className={styles.bottomVideo}
+          // className={styles.bottomVideo}
+          className="absolute left-[-30.42%] top-[-30.96%] h-[172.5%] w-[181.73%] bg-red-500 object-cover object-center"
         >
           <source src={bottomVideoSrc} type="video/mp4" />
         </video>
       </div>
 
       {/* Subheadline */}
-      <div className={styles.subheadlineContainer} data-node-id="5168:9918">
-        <h2 className={styles.subheadline}>
+      <div
+        // className={styles.subheadlineContainer}
+        className="absolute left-[120px] top-[368px] z-[10] -translate-y-full"
+        data-node-id="5168:9918"
+      >
+        <h2
+          // className={styles.subheadline}
+          className="whitespace-pre-line text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#ededed]"
+        >
           {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
         </h2>
       </div>
 
       {/* Challenge Label */}
-      <div className={styles.challengeLabel} data-node-id="5168:9925">
-        <div className={styles.challengeIcon}>
-          <div className={styles.iconInner}>
-            <img alt="" src={challengeIconSrc} />
+      <div
+        // className={styles.challengeLabel}
+        className="absolute left-[128.17px] top-[745.23px] z-[10] flex items-center gap-[41px]"
+        data-node-id="5168:9925"
+      >
+        <div
+          // className={styles.challengeIcon}
+          className="relative mr-[15px] flex h-[100px] w-[100px] items-center justify-center"
+        >
+          <div className="relative size-full rotate-[225deg] scale-y-[-1]">
+            <img alt="" className="block h-full w-full object-contain" src={challengeIconSrc} />
           </div>
         </div>
-        <h1 className={styles.challengeText}>Challenge</h1>
+        <h1
+          // className={styles.challengeText}
+          className="whitespace-nowrap text-[126.031px] font-normal leading-[1.3] tracking-[-6.3015px] text-[#ededed]"
+        >
+          Challenge
+        </h1>
       </div>
 
       {/* Stat Section (Left) */}
-      <div className={styles.statSection} data-node-id="5168:9913">
-        <div className={styles.statAmount}>{renderRegisteredMark(statAmount)}</div>
-        <p className={styles.statDescription}>{renderRegisteredMark(statDescription)}</p>
+      <div
+        // className={styles.statSection}
+        className="absolute left-[124px] top-[1058px] z-[5] flex w-[1390px] flex-col gap-[60px] opacity-50"
+        data-node-id="5168:9913"
+      >
+        <div
+          // className={styles.statAmount}
+          className="whitespace-nowrap text-[300px] font-[300] leading-[1.3] tracking-[-15px] text-[#6dcff6]"
+        >
+          {renderRegisteredMark(statAmount)}
+        </div>
+        <p
+          // className={styles.statDescription}
+          className="text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#6dcff6]"
+        >
+          {renderRegisteredMark(statDescription)}
+        </p>
       </div>
 
       {/* Main Description (Right) */}
-      <div className={styles.mainDescription} data-node-id="5168:9911">
-        <p className={styles.descriptionText}>{renderRegisteredMark(mainDescription)}</p>
+      <div
+        // className={styles.mainDescription}
+        className="absolute right-[422px] top-[2065px] z-[5] w-[971px]"
+        data-node-id="5168:9911"
+      >
+        <p
+          // className={styles.descriptionText}
+          className="text-[60px] font-normal leading-[1.4] tracking-[-3px] text-white"
+        >
+          {renderRegisteredMark(mainDescription)}
+        </p>
       </div>
 
       {/* Bottom Description */}
-      <div className={styles.bottomDescriptionContainer} data-node-id="5168:9919">
-        <p className={styles.bottomDescriptionText}>{renderRegisteredMark(bottomDescription)}</p>
+      <div
+        // className={styles.bottomDescriptionContainer}
+        className="absolute left-[120px] top-[4065px] z-[5] w-[971px]"
+        data-node-id="5168:9919"
+      >
+        <p
+          // className={styles.bottomDescriptionText}
+          className="text-[60px] font-normal leading-[1.4] tracking-[-3px] text-white"
+        >
+          {renderRegisteredMark(bottomDescription)}
+        </p>
       </div>
 
       {/* Navigation Arrows */}
       <div
         aria-label="Previous"
-        className={styles.arrowUp}
+        // className={styles.arrowUp}
+        className="absolute right-[120px] top-[1755px] z-[10] flex h-[118px] w-[118px] -scale-y-100 items-center justify-center"
         data-node-id="5168:9923"
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
@@ -107,11 +177,12 @@ export default function SecondScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img alt="Up" src={arrowIconSrc} />
+        <img alt="Up" className="h-full w-full object-contain" src={arrowIconSrc} />
       </div>
       <div
         aria-label="Next"
-        className={styles.arrowDown}
+        // className={styles.arrowDown}
+        className="absolute right-[120px] top-[1980px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
         data-node-id="5168:9921"
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
@@ -123,17 +194,33 @@ export default function SecondScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img alt="Down" src={arrowIconSrc} />
+        <img alt="Down" className="h-full w-full object-contain" src={arrowIconSrc} />
       </div>
 
       {/* Background Gradients */}
-      <div className={styles.gradientBg} data-node-id="5168:9910" />
-      <div className={styles.topGradientOverlay} data-node-id="5168:9916" />
-      <div className={styles.fadeOutGradient} data-node-id="5168:9920" />
+      <div
+        // className={styles.gradientBg}
+        className="absolute left-0 top-[-223px] z-[2] h-[5504px] w-full rounded-[100px] bg-[linear-gradient(to_bottom,#1b75bc_0%,#14477d_98%)]"
+        data-node-id="5168:9910"
+      />
+      <div
+        // className={styles.topGradientOverlay}
+        className="pointer-events-none absolute left-0 top-0 z-[3] h-[1291px] w-full bg-[linear-gradient(to_bottom,#1968ab_66.076%,rgba(26,108,175,0)_99.322%)]"
+        data-node-id="5168:9916"
+      />
+      <div
+        // className={styles.fadeOutGradient}
+        className="pointer-events-none absolute left-0 top-[3696px] z-[3] h-[1423px] w-full -scale-y-100 bg-[linear-gradient(to_bottom,#154c83_42.41%,rgba(21,75,130,0)_98.852%)]"
+        data-node-id="5168:9920"
+      />
 
       {/* Large Background Icon */}
-      <div className={styles.largeIcon} data-node-id="5168:9917">
-        <img alt="" src={largeIconSrc} />
+      <div
+        // className={styles.largeIcon}
+        className="pointer-events-none absolute left-[-12%] top-[46%] z-[4] flex h-[1106px] w-[1106px] -scale-y-100 items-center justify-center rotate-[225deg]"
+        data-node-id="5168:9917"
+      >
+        <img alt="" className="block h-full w-full object-contain" src={largeIconSrc} />
       </div>
     </div>
   );

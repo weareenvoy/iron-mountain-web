@@ -15,7 +15,7 @@ import ThirdScreenTemplate, {
   type ThirdScreenTemplateProps,
 } from '@/components/kiosk-templates/challenge/thirdScreen/thirdScreenTemplate';
 import challengeContent from '../challenges.json';
-import styles from './kiosk-1.module.css';
+// import styles from './kiosk-1.module.css';
 
 type Slide = { hasCarousel?: boolean; id: string; title: string };
 
@@ -58,10 +58,22 @@ export default function Kiosk1View() {
   }, [controller]);
 
   return (
-    <div className={styles.root}>
-      <div className={styles.parallaxContainer} data-top-index={topIndex}>
+    <div
+      // className={styles.root}
+      className="relative h-full w-full"
+    >
+      <div
+        // className={styles.parallaxContainer}
+        className="h-full w-full"
+        data-top-index={topIndex}
+      >
         {slides.map((s, idx) => (
-          <section key={s.id} className={styles.slide} data-active={idx === topIndex}>
+          <section
+            key={s.id}
+            // className={styles.slide}
+            className="flex h-full w-full flex-col items-center justify-center"
+            data-active={idx === topIndex}
+          >
             {/* Render the actual challenge templates so you can preview them in dev */}
             {s.id === 's1' && <InitialScreenTemplate {...challenges.initialScreen} />}
 
@@ -91,7 +103,10 @@ export default function Kiosk1View() {
           </section>
         ))}
       </div>
-      <div className={styles.debugControls}>
+      <div
+        // className={styles.debugControls}
+        className="absolute bottom-[12px] right-[12px] z-[1000] flex gap-2"
+      >
         <button onClick={() => controller.prev()}>Prev</button>
         <button onClick={() => controller.next()}>Next</button>
       </div>
