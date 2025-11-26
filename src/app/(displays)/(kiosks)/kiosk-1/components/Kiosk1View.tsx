@@ -1,19 +1,19 @@
 'use client';
 import { useEffect, useState } from 'react';
-import type { Controller } from '@/components/kiosk-controller/KioskController';
-import useKioskController from '@/components/kiosk-controller/useKioskController';
+import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
+import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
 import InitialScreenTemplate, {
   type InitialScreenTemplateProps,
-} from '@/components/kiosk-templates/challenge/initialScreen/initialScreenTemplate';
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/initialScreen/initialScreenTemplate';
 import FirstScreenTemplate, {
   type FirstScreenTemplateProps,
-} from '@/components/kiosk-templates/challenge/firstScreen/firstScreenTemplate';
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/firstScreen/firstScreenTemplate';
 import SecondScreenTemplate, {
   type SecondScreenTemplateProps,
-} from '@/components/kiosk-templates/challenge/secondScreen/secondScreenTemplate';
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/secondScreen/secondScreenTemplate';
 import ThirdScreenTemplate, {
   type ThirdScreenTemplateProps,
-} from '@/components/kiosk-templates/challenge/thirdScreen/thirdScreenTemplate';
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/thirdScreen/thirdScreenTemplate';
 import challengeContent from '../challenges.json';
 // import styles from './kiosk-1.module.css';
 

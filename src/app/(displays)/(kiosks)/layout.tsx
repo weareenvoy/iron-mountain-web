@@ -1,5 +1,5 @@
-import ScaleWrapper from '@/components/kiosk-controller/ScaleWrapper';
-import { KioskControllerProvider } from '@/components/kiosk-controller/KioskController';
+import ScaleWrapper from '@/app/(displays)/(kiosks)/_components/kiosk-controller/ScaleWrapper';
+import { KioskControllerProvider } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 import config from './kiosk.config.json';
 import type { PropsWithChildren } from 'react';
 import './_styles/globals.css';
