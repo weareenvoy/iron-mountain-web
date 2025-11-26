@@ -3,9 +3,11 @@
 import styles from './thirdScreenTemplate.module.css';
 
 // Asset constants from Figma MCP
-const imgVector = 'http://localhost:3845/assets/05930578dd643bcb26c67c6dc5d299ebc1702ef3.png';
-const imgVector1 = 'http://localhost:3845/assets/5c5e81bd06cff3986cbe35647aee4663132b7b27.png';
-const imgArrowNarrowDown = 'http://localhost:3845/assets/97b897487da68eef15f83e02bbe8418edb1b4cd5.svg';
+const imgArrowNarrowDown = 'http://localhost:3845/assets/0317ffc66a61baf023ab7ce353692457254030a6.svg';
+const imgHeroDiamond = 'http://localhost:3845/assets/980d1dee1ed7de2996214b8db1a42986b97dc47d.png';
+const imgMetricDiamond = 'http://localhost:3845/assets/f52f006df3b7e80cef930718c449ddff29312f59.png';
+const imgVector = imgHeroDiamond;
+const imgVector1 = imgMetricDiamond;
 const imgVector2 = 'http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg';
 
 export interface ThirdScreenTemplateProps {
@@ -19,12 +21,12 @@ export interface ThirdScreenTemplateProps {
 }
 
 export default function ThirdScreenTemplate({
-  description = 'After multiple acquisitions with antiquated and disordered records, finding the required regulatory documentation was difficult to impossible.',
-  metricAmount = '2.5M',
-  metricDescription = 'paper images are being digitized.',
+  description = 'The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.',
+  metricAmount = '40 TB',
+  metricDescription = 'of existing footage of data migration from physical drives into Smart Vault.',
   onNavigateDown,
   onNavigateUp,
-  subheadline = 'Information\n& data lifecycle',
+  subheadline = 'Rich media &\n cultural heritage',
   videoSrc = '/_videos/v1/3742b7e5490c6c79474014f5d41e4d50fe21d59a',
 }: ThirdScreenTemplateProps) {
   return (

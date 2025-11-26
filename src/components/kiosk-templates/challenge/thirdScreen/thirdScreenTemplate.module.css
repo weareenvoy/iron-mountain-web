@@ -52,22 +52,23 @@
 
 /* Challenge Label */
 .challengeLabel {
-  position: absolute;
-  top: 745.23px;
-  left: 128.17px;
-  display: flex;
+  z-index: 10;
   align-items: center;
   gap: 41px;
-  z-index: 10;
+  display: flex;
+  position: absolute;
+  top: 750px;
+  left: 135px;
 }
 
 .challengeIcon {
-  position: relative;
-  width: 86.408px;
-  height: 86.408px;
-  display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  position: relative;
+  margin-right: 15px;
 }
 
 .iconInner {
@@ -98,11 +99,11 @@
 
 /* Description */
 .descriptionContainer {
-  position: absolute;
-  top: 2117px;
-  left: 120px;
-  width: 971px;
   z-index: 5;
+  width: 971px;
+  position: absolute;
+  top: 2122px;
+  left: 118px;
 }
 
 .description {
@@ -118,14 +119,14 @@
 
 /* Metrics Section */
 .metricsSection {
-  position: absolute;
-  top: 3497px;
-  left: 120px;
-  width: 1390px;
-  display: flex;
+  z-index: 5;
   flex-direction: column;
   gap: 100px;
-  z-index: 5;
+  width: 1390px;
+  display: flex;
+  position: absolute;
+  top: 3324px;
+  left: -80px;
 }
 
 .metricAmount {
@@ -142,7 +143,6 @@
 }
 
 .metricDescription {
-  font-family: 'Interstate Regular', sans-serif;
   font-size: 60px;
   font-weight: 400;
   color: #6dcff6;
@@ -150,15 +150,18 @@
   letter-spacing: -3px;
   margin: 0;
   padding: 0;
+  position: relative;
+  top: -142px;
+  left: 200px;
 }
 
 /* Navigation Arrows */
 .arrowUp {
   position: absolute;
   top: 1755px;
-  right: 240px;
-  width: 118.63px;
-  height: 118.63px;
+  right: 120px;
+  width: 118px;
+  height: 118px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -175,10 +178,10 @@
 
 .arrowDown {
   position: absolute;
-  top: 1980.37px;
-  right: 240px;
-  width: 118.63px;
-  height: 118.63px;
+  top: 1980px;
+  right: 120px;
+  width: 118px;
+  height: 118px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -217,17 +220,17 @@
 
 /* Large Background Icons */
 .largeIconTop {
-  position: absolute;
-  top: 4.45%;
-  left: -22.64%;
-  width: 1106.66px;
-  height: 1106.66px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transform: rotate(225deg) scaleY(-1);
   z-index: 4;
   pointer-events: none;
+  justify-content: center;
+  align-items: center;
+  width: 860px;
+  height: 1056px;
+  display: flex;
+  position: absolute;
+  top: 666px;
+  left: -152px;
+  transform: rotate(225deg) scaleY(-1);
 }
 
 .largeIconTop img {
@@ -238,17 +241,17 @@
 }
 
 .largeIconCenter {
-  position: absolute;
-  top: 46.62%;
-  left: 42.04%;
-  width: 692.634px;
-  height: 692.633px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transform: rotate(225deg) scaleY(-1);
   z-index: 4;
   pointer-events: none;
+  justify-content: center;
+  align-items: center;
+  width: 695px;
+  height: 695px;
+  display: flex;
+  position: absolute;
+  top: 2536px;
+  left: 1052px;
+  transform: rotate(225deg) scaleY(-1);
 }
 
 .largeIconCenter img {

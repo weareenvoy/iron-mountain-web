@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react';
 import type { Controller } from '@/components/kiosk-controller/KioskController';
 import useKioskController from '@/components/kiosk-controller/useKioskController';
-import InnerEmbla from './InnerEmbla';
 import InitialScreenTemplate from '@/components/kiosk-templates/challenge/initialScreen/initialScreenTemplate';
 import FirstScreenTemplate from '@/components/kiosk-templates/challenge/firstScreen/firstScreenTemplate';
 import SecondScreenTemplate from '@/components/kiosk-templates/challenge/secondScreen/secondScreenTemplate';
@@ -13,8 +12,9 @@ type Slide = { hasCarousel?: boolean; id: string; title: string };
 
 const slides: Slide[] = [
   { id: 's1', title: 'Welcome' },
-  { id: 's2', title: 'Challenge', hasCarousel: true },
+  { hasCarousel: true, id: 's2', title: 'Challenge' },
   { id: 's3', title: 'Stats' },
+  { id: 's4', title: 'Impact' },
 ];
 
 export default function Kiosk1View() {
@@ -68,7 +68,6 @@ export default function Kiosk1View() {
                 onNavigateUp={() => controller.prev()}
               />
             )}
-            {s.hasCarousel ? <InnerEmbla id={`inner-${s.id}`} /> : null}
           </section>
         ))}
       </div>

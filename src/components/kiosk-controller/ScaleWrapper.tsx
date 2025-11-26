@@ -9,7 +9,7 @@ type Props = {
 };
 
 export default function ScaleWrapper({ targetWidth, targetHeight, children, background = 'black' }: Props) {
-  const scale = 0.417;
+  const scale = 0.415;
 
   const outerStyle: React.CSSProperties = {
     width: '100vw',
