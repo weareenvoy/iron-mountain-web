@@ -1,0 +1,32 @@
+{
+  "lang": "en",
+  "data": {
+    "slides": [
+      {
+        "borderColor": null,
+        "id": 1,
+        "title": "Your personalized journey map"
+      },
+      {
+        "borderColor": "border-primary-im-light-blue",
+        "id": 2,
+        "title": "What's standing in your way?"
+      },
+      {
+        "borderColor": "border-secondary-im-purple",
+        "id": 3,
+        "title": "Considering possibilities"
+      },
+      {
+        "borderColor": "border-secondary-im-orange",
+        "id": 4,
+        "title": "Unlock your future"
+      },
+      {
+        "borderColor": "border-secondary-im-green",
+        "id": 5,
+        "title": "Stories of impact"
+      }
+    ]
+  }
+}

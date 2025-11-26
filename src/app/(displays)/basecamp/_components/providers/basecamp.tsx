@@ -2,18 +2,26 @@
 
 import { createContext, useCallback, useContext, useEffect, useState, type PropsWithChildren } from 'react';
 import { useMqtt } from '@/components/providers/mqtt-provider';
+import { getLanguageOverride } from '@/flags/flags';
 import { getBasecampData } from '@/lib/internal/data/get-basecamp';
-import { isBasecampSection, type BasecampData, type ExhibitNavigationState } from '@/lib/internal/types';
+import {
+  isBasecampSection,
+  type BasecampData,
+  type Dictionary,
+  type ExhibitNavigationState,
+  type Locale,
+} from '@/lib/internal/types';
 import type { ExhibitMqttState } from '@/lib/mqtt/types';
 
 interface BasecampContextType {
-  data: BasecampData | null;
+  data: (BasecampData & { dict: Dictionary; lang: Locale }) | null;
   error: null | string;
   exhibitState: ExhibitNavigationState;
+  lang: Locale;
   loading: boolean;
 }
 
-const BasecampContext = createContext<BasecampContextType | undefined>(undefined);
+export const BasecampContext = createContext<BasecampContextType | undefined>(undefined);
 
 type BasecampProviderProps = PropsWithChildren<{
   readonly topic?: string; // placeholder for future props
@@ -25,6 +33,17 @@ export const useBasecamp = () => {
     throw new Error('useBasecamp must be used within a BasecampProvider');
   }
   return context;
+};
+
+/**
+ * Hook to get the current locale/language for the Basecamp app.
+ * Always returns a valid locale (never null).
+ *
+ * @returns The current locale ('en' | 'pt')
+ */
+export const useLocale = (): Locale => {
+  const { lang } = useBasecamp();
+  return lang;
 };
 
 export const BasecampProvider = ({ children }: BasecampProviderProps) => {
@@ -44,7 +63,8 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     'volume-muted': false,
   });
 
-  const [data, setData] = useState<BasecampData | null>(null);
+  const [data, setData] = useState<(BasecampData & { dict: Dictionary; lang: Locale }) | null>(null);
+  const [lang, setLang] = useState<Locale>(getLanguageOverride());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<null | string>(null);
 
@@ -56,6 +76,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     try {
       const basecampData = await getBasecampData();
       setData(basecampData);
+      setLang(basecampData.lang);
       setError(null);
       return true;
     } catch (err) {
@@ -243,6 +264,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     data,
     error,
     exhibitState,
+    lang,
     loading,
   };
 

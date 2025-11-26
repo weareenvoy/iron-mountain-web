@@ -118,3 +118,29 @@ export interface BasecampData {
     readonly text: string;
   };
 }
+
+import en from '@/dictionaries/en.json';
+
+export type Dictionary = typeof en;
+
+export type Locale = 'en' | 'pt';
+
+export interface BasecampApiResponse extends BasecampData {
+  lang: Locale;
+}
+
+export interface ToursApiResponse {
+  lang: Locale;
+  tours: Tour[];
+}
+
+export interface SummitRoomSlide {
+  borderColor: null | string;
+  id: number;
+  title: string;
+}
+
+export interface SummitRoomApiResponse {
+  lang: Locale;
+  slides: SummitRoomSlide[];
+}

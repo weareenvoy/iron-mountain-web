@@ -5,8 +5,10 @@ import { use, useCallback, useMemo } from 'react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
 import Flag from '@/components/ui/icons/Flag';
+import { useDocentTranslation } from '@/hooks/use-docent-translation';
 
 const TourOverviewPage = ({ params }: PageProps<'/docent/tour/[tourId]'>) => {
+  const { t } = useDocentTranslation();
   const { tourId } = use(params);
   const currentTour = useDocent().currentTour;
 
@@ -14,9 +16,9 @@ const TourOverviewPage = ({ params }: PageProps<'/docent/tour/[tourId]'>) => {
     (): HeaderProps['leftButton'] => ({
       href: '/docent',
       icon: <Flag className="h-[21px] w-[20px]" />,
-      text: 'End tour',
+      text: t.docent.navigation.endTour,
     }),
-    []
+    [t]
   );
 
   type TourSubPath = 'basecamp' | 'overlook' | 'summit-room';
@@ -30,7 +32,7 @@ const TourOverviewPage = ({ params }: PageProps<'/docent/tour/[tourId]'>) => {
 
       {/* Header */}
       <div className="text-primary-bg-grey mt-35 flex flex-col items-center gap-[23px]">
-        <h1 className="text-center text-4xl leading-loose tracking-[-1.8px]">Overview</h1>
+        <h1 className="text-center text-4xl leading-loose tracking-[-1.8px]">{t.docent.tour.overview}</h1>
         <p className="text-center text-xl leading-loose tracking-[-1px]">{currentTour?.guestName || 'Tour'}</p>
       </div>
 
@@ -41,7 +43,7 @@ const TourOverviewPage = ({ params }: PageProps<'/docent/tour/[tourId]'>) => {
           className="bg-primary-bg-grey relative flex h-50 w-50 items-center justify-center rounded-lg transition-opacity ease-in-out active:opacity-80"
           href={tourUrl('basecamp')}
         >
-          <p className="text-primary-im-dark-blue -rotate-45 text-2xl">Basecamp</p>
+          <p className="text-primary-im-dark-blue -rotate-45 text-2xl">{t.docent.tour.basecamp}</p>
         </Link>
 
         {/* Item 2 */}
@@ -49,7 +51,7 @@ const TourOverviewPage = ({ params }: PageProps<'/docent/tour/[tourId]'>) => {
           className="bg-primary-bg-grey relative flex h-50 w-50 items-center justify-center rounded-lg transition-opacity ease-in-out active:opacity-80"
           href={tourUrl('overlook')}
         >
-          <p className="text-primary-im-dark-blue -rotate-45 text-2xl">Overlook</p>
+          <p className="text-primary-im-dark-blue -rotate-45 text-2xl">{t.docent.tour.overlook}</p>
         </Link>
 
         {/* Item 3 (manually placed in column 2, row 2) */}
@@ -57,7 +59,7 @@ const TourOverviewPage = ({ params }: PageProps<'/docent/tour/[tourId]'>) => {
           className="bg-primary-bg-grey relative col-start-2 row-start-2 flex h-50 w-50 items-center justify-center rounded-lg transition-opacity ease-in-out active:opacity-80"
           href={tourUrl('summit-room')}
         >
-          <p className="text-primary-im-dark-blue -rotate-45 text-2xl">Summit Room</p>
+          <p className="text-primary-im-dark-blue -rotate-45 text-2xl">{t.docent.tour.summitRoom}</p>
         </Link>
       </div>
     </div>

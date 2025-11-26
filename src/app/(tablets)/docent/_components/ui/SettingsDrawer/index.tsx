@@ -8,6 +8,7 @@ import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import { Switch } from '@/app/(tablets)/docent/_components/ui/Switch';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import LightBulb from '@/components/ui/icons/LightBulb';
+import { useDocentTranslation } from '@/hooks/use-docent-translation';
 import { cn } from '@/lib/tailwind/utils/cn';
 
 interface SettingsDrawerProps {
@@ -65,6 +66,7 @@ const MOCK_EXHIBIT_CONTROLS: ExhibitControl[] = [
 ];
 
 const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
+  const { t } = useDocentTranslation();
   const { client } = useMqtt();
   const { currentTour } = useDocent();
   const router = useRouter();
@@ -119,10 +121,10 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
       >
         {/* Header */}
         <div className="mt-35 mb-19 flex items-center justify-between">
-          <h2 className="text-primary-bg-grey text-4xl leading-[48px]">Settings (this is hardcoded for now!)</h2>
-          <Button className="mr-[-30px] h-13 gap-2.5 px-5" onClick={onClose} variant="outline-light-grey">
+          <h2 className="text-primary-bg-grey text-4xl leading-[48px]">{t.settings.title}</h2>
+          <Button className="-mr-[30px] h-13 gap-2.5 px-5" onClick={onClose} variant="outline-light-grey">
             <X className="size-[24px]" />
-            <span className="h-6.25 text-[20px]">Close</span>
+            <span className="h-6.25 text-[20px]">{t.docent.actions.close}</span>
           </Button>
         </div>
 
@@ -172,7 +174,7 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
             {/* Lightbulb icon */}
             <LightBulb className="h-[33px] w-[24px]" />
 
-            <span className="text-primary-im-light-blue text-2xl">EBC Lights</span>
+            <span className="text-primary-im-light-blue text-2xl">{t.settings.ebcLights}</span>
           </div>
 
           {/* Switch to toggle EBC Lights. TODO Is the value from GEC state? */}
@@ -183,11 +185,11 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
         <div className="my-8 border-t border-[#58595B]"></div>
         <div className="flex flex-col items-center justify-center gap-6 text-center">
           <Button className="flex h-16 w-full text-xl" onClick={handleEndTour} variant="primary">
-            <span>End tour & activate idle</span>
+            <span>{t.settings.endTourButton}</span>
             <ArrowRight className="size-[24px]" />
           </Button>
           <p className="text-primary-bg-grey w-70 text-[16px] leading-loose tracking-[-0.8px]">
-            Tap to end the experience and bring all screens back to idle mode.
+            {t.settings.endTourDescription}
           </p>
         </div>
         {/* Open EBC Manual Link */}
@@ -197,7 +199,7 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
           target="_blank"
         >
           <ExternalLink className="size-[24px]" />
-          <span className="text-[16px] leading-loose">Open EBC Manual</span>
+          <span className="text-[16px] leading-loose">{t.settings.openManual}</span>
         </Link>
       </div>
     </>

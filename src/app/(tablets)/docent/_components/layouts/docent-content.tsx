@@ -5,11 +5,13 @@ import { usePathname } from 'next/navigation';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import SettingsDrawer from '@/app/(tablets)/docent/_components/ui/SettingsDrawer';
+import { useDocentTranslation } from '@/hooks/use-docent-translation';
 import { Interstate } from '@/lib/internal/fonts';
 import { cn } from '@/lib/tailwind/utils/cn';
 import type { PropsWithChildren } from 'react';
 
 const DocentContent = ({ children }: PropsWithChildren) => {
+  const { t } = useDocentTranslation();
   const { isConnected, isSettingsOpen, setIsSettingsOpen } = useDocent();
   const pathname = usePathname();
   const isHomePage = pathname === '/docent';
@@ -36,10 +38,15 @@ const DocentContent = ({ children }: PropsWithChildren) => {
       {/* Global Settings Button - Show on all pages except home */}
       {isConnected && !isHomePage && (
         <div className="absolute top-34 right-5 z-50">
-          <Button className="h-13 w-40 gap-3.5" onClick={openSettingsDrawer} size="sm" variant="outline-light-grey">
+          <Button
+            className="h-13 min-w-[40px] gap-3.5"
+            onClick={openSettingsDrawer}
+            size="sm"
+            variant="outline-light-grey"
+          >
             <Settings className="size-[24px]" />
             {/* When someone clicks it, asks for data (each exhibit's status) */}
-            <span className="h-6.25 text-xl">Settings</span>
+            <span className="h-6.25 text-xl">{t.settings.title}</span>
           </Button>
         </div>
       )}

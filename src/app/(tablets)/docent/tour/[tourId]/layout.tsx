@@ -2,7 +2,7 @@ import tours from '@public/api/tours.json';
 import type { Tour } from '@/lib/internal/types';
 
 export const generateStaticParams = async () => {
-  const allTours = tours as Tour[];
+  const allTours = tours.tours as Tour[];
   return allTours.map(t => ({ tourId: t.id }));
 };
 

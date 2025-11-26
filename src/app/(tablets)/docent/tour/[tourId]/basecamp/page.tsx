@@ -6,6 +6,7 @@ import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
 import MomentsAndBeats from '@/app/(tablets)/docent/_components/ui/MomentsAndBeats';
+import { useDocentTranslation } from '@/hooks/use-docent-translation';
 import useMomentsNavigation from '@/hooks/use-moments-navigation';
 import type { Moment } from '@/lib/internal/types';
 
@@ -38,6 +39,7 @@ const BASECAMP_CONTENT: Readonly<Moment[]> = [
 ] as const;
 
 const BasecampPage = ({ params }: PageProps<'/docent/tour/[tourId]/basecamp'>) => {
+  const { t } = useDocentTranslation();
   const { tourId } = use(params);
   const { basecampExhibitState, currentTour, setBasecampExhibitState } = useDocent();
 
@@ -53,9 +55,9 @@ const BasecampPage = ({ params }: PageProps<'/docent/tour/[tourId]/basecamp'>) =
     (): HeaderProps['leftButton'] => ({
       href: `/docent/tour/${tourId}`,
       icon: <ArrowLeft />,
-      text: 'Back to menu',
+      text: t.docent.navigation.backToMenu,
     }),
-    [tourId]
+    [tourId, t]
   );
 
   return (
@@ -67,7 +69,9 @@ const BasecampPage = ({ params }: PageProps<'/docent/tour/[tourId]/basecamp'>) =
       <div className="mt-35 flex flex-col gap-42.5">
         {/* Title */}
         <div className="flex flex-col items-center gap-[23px]">
-          <h1 className="text-primary-bg-grey text-center text-[36px] leading-loose tracking-[-1.8px]">Basecamp</h1>
+          <h1 className="text-primary-bg-grey text-center text-[36px] leading-loose tracking-[-1.8px]">
+            {t.docent.tour.basecamp}
+          </h1>
           <p className="text-primary-bg-grey text-center text-xl leading-loose tracking-[-1px]">
             {currentTour?.guestName || 'Tour'}
           </p>

@@ -9,6 +9,7 @@ import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import SummitRoomDiamonds from '@/components/ui/icons/SummitRoomDiamonds';
+import { useDocentTranslation } from '@/hooks/use-docent-translation';
 import { cn } from '@/lib/tailwind/utils/cn';
 
 // Import Swiper styles
@@ -18,34 +19,9 @@ import 'swiper/css/pagination';
 import 'swiper/css/a11y';
 
 // Summit Room has 5 slides. First slide has no border, no diamond icon, but has image. Other slides have a border and a diamond icon.
-const SUMMIT_ROOM_SLIDES = [
-  {
-    id: 1,
-    title: 'Your personalized journey map',
-  },
-  {
-    borderColor: 'border-primary-im-light-blue',
-    id: 2,
-    title: "What's standing in your way?",
-  },
-  {
-    borderColor: 'border-secondary-im-purple',
-    id: 3,
-    title: 'Considering possibilities',
-  },
-  {
-    borderColor: 'border-secondary-im-orange',
-    id: 4,
-    title: 'Unlock your future',
-  },
-  {
-    borderColor: 'border-secondary-im-green',
-    id: 5,
-    title: 'Stories of impact',
-  },
-] as const;
 
 const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room'>) => {
+  const { t } = useDocentTranslation();
   const { tourId } = use(params);
   const { client } = useMqtt();
   const {
@@ -54,6 +30,7 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
     setIsSummitRoomJourneyMapLaunched,
     setSummitRoomSlideIdx,
     summitRoomSlideIdx,
+    summitRoomSlides,
   } = useDocent();
 
   // Local UI state
@@ -97,7 +74,7 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
   };
 
   const handleNext = () => {
-    if (currentSlideIdx < SUMMIT_ROOM_SLIDES.length - 1) {
+    if (currentSlideIdx < summitRoomSlides.length - 1) {
       const newIdx = currentSlideIdx + 1;
       setCurrentSlideIdx(newIdx);
       // Send MQTT command
@@ -132,9 +109,9 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
     (): HeaderProps['leftButton'] => ({
       href: `/docent/tour/${tourId}`,
       icon: <ArrowLeft />,
-      text: 'Back to menu',
+      text: t.docent.navigation.backToMenu,
     }),
-    [tourId]
+    [tourId, t]
   );
 
   return (
@@ -144,7 +121,7 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
 
       {/* Header */}
       <div className="text-primary-bg-grey mt-35 flex flex-col items-center gap-[23px]">
-        <h1 className="text-center text-4xl leading-loose tracking-[-1.8px]">Summit room</h1>
+        <h1 className="text-center text-4xl leading-loose tracking-[-1.8px]">{t.docent.tour.summitRoom}</h1>
         <p className="text-center text-xl leading-loose tracking-[-1px]">{currentTour?.guestName || 'Tour'}</p>
       </div>
 
@@ -166,7 +143,7 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
             slidesPerView={1}
             spaceBetween={30}
           >
-            {SUMMIT_ROOM_SLIDES.map(slide => (
+            {summitRoomSlides.map(slide => (
               <SwiperSlide key={slide.id}>
                 <div className="bg-primary-bg-grey relative ml-5 flex h-[313px] w-[557px] flex-col items-center justify-center rounded-[16px] shadow-[16px_16px_16px_0px_rgba(94,94,94,0.25)]">
                   {slide.id === 1 ? (
@@ -190,7 +167,9 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
           <div className="relative mt-50 flex">
             <div className="border-primary-im-light-blue absolute top-1/2 left-1/2 h-82 w-82 -translate-x-1/2 -translate-y-1/2 rotate-45 rounded-[40px] border-2" />
             <Button className="relative h-17.5 w-70" onClick={handleLaunchJourneyMap} size="sm">
-              <span className="text-primary-im-dark-blue text-xl tracking-[-0.05em]">Launch journey map</span>
+              <span className="text-primary-im-dark-blue text-xl tracking-[-0.05em]">
+                {t.docent.actions.launchJourneyMap}
+              </span>
               <ArrowRight />
             </Button>
           </div>
@@ -202,7 +181,7 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
         <div className="absolute bottom-17.5 left-1/2 flex translate-x-[-50%] flex-col items-center justify-center gap-20">
           {/* Diamond slide indicator */}
           <div className="flex items-center justify-center gap-5">
-            {SUMMIT_ROOM_SLIDES.map((_, index) => {
+            {summitRoomSlides.map((_, index) => {
               const slideNumber = index + 1;
               const isActive = index === currentSlideIdx;
               return (
@@ -226,7 +205,7 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
             {/* Next Button */}
             <Button
               className="size-[80px] rounded-full"
-              disabled={currentSlideIdx === SUMMIT_ROOM_SLIDES.length - 1}
+              disabled={currentSlideIdx === summitRoomSlides.length - 1}
               onClick={handleNext}
             >
               <ArrowRight className="size-[36px]" />

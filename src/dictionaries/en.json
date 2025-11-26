@@ -1,0 +1,88 @@
+{
+  "connection": {
+    "connecting": "Connecting to MQTT..."
+  },
+  "docent": {
+    "actions": {
+      "close": "Close",
+      "launchJourneyMap": "Launch journey map",
+      "load": "Load",
+      "settings": "Settings",
+      "tapToBegin": "Tap to begin",
+      "today": "Today"
+    },
+    "home": {
+      "description": "Manage and direct the Iron Mountain EBC experience.",
+      "subtitle": "EBC Controls",
+      "title": "Iron Mountain"
+    },
+    "moments": {
+      "ambientState": "Ambient state",
+      "ascend": "Ascend",
+      "possibilities": "Possibilities",
+      "problem": "Problem",
+      "welcome": "Welcome"
+    },
+    "navigation": {
+      "backToHome": "Back to home",
+      "backToMenu": "Back to menu",
+      "endTour": "End tour"
+    },
+    "schedule": {
+      "loading": "Loading...",
+      "noTours": "No tours available for this month.",
+      "title": "EBC schedule"
+    },
+    "tour": {
+      "basecamp": "Basecamp",
+      "overlook": "Overlook",
+      "overview": "Overview",
+      "summitRoom": "Summit room"
+    }
+  },
+  "home": {
+    "appsTitle": "Apps:"
+  },
+  "loading": {
+    "basecamp": "Loading basecamp…",
+    "default": "Loading…",
+    "overlook": "Loading overlook…",
+    "schedule": "Loading schedule…",
+    "summitRoom": "Loading summit room…",
+    "tour": "Loading tour…"
+  },
+  "settings": {
+    "ebcLights": "EBC Lights",
+    "endTourButton": "End tour & activate idle",
+    "endTourDescription": "Tap to end the experience and bring all screens back to idle mode.",
+    "exhibits": {
+      "basecamp": "Basecamp",
+      "entryWay": "Entry Way",
+      "overlook": "Overlook",
+      "solutionPathways": "Solution Pathways",
+      "summitRoom": "Summit Room"
+    },
+    "openManual": "Open EBC Manual",
+    "status": {
+      "offline": "Offline"
+    },
+    "title": "Settings"
+  },
+  "summitRoom": {
+    "slides": {
+      "journeyMap": "Your personalized journey map",
+      "possibilities": "Considering possibilities",
+      "standingInWay": "What's standing in your way?",
+      "storiesOfImpact": "Stories of impact",
+      "unlockFuture": "Unlock your future"
+    }
+  },
+  "ui": {
+    "tapToBegin": "Tap to begin",
+    "onOff": "On/Off",
+    "tablet": "Tablet",
+    "display": "Display",
+    "off": "Off",
+    "on": "On"
+  }
+}

@@ -12,8 +12,10 @@ import {
 } from 'react';
 import { DocentAppState, type SyncState } from '@/app/(tablets)/docent/_types';
 import { useMqtt } from '@/components/providers/mqtt-provider';
+import { getLanguageOverride } from '@/flags/flags';
+import { getSummitRoomData } from '@/lib/internal/data/get-summit-room';
 import { getTours } from '@/lib/internal/data/get-tours';
-import type { ExhibitNavigationState, Tour } from '@/lib/internal/types';
+import type { Dictionary, ExhibitNavigationState, Locale, SummitRoomSlide, Tour } from '@/lib/internal/types';
 import type { Route } from 'next';
 
 const isDocentRoute = (path: string): path is Route => {
@@ -24,6 +26,7 @@ export interface DocentContextType {
   readonly allTours: Tour[];
   readonly basecampExhibitState: ExhibitNavigationState;
   readonly currentTour: null | Tour;
+  readonly dict: Dictionary | null;
   // Full state from GEC (combines tour, UI mode, exhibit settings)
   readonly docentAppState: DocentAppState | null;
   // Exhibit availability status
@@ -38,7 +41,7 @@ export interface DocentContextType {
   readonly isSettingsOpen: boolean;
   readonly isSummitRoomJourneyMapLaunched: boolean;
   readonly isTourDataLoading: boolean;
-
+  readonly lang: Locale;
   readonly lastUpdated: Date | null;
   readonly overlookExhibitState: ExhibitNavigationState;
   readonly refreshTours: () => Promise<void>;
@@ -53,9 +56,10 @@ export interface DocentContextType {
 
   // Summit Room state
   readonly summitRoomSlideIdx: number;
+  readonly summitRoomSlides: SummitRoomSlide[];
 }
 
-const DocentContext = createContext<DocentContextType | undefined>(undefined);
+export const DocentContext = createContext<DocentContextType | undefined>(undefined);
 
 type DocentProviderProps = PropsWithChildren<{
   readonly topic?: string; // placeholder for future props
@@ -69,11 +73,24 @@ export const useDocent = () => {
   return context;
 };
 
+/**
+ * Hook to get the current locale/language for the Docent app.
+ * Always returns a valid locale (never null).
+ *
+ * @returns The current locale ('en' | 'pt')
+ */
+export const useLocale = (): Locale => {
+  const { lang } = useDocent();
+  return lang;
+};
+
 export const DocentProvider = ({ children }: DocentProviderProps) => {
   const { client, isConnected } = useMqtt();
   const router = useRouter();
   const pathname = usePathname();
   const [allTours, setAllTours] = useState<Tour[]>([]);
+  const [dict, setDict] = useState<Dictionary | null>(null);
+  const [lang, setLang] = useState<Locale>(getLanguageOverride());
   const [currentTour, setCurrentTour] = useState<null | Tour>(null);
   const [isTourDataLoading, setIsTourDataLoading] = useState(true);
   const [isGecStateLoading, setIsGecStateLoading] = useState(true);
@@ -91,6 +108,7 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
   });
   const [summitRoomSlideIdx, setSummitRoomSlideIdx] = useState(0);
   const [isSummitRoomJourneyMapLaunched, setIsSummitRoomJourneyMapLaunched] = useState(false);
+  const [summitRoomSlides, setSummitRoomSlides] = useState<SummitRoomSlide[]>([]);
 
   // Full state from GEC
   const [docentAppState, setDocentAppState] = useState<DocentAppState | null>(null);
@@ -110,14 +128,20 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     setOverlookExhibitStateRaw(prev => ({ ...prev, ...state }));
   };
 
-  // Get tour data.
+  // Get tour data and summit room data.
   const fetchTours = useCallback(async () => {
     setIsTourDataLoading(true);
     try {
-      const tours: Tour[] = await getTours();
-      setAllTours(tours);
+      const [toursData, summitData] = await Promise.all([getTours(), getSummitRoomData()]);
+
+      setAllTours(toursData.tours);
+      setDict(toursData.dict);
+      // Use lang from tours data (both should have same lang, but tours is primary)
+      setLang(toursData.lang);
+      setSummitRoomSlides(summitData.slides);
       setLastUpdated(new Date());
-      if (currentTour && !tours.find(tour => tour.id === currentTour.id)) {
+
+      if (currentTour && !toursData.tours.find(tour => tour.id === currentTour.id)) {
         setCurrentTour(null);
       }
     } catch (error) {
@@ -242,6 +266,7 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
         allTours,
         basecampExhibitState,
         currentTour,
+        dict,
         docentAppState,
         exhibitAvailability,
         isConnected,
@@ -249,6 +274,7 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
         isSettingsOpen,
         isSummitRoomJourneyMapLaunched,
         isTourDataLoading,
+        lang,
         lastUpdated,
         overlookExhibitState,
         refreshTours: fetchTours,
@@ -260,6 +286,7 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
         setSummitRoomSlideIdx,
         // Summit Room state
         summitRoomSlideIdx,
+        summitRoomSlides,
       }}
     >
       {children}
