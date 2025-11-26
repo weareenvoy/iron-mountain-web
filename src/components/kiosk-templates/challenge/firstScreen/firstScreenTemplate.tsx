@@ -8,17 +8,21 @@ const imgArrowNarrowDown = 'http://localhost:3845/assets/41b3eec6c414760c14b0a84
 const imgVector = 'http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg';
 
 export interface FirstScreenTemplateProps {
+  arrowIconSrc?: string;
+  challengeIconSrc?: string;
   challengeLabel?: string;
-  subheadline?: string | string[];
   onNavigateDown?: () => void;
   onNavigateUp?: () => void;
   problemDescription?: string;
   savingsAmount?: string;
   savingsDescription?: string;
+  subheadline?: string | string[];
   videoSrc?: string;
 }
 
 export default function FirstScreenTemplate({
+  arrowIconSrc = imgArrowNarrowDown,
+  challengeIconSrc = imgVector,
   challengeLabel = 'Challenge',
   onNavigateDown,
   onNavigateUp,
@@ -55,7 +59,7 @@ export default function FirstScreenTemplate({
       <div className={styles.challengeLabel} data-node-id="5168:9901">
         <div className={styles.challengeIcon}>
           <div className={styles.iconInner}>
-            <img alt="" src={imgVector} />
+            <img alt="" src={challengeIconSrc} />
           </div>
         </div>
         <h1 className={styles.challengeText}>{renderRegisteredMark(challengeLabel)}</h1>
@@ -76,7 +80,7 @@ export default function FirstScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img alt="Up" src={imgArrowNarrowDown} />
+        <img alt="Up" src={arrowIconSrc} />
       </div>
       <div
         aria-label="Next"
@@ -92,7 +96,7 @@ export default function FirstScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img alt="Down" src={imgArrowNarrowDown} />
+        <img alt="Down" src={arrowIconSrc} />
       </div>
 
       {/* Problem Description Section */}

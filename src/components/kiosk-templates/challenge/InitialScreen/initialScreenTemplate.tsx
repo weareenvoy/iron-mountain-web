@@ -4,30 +4,38 @@ import styles from './initialScreenTemplate.module.css';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
 // Asset constants from Figma MCP
+const imgArrow = 'http://localhost:3845/assets/7326293bfdde3ab859cd77f94bcf35b016e0258d.svg';
 const imgBackground = 'http://localhost:3845/assets/dd98d7914a26e49c34d00ab9c8c7203040efa819.png';
 const imgGuides = 'http://localhost:3845/assets/bbb0c30a6c52c72ecfe10371a7001daf550a68d1.svg';
 const imgLogoLeft = 'http://localhost:3845/assets/38289b05b71863e8503d53ef14e909f42b7886ac.svg';
 const imgLogoRight = 'http://localhost:3845/assets/05ccdbe86e680d4f2668ce2111496defad30fecd.svg';
-const imgArrow = 'http://localhost:3845/assets/7326293bfdde3ab859cd77f94bcf35b016e0258d.svg';
 
 export interface InitialScreenTemplateProps {
-  headline?: string;
-  subheadline?: string;
-  quote?: string;
+  arrowIconSrc?: string;
   attribution?: string;
-  buttonText?: string;
-  onButtonClick?: () => void;
   backgroundImage?: string;
+  buttonText?: string;
+  guidesImageSrc?: string;
+  headline?: string;
+  logoLeftSrc?: string;
+  logoRightSrc?: string;
+  onButtonClick?: () => void;
+  quote?: string;
+  subheadline?: string | string[];
 }
 
 export default function InitialScreenTemplate({
-  headline = 'The GRAMMY Museum® preserves the soundtrack of history.',
-  subheadline = 'Rich media & cultural heritage',
-  quote = '"It\'s been a pleasure working with Iron Mountain. We feel very confident that the GRAMMY Museum\'s physical artifacts and digital content is safely protected. Smart Vault also provides significant reassurance that our iconic artist performances and interviews will remain preserved and accessible which is a huge benefit to the GRAMMY Museum."',
+  arrowIconSrc = imgArrow,
   attribution = '- Michael Rohrabacher, Technical Director at the GRAMMY Museum',
-  buttonText = 'Touch to explore',
-  onButtonClick,
   backgroundImage = imgBackground,
+  buttonText = 'Touch to explore',
+  guidesImageSrc = imgGuides,
+  headline = 'The GRAMMY Museum® preserves the soundtrack of history.',
+  logoLeftSrc = imgLogoLeft,
+  logoRightSrc = imgLogoRight,
+  onButtonClick,
+  quote = '"It\'s been a pleasure working with Iron Mountain. We feel very confident that the GRAMMY Museum\'s physical artifacts and digital content is safely protected. Smart Vault also provides significant reassurance that our iconic artist performances and interviews will remain preserved and accessible which is a huge benefit to the GRAMMY Museum."',
+  subheadline = 'Rich media & cultural heritage',
 }: InitialScreenTemplateProps) {
   return (
     <div className={styles.container} data-node-id="5168:9345">
@@ -39,7 +47,7 @@ export default function InitialScreenTemplate({
       {/* Solution Pathways Guide Lines */}
       <div className={styles.guidesContainer} data-name="Solution Pathways - Master Guides">
         <div className={styles.guides}>
-          <img alt="" className={styles.guidesImage} src={imgGuides} />
+          <img alt="" className={styles.guidesImage} src={guidesImageSrc} />
         </div>
       </div>
 
@@ -53,10 +61,10 @@ export default function InitialScreenTemplate({
         {/* Logo Section */}
         <div className={styles.logoContainer}>
           <div className={styles.logoLeft}>
-            <img alt="Logo" src={imgLogoLeft} />
+            <img alt="Logo" src={logoLeftSrc} />
           </div>
           <div className={styles.logoRight}>
-            <img alt="Logo" src={imgLogoRight} />
+            <img alt="Logo" src={logoRightSrc} />
           </div>
         </div>
 
@@ -79,7 +87,7 @@ export default function InitialScreenTemplate({
           >
             <span className={styles.buttonText}>{renderRegisteredMark(buttonText)}</span>
             <div className={styles.arrowIcon}>
-              <img alt="" src={imgArrow} />
+              <img alt="" src={arrowIconSrc} />
             </div>
           </button>
         </div>

@@ -12,8 +12,12 @@ const imgVector1 = imgMetricDiamond;
 const imgVector2 = 'http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg';
 
 export interface ThirdScreenTemplateProps {
+  arrowIconSrc?: string;
+  challengeIconSrc?: string;
   description?: string;
   heroImageSrc?: string;
+  largeIconCenterSrc?: string;
+  largeIconTopSrc?: string;
   metricAmount?: string;
   metricDescription?: string;
   metricImageSrc?: string;
@@ -24,8 +28,12 @@ export interface ThirdScreenTemplateProps {
 }
 
 export default function ThirdScreenTemplate({
+  arrowIconSrc = imgArrowNarrowDown,
+  challengeIconSrc = imgVector2,
   description = 'The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.',
   heroImageSrc = imgHeroDiamond,
+  largeIconCenterSrc = imgVector1,
+  largeIconTopSrc = imgVector,
   metricAmount = '40 TB',
   metricDescription = 'of existing footage of data migration from physical drives into Smart Vault.',
   metricImageSrc = imgMetricDiamond,
@@ -66,7 +74,7 @@ export default function ThirdScreenTemplate({
       <div className={styles.challengeLabel} data-node-id="5168:9942">
         <div className={styles.challengeIcon}>
           <div className={styles.iconInner}>
-            <img alt="" src={imgVector2} />
+            <img alt="" src={challengeIconSrc} />
           </div>
         </div>
         <h1 className={styles.challengeText}>Challenge</h1>
@@ -103,7 +111,7 @@ export default function ThirdScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img alt="Up" src={imgArrowNarrowDown} />
+        <img alt="Up" src={arrowIconSrc} />
       </div>
       <div
         aria-label="Next"
@@ -119,7 +127,7 @@ export default function ThirdScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img alt="Down" src={imgArrowNarrowDown} />
+        <img alt="Down" src={arrowIconSrc} />
       </div>
 
       {/* Background Gradients */}
@@ -128,10 +136,10 @@ export default function ThirdScreenTemplate({
 
       {/* Large Background Icons */}
       <div className={styles.largeIconTop} data-node-id="5168:9933">
-        <img alt="" src={imgVector} />
+        <img alt="" src={largeIconTopSrc} />
       </div>
       <div className={styles.largeIconCenter} data-node-id="5168:9936">
-        <img alt="" src={imgVector1} />
+        <img alt="" src={largeIconCenterSrc} />
       </div>
     </div>
   );

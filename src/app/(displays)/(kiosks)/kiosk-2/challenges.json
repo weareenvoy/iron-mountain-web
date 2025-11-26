@@ -1,13 +1,19 @@
 {
   "initialScreen": {
+    "arrowIconSrc": "http://localhost:3845/assets/7326293bfdde3ab859cd77f94bcf35b016e0258d.svg",
     "attribution": "",
-    "backgroundImage": "http://localhost:3845/assets/dd98d7914a26e49c34d00ab9c8c7203040efa819.png",
+    "backgroundImage": "http://localhost:3845/assets/736c887232dd85097de9b2adc97d70371baea4c6.png",
     "buttonText": "Touch to explore",
+    "guidesImageSrc": "http://localhost:3845/assets/bbb0c30a6c52c72ecfe10371a7001daf550a68d1.svg",
     "headline": "",
+    "logoLeftSrc": "http://localhost:3845/assets/38289b05b71863e8503d53ef14e909f42b7886ac.svg",
+    "logoRightSrc": "http://localhost:3845/assets/05ccdbe86e680d4f2668ce2111496defad30fecd.svg",
     "quote": "Our digital solutions centralized this healthcare organization's unstructured \"dark data.\" This enterprise-wide visibility prevented erroneous pension payments, elevated records management, and created a searchable, compliant digital core for ongoing operational improvement.",
     "subheadline": ["Information", "& data lifecycle"]
   },
   "firstScreen": {
+    "arrowIconSrc": "http://localhost:3845/assets/41b3eec6c414760c14b0a849351861e4f8091cf4.svg",
+    "challengeIconSrc": "http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg",
     "challengeLabel": "Challenge",
     "problemDescription": "A large healthcare organization faced significant financial risk because it could not locate the appropriate documentation to confirm the eligibility of employee pension claims. The legal system ruled the organization liable to pay claims without evidence to disprove eligibility, resulting in millions of dollars paid in ineligible pension benefits.",
     "savingsAmount": "$2M+",
@@ -16,17 +22,24 @@
     "videoSrc": "/_videos/v1/3a042a38ece8bc71c733d7878d6e2f1d3104be52"
   },
   "secondScreen": {
+    "arrowIconSrc": "http://localhost:3845/assets/a750fbdd00ef68fcb2ba9208e4bd977de111641b.svg",
     "bottomDescription": "The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.",
     "bottomVideoSrc": "/_videos/v1/a532f40a2a6848e2a80788002b6cb925a1f4c3c2",
+    "challengeIconSrc": "http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg",
+    "largeIconSrc": "http://localhost:3845/assets/40afdcf461baafad39ec3925ac4fd501259151d6.png",
     "mainDescription": "Disparate, unstructured records across various locations and legacy systems—including paper, microfilm, CD, and digital formats—created costly, risk-laden pension administration.",
     "statAmount": "",
     "statDescription": "",
     "subheadline": ["Information", "& data lifecycle"],
-    "topImageSrc": "http://localhost:3845/assets/40afdcf461baafad39ec3925ac4fd501259151d6.png"
+    "topImageSrc": "http://localhost:3845/assets/caf81e3bbca82f86954a2677e5046573cb1ee4a2.png"
   },
   "thirdScreen": {
+    "arrowIconSrc": "http://localhost:3845/assets/0317ffc66a61baf023ab7ce353692457254030a6.svg",
+    "challengeIconSrc": "http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg",
     "description": "After multiple acquisitions with antiquated and disordered records, finding the required regulatory documentation was difficult to impossible.",
     "heroImageSrc": "http://localhost:3845/assets/980d1dee1ed7de2996214b8db1a42986b97dc47d.png",
+    "largeIconCenterSrc": "http://localhost:3845/assets/f52f006df3b7e80cef930718c449ddff29312f59.png",
+    "largeIconTopSrc": "http://localhost:3845/assets/980d1dee1ed7de2996214b8db1a42986b97dc47d.png",
     "metricAmount": "2.5M",
     "metricDescription": "paper images are being digitized.",
     "metricImageSrc": "http://localhost:3845/assets/f52f006df3b7e80cef930718c449ddff29312f59.png",

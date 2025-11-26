@@ -5,13 +5,16 @@ import renderRegisteredMark from '../utils/renderRegisteredMark';
 
 // Asset constants from Figma MCP
 const imgArrowNarrowDown = 'http://localhost:3845/assets/a750fbdd00ef68fcb2ba9208e4bd977de111641b.svg';
-const imgHero = '';
+const imgHero = 'http://localhost:3845/assets/40afdcf461baafad39ec3925ac4fd501259151d6.png';
 const imgVector = 'http://localhost:3845/assets/40afdcf461baafad39ec3925ac4fd501259151d6.png';
 const imgVector1 = 'http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg';
 
 export interface SecondScreenTemplateProps {
+  arrowIconSrc?: string;
   bottomDescription?: string;
   bottomVideoSrc?: string;
+  challengeIconSrc?: string;
+  largeIconSrc?: string;
   mainDescription?: string;
   onNavigateDown?: () => void;
   onNavigateUp?: () => void;
@@ -22,8 +25,11 @@ export interface SecondScreenTemplateProps {
 }
 
 export default function SecondScreenTemplate({
+  arrowIconSrc = imgArrowNarrowDown,
   bottomDescription = 'The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.',
   bottomVideoSrc = '/_videos/v1/a532f40a2a6848e2a80788002b6cb925a1f4c3c2',
+  challengeIconSrc = imgVector1,
+  largeIconSrc = imgVector,
   mainDescription = 'The Museum also needed assistance with physical storage for a collection of historical music artifacts.',
   onNavigateDown,
   onNavigateUp,
@@ -64,7 +70,7 @@ export default function SecondScreenTemplate({
       <div className={styles.challengeLabel} data-node-id="5168:9925">
         <div className={styles.challengeIcon}>
           <div className={styles.iconInner}>
-            <img alt="" src={imgVector1} />
+            <img alt="" src={challengeIconSrc} />
           </div>
         </div>
         <h1 className={styles.challengeText}>Challenge</h1>
@@ -101,7 +107,7 @@ export default function SecondScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img alt="Up" src={imgArrowNarrowDown} />
+        <img alt="Up" src={arrowIconSrc} />
       </div>
       <div
         aria-label="Next"
@@ -117,7 +123,7 @@ export default function SecondScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img alt="Down" src={imgArrowNarrowDown} />
+        <img alt="Down" src={arrowIconSrc} />
       </div>
 
       {/* Background Gradients */}
@@ -127,7 +133,7 @@ export default function SecondScreenTemplate({
 
       {/* Large Background Icon */}
       <div className={styles.largeIcon} data-node-id="5168:9917">
-        <img alt="" src={imgVector} />
+        <img alt="" src={largeIconSrc} />
       </div>
     </div>
   );
