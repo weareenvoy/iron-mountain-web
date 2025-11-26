@@ -118,7 +118,7 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
         )}
       >
         {/* Header */}
-        <div className="mt-35 mb-19 flex items-center justify-between">
+        <div className="mt-40 mb-19 flex items-center justify-between">
           <h2 className="text-primary-bg-grey text-4xl leading-[48px]">Settings (this is hardcoded for now!)</h2>
           <Button className="mr-[-30px] h-13 gap-2.5 px-5" onClick={onClose} variant="outline-light-grey">
             <X className="size-[24px]" />

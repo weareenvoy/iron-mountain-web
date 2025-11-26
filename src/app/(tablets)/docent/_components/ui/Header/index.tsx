@@ -17,21 +17,35 @@ export interface HeaderProps {
 
 const Header = ({ leftButton, useDarkLogo }: HeaderProps) => {
   return (
-    <div className="absolute top-0 left-0 flex h-30 w-full items-center justify-between px-5">
+    <div className="absolute top-0 left-0 flex h-30 w-full items-center px-5">
       {/* Left Button */}
-      {leftButton && (
-        <Link href={leftButton.href}>
-          <Button className="flex h-13 items-center gap-3.5 px-6" size="sm" variant="outline-light-grey">
-            {leftButton.icon}
-            <span className="h-6.25 text-[20px]">{leftButton.text}</span>
-          </Button>
-        </Link>
-      )}
+      <div className="flex flex-1">
+        {leftButton && (
+          <Link href={leftButton.href}>
+            <Button className="flex h-13 items-center gap-3.5 px-6" size="sm" variant="outline-light-grey">
+              {leftButton.icon}
+              <span className="h-6.25 text-[20px]">{leftButton.text}</span>
+            </Button>
+          </Link>
+        )}
 
-      {!leftButton && <div />}
+        {!leftButton && <div />}
+      </div>
 
       {/* Logo. Use colored one on home page, white one on other pages */}
-      {useDarkLogo ? <LogoDark className="h-[39px] w-[150px]" /> : <LogoLight className="h-[39px] w-[150px]" />}
+      <div className="flex flex-1 justify-center">
+        {useDarkLogo ? <LogoDark className="h-10 w-60" /> : <LogoLight className="h-10 w-60" />}
+      </div>
+
+      {/* Right language buttons */}
+      <div className="flex flex-1 justify-end gap-2">
+        <Button className="h-8 w-16" size="sm" variant={useDarkLogo ? 'outline-mid-blue' : 'outline-light-grey'}>
+          <span className="text-[18px]">EN</span>
+        </Button>
+        <Button className="h-8 w-16" size="sm" variant={useDarkLogo ? 'outline-mid-blue' : 'outline-light-grey'}>
+          <span className="text-[18px]">BR</span>
+        </Button>
+      </div>
     </div>
   );
 };
