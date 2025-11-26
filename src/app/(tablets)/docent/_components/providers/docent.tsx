@@ -14,6 +14,7 @@ import { DocentAppState, type SyncState } from '@/app/(tablets)/docent/_types';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getLocaleForTesting } from '@/flags/flags';
 import { getDocentData } from '@/lib/internal/data/get-docent';
+import { getDictionary } from '@/lib/internal/dictionaries';
 import type { Dictionary, DocentData, ExhibitNavigationState, Locale, Tour } from '@/lib/internal/types';
 import type { Route } from 'next';
 
@@ -49,6 +50,7 @@ export interface DocentContextType {
   readonly setCurrentTour: (tour: null | Tour) => void;
   readonly setIsSettingsOpen: (open: boolean) => void;
   readonly setIsSummitRoomJourneyMapLaunched: (launched: boolean) => void;
+  readonly setLocale: (locale: Locale) => void;
   readonly setOverlookExhibitState: (state: Partial<ExhibitNavigationState>) => void;
 
   readonly setSummitRoomSlideIdx: (idx: number) => void;
@@ -125,14 +127,22 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     setOverlookExhibitStateRaw(prev => ({ ...prev, ...state }));
   };
 
+  // Fetch dictionary based on current locale
+  const fetchDictionary = useCallback(async (currentLocale: Locale) => {
+    try {
+      const dictionary = await getDictionary(currentLocale);
+      setDict(dictionary);
+    } catch (error) {
+      console.error('Failed to fetch dictionary:', error);
+    }
+  }, []);
+
   // Fetch all docent data (includes tours and slides)
   const fetchDocentData = useCallback(async () => {
     setIsTourDataLoading(true);
     try {
       const docentData = await getDocentData();
       setData(docentData.data);
-      setDict(docentData.dict);
-      setLocale(docentData.locale);
       setLastUpdated(new Date());
 
       if (currentTour && !docentData.data.tours.find(tour => tour.id === currentTour.id)) {
@@ -144,6 +154,11 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
       setIsTourDataLoading(false);
     }
   }, [currentTour]);
+
+  // Fetch dictionary when locale changes
+  useEffect(() => {
+    fetchDictionary(locale);
+  }, [locale, fetchDictionary]);
 
   useEffect(() => {
     fetchDocentData();
@@ -276,6 +291,7 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     setCurrentTour,
     setIsSettingsOpen,
     setIsSummitRoomJourneyMapLaunched,
+    setLocale,
     setOverlookExhibitState,
     setSummitRoomSlideIdx,
     summitRoomSlideIdx,
