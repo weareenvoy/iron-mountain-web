@@ -1,6 +1,7 @@
 'use client';
 
 import styles from './secondScreenTemplate.module.css';
+import renderRegisteredMark from '../utils/renderRegisteredMark';
 
 // Asset constants from Figma MCP
 const imgArrowNarrowDown = 'http://localhost:3845/assets/a750fbdd00ef68fcb2ba9208e4bd977de111641b.svg';
@@ -16,7 +17,7 @@ export interface SecondScreenTemplateProps {
   onNavigateUp?: () => void;
   statAmount?: string;
   statDescription?: string;
-  subheadline?: string;
+  subheadline?: string | string[];
   topImageSrc?: string;
 }
 
@@ -54,7 +55,9 @@ export default function SecondScreenTemplate({
 
       {/* Subheadline */}
       <div className={styles.subheadlineContainer} data-node-id="5168:9918">
-        <h2 className={styles.subheadline}>{subheadline}</h2>
+        <h2 className={styles.subheadline}>
+          {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
+        </h2>
       </div>
 
       {/* Challenge Label */}
@@ -69,18 +72,18 @@ export default function SecondScreenTemplate({
 
       {/* Stat Section (Left) */}
       <div className={styles.statSection} data-node-id="5168:9913">
-        <div className={styles.statAmount}>{statAmount}</div>
-        <p className={styles.statDescription}>{statDescription}</p>
+        <div className={styles.statAmount}>{renderRegisteredMark(statAmount)}</div>
+        <p className={styles.statDescription}>{renderRegisteredMark(statDescription)}</p>
       </div>
 
       {/* Main Description (Right) */}
       <div className={styles.mainDescription} data-node-id="5168:9911">
-        <p className={styles.descriptionText}>{mainDescription}</p>
+        <p className={styles.descriptionText}>{renderRegisteredMark(mainDescription)}</p>
       </div>
 
       {/* Bottom Description */}
       <div className={styles.bottomDescriptionContainer} data-node-id="5168:9919">
-        <p className={styles.bottomDescriptionText}>{bottomDescription}</p>
+        <p className={styles.bottomDescriptionText}>{renderRegisteredMark(bottomDescription)}</p>
       </div>
 
       {/* Navigation Arrows */}

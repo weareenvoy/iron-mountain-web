@@ -14,8 +14,9 @@ import SecondScreenTemplate, {
 import ThirdScreenTemplate, {
   type ThirdScreenTemplateProps,
 } from '@/components/kiosk-templates/challenge/thirdScreen/thirdScreenTemplate';
+import InnerEmbla from '../../kiosk-1/components/InnerEmbla';
 import challengeContent from '../challenges.json';
-import styles from './kiosk-1.module.css';
+import styles from './kiosk-3.module.css';
 
 type Slide = { hasCarousel?: boolean; id: string; title: string };
 
@@ -33,12 +34,11 @@ const slides: Slide[] = [
   { id: 's4', title: 'Impact' },
 ];
 
-export default function Kiosk1View() {
+const Kiosk3View = () => {
   const controller: Controller = useKioskController();
   const [topIndex, setTopIndex] = useState(0);
   const challenges = challengeContent as unknown as ChallengeSlidesConfig;
 
-  // Register root handlers for parallax navigation
   useEffect(() => {
     controller.setRootHandlers({
       next: () => {
@@ -52,7 +52,7 @@ export default function Kiosk1View() {
       goTo: (i: number) => {
         setTopIndex(Math.max(0, Math.min(i, slides.length - 1)));
         return true;
-      }
+      },
     });
     return () => controller.setRootHandlers(null);
   }, [controller]);
@@ -60,34 +60,31 @@ export default function Kiosk1View() {
   return (
     <div className={styles.root}>
       <div className={styles.parallaxContainer} data-top-index={topIndex}>
-        {slides.map((s, idx) => (
-          <section key={s.id} className={styles.slide} data-active={idx === topIndex}>
-            {/* Render the actual challenge templates so you can preview them in dev */}
-            {s.id === 's1' && <InitialScreenTemplate {...challenges.initialScreen} />}
-
-            {s.id === 's2' && (
+        {slides.map((slide, idx) => (
+          <section className={styles.slide} data-active={idx === topIndex} key={slide.id}>
+            {slide.id === 's1' && <InitialScreenTemplate {...challenges.initialScreen} />}
+            {slide.id === 's2' && (
               <FirstScreenTemplate
                 {...challenges.firstScreen}
                 onNavigateDown={() => controller.next()}
                 onNavigateUp={() => controller.prev()}
               />
             )}
-
-            {s.id === 's3' && (
+            {slide.id === 's3' && (
               <SecondScreenTemplate
                 {...challenges.secondScreen}
                 onNavigateDown={() => controller.next()}
                 onNavigateUp={() => controller.prev()}
               />
             )}
-
-            {s.id === 's4' && (
+            {slide.id === 's4' && (
               <ThirdScreenTemplate
                 {...challenges.thirdScreen}
                 onNavigateDown={() => controller.next()}
                 onNavigateUp={() => controller.prev()}
               />
             )}
+            {slide.hasCarousel ? <InnerEmbla id={`inner-${slide.id}`} /> : null}
           </section>
         ))}
       </div>
@@ -97,4 +94,7 @@ export default function Kiosk1View() {
       </div>
     </div>
   );
-}
+};
+
+export default Kiosk3View;
+

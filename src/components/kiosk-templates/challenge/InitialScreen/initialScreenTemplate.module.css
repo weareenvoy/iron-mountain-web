@@ -75,6 +75,7 @@
   letter-spacing: -6px;
   margin: 0;
   padding: 0;
+  white-space: pre-line;
 }
 
 /* Main content box */
@@ -96,15 +97,15 @@
 
 /* Logo section */
 .logoContainer {
-  position: absolute;
-  top: 2140px;
-  left: 246px;
-  width: 1680px;
-  height: 182.09px;
-  display: flex;
-  align-items: center;
-  gap: 34.98%;
   z-index: 3;
+  align-items: center;
+  gap: 4%;
+  width: 710px;
+  height: 180px;
+  display: flex;
+  position: absolute;
+  top: 2890px;
+  left: 114px;
 }
 
 .logoLeft {
@@ -125,7 +126,6 @@
   height: 100%;
   display: flex;
   align-items: center;
-  margin-top: 13.72%;
 }
 
 .logoRight img {

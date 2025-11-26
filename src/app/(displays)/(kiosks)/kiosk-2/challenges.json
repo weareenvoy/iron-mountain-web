@@ -1,0 +1,36 @@
+{
+  "initialScreen": {
+    "attribution": "",
+    "backgroundImage": "http://localhost:3845/assets/dd98d7914a26e49c34d00ab9c8c7203040efa819.png",
+    "buttonText": "Touch to explore",
+    "headline": "",
+    "quote": "Our digital solutions centralized this healthcare organization's unstructured \"dark data.\" This enterprise-wide visibility prevented erroneous pension payments, elevated records management, and created a searchable, compliant digital core for ongoing operational improvement.",
+    "subheadline": ["Information", "& data lifecycle"]
+  },
+  "firstScreen": {
+    "challengeLabel": "Challenge",
+    "problemDescription": "A large healthcare organization faced significant financial risk because it could not locate the appropriate documentation to confirm the eligibility of employee pension claims. The legal system ruled the organization liable to pay claims without evidence to disprove eligibility, resulting in millions of dollars paid in ineligible pension benefits.",
+    "savingsAmount": "$2M+",
+    "savingsDescription": "saved by eliminating ineligible pension payments.",
+    "subheadline": ["Information", "& data lifecycle"],
+    "videoSrc": "/_videos/v1/3a042a38ece8bc71c733d7878d6e2f1d3104be52"
+  },
+  "secondScreen": {
+    "bottomDescription": "The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.",
+    "bottomVideoSrc": "/_videos/v1/a532f40a2a6848e2a80788002b6cb925a1f4c3c2",
+    "mainDescription": "Disparate, unstructured records across various locations and legacy systems—including paper, microfilm, CD, and digital formats—created costly, risk-laden pension administration.",
+    "statAmount": "",
+    "statDescription": "",
+    "subheadline": ["Information", "& data lifecycle"],
+    "topImageSrc": "http://localhost:3845/assets/40afdcf461baafad39ec3925ac4fd501259151d6.png"
+  },
+  "thirdScreen": {
+    "description": "After multiple acquisitions with antiquated and disordered records, finding the required regulatory documentation was difficult to impossible.",
+    "heroImageSrc": "http://localhost:3845/assets/980d1dee1ed7de2996214b8db1a42986b97dc47d.png",
+    "metricAmount": "2.5M",
+    "metricDescription": "paper images are being digitized.",
+    "metricImageSrc": "http://localhost:3845/assets/f52f006df3b7e80cef930718c449ddff29312f59.png",
+    "subheadline": ["Information", "& data lifecycle"],
+    "videoSrc": "/_videos/v1/3742b7e5490c6c79474014f5d41e4d50fe21d59a"
+  }
+}

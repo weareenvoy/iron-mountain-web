@@ -1,6 +1,7 @@
 'use client';
 
 import styles from './thirdScreenTemplate.module.css';
+import renderRegisteredMark from '../utils/renderRegisteredMark';
 
 // Asset constants from Figma MCP
 const imgArrowNarrowDown = 'http://localhost:3845/assets/0317ffc66a61baf023ab7ce353692457254030a6.svg';
@@ -12,18 +13,22 @@ const imgVector2 = 'http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c6
 
 export interface ThirdScreenTemplateProps {
   description?: string;
+  heroImageSrc?: string;
   metricAmount?: string;
   metricDescription?: string;
+  metricImageSrc?: string;
   onNavigateDown?: () => void;
   onNavigateUp?: () => void;
-  subheadline?: string;
+  subheadline?: string | string[];
   videoSrc?: string;
 }
 
 export default function ThirdScreenTemplate({
   description = 'The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.',
+  heroImageSrc = imgHeroDiamond,
   metricAmount = '40 TB',
   metricDescription = 'of existing footage of data migration from physical drives into Smart Vault.',
+  metricImageSrc = imgMetricDiamond,
   onNavigateDown,
   onNavigateUp,
   subheadline = 'Rich media &\n cultural heritage',
@@ -45,9 +50,16 @@ export default function ThirdScreenTemplate({
         </video>
       </div>
 
+      {/* Top Hero Diamond */}
+      <div className={styles.topDiamond}>
+        <img alt="" src={heroImageSrc} />
+      </div>
+
       {/* Subheadline */}
       <div className={styles.subheadlineContainer} data-node-id="5168:9935">
-        <h2 className={styles.subheadline}>{subheadline}</h2>
+        <h2 className={styles.subheadline}>
+          {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
+        </h2>
       </div>
 
       {/* Challenge Label */}
@@ -62,13 +74,18 @@ export default function ThirdScreenTemplate({
 
       {/* Description */}
       <div className={styles.descriptionContainer} data-node-id="5168:9932">
-        <p className={styles.description}>{description}</p>
+        <p className={styles.description}>{renderRegisteredMark(description)}</p>
       </div>
 
       {/* Metrics Section */}
       <div className={styles.metricsSection} data-node-id="5168:9945">
-        <div className={styles.metricAmount}>{metricAmount}</div>
-        <p className={styles.metricDescription}>{metricDescription}</p>
+        <div className={styles.metricAmount}>{renderRegisteredMark(metricAmount)}</div>
+        <p className={styles.metricDescription}>{renderRegisteredMark(metricDescription)}</p>
+      </div>
+
+      {/* Bottom Media Diamond */}
+      <div className={styles.metricDiamond}>
+        <img alt="" src={metricImageSrc} />
       </div>
 
       {/* Navigation Arrows */}

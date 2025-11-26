@@ -1,6 +1,7 @@
 'use client';
 
 import styles from './initialScreenTemplate.module.css';
+import renderRegisteredMark from '../utils/renderRegisteredMark';
 
 // Asset constants from Figma MCP
 const imgBackground = 'http://localhost:3845/assets/dd98d7914a26e49c34d00ab9c8c7203040efa819.png';
@@ -44,7 +45,7 @@ export default function InitialScreenTemplate({
 
       {/* Subheadline - positioned above content */}
       <div className={styles.subheadlineContainer}>
-        <h2 className={styles.subheadline}>{subheadline}</h2>
+        <h2 className={styles.subheadline}>{renderRegisteredMark(subheadline)}</h2>
       </div>
 
       {/* Main Content Box */}
@@ -60,12 +61,12 @@ export default function InitialScreenTemplate({
         </div>
 
         {/* Headline */}
-        <h1 className={styles.headline}>{headline}</h1>
+        <h1 className={styles.headline}>{renderRegisteredMark(headline)}</h1>
 
         {/* Quote and Attribution */}
         <div className={styles.quoteSection}>
-          <p className={styles.quote}>{quote}</p>
-          <p className={styles.attribution}>{attribution}</p>
+          <p className={styles.quote}>{renderRegisteredMark(quote)}</p>
+          <p className={styles.attribution}>{renderRegisteredMark(attribution)}</p>
         </div>
 
         {/* CTA Button */}
@@ -76,7 +77,7 @@ export default function InitialScreenTemplate({
             aria-label={buttonText}
             data-name="button_default"
           >
-            <span className={styles.buttonText}>{buttonText}</span>
+            <span className={styles.buttonText}>{renderRegisteredMark(buttonText)}</span>
             <div className={styles.arrowIcon}>
               <img alt="" src={imgArrow} />
             </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import styles from './firstScreenTemplate.module.css';
+import renderRegisteredMark from '../utils/renderRegisteredMark';
 
 // Asset constants from Figma MCP
 const imgArrowNarrowDown = 'http://localhost:3845/assets/41b3eec6c414760c14b0a849351861e4f8091cf4.svg';
@@ -8,12 +9,12 @@ const imgVector = 'http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69
 
 export interface FirstScreenTemplateProps {
   challengeLabel?: string;
+  subheadline?: string | string[];
   onNavigateDown?: () => void;
   onNavigateUp?: () => void;
   problemDescription?: string;
   savingsAmount?: string;
   savingsDescription?: string;
-  subheadline?: string;
   videoSrc?: string;
 }
 
@@ -45,7 +46,9 @@ export default function FirstScreenTemplate({
 
       {/* Subheadline - positioned above challenge section */}
       <div className={styles.subheadlineContainer} data-node-id="5168:9896">
-        <h2 className={styles.subheadline}>{subheadline}</h2>
+        <h2 className={styles.subheadline}>
+          {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
+        </h2>
       </div>
 
       {/* Challenge Label Section */}
@@ -55,7 +58,7 @@ export default function FirstScreenTemplate({
             <img alt="" src={imgVector} />
           </div>
         </div>
-        <h1 className={styles.challengeText}>{challengeLabel}</h1>
+        <h1 className={styles.challengeText}>{renderRegisteredMark(challengeLabel)}</h1>
       </div>
 
       {/* Navigation Arrows */}
@@ -94,7 +97,7 @@ export default function FirstScreenTemplate({
 
       {/* Problem Description Section */}
       <div className={styles.problemSection} data-node-id="5168:9893">
-        <p className={styles.problemText}>{problemDescription}</p>
+        <p className={styles.problemText}>{renderRegisteredMark(problemDescription)}</p>
       </div>
 
       {/* Gradient Background */}
@@ -102,8 +105,8 @@ export default function FirstScreenTemplate({
 
       {/* Savings Metrics Section */}
       <div className={styles.savingsSection} data-node-id="5168:9904">
-        <div className={styles.savingsAmount}>{savingsAmount}</div>
-        <p className={styles.savingsDescription}>{savingsDescription}</p>
+        <div className={styles.savingsAmount}>{renderRegisteredMark(savingsAmount)}</div>
+        <p className={styles.savingsDescription}>{renderRegisteredMark(savingsDescription)}</p>
       </div>
 
       {/* Fade Out Gradient */}

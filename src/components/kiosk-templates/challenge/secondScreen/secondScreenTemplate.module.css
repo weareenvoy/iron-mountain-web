@@ -60,7 +60,6 @@
 }
 
 .subheadline {
-  font-family: 'Interstate Regular', sans-serif;
   font-size: 60px;
   font-weight: 400;
   color: #ededed;
@@ -107,7 +106,6 @@
 }
 
 .challengeText {
-  font-family: 'Interstate Regular', sans-serif;
   font-size: 126.031px;
   font-weight: 400;
   color: #ededed;
@@ -144,7 +142,6 @@
 }
 
 .statDescription {
-  font-family: 'Interstate Regular', sans-serif;
   font-size: 60px;
   font-weight: 400;
   color: #6dcff6;
@@ -164,7 +161,6 @@
 }
 
 .descriptionText {
-  font-family: 'Interstate Regular', sans-serif;
   font-size: 60px;
   font-weight: 400;
   color: #fff;
@@ -184,7 +180,6 @@
 }
 
 .bottomDescriptionText {
-  font-family: 'Interstate Regular', sans-serif;
   font-size: 60px;
   font-weight: 400;
   color: #fff;
