@@ -8,7 +8,9 @@
       "stepTwoLabel": "02.",
       "stepTwoDescription": "Scan, sanitize, and transport each asset with full chain-of-custody visibility.",
       "stepThreeLabel": "03.",
-      "stepThreeDescription": "Refurbish and redeploy hardware with updated images and documentation."
+      "stepThreeDescription": "Refurbish and redeploy hardware with updated images and documentation.",
+      "stepFourLabel": "04.",
+      "stepFourDescription": "Update inventory and user records so redeployed assets stay traceable."
     },
     {
       "subheadline": ["IT assets &", "data centers"],
@@ -18,7 +20,9 @@
       "stepTwoLabel": "02.",
       "stepTwoDescription": "Perform certified data sanitization tailored to compliance requirements.",
       "stepThreeLabel": "03.",
-      "stepThreeDescription": "Remarket or recycle assets to maximize value recovery and sustainability."
+      "stepThreeDescription": "Remarket or recycle assets to maximize value recovery and sustainability.",
+      "stepFourLabel": "04.",
+      "stepFourDescription": "Provide auditable reports covering resale revenue and recycling outcomes."
     },
     {
       "subheadline": ["IT assets &", "data centers"],
@@ -28,7 +32,9 @@
       "stepTwoLabel": "02.",
       "stepTwoDescription": "Destroy media on-site or in secure Iron Mountain facilities with auditable proof.",
       "stepThreeLabel": "03.",
-      "stepThreeDescription": "Process, resell, or recycle equipment to clear the space and capture value."
+      "stepThreeDescription": "Process, resell, or recycle equipment to clear the space and capture value.",
+      "stepFourLabel": "04.",
+      "stepFourDescription": "Document the cleared environment and deliver closeout compliance artifacts."
     },
     {
       "subheadline": ["IT assets &", "data centers"],
@@ -38,7 +44,9 @@
       "stepTwoLabel": "02.",
       "stepTwoDescription": "Provide detailed chain-of-custody records, insurance, and compliance reporting.",
       "stepThreeLabel": "03.",
-      "stepThreeDescription": "Deliver assets to lifecycle facilities for reuse, redeployment, or disposal."
+      "stepThreeDescription": "Deliver assets to lifecycle facilities for reuse, redeployment, or disposal.",
+      "stepFourLabel": "04.",
+      "stepFourDescription": "Share post-move analytics to confirm timelines, spend, and sustainability KPIs."
     }
   ],
   "thirdScreen": {

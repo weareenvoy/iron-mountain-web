@@ -44,7 +44,9 @@
       "stepTwoLabel": "02.",
       "stepTwoDescription": "Scan, sanitize, and transport each asset with full chain-of-custody visibility.",
       "stepThreeLabel": "03.",
-      "stepThreeDescription": "Refurbish and redeploy hardware with updated images and documentation."
+      "stepThreeDescription": "Refurbish and redeploy hardware with updated images and documentation.",
+      "stepFourLabel": "04.",
+      "stepFourDescription": "Sync redeployment status with ITSM tools for downstream transparency."
     },
     {
       "subheadline": ["IT assets &", "data centers"],
@@ -54,7 +56,9 @@
       "stepTwoLabel": "02.",
       "stepTwoDescription": "Perform certified data sanitization for compliance and audit readiness.",
       "stepThreeLabel": "03.",
-      "stepThreeDescription": "Remarket or recycle assets to maximize value recovery and sustainability."
+      "stepThreeDescription": "Remarket or recycle assets to maximize value recovery and sustainability.",
+      "stepFourLabel": "04.",
+      "stepFourDescription": "Publish remarketing proceeds and recycling certificates to stakeholders."
     },
     {
       "subheadline": ["IT assets &", "data centers"],
@@ -64,7 +68,9 @@
       "stepTwoLabel": "02.",
       "stepTwoDescription": "Provide detailed chain-of-custody records, insurance, and compliance reporting.",
       "stepThreeLabel": "03.",
-      "stepThreeDescription": "Deliver assets to lifecycle facilities for reuse, redeployment, or disposal."
+      "stepThreeDescription": "Deliver assets to lifecycle facilities for reuse, redeployment, or disposal.",
+      "stepFourLabel": "04.",
+      "stepFourDescription": "Share decommissioning scorecards that summarize timing, spend, and ESG impact."
     }
   ],
   "thirdScreen": {

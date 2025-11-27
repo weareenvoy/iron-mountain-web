@@ -8,7 +8,9 @@
       "stepTwoLabel": "02.",
       "stepTwoDescription": "Scan, sanitize, and transport every asset with documented chain of custody.",
       "stepThreeLabel": "03.",
-      "stepThreeDescription": "Refurbish and redeploy hardware with current images and paperwork."
+      "stepThreeDescription": "Refurbish and redeploy hardware with current images and paperwork.",
+      "stepFourLabel": "04.",
+      "stepFourDescription": "Reconcile redeployments with finance and inventory controls."
     },
     {
       "subheadline": ["IT assets &", "data centers"],
@@ -18,7 +20,9 @@
       "stepTwoLabel": "02.",
       "stepTwoDescription": "Perform certified data sanitization tailored to compliance requirements.",
       "stepThreeLabel": "03.",
-      "stepThreeDescription": "Remarket or recycle assets to maximize value recovery and sustainability."
+      "stepThreeDescription": "Remarket or recycle assets to maximize value recovery and sustainability.",
+      "stepFourLabel": "04.",
+      "stepFourDescription": "Report resale value, recycling volumes, and carbon savings."
     },
     {
       "subheadline": ["IT assets &", "data centers"],
@@ -28,7 +32,9 @@
       "stepTwoLabel": "02.",
       "stepTwoDescription": "Provide detailed chain-of-custody records, insurance, and compliance reporting.",
       "stepThreeLabel": "03.",
-      "stepThreeDescription": "Deliver assets to lifecycle facilities for reuse, redeployment, or disposal."
+      "stepThreeDescription": "Deliver assets to lifecycle facilities for reuse, redeployment, or disposal.",
+      "stepFourLabel": "04.",
+      "stepFourDescription": "Produce executive-ready closeout reports with photos and KPIs."
     },
     {
       "subheadline": ["IT assets &", "data centers"],
@@ -38,7 +44,9 @@
       "stepTwoLabel": "02.",
       "stepTwoDescription": "Store media in climate-controlled vaults and Smart Vault repositories.",
       "stepThreeLabel": "03.",
-      "stepThreeDescription": "Provide global access, retention controls, and AI-powered search."
+      "stepThreeDescription": "Provide global access, retention controls, and AI-powered search.",
+      "stepFourLabel": "04.",
+      "stepFourDescription": "Deliver analytics on usage, retention, and compliance readiness."
     }
   ],
   "fourthScreen": {}
