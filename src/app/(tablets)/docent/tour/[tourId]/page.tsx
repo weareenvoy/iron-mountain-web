@@ -59,7 +59,7 @@ const TourOverviewPage = ({ params }: PageProps<'/docent/tour/[tourId]'>) => {
           className="bg-primary-bg-grey relative col-start-2 row-start-2 flex h-50 w-50 items-center justify-center rounded-lg transition-opacity ease-in-out active:opacity-80"
           href={tourUrl('summit-room')}
         >
-          <p className="text-primary-im-dark-blue -rotate-45 text-2xl">Summit</p>
+          <p className="text-primary-im-dark-blue -rotate-45 text-2xl">Summit Room</p>
         </Link>
       </div>
     </div>

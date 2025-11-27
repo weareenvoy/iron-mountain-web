@@ -66,15 +66,6 @@
     },
     "title": "Configurações"
   },
-  "summitRoom": {
-    "slides": {
-      "journeyMap": "Seu mapa de jornada personalizado",
-      "possibilities": "Considerando possibilidades",
-      "standingInWay": "O que está no seu caminho?",
-      "storiesOfImpact": "Histórias de impacto",
-      "unlockFuture": "Desbloqueie seu futuro"
-    }
-  },
   "ui": {
     "tapToBegin": "Toque para iniciar",
     "onOff": "Ligado/Desligado",
