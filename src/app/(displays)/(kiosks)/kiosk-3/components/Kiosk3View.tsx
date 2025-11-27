@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactElement } from 'react';
 import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
 import InitialScreenTemplate, {
@@ -14,11 +14,24 @@ import SecondScreenTemplate, {
 import ThirdScreenTemplate, {
   type ThirdScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/thirdScreen/thirdScreenTemplate';
+import SolutionFirstScreenTemplate, {
+  type SolutionFirstScreenTemplateProps,
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/firstScreen/firstScreenTemplate';
+import SolutionSecondScreenTemplate, {
+  type SolutionSecondScreenTemplateProps,
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/secondScreen/secondScreenTemplate';
+import SolutionThirdScreenTemplate, {
+  type SolutionThirdScreenTemplateProps,
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/thirdScreen/thirdScreenTemplate';
+import SolutionFourthScreenTemplate, {
+  type SolutionFourthScreenTemplateProps,
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/fourthScreen/fourthScreenTemplate';
 import InnerEmbla from '../../kiosk-1/components/InnerEmbla';
 import challengeContent from '../challenges.json';
+import solutionContent from '../solutions.json';
 // import styles from './kiosk-3.module.css';
 
-type Slide = { hasCarousel?: boolean; id: string; title: string };
+type Slide = { hasCarousel?: boolean; id: string; render: () => ReactElement; title: string };
 
 type ChallengeSlidesConfig = {
   firstScreen: FirstScreenTemplateProps;
@@ -27,17 +40,120 @@ type ChallengeSlidesConfig = {
   thirdScreen: ThirdScreenTemplateProps;
 };
 
-const slides: Slide[] = [
-  { id: 's1', title: 'Welcome' },
-  { hasCarousel: true, id: 's2', title: 'Challenge' },
-  { id: 's3', title: 'Stats' },
-  { id: 's4', title: 'Impact' },
-];
+type SolutionSlidesConfig = {
+  firstScreen?: SolutionFirstScreenTemplateProps;
+  secondScreen?: SolutionSecondScreenTemplateProps;
+  secondScreens?: SolutionSecondScreenTemplateProps[];
+  thirdScreen?: SolutionThirdScreenTemplateProps;
+  fourthScreen?: SolutionFourthScreenTemplateProps;
+};
 
 const Kiosk3View = () => {
   const controller: Controller = useKioskController();
   const [topIndex, setTopIndex] = useState(0);
   const challenges = challengeContent as unknown as ChallengeSlidesConfig;
+  const solutions = solutionContent as unknown as SolutionSlidesConfig;
+
+  const challengeSlides: Slide[] = [
+    {
+      id: 'challenge-initial',
+      title: 'Challenge Intro',
+      render: () => <InitialScreenTemplate {...challenges.initialScreen} />,
+    },
+    {
+      id: 'challenge-first',
+      title: 'Challenge Story',
+      hasCarousel: true,
+      render: () => (
+        <FirstScreenTemplate
+          {...challenges.firstScreen}
+          onNavigateDown={() => controller.next()}
+          onNavigateUp={() => controller.prev()}
+        />
+      ),
+    },
+    {
+      id: 'challenge-second',
+      title: 'Challenge Stats',
+      render: () => (
+        <SecondScreenTemplate
+          {...challenges.secondScreen}
+          onNavigateDown={() => controller.next()}
+          onNavigateUp={() => controller.prev()}
+        />
+      ),
+    },
+    {
+      id: 'challenge-third',
+      title: 'Challenge Impact',
+      render: () => (
+        <ThirdScreenTemplate
+          {...challenges.thirdScreen}
+          onNavigateDown={() => controller.next()}
+          onNavigateUp={() => controller.prev()}
+        />
+      ),
+    },
+  ];
+
+  const buildSolutionSlides = (): Slide[] => {
+    const result: Slide[] = [];
+    if (solutions.firstScreen) {
+      result.push({
+        id: 'solution-first',
+        title: solutions.firstScreen.title ?? 'Solution Intro',
+        render: () => <SolutionFirstScreenTemplate {...solutions.firstScreen!} />,
+      });
+    }
+    const secondScreens =
+      (solutions.secondScreens && solutions.secondScreens.length > 0
+        ? solutions.secondScreens
+        : solutions.secondScreen
+          ? [solutions.secondScreen]
+          : []) ?? [];
+    secondScreens.forEach((config, idx) => {
+      result.push({
+        id: `solution-second-${idx}`,
+        title: config.title ?? `Solution Step ${idx + 1}`,
+        render: () => (
+          <SolutionSecondScreenTemplate
+            {...config}
+            onNavigateDown={() => controller.next()}
+            onNavigateUp={() => controller.prev()}
+          />
+        ),
+      });
+    });
+    if (solutions.thirdScreen) {
+      result.push({
+        id: 'solution-third',
+        title: solutions.thirdScreen.title ?? 'Solution Walkthrough',
+        render: () => (
+          <SolutionThirdScreenTemplate
+            {...solutions.thirdScreen}
+            onNavigateDown={() => controller.next()}
+            onNavigateUp={() => controller.prev()}
+          />
+        ),
+      });
+    }
+    if (solutions.fourthScreen) {
+      result.push({
+        id: 'solution-fourth',
+        title: solutions.fourthScreen.title ?? 'Solution Details',
+        render: () => (
+          <SolutionFourthScreenTemplate
+            {...solutions.fourthScreen}
+            onNavigateDown={() => controller.next()}
+            onNavigateUp={() => controller.prev()}
+          />
+        ),
+      });
+    }
+    return result;
+  };
+
+  const slides = [...challengeSlides, ...buildSolutionSlides()];
 
   useEffect(() => {
     controller.setRootHandlers({
@@ -74,28 +190,7 @@ const Kiosk3View = () => {
             data-active={idx === topIndex}
             key={slide.id}
           >
-            {slide.id === 's1' && <InitialScreenTemplate {...challenges.initialScreen} />}
-            {slide.id === 's2' && (
-              <FirstScreenTemplate
-                {...challenges.firstScreen}
-                onNavigateDown={() => controller.next()}
-                onNavigateUp={() => controller.prev()}
-              />
-            )}
-            {slide.id === 's3' && (
-              <SecondScreenTemplate
-                {...challenges.secondScreen}
-                onNavigateDown={() => controller.next()}
-                onNavigateUp={() => controller.prev()}
-              />
-            )}
-            {slide.id === 's4' && (
-              <ThirdScreenTemplate
-                {...challenges.thirdScreen}
-                onNavigateDown={() => controller.next()}
-                onNavigateUp={() => controller.prev()}
-              />
-            )}
+            {slide.render()}
             {slide.hasCarousel ? <InnerEmbla id={`inner-${slide.id}`} /> : null}
           </section>
         ))}
