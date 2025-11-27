@@ -28,6 +28,77 @@
         "title": "Stories of impact"
       }
     ],
+    "moments": {
+      "basecamp": [
+        {
+          "beatCount": 1,
+          "id": "ambient",
+          "title": "Ambient state"
+        },
+        {
+          "beatCount": 4,
+          "id": "welcome",
+          "title": "Welcome"
+        },
+        {
+          "beatCount": 4,
+          "id": "problem",
+          "title": "Problem"
+        },
+        {
+          "beatCount": 5,
+          "id": "possibilities",
+          "title": "Possibilities"
+        },
+        {
+          "beatCount": 3,
+          "id": "ascend",
+          "title": "Ascend"
+        }
+      ],
+      "overlook": [
+        {
+          "beatCount": 1,
+          "id": "ambient",
+          "title": "Ambient state"
+        },
+        {
+          "beatCount": 2,
+          "id": "unlock",
+          "title": "Unlock"
+        },
+        {
+          "beatCount": 2,
+          "id": "protect",
+          "title": "Protect"
+        },
+        {
+          "beatCount": 2,
+          "id": "connect",
+          "title": "Connect"
+        },
+        {
+          "beatCount": 2,
+          "id": "activate",
+          "title": "Activate"
+        },
+        {
+          "beatCount": 5,
+          "id": "insight-dxp",
+          "title": "InSight DXP"
+        },
+        {
+          "beatCount": 2,
+          "id": "case-study",
+          "title": "Impact (case study)"
+        },
+        {
+          "beatCount": 4,
+          "id": "futurescape",
+          "title": "Futurescape"
+        }
+      ]
+    },
     "tours": [
       {
         "date": "2025-09-20",

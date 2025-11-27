@@ -10,42 +10,19 @@ import { useDocentTranslation } from '@/hooks/use-docent-translation';
 import useMomentsNavigation from '@/hooks/use-moments-navigation';
 import type { Moment } from '@/lib/internal/types';
 
-const BASECAMP_CONTENT: Readonly<Moment[]> = [
-  {
-    beatCount: 1,
-    id: 'ambient',
-    title: 'Ambient state',
-  },
-  {
-    beatCount: 4,
-    id: 'welcome',
-    title: 'Welcome',
-  },
-  {
-    beatCount: 4,
-    id: 'problem',
-    title: 'Problem',
-  },
-  {
-    beatCount: 5,
-    id: 'possibilities',
-    title: 'Possibilities',
-  },
-  {
-    beatCount: 3,
-    id: 'ascend',
-    title: 'Ascend',
-  },
-] as const;
-
 const BasecampPage = ({ params }: PageProps<'/docent/tour/[tourId]/basecamp'>) => {
   const { t } = useDocentTranslation();
   const { tourId } = use(params);
-  const { basecampExhibitState, currentTour, setBasecampExhibitState } = useDocent();
+  const { basecampExhibitState, currentTour, data, setBasecampExhibitState } = useDocent();
+
+  // Use moments directly from data (titles included)
+  const basecampContent: Readonly<Moment[]> = useMemo(() => {
+    return (data?.moments.basecamp ?? []) as Readonly<Moment[]>;
+  }, [data?.moments.basecamp]);
 
   // MomentsAndBeats navigation.
   const { handleNext, handlePrevious, isNextDisabled, isPreviousDisabled } = useMomentsNavigation(
-    BASECAMP_CONTENT,
+    basecampContent,
     basecampExhibitState,
     setBasecampExhibitState,
     'basecamp'
@@ -76,7 +53,7 @@ const BasecampPage = ({ params }: PageProps<'/docent/tour/[tourId]/basecamp'>) =
         </div>
 
         <MomentsAndBeats
-          content={BASECAMP_CONTENT}
+          content={basecampContent}
           exhibit="basecamp"
           exhibitState={basecampExhibitState}
           setExhibitState={setBasecampExhibitState}

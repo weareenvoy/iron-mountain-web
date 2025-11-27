@@ -134,7 +134,17 @@ export interface ExhibitControl {
   readonly name: string;
 }
 
+export interface MomentData {
+  beatCount: number;
+  id: Section;
+  title: string;
+}
+
 export interface DocentData {
+  moments: {
+    basecamp: readonly MomentData[];
+    overlook: readonly MomentData[];
+  };
   slides: SummitSlide[];
   tours: Tour[];
 }
