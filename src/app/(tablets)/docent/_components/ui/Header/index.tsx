@@ -40,10 +40,10 @@ const Header = ({ leftButton, useDarkLogo }: HeaderProps) => {
       {/* Right language buttons */}
       <div className="flex flex-1 justify-end gap-2">
         <Button className="h-8 w-16" size="sm" variant={useDarkLogo ? 'outline-mid-blue' : 'outline-light-grey'}>
-          <span className="text-[18px]">EN</span>
+          <span className="text-[18px] leading-normal">EN</span>
         </Button>
         <Button className="h-8 w-16" size="sm" variant={useDarkLogo ? 'outline-mid-blue' : 'outline-light-grey'}>
-          <span className="text-[18px]">BR</span>
+          <span className="text-[18px] leading-normal">BR</span>
         </Button>
       </div>
     </div>

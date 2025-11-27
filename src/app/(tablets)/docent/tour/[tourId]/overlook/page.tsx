@@ -43,7 +43,7 @@ const OVERLOOK_CONTENT: Readonly<Moment[]> = [
     title: 'InSight DXP',
   },
   {
-    beatCount: 2, // 1 normal beat, and 1 video. Video is just like a normal beat, but with a play/pause button.
+    beatCount: 1, // 1 normal beat, and 1 video button appended at the end. Video does not have its own beat.
     id: 'case-study',
     title: 'Impact (case study)',
   },
