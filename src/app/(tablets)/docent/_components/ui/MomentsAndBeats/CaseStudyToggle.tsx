@@ -14,18 +14,29 @@ const CaseStudyToggle = ({ isActive }: CaseStudyToggleProps) => {
 
   const togglePlayPause = () => {
     setIsPlaying(playing => !playing);
+    // client.goToBeat(exhibit, beat, playPause)? Confirm with Lucas on command.
   };
 
   return (
     <button
       className={cn(
-        'text-primary-bg-grey transition-opacity',
-        isActive ? 'opacity-100' : 'pointer-events-none opacity-0'
+        'text-primary-bg-grey flex h-[42px] items-center justify-center gap-2 rounded-full border-[1.5px] px-5 transition-all',
+        isActive ? 'opacity-100' : 'pointer-events-none border-white/0 bg-white/10 text-black/10'
       )}
       // TODO: Send mqtt message to play/pause video
       onClick={togglePlayPause}
     >
-      {isPlaying ? <CirclePause className="size-[40px]" /> : <CirclePlay className="size-[40px]" />}
+      {isPlaying ? (
+        <>
+          <span>Pause</span>
+          <CirclePause className="size-6" />
+        </>
+      ) : (
+        <>
+          <span>Play</span>
+          <CirclePlay className="size-6" />
+        </>
+      )}
     </button>
   );
 };

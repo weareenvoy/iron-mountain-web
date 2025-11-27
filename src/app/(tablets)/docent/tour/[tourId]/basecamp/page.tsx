@@ -64,9 +64,9 @@ const BasecampPage = ({ params }: PageProps<'/docent/tour/[tourId]/basecamp'>) =
       <Header leftButton={leftButton} />
 
       {/* Header */}
-      <div className="mt-35 flex flex-col gap-42.5">
+      <div className="mt-40 flex flex-col gap-20">
         {/* Title */}
-        <div className="flex flex-col items-center gap-[23px]">
+        <div className="mx-5 flex flex-col items-start gap-2 border-b border-[rgba(255,255,255,0.5)] pb-12.5">
           <h1 className="text-primary-bg-grey text-center text-[36px] leading-loose tracking-[-1.8px]">Basecamp</h1>
           <p className="text-primary-bg-grey text-center text-xl leading-loose tracking-[-1px]">
             {currentTour?.guestName || 'Tour'}
