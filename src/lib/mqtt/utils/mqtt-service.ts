@@ -172,8 +172,8 @@ export class MqttService {
   public reportExhibitState(
     exhibit: 'basecamp' | 'overlook' | 'summit',
     state: {
-      'playpause'?: boolean; // Only for overlook/summit
       'beat-id': string;
+      'playpause'?: boolean; // Only for overlook/summit
       'tour-id'?: null | string;
       'volume-level': number;
       'volume-muted': boolean;
