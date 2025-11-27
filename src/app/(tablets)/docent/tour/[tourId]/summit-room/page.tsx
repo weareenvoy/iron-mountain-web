@@ -121,13 +121,13 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
       <Header leftButton={leftButton} />
 
       {/* Header */}
-      <div className="text-primary-bg-grey mt-35 flex flex-col items-center gap-[23px]">
+      <div className="text-primary-bg-grey mx-5 mt-40 flex flex-col items-start gap-2 border-b border-[rgba(255,255,255,0.5)] pb-12.5">
         <h1 className="text-center text-4xl leading-loose tracking-[-1.8px]">Summit Room</h1>
         <p className="text-center text-xl leading-loose tracking-[-1px]">{currentTour?.guestName || 'Tour'}</p>
       </div>
 
       {/* Main Content Area */}
-      <div className="mt-46 flex items-center justify-center">
+      <div className="mt-30 flex items-center justify-center">
         {isJourneyMapLaunched ? (
           <Swiper
             allowTouchMove={true}
@@ -148,18 +148,20 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
               <SwiperSlide key={slide.id}>
                 <div className="bg-primary-bg-grey relative ml-5 flex h-[313px] w-[557px] flex-col items-center justify-center rounded-[16px] shadow-[16px_16px_16px_0px_rgba(94,94,94,0.25)]">
                   {slide.id === 1 ? (
+                    // Simple text
                     <div className="flex h-full w-full flex-col items-center justify-center gap-8">
                       <h2 className="text-center text-2xl leading-[normal] tracking-[-1.2px] text-black">
                         {slide.title}
                       </h2>
-                      <SummitRoomDiamonds className="absolute right-0 bottom-0 h-[159px] w-[177px]" />
                     </div>
                   ) : (
+                    // Text with colored border and diamond icon
                     <div className={cn('flex items-center gap-5 rounded-full border-2 px-8 py-5', slide.borderColor)}>
                       <div className={cn('h-4.25 w-4.25 rotate-45 border', slide.borderColor)}></div>
                       <h2 className="text-xl leading-[normal] tracking-[-1.2px] text-black">{slide.title}</h2>
                     </div>
                   )}
+                  <SummitRoomDiamonds className="absolute right-0 bottom-0 h-[159px] w-[177px]" />
                 </div>
               </SwiperSlide>
             ))}
@@ -188,8 +190,8 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
               return (
                 <button
                   className={cn(
-                    'border-primary-bg-grey relative h-5.5 w-5.5 rotate-45 rounded-[2px] border-2 transition-colors',
-                    isActive ? 'bg-primary-bg-grey' : 'transparent'
+                    'relative h-5.5 w-5.5 rotate-45 rounded-xs border-2 border-[rgba(237,237,237,0.5)] transition-colors',
+                    isActive ? 'bg-[rgba(237,237,237,0.8)]' : 'transparent'
                   )}
                   key={slideNumber}
                   onClick={handleSlideIndicatorClick(index)}

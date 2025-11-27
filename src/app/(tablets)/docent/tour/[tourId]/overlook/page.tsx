@@ -50,25 +50,25 @@ const OverlookPage = ({ params }: PageProps<'/docent/tour/[tourId]/overlook'>) =
       <Header leftButton={leftButton} />
 
       {/* Cast Button */}
-      <div className="text-primary-bg-grey absolute top-34 left-5 z-50 flex flex-col items-start">
+      <div className="text-primary-bg-grey absolute top-48 right-5 z-50 flex flex-row items-center gap-2">
+        {isOverlookCastMode ? (
+          <span className="text-lg">{t.docent.actions.startPresenting}</span>
+        ) : (
+          <span className="text-lg">{t.docent.actions.stopPresenting}</span>
+        )}
         <button className="active: border-none p-0" onClick={toggleOverlookCastMode}>
           {isOverlookCastMode ? (
-            <Cast className="size-[30px] text-[#ededed]" />
+            <Cast className="size-[20px] text-[#ededed]" />
           ) : (
-            <CastOff className="size-[30px] text-[#ededed]" />
+            <CastOff className="size-[20px] text-[#ededed]" />
           )}
         </button>
-        {isOverlookCastMode ? (
-          <span className="h-6.25 text-sm">{t.docent.actions.startPresenting}</span>
-        ) : (
-          <span className="h-6.25 text-sm">{t.docent.actions.stopPresenting}</span>
-        )}
       </div>
 
       {/* Header */}
-      <div className="mt-35 flex flex-col gap-42.5">
+      <div className="mt-40 flex flex-col gap-20">
         {/* Title */}
-        <div className="flex flex-col items-center gap-[23px]">
+        <div className="mx-5 flex flex-col items-start gap-2 border-b border-[rgba(255,255,255,0.5)] pb-12.5">
           <h1 className="text-primary-bg-grey text-center text-[36px] leading-loose tracking-[-1.8px]">Overlook</h1>
           <p className="text-primary-bg-grey text-center text-xl leading-loose tracking-[-1px]">
             {currentTour?.guestName || 'Tour'}

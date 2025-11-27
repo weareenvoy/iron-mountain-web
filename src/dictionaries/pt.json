@@ -10,7 +10,7 @@
       "settings": "Configurações",
       "startPresenting": "Iniciar apresentação",
       "stopPresenting": "Parar apresentação",
-      "tapToBegin": "Toque para iniciar",
+      "startTour": "Iniciar calendário",
       "today": "Hoje"
     },
     "home": {
@@ -67,11 +67,12 @@
     "title": "Configurações"
   },
   "ui": {
-    "tapToBegin": "Toque para iniciar",
     "onOff": "Ligado/Desligado",
     "tablet": "Tablet",
     "display": "Tela",
     "off": "Desligado",
-    "on": "Ligado"
+    "on": "Ligado",
+    "pause": "Pausar",
+    "play": "Reproduzir"
   }
 }

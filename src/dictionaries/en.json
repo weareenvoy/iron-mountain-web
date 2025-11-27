@@ -10,7 +10,7 @@
       "settings": "Settings",
       "startPresenting": "Start presenting",
       "stopPresenting": "Stop presenting",
-      "tapToBegin": "Tap to begin",
+      "startTour": "Launch calendar",
       "today": "Today"
     },
     "home": {
@@ -67,11 +67,12 @@
     "title": "Settings"
   },
   "ui": {
-    "tapToBegin": "Tap to begin",
     "onOff": "On/Off",
     "tablet": "Tablet",
     "display": "Display",
     "off": "Off",
-    "on": "On"
+    "on": "On",
+    "pause": "Pause",
+    "play": "Play"
   }
 }

@@ -155,7 +155,7 @@ const SchedulePageClient = () => {
       <Header leftButton={leftButton} />
       <div className="flex h-full w-full flex-col justify-between">
         {/* Header */}
-        <h1 className="text-primary-bg-grey mt-35 pl-5 text-4xl leading-loose tracking-[-1.8px]">
+        <h1 className="text-primary-bg-grey mt-40 pl-5 text-3xl leading-loose tracking-[-1.8px]">
           {t.docent.schedule.title}
         </h1>
         <div className="bg-primary-bg-grey relative flex w-full flex-col gap-[87px] rounded-t-[20px] px-6 py-11">

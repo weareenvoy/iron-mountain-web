@@ -25,42 +25,45 @@ const Header = ({ leftButton, useDarkLogo }: HeaderProps) => {
   };
 
   return (
-    <div className="absolute top-0 left-0 flex h-30 w-full items-center justify-between px-5">
+    <div className="absolute top-0 left-0 flex h-30 w-full items-center px-5">
       {/* Left Button */}
-      {leftButton && (
-        <Link href={leftButton.href}>
-          <Button className="flex h-13 items-center gap-3.5 px-6" size="sm" variant="outline-light-grey">
-            {leftButton.icon}
-            <span className="h-6.25 text-[20px]">{leftButton.text}</span>
-          </Button>
-        </Link>
-      )}
+      <div className="flex flex-1">
+        {leftButton && (
+          <Link href={leftButton.href}>
+            <Button className="flex h-13 items-center gap-3.5 px-6" size="sm" variant="outline-light-grey">
+              {leftButton.icon}
+              <span className="h-6.25 text-[20px]">{leftButton.text}</span>
+            </Button>
+          </Link>
+        )}
 
-      {!leftButton && <div />}
+        {!leftButton && <div />}
+      </div>
 
-      {/* Logo and Locale Toggle */}
-      <div className="flex items-center gap-4">
-        {/* Logo. Use colored one on home page, white one on other pages */}
-        {useDarkLogo ? <LogoDark className="h-[39px] w-[150px]" /> : <LogoLight className="h-[39px] w-[150px]" />}
+      <div className="flex flex-1 justify-center">
+        {useDarkLogo ? <LogoDark className="h-10 w-60" /> : <LogoLight className="h-10 w-60" />}
+      </div>
 
-        {/* Locale Toggle */}
-        <div className="flex gap-2">
-          <button
-            className={locale === 'en' ? 'text-primary-im-mid-blue underline' : 'text-primary-bg-grey'}
-            onClick={() => handleLocaleChange('en')}
-            type="button"
-          >
-            EN
-          </button>
-          <span className="text-primary-bg-grey">|</span>
-          <button
-            className={locale === 'pt' ? 'text-primary-im-mid-blue underline' : 'text-primary-bg-grey'}
-            onClick={() => handleLocaleChange('pt')}
-            type="button"
-          >
-            PT
-          </button>
-        </div>
+      {/* Logo. Use colored one on home page, white one on other pages */}
+      <div className="flex flex-1 justify-end gap-2">
+        <Button
+          active={locale === 'en'}
+          className="h-8 w-16"
+          onClick={() => handleLocaleChange('en')}
+          size="sm"
+          variant={useDarkLogo ? 'outline-mid-blue' : 'outline-light-grey'}
+        >
+          <span className="text-[18px] leading-normal">EN</span>
+        </Button>
+        <Button
+          active={locale === 'pt'}
+          className="h-8 w-16"
+          onClick={() => handleLocaleChange('pt')}
+          size="sm"
+          variant={useDarkLogo ? 'outline-mid-blue' : 'outline-light-grey'}
+        >
+          <span className="text-[18px] leading-normal">BR</span>
+        </Button>
       </div>
     </div>
   );
