@@ -28,7 +28,12 @@
     "navigation": {
       "backToHome": "Back to home",
       "backToMenu": "Back to menu",
+      "backToSchedule": "Back to schedule",
       "endTour": "End tour"
+    },
+    "notFound": {
+      "description": "The tour you're looking for doesn't exist or is no longer available.",
+      "title": "Tour not found"
     },
     "schedule": {
       "loading": "Loading...",

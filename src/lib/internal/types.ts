@@ -125,6 +125,15 @@ export interface SummitSlide {
   title: string;
 }
 
+export interface ExhibitControl {
+  readonly errorMessage?: string;
+  readonly hasError?: boolean;
+  readonly id: string;
+  readonly isMuted: boolean;
+  readonly isOn: boolean;
+  readonly name: string;
+}
+
 export interface DocentData {
   slides: SummitSlide[];
   tours: Tour[];

@@ -3,66 +3,28 @@
 import { ArrowRight, CircleAlert, CircleCheck, ExternalLink, Lightbulb, Volume2, VolumeX, X } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useMemo } from 'react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import { Switch } from '@/app/(tablets)/docent/_components/ui/Switch';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { useDocentTranslation } from '@/hooks/use-docent-translation';
 import { cn } from '@/lib/tailwind/utils/cn';
+import type { ExhibitControl } from '@/lib/internal/types';
 
 interface SettingsDrawerProps {
   readonly isOpen: boolean;
   readonly onClose: () => void;
 }
 
-interface ExhibitControl {
-  readonly errorMessage?: string;
-  readonly hasError?: boolean;
-  readonly id: string;
-  readonly isMuted: boolean;
-  readonly isOn: boolean;
-  readonly name: string;
-}
-
-// TODO Mock data for testing. How to get this data is not implemented yet
-const MOCK_EXHIBIT_CONTROLS: ExhibitControl[] = [
-  {
-    hasError: false,
-    id: 'entry-way',
-    isMuted: false,
-    isOn: true,
-    name: 'Entry Way',
-  },
-  {
-    hasError: false,
-    id: 'basecamp',
-    isMuted: false,
-    isOn: true,
-    name: 'Basecamp',
-  },
-  {
-    hasError: false,
-    id: 'overlook',
-    isMuted: true,
-    isOn: true,
-    name: 'Overlook',
-  },
-  {
-    hasError: false,
-    id: 'solution-pathways',
-    isMuted: false,
-    isOn: true,
-    name: 'Solution Pathways',
-  },
-  {
-    errorMessage: 'Offline',
-    hasError: true,
-    id: 'summit',
-    isMuted: false,
-    isOn: false,
-    name: 'Summit Room',
-  },
-];
+// Hardcoded exhibit IDs - these match the dictionary keys
+const EXHIBIT_IDS: readonly ('basecamp' | 'entry-way' | 'overlook' | 'solution-pathways' | 'summit')[] = [
+  'basecamp',
+  'entry-way',
+  'overlook',
+  'solution-pathways',
+  'summit',
+] as const;
 
 const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
   const { t } = useDocentTranslation();
@@ -70,14 +32,50 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
   const { currentTour } = useDocent();
   const router = useRouter();
 
-  // TODO Convert GEC data to exhibit controls for display
-  // const exhibitControls: ExhibitControl[] = [];
+  // Build exhibit controls from dictionary
+  // TODO: State (isOn, isMuted, hasError) should come from GEC/MQTT in the future
+  const exhibitControls: ExhibitControl[] = useMemo(() => {
+    return EXHIBIT_IDS.map(id => {
+      const nameKey =
+        id === 'entry-way'
+          ? 'entryWay'
+          : id === 'solution-pathways'
+            ? 'solutionPathways'
+            : id === 'summit'
+              ? 'summitRoom'
+              : id;
+      const name = t.settings.exhibits[nameKey as keyof typeof t.settings.exhibits];
+
+      // Default state - will be replaced with real GEC state later
+      const defaultState: ExhibitControl = {
+        hasError: false,
+        id,
+        isMuted: false,
+        isOn: true,
+        name,
+      };
+
+      // Mock error state for summit (for testing)
+      if (id === 'summit') {
+        return {
+          errorMessage: t.settings.status.offline,
+          hasError: true,
+          id,
+          isMuted: false,
+          isOn: false,
+          name,
+        };
+      }
+
+      return defaultState;
+    });
+  }, [t]);
 
   const handleToggleMute = (exhibitId: string) => () => {
     if (!client) return;
 
     // Find current muted state
-    const exhibit = MOCK_EXHIBIT_CONTROLS.find(c => c.id === exhibitId);
+    const exhibit = exhibitControls.find(c => c.id === exhibitId);
     if (!exhibit) return;
 
     // Send setVolume command to GEC
@@ -129,7 +127,7 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
 
         {/* Controls List */}
         <div className="space-y-8">
-          {MOCK_EXHIBIT_CONTROLS.map(control => (
+          {exhibitControls.map(control => (
             <div className="flex h-15 items-center justify-between" key={control.id}>
               <div className="flex flex-col gap-1">
                 {/* Status Icon and control name*/}

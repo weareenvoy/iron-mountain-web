@@ -28,7 +28,12 @@
     "navigation": {
       "backToHome": "Voltar ao início",
       "backToMenu": "Voltar ao menu",
+      "backToSchedule": "Voltar à agenda",
       "endTour": "Encerrar tour"
+    },
+    "notFound": {
+      "description": "O tour que você está procurando não existe ou não está mais disponível.",
+      "title": "Tour não encontrado"
     },
     "schedule": {
       "loading": "Carregando...",
