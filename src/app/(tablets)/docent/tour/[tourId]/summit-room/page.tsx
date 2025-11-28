@@ -122,11 +122,7 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
 
       {/* Header */}
       <div className="text-primary-bg-grey mx-5 mt-40 flex flex-col items-start gap-2 border-b border-[rgba(255,255,255,0.5)] pb-12.5">
-<<<<<<< HEAD
         <h1 className="text-center text-4xl leading-loose tracking-[-1.8px]">Summit Room</h1>
-=======
-        <h1 className="text-center text-4xl leading-loose tracking-[-1.8px]">Summit room</h1>
->>>>>>> main
         <p className="text-center text-xl leading-loose tracking-[-1px]">{currentTour?.guestName || 'Tour'}</p>
       </div>
 
