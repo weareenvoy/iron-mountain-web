@@ -44,7 +44,7 @@ const Header = ({ leftButton, useDarkLogo }: HeaderProps) => {
         {useDarkLogo ? <LogoDark className="h-10 w-60" /> : <LogoLight className="h-10 w-60" />}
       </div>
 
-      {/* Logo. Use colored one on home page, white one on other pages */}
+      {/* Logo. Use dark one on home page, light one on other pages */}
       <div className="flex flex-1 justify-end gap-2">
         <Button
           active={locale === 'en'}

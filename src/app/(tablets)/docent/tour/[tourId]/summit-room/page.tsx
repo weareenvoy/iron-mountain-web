@@ -155,7 +155,7 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
                       </h2>
                     </div>
                   ) : (
-                    // Text with colored border and diamond icon
+                    // Text with colorful border and diamond icon
                     <div className={cn('flex items-center gap-5 rounded-full border-2 px-8 py-5', slide.borderColor)}>
                       <div className={cn('h-4.25 w-4.25 rotate-45 border', slide.borderColor)}></div>
                       <h2 className="text-xl leading-[normal] tracking-[-1.2px] text-black">{slide.title}</h2>
