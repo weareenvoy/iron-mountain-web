@@ -5,6 +5,7 @@ import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import LogoDark from '@/components/ui/icons/LogoDark';
 import LogoLight from '@/components/ui/icons/LogoLight';
+import { cn } from '@/lib/tailwind/utils/cn';
 import type { Locale } from '@/lib/internal/types';
 import type { ReactNode } from 'react';
 
@@ -47,8 +48,7 @@ const Header = ({ leftButton, useDarkLogo }: HeaderProps) => {
       {/* Logo. Use dark one on home page, light one on other pages */}
       <div className="flex flex-1 justify-end gap-2">
         <Button
-          active={locale === 'en'}
-          className="h-8 w-16"
+          className={cn('h-8 w-16', locale === 'pt' ? 'opacity-40' : 'opacity-100')}
           onClick={() => handleLocaleChange('en')}
           size="sm"
           variant={useDarkLogo ? 'outline-mid-blue' : 'outline-light-grey'}
@@ -56,8 +56,7 @@ const Header = ({ leftButton, useDarkLogo }: HeaderProps) => {
           <span className="text-[18px] leading-normal">EN</span>
         </Button>
         <Button
-          active={locale === 'pt'}
-          className="h-8 w-16"
+          className={cn('h-8 w-16', locale === 'en' ? 'opacity-40' : 'opacity-100')}
           onClick={() => handleLocaleChange('pt')}
           size="sm"
           variant={useDarkLogo ? 'outline-mid-blue' : 'outline-light-grey'}
