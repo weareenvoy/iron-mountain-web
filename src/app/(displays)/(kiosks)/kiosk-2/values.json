@@ -1,0 +1,116 @@
+{
+  "valueScreens": [
+    {
+      "carouselId": "kiosk-2-value-overview",
+      "description": "Iron Mountain’s trusted workflows connect the information and data lifecycle across operational, economic, and strategic priorities.",
+      "eyebrow": ["Information", "& data lifecycle"],
+      "headline": "Expanding possibilities",
+      "heroVideoSrc": "/_videos/v1/7b46056515a038f40d95647dc31113a9e8ce2a8c",
+      "labelIconSrc": "http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg",
+      "labelText": "Value",
+      "slides": [
+        {
+          "badgeLabel": "Operational · Economic · Strategic",
+          "diamondCards": [
+            {
+              "color": "#8a0d71",
+              "label": "Operational benefits"
+            },
+            {
+              "color": "#1b75bc",
+              "label": "Economic benefits"
+            },
+            {
+              "color": "#f26522",
+              "label": "Strategic benefits",
+              "textColor": "#4a154b"
+            }
+          ],
+          "id": "value-trio-overview"
+        }
+      ]
+    },
+    {
+      "carouselId": "kiosk-2-value-carousel",
+      "description": "The partnership with Iron Mountain and implementation of InSight DXP transitioned the organization from unknown to certainty and clarity in pension administration.",
+      "eyebrow": ["Information", "& data lifecycle"],
+      "headline": "Expanding possibilities",
+      "heroVideoSrc": "/_videos/v1/7b46056515a038f40d95647dc31113a9e8ce2a8c",
+      "labelIconSrc": "http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg",
+      "labelText": "Value",
+      "slides": [
+        {
+          "badgeLabel": "Operational benefits",
+          "bullets": [
+            "Improved accessibility and security of the museum’s assets.",
+            "Simplified, modern media access with digitized workflows available instantly from anywhere.",
+            "Post-production workflows include automation and annotation support for a digital preservation platform."
+          ],
+          "diamondCards": [
+            {
+              "color": "#f26522",
+              "label": "Operational benefits"
+            },
+            {
+              "color": "#1b75bc",
+              "label": "Economic benefits"
+            },
+            {
+              "color": "#f99d1c",
+              "label": "Strategic benefits",
+              "textColor": "#4a154b"
+            }
+          ],
+          "id": "value-operational"
+        },
+        {
+          "badgeLabel": "Economic benefits",
+          "bullets": [
+            "Enabled new licensing opportunities for archived performances.",
+            "Enhanced licensing potential with multi-angle, high-resolution capture ready for partners.",
+            "Created repeatable revenue streams through curated content packages."
+          ],
+          "diamondCards": [
+            {
+              "color": "#1b75bc",
+              "label": "Economic benefits"
+            },
+            {
+              "color": "#8a0d71",
+              "label": "Strategic benefits"
+            },
+            {
+              "color": "#f26522",
+              "label": "Operational benefits"
+            }
+          ],
+          "id": "value-economic"
+        },
+        {
+          "badgeLabel": "Strategic benefits",
+          "bullets": [
+            "Safely archived and protected while enhancements are applied to the collection.",
+            "Positioned the museum for future innovation through trusted digital preservation pipelines.",
+            "Equipped administrators with advanced discovery tools to craft new storytelling moments."
+          ],
+          "diamondCards": [
+            {
+              "color": "#f99d1c",
+              "label": "Strategic benefits",
+              "textColor": "#4a154b"
+            },
+            {
+              "color": "#8a0d71",
+              "label": "Operational benefits"
+            },
+            {
+              "color": "#1b75bc",
+              "label": "Economic benefits"
+            }
+          ],
+          "id": "value-strategic"
+        }
+      ]
+    }
+  ]
+}

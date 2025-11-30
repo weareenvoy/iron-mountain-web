@@ -26,9 +26,13 @@ import SolutionThirdScreenTemplate, {
 import SolutionFourthScreenTemplate, {
   type SolutionFourthScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/fourthScreen/fourthScreenTemplate';
+import ValueCarouselTemplate, {
+  type ValueCarouselTemplateProps,
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueCarouselTemplate';
 import InnerEmbla from '../../kiosk-1/components/InnerEmbla';
 import challengeContent from '../challenges.json';
 import solutionContent from '../solutions.json';
+import valueContent from '../values.json';
 // import styles from './kiosk-2.module.css';
 
 type Slide = { hasCarousel?: boolean; id: string; render: () => ReactElement; title: string };
@@ -48,11 +52,16 @@ type SolutionSlidesConfig = {
   fourthScreen?: SolutionFourthScreenTemplateProps;
 };
 
+type ValueSlidesConfig = {
+  valueScreens?: Omit<ValueCarouselTemplateProps, 'onNavigateDown' | 'onNavigateUp'>[];
+};
+
 const Kiosk2View = () => {
   const controller: Controller = useKioskController();
   const [topIndex, setTopIndex] = useState(0);
   const challenges = challengeContent as unknown as ChallengeSlidesConfig;
   const solutions = solutionContent as unknown as SolutionSlidesConfig;
+  const values = valueContent as unknown as ValueSlidesConfig;
 
   const challengeSlides: Slide[] = [
     {
@@ -154,7 +163,21 @@ const Kiosk2View = () => {
     return result;
   };
 
-  const slides = [...challengeSlides, ...buildSolutionSlides()];
+  const valueSlides =
+    values.valueScreens?.map((config, idx) => ({
+      id: `value-${idx}`,
+      title: config.headline ?? config.labelText ?? `Value ${idx + 1}`,
+      render: () => (
+        <ValueCarouselTemplate
+          {...config}
+          carouselId={config.carouselId ?? `kiosk-2-value-${idx}`}
+          onNavigateDown={() => controller.next()}
+          onNavigateUp={() => controller.prev()}
+        />
+      ),
+    })) ?? [];
+
+  const slides = [...challengeSlides, ...buildSolutionSlides(), ...valueSlides];
 
   useEffect(() => {
     controller.setRootHandlers({
