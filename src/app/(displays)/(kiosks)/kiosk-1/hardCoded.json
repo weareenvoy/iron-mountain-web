@@ -1,0 +1,155 @@
+{
+  "initialScreen": {
+    "backgroundEndColor": "#14477d",
+    "backgroundStartColor": "#1b75bc",
+    "decorativeDiamonds": [
+      {
+        "borderColor": "rgba(237,237,237,0.25)",
+        "height": 360,
+        "left": 460,
+        "opacity": 1,
+        "top": 1870,
+        "width": 360
+      },
+      {
+        "borderColor": "rgba(237,237,237,0.25)",
+        "height": 520,
+        "left": 680,
+        "opacity": 1,
+        "top": 2100,
+        "width": 520
+      },
+      {
+        "fillColor": "#f26522",
+        "height": 140,
+        "left": 520,
+        "opacity": 1,
+        "top": 2250,
+        "width": 140
+      }
+    ],
+    "eyebrow": ["Rich media &", "cultural heritage"],
+    "headline": [
+      "Learn more about how we unlocked new possibilities",
+      "for our partners"
+    ],
+    "heroImageAlt": "Visitors review digital media inside the Grammy Museum",
+    "heroImageSrc": "http://localhost:3845/assets/3a4d46cd05506bd4cd1111ed8cd2d3dfe9681cd9.png",
+    "primaryCtaLabel": "From archive to access",
+    "saveForLaterLabel": "Save for later",
+    "secondaryCtaLabel": "Virtual walkthrough"
+  },
+  "firstScreen": {
+    "backCtaLabel": "Back to menu",
+    "backgroundEndColor": "#0a2f5c",
+    "backgroundStartColor": "#1b75bc",
+    "description": "Explore each section to learn how Iron Mountain can transform your enterprise",
+    "eyebrow": ["Rich media &", "cultural heritage"],
+    "headline": "From archive to access",
+    "slides": [
+      {
+        "id": "intake",
+        "title": "Intake",
+        "subtitle": "and assessment"
+      },
+      {
+        "id": "digitization",
+        "title": "Digitization",
+        "subtitle": "and remediation"
+      },
+      {
+        "highlight": true,
+        "id": "preservation",
+        "title": "Digital",
+        "subtitle": "Preservation"
+      },
+      {
+        "id": "search",
+        "title": "Search and",
+        "subtitle": "discover"
+      },
+      {
+        "id": "share",
+        "title": "Share, stream",
+        "subtitle": "and monetize"
+      }
+    ]
+  },
+  "secondScreens": [
+    {
+      "backLabel": "Back",
+      "backgroundImageSrc": "http://localhost:3845/assets/654867e73dd58b462c4290a35fc661c2add46d6b.png",
+      "description": [
+        "Assets, whether film, audio, digital, or physical, are logged, evaluated for condition and risk,",
+        "and prioritized based on preservation and activation potential."
+      ],
+      "eyebrow": ["Rich media &", "cultural heritage"],
+      "headline": "Intake and assessment",
+      "iconImageAlt": "Logbook and film reel",
+      "iconImageSrc": "http://localhost:3845/assets/654867e73dd58b462c4290a35fc661c2add46d6b.png",
+      "panelBackgroundColor": "#6dcff6"
+    },
+    {
+      "backLabel": "Back",
+      "backgroundImageSrc": "http://localhost:3845/assets/40afdcf461baafad39ec3925ac4fd501259151d6.png",
+      "description": [
+        "Every handoff is captured with digital chain-of-custody signatures,",
+        "providing real-time transparency across museums, archives, and Iron Mountain vaults."
+      ],
+      "eyebrow": ["Rich media &", "cultural heritage"],
+      "headline": "Chain-of-custody visibility",
+      "iconImageAlt": "Chain of custody visualization",
+      "iconImageSrc": "http://localhost:3845/assets/40afdcf461baafad39ec3925ac4fd501259151d6.png",
+      "panelBackgroundColor": "#67d6ff"
+    },
+    {
+      "backLabel": "Back",
+      "backgroundImageSrc": "http://localhost:3845/assets/980d1dee1ed7de2996214b8db1a42986b97dc47d.png",
+      "description": [
+        "Materials are stabilized, humidity-controlled, and cataloged with preservation notes",
+        "so curators can understand risk and readiness before activation."
+      ],
+      "eyebrow": ["Rich media &", "cultural heritage"],
+      "headline": "Preservation readiness",
+      "iconImageAlt": "Preservation environment graphic",
+      "iconImageSrc": "http://localhost:3845/assets/980d1dee1ed7de2996214b8db1a42986b97dc47d.png",
+      "panelBackgroundColor": "#6ac5f8"
+    },
+    {
+      "backLabel": "Back",
+      "backgroundImageSrc": "http://localhost:3845/assets/f52f006df3b7e80cef930718c449ddff29312f59.png",
+      "description": [
+        "Sensors monitor temperature, vibration, and light exposure with automated alerts,",
+        "ensuring priceless artifacts stay within safe tolerances."
+      ],
+      "eyebrow": ["Rich media &", "cultural heritage"],
+      "headline": "Environmental monitoring",
+      "iconImageAlt": "Sensor dashboard illustration",
+      "iconImageSrc": "http://localhost:3845/assets/f52f006df3b7e80cef930718c449ddff29312f59.png",
+      "panelBackgroundColor": "#5ec0f2"
+    },
+    {
+      "backLabel": "Back",
+      "backgroundImageSrc": "http://localhost:3845/assets/bbb0c30a6c52c72ecfe10371a7001daf550a68d1.svg",
+      "description": [
+        "Curators select highlight reels, transcripts, and metadata bundles",
+        "to accelerate publishing across galleries, education partners, and streaming endpoints."
+      ],
+      "eyebrow": ["Rich media &", "cultural heritage"],
+      "headline": "Activation planning",
+      "iconImageAlt": "Activation planning icon",
+      "iconImageSrc": "http://localhost:3845/assets/bbb0c30a6c52c72ecfe10371a7001daf550a68d1.svg",
+      "panelBackgroundColor": "#58b9eb"
+    }
+  ],
+  "thirdScreen": {
+    "backgroundEndColor": "#05254b",
+    "backgroundStartColor": "#1b75bc",
+    "cardBackgroundColor": "#e0e0e0",
+    "cardLabel": "Virtual walkthrough",
+    "cardTextColor": "#4a4a4a",
+    "headline": ["Section title lorem ipsum", "dolor sit."]
+  }
+}
+
+
