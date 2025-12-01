@@ -45,7 +45,7 @@ const SummitWebContent = () => {
       </div>
       {recapList.length > 0 && (
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
-          <RecapSection recap={recapList[0]!} />
+          <RecapSection recap={recapList[0]!} storageKey="recap-0" />
         </div>
       )}
       <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
@@ -60,6 +60,7 @@ const SummitWebContent = () => {
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
           <RecapSection
             recap={recapList[1]!}
+            storageKey="recap-1"
             tone={{
               accentBg: '#8A0D71',
               accentColor: '#EDEDED',
@@ -75,15 +76,16 @@ const SummitWebContent = () => {
       </div>
       {data.strategies[1] && (
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
-          <StrategiesSection accentColor="#F7931E" strategy={data.strategies[1]} />
+          <StrategiesSection accentColor="#00A88E" strategy={data.strategies[1]} />
         </div>
       )}
       {recapList.length > 2 ? (
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
           <RecapSection
             recap={recapList[2]!}
+            storageKey="recap-2"
             tone={{
-              accentBg: '#F7931E',
+              accentBg: '#00A88E',
               accentColor: '#FFFFFF',
               bodyColor: '#FFFFFF',
               iconColor: '#FFFFFF',
@@ -97,13 +99,37 @@ const SummitWebContent = () => {
       </div>
       {data.strategies[2] && (
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
-          <StrategiesSection accentColor="#1B75BC" strategy={data.strategies[2]} />
+          <StrategiesSection accentColor="#F7931E" strategy={data.strategies[2]} />
         </div>
       )}
       {recapList.length > 3 ? (
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
           <RecapSection
             recap={recapList[3]!}
+            storageKey="recap-3"
+            tone={{
+              accentBg: '#F7931E',
+              accentColor: '#FFFFFF',
+              bodyColor: '#FFFFFF',
+              iconColor: '#FFFFFF',
+              rightTextColor: '#12406A',
+            }}
+          />
+        </div>
+      ) : null}
+      <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
+        <hr className="border-t border-[#D0D0D3]" />
+      </div>
+      {data.strategies[3] && (
+        <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
+          <StrategiesSection accentColor="#1B75BC" strategy={data.strategies[3]} />
+        </div>
+      )}
+      {recapList.length > 4 ? (
+        <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
+          <RecapSection
+            recap={recapList[4]!}
+            storageKey="recap-4"
             tone={{
               accentBg: '#1B75BC',
               accentColor: '#FFFFFF',
