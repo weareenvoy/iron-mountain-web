@@ -7,62 +7,25 @@ import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
 import MomentsAndBeats from '@/app/(tablets)/docent/_components/ui/MomentsAndBeats';
 import CastOff from '@/components/ui/icons/CastOff';
+import { useDocentTranslation } from '@/hooks/use-docent-translation';
 import useMomentsNavigation from '@/hooks/use-moments-navigation';
 import type { Moment } from '@/lib/internal/types';
 
-const OVERLOOK_CONTENT: Readonly<Moment[]> = [
-  {
-    beatCount: 1,
-    id: 'ambient',
-    title: 'Ambient state',
-  },
-  {
-    beatCount: 2,
-    id: 'unlock',
-    title: 'Unlock',
-  },
-
-  {
-    beatCount: 2,
-    id: 'protect',
-    title: 'Protect',
-  },
-  {
-    beatCount: 2,
-    id: 'connect',
-    title: 'Connect',
-  },
-  {
-    beatCount: 2,
-    id: 'activate',
-    title: 'Activate',
-  },
-  {
-    beatCount: 5,
-    id: 'insight-dxp',
-    title: 'InSight DXP',
-  },
-  {
-    beatCount: 1, // 1 normal beat, and 1 video button appended at the end. Video does not have its own beat.
-    id: 'case-study',
-    title: 'Impact (case study)',
-  },
-  {
-    beatCount: 4,
-    id: 'futurescape',
-    title: 'Futurescape',
-  },
-] as const;
-
 const OverlookPage = ({ params }: PageProps<'/docent/tour/[tourId]/overlook'>) => {
   const { tourId } = use(params);
-  const { currentTour, overlookExhibitState, setOverlookExhibitState } = useDocent();
+  const { currentTour, data, overlookExhibitState, setOverlookExhibitState } = useDocent();
+  const { t } = useDocentTranslation();
   // TODO does this live in GEC state?
   const [isOverlookCastMode, setIsOverlookCastMode] = useState(false);
 
+  // Use moments directly from data (titles included)
+  const overlookContent: Readonly<Moment[]> = useMemo(() => {
+    return (data?.moments.overlook ?? []) as Readonly<Moment[]>;
+  }, [data?.moments.overlook]);
+
   // Should the bottom controls live here, or live in MomentaAndBeats
   const { handleNext, handlePrevious, isNextDisabled, isPreviousDisabled } = useMomentsNavigation(
-    OVERLOOK_CONTENT,
+    overlookContent,
     overlookExhibitState,
     setOverlookExhibitState,
     'overlook'
@@ -76,9 +39,9 @@ const OverlookPage = ({ params }: PageProps<'/docent/tour/[tourId]/overlook'>) =
     (): HeaderProps['leftButton'] => ({
       href: `/docent/tour/${tourId}`,
       icon: <ArrowLeft />,
-      text: 'Back to menu',
+      text: t.docent.navigation.backToMenu,
     }),
-    [tourId]
+    [tourId, t]
   );
 
   return (
@@ -89,9 +52,9 @@ const OverlookPage = ({ params }: PageProps<'/docent/tour/[tourId]/overlook'>) =
       {/* Cast Button */}
       <div className="text-primary-bg-grey absolute top-48 right-5 z-50 flex flex-row items-center gap-2">
         {isOverlookCastMode ? (
-          <span className="text-lg">Start presenting</span>
+          <span className="text-lg">{t.docent.actions.startPresenting}</span>
         ) : (
-          <span className="text-lg">Stop presenting</span>
+          <span className="text-lg">{t.docent.actions.stopPresenting}</span>
         )}
         <button className="active: border-none p-0" onClick={toggleOverlookCastMode}>
           {isOverlookCastMode ? (
@@ -113,7 +76,7 @@ const OverlookPage = ({ params }: PageProps<'/docent/tour/[tourId]/overlook'>) =
         </div>
 
         <MomentsAndBeats
-          content={OVERLOOK_CONTENT}
+          content={overlookContent}
           exhibit="overlook"
           exhibitState={overlookExhibitState}
           setExhibitState={setOverlookExhibitState}

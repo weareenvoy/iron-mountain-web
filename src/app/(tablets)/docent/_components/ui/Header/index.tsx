@@ -1,9 +1,12 @@
 'use client';
 
 import Link from 'next/link';
+import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import LogoDark from '@/components/ui/icons/LogoDark';
 import LogoLight from '@/components/ui/icons/LogoLight';
+import { cn } from '@/lib/tailwind/utils/cn';
+import type { Locale } from '@/lib/internal/types';
 import type { ReactNode } from 'react';
 
 export interface HeaderProps {
@@ -16,6 +19,12 @@ export interface HeaderProps {
 }
 
 const Header = ({ leftButton, useDarkLogo }: HeaderProps) => {
+  const { locale, setLocale } = useDocent();
+
+  const handleLocaleChange = (newLocale: Locale) => {
+    setLocale(newLocale);
+  };
+
   return (
     <div className="absolute top-0 left-0 flex h-30 w-full items-center px-5">
       {/* Left Button */}
@@ -32,17 +41,26 @@ const Header = ({ leftButton, useDarkLogo }: HeaderProps) => {
         {!leftButton && <div />}
       </div>
 
-      {/* Logo. Use colored one on home page, white one on other pages */}
       <div className="flex flex-1 justify-center">
         {useDarkLogo ? <LogoDark className="h-10 w-60" /> : <LogoLight className="h-10 w-60" />}
       </div>
 
-      {/* Right language buttons */}
+      {/* Logo. Use dark one on home page, light one on other pages */}
       <div className="flex flex-1 justify-end gap-2">
-        <Button className="h-8 w-16" size="sm" variant={useDarkLogo ? 'outline-mid-blue' : 'outline-light-grey'}>
+        <Button
+          className={cn('h-8 w-16', locale === 'pt' ? 'opacity-40' : 'opacity-100')}
+          onClick={() => handleLocaleChange('en')}
+          size="sm"
+          variant={useDarkLogo ? 'outline-mid-blue' : 'outline-light-grey'}
+        >
           <span className="text-[18px] leading-normal">EN</span>
         </Button>
-        <Button className="h-8 w-16" size="sm" variant={useDarkLogo ? 'outline-mid-blue' : 'outline-light-grey'}>
+        <Button
+          className={cn('h-8 w-16', locale === 'en' ? 'opacity-40' : 'opacity-100')}
+          onClick={() => handleLocaleChange('pt')}
+          size="sm"
+          variant={useDarkLogo ? 'outline-mid-blue' : 'outline-light-grey'}
+        >
           <span className="text-[18px] leading-normal">BR</span>
         </Button>
       </div>

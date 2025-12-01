@@ -12,8 +12,10 @@ import {
 } from 'react';
 import { DocentAppState, type SyncState } from '@/app/(tablets)/docent/_types';
 import { useMqtt } from '@/components/providers/mqtt-provider';
-import { getTours } from '@/lib/internal/data/get-tours';
-import type { ExhibitNavigationState, Tour } from '@/lib/internal/types';
+import { getLocaleForTesting } from '@/flags/flags';
+import { getDocentData } from '@/lib/internal/data/get-docent';
+import { getDictionary } from '@/lib/internal/dictionaries';
+import type { Dictionary, DocentData, ExhibitNavigationState, Locale, Tour } from '@/lib/internal/types';
 import type { Route } from 'next';
 
 const isDocentRoute = (path: string): path is Route => {
@@ -21,9 +23,10 @@ const isDocentRoute = (path: string): path is Route => {
 };
 
 export interface DocentContextType {
-  readonly allTours: Tour[];
   readonly basecampExhibitState: ExhibitNavigationState;
   readonly currentTour: null | Tour;
+  readonly data: DocentData | null;
+  readonly dict: Dictionary | null;
   // Full state from GEC (combines tour, UI mode, exhibit settings)
   readonly docentAppState: DocentAppState | null;
   // Exhibit availability status
@@ -38,15 +41,16 @@ export interface DocentContextType {
   readonly isSettingsOpen: boolean;
   readonly isSummitRoomJourneyMapLaunched: boolean;
   readonly isTourDataLoading: boolean;
-
   readonly lastUpdated: Date | null;
+  readonly locale: Locale;
   readonly overlookExhibitState: ExhibitNavigationState;
-  readonly refreshTours: () => Promise<void>;
+  readonly refreshData: () => Promise<void>;
   readonly setBasecampExhibitState: (state: Partial<ExhibitNavigationState>) => void;
 
   readonly setCurrentTour: (tour: null | Tour) => void;
   readonly setIsSettingsOpen: (open: boolean) => void;
   readonly setIsSummitRoomJourneyMapLaunched: (launched: boolean) => void;
+  readonly setLocale: (locale: Locale) => void;
   readonly setOverlookExhibitState: (state: Partial<ExhibitNavigationState>) => void;
 
   readonly setSummitRoomSlideIdx: (idx: number) => void;
@@ -55,7 +59,7 @@ export interface DocentContextType {
   readonly summitRoomSlideIdx: number;
 }
 
-const DocentContext = createContext<DocentContextType | undefined>(undefined);
+export const DocentContext = createContext<DocentContextType | undefined>(undefined);
 
 type DocentProviderProps = PropsWithChildren<{
   readonly topic?: string; // placeholder for future props
@@ -69,11 +73,24 @@ export const useDocent = () => {
   return context;
 };
 
+/**
+ * Hook to get the current locale/language for the Docent app.
+ * Always returns a valid locale (never null).
+ *
+ * @returns The current locale ('en' | 'pt')
+ */
+export const useLocale = (): Locale => {
+  const { locale } = useDocent();
+  return locale;
+};
+
 export const DocentProvider = ({ children }: DocentProviderProps) => {
   const { client, isConnected } = useMqtt();
   const router = useRouter();
   const pathname = usePathname();
-  const [allTours, setAllTours] = useState<Tour[]>([]);
+  const [data, setData] = useState<DocentData | null>(null);
+  const [dict, setDict] = useState<Dictionary | null>(null);
+  const [locale, setLocale] = useState<Locale>(getLocaleForTesting());
   const [currentTour, setCurrentTour] = useState<null | Tour>(null);
   const [isTourDataLoading, setIsTourDataLoading] = useState(true);
   const [isGecStateLoading, setIsGecStateLoading] = useState(true);
@@ -110,26 +127,42 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     setOverlookExhibitStateRaw(prev => ({ ...prev, ...state }));
   };
 
-  // Get tour data.
-  const fetchTours = useCallback(async () => {
+  // Fetch dictionary based on current locale
+  const fetchDictionary = useCallback(async (currentLocale: Locale) => {
+    try {
+      const dictionary = await getDictionary(currentLocale);
+      setDict(dictionary);
+    } catch (error) {
+      console.error('Failed to fetch dictionary:', error);
+    }
+  }, []);
+
+  // Fetch all docent data (includes tours and slides)
+  const fetchDocentData = useCallback(async () => {
     setIsTourDataLoading(true);
     try {
-      const tours: Tour[] = await getTours();
-      setAllTours(tours);
+      const docentData = await getDocentData();
+      setData(docentData.data);
       setLastUpdated(new Date());
-      if (currentTour && !tours.find(tour => tour.id === currentTour.id)) {
+
+      if (currentTour && !docentData.data.tours.find(tour => tour.id === currentTour.id)) {
         setCurrentTour(null);
       }
     } catch (error) {
-      console.error('Failed to fetch tours:', error);
+      console.error('Failed to fetch docent data:', error);
     } finally {
       setIsTourDataLoading(false);
     }
   }, [currentTour]);
 
+  // Fetch dictionary when locale changes
   useEffect(() => {
-    fetchTours();
-  }, [fetchTours]);
+    fetchDictionary(locale);
+  }, [locale, fetchDictionary]);
+
+  useEffect(() => {
+    fetchDocentData();
+  }, [fetchDocentData]);
 
   // Request sync from GEC when MQTT connects
   useEffect(() => {
@@ -161,6 +194,8 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
           state.exhibits?.basecamp?.['tour-id'] ||
           state.exhibits?.overlook?.['tour-id'] ||
           state.exhibits?.summit?.['tour-id'];
+
+        const allTours = data?.tours ?? [];
 
         if (tourId && allTours.length > 0) {
           const tour = allTours.find(t => t.id === tourId);
@@ -195,7 +230,7 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     return () => {
       client.unsubscribeFromTopic('state/docent-app', handleDocentAppState);
     };
-  }, [client, allTours, currentTour?.id, pathname, router]);
+  }, [client, data?.tours, currentTour?.id, pathname, router]);
 
   // TODO TBD Subscribe to which topic??
   useEffect(() => {
@@ -208,8 +243,8 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
         console.info('Docent: Received sync status:', syncState);
 
         if (syncState.status === 'sync-complete') {
-          // Refetch tours after sync completes
-          fetchTours();
+          // Refetch docent data after sync completes
+          fetchDocentData();
         } else if (syncState.status === 'sync-in-progress') {
           console.info('Sync in progress...');
           // Could show a loading indicator here
@@ -224,7 +259,7 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     return () => {
       client.unsubscribeFromTopic('state/sync', handleSync);
     };
-  }, [client, fetchTours]);
+  }, [client, fetchDocentData]);
 
   // Reset navigation states when currentTour changes
   useEffect(() => {
@@ -236,35 +271,33 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     }
   }, [currentTour]);
 
-  return (
-    <DocentContext.Provider
-      value={{
-        allTours,
-        basecampExhibitState,
-        currentTour,
-        docentAppState,
-        exhibitAvailability,
-        isConnected,
-        isGecStateLoading,
-        isSettingsOpen,
-        isSummitRoomJourneyMapLaunched,
-        isTourDataLoading,
-        lastUpdated,
-        overlookExhibitState,
-        refreshTours: fetchTours,
-        setBasecampExhibitState,
-        setCurrentTour,
-        setIsSettingsOpen,
-        setIsSummitRoomJourneyMapLaunched,
-        setOverlookExhibitState,
-        setSummitRoomSlideIdx,
-        // Summit Room state
-        summitRoomSlideIdx,
-      }}
-    >
-      {children}
-    </DocentContext.Provider>
-  );
+  const contextValue = {
+    basecampExhibitState,
+    currentTour,
+    data,
+    dict,
+    docentAppState,
+    exhibitAvailability,
+    isConnected,
+    isGecStateLoading,
+    isSettingsOpen,
+    isSummitRoomJourneyMapLaunched,
+    isTourDataLoading,
+    lastUpdated,
+    locale,
+    overlookExhibitState,
+    refreshData: fetchDocentData,
+    setBasecampExhibitState,
+    setCurrentTour,
+    setIsSettingsOpen,
+    setIsSummitRoomJourneyMapLaunched,
+    setLocale,
+    setOverlookExhibitState,
+    setSummitRoomSlideIdx,
+    summitRoomSlideIdx,
+  };
+
+  return <DocentContext.Provider value={contextValue}>{children}</DocentContext.Provider>;
 };
 
 export default DocentProvider;

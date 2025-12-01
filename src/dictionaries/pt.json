@@ -1,0 +1,78 @@
+{
+  "connection": {
+    "connecting": "Conectando ao MQTT..."
+  },
+  "docent": {
+    "actions": {
+      "close": "Fechar",
+      "launchJourneyMap": "Iniciar mapa da jornada",
+      "load": "Carregar",
+      "settings": "Configurações",
+      "startPresenting": "Iniciar apresentação",
+      "stopPresenting": "Parar apresentação",
+      "startTour": "Iniciar calendário",
+      "today": "Hoje"
+    },
+    "home": {
+      "description": "Gerencie e direcione a experiência EBC da Iron Mountain.",
+      "subtitle": "Controles EBC",
+      "title": "Iron Mountain"
+    },
+    "moments": {
+      "ambientState": "Estado ambiente",
+      "ascend": "Ascender",
+      "possibilities": "Possibilidades",
+      "problem": "Problema",
+      "welcome": "Bem-vindo"
+    },
+    "navigation": {
+      "backToHome": "Voltar ao início",
+      "backToMenu": "Voltar ao menu",
+      "backToSchedule": "Voltar à agenda",
+      "endTour": "Encerrar tour"
+    },
+    "notFound": {
+      "description": "O tour que você está procurando não existe ou não está mais disponível.",
+      "title": "Tour não encontrado"
+    },
+    "schedule": {
+      "loading": "Carregando...",
+      "noTours": "Nenhum tour disponível para este mês.",
+      "title": "Agenda EBC"
+    }
+  },
+  "loading": {
+    "basecamp": "Carregando basecamp…",
+    "default": "Carregando…",
+    "overlook": "Carregando visão geral…",
+    "schedule": "Carregando agenda…",
+    "summitRoom": "Carregando sala do cume…",
+    "tour": "Carregando tour…"
+  },
+  "settings": {
+    "ebcLights": "Luzes EBC",
+    "endTourButton": "Encerrar tour & ativar idle",
+    "endTourDescription": "Toque para encerrar a experiência e voltar todas as telas ao modo idle.",
+    "exhibits": {
+      "basecamp": "Basecamp",
+      "entryWay": "Entrada",
+      "overlook": "Visão geral",
+      "solutionPathways": "Caminhos de solução",
+      "summitRoom": "Sala do cume"
+    },
+    "openManual": "Abrir Manual EBC",
+    "status": {
+      "offline": "Offline"
+    },
+    "title": "Configurações"
+  },
+  "ui": {
+    "onOff": "Ligado/Desligado",
+    "tablet": "Tablet",
+    "display": "Tela",
+    "off": "Desligado",
+    "on": "Ligado",
+    "pause": "Pausar",
+    "play": "Reproduzir"
+  }
+}

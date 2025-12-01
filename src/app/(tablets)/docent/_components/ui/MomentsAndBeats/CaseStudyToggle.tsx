@@ -2,6 +2,7 @@
 
 import { CirclePause, CirclePlay } from 'lucide-react';
 import { useState } from 'react';
+import { useDocentTranslation } from '@/hooks/use-docent-translation';
 import { cn } from '@/lib/tailwind/utils/cn';
 
 interface CaseStudyToggleProps {
@@ -10,6 +11,8 @@ interface CaseStudyToggleProps {
 
 // Case-study play/pause toggle, resets when navigation changes via key on parent render
 const CaseStudyToggle = ({ isActive }: CaseStudyToggleProps) => {
+  const { t } = useDocentTranslation();
+
   const [isPlaying, setIsPlaying] = useState(true);
 
   const togglePlayPause = () => {
@@ -28,12 +31,12 @@ const CaseStudyToggle = ({ isActive }: CaseStudyToggleProps) => {
     >
       {isPlaying ? (
         <>
-          <span>Pause</span>
+          <span>{t.ui.pause}</span>
           <CirclePause className="size-6" />
         </>
       ) : (
         <>
-          <span>Play</span>
+          <span>{t.ui.play}</span>
           <CirclePlay className="size-6" />
         </>
       )}

@@ -5,11 +5,13 @@ import { usePathname } from 'next/navigation';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import SettingsDrawer from '@/app/(tablets)/docent/_components/ui/SettingsDrawer';
+import { useDocentTranslation } from '@/hooks/use-docent-translation';
 import { Interstate } from '@/lib/internal/fonts';
 import { cn } from '@/lib/tailwind/utils/cn';
 import type { PropsWithChildren } from 'react';
 
 const DocentContent = ({ children }: PropsWithChildren) => {
+  const { t } = useDocentTranslation();
   const { isConnected, isSettingsOpen, setIsSettingsOpen } = useDocent();
   const pathname = usePathname();
   const isHomePage = pathname === '/docent';
@@ -43,7 +45,7 @@ const DocentContent = ({ children }: PropsWithChildren) => {
             variant="outline-light-grey"
           >
             {/* When someone clicks it, asks for data (each exhibit's status) */}
-            <span className="h-6.25 text-lg">Settings</span>
+            <span className="h-6.25 text-lg">{t.settings.title}</span>
             <Settings className="size-[24px]" />
           </Button>
         </div>

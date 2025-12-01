@@ -5,8 +5,10 @@ import { use, useCallback, useMemo } from 'react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
 import Flag from '@/components/ui/icons/Flag';
+import { useDocentTranslation } from '@/hooks/use-docent-translation';
 
 const TourOverviewPage = ({ params }: PageProps<'/docent/tour/[tourId]'>) => {
+  const { t } = useDocentTranslation();
   const { tourId } = use(params);
   const currentTour = useDocent().currentTour;
 
@@ -14,9 +16,9 @@ const TourOverviewPage = ({ params }: PageProps<'/docent/tour/[tourId]'>) => {
     (): HeaderProps['leftButton'] => ({
       href: '/docent',
       icon: <Flag className="h-[21px] w-[20px]" />,
-      text: 'End tour',
+      text: t.docent.navigation.endTour,
     }),
-    []
+    [t]
   );
 
   type TourSubPath = 'basecamp' | 'overlook' | 'summit-room';

@@ -1,0 +1,177 @@
+{
+  "locale": "en",
+  "data": {
+    "slides": [
+      {
+        "borderColor": null,
+        "id": 1,
+        "title": "Your personalized journey map"
+      },
+      {
+        "borderColor": "border-primary-im-light-blue",
+        "id": 2,
+        "title": "What's standing in your way?"
+      },
+      {
+        "borderColor": "border-secondary-im-purple",
+        "id": 3,
+        "title": "Considering possibilities"
+      },
+      {
+        "borderColor": "border-secondary-im-orange",
+        "id": 4,
+        "title": "Unlock your future"
+      },
+      {
+        "borderColor": "border-secondary-im-green",
+        "id": 5,
+        "title": "Stories of impact"
+      }
+    ],
+    "moments": {
+      "basecamp": [
+        {
+          "beatCount": 1,
+          "id": "ambient",
+          "title": "Ambient state"
+        },
+        {
+          "beatCount": 4,
+          "id": "welcome",
+          "title": "Welcome"
+        },
+        {
+          "beatCount": 4,
+          "id": "problem",
+          "title": "Problem"
+        },
+        {
+          "beatCount": 5,
+          "id": "possibilities",
+          "title": "Possibilities"
+        },
+        {
+          "beatCount": 3,
+          "id": "ascend",
+          "title": "Ascend"
+        }
+      ],
+      "overlook": [
+        {
+          "beatCount": 1,
+          "id": "ambient",
+          "title": "Ambient state"
+        },
+        {
+          "beatCount": 2,
+          "id": "unlock",
+          "title": "Unlock"
+        },
+        {
+          "beatCount": 2,
+          "id": "protect",
+          "title": "Protect"
+        },
+        {
+          "beatCount": 2,
+          "id": "connect",
+          "title": "Connect"
+        },
+        {
+          "beatCount": 2,
+          "id": "activate",
+          "title": "Activate"
+        },
+        {
+          "beatCount": 5,
+          "id": "insight-dxp",
+          "title": "InSight DXP"
+        },
+        {
+          "beatCount": 1,
+          "id": "case-study",
+          "title": "Impact (case study)"
+        },
+        {
+          "beatCount": 4,
+          "id": "futurescape",
+          "title": "Futurescape"
+        }
+      ]
+    },
+    "tours": [
+      {
+        "date": "2025-09-20",
+        "endTime": "11:00 AM",
+        "guestLogo": null,
+        "guestName": "Herman Miller",
+        "id": "tour-001",
+        "startTime": "07:00 AM",
+        "title": "fake title 1"
+      },
+      {
+        "date": "2025-09-20",
+        "endTime": "02:00 PM",
+        "guestLogo": null,
+        "guestName": "PMU Umbrella Pharmaceuticals",
+        "id": "tour-002",
+        "startTime": "12:00 PM",
+        "title": "fake title 2"
+      },
+      {
+        "date": "2025-09-27",
+        "endTime": "05:30 PM",
+        "guestLogo": null,
+        "guestName": "Boyer-Boyer",
+        "id": "tour-003",
+        "startTime": "03:30 PM",
+        "title": "fake title 3"
+      },
+      {
+        "date": "2025-09-30",
+        "endTime": "02:00 PM",
+        "guestLogo": null,
+        "guestName": "Cremin-Okuneva",
+        "id": "tour-004",
+        "startTime": "01:00 PM",
+        "title": "fake title 4"
+      },
+      {
+        "date": "2025-09-30",
+        "endTime": "04:00 PM",
+        "guestLogo": null,
+        "guestName": "fake co 5",
+        "id": "tour-005",
+        "startTime": "03:00 PM",
+        "title": "fake title 5"
+      },
+      {
+        "date": "2025-10-12",
+        "endTime": "02:00 PM",
+        "guestLogo": null,
+        "guestName": "Zalauf Inc.",
+        "id": "tour-006",
+        "startTime": "01:00 PM",
+        "title": "fake title 6"
+      },
+      {
+        "date": "2025-10-12",
+        "endTime": "04:00 PM",
+        "guestLogo": null,
+        "guestName": "fake co 7",
+        "id": "tour-007",
+        "startTime": "03:00 PM",
+        "title": "fake title 7"
+      },
+      {
+        "date": "2025-11-04",
+        "endTime": "04:00 PM",
+        "guestLogo": null,
+        "guestName": "fake co 8",
+        "id": "tour-008",
+        "startTime": "02:40 PM",
+        "title": "fake title 8"
+      }
+    ]
+  }
+}

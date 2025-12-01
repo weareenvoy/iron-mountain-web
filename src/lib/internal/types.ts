@@ -118,3 +118,51 @@ export interface BasecampData {
     readonly text: string;
   };
 }
+
+export interface SummitSlide {
+  borderColor: null | string;
+  id: number;
+  title: string;
+}
+
+export interface ExhibitControl {
+  readonly errorMessage?: string;
+  readonly hasError?: boolean;
+  readonly id: string;
+  readonly isMuted: boolean;
+  readonly isOn: boolean;
+  readonly name: string;
+}
+
+export interface MomentData {
+  beatCount: number;
+  id: Section;
+  title: string;
+}
+
+export interface DocentData {
+  moments: {
+    basecamp: readonly MomentData[];
+    overlook: readonly MomentData[];
+  };
+  slides: SummitSlide[];
+  tours: Tour[];
+}
+
+import en from '@/dictionaries/en.json';
+
+export type Dictionary = typeof en;
+
+export type Locale = 'en' | 'pt';
+
+export interface BasecampApiResponse {
+  data: BasecampData;
+  dict: Dictionary;
+  locale: Locale;
+}
+
+export interface DocentApiResponse {
+  data: DocentData;
+  dict: Dictionary;
+  locale: Locale;
+}
