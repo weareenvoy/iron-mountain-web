@@ -3,8 +3,8 @@
 import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getSummitData } from '@/lib/internal/data/get-summit';
+import { isSection, type ExhibitNavigationState } from '@/lib/internal/types';
 import type { SummitData } from '@/app/(displays)/summit/_types';
-import type { ExhibitNavigationState } from '@/lib/internal/types';
 import type { ExhibitMqttState } from '@/lib/mqtt/types';
 
 interface SummitContextValue {
@@ -37,7 +37,7 @@ export const SummitProvider = ({ children }: PropsWithChildren) => {
   const [exhibitState, setExhibitState] = useState<ExhibitNavigationState>(DEFAULT_EXHIBIT_STATE);
   const [loading, setLoading] = useState(true);
   const [mqttState, setMqttState] = useState<ExhibitMqttState>({
-    'slide': 'idle',
+    'beat-id': 'idle',
     'tour-id': null,
     'volume-level': 1.0,
     'volume-muted': false,
@@ -68,25 +68,16 @@ export const SummitProvider = ({ children }: PropsWithChildren) => {
     (newState: Partial<ExhibitMqttState>) => {
       if (!client) return;
 
-      const updatedState = {
+      const updatedState: ExhibitMqttState = {
         ...mqttState,
         ...newState,
       };
       setMqttState(updatedState);
 
-      client.reportExhibitState(
-        'summit',
-        {
-          'slide': updatedState.slide,
-          'tour-id': updatedState['tour-id'],
-          'volume-level': updatedState['volume-level'],
-          'volume-muted': updatedState['volume-muted'],
-        },
-        {
-          onError: err => console.error('Summit: failed to report state:', err),
-          onSuccess: () => console.info('Summit: reported state:', updatedState),
-        }
-      );
+      client.reportExhibitState('summit', updatedState, {
+        onError: err => console.error('Summit: failed to report state:', err),
+        onSuccess: () => console.info('Summit: reported state:', updatedState),
+      });
     },
     [client, mqttState]
   );
@@ -103,7 +94,7 @@ export const SummitProvider = ({ children }: PropsWithChildren) => {
         if (!tourId) return;
 
         reportState({
-          'slide': 'loading',
+          'beat-id': 'loading',
           'tour-id': tourId,
           'volume-level': 1.0,
           'volume-muted': false,
@@ -114,14 +105,14 @@ export const SummitProvider = ({ children }: PropsWithChildren) => {
         if (success) {
           setExhibitState(DEFAULT_EXHIBIT_STATE);
           reportState({
-            'slide': 'primary-1',
+            'beat-id': 'primary-1',
             'tour-id': tourId,
             'volume-level': 1.0,
             'volume-muted': false,
           });
         } else {
           reportState({
-            'slide': 'error',
+            'beat-id': 'error',
             'tour-id': tourId,
             'volume-level': 0.0,
             'volume-muted': true,
@@ -140,7 +131,7 @@ export const SummitProvider = ({ children }: PropsWithChildren) => {
 
         setExhibitState(DEFAULT_EXHIBIT_STATE);
         reportState({
-          'slide': 'idle',
+          'beat-id': 'idle',
           'tour-id': null,
           'volume-level': 0.0,
           'volume-muted': true,
@@ -153,7 +144,7 @@ export const SummitProvider = ({ children }: PropsWithChildren) => {
     const handleGotoBeat = (message: Buffer) => {
       try {
         const parsedMessage = JSON.parse(message.toString());
-        const beatId = parsedMessage.body?.beat_id;
+        const beatId = parsedMessage.body?.['beat-id'];
         console.info('Summit: received goto-beat command:', beatId);
 
         if (!beatId) return;
@@ -167,7 +158,7 @@ export const SummitProvider = ({ children }: PropsWithChildren) => {
         const momentId = beatId.substring(0, lastDashIndex);
         const beatNumber = parseInt(beatId.substring(lastDashIndex + 1), 10);
 
-        if (Number.isNaN(beatNumber) || beatNumber < 1) {
+        if (Number.isNaN(beatNumber) || beatNumber < 1 || !isSection(momentId)) {
           console.error('Summit: invalid beat number in beat_id:', beatId);
           return;
         }
@@ -177,7 +168,7 @@ export const SummitProvider = ({ children }: PropsWithChildren) => {
           momentId,
         });
 
-        reportState({ slide: beatId });
+        reportState({ 'beat-id': beatId });
       } catch (err) {
         console.error('Summit: error parsing goto-beat command:', err);
       }
@@ -205,12 +196,12 @@ export const SummitProvider = ({ children }: PropsWithChildren) => {
 
         setMqttState(state);
 
-        if (state.slide && state.slide !== 'idle') {
-          const lastDashIndex = state.slide.lastIndexOf('-');
+        if (state['beat-id'] && state['beat-id'] !== 'idle') {
+          const lastDashIndex = state['beat-id'].lastIndexOf('-');
           if (lastDashIndex !== -1) {
-            const momentId = state.slide.substring(0, lastDashIndex);
-            const beatNumber = parseInt(state.slide.substring(lastDashIndex + 1), 10);
-            if (!Number.isNaN(beatNumber) && beatNumber >= 1) {
+            const momentId = state['beat-id'].substring(0, lastDashIndex);
+            const beatNumber = parseInt(state['beat-id'].substring(lastDashIndex + 1), 10);
+            if (!Number.isNaN(beatNumber) && beatNumber >= 1 && isSection(momentId)) {
               setExhibitState({
                 beatIdx: beatNumber - 1,
                 momentId,
