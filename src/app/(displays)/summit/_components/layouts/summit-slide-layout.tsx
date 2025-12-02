@@ -1,8 +1,7 @@
 import type { PropsWithChildren } from 'react';
 
 const SummitSlideLayout = ({ children }: PropsWithChildren) => {
-  return <div className="bg-background flex flex-col h-full text-foreground w-full">{children}</div>;
+  return <div className="flex h-full w-full flex-col bg-background text-foreground">{children}</div>;
 };
 
 export default SummitSlideLayout;
-

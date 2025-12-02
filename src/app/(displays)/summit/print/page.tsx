@@ -12,4 +12,3 @@ const SummitPrintPage = ({}: PageProps<'/summit/print'>) => {
 };
 
 export default SummitPrintPage;
-
