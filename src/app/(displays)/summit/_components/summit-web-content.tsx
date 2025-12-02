@@ -10,10 +10,17 @@ import type { SummitRecap } from '@/app/(displays)/summit/_types';
 const SummitWebContent = () => {
   const { data, dict, error, loading } = useSummit();
 
+  const loadingDict = dict?.loading;
+  const summitDict = dict?.summit;
+
+  const loadErrorMessage = summitDict?.errors.loadFailed ?? 'Unable to load summit content.';
+  const loadingMessage =
+    loadingDict?.summit ?? loadingDict?.summitRoom ?? loadingDict?.default ?? 'Loading summit experience…';
+
   if (loading) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center text-base text-muted-foreground">
-        Loading summit experience…
+        {loadingMessage}
       </div>
     );
   }
@@ -21,7 +28,7 @@ const SummitWebContent = () => {
   if (error || !data) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center text-base text-destructive">
-        {error ?? 'Unable to load summit content.'}
+        {error ?? loadErrorMessage}
       </div>
     );
   }
@@ -36,21 +43,18 @@ const SummitWebContent = () => {
   }
 
   const consideringTitle =
-    dict?.summit.sections.consideringPossibilities ?? data.strategies[0]?.title ?? 'Considering possibilities';
-  const footerStats = dict?.summit.footerStats ?? data.footerStats ?? [];
+    summitDict?.sections.consideringPossibilities ?? data.strategies[0]?.title ?? 'Considering possibilities';
   const heroLabels = {
-    company: dict?.summit.hero.labels.company ?? 'Company',
-    dateOfEngagement: dict?.summit.hero.labels.dateOfEngagement ?? 'Date of engagement',
-    location: dict?.summit.hero.labels.location ?? 'Location',
+    company: summitDict?.hero.labels.company ?? 'Company',
+    dateOfEngagement: summitDict?.hero.labels.dateOfEngagement ?? 'Date of engagement',
+    location: summitDict?.hero.labels.location ?? 'Location',
   };
-  const heroTitle = dict?.summit.hero.title ?? data.hero.title ?? 'Your personalized journey map';
-  const recapPlaceholder = dict?.summit.recap.placeholder ?? 'Type your notes here';
+  const heroTitle = summitDict?.hero.title ?? data.hero.title ?? 'Your personalized journey map';
+  const recapPlaceholder = summitDict?.recap.placeholder ?? 'Type your notes here';
   const relevantSolutionsTitle =
-    dict?.summit.sections.relevantSolutions ?? data.strategies[1]?.title ?? 'Relevant solutions';
-  const unlockFutureTitle = dict?.summit.sections.unlockYourFuture ?? data.strategies[2]?.title ?? 'Unlock your future';
-  const storiesOfImpactTitle =
-    dict?.summit.sections.storiesOfImpact ?? data.strategies[3]?.title ?? 'Stories of impact';
-
+    summitDict?.sections.relevantSolutions ?? data.strategies[1]?.title ?? 'Relevant solutions';
+  const unlockFutureTitle = summitDict?.sections.unlockYourFuture ?? data.strategies[2]?.title ?? 'Unlock your future';
+  const storiesOfImpactTitle = summitDict?.sections.storiesOfImpact ?? data.strategies[3]?.title ?? 'Stories of impact';
   return (
     <div className="flex flex-col gap-14 py-10">
       <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
@@ -158,18 +162,6 @@ const SummitWebContent = () => {
               rightTextColor: '#12406A',
             }}
           />
-        </div>
-      ) : null}
-      {footerStats.length > 0 ? (
-        <div className="mx-auto w-full max-w-[1200px] px-4 pb-6 sm:px-8 lg:px-12">
-          <div className="grid gap-6 text-sm text-[#5B5B5B] sm:grid-cols-3">
-            {footerStats.map(stat => (
-              <div className="flex flex-col items-start gap-3" key={stat}>
-                <div className="h-2 w-2 rounded-full bg-[#4B4B4D]" />
-                <div>{stat}</div>
-              </div>
-            ))}
-          </div>
         </div>
       ) : null}
     </div>

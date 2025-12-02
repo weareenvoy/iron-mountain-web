@@ -46,6 +46,7 @@
     "default": "Carregando…",
     "overlook": "Carregando visão geral…",
     "schedule": "Carregando agenda…",
+    "summit": "Carregando experiência do Summit…",
     "summitRoom": "Carregando sala do cume…",
     "tour": "Carregando tour…"
   },
@@ -67,6 +68,9 @@
     "title": "Configurações"
   },
   "summit": {
+    "errors": {
+      "loadFailed": "Não foi possível carregar o conteúdo do Summit."
+    },
     "footerStats": ["Centro de Inovação Executiva", "São Paulo, Brasil", "Altitude 760 m (2.493,4 pés)"],
     "hero": {
       "labels": {

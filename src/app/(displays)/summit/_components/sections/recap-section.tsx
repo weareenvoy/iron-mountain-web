@@ -23,18 +23,11 @@ const DEFAULT_TONE = {
   iconColor: '#0D3C69',
 } as const;
 
-const DEFAULT_PLACEHOLDER = 'Type your notes here';
-
-const RecapSection = ({
-  actionSlot,
-  placeholder = DEFAULT_PLACEHOLDER,
-  recap,
-  storageKey,
-  tone = DEFAULT_TONE,
-}: RecapSectionProps) => {
+const RecapSection = ({ actionSlot, placeholder = '', recap, storageKey, tone = DEFAULT_TONE }: RecapSectionProps) => {
   const palette = { ...DEFAULT_TONE, ...tone };
   const key = storageKey ?? `summit-recap:${recap.title}`;
   const [note, setNote] = useLocalStorage<string>(key, '');
+  const rightTextColor = palette.rightTextColor ?? '#12406A';
 
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setNote(event.target.value);
@@ -44,9 +37,9 @@ const RecapSection = ({
     <section className="flex flex-col gap-0 overflow-hidden rounded-xl bg-white shadow-[0_20px_55px_rgba(12,35,80,0.12)] sm:flex-row">
       <div
         className="flex flex-1 flex-col items-start gap-4 px-8 py-6 text-lg font-semibold sm:w-5/12 sm:flex-none sm:px-10 sm:py-8"
-        style={{ backgroundColor: palette.accentBg, color: palette.accentColor }}
+        style={{ backgroundColor: palette.accentBg, color: palette.bodyColor }}
       >
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3" style={{ color: palette.accentColor }}>
           {/* We use span instead of img because we need to pass color to the icon */}
           <span
             aria-hidden
@@ -63,9 +56,10 @@ const RecapSection = ({
       </div>
       <div className="flex flex-1 px-8 py-6 sm:px-10 sm:py-8">
         <textarea
-          className="h-28 w-full resize-none rounded-lg border border-transparent bg-transparent text-base text-[#12406A] outline-none focus:border-[#12406A]/30"
+          className="h-28 w-full resize-none rounded-lg border border-transparent bg-transparent text-base outline-none focus:border-[#12406A]/30"
           onChange={handleChange}
           placeholder={placeholder}
+          style={{ color: rightTextColor }}
           value={note}
         />
       </div>
