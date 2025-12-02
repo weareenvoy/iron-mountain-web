@@ -8,7 +8,7 @@ import StrategiesSection from '@/app/(displays)/summit/_components/sections/stra
 import type { SummitRecap } from '@/app/(displays)/summit/_types';
 
 const SummitWebContent = () => {
-  const { data, error, loading } = useSummit();
+  const { data, dict, error, loading } = useSummit();
 
   if (loading) {
     return (
@@ -35,10 +35,25 @@ const SummitWebContent = () => {
     recapList = [legacyRecap];
   }
 
+  const heroTitle = dict?.summit.hero.title ?? data.hero.title ?? 'Your personalized journey map';
+  const heroLabels = {
+    company: dict?.summit.hero.labels.company ?? 'Company',
+    dateOfEngagement: dict?.summit.hero.labels.dateOfEngagement ?? 'Date of engagement',
+    location: dict?.summit.hero.labels.location ?? 'Location',
+  };
+  const consideringTitle =
+    dict?.summit.sections.consideringPossibilities ?? data.strategies[0]?.title ?? 'Considering possibilities';
+  const relevantSolutionsTitle =
+    dict?.summit.sections.relevantSolutions ?? data.strategies[1]?.title ?? 'Relevant solutions';
+  const unlockFutureTitle = dict?.summit.sections.unlockYourFuture ?? data.strategies[2]?.title ?? 'Unlock your future';
+  const storiesOfImpactTitle =
+    dict?.summit.sections.storiesOfImpact ?? data.strategies[3]?.title ?? 'Stories of impact';
+  const footerStats = dict?.summit.footerStats ?? data.footerStats ?? [];
+
   return (
     <div className="flex flex-col gap-14 py-10">
       <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
-        <HeroSection hero={data.hero} />
+        <HeroSection hero={data.hero} labels={heroLabels} title={heroTitle} />
       </div>
       <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
         <MetricsSection metrics={data.metrics} obstacles={data.obstacles} />
@@ -53,7 +68,7 @@ const SummitWebContent = () => {
       </div>
       {data.strategies[0] && (
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
-          <StrategiesSection accentColor="#8A0D71" strategy={data.strategies[0]} />
+          <StrategiesSection accentColor="#8A0D71" strategy={data.strategies[0]} title={consideringTitle} />
         </div>
       )}
       {recapList.length > 1 ? (
@@ -76,7 +91,7 @@ const SummitWebContent = () => {
       </div>
       {data.strategies[1] && (
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
-          <StrategiesSection accentColor="#00A88E" strategy={data.strategies[1]} />
+          <StrategiesSection accentColor="#00A88E" strategy={data.strategies[1]} title={relevantSolutionsTitle} />
         </div>
       )}
       {recapList.length > 2 ? (
@@ -99,7 +114,7 @@ const SummitWebContent = () => {
       </div>
       {data.strategies[2] && (
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
-          <StrategiesSection accentColor="#F7931E" strategy={data.strategies[2]} />
+          <StrategiesSection accentColor="#F7931E" strategy={data.strategies[2]} title={unlockFutureTitle} />
         </div>
       )}
       {recapList.length > 3 ? (
@@ -122,7 +137,7 @@ const SummitWebContent = () => {
       </div>
       {data.strategies[3] && (
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
-          <StrategiesSection accentColor="#1B75BC" strategy={data.strategies[3]} />
+          <StrategiesSection accentColor="#1B75BC" strategy={data.strategies[3]} title={storiesOfImpactTitle} />
         </div>
       )}
       {recapList.length > 4 ? (
@@ -140,10 +155,10 @@ const SummitWebContent = () => {
           />
         </div>
       ) : null}
-      {data.footerStats && data.footerStats.length > 0 ? (
+      {footerStats.length > 0 ? (
         <div className="mx-auto w-full max-w-[1200px] px-4 pb-6 sm:px-8 lg:px-12">
           <div className="grid gap-6 text-sm text-[#5B5B5B] sm:grid-cols-3">
-            {data.footerStats.map((stat: string) => (
+            {footerStats.map(stat => (
               <div className="flex flex-col items-start gap-3" key={stat}>
                 <div className="h-2 w-2 rounded-full bg-[#4B4B4D]" />
                 <div>{stat}</div>

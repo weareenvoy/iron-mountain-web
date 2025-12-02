@@ -18,7 +18,7 @@ export interface SummitHero {
   readonly logoAlt: string;
   readonly logoSrc: string;
   readonly subtitle: string;
-  readonly title: string;
+  readonly title?: string;
 }
 
 export interface SummitMetricItem {
@@ -67,7 +67,7 @@ export interface SummitStrategy {
   readonly eyebrow: string;
   readonly items: readonly SummitStrategyItem[];
   readonly summary: string;
-  readonly title: string;
+  readonly title?: string;
 }
 
 export interface SummitStrategyItem {

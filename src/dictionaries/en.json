@@ -66,6 +66,23 @@
     },
     "title": "Settings"
   },
+  "summit": {
+    "footerStats": ["Executive Innovation Center", "São Paulo, Brazil", "Elevation 760 m (2,493.4 ft)"],
+    "hero": {
+      "labels": {
+        "company": "Company",
+        "dateOfEngagement": "Date of engagement",
+        "location": "Location"
+      },
+      "title": "Your personalized journey map"
+    },
+    "sections": {
+      "consideringPossibilities": "Considering possibilities",
+      "relevantSolutions": "Relevant solutions",
+      "storiesOfImpact": "Stories of impact",
+      "unlockYourFuture": "Unlock your future"
+    }
+  },
   "ui": {
     "onOff": "On/Off",
     "tablet": "Tablet",

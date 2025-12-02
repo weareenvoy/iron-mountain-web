@@ -1,16 +1,32 @@
 import Image from 'next/image';
 import type { SummitHero } from '@/app/(displays)/summit/_types';
 
-type HeroSectionProps = {
-  readonly hero: SummitHero;
+type HeroMetadataLabels = {
+  readonly company: string;
+  readonly dateOfEngagement: string;
+  readonly location: string;
 };
 
-const HeroSection = ({ hero }: HeroSectionProps) => {
+type HeroSectionProps = {
+  readonly hero: SummitHero;
+  readonly labels?: HeroMetadataLabels;
+  readonly title?: string;
+};
+
+const DEFAULT_LABELS: HeroMetadataLabels = {
+  company: 'Company',
+  dateOfEngagement: 'Date of engagement',
+  location: 'Location',
+};
+
+const HeroSection = ({ hero, labels, title }: HeroSectionProps) => {
+  const resolvedLabels = labels ?? DEFAULT_LABELS;
   const metadata: { readonly label: string; readonly value: string }[] = [
-    { label: 'Company', value: hero.clientName },
-    { label: 'Date of engagement', value: hero.date },
-    { label: 'Location', value: hero.location },
+    { label: resolvedLabels.company, value: hero.clientName },
+    { label: resolvedLabels.dateOfEngagement, value: hero.date },
+    { label: resolvedLabels.location, value: hero.location },
   ];
+  const heading = title ?? hero.title ?? 'Your personalized journey map';
 
   return (
     <section className="relative isolate overflow-visible">
@@ -25,7 +41,7 @@ const HeroSection = ({ hero }: HeroSectionProps) => {
           className="mt-16 mb-8 max-w-[24rem] text-4xl leading-tight font-normal text-balance text-[#58595B] sm:max-w-120 sm:text-5xl lg:max-w-xl lg:text-7xl"
           style={{ fontFamily: 'var(--font-interstate)', letterSpacing: '-0.04em' }}
         >
-          {hero.title}
+          {heading}
         </h1>
 
         <dl className="grid gap-6 text-sm sm:grid-cols-3">

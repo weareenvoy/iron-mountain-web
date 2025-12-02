@@ -3,14 +3,17 @@ import type { SummitStrategy } from '@/app/(displays)/summit/_types';
 type StrategiesSectionProps = {
   readonly accentColor?: string;
   readonly strategy: SummitStrategy;
+  readonly title?: string;
 };
 
-const StrategiesSection = ({ accentColor = '#8A0D71', strategy }: StrategiesSectionProps) => {
+const StrategiesSection = ({ accentColor = '#8A0D71', strategy, title }: StrategiesSectionProps) => {
+  const heading = title ?? strategy.title ?? strategy.eyebrow;
+
   return (
     <section className="flex flex-col gap-8">
       <div className="flex items-center gap-3 text-2xl font-semibold text-[#58595B] sm:text-3xl">
         <span aria-hidden className="h-4 w-4 rotate-45 rounded-xs border-2" style={{ borderColor: accentColor }} />
-        <span>{strategy.title}</span>
+        <span>{heading}</span>
       </div>
 
       <div className="grid gap-6 sm:grid-cols-3">

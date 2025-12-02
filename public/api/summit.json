@@ -6,8 +6,7 @@
     "location": "Summit Room · Boston, MA",
     "logoAlt": "Iron Mountain",
     "logoSrc": "/images/iron-mountain-logo-blue.svg",
-    "subtitle": "Prepared for your Iron Mountain visit",
-    "title": "Your personalized journey map"
+    "subtitle": "Prepared for your Iron Mountain visit"
   },
   "metrics": {
     "description": "",
@@ -83,11 +82,6 @@
       "title": "Recap"
     }
   ],
-  "footerStats": [
-    "Executive Innovation Center",
-    "São Paulo, Brazil",
-    "Elevation 760 m (2,493.4 ft)"
-  ],
   "stories": {
     "description": "These are proof points from customers solving similar challenges.",
     "items": [
@@ -138,8 +132,7 @@
           "title": "Optimizing your assets"
         }
       ],
-      "summary": "Each path can run independently, yet the greatest momentum happens when they progress together.",
-      "title": "Considering possibilities"
+      "summary": "Each path can run independently, yet the greatest momentum happens when they progress together."
     },
     {
       "eyebrow": "Modernize operations",
@@ -169,8 +162,7 @@
           "title": "Scale confidently"
         }
       ],
-      "summary": "Modernize operations while keeping compliance, velocity, and sustainability in balance.",
-      "title": "Modernize operations"
+      "summary": "Modernize operations while keeping compliance, velocity, and sustainability in balance."
     },
     {
       "eyebrow": "Unlock your future",
@@ -200,8 +192,7 @@
           "title": "Grow"
         }
       ],
-      "summary": "You decide where to begin; we ensure the roadmap stays actionable.",
-      "title": "Unlock your future"
+      "summary": "You decide where to begin; we ensure the roadmap stays actionable."
     },
     {
       "eyebrow": "Stories of impact",
@@ -228,8 +219,7 @@
           "title": "Rich media & cultural heritage"
         }
       ],
-      "summary": "Proof points that connect today’s challenges with real outcomes.",
-      "title": "Stories of impact"
+      "summary": "Proof points that connect today’s challenges with real outcomes."
     }
   ],
   "summary": {

@@ -66,6 +66,23 @@
     },
     "title": "Configurações"
   },
+  "summit": {
+    "footerStats": ["Centro de Inovação Executiva", "São Paulo, Brasil", "Altitude 760 m (2.493,4 pés)"],
+    "hero": {
+      "labels": {
+        "company": "Empresa",
+        "dateOfEngagement": "Data do encontro",
+        "location": "Local"
+      },
+      "title": "Seu mapa de jornada personalizado"
+    },
+    "sections": {
+      "consideringPossibilities": "Considerando possibilidades",
+      "relevantSolutions": "Soluções relevantes",
+      "storiesOfImpact": "Histórias de impacto",
+      "unlockYourFuture": "Liberte seu futuro"
+    }
+  },
   "ui": {
     "onOff": "Ligado/Desligado",
     "tablet": "Tablet",
