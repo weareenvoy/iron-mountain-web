@@ -76,6 +76,9 @@
       },
       "title": "Your personalized journey map"
     },
+    "recap": {
+      "placeholder": "Type your notes here"
+    },
     "sections": {
       "consideringPossibilities": "Considering possibilities",
       "relevantSolutions": "Relevant solutions",

@@ -4,6 +4,7 @@ import type { ChangeEvent, ReactNode } from 'react';
 
 type RecapSectionProps = {
   readonly actionSlot?: ReactNode;
+  readonly placeholder?: string;
   readonly recap: SummitRecap;
   readonly storageKey?: string;
   readonly tone?: {
@@ -22,7 +23,15 @@ const DEFAULT_TONE = {
   iconColor: '#0D3C69',
 } as const;
 
-const RecapSection = ({ actionSlot, recap, storageKey, tone = DEFAULT_TONE }: RecapSectionProps) => {
+const DEFAULT_PLACEHOLDER = 'Type your notes here';
+
+const RecapSection = ({
+  actionSlot,
+  placeholder = DEFAULT_PLACEHOLDER,
+  recap,
+  storageKey,
+  tone = DEFAULT_TONE,
+}: RecapSectionProps) => {
   const palette = { ...DEFAULT_TONE, ...tone };
   const key = storageKey ?? `summit-recap:${recap.title}`;
   const [note, setNote] = useLocalStorage<string>(key, '');
@@ -56,7 +65,7 @@ const RecapSection = ({ actionSlot, recap, storageKey, tone = DEFAULT_TONE }: Re
         <textarea
           className="h-28 w-full resize-none rounded-lg border border-transparent bg-transparent text-base text-[#12406A] outline-none focus:border-[#12406A]/30"
           onChange={handleChange}
-          placeholder={recap.body}
+          placeholder={placeholder}
           value={note}
         />
       </div>

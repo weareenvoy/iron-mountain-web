@@ -76,6 +76,9 @@
       },
       "title": "Seu mapa de jornada personalizado"
     },
+    "recap": {
+      "placeholder": "Digite suas anotações aqui"
+    },
     "sections": {
       "consideringPossibilities": "Considerando possibilidades",
       "relevantSolutions": "Soluções relevantes",

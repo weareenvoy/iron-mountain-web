@@ -35,20 +35,21 @@ const SummitWebContent = () => {
     recapList = [legacyRecap];
   }
 
-  const heroTitle = dict?.summit.hero.title ?? data.hero.title ?? 'Your personalized journey map';
+  const consideringTitle =
+    dict?.summit.sections.consideringPossibilities ?? data.strategies[0]?.title ?? 'Considering possibilities';
+  const footerStats = dict?.summit.footerStats ?? data.footerStats ?? [];
   const heroLabels = {
     company: dict?.summit.hero.labels.company ?? 'Company',
     dateOfEngagement: dict?.summit.hero.labels.dateOfEngagement ?? 'Date of engagement',
     location: dict?.summit.hero.labels.location ?? 'Location',
   };
-  const consideringTitle =
-    dict?.summit.sections.consideringPossibilities ?? data.strategies[0]?.title ?? 'Considering possibilities';
+  const heroTitle = dict?.summit.hero.title ?? data.hero.title ?? 'Your personalized journey map';
+  const recapPlaceholder = dict?.summit.recap.placeholder ?? 'Type your notes here';
   const relevantSolutionsTitle =
     dict?.summit.sections.relevantSolutions ?? data.strategies[1]?.title ?? 'Relevant solutions';
   const unlockFutureTitle = dict?.summit.sections.unlockYourFuture ?? data.strategies[2]?.title ?? 'Unlock your future';
   const storiesOfImpactTitle =
     dict?.summit.sections.storiesOfImpact ?? data.strategies[3]?.title ?? 'Stories of impact';
-  const footerStats = dict?.summit.footerStats ?? data.footerStats ?? [];
 
   return (
     <div className="flex flex-col gap-14 py-10">
@@ -60,7 +61,7 @@ const SummitWebContent = () => {
       </div>
       {recapList.length > 0 && (
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
-          <RecapSection recap={recapList[0]!} storageKey="recap-0" />
+          <RecapSection placeholder={recapPlaceholder} recap={recapList[0]!} storageKey="recap-0" />
         </div>
       )}
       <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
@@ -74,6 +75,7 @@ const SummitWebContent = () => {
       {recapList.length > 1 ? (
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
           <RecapSection
+            placeholder={recapPlaceholder}
             recap={recapList[1]!}
             storageKey="recap-1"
             tone={{
@@ -97,6 +99,7 @@ const SummitWebContent = () => {
       {recapList.length > 2 ? (
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
           <RecapSection
+            placeholder={recapPlaceholder}
             recap={recapList[2]!}
             storageKey="recap-2"
             tone={{
@@ -120,6 +123,7 @@ const SummitWebContent = () => {
       {recapList.length > 3 ? (
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
           <RecapSection
+            placeholder={recapPlaceholder}
             recap={recapList[3]!}
             storageKey="recap-3"
             tone={{
@@ -143,6 +147,7 @@ const SummitWebContent = () => {
       {recapList.length > 4 ? (
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">
           <RecapSection
+            placeholder={recapPlaceholder}
             recap={recapList[4]!}
             storageKey="recap-4"
             tone={{
