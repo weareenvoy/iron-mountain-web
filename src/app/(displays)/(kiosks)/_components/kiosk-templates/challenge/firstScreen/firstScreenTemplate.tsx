@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 // import styles from './firstScreenTemplate.module.css';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
@@ -89,7 +91,14 @@ export default function FirstScreenTemplate({
           // className={styles.challengeIcon}
           className="relative mr-[15px] flex h-[100px] w-[100px] items-center justify-center"
         >
-          <img alt="" className="block h-full w-full object-contain" src={challengeIconSrc} />
+          <Image
+            alt=""
+            className="object-contain"
+            fill
+            sizes="100px"
+            src={challengeIconSrc}
+            unoptimized
+          />
         </div>
         <h1
           // className={styles.challengeText}
@@ -115,7 +124,16 @@ export default function FirstScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img alt="Up" className="h-full w-full object-contain" src={arrowUpIconSrc ?? imgArrowNavUp} />
+        <div className="relative h-full w-full">
+          <Image
+            alt="Up"
+            className="object-contain"
+            fill
+            sizes="118px"
+            src={arrowUpIconSrc ?? imgArrowNavUp}
+            unoptimized
+          />
+        </div>
       </div>
       <div
         aria-label="Next"
@@ -132,11 +150,16 @@ export default function FirstScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img
-          alt="Down"
-          className="h-full w-full object-contain"
-          src={arrowDownIconSrc ?? arrowIconSrc ?? imgArrowNavDown}
-        />
+        <div className="relative h-full w-full">
+          <Image
+            alt="Down"
+            className="object-contain"
+            fill
+            sizes="118px"
+            src={arrowDownIconSrc ?? arrowIconSrc ?? imgArrowNavDown}
+            unoptimized
+          />
+        </div>
       </div>
 
       {/* Problem Description Section */}

@@ -1,13 +1,13 @@
 'use client';
 import { useEffect, useState } from 'react';
+import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
 import FirstScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/firstScreen/firstScreenTemplate';
 import InitialScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/initialScreen/initialScreenTemplate';
 import SecondScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/secondScreen/secondScreenTemplate';
 import ThirdScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/thirdScreen/thirdScreenTemplate';
-import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
-import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
 import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
 import challengeContent from '../challenges.json';
+import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 // import styles from './kiosk-1.module.css';
 
 type Slide = { hasCarousel?: boolean; id: string; title: string };
@@ -27,6 +27,10 @@ export default function Kiosk1View() {
   // Register root handlers for parallax navigation
   useEffect(() => {
     controller.setRootHandlers({
+      goTo: (i: number) => {
+        setTopIndex(Math.max(0, Math.min(i, slides.length - 1)));
+        return true;
+      },
       next: () => {
         setTopIndex((i: number) => Math.min(i + 1, slides.length - 1));
         return true;
@@ -35,10 +39,6 @@ export default function Kiosk1View() {
         setTopIndex((i: number) => Math.max(i - 1, 0));
         return true;
       },
-      goTo: (i: number) => {
-        setTopIndex(Math.max(0, Math.min(i, slides.length - 1)));
-        return true;
-      }
     });
     return () => controller.setRootHandlers(null);
   }, [controller]);
@@ -55,10 +55,10 @@ export default function Kiosk1View() {
       >
         {slides.map((s, idx) => (
           <section
-            key={s.id}
             // className={styles.slide}
             className="flex h-full w-full flex-col items-center justify-center"
             data-active={idx === topIndex}
+            key={s.id}
           >
             {/* Render the actual challenge templates so you can preview them in dev */}
             {s.id === 's1' && <InitialScreenTemplate {...challenges.initialScreen} />}
@@ -91,7 +91,7 @@ export default function Kiosk1View() {
       </div>
       <div
         // className={styles.debugControls}
-        className="absolute bottom-[12px] right-[12px] z-[1000] flex gap-2"
+        className="absolute right-[12px] bottom-[12px] z-[1000] flex gap-2"
       >
         <button onClick={() => controller.prev()}>Prev</button>
         <button onClick={() => controller.next()}>Next</button>

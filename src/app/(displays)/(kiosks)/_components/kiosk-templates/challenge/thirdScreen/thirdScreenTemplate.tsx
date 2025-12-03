@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 // import styles from './thirdScreenTemplate.module.css';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
@@ -100,7 +102,14 @@ export default function ThirdScreenTemplate({
           // className={styles.challengeIcon}
           className="relative mr-0 flex h-[110px] w-[110px] items-center justify-center"
         >
-          <img alt="" className="block h-full w-full object-contain" src={challengeIconSrc} />
+          <Image
+            alt=""
+            className="object-contain"
+            fill
+            sizes="110px"
+            src={challengeIconSrc}
+            unoptimized
+          />
         </div>
         <h1
           // className={styles.challengeText}
@@ -161,7 +170,16 @@ export default function ThirdScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img alt="Up" className="h-full w-full object-contain" src={arrowUpIconSrc ?? imgArrowNavUp} />
+        <div className="relative h-full w-full">
+          <Image
+            alt="Up"
+            className="object-contain"
+            fill
+            sizes="118px"
+            src={arrowUpIconSrc ?? imgArrowNavUp}
+            unoptimized
+          />
+        </div>
       </div>
       <div
         aria-label="Next"
@@ -178,11 +196,16 @@ export default function ThirdScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img
-          alt="Down"
-          className="h-full w-full object-contain"
-          src={arrowDownIconSrc ?? arrowIconSrc ?? imgArrowNavDown}
-        />
+        <div className="relative h-full w-full">
+          <Image
+            alt="Down"
+            className="object-contain"
+            fill
+            sizes="118px"
+            src={arrowDownIconSrc ?? arrowIconSrc ?? imgArrowNavDown}
+            unoptimized
+          />
+        </div>
       </div>
 
       {/* Background Gradients */}
@@ -202,12 +225,17 @@ export default function ThirdScreenTemplate({
         className="pointer-events-none absolute left-[1090px] top-[1635px] z-[4] flex h-[795px] w-[795px] items-center justify-center rotate-[225deg] scale-y-[-1]"
         data-node-id="5168:9936"
       >
-        <img
-          alt=""
-          className="block h-full w-full object-contain"
-          src="/images/kiosks/kiosk1/01-challenge/Challenge-Image2-Diamond.png"
-          style={{ transform: 'rotate(45deg)' }}
-        />
+        <div className="relative h-full w-full">
+          <Image
+            alt=""
+            className="object-contain"
+            fill
+            sizes="795px"
+            src="/images/kiosks/kiosk1/01-challenge/Challenge-Image2-Diamond.png"
+            style={{ transform: 'rotate(45deg)' }}
+            unoptimized
+          />
+        </div>
       </div>
     </div>
   );

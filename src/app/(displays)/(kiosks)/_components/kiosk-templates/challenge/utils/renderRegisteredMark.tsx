@@ -37,7 +37,7 @@ export const renderRegisteredMark = (text?: string | string[]): ReactNode => {
     parts.push(
       <span className="registered-mark" key={`registered-mark-${matchIndex}-${index}`}>
         {match[0]}
-      </span>,
+      </span>
     );
     lastIndex = matchIndex + match[0].length;
   });
@@ -50,4 +50,3 @@ export const renderRegisteredMark = (text?: string | string[]): ReactNode => {
 };
 
 export default renderRegisteredMark;
-

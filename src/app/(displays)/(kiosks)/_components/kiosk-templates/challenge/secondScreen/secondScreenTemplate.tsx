@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 // import styles from './secondScreenTemplate.module.css';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
@@ -102,7 +104,14 @@ export default function SecondScreenTemplate({
           // className={styles.challengeIcon}
           className="relative mr-[5px] flex h-[120px] w-[120px] items-center justify-center"
         >
-          <img alt="" className="block h-full w-full object-contain" src={challengeIconSrc} />
+          <Image
+            alt=""
+            className="object-contain"
+            fill
+            sizes="120px"
+            src={challengeIconSrc}
+            unoptimized
+          />
         </div>
         <h1
           // className={styles.challengeText}
@@ -176,7 +185,16 @@ export default function SecondScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img alt="Up" className="h-full w-full object-contain" src={arrowUpIconSrc ?? imgArrowNavUp} />
+        <div className="relative h-full w-full">
+          <Image
+            alt="Up"
+            className="object-contain"
+            fill
+            sizes="118px"
+            src={arrowUpIconSrc ?? imgArrowNavUp}
+            unoptimized
+          />
+        </div>
       </div>
       <div
         aria-label="Next"
@@ -193,11 +211,16 @@ export default function SecondScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img
-          alt="Down"
-          className="h-full w-full object-contain"
-          src={arrowDownIconSrc ?? arrowIconSrc ?? imgArrowNavDown}
-        />
+        <div className="relative h-full w-full">
+          <Image
+            alt="Down"
+            className="object-contain"
+            fill
+            sizes="118px"
+            src={arrowDownIconSrc ?? arrowIconSrc ?? imgArrowNavDown}
+            unoptimized
+          />
+        </div>
       </div>
 
       {/* Background Gradients */}
@@ -223,12 +246,17 @@ export default function SecondScreenTemplate({
         className="pointer-events-none absolute left-[-21.5%] top-[42.5%] z-[4] flex size-[1506px] -scale-y-100 items-center justify-center rotate-[180deg]"
         data-node-id="5168:9917"
       >
-        <img
-          alt=""
-          className="block h-full w-full object-contain"
-          src={largeIconSrc}
-          style={{ transform: 'scaleX(-1)' }}
-        />
+        <div className="relative h-full w-full">
+          <Image
+            alt=""
+            className="object-contain"
+            fill
+            sizes="1506px"
+            src={largeIconSrc}
+            style={{ transform: 'scaleX(-1)' }}
+            unoptimized
+          />
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
 // Asset constants from Figma MCP
@@ -43,13 +45,30 @@ export default function InitialScreenTemplate({
       data-node-id="5168:9345"
     >
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <img alt="" className="absolute inset-0 h-[129%] w-full object-cover object-center" src={backgroundImage} />
-        <div className="absolute inset-0 bg-[rgba(0,0,0,0.2)]" />
+        <div className="relative h-full w-full">
+          <Image
+            alt=""
+            className="object-cover object-center"
+            fill
+            priority
+            sizes="100vw"
+            src={backgroundImage}
+            unoptimized
+          />
+          <div className="absolute inset-0 bg-[rgba(0,0,0,0.2)]" />
+        </div>
       </div>
 
       <div className="pointer-events-none absolute left-0 top-0 z-[1] h-[5120px] w-[2160px] overflow-hidden" data-name="Solution Pathways - Master Guides">
         <div className="absolute inset-0 h-full w-full">
-          <img alt="" className="block h-full w-full object-cover" src={guidesImageSrc} />
+          <Image
+            alt=""
+            className="object-cover"
+            fill
+            sizes="100vw"
+            src={guidesImageSrc}
+            unoptimized
+          />
         </div>
       </div>
 
@@ -64,7 +83,16 @@ export default function InitialScreenTemplate({
         data-name="Challenge Initial Screen Content Box"
       >
         <div className="absolute left-[120px] top-[2880px] z-[3] flex h-[180px] w-[710px] items-center">
-          <img alt="Partner logos" className="h-full w-full object-contain" src={logoCombinedSrc ?? imgLogo} />
+          <div className="relative h-full w-full">
+            <Image
+              alt="Partner logos"
+              className="object-contain"
+              fill
+              sizes="710px"
+              src={logoCombinedSrc ?? imgLogo}
+              unoptimized
+            />
+          </div>
         </div>
 
         <h1 className="max-w-[1460px] text-[80px] font-normal leading-[1.3] tracking-[-4px] text-black">
@@ -90,8 +118,8 @@ export default function InitialScreenTemplate({
             <span className="whitespace-nowrap text-[60.792px] font-normal leading-none tracking-[-1.8238px] text-[#14477d]">
               {renderRegisteredMark(buttonText)}
             </span>
-            <div className="flex h-[60px] w-[120px] items-center justify-center">
-              <img alt="" src={arrowIconSrc} />
+            <div className="relative flex h-[60px] w-[120px] items-center justify-center">
+              <Image alt="" fill sizes="120px" src={arrowIconSrc} unoptimized className="object-contain" />
             </div>
           </button>
         </div>

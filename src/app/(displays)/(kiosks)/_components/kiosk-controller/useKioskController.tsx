@@ -6,8 +6,8 @@ import type { Controller } from './KioskController';
 const noopController: Controller = {
   getRegistry: () => [],
   goTo: () => {},
-      next: () => {},
-      prev: () => {},
+  next: () => {},
+  prev: () => {},
   register: () => {},
   setRootHandlers: () => {},
   unregister: () => {},
