@@ -4,7 +4,7 @@ import styles from './initialScreenTemplate.module.css';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
 // Asset constants from Figma MCP
-const imgArrow = 'http://localhost:3845/assets/7326293bfdde3ab859cd77f94bcf35b016e0258d.svg';
+const imgArrow = '/images/kiosks/svgs/ButtonArrow.svg';
 const imgBackground = 'http://localhost:3845/assets/dd98d7914a26e49c34d00ab9c8c7203040efa819.png';
 const imgGuides = 'http://localhost:3845/assets/bbb0c30a6c52c72ecfe10371a7001daf550a68d1.svg';
 const imgLogoLeft = 'http://localhost:3845/assets/38289b05b71863e8503d53ef14e909f42b7886ac.svg';

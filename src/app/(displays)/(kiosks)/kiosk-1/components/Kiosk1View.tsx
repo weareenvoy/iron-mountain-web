@@ -1,30 +1,16 @@
 'use client';
 import { useEffect, useState } from 'react';
+import FirstScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/firstScreen/firstScreenTemplate';
+import InitialScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/initialScreen/initialScreenTemplate';
+import SecondScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/secondScreen/secondScreenTemplate';
+import ThirdScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/thirdScreen/thirdScreenTemplate';
 import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
-import InitialScreenTemplate, {
-  type InitialScreenTemplateProps,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/initialScreen/initialScreenTemplate';
-import FirstScreenTemplate, {
-  type FirstScreenTemplateProps,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/firstScreen/firstScreenTemplate';
-import SecondScreenTemplate, {
-  type SecondScreenTemplateProps,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/secondScreen/secondScreenTemplate';
-import ThirdScreenTemplate, {
-  type ThirdScreenTemplateProps,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/thirdScreen/thirdScreenTemplate';
+import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
 import challengeContent from '../challenges.json';
 // import styles from './kiosk-1.module.css';
 
 type Slide = { hasCarousel?: boolean; id: string; title: string };
-
-type ChallengeSlidesConfig = {
-  firstScreen: FirstScreenTemplateProps;
-  initialScreen: InitialScreenTemplateProps;
-  secondScreen: SecondScreenTemplateProps;
-  thirdScreen: ThirdScreenTemplateProps;
-};
 
 const slides: Slide[] = [
   { id: 's1', title: 'Welcome' },
@@ -36,7 +22,7 @@ const slides: Slide[] = [
 export default function Kiosk1View() {
   const controller: Controller = useKioskController();
   const [topIndex, setTopIndex] = useState(0);
-  const challenges = challengeContent as unknown as ChallengeSlidesConfig;
+  const challenges: KioskChallenges = parseKioskChallenges(challengeContent, 'kiosk-1');
 
   // Register root handlers for parallax navigation
   useEffect(() => {
