@@ -16,9 +16,9 @@ const Problem3 = ({ data }: Props) => {
   useEffect(() => {
     // Reset to hidden when data changes (async to avoid linter warning)
     const t0 = setTimeout(() => setStage('hidden'), 0);
-    const t1 = setTimeout(() => setStage('show1'), 1500);
-    const t2 = setTimeout(() => setStage('show2'), 2000);
-    const t3 = setTimeout(() => setStage('show3'), 2500);
+    const t1 = setTimeout(() => setStage('show1'), 2000);
+    const t2 = setTimeout(() => setStage('show2'), 3000);
+    const t3 = setTimeout(() => setStage('show3'), 4000);
 
     return () => {
       clearTimeout(t0);

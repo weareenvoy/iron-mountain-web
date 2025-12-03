@@ -34,7 +34,7 @@ const Background = () => {
         a.current?.play();
       };
 
-      a.current.addEventListener('canplay', onReady, { once: true });
+      a.current.addEventListener('canplaythrough', onReady, { once: true });
       a.current.load();
       lastBeat.current = beatId;
 
@@ -79,7 +79,7 @@ const Background = () => {
       if (nextUrl) setTimeout(() => (visible.src = nextUrl), 800); // 800 match fade duration
     };
 
-    hidden.addEventListener('canplay', go, { once: true });
+    hidden.addEventListener('canplaythrough', go, { once: true });
     hidden.load();
 
     lastBeat.current = beatId;
@@ -101,6 +101,7 @@ const Background = () => {
         muted
         onTimeUpdate={handleTimeUpdate}
         playsInline
+        preload="auto"
         ref={a}
         style={{ opacity: 1, transition: 'opacity 0.8s ease' }}
       />
@@ -109,6 +110,7 @@ const Background = () => {
         muted
         onTimeUpdate={handleTimeUpdate}
         playsInline
+        preload="auto"
         ref={b}
         style={{ opacity: 0, transition: 'opacity 0.8s ease' }}
       />
