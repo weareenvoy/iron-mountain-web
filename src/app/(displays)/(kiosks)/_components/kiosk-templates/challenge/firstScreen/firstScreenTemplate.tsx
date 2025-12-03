@@ -59,7 +59,7 @@ export default function FirstScreenTemplate({
             muted
             controlsList="nodownload"
             // className={styles.video}
-            className="block h-full w-full bg-red-500 object-cover object-center"
+            className="block h-full w-full object-cover object-center"
           >
             <source src={videoSrc} type="video/mp4" />
           </video>

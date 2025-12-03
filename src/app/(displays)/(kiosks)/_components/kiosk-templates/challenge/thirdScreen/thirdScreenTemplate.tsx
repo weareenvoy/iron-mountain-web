@@ -69,7 +69,7 @@ export default function ThirdScreenTemplate({
             muted
             controlsList="nodownload"
             // className={styles.video}
-            className="h-full w-full bg-red-500 object-cover object-center"
+            className="h-full w-full object-cover object-center"
           >
             <source src={videoSrc} type="video/mp4" />
           </video>
