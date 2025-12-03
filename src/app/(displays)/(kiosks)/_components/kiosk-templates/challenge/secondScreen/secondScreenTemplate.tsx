@@ -6,8 +6,8 @@ import renderRegisteredMark from '../utils/renderRegisteredMark';
 // Asset constants from Figma MCP
 const imgArrowNavDown = '/images/kiosks/svgs/NavDownArrow.svg';
 const imgArrowNavUp = '/images/kiosks/svgs/NavUpArrow.svg';
-const imgHero = 'http://localhost:3845/assets/40afdcf461baafad39ec3925ac4fd501259151d6.png';
-const imgVector = 'http://localhost:3845/assets/40afdcf461baafad39ec3925ac4fd501259151d6.png';
+const imgHero = '/images/kiosks/kiosk1/02-solution/Solution-Image1-Full.png';
+const imgVector = '/images/kiosks/kiosk1/01-challenge/Challenge-Image1-Diamond.png';
 const imgVector1 = '/images/kiosks/svgs/ChallengesDiamond.svg';
 
 export interface SecondScreenTemplateProps {
@@ -32,7 +32,7 @@ export default function SecondScreenTemplate({
   arrowIconSrc = imgArrowNavDown,
   arrowUpIconSrc = imgArrowNavUp,
   bottomDescription = 'The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.',
-  bottomVideoSrc = '/_videos/v1/a532f40a2a6848e2a80788002b6cb925a1f4c3c2',
+  bottomVideoSrc = '',
   challengeIconSrc = imgVector1,
   largeIconSrc = imgVector,
   mainDescription = 'The Museum also needed assistance with physical storage for a collection of historical music artifacts.',

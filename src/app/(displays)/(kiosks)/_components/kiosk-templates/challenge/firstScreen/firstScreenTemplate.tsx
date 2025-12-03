@@ -35,7 +35,7 @@ export default function FirstScreenTemplate({
   savingsAmount = '120 TB',
   savingsDescription = 'of data is safely stored and accessible for the Museum.',
   subheadline = 'Rich media &\n cultural heritage',
-  videoSrc = '/_videos/v1/3a042a38ece8bc71c733d7878d6e2f1d3104be52',
+  videoSrc = '/images/kiosks/kiosk1/01-challenge/Challenge-Header.mp4',
 }: FirstScreenTemplateProps) {
   return (
     <div

@@ -21,8 +21,6 @@ export type Controller = {
   getRegistry: () => RegistryEntry[];
 };
 
-const noop = () => {};
-
 const ControllerContext = React.createContext<Controller | null>(null);
 export { ControllerContext };
 
@@ -33,10 +31,11 @@ export const KioskControllerProvider = ({ children }: { children: React.ReactNod
     // replace if exists
     const idx = registryRef.current.findIndex((r) => r.id === id);
     if (idx >= 0) {
-      registryRef.current[idx].handlers = handlers;
-    } else {
-      registryRef.current.push({ id, handlers });
+      registryRef.current[idx] = { id, handlers };
+      return;
     }
+
+    registryRef.current.push({ id, handlers });
   };
 
   const unregister = (id: string) => {
@@ -45,7 +44,8 @@ export const KioskControllerProvider = ({ children }: { children: React.ReactNod
 
   const getActive = (): Handlers | null => {
     if (registryRef.current.length === 0) return null;
-    return registryRef.current[registryRef.current.length - 1].handlers;
+    const last = registryRef.current[registryRef.current.length - 1];
+    return last ? last.handlers : null;
   };
 
   const rootRef = React.useRef<Handlers | null>(null);

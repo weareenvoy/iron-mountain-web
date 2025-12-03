@@ -6,9 +6,9 @@ import renderRegisteredMark from '../utils/renderRegisteredMark';
 // Asset constants from Figma MCP
 const imgArrowNavDown = '/images/kiosks/svgs/NavDownArrow.svg';
 const imgArrowNavUp = '/images/kiosks/svgs/NavUpArrow.svg';
-const imgHeroDiamond = 'http://localhost:3845/assets/980d1dee1ed7de2996214b8db1a42986b97dc47d.png';
-const imgMetricDiamond = 'http://localhost:3845/assets/f52f006df3b7e80cef930718c449ddff29312f59.png';
-const imgVector = imgHeroDiamond;
+const imgHeroDiamond = '/images/kiosks/kiosk1/04-custom-interactive/CU-Image1-Diamond.png';
+const imgMetricDiamond = '/images/kiosks/kiosk1/04-custom-interactive/CU-Image1-Diamond.png';
+const imgVector = '/images/kiosks/kiosk1/04-custom-interactive/CU-Image1-Full.png';
 const imgVector1 = imgMetricDiamond;
 const imgVector2 = '/images/kiosks/svgs/ChallengesDiamond.svg';
 
@@ -45,7 +45,7 @@ export default function ThirdScreenTemplate({
   onNavigateDown,
   onNavigateUp,
   subheadline = 'Rich media &\n cultural heritage',
-  videoSrc = '/_videos/v1/3742b7e5490c6c79474014f5d41e4d50fe21d59a',
+  videoSrc = '/images/kiosks/kiosk1/03-value/Value-header.mp4',
 }: ThirdScreenTemplateProps) {
   return (
     <div
