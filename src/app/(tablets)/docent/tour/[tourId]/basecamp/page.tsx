@@ -6,44 +6,23 @@ import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
 import MomentsAndBeats from '@/app/(tablets)/docent/_components/ui/MomentsAndBeats';
+import { useDocentTranslation } from '@/hooks/use-docent-translation';
 import useMomentsNavigation from '@/hooks/use-moments-navigation';
 import type { Moment } from '@/lib/internal/types';
 
-const BASECAMP_CONTENT: Readonly<Moment[]> = [
-  {
-    beatCount: 1,
-    id: 'ambient',
-    title: 'Ambient state',
-  },
-  {
-    beatCount: 4,
-    id: 'welcome',
-    title: 'Welcome',
-  },
-  {
-    beatCount: 4,
-    id: 'problem',
-    title: 'Problem',
-  },
-  {
-    beatCount: 5,
-    id: 'possibilities',
-    title: 'Possibilities',
-  },
-  {
-    beatCount: 3,
-    id: 'ascend',
-    title: 'Ascend',
-  },
-] as const;
-
 const BasecampPage = ({ params }: PageProps<'/docent/tour/[tourId]/basecamp'>) => {
+  const { t } = useDocentTranslation();
   const { tourId } = use(params);
-  const { basecampExhibitState, currentTour, setBasecampExhibitState } = useDocent();
+  const { basecampExhibitState, currentTour, data, setBasecampExhibitState } = useDocent();
+
+  // Use moments directly from data (titles included)
+  const basecampContent: Readonly<Moment[]> = useMemo(() => {
+    return (data?.moments.basecamp ?? []) as Readonly<Moment[]>;
+  }, [data?.moments.basecamp]);
 
   // MomentsAndBeats navigation.
   const { handleNext, handlePrevious, isNextDisabled, isPreviousDisabled } = useMomentsNavigation(
-    BASECAMP_CONTENT,
+    basecampContent,
     basecampExhibitState,
     setBasecampExhibitState,
     'basecamp'
@@ -53,9 +32,9 @@ const BasecampPage = ({ params }: PageProps<'/docent/tour/[tourId]/basecamp'>) =
     (): HeaderProps['leftButton'] => ({
       href: `/docent/tour/${tourId}`,
       icon: <ArrowLeft />,
-      text: 'Back to menu',
+      text: t.docent.navigation.backToMenu,
     }),
-    [tourId]
+    [tourId, t]
   );
 
   return (
@@ -64,9 +43,9 @@ const BasecampPage = ({ params }: PageProps<'/docent/tour/[tourId]/basecamp'>) =
       <Header leftButton={leftButton} />
 
       {/* Header */}
-      <div className="mt-35 flex flex-col gap-42.5">
+      <div className="mt-40 flex flex-col gap-20">
         {/* Title */}
-        <div className="flex flex-col items-center gap-[23px]">
+        <div className="mx-5 flex flex-col items-start gap-2 border-b border-[rgba(255,255,255,0.5)] pb-12.5">
           <h1 className="text-primary-bg-grey text-center text-[36px] leading-loose tracking-[-1.8px]">Basecamp</h1>
           <p className="text-primary-bg-grey text-center text-xl leading-loose tracking-[-1px]">
             {currentTour?.guestName || 'Tour'}
@@ -74,7 +53,7 @@ const BasecampPage = ({ params }: PageProps<'/docent/tour/[tourId]/basecamp'>) =
         </div>
 
         <MomentsAndBeats
-          content={BASECAMP_CONTENT}
+          content={basecampContent}
           exhibit="basecamp"
           exhibitState={basecampExhibitState}
           setExhibitState={setBasecampExhibitState}

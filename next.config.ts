@@ -28,7 +28,7 @@ const nextConfig: NextConfig = {
     // Enable filesystem caching for `next build`
     // turbopackFileSystemCacheForBuild: true, // Available in Canary only
     // Enable filesystem caching for `next dev`
-    turbopackFileSystemCacheForDev: true,
+    turbopackFileSystemCacheForDev: false,
     typedEnv: true,
     webVitalsAttribution: ['CLS', 'FCP', 'FID', 'INP', 'LCP', 'TTFB'],
   },

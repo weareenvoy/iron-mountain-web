@@ -162,7 +162,7 @@ const eslintConfig = defineConfig([
           tabWidth: 2,
           tailwindFunctions: ['clsx'],
           tailwindPreserveWhitespace: true,
-          tailwindStylesheet: resolve(__dirname, './src/lib/tailwind/styles/globals.css'),
+          tailwindStylesheet: resolve(__dirname, './src/app/globals.css'),
           trailingComma: 'es5',
           useTabs: false,
         },

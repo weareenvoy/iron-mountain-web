@@ -28,7 +28,7 @@ export interface MqttMessage<T = unknown> {
 
 // Full MQTT state for an exhibit (published to state/<exhibit>)
 export interface ExhibitMqttState {
-  'slide': string; // e.g.,   , "welcome-3", "idle", "loading", "error"
+  'beat-id': string; // e.g., "ambient-1", "welcome-3", "loading", "error"
   'tour-id'?: null | string;
   'volume-level': number; // 0.0 to 1.0
   'volume-muted': boolean;

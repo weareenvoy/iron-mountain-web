@@ -2,19 +2,27 @@
 
 import { createContext, useCallback, useContext, useEffect, useState, type PropsWithChildren } from 'react';
 import { useMqtt } from '@/components/providers/mqtt-provider';
+import { getLocaleForTesting } from '@/flags/flags';
 import { getBasecampData } from '@/lib/internal/data/get-basecamp';
-import type { BasecampData } from '@/app/(displays)/basecamp/_types';
-import type { ExhibitNavigationState } from '@/lib/internal/types';
+import {
+  isBasecampSection,
+  type BasecampData,
+  type Dictionary,
+  type ExhibitNavigationState,
+  type Locale,
+} from '@/lib/internal/types';
 import type { ExhibitMqttState } from '@/lib/mqtt/types';
 
 interface BasecampContextType {
   data: BasecampData | null;
+  dict: Dictionary | null;
   error: null | string;
   exhibitState: ExhibitNavigationState;
   loading: boolean;
+  locale: Locale;
 }
 
-const BasecampContext = createContext<BasecampContextType | undefined>(undefined);
+export const BasecampContext = createContext<BasecampContextType | undefined>(undefined);
 
 type BasecampProviderProps = PropsWithChildren<{
   readonly topic?: string; // placeholder for future props
@@ -28,6 +36,17 @@ export const useBasecamp = () => {
   return context;
 };
 
+/**
+ * Hook to get the current locale/language for the Basecamp app.
+ * Always returns a valid locale (never null).
+ *
+ * @returns The current locale ('en' | 'pt')
+ */
+export const useLocale = (): Locale => {
+  const { locale } = useBasecamp();
+  return locale;
+};
+
 export const BasecampProvider = ({ children }: BasecampProviderProps) => {
   const { client } = useMqtt();
 
@@ -39,13 +58,15 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
 
   // MQTT state (what we report to GEC)
   const [mqttState, setMqttState] = useState<ExhibitMqttState>({
-    'slide': 'idle',
+    'beat-id': 'ambient-1',
     'tour-id': null,
     'volume-level': 1.0,
     'volume-muted': false,
   });
 
   const [data, setData] = useState<BasecampData | null>(null);
+  const [dict, setDict] = useState<Dictionary | null>(null);
+  const [locale, setLocale] = useState<Locale>(getLocaleForTesting());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<null | string>(null);
 
@@ -56,7 +77,9 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
 
     try {
       const basecampData = await getBasecampData();
-      setData(basecampData);
+      setData(basecampData.data);
+      setDict(basecampData.dict);
+      setLocale(basecampData.locale);
       setError(null);
       return true;
     } catch (err) {
@@ -100,14 +123,6 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
         console.info('Basecamp received load-tour command:', tourId);
 
         if (tourId) {
-          // Report loading state immediately
-          reportState({
-            'slide': 'loading',
-            'tour-id': tourId,
-            'volume-level': 1.0,
-            'volume-muted': false,
-          });
-
           // Fetch tour-specific data for this tour
           // For now, just fetch the generic basecamp data
           const success = await fetchData(tourId);
@@ -116,19 +131,13 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
             // Only report loaded state after data is fetched
             setExhibitState({ beatIdx: 0, momentId: 'ambient' });
             reportState({
-              'slide': 'ambient-1',
+              'beat-id': 'ambient-1',
               'tour-id': tourId,
               'volume-level': 1.0,
               'volume-muted': false,
             });
           } else {
-            // Report error state if fetch failed
-            reportState({
-              'slide': 'error',
-              'tour-id': tourId,
-              'volume-level': 0.0,
-              'volume-muted': false,
-            });
+            console.error('Basecamp: Failed to fetch tour data for tour:', tourId);
           }
         }
       } catch (error) {
@@ -136,38 +145,32 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
       }
     };
 
-    // 2. Go idle command (broadcast to all exhibits)
-    const handleGoIdle = (message: Buffer) => {
-      try {
-        const msg = JSON.parse(message.toString());
-        const reason = msg.body?.reason;
-        console.info('Basecamp received go-idle command:', reason);
+    // 2. End tour command (broadcast to all exhibits)
+    const handleEndTour = () => {
+      console.info('Basecamp received end-tour command');
 
-        // Reset to idle state
-        setExhibitState({ beatIdx: 0, momentId: 'ambient' });
-        reportState({
-          'slide': 'idle',
-          'tour-id': null,
-          'volume-level': 0.0,
-          'volume-muted': false,
-        });
-      } catch (error) {
-        console.error('Basecamp: Error parsing go-idle command:', error);
-      }
+      // Reset to ambient state with no tour
+      setExhibitState({ beatIdx: 0, momentId: 'ambient' });
+      reportState({
+        'beat-id': 'ambient-1',
+        'tour-id': null,
+        'volume-level': 0.0,
+        'volume-muted': false,
+      });
     };
 
     // 3. Goto beat command (direct from Docent)
     const handleGotoBeat = (message: Buffer) => {
       try {
         const msg = JSON.parse(message.toString());
-        const beatId = msg.body?.beat_id;
+        const beatId = msg.body?.['beat-id'];
         console.info('Basecamp received goto-beat command:', beatId);
 
         if (beatId) {
-          // Parse beat_id format: ${moment}-${beatNumber} (e.g., "ambient-1", "welcome-3", "protect-2")
+          // Parse beat-id format: ${moment}-${beatNumber} (e.g., "ambient-1", "welcome-3", "protect-2")
           const lastDashIndex = beatId.lastIndexOf('-');
           if (lastDashIndex === -1) {
-            console.error('Invalid beat_id format:', beatId);
+            console.error('Invalid beat-id format:', beatId);
             return;
           }
 
@@ -175,7 +178,13 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
           const beatNumber = parseInt(beatId.substring(lastDashIndex + 1), 10);
 
           if (isNaN(beatNumber) || beatNumber < 1) {
-            console.error('Invalid beat number in beat_id:', beatId);
+            console.error('Invalid beat number in beat-id:', beatId);
+            return;
+          }
+
+          // Validate that momentId is a valid BasecampSection
+          if (!isBasecampSection(momentId)) {
+            console.error('Invalid moment ID for Basecamp:', momentId);
             return;
           }
 
@@ -185,8 +194,8 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
           console.info(`Parsed beat: moment=${momentId}, beatIdx=${beatIdx}`);
           setExhibitState({ beatIdx, momentId });
 
-          // Report updated state with new slide
-          reportState({ slide: beatId });
+          // Report updated state with new beat-id
+          reportState({ 'beat-id': beatId });
         }
       } catch (error) {
         console.error('Basecamp: Error parsing goto-beat command:', error);
@@ -195,15 +204,15 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
 
     // Subscribe to broadcast commands (all exhibits listen to same topics)
     client.subscribeToTopic('cmd/dev/all/load-tour', handleLoadTour);
-    client.subscribeToTopic('cmd/dev/all/go-idle', handleGoIdle);
+    client.subscribeToTopic('cmd/dev/all/end-tour', handleEndTour);
 
     // Also subscribe to basecamp-specific goto-beat (direct from Docent)
     client.subscribeToTopic('cmd/dev/basecamp/goto-beat', handleGotoBeat);
 
     return () => {
-      client.unsubscribeFromTopic('cmd/dev/all/load-tour');
-      client.unsubscribeFromTopic('cmd/dev/all/go-idle');
-      client.unsubscribeFromTopic('cmd/dev/basecamp/goto-beat');
+      client.unsubscribeFromTopic('cmd/dev/all/load-tour', handleLoadTour);
+      client.unsubscribeFromTopic('cmd/dev/all/end-tour', handleEndTour);
+      client.unsubscribeFromTopic('cmd/dev/basecamp/goto-beat', handleGotoBeat);
     };
   }, [client, fetchData, reportState]);
 
@@ -221,14 +230,18 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
         // Update internal MQTT state
         setMqttState(state);
 
-        // Parse slide to update UI navigation state
-        if (state.slide && state.slide !== 'idle') {
-          const lastDashIndex = state.slide.lastIndexOf('-');
+        // Parse beat-id to update UI navigation state
+        if (state['beat-id']) {
+          const lastDashIndex = state['beat-id'].lastIndexOf('-');
           if (lastDashIndex !== -1) {
-            const momentId = state.slide.substring(0, lastDashIndex);
-            const beatNumber = parseInt(state.slide.substring(lastDashIndex + 1), 10);
-            if (!isNaN(beatNumber) && beatNumber >= 1) {
+            const momentId = state['beat-id'].substring(0, lastDashIndex);
+            const beatNumber = parseInt(state['beat-id'].substring(lastDashIndex + 1), 10);
+
+            // Validate that momentId is a valid BasecampSection before using it
+            if (!isNaN(beatNumber) && beatNumber >= 1 && isBasecampSection(momentId)) {
               setExhibitState({ beatIdx: beatNumber - 1, momentId });
+            } else {
+              console.warn('Invalid beat-id format or moment ID:', state['beat-id']);
             }
           }
         }
@@ -246,15 +259,17 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     client.subscribeToTopic('state/basecamp', handleOwnState);
 
     return () => {
-      client.unsubscribeFromTopic('state/basecamp');
+      client.unsubscribeFromTopic('state/basecamp', handleOwnState);
     };
   }, [client, fetchData]);
 
   const contextValue = {
     data,
+    dict,
     error,
     exhibitState,
     loading,
+    locale,
   };
 
   return <BasecampContext.Provider value={contextValue}>{children}</BasecampContext.Provider>;
