@@ -7,6 +7,7 @@ import renderRegisteredMark from '../utils/renderRegisteredMark';
 const imgArrow = '/images/kiosks/svgs/ButtonArrow.svg';
 const imgBackground = 'http://localhost:3845/assets/dd98d7914a26e49c34d00ab9c8c7203040efa819.png';
 const imgGuides = 'http://localhost:3845/assets/bbb0c30a6c52c72ecfe10371a7001daf550a68d1.svg';
+const imgLogoCombined = '/images/kiosks/svgs/WhiteLogos.svg';
 const imgLogoLeft = 'http://localhost:3845/assets/38289b05b71863e8503d53ef14e909f42b7886ac.svg';
 const imgLogoRight = 'http://localhost:3845/assets/05ccdbe86e680d4f2668ce2111496defad30fecd.svg';
 
@@ -17,6 +18,7 @@ export interface InitialScreenTemplateProps {
   buttonText?: string;
   guidesImageSrc?: string;
   headline?: string;
+  logoCombinedSrc?: string;
   logoLeftSrc?: string;
   logoRightSrc?: string;
   onButtonClick?: () => void;
@@ -31,6 +33,7 @@ export default function InitialScreenTemplate({
   buttonText = 'Touch to explore',
   guidesImageSrc = imgGuides,
   headline = 'The GRAMMY Museum® preserves the soundtrack of history.',
+  logoCombinedSrc = imgLogoCombined,
   logoLeftSrc = imgLogoLeft,
   logoRightSrc = imgLogoRight,
   onButtonClick,
@@ -60,12 +63,7 @@ export default function InitialScreenTemplate({
       <div className={styles.contentBox} data-name="Challenge Initial Screen Content Box">
         {/* Logo Section */}
         <div className={styles.logoContainer}>
-          <div className={styles.logoLeft}>
-            <img alt="Logo" src={logoLeftSrc} />
-          </div>
-          <div className={styles.logoRight}>
-            <img alt="Logo" src={logoRightSrc} />
-          </div>
+        <img alt="Partner logos" className={styles.logoCombined} src={logoCombinedSrc ?? logoLeftSrc ?? logoRightSrc} />
         </div>
 
         {/* Headline */}

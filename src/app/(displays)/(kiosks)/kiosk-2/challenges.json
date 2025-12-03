@@ -10,7 +10,7 @@
     "videoSrc": "/images/kiosks/kiosk2/01-challenge/Challenge-header.mp4"
   },
   "initialScreen": {
-    "arrowIconSrc": "/images/kiosks/svgs/ButtonArrow.svg",
+    "arrowIconSrc": "http://localhost:3845/assets/7326293bfdde3ab859cd77f94bcf35b016e0258d.svg",
     "attribution": "",
     "backgroundImage": "/images/kiosks/kiosk2/Cover.png",
     "buttonText": "Touch to explore",
