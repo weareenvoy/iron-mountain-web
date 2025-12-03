@@ -4,13 +4,16 @@
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
 // Asset constants from Figma MCP
-const imgArrowNarrowDown = 'http://localhost:3845/assets/a750fbdd00ef68fcb2ba9208e4bd977de111641b.svg';
+const imgArrowNavDown = '/images/kiosks/svgs/NavDownArrow.svg';
+const imgArrowNavUp = '/images/kiosks/svgs/NavUpArrow.svg';
 const imgHero = 'http://localhost:3845/assets/40afdcf461baafad39ec3925ac4fd501259151d6.png';
 const imgVector = 'http://localhost:3845/assets/40afdcf461baafad39ec3925ac4fd501259151d6.png';
-const imgVector1 = 'http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg';
+const imgVector1 = '/images/kiosks/svgs/ChallengesDiamond.svg';
 
 export interface SecondScreenTemplateProps {
+  arrowDownIconSrc?: string;
   arrowIconSrc?: string;
+  arrowUpIconSrc?: string;
   bottomDescription?: string;
   bottomVideoSrc?: string;
   challengeIconSrc?: string;
@@ -25,7 +28,9 @@ export interface SecondScreenTemplateProps {
 }
 
 export default function SecondScreenTemplate({
-  arrowIconSrc = imgArrowNarrowDown,
+  arrowDownIconSrc = imgArrowNavDown,
+  arrowIconSrc = imgArrowNavDown,
+  arrowUpIconSrc = imgArrowNavUp,
   bottomDescription = 'The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.',
   bottomVideoSrc = '/_videos/v1/a532f40a2a6848e2a80788002b6cb925a1f4c3c2',
   challengeIconSrc = imgVector1,
@@ -104,9 +109,7 @@ export default function SecondScreenTemplate({
           // className={styles.challengeIcon}
           className="relative mr-[15px] flex h-[100px] w-[100px] items-center justify-center"
         >
-          <div className="relative size-full rotate-[225deg] scale-y-[-1]">
-            <img alt="" className="block h-full w-full object-contain" src={challengeIconSrc} />
-          </div>
+          <img alt="" className="block h-full w-full object-contain" src={challengeIconSrc} />
         </div>
         <h1
           // className={styles.challengeText}
@@ -168,7 +171,7 @@ export default function SecondScreenTemplate({
       <div
         aria-label="Previous"
         // className={styles.arrowUp}
-        className="absolute right-[120px] top-[1755px] z-[10] flex h-[118px] w-[118px] -scale-y-100 items-center justify-center"
+        className="absolute right-[120px] top-[1755px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
         data-node-id="5168:9923"
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
@@ -180,7 +183,7 @@ export default function SecondScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img alt="Up" className="h-full w-full object-contain" src={arrowIconSrc} />
+        <img alt="Up" className="h-full w-full object-contain" src={arrowUpIconSrc ?? imgArrowNavUp} />
       </div>
       <div
         aria-label="Next"
@@ -197,7 +200,11 @@ export default function SecondScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img alt="Down" className="h-full w-full object-contain" src={arrowIconSrc} />
+        <img
+          alt="Down"
+          className="h-full w-full object-contain"
+          src={arrowDownIconSrc ?? arrowIconSrc ?? imgArrowNavDown}
+        />
       </div>
 
       {/* Background Gradients */}

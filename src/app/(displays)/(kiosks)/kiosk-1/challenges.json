@@ -1,7 +1,7 @@
 {
   "firstScreen": {
-    "arrowIconSrc": "http://localhost:3845/assets/41b3eec6c414760c14b0a849351861e4f8091cf4.svg",
-    "challengeIconSrc": "http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg",
+    "arrowIconSrc": "/images/kiosks/svgs/NavDownArrow.svg",
+    "challengeIconSrc": "/images/kiosks/svgs/ChallengesDiamond.svg",
     "challengeLabel": "Challenge",
     "problemDescription": "The Museum needed a secure, off-site, cloud-accessible, and easily managed solution to protect its one-of-a-kind, irreplaceable footage. Storing the only master copy locally presented a high risk of losing all assets in the event of a data failure or system crash.",
     "savingsAmount": "120 TB",
@@ -22,10 +22,10 @@
     "subheadline": ["Rich media &", "cultural heritage"]
   },
   "secondScreen": {
-    "arrowIconSrc": "http://localhost:3845/assets/a750fbdd00ef68fcb2ba9208e4bd977de111641b.svg",
+    "arrowIconSrc": "/images/kiosks/svgs/NavDownArrow.svg",
     "bottomDescription": "The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.",
     "bottomVideoSrc": "/images/kiosks/kiosk1/02-solution/Solution-Header.mp4",
-    "challengeIconSrc": "http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg",
+    "challengeIconSrc": "/images/kiosks/svgs/ChallengesDiamond.svg",
     "largeIconSrc": "/images/kiosks/kiosk1/02-solution/Solution-Image1-Diamond.png",
     "mainDescription": "The Museum also needed assistance with physical storage for a collection of historical music artifacts.",
     "statAmount": "100M+",
@@ -34,8 +34,8 @@
     "topImageSrc": "/images/kiosks/kiosk1/02-solution/Solution-Image1-Full.png"
   },
   "thirdScreen": {
-    "arrowIconSrc": "http://localhost:3845/assets/0317ffc66a61baf023ab7ce353692457254030a6.svg",
-    "challengeIconSrc": "http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg",
+    "arrowIconSrc": "/images/kiosks/svgs/NavDownArrow.svg",
+    "challengeIconSrc": "/images/kiosks/svgs/ChallengesDiamond.svg",
     "description": "The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.",
     "heroImageSrc": "/images/kiosks/kiosk1/04-custom-interactive/CU-Image1-Diamond.png",
     "largeIconCenterSrc": "/images/kiosks/kiosk1/04-custom-interactive/CU-Image1-Full.png",

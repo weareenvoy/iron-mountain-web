@@ -4,11 +4,14 @@
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
 // Asset constants from Figma MCP
-const imgArrowNarrowDown = 'http://localhost:3845/assets/41b3eec6c414760c14b0a849351861e4f8091cf4.svg';
-const imgVector = 'http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg';
+const imgArrowNavDown = '/images/kiosks/svgs/NavDownArrow.svg';
+const imgArrowNavUp = '/images/kiosks/svgs/NavUpArrow.svg';
+const imgVector = '/images/kiosks/svgs/ChallengesDiamond.svg';
 
 export interface FirstScreenTemplateProps {
+  arrowDownIconSrc?: string;
   arrowIconSrc?: string;
+  arrowUpIconSrc?: string;
   challengeIconSrc?: string;
   challengeLabel?: string;
   onNavigateDown?: () => void;
@@ -21,7 +24,9 @@ export interface FirstScreenTemplateProps {
 }
 
 export default function FirstScreenTemplate({
-  arrowIconSrc = imgArrowNarrowDown,
+  arrowDownIconSrc = imgArrowNavDown,
+  arrowIconSrc = imgArrowNavDown,
+  arrowUpIconSrc = imgArrowNavUp,
   challengeIconSrc = imgVector,
   challengeLabel = 'Challenge',
   onNavigateDown,
@@ -84,9 +89,7 @@ export default function FirstScreenTemplate({
           // className={styles.challengeIcon}
           className="relative mr-[15px] flex h-[100px] w-[100px] items-center justify-center"
         >
-          <div className="relative size-full rotate-[225deg] scale-y-[-1]">
-            <img alt="" className="block h-full w-full object-contain" src={challengeIconSrc} />
-          </div>
+          <img alt="" className="block h-full w-full object-contain" src={challengeIconSrc} />
         </div>
         <h1
           // className={styles.challengeText}
@@ -100,7 +103,7 @@ export default function FirstScreenTemplate({
       <div
         aria-label="Previous"
         // className={styles.arrowUp}
-        className="absolute right-[120px] top-[1760px] z-[10] flex h-[118px] w-[118px] -scale-y-100 items-center justify-center"
+        className="absolute right-[120px] top-[1760px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
         data-node-id="5168:9899"
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
@@ -112,7 +115,7 @@ export default function FirstScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img alt="Up" className="h-full w-full object-contain" src={arrowIconSrc} />
+        <img alt="Up" className="h-full w-full object-contain" src={arrowUpIconSrc ?? imgArrowNavUp} />
       </div>
       <div
         aria-label="Next"
@@ -129,7 +132,11 @@ export default function FirstScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img alt="Down" className="h-full w-full object-contain" src={arrowIconSrc} />
+        <img
+          alt="Down"
+          className="h-full w-full object-contain"
+          src={arrowDownIconSrc ?? arrowIconSrc ?? imgArrowNavDown}
+        />
       </div>
 
       {/* Problem Description Section */}

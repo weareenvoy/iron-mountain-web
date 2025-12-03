@@ -4,15 +4,18 @@
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
 // Asset constants from Figma MCP
-const imgArrowNarrowDown = 'http://localhost:3845/assets/0317ffc66a61baf023ab7ce353692457254030a6.svg';
+const imgArrowNavDown = '/images/kiosks/svgs/NavDownArrow.svg';
+const imgArrowNavUp = '/images/kiosks/svgs/NavUpArrow.svg';
 const imgHeroDiamond = 'http://localhost:3845/assets/980d1dee1ed7de2996214b8db1a42986b97dc47d.png';
 const imgMetricDiamond = 'http://localhost:3845/assets/f52f006df3b7e80cef930718c449ddff29312f59.png';
 const imgVector = imgHeroDiamond;
 const imgVector1 = imgMetricDiamond;
-const imgVector2 = 'http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg';
+const imgVector2 = '/images/kiosks/svgs/ChallengesDiamond.svg';
 
 export interface ThirdScreenTemplateProps {
+  arrowDownIconSrc?: string;
   arrowIconSrc?: string;
+  arrowUpIconSrc?: string;
   challengeIconSrc?: string;
   description?: string;
   heroImageSrc?: string;
@@ -28,7 +31,9 @@ export interface ThirdScreenTemplateProps {
 }
 
 export default function ThirdScreenTemplate({
-  arrowIconSrc = imgArrowNarrowDown,
+  arrowDownIconSrc = imgArrowNavDown,
+  arrowIconSrc = imgArrowNavDown,
+  arrowUpIconSrc = imgArrowNavUp,
   challengeIconSrc = imgVector2,
   description = 'The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.',
   heroImageSrc = imgHeroDiamond,
@@ -99,9 +104,7 @@ export default function ThirdScreenTemplate({
           // className={styles.challengeIcon}
           className="relative mr-[15px] flex h-[100px] w-[100px] items-center justify-center"
         >
-          <div className="relative size-full rotate-[225deg] scale-y-[-1]">
-            <img alt="" className="block h-full w-full object-contain" src={challengeIconSrc} />
-          </div>
+          <img alt="" className="block h-full w-full object-contain" src={challengeIconSrc} />
         </div>
         <h1
           // className={styles.challengeText}
@@ -154,7 +157,7 @@ export default function ThirdScreenTemplate({
       <div
         aria-label="Previous"
         // className={styles.arrowUp}
-        className="absolute right-[120px] top-[1755px] z-[10] flex h-[118px] w-[118px] -scale-y-100 items-center justify-center"
+        className="absolute right-[120px] top-[1755px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
         data-node-id="5168:9940"
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
@@ -166,7 +169,7 @@ export default function ThirdScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img alt="Up" className="h-full w-full object-contain" src={arrowIconSrc} />
+        <img alt="Up" className="h-full w-full object-contain" src={arrowUpIconSrc ?? imgArrowNavUp} />
       </div>
       <div
         aria-label="Next"
@@ -183,7 +186,11 @@ export default function ThirdScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img alt="Down" className="h-full w-full object-contain" src={arrowIconSrc} />
+        <img
+          alt="Down"
+          className="h-full w-full object-contain"
+          src={arrowDownIconSrc ?? arrowIconSrc ?? imgArrowNavDown}
+        />
       </div>
 
       {/* Background Gradients */}
