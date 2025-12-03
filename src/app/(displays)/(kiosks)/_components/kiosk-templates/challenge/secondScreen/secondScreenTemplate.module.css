@@ -73,8 +73,8 @@
 /* Challenge Label */
 .challengeLabel {
   position: absolute;
-  top: 745.23px;
-  left: 128.17px;
+  top: 745px;
+  left: 128px;
   display: flex;
   align-items: center;
   gap: 41px;

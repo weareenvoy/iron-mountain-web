@@ -54,17 +54,20 @@ export default function ThirdScreenTemplate({
         className="absolute left-0 top-0 z-[1] h-[1291px] w-full overflow-hidden"
         data-node-id="5168:9929"
       >
-        <video
-          autoPlay
-          loop
-          playsInline
-          muted
-          controlsList="nodownload"
-          // className={styles.video}
-          className="absolute left-[-7.5%] top-[-5.93%] h-[117.19%] w-[124.52%] bg-red-500 object-cover object-center"
-        >
-          <source src={videoSrc} type="video/mp4" />
-        </video>
+        <div className="relative left-[-7.5%] top-[-5.93%] h-[117.19%] w-[124.52%]">
+          <video
+            autoPlay
+            loop
+            playsInline
+            muted
+            controlsList="nodownload"
+            // className={styles.video}
+            className="h-full w-full bg-red-500 object-cover object-center"
+          >
+            <source src={videoSrc} type="video/mp4" />
+          </video>
+          <div className="pointer-events-none absolute inset-0 bg-black/20" />
+        </div>
       </div>
 
       {/* Top Hero Diamond */}

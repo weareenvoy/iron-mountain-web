@@ -44,17 +44,20 @@ export default function FirstScreenTemplate({
         className="absolute left-0 top-0 z-[1] h-[1291px] w-full overflow-hidden bg-transparent"
         data-node-id="5168:9883"
       >
-        <video
-          autoPlay
-          loop
-          playsInline
-          muted
-          controlsList="nodownload"
-          // className={styles.video}
-          className="block h-full w-full bg-red-500 object-cover object-center"
-        >
-          <source src={videoSrc} type="video/mp4" />
-        </video>
+        <div className="relative h-full w-full">
+          <video
+            autoPlay
+            loop
+            playsInline
+            muted
+            controlsList="nodownload"
+            // className={styles.video}
+            className="block h-full w-full bg-red-500 object-cover object-center"
+          >
+            <source src={videoSrc} type="video/mp4" />
+          </video>
+          <div className="pointer-events-none absolute inset-0 bg-black/20" />
+        </div>
       </div>
 
       {/* Subheadline - positioned above challenge section */}

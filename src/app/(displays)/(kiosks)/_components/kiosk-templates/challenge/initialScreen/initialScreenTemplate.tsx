@@ -45,6 +45,7 @@ export default function InitialScreenTemplate({
       {/* Background with parallax layer */}
       <div className={styles.backgroundLayer}>
         <img alt="" className={styles.backgroundImage} src={backgroundImage} />
+        <div className={styles.backgroundOverlay} />
       </div>
 
       {/* Solution Pathways Guide Lines */}

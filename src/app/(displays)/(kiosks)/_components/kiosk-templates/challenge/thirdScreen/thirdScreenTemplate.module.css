@@ -195,10 +195,10 @@
 /* Background Gradients */
 .gradientBg {
   position: absolute;
-  top: -224.49px;
-  left: 0.49px;
-  width: 2158.28px;
-  height: 5549.29px;
+  top: -224px;
+  left: 0px;
+  width: 2158px;
+  height: 5549px;
   background: linear-gradient(to bottom, #1b75bc 0%, #14477d 98%);
   border-radius: 100px;
   z-index: 2;

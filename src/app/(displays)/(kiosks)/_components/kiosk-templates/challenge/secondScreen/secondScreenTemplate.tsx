@@ -64,17 +64,20 @@ export default function SecondScreenTemplate({
         className="absolute left-0 top-[4233px] z-[1] h-[1291px] w-full overflow-hidden"
         data-node-id="5168:9908"
       >
-        <video
-          autoPlay
-          loop
-          playsInline
-          muted
-          controlsList="nodownload"
-          // className={styles.bottomVideo}
-          className="absolute left-[-30.42%] top-[-30.96%] h-[172.5%] w-[181.73%] bg-red-500 object-cover object-center"
-        >
-          <source src={bottomVideoSrc} type="video/mp4" />
-        </video>
+        <div className="relative left-[-30.42%] top-[-30.96%] h-[172.5%] w-[181.73%]">
+          <video
+            autoPlay
+            loop
+            playsInline
+            muted
+            controlsList="nodownload"
+            // className={styles.bottomVideo}
+            className="h-full w-full bg-red-500 object-cover object-center"
+          >
+            <source src={bottomVideoSrc} type="video/mp4" />
+          </video>
+          <div className="pointer-events-none absolute inset-0 bg-black/20" />
+        </div>
       </div>
 
       {/* Subheadline */}
