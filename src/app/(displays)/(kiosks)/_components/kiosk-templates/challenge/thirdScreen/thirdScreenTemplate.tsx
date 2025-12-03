@@ -36,12 +36,12 @@ export default function ThirdScreenTemplate({
   arrowUpIconSrc = imgArrowNavUp,
   challengeIconSrc = imgVector2,
   description = 'The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.',
-  heroImageSrc = imgHeroDiamond,
-  largeIconCenterSrc = imgVector1,
-  largeIconTopSrc = imgVector,
+  heroImageSrc: _heroImageSrc = imgHeroDiamond,
+  largeIconCenterSrc: _largeIconCenterSrc = imgVector1,
+  largeIconTopSrc: _largeIconTopSrc = imgVector,
   metricAmount = '40 TB',
-  metricDescription = 'of existing footage of data migration from physical drives into Smart Vault.',
-  metricImageSrc = imgMetricDiamond,
+  metricDescription = 'of existing footage of data migration from physical drives into Iron Mountain’s digital preservation platform.',
+  metricImageSrc: _metricImageSrc = imgMetricDiamond,
   onNavigateDown,
   onNavigateUp,
   subheadline = 'Rich media &\n cultural heritage',
@@ -75,10 +75,6 @@ export default function ThirdScreenTemplate({
         </div>
       </div>
 
-      {/* Top Hero Diamond */}
-      <div className="absolute left-[240px] top-[640px] z-[4] flex size-[520px] -translate-x-1/2 rotate-[45deg]">
-        <img alt="" className="h-full w-full object-contain" src={heroImageSrc} />
-      </div>
 
       {/* Subheadline */}
       <div
@@ -102,7 +98,7 @@ export default function ThirdScreenTemplate({
       >
         <div
           // className={styles.challengeIcon}
-          className="relative mr-[15px] flex h-[100px] w-[100px] items-center justify-center"
+          className="relative mr-0 flex h-[110px] w-[110px] items-center justify-center"
         >
           <img alt="" className="block h-full w-full object-contain" src={challengeIconSrc} />
         </div>
@@ -117,7 +113,7 @@ export default function ThirdScreenTemplate({
       {/* Description */}
       <div
         // className={styles.descriptionContainer}
-        className="absolute left-[118px] top-[2122px] z-[5] w-[971px]"
+        className="absolute left-[120px] top-[1405px] z-[5] w-[1090px]"
         data-node-id="5168:9932"
       >
         <p
@@ -131,7 +127,7 @@ export default function ThirdScreenTemplate({
       {/* Metrics Section */}
       <div
         // className={styles.metricsSection}
-        className="absolute left-[-80px] top-[3324px] z-[5] flex w-[1390px] flex-col gap-[100px]"
+        className="absolute left-[-70px] top-[2765px] z-[5] flex w-[1390px] flex-col gap-[100px]"
         data-node-id="5168:9945"
       >
         <div
@@ -148,16 +144,12 @@ export default function ThirdScreenTemplate({
         </p>
       </div>
 
-      {/* Bottom Media Diamond */}
-      <div className="absolute left-[332px] top-[3100px] z-[4] flex size-[520px] rotate-[45deg]">
-        <img alt="" className="h-full w-full object-contain" src={metricImageSrc} />
-      </div>
 
       {/* Navigation Arrows */}
       <div
         aria-label="Previous"
         // className={styles.arrowUp}
-        className="absolute right-[120px] top-[1755px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
+        className="absolute right-[120px] top-[1720px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
         data-node-id="5168:9940"
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
@@ -174,7 +166,7 @@ export default function ThirdScreenTemplate({
       <div
         aria-label="Next"
         // className={styles.arrowDown}
-        className="absolute right-[120px] top-[1980px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
+        className="absolute right-[120px] top-[1940px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
         data-node-id="5168:9938"
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
@@ -205,20 +197,17 @@ export default function ThirdScreenTemplate({
         data-node-id="5168:9934"
       />
 
-      {/* Large Background Icons */}
-      <div
-        // className={styles.largeIconTop}
-        className="pointer-events-none absolute left-[-152px] top-[666px] z-[4] flex h-[1056px] w-[860px] items-center justify-center rotate-[225deg] scale-y-[-1]"
-        data-node-id="5168:9933"
-      >
-        <img alt="" className="block h-full w-full object-contain" src={largeIconTopSrc} />
-      </div>
       <div
         // className={styles.largeIconCenter}
-        className="pointer-events-none absolute left-[1052px] top-[2536px] z-[4] flex h-[695px] w-[695px] items-center justify-center rotate-[225deg] scale-y-[-1]"
+        className="pointer-events-none absolute left-[1090px] top-[1635px] z-[4] flex h-[795px] w-[795px] items-center justify-center rotate-[225deg] scale-y-[-1]"
         data-node-id="5168:9936"
       >
-        <img alt="" className="block h-full w-full object-contain" src={largeIconCenterSrc} />
+        <img
+          alt=""
+          className="block h-full w-full object-contain"
+          src="/images/kiosks/kiosk1/01-challenge/Challenge-Image2-Diamond.png"
+          style={{ transform: 'rotate(45deg)' }}
+        />
       </div>
     </div>
   );

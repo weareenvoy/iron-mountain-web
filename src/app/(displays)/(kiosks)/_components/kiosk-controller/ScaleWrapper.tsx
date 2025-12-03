@@ -9,7 +9,9 @@ type Props = {
 };
 
 export default function ScaleWrapper({ targetWidth, targetHeight, children, background = 'black' }: Props) {
-  const scale = 0.415;
+  // const scale = 0.415;
+  const scale = 1;
+  // For dev in chrome current value is 0.415. Remove for production.
 
   const outerStyle: React.CSSProperties = {
     width: '100vw',

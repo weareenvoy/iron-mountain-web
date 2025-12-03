@@ -1,6 +1,5 @@
 'use client';
 
-import styles from './initialScreenTemplate.module.css';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
 // Asset constants from Figma MCP
@@ -41,51 +40,63 @@ export default function InitialScreenTemplate({
   subheadline = 'Rich media & cultural heritage',
 }: InitialScreenTemplateProps) {
   return (
-    <div className={styles.container} data-node-id="5168:9345">
-      {/* Background with parallax layer */}
-      <div className={styles.backgroundLayer}>
-        <img alt="" className={styles.backgroundImage} src={backgroundImage} />
-        <div className={styles.backgroundOverlay} />
+    <div
+      className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden"
+      data-node-id="5168:9345"
+    >
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <img alt="" className="absolute inset-0 h-[129%] w-full object-cover object-center" src={backgroundImage} />
+        <div className="absolute inset-0 bg-[rgba(0,0,0,0.2)]" />
       </div>
 
-      {/* Solution Pathways Guide Lines */}
-      <div className={styles.guidesContainer} data-name="Solution Pathways - Master Guides">
-        <div className={styles.guides}>
-          <img alt="" className={styles.guidesImage} src={guidesImageSrc} />
+      <div className="pointer-events-none absolute left-0 top-0 z-[1] h-[5120px] w-[2160px] overflow-hidden" data-name="Solution Pathways - Master Guides">
+        <div className="absolute inset-0 h-full w-full">
+          <img alt="" className="block h-full w-full object-cover" src={guidesImageSrc} />
         </div>
       </div>
 
-      {/* Subheadline - positioned above content */}
-      <div className={styles.subheadlineContainer}>
-        <h2 className={styles.subheadline}>{renderRegisteredMark(subheadline)}</h2>
+      <div className="absolute left-[244px] top-[907px] z-[3] w-[980px] -translate-y-full">
+        <h2 className="whitespace-pre-line text-[120px] font-normal leading-[1.3] tracking-[-6px] text-[#ededed]">
+          {renderRegisteredMark(subheadline)}
+        </h2>
       </div>
 
-      {/* Main Content Box */}
-      <div className={styles.contentBox} data-name="Challenge Initial Screen Content Box">
-        {/* Logo Section */}
-        <div className={styles.logoContainer}>
-        <img alt="Partner logos" className={styles.logoCombined} src={logoCombinedSrc ?? logoLeftSrc ?? logoRightSrc} />
+      <div
+        className="absolute left-[126px] top-[1066px] z-[2] flex w-[1920px] flex-col gap-[200px] rounded-[60px] bg-[#f7931e] px-[120px] py-[240px] backdrop-blur-[30px]"
+        data-name="Challenge Initial Screen Content Box"
+      >
+        <div className="absolute left-[120px] top-[2880px] z-[3] flex h-[180px] w-[710px] items-center">
+          <img
+            alt="Partner logos"
+            className="h-full w-full object-contain"
+            src={logoCombinedSrc ?? logoLeftSrc ?? logoRightSrc}
+          />
         </div>
 
-        {/* Headline */}
-        <h1 className={styles.headline}>{renderRegisteredMark(headline)}</h1>
+        <h1 className="max-w-[1460px] text-[80px] font-normal leading-[1.3] tracking-[-4px] text-black">
+          {renderRegisteredMark(headline)}
+        </h1>
 
-        {/* Quote and Attribution */}
-        <div className={styles.quoteSection}>
-          <p className={styles.quote}>{renderRegisteredMark(quote)}</p>
-          <p className={styles.attribution}>{renderRegisteredMark(attribution)}</p>
+        <div className="flex flex-col gap-[200px]">
+          <p className="text-[80px] font-normal leading-[1.3] tracking-[-4px] text-white">
+            {renderRegisteredMark(quote)}
+          </p>
+          <p className="whitespace-pre-wrap text-[52px] font-semibold leading-[1.6] tracking-[-2.4px] text-black">
+            {renderRegisteredMark(attribution)}
+          </p>
         </div>
 
-        {/* CTA Button */}
-        <div className={styles.buttonContainer}>
+        <div className="flex w-full flex-col items-start justify-center gap-[10px]">
           <button
-            className={styles.button}
-            onClick={onButtonClick}
             aria-label={buttonText}
+            className="flex h-[200px] items-center justify-center gap-[60px] rounded-[999px] bg-[#ededed] px-[100px] py-[70px] text-left transition-all duration-300 ease-out hover:scale-[1.05] hover:shadow-[0_8px_24px_rgba(0,0,0,0.15)] active:scale-[0.98] backdrop-blur-[19px]"
             data-name="button_default"
+            onClick={onButtonClick}
           >
-            <span className={styles.buttonText}>{renderRegisteredMark(buttonText)}</span>
-            <div className={styles.arrowIcon}>
+            <span className="whitespace-nowrap text-[60.792px] font-normal leading-none tracking-[-1.8238px] text-[#14477d]">
+              {renderRegisteredMark(buttonText)}
+            </span>
+            <div className="flex h-[60px] w-[120px] items-center justify-center">
               <img alt="" src={arrowIconSrc} />
             </div>
           </button>

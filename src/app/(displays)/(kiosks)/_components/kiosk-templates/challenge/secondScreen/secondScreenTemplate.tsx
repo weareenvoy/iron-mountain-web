@@ -43,47 +43,40 @@ export default function SecondScreenTemplate({
   subheadline = 'Rich media &\n cultural heritage',
   topImageSrc = imgHero,
 }: SecondScreenTemplateProps) {
+  const showBottomVideo = Boolean(bottomVideoSrc);
+
   return (
     <div
       // className={styles.container}
       className="relative flex h-screen w-full flex-col overflow-hidden bg-black"
+      data-hero-image={topImageSrc}
       data-node-id="5168:9907"
     >
-      {/* Hero Image */}
-      <div
-        // className={styles.topVideoContainer}
-        className="absolute left-0 top-0 z-[1] h-[1291px] w-full overflow-hidden"
-        data-node-id="5168:9909"
-      >
-        <img
-          alt=""
-          // className={styles.topVideo}
-          className="absolute left-[-7.5%] top-[-5.93%] h-[117.19%] w-[124.52%] object-cover object-center"
-          src={topImageSrc}
-        />
-      </div>
+
 
       {/* Bottom Video Section */}
-      <div
-        // className={styles.bottomVideoContainer}
-        className="absolute left-0 top-[4233px] z-[1] h-[1291px] w-full overflow-hidden"
-        data-node-id="5168:9908"
-      >
-        <div className="relative left-[-30.42%] top-[-30.96%] h-[172.5%] w-[181.73%]">
-          <video
-            autoPlay
-            loop
-            playsInline
-            muted
-            controlsList="nodownload"
-            // className={styles.bottomVideo}
-            className="h-full w-full bg-red-500 object-cover object-center"
-          >
-            <source src={bottomVideoSrc} type="video/mp4" />
-          </video>
-          <div className="pointer-events-none absolute inset-0 bg-black/20" />
+      {showBottomVideo ? (
+        <div
+          // className={styles.bottomVideoContainer}
+          className="absolute left-0 top-[4233px] z-[1] h-[1291px] w-full overflow-hidden"
+          data-node-id="5168:9908"
+        >
+          <div className="relative left-[-30.42%] top-[-30.96%] h-[172.5%] w-[181.73%]">
+            <video
+              autoPlay
+              loop
+              playsInline
+              muted
+              controlsList="nodownload"
+              // className={styles.bottomVideo}
+              className="h-full w-full bg-red-500 object-cover object-center"
+            >
+              <source src={bottomVideoSrc} type="video/mp4" />
+            </video>
+            <div className="pointer-events-none absolute inset-0 bg-black/20" />
+          </div>
         </div>
-      </div>
+      ) : null}
 
       {/* Subheadline */}
       <div
@@ -107,7 +100,7 @@ export default function SecondScreenTemplate({
       >
         <div
           // className={styles.challengeIcon}
-          className="relative mr-[15px] flex h-[100px] w-[100px] items-center justify-center"
+          className="relative mr-[5px] flex h-[120px] w-[120px] items-center justify-center"
         >
           <img alt="" className="block h-full w-full object-contain" src={challengeIconSrc} />
         </div>
@@ -122,7 +115,7 @@ export default function SecondScreenTemplate({
       {/* Stat Section (Left) */}
       <div
         // className={styles.statSection}
-        className="absolute left-[124px] top-[1058px] z-[5] flex w-[1390px] flex-col gap-[60px] opacity-50"
+        className="absolute left-[124px] top-[1058px] z-[5] flex w-[940px] flex-col gap-[60px] opacity-60"
         data-node-id="5168:9913"
       >
         <div
@@ -133,7 +126,7 @@ export default function SecondScreenTemplate({
         </div>
         <p
           // className={styles.statDescription}
-          className="text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#6dcff6]"
+          className="text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#a8d4f6]"
         >
           {renderRegisteredMark(statDescription)}
         </p>
@@ -142,12 +135,12 @@ export default function SecondScreenTemplate({
       {/* Main Description (Right) */}
       <div
         // className={styles.mainDescription}
-        className="absolute right-[422px] top-[2065px] z-[5] w-[971px]"
+        className="absolute left-[1160px] top-[2340px] z-[6] w-[760px]"
         data-node-id="5168:9911"
       >
         <p
           // className={styles.descriptionText}
-          className="text-[60px] font-normal leading-[1.4] tracking-[-3px] text-white"
+          className="font-normal left-[-380px] leading-[1.4] relative text-[60px] text-white tracking-[-3px] top-[-255px] w-[980px]"
         >
           {renderRegisteredMark(mainDescription)}
         </p>
@@ -171,7 +164,7 @@ export default function SecondScreenTemplate({
       <div
         aria-label="Previous"
         // className={styles.arrowUp}
-        className="absolute right-[120px] top-[1755px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
+        className="absolute right-[110px] top-[1765px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
         data-node-id="5168:9923"
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
@@ -188,7 +181,7 @@ export default function SecondScreenTemplate({
       <div
         aria-label="Next"
         // className={styles.arrowDown}
-        className="absolute right-[120px] top-[1980px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
+        className="absolute right-[110px] top-[1995px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
         data-node-id="5168:9921"
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
@@ -227,10 +220,15 @@ export default function SecondScreenTemplate({
       {/* Large Background Icon */}
       <div
         // className={styles.largeIcon}
-        className="pointer-events-none absolute left-[-12%] top-[46%] z-[4] flex h-[1106px] w-[1106px] -scale-y-100 items-center justify-center rotate-[225deg]"
+        className="pointer-events-none absolute left-[-21.5%] top-[42.5%] z-[4] flex size-[1506px] -scale-y-100 items-center justify-center rotate-[180deg]"
         data-node-id="5168:9917"
       >
-        <img alt="" className="block h-full w-full object-contain" src={largeIconSrc} />
+        <img
+          alt=""
+          className="block h-full w-full object-contain"
+          src={largeIconSrc}
+          style={{ transform: 'scaleX(-1)' }}
+        />
       </div>
     </div>
   );

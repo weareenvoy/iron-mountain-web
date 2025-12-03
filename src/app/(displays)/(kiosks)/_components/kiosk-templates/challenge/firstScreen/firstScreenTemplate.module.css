@@ -179,7 +179,7 @@
 }
 
 .savingsAmount {
-  font-family: 'Interstate Light', sans-serif;
+  font-family: var(--font-interstate), 'Interstate', sans-serif;
   font-size: 400px;
   font-weight: 300;
   color: #6dcff6;

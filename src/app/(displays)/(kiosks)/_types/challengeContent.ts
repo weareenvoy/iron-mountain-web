@@ -31,7 +31,7 @@ const firstScreenSchema = z.object({
 const secondScreenSchema = z.object({
   arrowIconSrc: assetString,
   bottomDescription: textString,
-  bottomVideoSrc: assetString,
+  bottomVideoSrc: z.union([assetString, z.literal('')]).optional().default(''),
   challengeIconSrc: assetString,
   largeIconSrc: assetString,
   mainDescription: textString,
