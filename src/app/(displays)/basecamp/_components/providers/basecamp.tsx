@@ -14,12 +14,14 @@ import {
 import type { ExhibitMqttState } from '@/lib/mqtt/types';
 
 interface BasecampContextType {
+  backgroundReady: boolean;
   data: BasecampData | null;
   dict: Dictionary | null;
   error: null | string;
   exhibitState: ExhibitNavigationState;
   loading: boolean;
   locale: Locale;
+  setBackgroundReady: (ready: boolean) => void;
 }
 
 export const BasecampContext = createContext<BasecampContextType | undefined>(undefined);
@@ -55,6 +57,9 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     beatIdx: 0,
     momentId: 'ambient',
   });
+
+  // Used for background to tell foreground when video is ready. So foreground can start animation.
+  const [backgroundReady, setBackgroundReady] = useState(false);
 
   // MQTT state (what we report to GEC)
   const [mqttState, setMqttState] = useState<ExhibitMqttState>({
@@ -100,15 +105,17 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     (newState: Partial<ExhibitMqttState>) => {
       if (!client) return;
 
-      const updatedState = { ...mqttState, ...newState };
-      setMqttState(updatedState);
+      setMqttState(prev => {
+        const updatedState = { ...prev, ...newState };
 
-      client.reportExhibitState('basecamp', updatedState, {
-        onError: err => console.error('Basecamp: Failed to report state:', err),
-        onSuccess: () => console.info('Basecamp: Reported state:', updatedState),
+        client.reportExhibitState('basecamp', updatedState, {
+          onError: err => console.error('Basecamp: Failed to report state:', err),
+        });
+
+        return updatedState;
       });
     },
-    [client, mqttState]
+    [client]
   );
 
   // Subscribe to GEC commands (broadcasts to ALL exhibits)
@@ -203,6 +210,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     };
 
     // Subscribe to broadcast commands (all exhibits listen to same topics)
+    // TODO Confirm with Lucas. Currently not receiving anything from these topics.
     client.subscribeToTopic('cmd/dev/all/load-tour', handleLoadTour);
     client.subscribeToTopic('cmd/dev/all/end-tour', handleEndTour);
 
@@ -250,6 +258,8 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
         if (state['tour-id']) {
           fetchData();
         }
+        // We just need to get retained state once, so unsubscribe after we got the state
+        client.unsubscribeFromTopic('state/basecamp', handleOwnState);
       } catch (error) {
         console.error('Basecamp: Error parsing own state:', error);
       }
@@ -257,19 +267,17 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
 
     // Subscribe once on mount to get retained state
     client.subscribeToTopic('state/basecamp', handleOwnState);
-
-    return () => {
-      client.unsubscribeFromTopic('state/basecamp', handleOwnState);
-    };
   }, [client, fetchData]);
 
   const contextValue = {
+    backgroundReady,
     data,
     dict,
     error,
     exhibitState,
     loading,
     locale,
+    setBackgroundReady,
   };
 
   return <BasecampContext.Provider value={contextValue}>{children}</BasecampContext.Provider>;

@@ -1,186 +1,126 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState, type SyntheticEvent } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useBasecamp } from '@/app/(displays)/basecamp/_components/providers/basecamp';
-import { cn } from '@/lib/tailwind/utils/cn';
-import { getBeatTimeRange, isTimedSection } from './utils';
+import { BEAT_ORDER } from './utils';
 
 const Background = () => {
-  // The moment and beat might come from GEC.
-  const { exhibitState } = useBasecamp();
+  const { data, exhibitState, setBackgroundReady } = useBasecamp();
   const { beatIdx, momentId } = exhibitState;
+  const beatId = `${momentId}-${beatIdx + 1}`;
 
-  const mainVideoRef = useRef<HTMLVideoElement | null>(null);
-  const ambientVideoRef = useRef<HTMLVideoElement | null>(null);
-  // Ref to track the specific SPAN element used for displaying the time.
-  const timeDisplayRef = useRef<HTMLSpanElement | null>(null);
-  // Tracks the last played moment/beat to prevent re-triggering playback
-  const lastPlayedRef = useRef<null | { id: string; idx: number }>(null);
+  // 2 videos "ping pong" between, 1 visible, 1 invisible.
+  const a = useRef<HTMLVideoElement>(null);
+  const b = useRef<HTMLVideoElement>(null);
+  const active = useRef<'a' | 'b'>('a');
+  const [activeDisplay, setActiveDisplay] = useState<'a' | 'b'>('a');
+  const lastBeat = useRef<string>('');
 
-  const [isSeeking, setIsSeeking] = useState<boolean>(false);
-
-  // For dev testing, read it from an S3 bucket. Where will this be hosted in prod?
-  const mainVideoUrl = `${process.env.NEXT_PUBLIC_CDN_HOST_NAME}/BASECAMP-FPO-content.webm`;
-  const ambientVideoUrl = `${process.env.NEXT_PUBLIC_CDN_HOST_NAME}/BASECAMP-FPO-loop.webm`;
-
-  // This function now only handles the PAUSE logic and the DIRECT DOM update for time.
-  const updateDisplayTime = (currentTime: number) => {
-    // Check if the ref target exists and update its text content directly.
-    if (timeDisplayRef.current) {
-      timeDisplayRef.current.textContent = currentTime.toFixed(1) + 's';
-    }
-  };
-
-  // This tracks preload progress, but it does not help with loading.
-  const progressHandler = (event: SyntheticEvent<HTMLVideoElement>) => {
-    const video = event.currentTarget;
-    if (video.buffered.length > 0 && video.duration) {
-      const percent = (video.buffered.end(0) / video.duration) * 100;
-      console.info(`main vid preload: ${percent.toFixed(1)}%`);
-    }
-  };
-
-  const timeUpdateHandler = useCallback(
-    (event: SyntheticEvent<HTMLVideoElement>) => {
-      if (momentId === 'ambient' || !isTimedSection(momentId)) return;
-
-      const video = event.currentTarget;
-      const currentTime = video.currentTime;
-
-      updateDisplayTime(currentTime);
-
-      if (isSeeking) return;
-
-      const timeRange = getBeatTimeRange(momentId, beatIdx);
-
-      if (timeRange && timeRange.end && currentTime >= timeRange.end - 0.1) {
-        video.pause();
-        console.info(`Paused at ${currentTime}s for ${momentId} beat ${beatIdx}`);
-      }
-    },
-    [isSeeking, momentId, beatIdx]
-  );
-
-  const ambientTimeUpdateHandler = (event: SyntheticEvent<HTMLVideoElement>) => {
-    if (momentId !== 'ambient' || isTimedSection(momentId)) return;
-
-    const video = event.currentTarget;
-    const currentTime = video.currentTime;
-
-    updateDisplayTime(currentTime);
-  };
-
-  const seekingHandler = (event: SyntheticEvent<HTMLVideoElement>) => {
-    const video = event.currentTarget;
-    const currentTime = video.currentTime;
-    console.info(`Seeking to ${currentTime}s for ${momentId}`);
-    setIsSeeking(true);
-  };
-
-  const seekedHandler = (event: SyntheticEvent<HTMLVideoElement>) => {
-    const video = event.currentTarget;
-    const currentTime = video.currentTime;
-    console.info(`Seeked to ${currentTime}s for ${momentId}`);
-    setIsSeeking(false);
-  };
-
-  // Core Video Playback Logic: Synchronizes React state (momentId, beatIdx) to the external video system
   useEffect(() => {
-    const mainVideo = mainVideoRef.current;
-    const ambientVideo = ambientVideoRef.current;
+    if (!data || !a.current || !b.current) return;
 
-    // Create keys to check if the current state is the same as the last played state
-    const currentMomentKey = `${momentId}-${beatIdx}`;
-    const lastMomentKey = `${lastPlayedRef.current?.id}-${lastPlayedRef.current?.idx}`;
+    const url = data.beats[beatId as keyof typeof data.beats].url;
+    if (!url || beatId === lastBeat.current) return;
 
-    // Optimization: If the target beat/moment hasn't changed, do nothing.
-    if (currentMomentKey === lastMomentKey) {
-      return;
-    }
+    // First beat after page reload → force into A
+    if (!lastBeat.current) {
+      setBackgroundReady(false);
+      a.current.src = url;
+      a.current.currentTime = 0;
+      a.current.loop = momentId === 'ambient';
 
-    // Update the ref right away to prevent re-triggering this logic on simple re-renders
-    lastPlayedRef.current = { id: momentId, idx: beatIdx };
+      const onReady = () => {
+        setBackgroundReady(true);
+        a.current?.play();
+      };
 
-    // A. Ambient Mode
-    if (momentId === 'ambient') {
-      if (mainVideo) mainVideo.pause();
-      if (ambientVideo) {
-        const startTime = 0;
-        ambientVideo.currentTime = startTime; // Reset to start
-        // Update display time synchronously (non-breaking since it's only called once per section start)
-        updateDisplayTime(0);
-        ambientVideo.play().catch(err => {
-          console.error('Error playing ambient video:', err);
-        });
+      a.current.addEventListener('canplay', onReady, { once: true });
+      a.current.load();
+      lastBeat.current = beatId;
+
+      // Preload next into B
+      const nextIdx = BEAT_ORDER.indexOf(beatId as (typeof BEAT_ORDER)[number]) + 1;
+      if (nextIdx > 0 && nextIdx < BEAT_ORDER.length) {
+        const nextUrl = data.beats[BEAT_ORDER[nextIdx] as keyof typeof data.beats].url;
+        if (nextUrl) b.current.src = nextUrl;
       }
       return;
     }
 
-    // B. Non-Ambient (Main Video) Logic
-    if (ambientVideo) ambientVideo.pause();
+    // Determine visible and invisible
+    const visible = active.current === 'a' ? a.current : b.current;
+    const hidden = active.current === 'a' ? b.current : a.current;
 
-    if (!isTimedSection(momentId)) return;
+    // This is used to tell foreground element when to be visible
+    setBackgroundReady(false);
 
-    const timeRange = getBeatTimeRange(momentId, beatIdx);
+    // Set hidden video to use incoming beat's url
+    hidden.src = url;
+    hidden.currentTime = 0;
+    hidden.loop = momentId === 'ambient';
 
-    // Perform a strict type check and cast
-    if (
-      mainVideo instanceof HTMLVideoElement && // Ensure it's a valid video element
-      timeRange &&
-      typeof timeRange.start === 'number' && // Check the type explicitly
-      Number.isFinite(timeRange.start)
-    ) {
-      // TypeScript is now satisfied because we have explicitly checked the type.
-      const startTime = timeRange.start; // Capture in variable to preserve type narrowing
-      mainVideo.currentTime = startTime;
-      // Update display time synchronously (non-breaking since it's only called once per section start)
-      updateDisplayTime(startTime);
-      mainVideo.play().catch(err => {
-        console.error('Error playing main video after seek:', err);
-      });
-      console.info(`Seeking to ${startTime}s for ${momentId} beat ${beatIdx}`);
-    } else {
-      console.error('Invalid state or time range:', { beatIdx, momentId, timeRange });
+    const go = () => {
+      setBackgroundReady(true);
+
+      // Fade out visible, fade in hidden
+      visible.style.transition = hidden.style.transition = 'opacity 0.8s ease';
+      visible.style.opacity = '0';
+      hidden.style.opacity = '1';
+
+      // Play hidden video
+      hidden.play();
+      active.current = active.current === 'a' ? 'b' : 'a';
+      setActiveDisplay(active.current);
+
+      // Assume docent would click the "next" beat, preload it.
+      const currIdx = BEAT_ORDER.indexOf(beatId as (typeof BEAT_ORDER)[number]);
+      const nextIdx = currIdx + 1 < BEAT_ORDER.length ? currIdx + 1 : 0;
+      const nextUrl = data.beats[BEAT_ORDER[nextIdx] as keyof typeof data.beats].url;
+      if (nextUrl) setTimeout(() => (visible.src = nextUrl), 800); // 800 match fade duration
+    };
+
+    hidden.addEventListener('canplay', go, { once: true });
+    hidden.load();
+
+    lastBeat.current = beatId;
+  }, [beatId, data, momentId, setBackgroundReady]);
+
+  // For debugging only. Update display time
+  const timeDisplayRef = useRef<HTMLSpanElement>(null);
+  const handleTimeUpdate = () => {
+    const currentVideo = active.current === 'a' ? a.current : b.current;
+    if (currentVideo && timeDisplayRef.current) {
+      timeDisplayRef.current.textContent = currentVideo.currentTime.toFixed(3) + 's';
     }
-  }, [momentId, beatIdx]);
+  };
 
   return (
-    <>
-      {/* Ambient video (looping). Playback controlled in effects. */}
+    <div className="relative h-full w-full overflow-hidden">
       <video
-        autoPlay={false}
-        className={cn('h-full w-full object-cover', momentId === 'ambient' ? 'block' : 'hidden')}
-        loop
+        className="absolute inset-0 h-full w-full object-cover"
         muted
-        onTimeUpdate={ambientTimeUpdateHandler}
+        onTimeUpdate={handleTimeUpdate}
         playsInline
-        ref={ambientVideoRef}
-        src={ambientVideoUrl}
+        ref={a}
+        style={{ opacity: 1, transition: 'opacity 0.8s ease' }}
+      />
+      <video
+        className="absolute inset-0 h-full w-full object-cover"
+        muted
+        onTimeUpdate={handleTimeUpdate}
+        playsInline
+        ref={b}
+        style={{ opacity: 0, transition: 'opacity 0.8s ease' }}
       />
 
-      {/* Main video background */}
-      <video
-        autoPlay={false}
-        className={cn('h-full w-full object-cover', momentId !== 'ambient' ? 'block' : 'hidden')}
-        muted
-        onProgress={progressHandler}
-        onSeeked={seekedHandler}
-        onSeeking={seekingHandler}
-        onTimeUpdate={timeUpdateHandler}
-        playsInline
-        ref={mainVideoRef}
-        src={mainVideoUrl}
-      />
-
-      {/* Debug info */}
-      <div className="absolute top-4 left-4 rounded bg-black/50 p-2 text-white">
-        <p>Moment: {momentId}</p>
-        <p>BeatIdx: {beatIdx}</p>
+      <div className="pointer-events-none absolute top-4 left-4 rounded bg-black/60 px-3 py-2 font-mono text-sm text-white">
+        <div>{beatId}</div>
+        <div>Active: {activeDisplay.toUpperCase()}</div>
         <p>
           Time: <span ref={timeDisplayRef}>0.0s</span>
         </p>
       </div>
-    </>
+    </div>
   );
 };
 
