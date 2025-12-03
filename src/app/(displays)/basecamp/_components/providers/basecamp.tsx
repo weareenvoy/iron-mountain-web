@@ -62,7 +62,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
   const [backgroundReady, setBackgroundReady] = useState(false);
 
   // MQTT state (what we report to GEC)
-  const [mqttState, setMqttState] = useState<ExhibitMqttState>({
+  const [, setMqttState] = useState<ExhibitMqttState>({
     'beat-id': 'ambient-1',
     'tour-id': null,
     'volume-level': 1.0,
