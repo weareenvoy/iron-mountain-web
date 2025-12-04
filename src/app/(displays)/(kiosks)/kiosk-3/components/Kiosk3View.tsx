@@ -7,15 +7,14 @@ import SecondScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-te
 import ThirdScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/thirdScreen/thirdScreenTemplate';
 import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
 import challengeContent from '../challenges.json';
-import InnerEmbla from '../../kiosk-1/components/InnerEmbla';
 import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 // import styles from './kiosk-3.module.css';
 
-type Slide = { hasCarousel?: boolean; id: string; title: string };
+type Slide = { id: string; title: string };
 
 const slides: Slide[] = [
   { id: 's1', title: 'Welcome' },
-  { hasCarousel: true, id: 's2', title: 'Challenge' },
+  { id: 's2', title: 'Challenge' },
   { id: 's3', title: 'Stats' },
   { id: 's4', title: 'Impact' },
 ];
@@ -82,7 +81,6 @@ const Kiosk3View = () => {
                 onNavigateUp={() => controller.prev()}
               />
             )}
-            {slide.hasCarousel ? <InnerEmbla id={`inner-${slide.id}`} /> : null}
           </section>
         ))}
       </div>

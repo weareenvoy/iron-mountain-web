@@ -15,6 +15,7 @@ export interface InitialScreenTemplateProps {
   attribution?: string;
   backgroundImage?: string;
   buttonText?: string;
+  contentBoxBgColor?: string;
   guidesImageSrc?: string;
   headline?: string;
   logoCombinedSrc?: string;
@@ -30,6 +31,7 @@ export default function InitialScreenTemplate({
   attribution = '- Michael Rohrabacher, Technical Director at the GRAMMY Museum',
   backgroundImage = imgBackground,
   buttonText = 'Touch to explore',
+  contentBoxBgColor = '#f7931e',
   guidesImageSrc = imgGuides,
   headline = 'The GRAMMY Museum® preserves the soundtrack of history.',
   logoCombinedSrc = imgLogo,
@@ -79,10 +81,11 @@ export default function InitialScreenTemplate({
       </div>
 
       <div
-        className="absolute left-[126px] top-[1066px] z-[2] flex w-[1920px] flex-col gap-[200px] rounded-[60px] bg-[#f7931e] px-[120px] py-[240px] backdrop-blur-[30px]"
+        className="absolute left-[120px] top-[1066px] z-[2] flex w-[1940px] flex-col gap-[200px] rounded-[60px] px-[120px] py-[240px] backdrop-blur-[30px]"
         data-name="Challenge Initial Screen Content Box"
+        style={{ backgroundColor: contentBoxBgColor }}
       >
-        <div className="absolute left-[120px] top-[2880px] z-[3] flex h-[180px] w-[710px] items-center">
+        <div className="absolute left-[120px] top-[2910px] z-[3] flex h-[180px] w-[710px] items-center">
           <div className="relative h-full w-full">
             <Image
               alt="Partner logos"
@@ -95,11 +98,11 @@ export default function InitialScreenTemplate({
           </div>
         </div>
 
-        <h1 className="max-w-[1460px] text-[80px] font-normal leading-[1.3] tracking-[-4px] text-black">
+        <h1 className="max-w-[1660px] text-[80px] font-normal leading-[1.3] tracking-[-4px] text-black">
           {renderRegisteredMark(headline)}
         </h1>
 
-        <div className="flex flex-col gap-[200px]">
+        <div className="relative top-[10px] flex w-[1670px] flex-col gap-[20px]">
           <p className="text-[80px] font-normal leading-[1.3] tracking-[-4px] text-white">
             {renderRegisteredMark(quote)}
           </p>
