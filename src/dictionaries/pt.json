@@ -5,6 +5,7 @@
   "docent": {
     "actions": {
       "close": "Fechar",
+      "back": "Voltar",
       "launchJourneyMap": "Iniciar mapa da jornada",
       "load": "Carregar",
       "settings": "Configurações",
