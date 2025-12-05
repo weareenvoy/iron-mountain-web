@@ -5,6 +5,7 @@
   "docent": {
     "actions": {
       "close": "Close",
+      "back": "Back",
       "launchJourneyMap": "Launch journey map",
       "load": "Load",
       "settings": "Settings",
