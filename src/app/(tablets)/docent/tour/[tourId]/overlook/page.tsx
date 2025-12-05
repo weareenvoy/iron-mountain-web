@@ -50,7 +50,7 @@ const OverlookPage = ({ params }: PageProps<'/docent/tour/[tourId]/overlook'>) =
       <Header leftButton={leftButton} />
 
       {/* Cast Button */}
-      <div className="text-primary-bg-grey absolute top-48 right-5 z-50 flex flex-row items-center gap-2">
+      <div className="text-primary-bg-grey absolute top-50 right-5 z-50 flex flex-row items-center gap-2 p-0.5">
         {isOverlookCastMode ? (
           <span className="text-lg">{t.docent.actions.startPresenting}</span>
         ) : (
