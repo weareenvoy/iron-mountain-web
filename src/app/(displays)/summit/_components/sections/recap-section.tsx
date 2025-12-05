@@ -1,3 +1,4 @@
+import NotificationTextIcon from '@/components/ui/icons/NotificationTextIcon';
 import useLocalStorage from '@/hooks/use-local-storage';
 import type { SummitRecap } from '@/app/(displays)/summit/_types';
 import type { ChangeEvent, ReactNode } from 'react';
@@ -25,6 +26,7 @@ const DEFAULT_TONE = {
 
 const RecapSection = ({ actionSlot, placeholder = '', recap, storageKey, tone = DEFAULT_TONE }: RecapSectionProps) => {
   const palette = { ...DEFAULT_TONE, ...tone };
+  const iconColor = palette.iconColor;
   const key = storageKey ?? `summit-recap:${recap.title}`;
   const [note, setNote] = useLocalStorage<string>(key, '');
   const rightTextColor = palette.rightTextColor ?? '#12406A';
@@ -40,16 +42,7 @@ const RecapSection = ({ actionSlot, placeholder = '', recap, storageKey, tone = 
         style={{ backgroundColor: palette.accentBg, color: palette.bodyColor }}
       >
         <div className="flex items-center gap-3" style={{ color: palette.accentColor }}>
-          {/* We use span instead of img because we need to pass color to the icon */}
-          <span
-            aria-hidden
-            className="inline-block h-8 w-8"
-            style={{
-              backgroundColor: palette.iconColor || palette.accentColor,
-              mask: 'url(/images/notification-text.svg) no-repeat center / contain',
-              WebkitMask: 'url(/images/notification-text.svg) no-repeat center / contain',
-            }}
-          />
+          <NotificationTextIcon aria-hidden className="h-8 w-8" style={{ color: iconColor }} />
           <span className="text-3xl font-normal">{recap.title}</span>
         </div>
         {actionSlot}

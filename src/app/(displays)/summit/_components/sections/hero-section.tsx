@@ -1,4 +1,5 @@
-import Image from 'next/image';
+import IronMountainLogoBlue from '@/components/ui/icons/IronMountainLogoBlue';
+import SummitRootDiamondsBg from '@/components/ui/icons/SummitRootDiamondsBg';
 import type { SummitHero } from '@/app/(displays)/summit/_types';
 
 type HeroMetadataLabels = {
@@ -31,11 +32,15 @@ const HeroSection = ({ hero, labels, title }: HeroSectionProps) => {
   return (
     <section className="relative isolate overflow-visible">
       <div aria-hidden className="pointer-events-none absolute -top-6 -right-20 hidden lg:block">
-        <Image alt="" height={420} priority src="/images/summit-root-diamonds-bg2.svg" width={420} />
+        <SummitRootDiamondsBg className="h-[420px] w-[420px]" />
       </div>
 
       <div className="relative flex flex-col gap-10 pt-12 pb-10">
-        <Image alt={hero.logoAlt} className="h-auto w-60 sm:w-80" height={48} priority src={hero.logoSrc} width={260} />
+        <IronMountainLogoBlue
+          aria-label={hero.logoAlt}
+          className="h-auto w-[300px] max-w-full sm:w-[360px]"
+          role="img"
+        />
 
         <h1
           className="mt-16 mb-8 max-w-[24rem] text-4xl leading-tight font-normal text-balance text-[#58595B] sm:max-w-120 sm:text-5xl lg:max-w-xl lg:text-7xl"
