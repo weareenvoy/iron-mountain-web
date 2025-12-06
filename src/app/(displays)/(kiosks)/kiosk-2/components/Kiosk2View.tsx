@@ -6,7 +6,7 @@ import InitialScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-t
 import SecondScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/secondScreen/secondScreenTemplate';
 import ThirdScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/thirdScreen/thirdScreenTemplate';
 import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
-import challengeContent from '../challenges.json';
+import challengeContent from '@public/api/kiosk-2.json';
 import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 // import styles from './kiosk-2.module.css';
 
@@ -59,7 +59,13 @@ const Kiosk2View = () => {
             data-active={idx === topIndex}
             key={slide.id}
           >
-            {slide.id === 's1' && <InitialScreenTemplate {...challenges.initialScreen} />}
+            {slide.id === 's1' && (
+              <InitialScreenTemplate
+                {...challenges.initialScreen}
+                contentBoxBgColor="#8DC13F"
+                kioskId="kiosk-2"
+              />
+            )}
             {slide.id === 's2' && (
               <FirstScreenTemplate
                 {...challenges.firstScreen}

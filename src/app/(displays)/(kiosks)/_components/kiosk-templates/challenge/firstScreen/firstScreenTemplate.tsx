@@ -84,12 +84,12 @@ export default function FirstScreenTemplate({
       {/* Challenge Label Section */}
       <div
         // className={styles.challengeLabel}
-        className="absolute left-[128.17px] top-[745.23px] z-[10] flex items-center gap-[41px]"
+        className="absolute left-[128px] top-[745px] z-[10] flex items-center gap-[41px]"
         data-node-id="5168:9901"
       >
         <div
           // className={styles.challengeIcon}
-          className="relative mr-[15px] flex h-[100px] w-[100px] items-center justify-center"
+          className="relative mr-[5px] flex h-[110px] w-[110px] items-center justify-center"
         >
           <Image
             alt=""
@@ -112,7 +112,7 @@ export default function FirstScreenTemplate({
       <div
         aria-label="Previous"
         // className={styles.arrowUp}
-        className="absolute right-[120px] top-[1760px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
+        className="absolute right-[100px] top-[1740px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
         data-node-id="5168:9899"
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
@@ -138,7 +138,7 @@ export default function FirstScreenTemplate({
       <div
         aria-label="Next"
         // className={styles.arrowDown}
-        className="absolute right-[120px] top-[1980px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
+        className="absolute right-[100px] top-[1970px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
         data-node-id="5168:9897"
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
@@ -165,12 +165,12 @@ export default function FirstScreenTemplate({
       {/* Problem Description Section */}
       <div
         // className={styles.problemSection}
-        className="absolute left-[114px] top-[1432px] z-[5] w-[1390px]"
+        className="absolute left-[115px] top-[1230px] z-[5] w-[1390px]"
         data-node-id="5168:9893"
       >
         <p
           // className={styles.problemText}
-          className="text-[60px] font-normal leading-[1.4] tracking-[-3px] text-white"
+          className="text-[80px] font-normal leading-[1.4] tracking-[-3px] text-white"
         >
           {renderRegisteredMark(problemDescription)}
         </p>
@@ -179,14 +179,14 @@ export default function FirstScreenTemplate({
       {/* Gradient Background */}
       <div
         // className={styles.gradientBg}
-        className="absolute left-0 top-[1058px] z-[2] h-[4085px] w-full rounded-t-[100px] bg-[linear-gradient(to_bottom,#1b75bc_0%,#14477d_98%)]"
+        className="absolute left-0 top-[1030px] z-[2] h-[4085px] w-full rounded-t-[100px] bg-[linear-gradient(to_bottom,#1b75bc_0%,#14477d_98%)]"
         data-node-id="5168:9884"
       />
 
       {/* Savings Metrics Section */}
       <div
         // className={styles.savingsSection}
-        className="absolute left-[-45px] top-[2455px] z-[5] flex w-[1390px] flex-col"
+        className="absolute left-[-115px] top-[2675px] z-[5] flex w-[1390px] flex-col"
         data-node-id="5168:9904"
       >
         <div
@@ -197,7 +197,7 @@ export default function FirstScreenTemplate({
         </div>
         <p
           // className={styles.savingsDescription}
-          className="relative left-[140px] top-[-40px] text-center text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#6dcff6]"
+          className="relative left-[240px] top-0 whitespace-pre-line text-left text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#6dcff6]"
         >
           {renderRegisteredMark(savingsDescription)}
         </p>

@@ -10,12 +10,15 @@ const imgBackground = '/images/kiosks/kiosk1/Cover.png';
 const imgGuides = 'http://localhost:3845/assets/bbb0c30a6c52c72ecfe10371a7001daf550a68d1.svg';
 const imgLogo = '/images/kiosks/svgs/WhiteLogos.svg';
 
+type KioskVariant = 'kiosk-1' | 'kiosk-2' | 'kiosk-3';
+
 export interface InitialScreenTemplateProps {
   arrowIconSrc?: string;
   attribution?: string;
   backgroundImage?: string;
   buttonText?: string;
   contentBoxBgColor?: string;
+  kioskId?: KioskVariant;
   guidesImageSrc?: string;
   headline?: string;
   logoCombinedSrc?: string;
@@ -32,6 +35,7 @@ export default function InitialScreenTemplate({
   backgroundImage = imgBackground,
   buttonText = 'Touch to explore',
   contentBoxBgColor = '#f7931e',
+  kioskId = 'kiosk-1',
   guidesImageSrc = imgGuides,
   headline = 'The GRAMMY Museum® preserves the soundtrack of history.',
   logoCombinedSrc = imgLogo,
@@ -43,7 +47,8 @@ export default function InitialScreenTemplate({
 }: InitialScreenTemplateProps) {
   return (
     <div
-      className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden"
+      className="group/kiosk relative flex h-screen w-full flex-col items-center justify-center overflow-hidden"
+      data-kiosk={kioskId}
       data-node-id="5168:9345"
     >
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -81,11 +86,11 @@ export default function InitialScreenTemplate({
       </div>
 
       <div
-        className="absolute left-[120px] top-[1066px] z-[2] flex w-[1940px] flex-col gap-[200px] rounded-[60px] px-[120px] py-[240px] backdrop-blur-[30px]"
+        className="absolute left-[120px] top-[1066px] z-[2] flex w-[1940px] flex-col gap-[200px] rounded-[60px] px-[120px] py-[240px] pb-[430px] backdrop-blur-[30px] group-data-[kiosk=kiosk-2]/kiosk:py-[220px] group-data-[kiosk=kiosk-2]/kiosk:pb-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[1920px] group-data-[kiosk=kiosk-3]/kiosk:pb-0"
         data-name="Challenge Initial Screen Content Box"
         style={{ backgroundColor: contentBoxBgColor }}
       >
-        <div className="absolute left-[120px] top-[2910px] z-[3] flex h-[180px] w-[710px] items-center">
+        <div className="absolute left-[120px] top-[2910px] z-[3] flex h-[180px] w-[710px] items-center group-data-[kiosk=kiosk-2]/kiosk:top-[2870px] group-data-[kiosk=kiosk-3]/kiosk:hidden">
           <div className="relative h-full w-full">
             <Image
               alt="Partner logos"
@@ -103,18 +108,18 @@ export default function InitialScreenTemplate({
         </h1>
 
         <div className="relative top-[10px] flex w-[1670px] flex-col gap-[20px]">
-          <p className="text-[80px] font-normal leading-[1.3] tracking-[-4px] text-white">
+          <p className="text-[80px] font-normal leading-[1.3] tracking-[-4px] text-white group-data-[kiosk=kiosk-3]/kiosk:relative group-data-[kiosk=kiosk-3]/kiosk:top-[-230px] group-data-[kiosk=kiosk-3]/kiosk:text-[120px] group-data-[kiosk=kiosk-3]/kiosk:tracking-[-6px]">
             {renderRegisteredMark(quote)}
           </p>
-          <p className="whitespace-pre-wrap text-[52px] font-semibold leading-[1.6] tracking-[-2.4px] text-black">
+          <p className="relative top-[180px] whitespace-pre-wrap text-[52px] font-semibold leading-[1.6] tracking-[-2.4px] text-black">
             {renderRegisteredMark(attribution)}
           </p>
         </div>
 
-        <div className="flex w-full flex-col items-start justify-center gap-[10px]">
+        <div className="relative top-[190px] flex w-full flex-col items-start justify-center gap-[10px] group-data-[kiosk=kiosk-2]/kiosk:top-0 group-data-[kiosk=kiosk-3]/kiosk:top-[-220px]">
           <button
             aria-label={buttonText}
-            className="flex h-[200px] items-center justify-center gap-[60px] rounded-[999px] bg-[#ededed] px-[100px] py-[70px] text-left transition-all duration-300 ease-out hover:scale-[1.05] hover:shadow-[0_8px_24px_rgba(0,0,0,0.15)] active:scale-[0.98] backdrop-blur-[19px]"
+            className="flex h-[200px] items-center justify-center gap-[60px] rounded-[999px] bg-[#ededed] px-[100px] py-[70px] text-left transition-all duration-300 ease-out hover:scale-[1.05] hover:shadow-[0_8px_24px_rgba(0,0,0,0.15)] active:scale-[0.98] backdrop-blur-[19px] group-data-[kiosk=kiosk-2]/kiosk:px-[110px]"
             data-name="button_default"
             onClick={onButtonClick}
           >

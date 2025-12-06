@@ -97,7 +97,7 @@ export default function SecondScreenTemplate({
       {/* Challenge Label */}
       <div
         // className={styles.challengeLabel}
-        className="absolute left-[128.17px] top-[745.23px] z-[10] flex items-center gap-[41px]"
+        className="absolute left-[128px] top-[745px] z-[10] flex items-center gap-[41px]"
         data-node-id="5168:9925"
       >
         <div

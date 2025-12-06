@@ -211,7 +211,7 @@ export default function ThirdScreenTemplate({
       {/* Background Gradients */}
       <div
         // className={styles.gradientBg}
-        className="absolute left-[0.49px] top-[-224.49px] z-[2] h-[5549.29px] w-[2158.28px] rounded-[100px] bg-[linear-gradient(to_bottom,#1b75bc_0%,#14477d_98%)]"
+        className="absolute left-[0px] top-[-224px] z-[2] h-[5549px] w-[2158px] rounded-[100px] bg-[linear-gradient(to_bottom,#1b75bc_0%,#14477d_98%)]"
         data-node-id="5168:9930"
       />
       <div
