@@ -7,6 +7,11 @@ export const Interstate = localFont({
   preload: true,
   src: [
     {
+      path: '../../../public/fonts/Interstate-Light.woff2',
+      style: 'normal',
+      weight: '300',
+    },
+    {
       path: '../../../public/fonts/InterstateRegular.woff2',
       style: 'normal',
       weight: '400',
@@ -14,7 +19,6 @@ export const Interstate = localFont({
   ],
   style: 'normal',
   variable: '--font-interstate',
-  weight: '400',
 });
 
 export const Geometria = localFont({
