@@ -3,10 +3,12 @@
 import { useEffect } from 'react';
 import { toast, type ExternalToast } from 'sonner';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
-const OFFLINE_FIRST = (process.env.NEXT_PUBLIC_KIOSK_OFFLINE_FIRST ?? 'true') === 'true';
+interface SwRegisterProps {
+  readonly apiBase: string;
+  readonly offlineFirst: boolean;
+}
 
-const SwRegister = () => {
+const SwRegister = ({ apiBase: API_BASE, offlineFirst: OFFLINE_FIRST }: SwRegisterProps) => {
   useEffect(() => {
     if (!('serviceWorker' in navigator)) return;
 
@@ -90,7 +92,7 @@ const SwRegister = () => {
         if (typeof cleanup === 'function') cleanup();
       });
     };
-  }, []);
+  }, [API_BASE, OFFLINE_FIRST]);
 
   return null;
 };
