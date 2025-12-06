@@ -70,6 +70,11 @@ export interface Tour {
 }
 
 export interface BasecampData {
+  readonly 'beats': {
+    readonly [key in Section]: {
+      readonly url: string;
+    };
+  };
   readonly 'possibilities': {
     readonly title: string;
   };

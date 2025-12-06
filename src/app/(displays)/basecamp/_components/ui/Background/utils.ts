@@ -1,47 +1,23 @@
 'use client';
 
-import type { BasecampSection } from '@/lib/internal/types';
-
-export type TimedSection = Exclude<BasecampSection, 'ambient'>;
-
-// Single source of truth: define sections with explicit order and times
-const SECTIONS: ReadonlyArray<{
-  readonly id: TimedSection;
-  readonly times: readonly number[];
-}> = [
-  { id: 'ascend', times: [103, 117, 134] },
-  { id: 'possibilities', times: [70, 75, 85, 93, 100] },
-  { id: 'problem', times: [26, 45, 53, 66] },
-  { id: 'welcome', times: [1, 7, 12, 22] },
+// TODO Should update API data and derive beats from it? Since "beats" data will be Simple CMS?
+// This helps basecamp decide which is the possible next video to preload.
+export const BEAT_ORDER = [
+  'ambient-1',
+  'welcome-1',
+  'welcome-2',
+  'welcome-3',
+  'welcome-4',
+  'problem-1',
+  'problem-2',
+  'problem-3',
+  'problem-4',
+  'possibilities-1',
+  'possibilities-2',
+  'possibilities-3',
+  'possibilities-4',
+  'possibilities-5',
+  'ascend-1',
+  'ascend-2',
+  'ascend-3',
 ] as const;
-
-// Derivations to prevent drift
-export const TIME_MAPPING = Object.fromEntries(SECTIONS.map(s => [s.id, [...s.times]])) as Record<
-  TimedSection,
-  number[]
->;
-
-export const sectionOrder: TimedSection[] = SECTIONS.map(s => s.id);
-
-export const isTimedSection = (s: string): s is TimedSection => s in TIME_MAPPING;
-
-export const getSectionStartTime = (section: TimedSection): number => {
-  const sectionIndex = sectionOrder.indexOf(section);
-  if (sectionIndex === 0) return 0;
-  const previousSection = sectionOrder[sectionIndex - 1];
-  if (!previousSection) return 0;
-  const previousTimePoints = TIME_MAPPING[previousSection];
-  const lastTimePoint = previousTimePoints[previousTimePoints.length - 1];
-  if (!lastTimePoint) return 0;
-  return lastTimePoint;
-};
-
-export const getBeatTimeRange = (section: TimedSection, beatIndex: number) => {
-  const timePoints = TIME_MAPPING[section];
-  if (beatIndex >= timePoints.length || beatIndex < 0) {
-    return null;
-  }
-  const start = beatIndex === 0 ? getSectionStartTime(section) : timePoints[beatIndex - 1];
-  const end = timePoints[beatIndex];
-  return { end, start };
-};
