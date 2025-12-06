@@ -33,7 +33,7 @@ const RootLayout = ({ children }: LayoutProps<'/'>) => {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={cn('font-interstate antialiased', Interstate.variable, Geometria.variable)}>
-        <SwRegister apiBase={apiBase} offlineFirst={offlineFirst} />
+        <SwRegister apiBase={apiBase} offlineFirst={offlineFirst} type="CONFIG" />
         <ThemeProvider
           defaultTheme="system"
           disableTransitionOnChange

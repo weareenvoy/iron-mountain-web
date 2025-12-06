@@ -6,9 +6,10 @@ import { toast, type ExternalToast } from 'sonner';
 interface SwRegisterProps {
   readonly apiBase: string;
   readonly offlineFirst: boolean;
+  readonly type: 'CONFIG' | 'UPDATE';
 }
 
-const SwRegister = ({ apiBase: API_BASE, offlineFirst: OFFLINE_FIRST }: SwRegisterProps) => {
+const SwRegister = ({ apiBase, offlineFirst, type }: SwRegisterProps) => {
   useEffect(() => {
     if (!('serviceWorker' in navigator)) return;
 
@@ -20,17 +21,17 @@ const SwRegister = ({ apiBase: API_BASE, offlineFirst: OFFLINE_FIRST }: SwRegist
         // Configure runtime options for the SW
         if (reg.active) {
           reg.active.postMessage({
-            apiBase: API_BASE,
-            offlineFirst: OFFLINE_FIRST,
-            type: 'CONFIG',
+            apiBase,
+            offlineFirst,
+            type,
           });
         } else if (reg.installing) {
           const onStateChange = () => {
             if (reg.installing?.state === 'activated' && reg.active) {
               reg.active.postMessage({
-                apiBase: API_BASE,
-                offlineFirst: OFFLINE_FIRST,
-                type: 'CONFIG',
+                apiBase,
+                offlineFirst,
+                type,
               });
             }
           };
@@ -92,7 +93,7 @@ const SwRegister = ({ apiBase: API_BASE, offlineFirst: OFFLINE_FIRST }: SwRegist
         if (typeof cleanup === 'function') cleanup();
       });
     };
-  }, [API_BASE, OFFLINE_FIRST]);
+  }, [apiBase, offlineFirst, type]);
 
   return null;
 };
