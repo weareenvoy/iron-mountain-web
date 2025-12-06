@@ -28,14 +28,14 @@ const Switch = ({ className, offLabel, onLabel, useIcon, ...props }: SwitchProps
   return (
     <Root
       className={cn(
-        'peer group data-[state=checked]:bg-primary-im-mid-blue data-[state=unchecked]:bg-primary-im-grey relative inline-flex h-[53.6px] shrink-0 cursor-pointer items-center rounded-full px-2 transition-colors focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
+        'peer group data-[state=checked]:bg-primary-im-mid-blue relative inline-flex h-[53.6px] shrink-0 cursor-pointer items-center rounded-full px-2 transition-colors focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 data-[state=unchecked]:bg-[#151515]',
         width,
         className
       )}
       {...props}
     >
       {/* Off label - visible when unchecked, positioned on right side */}
-      <span className="text-primary-bg-grey absolute right-5 text-center text-base transition-opacity group-data-[state=checked]:opacity-0 group-data-[state=unchecked]:opacity-100">
+      <span className="text-primary-im-grey absolute right-5 text-center text-base transition-opacity group-data-[state=checked]:opacity-0 group-data-[state=unchecked]:opacity-100">
         {useIcon ? <LightbulbOff className="size-[24px]" /> : offLabelText}
       </span>
 
@@ -47,7 +47,7 @@ const Switch = ({ className, offLabel, onLabel, useIcon, ...props }: SwitchProps
       {/* Thumb/Handle */}
       <Thumb
         className={cn(
-          'bg-primary-bg-grey pointer-events-none z-10 block h-[38.52px] w-[38.52px] rounded-full ring-0 transition-transform',
+          'data-[state=checked]:bg-primary-bg-grey data-[state=unchecked]:bg-primary-im-grey pointer-events-none z-10 block h-[38.52px] w-[38.52px] rounded-full ring-0 transition-transform',
           translateX
         )}
       />

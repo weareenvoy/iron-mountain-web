@@ -1,6 +1,15 @@
 'use client';
 
-import { ArrowRight, CircleAlert, CircleCheck, ExternalLink, Lightbulb, Volume2, VolumeX, X } from 'lucide-react';
+import {
+  ArrowLeft,
+  ArrowRight,
+  CircleAlert,
+  CircleCheck,
+  ExternalLink,
+  Lightbulb,
+  Volume2,
+  VolumeX,
+} from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
@@ -117,12 +126,12 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
         )}
       >
         {/* Header */}
-        <div className="mt-40 mb-19 flex items-center justify-between">
-          <h2 className="text-primary-bg-grey text-4xl leading-[48px]">{t.settings.title}</h2>
+        <div className="mt-10 mb-19 flex flex-col items-start justify-between gap-18">
           <Button className="-mr-[30px] h-13 gap-2.5 px-5" onClick={onClose} variant="outline-light-grey">
-            <X className="size-[24px]" />
-            <span className="h-6.25 text-[20px]">{t.docent.actions.close}</span>
+            <ArrowLeft className="size-[24px]" />
+            <span className="h-6.25 text-[20px]">{t.docent.actions.back}</span>
           </Button>
+          <h2 className="text-primary-bg-grey text-4xl leading-[48px]">{t.settings.title}</h2>
         </div>
 
         {/* Controls List */}
@@ -133,7 +142,7 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
                 {/* Status Icon and control name*/}
                 <div className="flex items-center gap-2.5">
                   {control.isOn ? (
-                    <CircleCheck className="size-[32px] fill-[#8dc13f] stroke-[#2e2e2e]" />
+                    <CircleCheck className="size-[32px] fill-[#6dcff6] stroke-[#2e2e2e]" />
                   ) : (
                     <CircleAlert className="size-[32px] fill-[#f7931e] stroke-[#2e2e2e]" />
                   )}
@@ -146,7 +155,7 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
 
                 {/* Error message */}
                 {control.hasError && (
-                  <span className="text-secondary-im-orange ml-11 text-[16px]">{control.errorMessage}</span>
+                  <span className="text-primary-im-grey ml-11 text-[16px]">{control.errorMessage}</span>
                 )}
               </div>
 
@@ -185,7 +194,7 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
             <span>{t.settings.endTourButton}</span>
             <ArrowRight className="size-[24px]" />
           </Button>
-          <p className="text-primary-bg-grey w-70 text-[16px] leading-loose tracking-[-0.8px]">
+          <p className="text-primary-bg-grey min-w-70 text-[16px] leading-loose tracking-[-0.8px]">
             {t.settings.endTourDescription}
           </p>
         </div>

@@ -9,7 +9,9 @@ export type OverlookSection =
   | 'protect'
   | 'unlock';
 
-export type Section = BasecampSection | OverlookSection;
+export type SummitSection = 'primary';
+
+export type Section = BasecampSection | OverlookSection | SummitSection;
 export type TimedSection = Exclude<Section, 'ambient'>;
 
 // Type guards for runtime validation
@@ -24,6 +26,7 @@ const OVERLOOK_SECTIONS: readonly OverlookSection[] = [
   'protect',
   'unlock',
 ];
+const SUMMIT_SECTIONS: readonly SummitSection[] = ['primary'];
 
 export const isBasecampSection = (value: string): value is BasecampSection => {
   return BASECAMP_SECTIONS.includes(value as BasecampSection);
@@ -33,8 +36,12 @@ export const isOverlookSection = (value: string): value is OverlookSection => {
   return OVERLOOK_SECTIONS.includes(value as OverlookSection);
 };
 
+export const isSummitSection = (value: string): value is SummitSection => {
+  return SUMMIT_SECTIONS.includes(value as SummitSection);
+};
+
 export const isSection = (value: string): value is Section => {
-  return isBasecampSection(value) || isOverlookSection(value);
+  return isBasecampSection(value) || isOverlookSection(value) || isSummitSection(value);
 };
 // UI Navigation state for exhibits (local to UI, not MQTT)
 export interface ExhibitNavigationState {
