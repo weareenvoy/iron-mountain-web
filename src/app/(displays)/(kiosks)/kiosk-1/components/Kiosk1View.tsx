@@ -82,6 +82,7 @@ export default function Kiosk1View() {
             {s.id === 's4' && (
               <ThirdScreenTemplate
                 {...challenges.thirdScreen}
+                kioskId="kiosk-1"
                 onNavigateDown={() => controller.next()}
                 onNavigateUp={() => controller.prev()}
               />

@@ -4,6 +4,7 @@ import Image from 'next/image';
 
 // import styles from './thirdScreenTemplate.module.css';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
+import { DEFAULT_KIOSK_ID, type KioskId } from '../../../../_types/kiosk-id';
 
 // Asset constants from Figma MCP
 const imgArrowNavDown = '/images/kiosks/svgs/NavDownArrow.svg';
@@ -28,6 +29,7 @@ export interface ThirdScreenTemplateProps {
   metricImageSrc?: string;
   onNavigateDown?: () => void;
   onNavigateUp?: () => void;
+  kioskId?: KioskId;
   subheadline?: string | string[];
   videoSrc?: string;
 }
@@ -43,16 +45,18 @@ export default function ThirdScreenTemplate({
   largeIconTopSrc: _largeIconTopSrc = imgVector,
   metricAmount = '40 TB',
   metricDescription = 'of existing footage of data migration from physical drives into Iron Mountain’s digital preservation platform.',
-  metricImageSrc: _metricImageSrc = imgMetricDiamond,
+  metricImageSrc = imgMetricDiamond,
   onNavigateDown,
   onNavigateUp,
+  kioskId = DEFAULT_KIOSK_ID,
   subheadline = 'Rich media &\n cultural heritage',
   videoSrc = '/images/kiosks/kiosk1/03-value/Value-header.mp4',
 }: ThirdScreenTemplateProps) {
   return (
     <div
       // className={styles.container}
-      className="relative flex h-screen w-full flex-col overflow-hidden bg-black"
+      className="group/kiosk relative flex h-screen w-full flex-col overflow-hidden bg-black"
+      data-kiosk={kioskId}
       data-node-id="5168:9928"
     >
       {/* Video Section */}
@@ -122,7 +126,7 @@ export default function ThirdScreenTemplate({
       {/* Description */}
       <div
         // className={styles.descriptionContainer}
-        className="absolute left-[120px] top-[1405px] z-[5] w-[1090px]"
+        className="absolute left-[120px] top-[2115px] z-[5] w-[1010px]"
         data-node-id="5168:9932"
       >
         <p
@@ -136,7 +140,7 @@ export default function ThirdScreenTemplate({
       {/* Metrics Section */}
       <div
         // className={styles.metricsSection}
-        className="absolute left-[-70px] top-[2765px] z-[5] flex w-[1390px] flex-col gap-[100px]"
+        className="absolute left-[-80px] top-[3315px] z-[5] flex w-[1390px] flex-col gap-[100px] group-data-[kiosk=kiosk-2]/kiosk:left-[-180px] group-data-[kiosk=kiosk-2]/kiosk:top-[3395px]"
         data-node-id="5168:9945"
       >
         <div
@@ -147,7 +151,7 @@ export default function ThirdScreenTemplate({
         </div>
         <p
           // className={styles.metricDescription}
-          className="relative left-[200px] top-[-142px] text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#6dcff6]"
+          className="relative left-[200px] top-[-142px] text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#6dcff6] group-data-[kiosk=kiosk-2]/kiosk:left-[300px]"
         >
           {renderRegisteredMark(metricDescription)}
         </p>
@@ -158,7 +162,7 @@ export default function ThirdScreenTemplate({
       <div
         aria-label="Previous"
         // className={styles.arrowUp}
-        className="absolute right-[120px] top-[1720px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
+        className="absolute right-[120px] top-[1750px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
         data-node-id="5168:9940"
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
@@ -184,7 +188,7 @@ export default function ThirdScreenTemplate({
       <div
         aria-label="Next"
         // className={styles.arrowDown}
-        className="absolute right-[120px] top-[1940px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
+        className="absolute right-[120px] top-[1980px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
         data-node-id="5168:9938"
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
@@ -222,7 +226,7 @@ export default function ThirdScreenTemplate({
 
       <div
         // className={styles.largeIconCenter}
-        className="pointer-events-none absolute left-[1090px] top-[1635px] z-[4] flex h-[795px] w-[795px] items-center justify-center rotate-[225deg] scale-y-[-1]"
+        className="pointer-events-none absolute left-[920px] top-[2415px] z-[4] flex h-[945px] w-[945px] items-center justify-center rotate-[225deg] scale-y-[-1]"
         data-node-id="5168:9936"
       >
         <div className="relative h-full w-full">
@@ -231,7 +235,7 @@ export default function ThirdScreenTemplate({
             className="object-contain"
             fill
             sizes="795px"
-            src="/images/kiosks/kiosk1/01-challenge/Challenge-Image2-Diamond.png"
+            src={metricImageSrc}
             style={{ transform: 'rotate(45deg)' }}
             unoptimized
           />

@@ -23,10 +23,10 @@
   },
   "secondScreen": {
     "arrowIconSrc": "/images/kiosks/svgs/NavDownArrow.svg",
-    "bottomDescription": "The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.",
+    "bottomDescription": "",
     "bottomVideoSrc": "/images/kiosks/kiosk3/02-solution/Solution-header.mp4",
     "challengeIconSrc": "/images/kiosks/svgs/ChallengesDiamond.svg",
-    "largeIconSrc": "/images/kiosks/kiosk3/02-solution/Solution-Image1-Diamond.png",
+    "largeIconSrc": "/images/kiosks/kiosk3/01-challenge/Challenge-Image1-Diamond.png",
     "mainDescription": "A large bank acquired a competitor, which resulted in redundant and costly data center operations.",
     "statAmount": "",
     "statDescription": "",

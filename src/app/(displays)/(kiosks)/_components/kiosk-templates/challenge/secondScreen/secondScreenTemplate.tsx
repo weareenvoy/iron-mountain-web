@@ -149,7 +149,7 @@ export default function SecondScreenTemplate({
       >
         <p
           // className={styles.descriptionText}
-          className="font-normal left-[-380px] leading-[1.4] relative text-[60px] text-white tracking-[-3px] top-[-255px] w-[980px]"
+          className="relative left-[-390px] top-[-275px] w-[980px] text-[60px] font-normal leading-[1.4] tracking-[-3px] text-white"
         >
           {renderRegisteredMark(mainDescription)}
         </p>
@@ -173,7 +173,7 @@ export default function SecondScreenTemplate({
       <div
         aria-label="Previous"
         // className={styles.arrowUp}
-        className="absolute right-[110px] top-[1765px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
+        className="absolute right-[130px] top-[1755px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
         data-node-id="5168:9923"
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
@@ -199,7 +199,7 @@ export default function SecondScreenTemplate({
       <div
         aria-label="Next"
         // className={styles.arrowDown}
-        className="absolute right-[110px] top-[1995px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
+        className="absolute right-[130px] top-[1975px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
         data-node-id="5168:9921"
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
@@ -243,7 +243,7 @@ export default function SecondScreenTemplate({
       {/* Large Background Icon */}
       <div
         // className={styles.largeIcon}
-        className="pointer-events-none absolute left-[-21.5%] top-[42.5%] z-[4] flex size-[1506px] -scale-y-100 items-center justify-center rotate-[180deg]"
+        className="pointer-events-none absolute left-[-21%] top-[42%] z-[4] flex size-[1506px] -scale-y-100 items-center justify-center rotate-[180deg]"
         data-node-id="5168:9917"
       >
         <div className="relative h-full w-full">
