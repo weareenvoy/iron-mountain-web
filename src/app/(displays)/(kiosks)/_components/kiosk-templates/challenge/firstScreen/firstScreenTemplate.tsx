@@ -2,6 +2,9 @@
 
 import Image from 'next/image';
 
+import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
+import { DEFAULT_KIOSK_ID } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
+
 // import styles from './firstScreenTemplate.module.css';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
@@ -16,6 +19,7 @@ export interface FirstScreenTemplateProps {
   arrowUpIconSrc?: string;
   challengeIconSrc?: string;
   challengeLabel?: string;
+  kioskId?: KioskId;
   onNavigateDown?: () => void;
   onNavigateUp?: () => void;
   problemDescription?: string;
@@ -36,13 +40,15 @@ export default function FirstScreenTemplate({
   problemDescription = 'The Museum needed a secure, off-site, cloud-accessible, and easily managed solution to protect its one-of-a-kind, irreplaceable footage. Storing the only master copy locally presented a high risk of losing all assets in the event of a data failure or system crash.',
   savingsAmount = '120 TB',
   savingsDescription = 'of data is safely stored and accessible for the Museum.',
+  kioskId = DEFAULT_KIOSK_ID,
   subheadline = 'Rich media &\n cultural heritage',
   videoSrc = '/images/kiosks/kiosk1/01-challenge/Challenge-Header.mp4',
 }: FirstScreenTemplateProps) {
   return (
     <div
       // className={styles.container}
-      className="relative flex h-screen w-full flex-col overflow-hidden bg-black"
+      className="group/kiosk relative flex h-screen w-full flex-col overflow-hidden bg-black"
+      data-kiosk={kioskId}
       data-node-id="5168:9882"
     >
       {/* Video Section */}
@@ -112,7 +118,7 @@ export default function FirstScreenTemplate({
       <div
         aria-label="Previous"
         // className={styles.arrowUp}
-        className="absolute right-[100px] top-[1740px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
+        className="absolute right-[110px] top-[1770px] z-[10] flex h-[118px] w-[118px] items-center justify-center group-data-[kiosk=kiosk-3]/kiosk:right-[130px] group-data-[kiosk=kiosk-3]/kiosk:top-[1760px]"
         data-node-id="5168:9899"
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
@@ -138,7 +144,7 @@ export default function FirstScreenTemplate({
       <div
         aria-label="Next"
         // className={styles.arrowDown}
-        className="absolute right-[100px] top-[1970px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
+        className="absolute right-[110px] top-[1990px] z-[10] flex h-[118px] w-[118px] items-center justify-center group-data-[kiosk=kiosk-3]/kiosk:right-[130px] group-data-[kiosk=kiosk-3]/kiosk:top-[1980px]"
         data-node-id="5168:9897"
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
@@ -165,12 +171,12 @@ export default function FirstScreenTemplate({
       {/* Problem Description Section */}
       <div
         // className={styles.problemSection}
-        className="absolute left-[115px] top-[1230px] z-[5] w-[1390px]"
+        className="absolute left-[115px] top-[1230px] z-[5] w-[1390px] group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-2]/kiosk:top-[1240px] group-data-[kiosk=kiosk-2]/kiosk:w-[1370px]"
         data-node-id="5168:9893"
       >
         <p
           // className={styles.problemText}
-          className="text-[80px] font-normal leading-[1.4] tracking-[-3px] text-white"
+          className="relative left-[5px] top-[210px] text-[60px] font-normal leading-[1.4] tracking-[-3px] text-white group-data-[kiosk=kiosk-2]/kiosk:left-0 group-data-[kiosk=kiosk-2]/kiosk:top-[200px] group-data-[kiosk=kiosk-2]/kiosk:leading-[1.3] group-data-[kiosk=kiosk-3]/kiosk:left-[-25px] group-data-[kiosk=kiosk-3]/kiosk:top-[200px] group-data-[kiosk=kiosk-3]/kiosk:text-[80px] group-data-[kiosk=kiosk-3]/kiosk:tracking-[-4px]"
         >
           {renderRegisteredMark(problemDescription)}
         </p>
@@ -179,14 +185,14 @@ export default function FirstScreenTemplate({
       {/* Gradient Background */}
       <div
         // className={styles.gradientBg}
-        className="absolute left-0 top-[1030px] z-[2] h-[4085px] w-full rounded-t-[100px] bg-[linear-gradient(to_bottom,#1b75bc_0%,#14477d_98%)]"
+        className="absolute left-0 top-[1060px] z-[2] h-[4085px] w-full rounded-t-[100px] bg-[linear-gradient(to_bottom,#1b75bc_0%,#14477d_98%)]"
         data-node-id="5168:9884"
       />
 
       {/* Savings Metrics Section */}
       <div
         // className={styles.savingsSection}
-        className="absolute left-[-115px] top-[2675px] z-[5] flex w-[1390px] flex-col"
+        className="absolute left-[-45px] top-[2465px] z-[5] flex w-[1390px] flex-col group-data-[kiosk=kiosk-2]/kiosk:left-[-105px] group-data-[kiosk=kiosk-3]/kiosk:left-[-15px] group-data-[kiosk=kiosk-3]/kiosk:top-[2445px]"
         data-node-id="5168:9904"
       >
         <div
@@ -197,7 +203,7 @@ export default function FirstScreenTemplate({
         </div>
         <p
           // className={styles.savingsDescription}
-          className="relative left-[240px] top-0 whitespace-pre-line text-left text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#6dcff6]"
+          className="relative left-[160px] top-[-40px] whitespace-pre-line text-left text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#6dcff6] group-data-[kiosk=kiosk-2]/kiosk:left-[220px] group-data-[kiosk=kiosk-2]/kiosk:top-[-30px] group-data-[kiosk=kiosk-2]/kiosk:leading-[1.3] group-data-[kiosk=kiosk-3]/kiosk:left-[130px] group-data-[kiosk=kiosk-3]/kiosk:top-[-50px] group-data-[kiosk=kiosk-3]/kiosk:leading-[1.3] group-data-[kiosk=kiosk-3]/kiosk:tracking-[-3px]"
         >
           {renderRegisteredMark(savingsDescription)}
         </p>

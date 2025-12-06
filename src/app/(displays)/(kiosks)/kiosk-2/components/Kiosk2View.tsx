@@ -69,6 +69,7 @@ const Kiosk2View = () => {
             {slide.id === 's2' && (
               <FirstScreenTemplate
                 {...challenges.firstScreen}
+                kioskId="kiosk-2"
                 onNavigateDown={() => controller.next()}
                 onNavigateUp={() => controller.prev()}
               />

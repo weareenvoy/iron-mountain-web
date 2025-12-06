@@ -5,7 +5,7 @@
     "challengeLabel": "Challenge",
     "problemDescription": "A large healthcare organization faced significant financial risk because it could not locate the appropriate documentation to confirm the eligibility of employee pension claims. The legal system ruled the organization liable to pay claims without evidence to disprove eligibility, resulting in millions of dollars paid in ineligible pension benefits.",
     "savingsAmount": "$2M+",
-    "savingsDescription": "saved annually through the identification\nof “duplicate” pension payments",
+    "savingsDescription": "saved annually through the identification of “duplicate”\n pension payments",
     "subheadline": ["Information", "& data lifecycle"],
     "videoSrc": "/images/kiosks/kiosk2/01-challenge/Challenge-header.mp4"
   },
