@@ -7,7 +7,6 @@ import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
 import { useMqtt } from '@/components/providers/mqtt-provider';
-import { useDocentTranslation } from '@/hooks/use-docent-translation';
 import { cn } from '@/lib/tailwind/utils/cn';
 import type { Tour } from '@/lib/internal/types';
 
@@ -17,7 +16,6 @@ interface TourByDate {
 }
 
 const SchedulePageClient = () => {
-  const { t } = useDocentTranslation();
   const router = useRouter();
   const { client } = useMqtt();
   const { data, isConnected, isTourDataLoading, refreshData, setCurrentTour } = useDocent();
@@ -140,13 +138,13 @@ const SchedulePageClient = () => {
     (): HeaderProps['leftButton'] => ({
       href: '/docent',
       icon: <House className="size-[20px]" />,
-      text: t.docent.navigation.backToHome,
+      text: data?.docent.navigation.backToHome ?? 'Back to home',
     }),
-    [t]
+    [data]
   );
 
   if (!isConnected) {
-    return <div>{t.connection.connecting}</div>;
+    return <div>{data?.connection.connecting ?? 'Connecting to MQTT...'}</div>;
   }
 
   return (
@@ -156,7 +154,7 @@ const SchedulePageClient = () => {
       <div className="flex h-full w-full flex-col justify-between">
         {/* Header */}
         <h1 className="text-primary-bg-grey mt-40 pl-5 text-3xl leading-loose tracking-[-1.8px]">
-          {t.docent.schedule.title}
+          {data?.docent.schedule.title ?? 'EBC schedule'}
         </h1>
         <div className="bg-primary-bg-grey relative flex w-full flex-col gap-[87px] rounded-t-[20px] px-6 py-11">
           <div className="text-primary-im-dark-blue flex items-center justify-between">
@@ -166,7 +164,7 @@ const SchedulePageClient = () => {
               size="sm"
               variant="outline"
             >
-              {t.docent.actions.today}
+              {data?.docent.actions.today ?? 'Today'}
             </Button>
             <div className="flex items-center gap-7">
               <button className="active:opacity-50" onClick={handlePreviousMonth}>
@@ -190,9 +188,11 @@ const SchedulePageClient = () => {
           {/* Tours list */}
           <div className="h-[624px] space-y-0 overflow-y-auto">
             {isTourDataLoading ? (
-              <div>{t.docent.schedule.loading}</div>
+              <div>{data?.docent.schedule.loading ?? 'Loading...'}</div>
             ) : filteredTours.length === 0 ? (
-              <div className="text-primary-im-dark-blue">{t.docent.schedule.noTours}</div>
+              <div className="text-primary-im-dark-blue">
+                {data?.docent.schedule.noTours ?? 'No tours available for this month.'}
+              </div>
             ) : (
               filteredTours.map(([date, { dayOfWeek, tours }]) => (
                 <div className="flex flex-col gap-5 border-t border-[#C9C9C9] py-5" key={date}>
@@ -262,7 +262,7 @@ const SchedulePageClient = () => {
                               size="sm"
                               variant="secondary"
                             >
-                              {t.docent.actions.load}
+                              {data?.docent.actions.load ?? 'Load'}
                             </Button>
                           )}
                         </div>

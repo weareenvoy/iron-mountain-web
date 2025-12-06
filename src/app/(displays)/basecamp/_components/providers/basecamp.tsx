@@ -2,20 +2,12 @@
 
 import { createContext, useCallback, useContext, useEffect, useState, type PropsWithChildren } from 'react';
 import { useMqtt } from '@/components/providers/mqtt-provider';
-import { getLocaleForTesting } from '@/flags/flags';
 import { getBasecampData } from '@/lib/internal/data/get-basecamp';
-import {
-  isBasecampSection,
-  type BasecampData,
-  type Dictionary,
-  type ExhibitNavigationState,
-  type Locale,
-} from '@/lib/internal/types';
+import { isBasecampSection, type BasecampData, type ExhibitNavigationState, type Locale } from '@/lib/internal/types';
 import type { ExhibitMqttState } from '@/lib/mqtt/types';
 
 interface BasecampContextType {
   data: BasecampData | null;
-  dict: Dictionary | null;
   error: null | string;
   exhibitState: ExhibitNavigationState;
   loading: boolean;
@@ -36,17 +28,6 @@ export const useBasecamp = () => {
   return context;
 };
 
-/**
- * Hook to get the current locale/language for the Basecamp app.
- * Always returns a valid locale (never null).
- *
- * @returns The current locale ('en' | 'pt')
- */
-export const useLocale = (): Locale => {
-  const { locale } = useBasecamp();
-  return locale;
-};
-
 export const BasecampProvider = ({ children }: BasecampProviderProps) => {
   const { client } = useMqtt();
 
@@ -65,8 +46,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
   });
 
   const [data, setData] = useState<BasecampData | null>(null);
-  const [dict, setDict] = useState<Dictionary | null>(null);
-  const [locale, setLocale] = useState<Locale>(getLocaleForTesting());
+  const [locale, setLocale] = useState<Locale>('en');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<null | string>(null);
 
@@ -78,7 +58,6 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     try {
       const basecampData = await getBasecampData();
       setData(basecampData.data);
-      setDict(basecampData.dict);
       setLocale(basecampData.locale);
       setError(null);
       return true;
@@ -205,7 +184,6 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     // Subscribe to broadcast commands (all exhibits listen to same topics)
     client.subscribeToTopic('cmd/dev/all/load-tour', handleLoadTour);
     client.subscribeToTopic('cmd/dev/all/end-tour', handleEndTour);
-
     // Also subscribe to basecamp-specific goto-beat (direct from Docent)
     client.subscribeToTopic('cmd/dev/basecamp/goto-beat', handleGotoBeat);
 
@@ -265,7 +243,6 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
 
   const contextValue = {
     data,
-    dict,
     error,
     exhibitState,
     loading,

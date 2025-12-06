@@ -8,14 +8,10 @@ import StrategiesSection from '@/app/(displays)/summit/_components/sections/stra
 import type { SummitRecap } from '@/app/(displays)/summit/_types';
 
 const SummitWebContent = () => {
-  const { data, dict, error, loading } = useSummit();
+  const { data, error, loading } = useSummit();
 
-  const loadingDict = dict?.loading;
-  const summitDict = dict?.summit;
-
-  const loadErrorMessage = summitDict?.errors.loadFailed ?? 'Unable to load summit content.';
-  const loadingMessage =
-    loadingDict?.summit ?? loadingDict?.summitRoom ?? loadingDict?.default ?? 'Loading summit experience…';
+  const loadErrorMessage = 'Unable to load summit content.';
+  const loadingMessage = 'Loading summit experience…';
 
   if (loading) {
     return (
@@ -42,19 +38,18 @@ const SummitWebContent = () => {
     recapList = [legacyRecap];
   }
 
-  const consideringTitle =
-    summitDict?.sections.consideringPossibilities ?? data.strategies[0]?.title ?? 'Considering possibilities';
+  const consideringTitle = data.strategies[0]?.eyebrow ?? 'Considering possibilities';
   const heroLabels = {
-    company: summitDict?.hero.labels.company ?? 'Company',
-    dateOfEngagement: summitDict?.hero.labels.dateOfEngagement ?? 'Date of engagement',
-    location: summitDict?.hero.labels.location ?? 'Location',
+    company: 'Company',
+    dateOfEngagement: 'Date of engagement',
+    location: 'Location',
   };
-  const heroTitle = summitDict?.hero.title ?? data.hero.title ?? 'Your personalized journey map';
-  const recapPlaceholder = summitDict?.recap.placeholder ?? 'Type your notes here';
-  const relevantSolutionsTitle =
-    summitDict?.sections.relevantSolutions ?? data.strategies[1]?.title ?? 'Relevant solutions';
-  const unlockFutureTitle = summitDict?.sections.unlockYourFuture ?? data.strategies[2]?.title ?? 'Unlock your future';
-  const storiesOfImpactTitle = summitDict?.sections.storiesOfImpact ?? data.strategies[3]?.title ?? 'Stories of impact';
+  const heroTitle = data.hero.title ?? 'Your personalized journey map';
+  const recapPlaceholder = 'Type your notes here';
+  const relevantSolutionsTitle = data.strategies[1]?.eyebrow ?? 'Relevant solutions';
+  const unlockFutureTitle = data.strategies[2]?.eyebrow ?? 'Unlock your future';
+  const storiesOfImpactTitle = data.strategies[3]?.eyebrow ?? 'Stories of impact';
+
   return (
     <div className="flex flex-col gap-14 py-10">
       <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-12">

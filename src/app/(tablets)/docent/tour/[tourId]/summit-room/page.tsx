@@ -9,7 +9,6 @@ import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import SummitRoomDiamonds from '@/components/ui/icons/SummitRoomDiamonds';
-import { useDocentTranslation } from '@/hooks/use-docent-translation';
 import { cn } from '@/lib/tailwind/utils/cn';
 
 // Import Swiper styles
@@ -21,7 +20,6 @@ import 'swiper/css/a11y';
 // Summit Room has 5 slides. First slide has no border, no diamond icon, but has image. Other slides have a border and a diamond icon.
 
 const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room'>) => {
-  const { t } = useDocentTranslation();
   const { tourId } = use(params);
   const { client } = useMqtt();
   const {
@@ -110,9 +108,9 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
     (): HeaderProps['leftButton'] => ({
       href: `/docent/tour/${tourId}`,
       icon: <ArrowLeft />,
-      text: t.docent.navigation.backToMenu,
+      text: data?.docent.navigation.backToMenu ?? 'Back to menu',
     }),
-    [tourId, t]
+    [tourId, data]
   );
 
   return (
@@ -171,7 +169,7 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
             <div className="border-primary-im-light-blue absolute top-1/2 left-1/2 h-82 w-82 -translate-x-1/2 -translate-y-1/2 rotate-45 rounded-[40px] border-2" />
             <Button className="relative h-17.5 w-70" onClick={handleLaunchJourneyMap} size="sm">
               <span className="text-primary-im-dark-blue text-xl tracking-[-0.05em]">
-                {t.docent.actions.launchJourneyMap}
+                {data?.docent.actions.launchJourneyMap ?? 'Launch journey map'}
               </span>
               <ArrowRight />
             </Button>

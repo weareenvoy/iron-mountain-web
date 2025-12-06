@@ -1,177 +1,386 @@
-{
-  "locale": "en",
-  "data": {
-    "slides": [
-      {
-        "borderColor": null,
-        "id": 1,
-        "title": "Your personalized journey map"
+[
+  {
+    "locale": "en",
+    "data": {
+      "connection": {
+        "connecting": "Connecting to MQTT..."
       },
-      {
-        "borderColor": "border-primary-im-light-blue",
-        "id": 2,
-        "title": "What's standing in your way?"
+      "docent": {
+        "actions": {
+          "close": "Close",
+          "back": "Back",
+          "launchJourneyMap": "Launch journey map",
+          "load": "Load",
+          "settings": "Settings",
+          "startPresenting": "Start presenting",
+          "stopPresenting": "Stop presenting",
+          "startTour": "Launch calendar",
+          "today": "Today"
+        },
+        "home": {
+          "description": "Manage and direct the Iron Mountain EBC experience.",
+          "subtitle": "EBC Controls",
+          "title": "Iron Mountain"
+        },
+        "moments": {
+          "ambientState": "Ambient state",
+          "ascend": "Ascend",
+          "possibilities": "Possibilities",
+          "problem": "Problem",
+          "welcome": "Welcome"
+        },
+        "navigation": {
+          "backToHome": "Back to home",
+          "backToMenu": "Back to menu",
+          "backToSchedule": "Back to schedule",
+          "endTour": "End tour"
+        },
+        "notFound": {
+          "description": "The tour you're looking for doesn't exist or is no longer available.",
+          "title": "Tour not found"
+        },
+        "schedule": {
+          "loading": "Loading...",
+          "noTours": "No tours available for this month.",
+          "title": "EBC schedule"
+        }
       },
-      {
-        "borderColor": "border-secondary-im-purple",
-        "id": 3,
-        "title": "Considering possibilities"
+      "loading": {
+        "basecamp": "Loading basecamp…",
+        "default": "Loading…",
+        "overlook": "Loading overlook…",
+        "schedule": "Loading schedule…",
+        "summit": "Loading summit experience…",
+        "summitRoom": "Loading summit room…",
+        "tour": "Loading tour…"
       },
-      {
-        "borderColor": "border-secondary-im-orange",
-        "id": 4,
-        "title": "Unlock your future"
+      "moments": {
+        "basecamp": [
+          {
+            "beatCount": 1,
+            "id": "ambient",
+            "title": "Ambient state"
+          },
+          {
+            "beatCount": 4,
+            "id": "welcome",
+            "title": "Welcome"
+          },
+          {
+            "beatCount": 4,
+            "id": "problem",
+            "title": "Problem"
+          },
+          {
+            "beatCount": 5,
+            "id": "possibilities",
+            "title": "Possibilities"
+          },
+          {
+            "beatCount": 3,
+            "id": "ascend",
+            "title": "Ascend"
+          }
+        ],
+        "overlook": [
+          {
+            "beatCount": 1,
+            "id": "ambient",
+            "title": "Ambient state"
+          },
+          {
+            "beatCount": 2,
+            "id": "unlock",
+            "title": "Unlock"
+          },
+          {
+            "beatCount": 2,
+            "id": "protect",
+            "title": "Protect"
+          },
+          {
+            "beatCount": 2,
+            "id": "connect",
+            "title": "Connect"
+          },
+          {
+            "beatCount": 2,
+            "id": "activate",
+            "title": "Activate"
+          },
+          {
+            "beatCount": 5,
+            "id": "insight-dxp",
+            "title": "InSight DXP"
+          },
+          {
+            "beatCount": 1,
+            "id": "case-study",
+            "title": "Impact (case study)"
+          },
+          {
+            "beatCount": 4,
+            "id": "futurescape",
+            "title": "Futurescape"
+          }
+        ]
       },
-      {
-        "borderColor": "border-primary-im-mid-blue",
-        "id": 5,
-        "title": "Stories of impact"
-      }
-    ],
-    "moments": {
-      "basecamp": [
+      "settings": {
+        "ebcLights": "EBC Lights",
+        "endTourButton": "End tour & activate idle",
+        "endTourDescription": "Tap to end the experience and bring all screens back to idle mode.",
+        "exhibits": {
+          "basecamp": "Basecamp",
+          "entryWay": "Entry Way",
+          "overlook": "Overlook",
+          "solutionPathways": "Solution Pathways",
+          "summitRoom": "Summit Room"
+        },
+        "openManual": "Open EBC Manual",
+        "status": {
+          "offline": "Offline"
+        },
+        "title": "Settings"
+      },
+      "slides": [
         {
-          "beatCount": 1,
-          "id": "ambient",
-          "title": "Ambient state"
+          "borderColor": null,
+          "id": 1,
+          "title": "Your personalized journey map"
         },
         {
-          "beatCount": 4,
-          "id": "welcome",
-          "title": "Welcome"
+          "borderColor": "border-primary-im-light-blue",
+          "id": 2,
+          "title": "What's standing in your way?"
         },
         {
-          "beatCount": 4,
-          "id": "problem",
-          "title": "Problem"
+          "borderColor": "border-secondary-im-purple",
+          "id": 3,
+          "title": "Considering possibilities"
         },
         {
-          "beatCount": 5,
-          "id": "possibilities",
-          "title": "Possibilities"
+          "borderColor": "border-secondary-im-orange",
+          "id": 4,
+          "title": "Unlock your future"
         },
         {
-          "beatCount": 3,
-          "id": "ascend",
-          "title": "Ascend"
+          "borderColor": "border-primary-im-mid-blue",
+          "id": 5,
+          "title": "Stories of impact"
         }
       ],
-      "overlook": [
-        {
-          "beatCount": 1,
-          "id": "ambient",
-          "title": "Ambient state"
+      "summit": {
+        "errors": {
+          "loadFailed": "Unable to load summit content."
         },
-        {
-          "beatCount": 2,
-          "id": "unlock",
-          "title": "Unlock"
+        "footerStats": ["Executive Innovation Center", "São Paulo, Brazil", "Elevation 760 m (2,493.4 ft)"],
+        "hero": {
+          "labels": {
+            "company": "Company",
+            "dateOfEngagement": "Date of engagement",
+            "location": "Location"
+          },
+          "title": "Your personalized journey map"
         },
-        {
-          "beatCount": 2,
-          "id": "protect",
-          "title": "Protect"
+        "recap": {
+          "placeholder": "Type your notes here"
         },
-        {
-          "beatCount": 2,
-          "id": "connect",
-          "title": "Connect"
-        },
-        {
-          "beatCount": 2,
-          "id": "activate",
-          "title": "Activate"
-        },
-        {
-          "beatCount": 5,
-          "id": "insight-dxp",
-          "title": "InSight DXP"
-        },
-        {
-          "beatCount": 1,
-          "id": "case-study",
-          "title": "Impact (case study)"
-        },
-        {
-          "beatCount": 4,
-          "id": "futurescape",
-          "title": "Futurescape"
+        "sections": {
+          "consideringPossibilities": "Considering possibilities",
+          "relevantSolutions": "Relevant solutions",
+          "storiesOfImpact": "Stories of impact",
+          "unlockYourFuture": "Unlock your future"
         }
-      ]
-    },
-    "tours": [
-      {
-        "date": "2025-09-20",
-        "endTime": "11:00 AM",
-        "guestLogo": null,
-        "guestName": "Herman Miller",
-        "id": "tour-001",
-        "startTime": "07:00 AM",
-        "title": "fake title 1"
       },
-      {
-        "date": "2025-09-20",
-        "endTime": "02:00 PM",
-        "guestLogo": null,
-        "guestName": "PMU Umbrella Pharmaceuticals",
-        "id": "tour-002",
-        "startTime": "12:00 PM",
-        "title": "fake title 2"
-      },
-      {
-        "date": "2025-09-27",
-        "endTime": "05:30 PM",
-        "guestLogo": null,
-        "guestName": "Boyer-Boyer",
-        "id": "tour-003",
-        "startTime": "03:30 PM",
-        "title": "fake title 3"
-      },
-      {
-        "date": "2025-09-30",
-        "endTime": "02:00 PM",
-        "guestLogo": null,
-        "guestName": "Cremin-Okuneva",
-        "id": "tour-004",
-        "startTime": "01:00 PM",
-        "title": "fake title 4"
-      },
-      {
-        "date": "2025-09-30",
-        "endTime": "04:00 PM",
-        "guestLogo": null,
-        "guestName": "fake co 5",
-        "id": "tour-005",
-        "startTime": "03:00 PM",
-        "title": "fake title 5"
-      },
-      {
-        "date": "2025-10-12",
-        "endTime": "02:00 PM",
-        "guestLogo": null,
-        "guestName": "Zalauf Inc.",
-        "id": "tour-006",
-        "startTime": "01:00 PM",
-        "title": "fake title 6"
-      },
-      {
-        "date": "2025-10-12",
-        "endTime": "04:00 PM",
-        "guestLogo": null,
-        "guestName": "fake co 7",
-        "id": "tour-007",
-        "startTime": "03:00 PM",
-        "title": "fake title 7"
-      },
-      {
-        "date": "2025-11-04",
-        "endTime": "04:00 PM",
-        "guestLogo": null,
-        "guestName": "fake co 8",
-        "id": "tour-008",
-        "startTime": "02:40 PM",
-        "title": "fake title 8"
+      "tours": [
+        {
+          "date": "2025-09-20",
+          "endTime": "11:00 AM",
+          "guestLogo": null,
+          "guestName": "Herman Miller",
+          "id": "tour-001",
+          "startTime": "07:00 AM",
+          "title": "fake title 1"
+        },
+        {
+          "date": "2025-09-20",
+          "endTime": "02:00 PM",
+          "guestLogo": null,
+          "guestName": "PMU Umbrella Pharmaceuticals",
+          "id": "tour-002",
+          "startTime": "12:00 PM",
+          "title": "fake title 2"
+        },
+        {
+          "date": "2025-09-27",
+          "endTime": "05:30 PM",
+          "guestLogo": null,
+          "guestName": "Boyer-Boyer",
+          "id": "tour-003",
+          "startTime": "03:30 PM",
+          "title": "fake title 3"
+        },
+        {
+          "date": "2025-09-30",
+          "endTime": "02:00 PM",
+          "guestLogo": null,
+          "guestName": "Cremin-Okuneva",
+          "id": "tour-004",
+          "startTime": "01:00 PM",
+          "title": "fake title 4"
+        },
+        {
+          "date": "2025-09-30",
+          "endTime": "04:00 PM",
+          "guestLogo": null,
+          "guestName": "fake co 5",
+          "id": "tour-005",
+          "startTime": "03:00 PM",
+          "title": "fake title 5"
+        },
+        {
+          "date": "2025-10-12",
+          "endTime": "02:00 PM",
+          "guestLogo": null,
+          "guestName": "Zalauf Inc.",
+          "id": "tour-006",
+          "startTime": "01:00 PM",
+          "title": "fake title 6"
+        },
+        {
+          "date": "2025-10-12",
+          "endTime": "04:00 PM",
+          "guestLogo": null,
+          "guestName": "fake co 7",
+          "id": "tour-007",
+          "startTime": "03:00 PM",
+          "title": "fake title 7"
+        },
+        {
+          "date": "2025-11-04",
+          "endTime": "04:00 PM",
+          "guestLogo": null,
+          "guestName": "fake co 8",
+          "id": "tour-008",
+          "startTime": "02:40 PM",
+          "title": "fake title 8"
+        }
+      ],
+      "ui": {
+        "onOff": "On/Off",
+        "tablet": "Tablet",
+        "display": "Display",
+        "off": "Off",
+        "on": "On",
+        "pause": "Pause",
+        "play": "Play"
       }
-    ]
+    }
+  },
+  {
+    "locale": "pt",
+    "data": {
+      "connection": {
+        "connecting": "Conectando ao MQTT..."
+      },
+      "docent": {
+        "actions": {
+          "close": "Fechar",
+          "back": "Voltar",
+          "launchJourneyMap": "Iniciar mapa da jornada",
+          "load": "Carregar",
+          "settings": "Configurações",
+          "startPresenting": "Iniciar apresentação",
+          "stopPresenting": "Parar apresentação",
+          "startTour": "Iniciar calendário",
+          "today": "Hoje"
+        },
+        "home": {
+          "description": "Gerencie e direcione a experiência EBC da Iron Mountain.",
+          "subtitle": "Controles EBC",
+          "title": "Iron Mountain"
+        },
+        "moments": {
+          "ambientState": "Estado ambiente",
+          "ascend": "Ascender",
+          "possibilities": "Possibilidades",
+          "problem": "Problema",
+          "welcome": "Bem-vindo"
+        },
+        "navigation": {
+          "backToHome": "Voltar ao início",
+          "backToMenu": "Voltar ao menu",
+          "backToSchedule": "Voltar à agenda",
+          "endTour": "Encerrar tour"
+        },
+        "notFound": {
+          "description": "O tour que você está procurando não existe ou não está mais disponível.",
+          "title": "Tour não encontrado"
+        },
+        "schedule": {
+          "loading": "Carregando...",
+          "noTours": "Nenhum tour disponível para este mês.",
+          "title": "Agenda EBC"
+        }
+      },
+      "loading": {
+        "basecamp": "Carregando basecamp…",
+        "default": "Carregando…",
+        "overlook": "Carregando visão geral…",
+        "schedule": "Carregando agenda…",
+        "summit": "Carregando experiência do Summit…",
+        "summitRoom": "Carregando sala do cume…",
+        "tour": "Carregando tour…"
+      },
+      "settings": {
+        "ebcLights": "Luzes EBC",
+        "endTourButton": "Encerrar tour & ativar idle",
+        "endTourDescription": "Toque para encerrar a experiência e voltar todas as telas ao modo idle.",
+        "exhibits": {
+          "basecamp": "Basecamp",
+          "entryWay": "Entrada",
+          "overlook": "Visão geral",
+          "solutionPathways": "Caminhos de solução",
+          "summitRoom": "Sala do cume"
+        },
+        "openManual": "Abrir Manual EBC",
+        "status": {
+          "offline": "Offline"
+        },
+        "title": "Configurações"
+      },
+      "summit": {
+        "errors": {
+          "loadFailed": "Não foi possível carregar o conteúdo do Summit."
+        },
+        "footerStats": ["Centro de Inovação Executiva", "São Paulo, Brasil", "Altitude 760 m (2.493,4 pés)"],
+        "hero": {
+          "labels": {
+            "company": "Empresa",
+            "dateOfEngagement": "Data do encontro",
+            "location": "Local"
+          },
+          "title": "Seu mapa de jornada personalizado"
+        },
+        "recap": {
+          "placeholder": "Digite suas anotações aqui"
+        },
+        "sections": {
+          "consideringPossibilities": "Considerando possibilidades",
+          "relevantSolutions": "Soluções relevantes",
+          "storiesOfImpact": "Histórias de impacto",
+          "unlockYourFuture": "Liberte seu futuro"
+        }
+      },
+      "ui": {
+        "onOff": "Ligado/Desligado",
+        "tablet": "Tablet",
+        "display": "Tela",
+        "off": "Desligado",
+        "on": "Ligado",
+        "pause": "Pausar",
+        "play": "Reproduzir"
+      }
+    }
   }
-}
+]

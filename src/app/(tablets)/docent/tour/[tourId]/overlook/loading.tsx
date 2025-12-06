@@ -1,10 +1,14 @@
 'use client';
 
-import { useDocentTranslation } from '@/hooks/use-docent-translation';
+import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 
 const TourOverlookLoading = () => {
-  const { t } = useDocentTranslation();
-  return <div className="flex h-full w-full items-center justify-center">{t.loading.overlook}</div>;
+  const { data } = useDocent();
+  return (
+    <div className="flex h-full w-full items-center justify-center">
+      {data?.loading.overlook ?? 'Loading overlook...'}
+    </div>
+  );
 };
 
 export default TourOverlookLoading;

@@ -43,6 +43,7 @@ export const isSummitSection = (value: string): value is SummitSection => {
 export const isSection = (value: string): value is Section => {
   return isBasecampSection(value) || isOverlookSection(value) || isSummitSection(value);
 };
+
 // UI Navigation state for exhibits (local to UI, not MQTT)
 export interface ExhibitNavigationState {
   beatIdx: number;
@@ -148,28 +149,200 @@ export interface MomentData {
 }
 
 export interface DocentData {
-  moments: {
-    basecamp: readonly MomentData[];
-    overlook: readonly MomentData[];
+  readonly connection: {
+    readonly connecting: string;
   };
-  slides: SummitSlide[];
-  tours: Tour[];
+  readonly docent: {
+    readonly actions: {
+      readonly back: string;
+      readonly close: string;
+      readonly launchJourneyMap: string;
+      readonly load: string;
+      readonly settings: string;
+      readonly startPresenting: string;
+      readonly startTour: string;
+      readonly stopPresenting: string;
+      readonly today: string;
+    };
+    readonly home: {
+      readonly description: string;
+      readonly subtitle: string;
+      readonly title: string;
+    };
+    readonly moments: {
+      readonly ambientState: string;
+      readonly ascend: string;
+      readonly possibilities: string;
+      readonly problem: string;
+      readonly welcome: string;
+    };
+    readonly navigation: {
+      readonly backToHome: string;
+      readonly backToMenu: string;
+      readonly backToSchedule: string;
+      readonly endTour: string;
+    };
+    readonly notFound: {
+      readonly description: string;
+      readonly title: string;
+    };
+    readonly schedule: {
+      readonly loading: string;
+      readonly noTours: string;
+      readonly title: string;
+    };
+  };
+  readonly loading: {
+    readonly basecamp: string;
+    readonly default: string;
+    readonly overlook: string;
+    readonly schedule: string;
+    readonly summit: string;
+    readonly summitRoom: string;
+    readonly tour: string;
+  };
+  readonly moments: {
+    readonly basecamp: readonly MomentData[];
+    readonly overlook: readonly MomentData[];
+  };
+  readonly settings: {
+    readonly ebcLights: string;
+    readonly endTourButton: string;
+    readonly endTourDescription: string;
+    readonly exhibits: {
+      readonly basecamp: string;
+      readonly entryWay: string;
+      readonly overlook: string;
+      readonly solutionPathways: string;
+      readonly summitRoom: string;
+    };
+    readonly openManual: string;
+    readonly status: {
+      readonly offline: string;
+    };
+    readonly title: string;
+  };
+  readonly slides: readonly SummitSlide[];
+  readonly summit: {
+    readonly errors: {
+      readonly loadFailed: string;
+    };
+    readonly footerStats: readonly string[];
+    readonly hero: {
+      readonly labels: {
+        readonly company: string;
+        readonly dateOfEngagement: string;
+        readonly location: string;
+      };
+      readonly title: string;
+    };
+    readonly recap: {
+      readonly placeholder: string;
+    };
+    readonly sections: {
+      readonly consideringPossibilities: string;
+      readonly relevantSolutions: string;
+      readonly storiesOfImpact: string;
+      readonly unlockYourFuture: string;
+    };
+  };
+  readonly tours: readonly Tour[];
+  readonly ui: {
+    readonly display: string;
+    readonly off: string;
+    readonly on: string;
+    readonly onOff: string;
+    readonly pause: string;
+    readonly play: string;
+    readonly tablet: string;
+  };
 }
 
-import en from '@/dictionaries/en.json';
-
-export type Dictionary = typeof en;
+export interface SummitData {
+  readonly hero: {
+    readonly advisorName: string;
+    readonly clientName: string;
+    readonly date: string;
+    readonly location: string;
+    readonly logoAlt: string;
+    readonly subtitle: string;
+  };
+  readonly metrics: {
+    readonly description: string;
+    readonly items: readonly {
+      readonly description: string;
+      readonly label: string;
+      readonly value: string;
+    }[];
+    readonly title: string;
+  };
+  readonly obstacles: {
+    readonly description: string;
+    readonly items: readonly {
+      readonly body: string;
+      readonly icon: string;
+      readonly title: string;
+    }[];
+    readonly title: string;
+  };
+  readonly recaps: readonly {
+    readonly body: string;
+    readonly cta: string;
+    readonly title: string;
+  }[];
+  readonly stories: {
+    readonly description: string;
+    readonly items: readonly {
+      readonly category: string;
+      readonly description: string;
+      readonly title: string;
+    }[];
+    readonly title: string;
+  };
+  readonly strategies: readonly {
+    readonly eyebrow: string;
+    readonly items: readonly {
+      readonly body: readonly string[];
+      readonly title: string;
+    }[];
+    readonly summary: string;
+  }[];
+  readonly summary: {
+    readonly body: string;
+    readonly cta: string;
+    readonly title: string;
+  };
+}
 
 export type Locale = 'en' | 'pt';
 
-export interface BasecampApiResponse {
-  data: BasecampData;
-  dict: Dictionary;
-  locale: Locale;
+// Generic API response structure
+export interface ApiResponseItem<T> {
+  readonly data: T;
+  readonly locale: Locale;
 }
 
-export interface DocentApiResponse {
-  data: DocentData;
-  dict: Dictionary;
-  locale: Locale;
+export type ApiResponse<T> = readonly ApiResponseItem<T>[];
+
+// Specific API response types
+export type BasecampApiResponse = ApiResponse<BasecampData>;
+export type DocentApiResponse = ApiResponse<DocentData>;
+export type SummitApiResponse = ApiResponse<SummitData>;
+
+// Function return types (transformed from API responses)
+export interface DocentDataResponse {
+  readonly data: {
+    readonly en: DocentData;
+    readonly pt: DocentData;
+  };
+}
+
+export interface BasecampDataResponse {
+  readonly data: BasecampData;
+  readonly locale: Locale;
+}
+
+export interface SummitDataResponse {
+  readonly data: SummitData;
+  readonly locale: Locale;
 }
