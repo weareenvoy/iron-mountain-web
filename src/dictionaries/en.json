@@ -47,6 +47,7 @@
     "default": "Loading…",
     "overlook": "Loading overlook…",
     "schedule": "Loading schedule…",
+    "summit": "Loading summit experience…",
     "summitRoom": "Loading summit room…",
     "tour": "Loading tour…"
   },
@@ -66,6 +67,29 @@
       "offline": "Offline"
     },
     "title": "Settings"
+  },
+  "summit": {
+    "errors": {
+      "loadFailed": "Unable to load summit content."
+    },
+    "footerStats": ["Executive Innovation Center", "São Paulo, Brazil", "Elevation 760 m (2,493.4 ft)"],
+    "hero": {
+      "labels": {
+        "company": "Company",
+        "dateOfEngagement": "Date of engagement",
+        "location": "Location"
+      },
+      "title": "Your personalized journey map"
+    },
+    "recap": {
+      "placeholder": "Type your notes here"
+    },
+    "sections": {
+      "consideringPossibilities": "Considering possibilities",
+      "relevantSolutions": "Relevant solutions",
+      "storiesOfImpact": "Stories of impact",
+      "unlockYourFuture": "Unlock your future"
+    }
   },
   "ui": {
     "onOff": "On/Off",
