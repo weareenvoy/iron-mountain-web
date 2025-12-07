@@ -27,7 +27,10 @@ const firstScreenSchema = z.object({
 
 const secondScreenSchema = z.object({
   bottomDescription: textString,
-  bottomVideoSrc: z.union([assetString, z.literal('')]).optional().default(''),
+  bottomVideoSrc: z
+    .union([assetString, z.literal('')])
+    .optional()
+    .default(''),
   largeIconSrc: assetString,
   mainDescription: textString,
   statAmount: textString,
@@ -57,9 +60,14 @@ export const kioskChallengesSchema = z.object({
 
 export type KioskChallenges = z.infer<typeof kioskChallengesSchema>;
 
-const formatIssues = (issues: z.ZodIssue[]) =>
+type ChallengeIssue = {
+  message: string;
+  path: Array<number | string>;
+};
+
+const formatIssues = (issues: ChallengeIssue[]) =>
   issues
-    .map((issue) => {
+    .map(issue => {
       const path = issue.path.join('.') || '<root>';
       return `${path}: ${issue.message}`;
     })
@@ -74,5 +82,3 @@ export const parseKioskChallenges = (value: unknown, kioskName: string): KioskCh
 
   return parsed.data;
 };
-
-

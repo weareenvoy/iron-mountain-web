@@ -9,9 +9,7 @@ const fetchStaticKioskData = async (kioskId: KioskId): Promise<KioskChallenges> 
   return (await res.json()) as KioskChallenges;
 };
 
-export async function getKioskData(
-  kioskId: KioskId,
-): Promise<{ data: KioskChallenges; kioskId: KioskId }> {
+export async function getKioskData(kioskId: KioskId): Promise<{ data: KioskChallenges; kioskId: KioskId }> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 3500);
 
@@ -49,4 +47,3 @@ export async function getKioskData(
     };
   }
 }
-

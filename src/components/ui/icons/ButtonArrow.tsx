@@ -1,6 +1,10 @@
 import type { SVGProps } from 'react';
 
-const ButtonArrow = ({ 'aria-hidden': ariaHidden = 'true', focusable = 'false', ...props }: SVGProps<SVGSVGElement>) => {
+const ButtonArrow = ({
+  'aria-hidden': ariaHidden = 'true',
+  focusable = 'false',
+  ...props
+}: SVGProps<SVGSVGElement>) => {
   return (
     <svg
       aria-hidden={ariaHidden}
@@ -21,5 +25,6 @@ const ButtonArrow = ({ 'aria-hidden': ariaHidden = 'true', focusable = 'false', 
   );
 };
 
-export default ButtonArrow;
+ButtonArrow.displayName = 'ButtonArrow';
 
+export default ButtonArrow;

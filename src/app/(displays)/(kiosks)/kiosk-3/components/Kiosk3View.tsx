@@ -1,14 +1,14 @@
 'use client';
 
-import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
+import challengeContent from '@public/api/kiosk-3.json';
+import { useEffect, useState } from 'react';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
 import FirstScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/firstScreen/firstScreenTemplate';
 import InitialScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/initialScreen/initialScreenTemplate';
 import SecondScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/secondScreen/secondScreenTemplate';
 import ThirdScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/thirdScreen/thirdScreenTemplate';
 import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
-import challengeContent from '@public/api/kiosk-3.json';
-import { useEffect, useState } from 'react';
+import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 
 type Slide = { id: string; title: string };
 
@@ -45,7 +45,7 @@ const Kiosk3View = () => {
   return (
     <div
       // className={styles.root}
-      className="h-full relative w-full"
+      className="relative h-full w-full"
     >
       <div
         // className={styles.parallaxContainer}
@@ -55,16 +55,12 @@ const Kiosk3View = () => {
         {slides.map((slide, idx) => (
           <section
             // className={styles.slide}
-            className="flex flex-col h-full items-center justify-center w-full"
+            className="flex h-full w-full flex-col items-center justify-center"
             data-active={idx === topIndex}
             key={slide.id}
           >
             {slide.id === 's1' && (
-              <InitialScreenTemplate
-                {...challenges.initialScreen}
-                contentBoxBgColor="#00A88E"
-                kioskId="kiosk-3"
-              />
+              <InitialScreenTemplate {...challenges.initialScreen} contentBoxBgColor="#00A88E" kioskId="kiosk-3" />
             )}
             {slide.id === 's2' && (
               <FirstScreenTemplate
@@ -77,6 +73,7 @@ const Kiosk3View = () => {
             {slide.id === 's3' && (
               <SecondScreenTemplate
                 {...challenges.secondScreen}
+                kioskId="kiosk-3"
                 onNavigateDown={() => controller.next()}
                 onNavigateUp={() => controller.prev()}
               />
@@ -84,7 +81,7 @@ const Kiosk3View = () => {
             {slide.id === 's4' && (
               <ThirdScreenTemplate
                 {...challenges.thirdScreen}
-              kioskId="kiosk-3"
+                kioskId="kiosk-3"
                 onNavigateDown={() => controller.next()}
                 onNavigateUp={() => controller.prev()}
               />
@@ -94,7 +91,7 @@ const Kiosk3View = () => {
       </div>
       <div
         // className={styles.debugControls}
-        className="absolute bottom-[12px] flex gap-2 right-[12px] z-[1000]"
+        className="absolute right-[12px] bottom-[12px] z-[1000] flex gap-2"
       >
         <button onClick={() => controller.prev()}>Prev</button>
         <button onClick={() => controller.next()}>Next</button>

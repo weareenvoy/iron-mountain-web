@@ -1,14 +1,14 @@
 'use client';
 import React from 'react';
 
-type Props = {
-  readonly background?: string;
-  readonly children: React.ReactNode;
-  readonly targetHeight: number;
-  readonly targetWidth: number;
-};
+type Props = Readonly<{
+  background?: string;
+  children: React.ReactNode;
+  targetHeight: number;
+  targetWidth: number;
+}>;
 
-export default function ScaleWrapper({ background = 'black', children, targetHeight, targetWidth }: Props) {
+const ScaleWrapper = ({ background = 'black', children, targetHeight, targetWidth }: Props) => {
   // const scale = 0.415;
   const scale = 1;
   // For dev in chrome current value is 0.415. Remove for production.
@@ -33,4 +33,8 @@ export default function ScaleWrapper({ background = 'black', children, targetHei
       <div style={innerStyle}>{children}</div>
     </div>
   );
-}
+};
+
+ScaleWrapper.displayName = 'ScaleWrapper';
+
+export default ScaleWrapper;

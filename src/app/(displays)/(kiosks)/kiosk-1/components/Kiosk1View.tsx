@@ -1,14 +1,14 @@
 'use client';
 
-import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
+import challengeContent from '@public/api/kiosk-1.json';
+import { useEffect, useState } from 'react';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
 import FirstScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/firstScreen/firstScreenTemplate';
 import InitialScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/initialScreen/initialScreenTemplate';
 import SecondScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/secondScreen/secondScreenTemplate';
 import ThirdScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/thirdScreen/thirdScreenTemplate';
 import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
-import challengeContent from '@public/api/kiosk-1.json';
-import { useEffect, useState } from 'react';
+import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 
 type Slide = { hasCarousel?: boolean; id: string; title: string };
 
@@ -19,7 +19,7 @@ const slides: Slide[] = [
   { id: 's4', title: 'Impact' },
 ];
 
-export default function Kiosk1View() {
+const Kiosk1View = () => {
   const controller: Controller = useKioskController();
   const [topIndex, setTopIndex] = useState(0);
   const challenges: KioskChallenges = parseKioskChallenges(challengeContent, 'kiosk-1');
@@ -46,7 +46,7 @@ export default function Kiosk1View() {
   return (
     <div
       // className={styles.root}
-      className="h-full relative w-full"
+      className="relative h-full w-full"
     >
       <div
         // className={styles.parallaxContainer}
@@ -56,16 +56,17 @@ export default function Kiosk1View() {
         {slides.map((s, idx) => (
           <section
             // className={styles.slide}
-            className="flex flex-col h-full items-center justify-center w-full"
+            className="flex h-full w-full flex-col items-center justify-center"
             data-active={idx === topIndex}
             key={s.id}
           >
             {/* Render the actual challenge templates so you can preview them in dev */}
-            {s.id === 's1' && <InitialScreenTemplate {...challenges.initialScreen} />}
+            {s.id === 's1' && <InitialScreenTemplate {...challenges.initialScreen} kioskId="kiosk-1" />}
 
             {s.id === 's2' && (
               <FirstScreenTemplate
                 {...challenges.firstScreen}
+                kioskId="kiosk-1"
                 onNavigateDown={() => controller.next()}
                 onNavigateUp={() => controller.prev()}
               />
@@ -74,6 +75,7 @@ export default function Kiosk1View() {
             {s.id === 's3' && (
               <SecondScreenTemplate
                 {...challenges.secondScreen}
+                kioskId="kiosk-1"
                 onNavigateDown={() => controller.next()}
                 onNavigateUp={() => controller.prev()}
               />
@@ -92,13 +94,15 @@ export default function Kiosk1View() {
       </div>
       <div
         // className={styles.debugControls}
-        className="absolute bottom-[12px] flex gap-2 right-[12px] z-[1000]"
+        className="absolute right-[12px] bottom-[12px] z-[1000] flex gap-2"
       >
         <button onClick={() => controller.prev()}>Prev</button>
         <button onClick={() => controller.next()}>Next</button>
       </div>
     </div>
   );
-}
+};
 
 Kiosk1View.displayName = 'Kiosk1View';
+
+export default Kiosk1View;

@@ -30,7 +30,7 @@ export const renderRegisteredMark = (text?: string | string[]): ReactNode => {
   let lastIndex = 0;
 
   matches.forEach((match, index) => {
-    const matchIndex = match.index ?? 0;
+    const matchIndex = typeof match.index === 'number' ? match.index : 0;
     if (matchIndex > lastIndex) {
       parts.push(normalized.slice(lastIndex, matchIndex));
     }
