@@ -8,7 +8,6 @@
     "videoSrc": "/images/kiosks/kiosk1/01-challenge/Challenge-Header.mp4"
   },
   "initialScreen": {
-    "arrowIconSrc": "/images/kiosks/svgs/ButtonArrow.svg",
     "attribution": "- Michael Rohrabacher, Technical Director at the GRAMMY Museum",
     "backgroundImage": "/images/kiosks/kiosk1/Cover.png",
     "buttonText": "Touch to explore",

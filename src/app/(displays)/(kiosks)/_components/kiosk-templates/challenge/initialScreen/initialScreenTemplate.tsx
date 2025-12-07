@@ -3,10 +3,10 @@
 import Image from 'next/image';
 
 import renderRegisteredMark from '../utils/renderRegisteredMark';
+import ButtonArrow from '@/components/ui/icons/ButtonArrow';
 import WhiteLogoSimple from '@/components/ui/icons/WhiteLogos';
 
 // Asset constants from Figma MCP
-const imgArrow = '/images/kiosks/svgs/ButtonArrow.svg';
 const imgBackground = '/images/kiosks/kiosk1/Cover.png';
 const imgGuides = 'http://localhost:3845/assets/bbb0c30a6c52c72ecfe10371a7001daf550a68d1.svg';
 
@@ -28,7 +28,7 @@ export interface InitialScreenTemplateProps {
 }
 
 export default function InitialScreenTemplate({
-  arrowIconSrc = imgArrow,
+  arrowIconSrc,
   attribution = '- Michael Rohrabacher, Technical Director at the GRAMMY Museum',
   backgroundImage = imgBackground,
   buttonText = 'Touch to explore',
@@ -127,7 +127,11 @@ export default function InitialScreenTemplate({
               {renderRegisteredMark(buttonText)}
             </span>
             <div className="relative flex h-[60px] w-[120px] items-center justify-center">
-              <Image alt="" fill sizes="120px" src={arrowIconSrc} unoptimized className="object-contain" />
+              {arrowIconSrc ? (
+                <Image alt="" fill sizes="120px" src={arrowIconSrc} unoptimized className="object-contain" />
+              ) : (
+                <ButtonArrow aria-hidden="true" className="h-full w-full" preserveAspectRatio="xMidYMid meet" />
+              )}
             </div>
           </button>
         </div>

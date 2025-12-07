@@ -8,7 +8,6 @@
     "videoSrc": "/images/kiosks/kiosk2/01-challenge/Challenge-header.mp4"
   },
   "initialScreen": {
-    "arrowIconSrc": "/images/kiosks/svgs/ButtonArrow.svg",
     "attribution": "",
     "backgroundImage": "/images/kiosks/kiosk2/Cover.png",
     "buttonText": "Touch to explore",

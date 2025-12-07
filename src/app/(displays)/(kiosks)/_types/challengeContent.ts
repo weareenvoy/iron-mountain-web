@@ -5,7 +5,7 @@ const textString = z.string();
 const subheadlineSchema = z.union([textString, z.array(textString)]);
 
 const initialScreenSchema = z.object({
-  arrowIconSrc: assetString,
+  arrowIconSrc: assetString.optional(),
   attribution: textString,
   backgroundImage: assetString,
   buttonText: textString,
