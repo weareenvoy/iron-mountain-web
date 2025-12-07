@@ -1,9 +1,15 @@
 import type { SVGProps } from 'react';
 
-const WhiteLogoSimple = (props: SVGProps<SVGSVGElement>) => {
+const WhiteLogoSimple = ({
+  'aria-label': ariaLabel = 'Iron Mountain Logo',
+  role = 'img',
+  ...props
+}: SVGProps<SVGSVGElement>) => {
   return (
     <svg
+      aria-label={ariaLabel}
       fill="none"
+      role={role}
       viewBox="0 0 703 183"
       xmlns="http://www.w3.org/2000/svg"
       {...props}

@@ -1,5 +1,6 @@
 'use client';
-import { useEffect, useState } from 'react';
+
+import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
 import FirstScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/firstScreen/firstScreenTemplate';
 import InitialScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/initialScreen/initialScreenTemplate';
@@ -7,7 +8,7 @@ import SecondScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-te
 import ThirdScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/thirdScreen/thirdScreenTemplate';
 import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
 import challengeContent from '@public/api/kiosk-2.json';
-import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
+import { useEffect, useState } from 'react';
 
 type Slide = { id: string; title: string };
 
@@ -44,7 +45,7 @@ const Kiosk2View = () => {
   return (
     <div
       // className={styles.root}
-      className="relative h-full w-full"
+      className="h-full relative w-full"
     >
       <div
         // className={styles.parallaxContainer}
@@ -54,7 +55,7 @@ const Kiosk2View = () => {
         {slides.map((slide, idx) => (
           <section
             // className={styles.slide}
-            className="flex h-full w-full flex-col items-center justify-center"
+            className="flex flex-col h-full items-center justify-center w-full"
             data-active={idx === topIndex}
             key={slide.id}
           >
@@ -93,7 +94,7 @@ const Kiosk2View = () => {
       </div>
       <div
         // className={styles.debugControls}
-        className="absolute right-[12px] bottom-[12px] z-[1000] flex gap-2"
+        className="absolute bottom-[12px] flex gap-2 right-[12px] z-[1000]"
       >
         <button onClick={() => controller.prev()}>Prev</button>
         <button onClick={() => controller.next()}>Next</button>
@@ -101,5 +102,7 @@ const Kiosk2View = () => {
     </div>
   );
 };
+
+Kiosk2View.displayName = 'Kiosk2View';
 
 export default Kiosk2View;

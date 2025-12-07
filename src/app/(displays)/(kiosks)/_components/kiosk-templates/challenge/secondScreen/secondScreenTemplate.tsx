@@ -1,7 +1,7 @@
 'use client';
 
-import Image from 'next/image';
 import { ArrowDown, ArrowUp, Diamond } from 'lucide-react';
+import Image from 'next/image';
 
 // import styles from './secondScreenTemplate.module.css';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
@@ -40,7 +40,7 @@ export default function SecondScreenTemplate({
   return (
     <div
       // className={styles.container}
-      className="relative flex h-screen w-full flex-col overflow-hidden bg-black"
+      className="bg-black flex flex-col h-screen overflow-hidden relative w-full"
       data-hero-image={topImageSrc}
       data-node-id="5168:9907"
     >
@@ -50,10 +50,10 @@ export default function SecondScreenTemplate({
       {showBottomVideo ? (
         <div
           // className={styles.bottomVideoContainer}
-          className="absolute left-0 top-[4233px] z-[1] h-[1291px] w-full overflow-hidden"
+          className="absolute h-[1291px] left-0 overflow-hidden top-[4233px] w-full z-[1]"
           data-node-id="5168:9908"
         >
-          <div className="relative left-[-30.42%] top-[-30.96%] h-[172.5%] w-[181.73%]">
+          <div className="h-[172.5%] left-[-30.42%] relative top-[-30.96%] w-[181.73%]">
             <video
               autoPlay
               loop
@@ -61,11 +61,11 @@ export default function SecondScreenTemplate({
               muted
               controlsList="nodownload"
               // className={styles.bottomVideo}
-              className="h-full w-full object-cover object-center"
+              className="h-full object-center object-cover w-full"
             >
               <source src={bottomVideoSrc} type="video/mp4" />
             </video>
-            <div className="pointer-events-none absolute inset-0 bg-black/20" />
+            <div className="absolute bg-black/20 inset-0 pointer-events-none" />
           </div>
         </div>
       ) : null}
@@ -73,12 +73,12 @@ export default function SecondScreenTemplate({
       {/* Subheadline */}
       <div
         // className={styles.subheadlineContainer}
-        className="absolute left-[120px] top-[368px] z-[10] -translate-y-full"
+        className="-translate-y-full absolute left-[120px] top-[368px] z-[10]"
         data-node-id="5168:9918"
       >
         <h2
           // className={styles.subheadline}
-          className="whitespace-pre-line text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#ededed]"
+          className="font-normal leading-[1.4] text-[#ededed] text-[60px] tracking-[-3px] whitespace-pre-line"
         >
           {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
         </h2>
@@ -87,18 +87,18 @@ export default function SecondScreenTemplate({
       {/* Challenge Label */}
       <div
         // className={styles.challengeLabel}
-        className="absolute left-[128px] top-[745px] z-[10] flex items-center gap-[41px]"
+        className="absolute flex gap-[41px] items-center left-[128px] top-[745px] z-[10]"
         data-node-id="5168:9925"
       >
         <div
           // className={styles.challengeIcon}
-          className="relative mr-[5px] flex h-[120px] w-[120px] items-center justify-center"
+          className="flex h-[120px] items-center justify-center mr-[5px] relative w-[120px]"
         >
-          <Diamond aria-hidden="true" className="h-full w-full text-[#ededed]" strokeWidth={1.25} />
+          <Diamond aria-hidden="true" className="h-full text-[#ededed] w-full" focusable="false" strokeWidth={1.25} />
         </div>
         <h1
           // className={styles.challengeText}
-          className="whitespace-nowrap text-[126.031px] font-normal leading-[1.3] tracking-[-6.3015px] text-[#ededed]"
+          className="font-normal leading-[1.3] text-[#ededed] text-[126.031px] tracking-[-6.3015px] whitespace-nowrap"
         >
           Challenge
         </h1>
@@ -107,18 +107,18 @@ export default function SecondScreenTemplate({
       {/* Stat Section (Left) */}
       <div
         // className={styles.statSection}
-        className="absolute left-[124px] top-[1058px] z-[5] flex w-[940px] flex-col gap-[60px] opacity-60"
+        className="absolute flex flex-col gap-[60px] left-[124px] opacity-60 top-[1058px] w-[940px] z-[5]"
         data-node-id="5168:9913"
       >
         <div
           // className={styles.statAmount}
-          className="whitespace-nowrap text-[300px] font-[300] leading-[1.3] tracking-[-15px] text-[#6dcff6]"
+          className="font-[300] leading-[1.3] text-[#6dcff6] text-[300px] tracking-[-15px] whitespace-nowrap"
         >
           {renderRegisteredMark(statAmount)}
         </div>
         <p
           // className={styles.statDescription}
-          className="text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#a8d4f6]"
+          className="font-normal leading-[1.4] text-[#a8d4f6] text-[60px] tracking-[-3px]"
         >
           {renderRegisteredMark(statDescription)}
         </p>
@@ -127,12 +127,12 @@ export default function SecondScreenTemplate({
       {/* Main Description (Right) */}
       <div
         // className={styles.mainDescription}
-        className="absolute left-[1160px] top-[2340px] z-[6] w-[760px]"
+        className="absolute left-[1160px] top-[2340px] w-[760px] z-[6]"
         data-node-id="5168:9911"
       >
         <p
           // className={styles.descriptionText}
-          className="relative left-[-390px] top-[-275px] w-[980px] text-[60px] font-normal leading-[1.4] tracking-[-3px] text-white"
+          className="font-normal leading-[1.4] left-[-390px] relative text-[60px] text-white top-[-275px] tracking-[-3px] w-[980px]"
         >
           {renderRegisteredMark(mainDescription)}
         </p>
@@ -141,12 +141,12 @@ export default function SecondScreenTemplate({
       {/* Bottom Description */}
       <div
         // className={styles.bottomDescriptionContainer}
-        className="absolute left-[120px] top-[4065px] z-[5] w-[971px]"
+        className="absolute left-[120px] top-[4065px] w-[971px] z-[5]"
         data-node-id="5168:9919"
       >
         <p
           // className={styles.bottomDescriptionText}
-          className="text-[60px] font-normal leading-[1.4] tracking-[-3px] text-white"
+          className="font-normal leading-[1.4] text-[60px] text-white tracking-[-3px]"
         >
           {renderRegisteredMark(bottomDescription)}
         </p>
@@ -156,7 +156,7 @@ export default function SecondScreenTemplate({
       <div
         aria-label="Previous"
         // className={styles.arrowUp}
-        className="absolute right-[130px] top-[1755px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
+        className="absolute flex h-[118px] items-center justify-center right-[130px] top-[1755px] w-[118px] z-[10]"
         data-node-id="5168:9923"
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
@@ -168,12 +168,12 @@ export default function SecondScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <ArrowUp aria-hidden="true" className="h-full w-full text-[#ffffff66]" strokeWidth={1.5} />
+        <ArrowUp aria-hidden="true" className="h-full text-[#ffffff66] w-full" focusable="false" strokeWidth={1.5} />
       </div>
       <div
         aria-label="Next"
         // className={styles.arrowDown}
-        className="absolute right-[130px] top-[1975px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
+        className="absolute flex h-[118px] items-center justify-center right-[130px] top-[1975px] w-[118px] z-[10]"
         data-node-id="5168:9921"
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
@@ -185,35 +185,35 @@ export default function SecondScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <ArrowDown aria-hidden="true" className="h-full w-full text-[#ffffff66]" strokeWidth={1.5} />
+        <ArrowDown aria-hidden="true" className="h-full text-[#ffffff66] w-full" focusable="false" strokeWidth={1.5} />
       </div>
 
       {/* Background Gradients */}
       <div
         // className={styles.gradientBg}
-        className="absolute left-0 top-[-223px] z-[2] h-[5504px] w-full rounded-[100px] bg-[linear-gradient(to_bottom,#1b75bc_0%,#14477d_98%)]"
+        className="absolute bg-[linear-gradient(to_bottom,#1b75bc_0%,#14477d_98%)] h-[5504px] left-0 rounded-[100px] top-[-223px] w-full z-[2]"
         data-node-id="5168:9910"
       />
       <div
         // className={styles.topGradientOverlay}
-        className="pointer-events-none absolute left-0 top-0 z-[3] h-[1291px] w-full bg-[linear-gradient(to_bottom,#1968ab_66.076%,rgba(26,108,175,0)_99.322%)]"
+        className="absolute bg-[linear-gradient(to_bottom,#1968ab_66.076%,rgba(26,108,175,0)_99.322%)] h-[1291px] left-0 pointer-events-none top-0 w-full z-[3]"
         data-node-id="5168:9916"
       />
       <div
         // className={styles.fadeOutGradient}
-        className="pointer-events-none absolute left-0 top-[3696px] z-[3] h-[1423px] w-full -scale-y-100 bg-[linear-gradient(to_bottom,#154c83_42.41%,rgba(21,75,130,0)_98.852%)]"
+        className="-scale-y-100 absolute bg-[linear-gradient(to_bottom,#154c83_42.41%,rgba(21,75,130,0)_98.852%)] h-[1423px] left-0 pointer-events-none top-[3696px] w-full z-[3]"
         data-node-id="5168:9920"
       />
 
       {/* Large Background Icon */}
       <div
         // className={styles.largeIcon}
-        className="pointer-events-none absolute left-[-21%] top-[42%] z-[4] flex size-[1506px] -scale-y-100 items-center justify-center rotate-[180deg]"
+        className="-scale-y-100 absolute flex items-center justify-center left-[-21%] pointer-events-none rotate-[180deg] size-[1506px] top-[42%] z-[4]"
         data-node-id="5168:9917"
       >
-        <div className="relative h-full w-full">
+        <div className="h-full relative w-full">
           <Image
-            alt=""
+            alt="Large decorative background diamond"
             className="object-contain"
             fill
             sizes="1506px"
@@ -226,3 +226,5 @@ export default function SecondScreenTemplate({
     </div>
   );
 }
+
+SecondScreenTemplate.displayName = 'SecondScreenTemplate';

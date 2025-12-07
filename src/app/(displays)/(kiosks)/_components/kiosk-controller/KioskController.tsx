@@ -6,24 +6,24 @@ import { DEFAULT_KIOSK_ID, type KioskId } from '@/app/(displays)/(kiosks)/_types
 
 type Handlers = {
   // return true if this handler consumed the action and no further fallback should occur
+  goTo?: (index: number) => boolean | void;
   next?: () => boolean | void;
   prev?: () => boolean | void;
-  goTo?: (index: number) => boolean | void;
 };
 
 type RegistryEntry = { id: string; handlers: Handlers };
 
 export type Controller = {
+  fetchKioskChallenges: () => Promise<KioskChallenges>;
+  getRegistry: () => RegistryEntry[];
+  goTo: (i: number) => void;
+  kioskId: KioskId;
   next: () => void;
   prev: () => void;
-  goTo: (i: number) => void;
   register: (id: string, handlers: Handlers) => void;
   unregister: (id: string) => void;
   // register a top-level/root handler (parallax slide navigation)
   setRootHandlers: (handlers: Handlers | null) => void;
-  getRegistry: () => RegistryEntry[];
-  kioskId: KioskId;
-  fetchKioskChallenges: () => Promise<KioskChallenges>;
 };
 
 const ControllerContext = React.createContext<Controller | null>(null);
@@ -120,15 +120,15 @@ export const KioskControllerProvider = ({
   }, [kioskId]);
 
   const value: Controller = {
+    fetchKioskChallenges,
+    getRegistry: () => registryRef.current,
+    goTo,
+    kioskId,
     next,
     prev,
-    goTo,
     register,
-    unregister,
     setRootHandlers,
-    getRegistry: () => registryRef.current,
-    kioskId,
-    fetchKioskChallenges,
+    unregister,
   };
 
   return <ControllerContext.Provider value={value}>{children}</ControllerContext.Provider>;
