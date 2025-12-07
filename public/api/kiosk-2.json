@@ -1,7 +1,5 @@
 {
   "firstScreen": {
-    "arrowIconSrc": "/images/kiosks/svgs/NavDownArrow.svg",
-    "challengeIconSrc": "/images/kiosks/svgs/ChallengesDiamond.svg",
     "challengeLabel": "Challenge",
     "problemDescription": "A large healthcare organization faced significant financial risk because it could not locate the appropriate documentation to confirm the eligibility of employee pension claims. The legal system ruled the organization liable to pay claims without evidence to disprove eligibility, resulting in millions of dollars paid in ineligible pension benefits.",
     "savingsAmount": "$2M+",
@@ -20,10 +18,8 @@
     "subheadline": ["Information", "& data lifecycle"]
   },
   "secondScreen": {
-    "arrowIconSrc": "/images/kiosks/svgs/NavDownArrow.svg",
     "bottomDescription": "The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.",
     "bottomVideoSrc": "/images/kiosks/kiosk2/02-solution/Solution-header.mp4",
-    "challengeIconSrc": "/images/kiosks/svgs/ChallengesDiamond.svg",
     "largeIconSrc": "/images/kiosks/kiosk2/01-challenge/Challenge-Image1-Diamond.png",
     "mainDescription": "Disparate, unstructured records across various locations and legacy systems—including paper, microfilm, CD, and digital formats—created costly, risk-laden pension administration.",
     "statAmount": "",
@@ -32,8 +28,6 @@
     "topImageSrc": "/images/kiosks/kiosk2/02-solution/Solution-Image1-Full.png"
   },
   "thirdScreen": {
-    "arrowIconSrc": "/images/kiosks/svgs/NavDownArrow.svg",
-    "challengeIconSrc": "/images/kiosks/svgs/ChallengesDiamond.svg",
     "description": "After multiple acquisitions with antiquated and disordered records, finding the required regulatory documentation was difficult to impossible.",
     "heroImageSrc": "/images/kiosks/kiosk2/01-challenge/Challenge-Image2-Diamond.png",
     "largeIconCenterSrc": "/images/kiosks/kiosk2/02-solution/Solution-Image3-Full.png",

@@ -1,7 +1,5 @@
 {
   "firstScreen": {
-    "arrowIconSrc": "/images/kiosks/svgs/NavDownArrow.svg",
-    "challengeIconSrc": "/images/kiosks/svgs/ChallengesDiamond.svg",
     "challengeLabel": "Challenge",
     "problemDescription": "When seeking a new partner to help manage their extensive IT hardware fleet of assets, the customer’s primary pain points were logistical costs and a lack of granularity in reporting, reducing overall transparency.",
     "savingsAmount": "200K+",
@@ -20,10 +18,8 @@
     "subheadline": ["IT assets &", "data centers"]
   },
   "secondScreen": {
-    "arrowIconSrc": "/images/kiosks/svgs/NavDownArrow.svg",
     "bottomDescription": "",
     "bottomVideoSrc": "/images/kiosks/kiosk3/02-solution/Solution-header.mp4",
-    "challengeIconSrc": "/images/kiosks/svgs/ChallengesDiamond.svg",
     "largeIconSrc": "/images/kiosks/kiosk3/01-challenge/Challenge-Image1-Diamond.png",
     "mainDescription": "A large bank acquired a competitor, which resulted in redundant and costly data center operations.",
     "statAmount": "",
@@ -32,8 +28,6 @@
     "topImageSrc": "/images/kiosks/kiosk3/02-solution/Solution-Image1-Full.png"
   },
   "thirdScreen": {
-    "arrowIconSrc": "/images/kiosks/svgs/NavDownArrow.svg",
-    "challengeIconSrc": "/images/kiosks/svgs/ChallengesDiamond.svg",
     "description": "Prior to partnering with Iron Mountain, the enterprise also faced challenges in optimizing remarketing potential across end-user devices and data center assets.",
     "heroImageSrc": "/images/kiosks/kiosk3/04-custom-interactive/CU-Image1-Diamond.png",
     "largeIconCenterSrc": "/images/kiosks/kiosk3/04-custom-interactive/CU-Image2-Full.png",

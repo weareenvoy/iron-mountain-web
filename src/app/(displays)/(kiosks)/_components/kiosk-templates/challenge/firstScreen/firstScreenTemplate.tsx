@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import { ArrowDown, ArrowUp, Diamond } from 'lucide-react';
 
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import { DEFAULT_KIOSK_ID } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
@@ -8,16 +8,7 @@ import { DEFAULT_KIOSK_ID } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 // import styles from './firstScreenTemplate.module.css';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
-// Asset constants from Figma MCP
-const imgArrowNavDown = '/images/kiosks/svgs/NavDownArrow.svg';
-const imgArrowNavUp = '/images/kiosks/svgs/NavUpArrow.svg';
-const imgVector = '/images/kiosks/svgs/ChallengesDiamond.svg';
-
 export interface FirstScreenTemplateProps {
-  arrowDownIconSrc?: string;
-  arrowIconSrc?: string;
-  arrowUpIconSrc?: string;
-  challengeIconSrc?: string;
   challengeLabel?: string;
   kioskId?: KioskId;
   onNavigateDown?: () => void;
@@ -30,10 +21,6 @@ export interface FirstScreenTemplateProps {
 }
 
 export default function FirstScreenTemplate({
-  arrowDownIconSrc = imgArrowNavDown,
-  arrowIconSrc = imgArrowNavDown,
-  arrowUpIconSrc = imgArrowNavUp,
-  challengeIconSrc = imgVector,
   challengeLabel = 'Challenge',
   onNavigateDown,
   onNavigateUp,
@@ -97,14 +84,7 @@ export default function FirstScreenTemplate({
           // className={styles.challengeIcon}
           className="relative mr-[5px] flex h-[110px] w-[110px] items-center justify-center"
         >
-          <Image
-            alt=""
-            className="object-contain"
-            fill
-            sizes="100px"
-            src={challengeIconSrc}
-            unoptimized
-          />
+          <Diamond aria-hidden="true" className="h-full w-full text-[#ededed]" strokeWidth={1.25} />
         </div>
         <h1
           // className={styles.challengeText}
@@ -118,7 +98,7 @@ export default function FirstScreenTemplate({
       <div
         aria-label="Previous"
         // className={styles.arrowUp}
-        className="absolute right-[110px] top-[1770px] z-[10] flex h-[118px] w-[118px] items-center justify-center group-data-[kiosk=kiosk-3]/kiosk:right-[130px] group-data-[kiosk=kiosk-3]/kiosk:top-[1760px]"
+        className="absolute right-[110px] top-[1770px] z-[10] flex h-[118px] w-[118px] items-center justify-center group-data-[kiosk=kiosk-2]/kiosk:right-[120px] group-data-[kiosk=kiosk-2]/kiosk:top-[1740px] group-data-[kiosk=kiosk-2]/kiosk:h-[140px] group-data-[kiosk=kiosk-2]/kiosk:w-[120px] group-data-[kiosk=kiosk-3]/kiosk:right-[130px] group-data-[kiosk=kiosk-3]/kiosk:top-[1760px]"
         data-node-id="5168:9899"
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
@@ -130,21 +110,12 @@ export default function FirstScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <div className="relative h-full w-full">
-          <Image
-            alt="Up"
-            className="object-contain"
-            fill
-            sizes="118px"
-            src={arrowUpIconSrc ?? imgArrowNavUp}
-            unoptimized
-          />
-        </div>
+        <ArrowUp aria-hidden="true" className="h-full w-full text-[#ffffff66]" strokeWidth={1.5} />
       </div>
       <div
         aria-label="Next"
         // className={styles.arrowDown}
-        className="absolute right-[110px] top-[1990px] z-[10] flex h-[118px] w-[118px] items-center justify-center group-data-[kiosk=kiosk-3]/kiosk:right-[130px] group-data-[kiosk=kiosk-3]/kiosk:top-[1980px]"
+        className="absolute right-[110px] top-[1990px] z-[10] flex h-[118px] w-[118px] items-center justify-center group-data-[kiosk=kiosk-2]/kiosk:right-[120px] group-data-[kiosk=kiosk-2]/kiosk:top-[1970px] group-data-[kiosk=kiosk-2]/kiosk:h-[140px] group-data-[kiosk=kiosk-2]/kiosk:w-[120px] group-data-[kiosk=kiosk-3]/kiosk:right-[130px] group-data-[kiosk=kiosk-3]/kiosk:top-[1980px]"
         data-node-id="5168:9897"
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
@@ -156,16 +127,7 @@ export default function FirstScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <div className="relative h-full w-full">
-          <Image
-            alt="Down"
-            className="object-contain"
-            fill
-            sizes="118px"
-            src={arrowDownIconSrc ?? arrowIconSrc ?? imgArrowNavDown}
-            unoptimized
-          />
-        </div>
+        <ArrowDown aria-hidden="true" className="h-full w-full text-[#ffffff66]" strokeWidth={1.5} />
       </div>
 
       {/* Problem Description Section */}

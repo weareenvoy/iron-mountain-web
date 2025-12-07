@@ -1,25 +1,19 @@
 'use client';
 
 import Image from 'next/image';
+import { ArrowDown, ArrowUp, Diamond } from 'lucide-react';
 
 // import styles from './thirdScreenTemplate.module.css';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 import { DEFAULT_KIOSK_ID, type KioskId } from '../../../../_types/kiosk-id';
 
 // Asset constants from Figma MCP
-const imgArrowNavDown = '/images/kiosks/svgs/NavDownArrow.svg';
-const imgArrowNavUp = '/images/kiosks/svgs/NavUpArrow.svg';
 const imgHeroDiamond = '/images/kiosks/kiosk1/04-custom-interactive/CU-Image1-Diamond.png';
 const imgMetricDiamond = '/images/kiosks/kiosk1/04-custom-interactive/CU-Image1-Diamond.png';
 const imgVector = '/images/kiosks/kiosk1/04-custom-interactive/CU-Image1-Full.png';
 const imgVector1 = imgMetricDiamond;
-const imgVector2 = '/images/kiosks/svgs/ChallengesDiamond.svg';
 
 export interface ThirdScreenTemplateProps {
-  arrowDownIconSrc?: string;
-  arrowIconSrc?: string;
-  arrowUpIconSrc?: string;
-  challengeIconSrc?: string;
   description?: string;
   heroImageSrc?: string;
   largeIconCenterSrc?: string;
@@ -35,10 +29,6 @@ export interface ThirdScreenTemplateProps {
 }
 
 export default function ThirdScreenTemplate({
-  arrowDownIconSrc = imgArrowNavDown,
-  arrowIconSrc = imgArrowNavDown,
-  arrowUpIconSrc = imgArrowNavUp,
-  challengeIconSrc = imgVector2,
   description = 'The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.',
   heroImageSrc: _heroImageSrc = imgHeroDiamond,
   largeIconCenterSrc: _largeIconCenterSrc = imgVector1,
@@ -106,14 +96,7 @@ export default function ThirdScreenTemplate({
           // className={styles.challengeIcon}
           className="relative mr-0 flex h-[110px] w-[110px] items-center justify-center"
         >
-          <Image
-            alt=""
-            className="object-contain"
-            fill
-            sizes="110px"
-            src={challengeIconSrc}
-            unoptimized
-          />
+          <Diamond aria-hidden="true" className="h-full w-full text-[#ededed]" strokeWidth={1.25} />
         </div>
         <h1
           // className={styles.challengeText}
@@ -174,16 +157,7 @@ export default function ThirdScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <div className="relative h-full w-full">
-          <Image
-            alt="Up"
-            className="object-contain"
-            fill
-            sizes="118px"
-            src={arrowUpIconSrc ?? imgArrowNavUp}
-            unoptimized
-          />
-        </div>
+        <ArrowUp aria-hidden="true" className="h-full w-full text-[#ffffff66]" strokeWidth={1.5} />
       </div>
       <div
         aria-label="Next"
@@ -200,16 +174,7 @@ export default function ThirdScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <div className="relative h-full w-full">
-          <Image
-            alt="Down"
-            className="object-contain"
-            fill
-            sizes="118px"
-            src={arrowDownIconSrc ?? arrowIconSrc ?? imgArrowNavDown}
-            unoptimized
-          />
-        </div>
+        <ArrowDown aria-hidden="true" className="h-full w-full text-[#ffffff66]" strokeWidth={1.5} />
       </div>
 
       {/* Background Gradients */}

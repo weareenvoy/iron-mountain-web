@@ -1,7 +1,5 @@
 {
   "firstScreen": {
-    "arrowIconSrc": "/images/kiosks/svgs/NavDownArrow.svg",
-    "challengeIconSrc": "/images/kiosks/svgs/ChallengesDiamond.svg",
     "challengeLabel": "Challenge",
     "problemDescription": "The Museum needed a secure, off-site, cloud-accessible, and easily managed solution to protect its one-of-a-kind, irreplaceable footage. Storing the only master copy locally presented a high risk of losing all assets in the event of a data failure or system crash.",
     "savingsAmount": "120 TB",
@@ -20,10 +18,8 @@
     "subheadline": ["Rich media &", "cultural heritage"]
   },
   "secondScreen": {
-    "arrowIconSrc": "/images/kiosks/svgs/NavDownArrow.svg",
     "bottomDescription": "",
     "bottomVideoSrc": "",
-    "challengeIconSrc": "/images/kiosks/svgs/ChallengesDiamond.svg",
     "largeIconSrc": "/images/kiosks/kiosk1/01-challenge/Challenge-Image1-Diamond.png",
     "mainDescription": "The Museum also needed assistance with physical storage for a collection of historical music artifacts.",
     "statAmount": "",
@@ -32,8 +28,6 @@
     "topImageSrc": "/images/kiosks/kiosk1/02-solution/Solution-Image1-Full.png"
   },
   "thirdScreen": {
-    "arrowIconSrc": "/images/kiosks/svgs/NavDownArrow.svg",
-    "challengeIconSrc": "/images/kiosks/svgs/ChallengesDiamond.svg",
     "description": "The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.",
     "heroImageSrc": "/images/kiosks/kiosk1/04-custom-interactive/CU-Image1-Diamond.png",
     "largeIconCenterSrc": "/images/kiosks/kiosk1/04-custom-interactive/CU-Image1-Full.png",

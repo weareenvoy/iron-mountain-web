@@ -1,24 +1,18 @@
 'use client';
 
 import Image from 'next/image';
+import { ArrowDown, ArrowUp, Diamond } from 'lucide-react';
 
 // import styles from './secondScreenTemplate.module.css';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
 // Asset constants from Figma MCP
-const imgArrowNavDown = '/images/kiosks/svgs/NavDownArrow.svg';
-const imgArrowNavUp = '/images/kiosks/svgs/NavUpArrow.svg';
 const imgHero = '/images/kiosks/kiosk1/02-solution/Solution-Image1-Full.png';
 const imgVector = '/images/kiosks/kiosk1/01-challenge/Challenge-Image1-Diamond.png';
-const imgVector1 = '/images/kiosks/svgs/ChallengesDiamond.svg';
 
 export interface SecondScreenTemplateProps {
-  arrowDownIconSrc?: string;
-  arrowIconSrc?: string;
-  arrowUpIconSrc?: string;
   bottomDescription?: string;
   bottomVideoSrc?: string;
-  challengeIconSrc?: string;
   largeIconSrc?: string;
   mainDescription?: string;
   onNavigateDown?: () => void;
@@ -30,12 +24,8 @@ export interface SecondScreenTemplateProps {
 }
 
 export default function SecondScreenTemplate({
-  arrowDownIconSrc = imgArrowNavDown,
-  arrowIconSrc = imgArrowNavDown,
-  arrowUpIconSrc = imgArrowNavUp,
   bottomDescription = 'The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.',
   bottomVideoSrc = '',
-  challengeIconSrc = imgVector1,
   largeIconSrc = imgVector,
   mainDescription = 'The Museum also needed assistance with physical storage for a collection of historical music artifacts.',
   onNavigateDown,
@@ -104,14 +94,7 @@ export default function SecondScreenTemplate({
           // className={styles.challengeIcon}
           className="relative mr-[5px] flex h-[120px] w-[120px] items-center justify-center"
         >
-          <Image
-            alt=""
-            className="object-contain"
-            fill
-            sizes="120px"
-            src={challengeIconSrc}
-            unoptimized
-          />
+          <Diamond aria-hidden="true" className="h-full w-full text-[#ededed]" strokeWidth={1.25} />
         </div>
         <h1
           // className={styles.challengeText}
@@ -185,16 +168,7 @@ export default function SecondScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <div className="relative h-full w-full">
-          <Image
-            alt="Up"
-            className="object-contain"
-            fill
-            sizes="118px"
-            src={arrowUpIconSrc ?? imgArrowNavUp}
-            unoptimized
-          />
-        </div>
+        <ArrowUp aria-hidden="true" className="h-full w-full text-[#ffffff66]" strokeWidth={1.5} />
       </div>
       <div
         aria-label="Next"
@@ -211,16 +185,7 @@ export default function SecondScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <div className="relative h-full w-full">
-          <Image
-            alt="Down"
-            className="object-contain"
-            fill
-            sizes="118px"
-            src={arrowDownIconSrc ?? arrowIconSrc ?? imgArrowNavDown}
-            unoptimized
-          />
-        </div>
+        <ArrowDown aria-hidden="true" className="h-full w-full text-[#ffffff66]" strokeWidth={1.5} />
       </div>
 
       {/* Background Gradients */}

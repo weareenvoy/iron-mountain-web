@@ -17,8 +17,6 @@ const initialScreenSchema = z.object({
 });
 
 const firstScreenSchema = z.object({
-  arrowIconSrc: assetString,
-  challengeIconSrc: assetString,
   challengeLabel: textString,
   problemDescription: textString,
   savingsAmount: textString,
@@ -28,10 +26,8 @@ const firstScreenSchema = z.object({
 });
 
 const secondScreenSchema = z.object({
-  arrowIconSrc: assetString,
   bottomDescription: textString,
   bottomVideoSrc: z.union([assetString, z.literal('')]).optional().default(''),
-  challengeIconSrc: assetString,
   largeIconSrc: assetString,
   mainDescription: textString,
   statAmount: textString,
@@ -41,8 +37,6 @@ const secondScreenSchema = z.object({
 });
 
 const thirdScreenSchema = z.object({
-  arrowIconSrc: assetString,
-  challengeIconSrc: assetString,
   description: textString,
   heroImageSrc: assetString,
   largeIconCenterSrc: assetString,
