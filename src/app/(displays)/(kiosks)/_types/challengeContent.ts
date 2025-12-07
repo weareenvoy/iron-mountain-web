@@ -11,8 +11,7 @@ const initialScreenSchema = z.object({
   buttonText: textString,
   guidesImageSrc: assetString,
   headline: textString,
-  logoLeftSrc: assetString,
-  logoRightSrc: assetString,
+  logoCombinedSrc: assetString.optional(),
   quote: textString,
   subheadline: subheadlineSchema,
 });

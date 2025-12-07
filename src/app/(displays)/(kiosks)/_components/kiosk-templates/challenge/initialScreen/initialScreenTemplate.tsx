@@ -3,12 +3,12 @@
 import Image from 'next/image';
 
 import renderRegisteredMark from '../utils/renderRegisteredMark';
+import WhiteLogoSimple from '@/components/ui/icons/WhiteLogos';
 
 // Asset constants from Figma MCP
 const imgArrow = '/images/kiosks/svgs/ButtonArrow.svg';
 const imgBackground = '/images/kiosks/kiosk1/Cover.png';
 const imgGuides = 'http://localhost:3845/assets/bbb0c30a6c52c72ecfe10371a7001daf550a68d1.svg';
-const imgLogo = '/images/kiosks/svgs/WhiteLogos.svg';
 
 type KioskVariant = 'kiosk-1' | 'kiosk-2' | 'kiosk-3';
 
@@ -22,8 +22,6 @@ export interface InitialScreenTemplateProps {
   guidesImageSrc?: string;
   headline?: string;
   logoCombinedSrc?: string;
-  logoLeftSrc?: string;
-  logoRightSrc?: string;
   onButtonClick?: () => void;
   quote?: string;
   subheadline?: string | string[];
@@ -38,9 +36,7 @@ export default function InitialScreenTemplate({
   kioskId = 'kiosk-1',
   guidesImageSrc = imgGuides,
   headline = 'The GRAMMY Museum® preserves the soundtrack of history.',
-  logoCombinedSrc = imgLogo,
-  logoLeftSrc: _logoLeftSrc = imgLogo,
-  logoRightSrc: _logoRightSrc = imgLogo,
+  logoCombinedSrc,
   onButtonClick,
   quote = '"It\'s been a pleasure working with Iron Mountain. We feel very confident that the GRAMMY Museum\'s physical artifacts and digital content is safely protected. Smart Vault also provides significant reassurance that our iconic artist performances and interviews will remain preserved and accessible which is a huge benefit to the GRAMMY Museum."',
   subheadline = 'Rich media & cultural heritage',
@@ -92,14 +88,18 @@ export default function InitialScreenTemplate({
       >
         <div className="absolute left-[120px] top-[2910px] z-[3] flex h-[180px] w-[710px] items-center group-data-[kiosk=kiosk-2]/kiosk:top-[2870px] group-data-[kiosk=kiosk-3]/kiosk:hidden">
           <div className="relative h-full w-full">
-            <Image
-              alt="Partner logos"
-              className="object-contain"
-              fill
-              sizes="710px"
-              src={logoCombinedSrc ?? imgLogo}
-              unoptimized
-            />
+            {logoCombinedSrc ? (
+              <Image
+                alt="Partner logos"
+                className="object-contain"
+                fill
+                sizes="710px"
+                src={logoCombinedSrc}
+                unoptimized
+              />
+            ) : (
+              <WhiteLogoSimple aria-hidden="true" className="h-full w-full" preserveAspectRatio="xMidYMid meet" />
+            )}
           </div>
         </div>
 
