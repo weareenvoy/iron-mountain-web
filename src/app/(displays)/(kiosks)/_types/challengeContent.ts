@@ -62,7 +62,7 @@ export type KioskChallenges = z.infer<typeof kioskChallengesSchema>;
 
 type ChallengeIssue = {
   message: string;
-  path: Array<number | string>;
+  path: Array<number | string | symbol>;
 };
 
 const formatIssues = (issues: ChallengeIssue[]) =>
