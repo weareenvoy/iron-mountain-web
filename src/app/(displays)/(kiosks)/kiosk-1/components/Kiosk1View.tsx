@@ -8,7 +8,6 @@ import ThirdScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-tem
 import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
 import challengeContent from '@public/api/kiosk-1.json';
 import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
-// import styles from './kiosk-1.module.css';
 
 type Slide = { hasCarousel?: boolean; id: string; title: string };
 

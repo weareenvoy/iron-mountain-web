@@ -1,5 +1,8 @@
 'use client';
 import React from 'react';
+import { getKioskData } from '@/lib/internal/data/get-kiosk';
+import type { KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
+import { DEFAULT_KIOSK_ID, type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 type Handlers = {
   // return true if this handler consumed the action and no further fallback should occur
@@ -19,12 +22,20 @@ export type Controller = {
   // register a top-level/root handler (parallax slide navigation)
   setRootHandlers: (handlers: Handlers | null) => void;
   getRegistry: () => RegistryEntry[];
+  kioskId: KioskId;
+  fetchKioskChallenges: () => Promise<KioskChallenges>;
 };
 
 const ControllerContext = React.createContext<Controller | null>(null);
 export { ControllerContext };
 
-export const KioskControllerProvider = ({ children }: { children: React.ReactNode }) => {
+export const KioskControllerProvider = ({
+  children,
+  kioskId = DEFAULT_KIOSK_ID,
+}: {
+  children: React.ReactNode;
+  kioskId?: KioskId;
+}) => {
   const registryRef = React.useRef<RegistryEntry[]>([]);
 
   const register = (id: string, handlers: Handlers) => {
@@ -103,6 +114,11 @@ export const KioskControllerProvider = ({ children }: { children: React.ReactNod
     }
   };
 
+  const fetchKioskChallenges = React.useCallback(async () => {
+    const result = await getKioskData(kioskId);
+    return result.data;
+  }, [kioskId]);
+
   const value: Controller = {
     next,
     prev,
@@ -111,6 +127,8 @@ export const KioskControllerProvider = ({ children }: { children: React.ReactNod
     unregister,
     setRootHandlers,
     getRegistry: () => registryRef.current,
+    kioskId,
+    fetchKioskChallenges,
   };
 
   return <ControllerContext.Provider value={value}>{children}</ControllerContext.Provider>;
