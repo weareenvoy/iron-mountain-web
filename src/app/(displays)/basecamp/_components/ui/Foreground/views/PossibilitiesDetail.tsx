@@ -1,4 +1,4 @@
-import type { BasecampData } from '@/app/(displays)/basecamp/_types';
+import type { BasecampData } from '@/lib/internal/types';
 
 type Props = {
   readonly data: BasecampData['possibilities-a'];

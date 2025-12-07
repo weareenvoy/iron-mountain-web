@@ -27,6 +27,8 @@ const buttonVariants = cva(
           'border-primary-im-dark-blue text-primary-im-dark-blue bg-transparent hover:bg-primary-im-mid-blue/10 active:bg-primary-im-mid-blue/20 disabled:opacity-50',
         'outline-light-grey':
           'border-primary-bg-grey text-primary-bg-grey bg-transparent hover:bg-primary-bg-grey/10 active:bg-primary-bg-grey/20 disabled:opacity-50',
+        'outline-mid-blue':
+          'border-primary-im-mid-blue text-primary-im-mid-blue bg-transparent hover:bg-primary-im-mid-blue/10 active:bg-primary-im-mid-blue/20 disabled:opacity-50',
         // Generic button styles
         'primary':
           'border-primary-bg-grey bg-primary-bg-grey text-primary-im-dark-blue hover:bg-[#e0e0e0] active:bg-[#d0d0d0] disabled:opacity-50',

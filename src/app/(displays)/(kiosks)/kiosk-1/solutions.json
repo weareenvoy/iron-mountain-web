@@ -1,58 +1,28 @@
 {
-  "secondScreens": [
-    {
-      "subheadline": ["IT assets &", "data centers"],
-      "title": "Device retrieval & redeployment services",
-      "stepOneLabel": "01.",
-      "stepOneDescription": "Collect devices from global offices, remote teams, and warehouse locations.",
-      "stepTwoLabel": "02.",
-      "stepTwoDescription": "Scan, sanitize, and transport each asset with full chain-of-custody visibility.",
-      "stepThreeLabel": "03.",
-      "stepThreeDescription": "Refurbish and redeploy hardware with updated images and documentation.",
-      "stepFourLabel": "04.",
-      "stepFourDescription": "Update inventory and user records so redeployed assets stay traceable."
-    },
-    {
-      "subheadline": ["IT assets &", "data centers"],
-      "title": "IT asset disposition (ITAD) for end-user devices",
-      "stepOneLabel": "01.",
-      "stepOneDescription": "Grade devices, document condition, and separate reusable components.",
-      "stepTwoLabel": "02.",
-      "stepTwoDescription": "Perform certified data sanitization tailored to compliance requirements.",
-      "stepThreeLabel": "03.",
-      "stepThreeDescription": "Remarket or recycle assets to maximize value recovery and sustainability.",
-      "stepFourLabel": "04.",
-      "stepFourDescription": "Provide auditable reports covering resale revenue and recycling outcomes."
-    },
-    {
-      "subheadline": ["IT assets &", "data centers"],
-      "title": "Data center decommissioning & ITAD",
-      "stepOneLabel": "01.",
-      "stepOneDescription": "Coordinate disconnects, labeling, and physical extraction of racks and gear.",
-      "stepTwoLabel": "02.",
-      "stepTwoDescription": "Destroy media on-site or in secure Iron Mountain facilities with auditable proof.",
-      "stepThreeLabel": "03.",
-      "stepThreeDescription": "Process, resell, or recycle equipment to clear the space and capture value.",
-      "stepFourLabel": "04.",
-      "stepFourDescription": "Document the cleared environment and deliver closeout compliance artifacts."
-    },
-    {
-      "subheadline": ["IT assets &", "data centers"],
-      "title": "Decommissioning and logistics",
-      "stepOneLabel": "01.",
-      "stepOneDescription": "Plan the logistics timeline, crate equipment, and schedule secure transport.",
-      "stepTwoLabel": "02.",
-      "stepTwoDescription": "Provide detailed chain-of-custody records, insurance, and compliance reporting.",
-      "stepThreeLabel": "03.",
-      "stepThreeDescription": "Deliver assets to lifecycle facilities for reuse, redeployment, or disposal.",
-      "stepFourLabel": "04.",
-      "stepFourDescription": "Share post-move analytics to confirm timelines, spend, and sustainability KPIs."
-    }
-  ],
+  "firstScreen": {
+    "backgroundVideoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Header.webm",
+    "description": "Iron Mountain unites private vault storage with Smart Vault access so the GRAMMY Museum can preserve iconic recordings and activate them on demand.",
+    "subheadline": ["Rich media &", "cultural heritage"],
+    "title": "Smart Vault protections for legendary performances"
+  },
+  "secondScreen": {
+    "stepFourDescription": "Update inventory and user records so redeployed assets stay traceable.",
+    "stepFourLabel": "04.",
+    "stepOneDescription": "Collect devices from global offices, remote teams, and warehouse locations.",
+    "stepOneLabel": "01.",
+    "stepThreeDescription": "Refurbish and redeploy hardware with updated images and documentation.",
+    "stepThreeLabel": "03.",
+    "stepTwoDescription": "Scan, sanitize, and transport each asset with full chain-of-custody visibility.",
+    "stepTwoLabel": "02.",
+    "subheadline": ["IT assets &", "data centers"],
+    "title": "Device retrieval & redeployment services"
+  },
   "thirdScreen": {
     "accentDiamondSrc": "http://localhost:3845/assets/04c5d53f375e593c269131982829bc5be36f8abf.svg",
     "arrowIconSrc": "http://localhost:3845/assets/a6edb731c633feb0583f227ea6146050aabea4d5.svg",
     "backgroundVideoSrc": "/_videos/v1/a532f40a2a6848e2a80788002b6cb925a1f4c3c2",
+    "bottomLeftLabel": "Smart Vault\narchiving",
+    "bottomRightLabel": "AI-powered\nsearch",
     "gradientEndColor": "#8a0d71",
     "gradientStartColor": "#a2115e",
     "mediaDiamondLeftSrc": "http://localhost:3845/assets/bb9d9dd13fdcc4e78ef8886b4114de7fb75d7586.png",
@@ -62,9 +32,6 @@
     "subheadline": ["Rich media &", "cultural heritage"],
     "title": "How Iron Mountain\nSmart Vault works:",
     "topLeftLabel": "Secure physical\nstorage",
-    "topRightLabel": "Digital\ntransformation",
-    "bottomLeftLabel": "Smart Vault\narchiving",
-    "bottomRightLabel": "AI-powered\nsearch"
+    "topRightLabel": "Digital\ntransformation"
   }
 }
-

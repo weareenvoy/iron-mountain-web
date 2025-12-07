@@ -1,5 +1,5 @@
 import { useMqtt } from '@/components/providers/mqtt-provider';
-import type { ExhibitNavigationState, Moment } from '@/lib/internal/types';
+import type { ExhibitNavigationState, Moment, Section } from '@/lib/internal/types';
 
 // moments/beats navigation hook
 const useMomentsNavigation = (
@@ -14,7 +14,7 @@ const useMomentsNavigation = (
   const currentMomentIdx = content.findIndex(m => m.id === momentId);
   const currentMoment = content[currentMomentIdx];
 
-  const publishNavigation = (momentId: string, beatIdx: number) => {
+  const publishNavigation = (momentId: Section, beatIdx: number) => {
     if (!client) return;
 
     // Format: ${moment}-${beatNumber} (1-indexed)
@@ -27,7 +27,7 @@ const useMomentsNavigation = (
     });
   };
 
-  const goTo = (momentId: string, beatIdx: number) => {
+  const goTo = (momentId: Section, beatIdx: number) => {
     setExhibitState({ beatIdx, momentId });
     publishNavigation(momentId, beatIdx);
   };

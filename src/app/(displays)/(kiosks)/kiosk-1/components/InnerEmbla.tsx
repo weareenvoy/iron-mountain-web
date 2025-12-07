@@ -1,11 +1,13 @@
 'use client';
-import React, { useEffect } from 'react';
+
 import useEmblaCarousel from 'embla-carousel-react';
+import { useEffect, type ReactNode } from 'react';
+
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
 
-type Props = { id?: string; slides?: React.ReactNode[] };
+type Props = { id?: string; slides?: ReactNode[] };
 
-export default function InnerEmbla({ id = 'inner-embla', slides }: Props) {
+const InnerEmbla = ({ id = 'inner-embla', slides }: Props) => {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false });
   const controller = useKioskController();
 
@@ -13,6 +15,13 @@ export default function InnerEmbla({ id = 'inner-embla', slides }: Props) {
     if (!emblaApi) return;
 
     controller.register(id, {
+      goTo: i => {
+        if (emblaApi) {
+          emblaApi.scrollTo(i);
+          return true;
+        }
+        return false;
+      },
       next: () => {
         if (emblaApi && emblaApi.canScrollNext()) {
           emblaApi.scrollNext();
@@ -27,33 +36,31 @@ export default function InnerEmbla({ id = 'inner-embla', slides }: Props) {
         }
         return false;
       },
-      goTo: (i) => {
-        if (emblaApi) {
-          emblaApi.scrollTo(i);
-          return true;
-        }
-        return false;
-      }
     });
 
     return () => controller.unregister(id);
-  }, [emblaApi, controller, id]);
+  }, [controller, emblaApi, id]);
 
   return (
     <div className="embla" ref={emblaRef} style={{ overflow: 'hidden' }}>
       <div className="embla__container" style={{ display: 'flex' }}>
         {slides?.length
-          ? slides.map((s, i) => (
-              <div key={i} className="embla__slide" style={{ minWidth: '100%' }}>
-                {s}
+          ? slides.map((slide, index) => (
+              <div className="embla__slide" key={index} style={{ minWidth: '100%' }}>
+                {slide}
               </div>
             ))
-          : [1, 2, 3].map((n) => (
-              <div key={n} className="embla__slide" style={{ minWidth: '100%', padding: 20 }}>
-                <div>Inner Embla slide {n}</div>
+          : [1, 2, 3].map(slideNumber => (
+              <div className="embla__slide" key={slideNumber} style={{ minWidth: '100%', padding: 20 }}>
+                <div>Inner Embla slide {slideNumber}</div>
               </div>
             ))}
       </div>
     </div>
   );
-}
+};
+
+InnerEmbla.displayName = 'InnerEmbla';
+
+export default InnerEmbla;
+
