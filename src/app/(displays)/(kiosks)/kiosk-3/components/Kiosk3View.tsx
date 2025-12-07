@@ -15,19 +15,21 @@ import SolutionSecondScreenTemplate from '@/app/(displays)/(kiosks)/_components/
 import SolutionThirdScreenTemplate, {
   type SolutionThirdScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/thirdScreen/thirdScreenTemplate';
+import SolutionFourthScreenTemplate, {
+  type SolutionFourthScreenTemplateProps,
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/fourthScreen/fourthScreenTemplate';
 import ThirdScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/thirdScreen/thirdScreenTemplate';
 import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
-import InnerEmbla from '../../kiosk-1/components/InnerEmbla';
 import solutionContent from '../solutions.json';
 // import styles from './kiosk-3.module.css';
 
-type Slide = { hasCarousel?: boolean; id: string; render: () => ReactElement; title: string };
+type Slide = { id: string; render: () => ReactElement; title: string };
 
 type SolutionSlidesConfig = {
   firstScreen?: SolutionFirstScreenTemplateProps;
   secondScreen?: Parameters<typeof SolutionSecondScreenTemplate>[0];
   thirdScreen?: SolutionThirdScreenTemplateProps;
-  fourthScreen?: SolutionThirdScreenTemplateProps;
+  fourthScreen?: SolutionFourthScreenTemplateProps;
 };
 
 const formatTitle = (value: string | string[] | undefined, fallback: string) =>
@@ -54,7 +56,6 @@ const Kiosk3View = () => {
     {
       id: 'challenge-first',
       title: 'Challenge Story',
-      hasCarousel: true,
       render: () => (
         <FirstScreenTemplate
           {...challenges.firstScreen}
@@ -102,7 +103,7 @@ const Kiosk3View = () => {
     if (solutions.secondScreen) {
       result.push({
         id: 'solution-second',
-        title: formatTitle(solutions.secondScreen.title, 'Solution Step 1'),
+        title: formatTitle(solutions.secondScreen.title ?? solutions.thirdScreen?.title, 'Solution Step 1'),
         render: () => (
           <SolutionSecondScreenTemplate
             {...solutions.secondScreen}
@@ -112,30 +113,29 @@ const Kiosk3View = () => {
         ),
       });
     }
-    if (solutions.thirdScreen) {
+    const kioskThreeDetailScreen = solutions.fourthScreen ?? solutions.thirdScreen;
+    if (kioskThreeDetailScreen) {
+      const useFourthTemplate = Boolean(solutions.fourthScreen);
       result.push({
-        id: 'solution-third',
-      title: formatTitle(solutions.thirdScreen.title, 'Solution Walkthrough'),
-        render: () => (
-          <SolutionThirdScreenTemplate
-            {...solutions.thirdScreen}
-            onNavigateDown={() => controller.next()}
-            onNavigateUp={() => controller.prev()}
-          />
+        id: useFourthTemplate ? 'solution-fourth' : 'solution-third',
+        title: formatTitle(
+          kioskThreeDetailScreen.title,
+          useFourthTemplate ? 'Solution Details' : 'Solution Walkthrough',
         ),
-      });
-    }
-    if (solutions.fourthScreen) {
-      result.push({
-        id: 'solution-fourth',
-        title: formatTitle(solutions.fourthScreen.title, 'Solution Details'),
-        render: () => (
-          <SolutionThirdScreenTemplate
-            {...solutions.fourthScreen}
-            onNavigateDown={() => controller.next()}
-            onNavigateUp={() => controller.prev()}
-          />
-        ),
+        render: () =>
+          useFourthTemplate ? (
+            <SolutionFourthScreenTemplate
+              {...(kioskThreeDetailScreen as SolutionFourthScreenTemplateProps)}
+              onNavigateDown={() => controller.next()}
+              onNavigateUp={() => controller.prev()}
+            />
+          ) : (
+            <SolutionThirdScreenTemplate
+              {...(kioskThreeDetailScreen as SolutionThirdScreenTemplateProps)}
+              onNavigateDown={() => controller.next()}
+              onNavigateUp={() => controller.prev()}
+            />
+          ),
       });
     }
     return result;
@@ -179,7 +179,6 @@ const Kiosk3View = () => {
             key={slide.id}
           >
             {slide.render()}
-            {slide.hasCarousel ? <InnerEmbla id={`inner-${slide.id}`} /> : null}
           </section>
         ))}
       </div>

@@ -22,8 +22,8 @@
   "secondScreen": {
     "arrowIconSrc": "",
     "backgroundGlyphSrc": "",
-    "gradientEndColor": "",
-    "gradientStartColor": "",
+    "gradientEndColor": "#8a0d71",
+    "gradientStartColor": "#a2115e",
     "largeDiamondOutlineSrc": "",
     "mediumDiamondOutlineSrc": "",
     "solutionIconSrc": "",

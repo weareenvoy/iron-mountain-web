@@ -6,6 +6,8 @@
     "title": "Smart Vault protections for legendary performances"
   },
   "secondScreen": {
+    "gradientEndColor": "#8a0d71",
+    "gradientStartColor": "#a2115e",
     "stepFourDescription": "Update inventory and user records so redeployed assets stay traceable.",
     "stepFourLabel": "04.",
     "stepOneDescription": "Collect devices from global offices, remote teams, and warehouse locations.",
@@ -25,8 +27,8 @@
     "bottomRightLabel": "AI-powered\nsearch",
     "gradientEndColor": "#8a0d71",
     "gradientStartColor": "#a2115e",
-    "mediaDiamondLeftSrc": "http://localhost:3845/assets/bb9d9dd13fdcc4e78ef8886b4114de7fb75d7586.png",
-    "mediaDiamondRightSrc": "http://localhost:3845/assets/2f62e81abe58763bf6bdbf710843b3c886f19583.png",
+    "mediaDiamondLeftSrc": "/images/kiosks/kiosk2/02-solution/Solution-Image3-Diamond.png",
+    "mediaDiamondRightSrc": "/images/kiosks/kiosk3/02-solution/Solution-Image2-Diamond.png",
     "solutionIconSrc": "http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg",
     "solutionLabel": "Solution",
     "subheadline": ["Rich media &", "cultural heritage"],

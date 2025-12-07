@@ -16,5 +16,64 @@
     "stepTwoLabel": "02.",
     "subheadline": ["IT assets &", "data centers"],
     "title": "Device retrieval & redeployment services"
+  },
+  "fourthScreen": {
+    "accordionItems": [
+      {
+        "color": "white",
+        "contentList": [
+          "Automated and scalable",
+          "Custom packaging",
+          "Real-time tracking",
+          "Redeployment of devices and peripherals"
+        ],
+        "expanded": true,
+        "id": "item-1",
+        "number": "01.",
+        "title": "Device retrieval and redeployment services"
+      },
+      {
+        "color": "lightBlue",
+        "contentList": [
+          "Secure chain of custody",
+          "Guaranteed data sanitization",
+          "Maximized value recovery",
+          "Clear sustainability reporting"
+        ],
+        "id": "item-2",
+        "number": "02.",
+        "title": "IT asset disposition (ITAD) for end-user devices"
+      },
+      {
+        "color": "blue",
+        "contentList": [
+          "Data destruction",
+          "Flexible data sanitization",
+          "Secure media destruction"
+        ],
+        "id": "item-3",
+        "number": "03.",
+        "title": "Data center decommissioning & ITAD"
+      },
+      {
+        "color": "navy",
+        "contentList": [
+          "Onsite inventory and removal",
+          "Secure logistics"
+        ],
+        "id": "item-4",
+        "number": "04.",
+        "title": "Decommissioning and logistics"
+      }
+    ],
+    "accentDiamondSrc": "",
+    "backgroundVideoSrc": "",
+    "gradientEndColor": "#8a0d71",
+    "gradientStartColor": "#a2115e",
+    "mediaDiamondOutlineSrc": "",
+    "mediaDiamondSolidSrc": "/images/kiosks/kiosk3/02-solution/Solution-Image2-Diamond.png",
+    "solutionLabel": "Solution",
+    "subheadline": ["IT assets &", "data centers"],
+    "title": "Iron Mountain’s Asset Lifecycle Management"
   }
 }

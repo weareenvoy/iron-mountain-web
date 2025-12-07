@@ -20,7 +20,7 @@ import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(ki
 import solutionContent from '../solutions.json';
 // import styles from './kiosk-1.module.css';
 
-type Slide = { hasCarousel?: boolean; id: string; render: () => ReactElement; title: string };
+type Slide = { id: string; render: () => ReactElement; title: string };
 
 type SolutionSlidesConfig = {
   firstScreen?: SolutionFirstScreenTemplateProps;
@@ -45,7 +45,6 @@ const Kiosk1View = () => {
       render: () => <InitialScreenTemplate {...challenges.initialScreen} kioskId="kiosk-1" />,
     },
     {
-      hasCarousel: true,
       id: 'challenge-first',
       title: 'Challenge Story',
       render: () => (
@@ -96,7 +95,7 @@ const Kiosk1View = () => {
   if (solutions.secondScreen) {
     solutionSlides.push({
       id: 'solution-second',
-      title: formatTitle(solutions.secondScreen.title, 'Solution Step 1'),
+      title: formatTitle(solutions.secondScreen.title ?? solutions.thirdScreen?.title, 'Solution Step 1'),
       render: () => (
         <SolutionSecondScreenTemplate
           {...solutions.secondScreen}
@@ -114,20 +113,6 @@ const Kiosk1View = () => {
       render: () => (
         <SolutionThirdScreenTemplate
           {...solutions.thirdScreen}
-          onNavigateDown={() => controller.next()}
-          onNavigateUp={() => controller.prev()}
-        />
-      ),
-    });
-  }
-
-  if (solutions.fourthScreen) {
-    solutionSlides.push({
-      id: 'solution-fourth',
-      title: formatTitle(solutions.fourthScreen.title, 'Solution Details'),
-      render: () => (
-        <SolutionThirdScreenTemplate
-          {...solutions.fourthScreen}
           onNavigateDown={() => controller.next()}
           onNavigateUp={() => controller.prev()}
         />

@@ -42,16 +42,16 @@ export default function SolutionFirstScreenTemplate({
       {/* Background video */}
       <div className="absolute left-0 top-[-5px] h-[1545px] w-full">
         <div className="relative h-full w-full">
-          <video
-            autoPlay
-            className="absolute h-full w-full bg-black object-cover"
-            controlsList="nodownload"
-            loop
-            playsInline
-            muted
-          >
-            <source src={backgroundVideoSrc} type="video/mp4" />
-          </video>
+        <video
+          autoPlay
+          className="absolute h-full w-full bg-black object-cover"
+          controlsList="nodownload"
+          loop
+          playsInline
+          muted
+        >
+          <source src={backgroundVideoSrc} type="video/mp4" />
+        </video>
           <div className="pointer-events-none absolute inset-0 bg-black/20" />
         </div>
       </div>
@@ -87,14 +87,14 @@ export default function SolutionFirstScreenTemplate({
       {/* Decorative diamonds */}
       <div className="pointer-events-none absolute left-[-220px] top-[2550px] z-[3] h-[1330px] w-[1330px] opacity-60">
         {largeDiamondSrc ? (
-          <img alt="" className="h-full w-full object-contain" src={largeDiamondSrc} />
+        <img alt="" className="h-full w-full object-contain" src={largeDiamondSrc} />
         ) : (
           <BlueDiamondMain aria-hidden="true" className="h-full w-full" focusable="false" />
         )}
       </div>
       <div className="pointer-events-none absolute left-[1410px] top-[2500px] z-[3] h-[660px] w-[660px] opacity-70">
         {mediumDiamondSrc ? (
-          <img alt="" className="h-full w-full object-contain" src={mediumDiamondSrc} />
+        <img alt="" className="h-full w-full object-contain" src={mediumDiamondSrc} />
         ) : (
           <GreenDiamondMain aria-hidden="true" className="h-full w-full" focusable="false" />
         )}

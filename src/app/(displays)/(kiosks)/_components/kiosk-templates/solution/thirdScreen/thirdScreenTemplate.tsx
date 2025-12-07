@@ -13,12 +13,10 @@ import TealGradientDiamondThird from '@/components/ui/icons/Kiosks/Solutions/Tea
 
 import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
 
-const imgBackgroundVideo = '/_videos/v1/a532f40a2a6848e2a80788002b6cb925a1f4c3c2';
-const imgDiamondMediaLeft = 'http://localhost:3845/assets/bb9d9dd13fdcc4e78ef8886b4114de7fb75d7586.png';
-const imgDiamondMediaRight = 'http://localhost:3845/assets/2f62e81abe58763bf6bdbf710843b3c886f19583.png';
+const imgDiamondMediaLeft = '/images/kiosks/kiosk2/02-solution/Solution-Image3-Diamond.png';
+const imgDiamondMediaRight = '/images/kiosks/kiosk3/02-solution/Solution-Image2-Diamond.png';
 
 export interface SolutionThirdScreenTemplateProps {
-  backgroundVideoSrc?: string;
   gradientEndColor?: string;
   gradientStartColor?: string;
   mediaDiamondLeftSrc?: string;
@@ -30,13 +28,13 @@ export interface SolutionThirdScreenTemplateProps {
   topRightLabel?: string;
   bottomLeftLabel?: string;
   bottomRightLabel?: string;
+  centerLabel?: string;
   accentDiamondSrc?: string;
   onNavigateDown?: () => void;
   onNavigateUp?: () => void;
 }
 
 export default function SolutionThirdScreenTemplate({
-  backgroundVideoSrc = imgBackgroundVideo,
   gradientEndColor = '#8a0d71',
   gradientStartColor = '#a2115e',
   mediaDiamondLeftSrc = imgDiamondMediaLeft,
@@ -44,35 +42,25 @@ export default function SolutionThirdScreenTemplate({
   solutionLabel = 'Solution',
   subheadline = 'Rich media &\n cultural heritage',
   title = 'How Iron Mountain\nSmart Vault works:',
-  topLeftLabel = 'Secure physical\nstorage',
-  topRightLabel = 'Digital\ntransformation',
-  bottomLeftLabel = 'Smart Vault\narchiving',
-  bottomRightLabel = 'AI-powered\nsearch',
+  topLeftLabel = 'Platform centralization',
+  topRightLabel = 'Metadata enrichment',
+  bottomLeftLabel = 'Automated workflows',
+  bottomRightLabel = 'Searchable repository of pension information',
+  centerLabel = 'Document digitization',
   accentDiamondSrc,
   onNavigateDown,
   onNavigateUp,
 }: SolutionThirdScreenTemplateProps) {
+  const textDiamonds = [
+    { className: 'left-[540px] top-[1460px]', label: centerLabel, Outline: GreenDiamondThird },
+    { className: 'left-[180px] top-[1880px]', label: topLeftLabel, Outline: OrangeDiamondThird },
+    { className: 'left-[1020px] top-[1680px]', label: topRightLabel, Outline: BlueDiamondThird },
+    { className: 'left-[480px] top-[2180px]', label: bottomLeftLabel, Outline: OrangeDiamondThird2 },
+    { className: 'left-[940px] top-[2440px]', label: bottomRightLabel, Outline: GreenDiamondThird2 },
+  ] as const;
+
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden bg-black" data-node-id="5168:9626">
-      {/* Background video */}
-      <div className="absolute left-0 top-0 h-[1291px] w-full">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="relative h-full w-full">
-            <video
-              autoPlay
-              className="absolute left-[-30.42%] top-[-30.96%] h-[172.5%] w-[181.73%] object-cover"
-              controlsList="nodownload"
-              loop
-              muted
-              playsInline
-            >
-              <source src={backgroundVideoSrc} type="video/mp4" />
-            </video>
-            <div className="pointer-events-none absolute inset-0 bg-black/20" />
-          </div>
-        </div>
-      </div>
-
       {/* Gradient backdrop */}
       <div
         className="absolute left-0 top-[-296px] h-[5416px] w-full rounded-t-[100px]"
@@ -101,37 +89,22 @@ export default function SolutionThirdScreenTemplate({
       </div>
 
       {/* Diamond cluster */}
-      <div className="absolute left-[240px] top-[1850px] h-[2500px] w-[1680px]">
-        {/* Top-left text diamond */}
-        <Diamond className="left-[0px] top-[0px]" label={topLeftLabel} Outline={BlueDiamondThird} textColor="#ededed" />
-        {/* Top-right text diamond */}
-        <Diamond className="left-[900px] top-[450px]" label={topRightLabel} Outline={GreenDiamondThird} textColor="#ededed" />
-        {/* Bottom-left text diamond */}
-        <Diamond className="left-[450px] top-[900px]" label={bottomLeftLabel} Outline={OrangeDiamondThird} textColor="#ededed" />
-        {/* Bottom-right text diamond */}
-        <Diamond
-          className="left-[1050px] top-[1400px]"
-          label={bottomRightLabel}
-          Outline={TealGradientDiamondThird}
-          textColor="#ededed"
-        />
+      <div className="absolute left-[240px] top-[1400px] h-[2800px] w-[1680px]">
+        {textDiamonds.map(({ className, label, Outline }) => (
+          <Diamond className={className} key={`${className}-${label}`} label={label} Outline={Outline} textColor="#ededed" />
+        ))}
 
-        {/* Media diamonds */}
         <MediaDiamond
-          className="left-[620px] top-[1230px]"
+          className="left-[140px] top-[2480px]"
           fallback={<GreenDiamondThird2 aria-hidden="true" className="h-full w-full" focusable="false" />}
           imageSrc={mediaDiamondLeftSrc}
         />
         <MediaDiamond
-          className="left-[1220px] top-[1730px]"
+          className="left-[860px] top-[2680px]"
           fallback={<BlueDiamondThird aria-hidden="true" className="h-full w-full" focusable="false" />}
           imageSrc={mediaDiamondRightSrc}
         />
-        <MediaDiamond
-          className="left-[1180px] top-[2360px]"
-          fallback={<OrangeDiamondThird2 aria-hidden="true" className="h-full w-full" focusable="false" />}
-          imageSrc={accentDiamondSrc}
-        />
+        <FilledDiamond className="left-[1380px] top-[1820px]" imageSrc={accentDiamondSrc} />
       </div>
 
       {/* Navigation arrows */}
@@ -207,6 +180,20 @@ function MediaDiamond({ className, fallback, imageSrc }: MediaDiamondProps) {
           <img alt="" className="h-full w-full -rotate-[45deg] object-cover" src={imageSrc} />
         ) : (
           <div className="flex h-full w-full -rotate-[45deg] items-center justify-center">{fallback}</div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function FilledDiamond({ className, imageSrc }: { className: string; imageSrc?: string }) {
+  return (
+    <div className={`absolute ${className}`}>
+      <div className="relative size-[360px] rotate-[45deg]">
+        {imageSrc ? (
+          <img alt="" className="h-full w-full -rotate-[45deg] object-cover" src={imageSrc} />
+        ) : (
+          <TealGradientDiamondThird aria-hidden="true" className="h-full w-full -rotate-[45deg]" focusable="false" />
         )}
       </div>
     </div>

@@ -10,18 +10,13 @@ type StepConfig = {
   label?: string;
 };
 
-const imgDiamondOutlineAccent = 'http://localhost:3845/assets/8b08f30de40cbe05fa92227a40f251d17baf8ca0.svg';
-const imgHeroDiamond = 'http://localhost:3845/assets/bb9d9dd13fdcc4e78ef8886b4114de7fb75d7586.png';
+const imgHeroDiamond = '/images/kiosks/kiosk2/02-solution/Solution-Image2-Diamond.png';
 
 export interface SolutionSecondScreenTemplateProps {
-  accentDiamondOutlineSrc?: string;
-  filledDiamondSrc?: string;
   gradientEndColor?: string;
   gradientStartColor?: string;
   heroImageAlt?: string;
   heroImageSrc?: string;
-  largeDiamondOutlineSrc?: string;
-  mediumDiamondOutlineSrc?: string;
   onNavigateDown?: () => void;
   onNavigateUp?: () => void;
   solutionLabel?: string;
@@ -40,14 +35,10 @@ export interface SolutionSecondScreenTemplateProps {
 }
 
 export default function SolutionSecondScreenTemplate({
-  accentDiamondOutlineSrc = imgDiamondOutlineAccent,
-  filledDiamondSrc,
   gradientEndColor = '#8a0d71',
   gradientStartColor = '#a2115e',
   heroImageAlt = 'Solution highlight',
   heroImageSrc = imgHeroDiamond,
-  largeDiamondOutlineSrc,
-  mediumDiamondOutlineSrc,
   onNavigateDown,
   onNavigateUp,
   solutionLabel = 'Solution',
@@ -81,11 +72,11 @@ export default function SolutionSecondScreenTemplate({
   const dividerHeights =
     stepsDividerHeights && stepsDividerHeights.length >= timelineSteps.length - 1
       ? stepsDividerHeights
-      : [560, 320, 320];
+      : [768, 250, 250];
 
   const getOpacityClass = (index: number) => {
     if (index === 0) return 'opacity-100';
-    if (index === 1) return 'opacity-60';
+    if (index === 1) return 'opacity-50';
     return 'opacity-20';
   };
 
@@ -98,33 +89,11 @@ export default function SolutionSecondScreenTemplate({
       />
 
       {/* Decorative diamonds */}
-      <div className="pointer-events-none absolute left-[1210px] top-[1180px] h-[1330px] w-[1330px] rotate-[225deg]">
-        {largeDiamondOutlineSrc ? (
-          <img alt="" className="h-full w-full object-contain" src={largeDiamondOutlineSrc} />
-        ) : (
-          <GreenDiamondSecond aria-hidden="true" className="h-full w-full" focusable="false" />
-        )}
+      <div className="pointer-events-none absolute left-[-220px] top-[1420px] z-[1] h-[1700px] w-[1700px]">
+        <BlueDiamondSecond aria-hidden="true" className="h-full w-full" focusable="false" />
       </div>
-      <div className="pointer-events-none absolute left-[1220px] top-[2100px] h-[660px] w-[660px] rotate-[225deg]">
-        {mediumDiamondOutlineSrc ? (
-          <img alt="" className="h-full w-full object-contain" src={mediumDiamondOutlineSrc} />
-        ) : (
-          <BlueDiamondSecond aria-hidden="true" className="h-full w-full" focusable="false" />
-        )}
-      </div>
-      <div className="pointer-events-none absolute left-[520px] top-[1500px] h-[660px] w-[660px] rotate-[225deg]">
-        {filledDiamondSrc ? (
-          <img alt="" className="h-full w-full object-contain" src={filledDiamondSrc} />
-        ) : (
-          <BlueDiamondSecond aria-hidden="true" className="h-full w-full" focusable="false" />
-        )}
-      </div>
-      <div className="pointer-events-none absolute left-[1590px] top-[1420px] h-[660px] w-[660px] rotate-[225deg]">
-        {accentDiamondOutlineSrc ? (
-          <img alt="" className="h-full w-full object-contain" src={accentDiamondOutlineSrc} />
-        ) : (
-          <GreenDiamondSecond aria-hidden="true" className="h-full w-full" focusable="false" />
-        )}
+      <div className="pointer-events-none absolute left-[1200px] top-[1840px] z-[1] h-[820px] w-[820px]">
+        <GreenDiamondSecond aria-hidden="true" className="h-full w-full" focusable="false" />
       </div>
 
       {/* Subheadline */}
@@ -143,17 +112,17 @@ export default function SolutionSecondScreenTemplate({
       </div>
 
       {/* Title */}
-      <p className="absolute left-[240px] top-[1568px] text-[100px] font-normal leading-[1.3] tracking-[-5px] text-white">
+      <p className="absolute left-[360px] top-[1568px] text-[100px] font-normal leading-[1.3] tracking-[-5px] text-white">
         {renderRegisteredMark(title)}
       </p>
 
       {/* Timeline with steps */}
-      <div className="absolute left-[240px] top-[1855px] flex w-[1200px] flex-col gap-[80px] text-[60px] leading-[1.4] tracking-[-3px] text-[#ededed]">
+      <div className="absolute left-[360px] top-[1855px] z-[2] flex w-[960px] flex-col gap-[80px] text-[60px] leading-[1.4] tracking-[-3px] text-[#ededed]">
         {timelineSteps.map((step, index) => (
           <div key={`${step.label}-${index}`}>
             <div className={`flex gap-10 ${getOpacityClass(index)}`}>
               <p className="w-[120px]">{renderRegisteredMark(step.label)}</p>
-              <p className="w-[840px]">{renderRegisteredMark(step.description)}</p>
+              <p className="w-[760px]">{renderRegisteredMark(step.description)}</p>
             </div>
             {index < timelineSteps.length - 1 ? (
               <div className="ml-[80px] mt-[30px]">
@@ -168,41 +137,41 @@ export default function SolutionSecondScreenTemplate({
       </div>
 
       {/* Hero media diamond */}
-      <div className="absolute left-[1250px] top-[1950px]">
-        <div className="h-[360px] w-[360px] rotate-[45deg] overflow-hidden rounded-[80px] shadow-[0_30px_80px_rgba(0,0,0,0.4)]">
+      <div className="absolute left-[1500px] top-[2180px] z-[2]">
+        <div className="h-[360px] w-[360px] rotate-[45deg] overflow-hidden rounded-[80px]">
           <img alt={heroImageAlt} className="h-full w-full -rotate-[45deg] object-cover" src={heroImageSrc} />
         </div>
       </div>
 
       {/* Timeline arrows */}
       <div
-        aria-label="Previous"
+          aria-label="Previous"
         className="absolute right-[120px] top-[1755px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
-        onKeyDown={(event) => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            onNavigateUp?.();
-          }
-        }}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              onNavigateUp?.();
+            }
+          }}
         onPointerDown={() => onNavigateUp?.()}
         role="button"
         tabIndex={0}
-      >
+        >
         <ArrowUp aria-hidden="true" className="h-full w-full text-[#ffffff66]" focusable="false" strokeWidth={1.5} />
       </div>
       <div
-        aria-label="Next"
+          aria-label="Next"
         className="absolute right-[120px] top-[1980px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
-        onKeyDown={(event) => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            onNavigateDown?.();
-          }
-        }}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              onNavigateDown?.();
+            }
+          }}
         onPointerDown={() => onNavigateDown?.()}
         role="button"
         tabIndex={0}
-      >
+        >
         <ArrowDown aria-hidden="true" className="h-full w-full text-[#ffffff66]" focusable="false" strokeWidth={1.5} />
       </div>
     </div>

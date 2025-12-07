@@ -17,11 +17,10 @@ import SolutionThirdScreenTemplate, {
   type SolutionThirdScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/thirdScreen/thirdScreenTemplate';
 import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
-import InnerEmbla from '../../kiosk-1/components/InnerEmbla';
 import solutionContent from '../solutions.json';
 // import styles from './kiosk-2.module.css';
 
-type Slide = { hasCarousel?: boolean; id: string; render: () => ReactElement; title: string };
+type Slide = { id: string; render: () => ReactElement; title: string };
 
 type SolutionSlidesConfig = {
   firstScreen?: SolutionFirstScreenTemplateProps;
@@ -50,12 +49,10 @@ const Kiosk2View = () => {
           kioskId="kiosk-2"
         />
       ),
-      hasCarousel: false,
     },
     {
       id: 'challenge-first',
       title: 'Challenge Story',
-      hasCarousel: true,
       render: () => (
         <FirstScreenTemplate
           {...challenges.firstScreen}
@@ -103,7 +100,7 @@ const Kiosk2View = () => {
     if (solutions.secondScreen) {
       result.push({
         id: 'solution-second',
-        title: formatTitle(solutions.secondScreen.title, 'Solution Step 1'),
+        title: formatTitle(solutions.secondScreen.title ?? solutions.thirdScreen?.title, 'Solution Step 1'),
         render: () => (
           <SolutionSecondScreenTemplate
             {...solutions.secondScreen}
@@ -116,23 +113,10 @@ const Kiosk2View = () => {
     if (solutions.thirdScreen) {
       result.push({
         id: 'solution-third',
-      title: formatTitle(solutions.thirdScreen.title, 'Solution Walkthrough'),
+        title: formatTitle(solutions.thirdScreen.title, 'Solution Walkthrough'),
         render: () => (
           <SolutionThirdScreenTemplate
             {...solutions.thirdScreen}
-            onNavigateDown={() => controller.next()}
-            onNavigateUp={() => controller.prev()}
-          />
-        ),
-      });
-    }
-    if (solutions.fourthScreen) {
-      result.push({
-        id: 'solution-fourth',
-        title: formatTitle(solutions.fourthScreen.title, 'Solution Details'),
-        render: () => (
-          <SolutionThirdScreenTemplate
-            {...solutions.fourthScreen}
             onNavigateDown={() => controller.next()}
             onNavigateUp={() => controller.prev()}
           />
@@ -180,7 +164,6 @@ const Kiosk2View = () => {
             key={slide.id}
           >
             {slide.render()}
-            {slide.hasCarousel ? <InnerEmbla id={`inner-${slide.id}`} /> : null}
           </section>
         ))}
       </div>
