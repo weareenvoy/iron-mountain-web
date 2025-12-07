@@ -1,3 +1,8 @@
+import { ArrowDown, ArrowUp, Diamond } from 'lucide-react';
+
+import BlueDiamondSecond from '@/components/ui/icons/Kiosks/Solutions/BlueDiamondSecond';
+import GreenDiamondSecond from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondSecond';
+
 import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
 
 type StepConfig = {
@@ -5,17 +10,11 @@ type StepConfig = {
   label?: string;
 };
 
-const imgArrowNarrowDown = 'http://localhost:3845/assets/4929e813dc10046943550e22e4bb36d08c29d8d5.svg';
-const imgSolutionIcon = 'http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg';
-const imgDiamondFilled = 'http://localhost:3845/assets/59d9fd95c90c1779271217ea48bc71a0ceb142f8.png';
-const imgDiamondOutlineLg = 'http://localhost:3845/assets/a9778f04639430558266e9867e209a1fd4e23b6f.svg';
-const imgDiamondOutlineSm = 'http://localhost:3845/assets/8b08f30de40cbe05fa92227a40f251d17baf8ca0.svg';
 const imgDiamondOutlineAccent = 'http://localhost:3845/assets/8b08f30de40cbe05fa92227a40f251d17baf8ca0.svg';
 const imgHeroDiamond = 'http://localhost:3845/assets/bb9d9dd13fdcc4e78ef8886b4114de7fb75d7586.png';
 
 export interface SolutionSecondScreenTemplateProps {
   accentDiamondOutlineSrc?: string;
-  arrowIconSrc?: string;
   filledDiamondSrc?: string;
   gradientEndColor?: string;
   gradientStartColor?: string;
@@ -25,7 +24,6 @@ export interface SolutionSecondScreenTemplateProps {
   mediumDiamondOutlineSrc?: string;
   onNavigateDown?: () => void;
   onNavigateUp?: () => void;
-  solutionIconSrc?: string;
   solutionLabel?: string;
   stepFourDescription?: string;
   stepFourLabel?: string;
@@ -43,17 +41,15 @@ export interface SolutionSecondScreenTemplateProps {
 
 export default function SolutionSecondScreenTemplate({
   accentDiamondOutlineSrc = imgDiamondOutlineAccent,
-  arrowIconSrc = imgArrowNarrowDown,
-  filledDiamondSrc = imgDiamondFilled,
+  filledDiamondSrc,
   gradientEndColor = '#8a0d71',
   gradientStartColor = '#a2115e',
   heroImageAlt = 'Solution highlight',
   heroImageSrc = imgHeroDiamond,
-  largeDiamondOutlineSrc = imgDiamondOutlineLg,
-  mediumDiamondOutlineSrc = imgDiamondOutlineSm,
+  largeDiamondOutlineSrc,
+  mediumDiamondOutlineSrc,
   onNavigateDown,
   onNavigateUp,
-  solutionIconSrc = imgSolutionIcon,
   solutionLabel = 'Solution',
   stepFourDescription,
   stepFourLabel,
@@ -103,16 +99,32 @@ export default function SolutionSecondScreenTemplate({
 
       {/* Decorative diamonds */}
       <div className="pointer-events-none absolute left-[1210px] top-[1180px] h-[1330px] w-[1330px] rotate-[225deg]">
-        <img alt="" className="h-full w-full object-contain" src={largeDiamondOutlineSrc} />
+        {largeDiamondOutlineSrc ? (
+          <img alt="" className="h-full w-full object-contain" src={largeDiamondOutlineSrc} />
+        ) : (
+          <GreenDiamondSecond aria-hidden="true" className="h-full w-full" focusable="false" />
+        )}
       </div>
       <div className="pointer-events-none absolute left-[1220px] top-[2100px] h-[660px] w-[660px] rotate-[225deg]">
-        <img alt="" className="h-full w-full object-contain" src={mediumDiamondOutlineSrc} />
+        {mediumDiamondOutlineSrc ? (
+          <img alt="" className="h-full w-full object-contain" src={mediumDiamondOutlineSrc} />
+        ) : (
+          <BlueDiamondSecond aria-hidden="true" className="h-full w-full" focusable="false" />
+        )}
       </div>
       <div className="pointer-events-none absolute left-[520px] top-[1500px] h-[660px] w-[660px] rotate-[225deg]">
-        <img alt="" className="h-full w-full object-contain" src={filledDiamondSrc} />
+        {filledDiamondSrc ? (
+          <img alt="" className="h-full w-full object-contain" src={filledDiamondSrc} />
+        ) : (
+          <BlueDiamondSecond aria-hidden="true" className="h-full w-full" focusable="false" />
+        )}
       </div>
       <div className="pointer-events-none absolute left-[1590px] top-[1420px] h-[660px] w-[660px] rotate-[225deg]">
-        <img alt="" className="h-full w-full object-contain" src={accentDiamondOutlineSrc} />
+        {accentDiamondOutlineSrc ? (
+          <img alt="" className="h-full w-full object-contain" src={accentDiamondOutlineSrc} />
+        ) : (
+          <GreenDiamondSecond aria-hidden="true" className="h-full w-full" focusable="false" />
+        )}
       </div>
 
       {/* Subheadline */}
@@ -123,9 +135,7 @@ export default function SolutionSecondScreenTemplate({
       {/* Solution label */}
       <div className="absolute left-[128px] top-[745px] flex items-center gap-[41px]">
         <div className="relative flex h-[100px] w-[100px] items-center justify-center">
-          <div className="relative size-full rotate-[225deg] scale-y-[-1]">
-            <img alt="" className="block h-full w-full object-contain" src={solutionIconSrc} />
-          </div>
+          <Diamond aria-hidden="true" className="h-[90px] w-[90px] text-[#ededed]" focusable="false" strokeWidth={1.25} />
         </div>
         <h1 className="whitespace-nowrap text-[126px] font-normal leading-[1.3] tracking-[-6.3px] text-[#ededed]">
           {renderRegisteredMark(solutionLabel)}
@@ -165,37 +175,35 @@ export default function SolutionSecondScreenTemplate({
       </div>
 
       {/* Timeline arrows */}
-      <div className="absolute right-[120px] top-[1755px] flex h-[118px] w-[118px] -scale-y-100 items-center justify-center">
-        <button
-          aria-label="Previous"
-          className="h-full w-full"
-          onClick={onNavigateUp}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-              event.preventDefault();
-              onNavigateUp?.();
-            }
-          }}
-          type="button"
-        >
-          <img alt="Up" className="h-full w-full object-contain" src={arrowIconSrc} />
-        </button>
+      <div
+        aria-label="Previous"
+        className="absolute right-[120px] top-[1755px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            onNavigateUp?.();
+          }
+        }}
+        onPointerDown={() => onNavigateUp?.()}
+        role="button"
+        tabIndex={0}
+      >
+        <ArrowUp aria-hidden="true" className="h-full w-full text-[#ffffff66]" focusable="false" strokeWidth={1.5} />
       </div>
-      <div className="absolute right-[120px] top-[1980px] flex h-[118px] w-[118px] items-center justify-center">
-        <button
-          aria-label="Next"
-          className="h-full w-full"
-          onClick={onNavigateDown}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-              event.preventDefault();
-              onNavigateDown?.();
-            }
-          }}
-          type="button"
-        >
-          <img alt="Down" className="h-full w-full object-contain" src={arrowIconSrc} />
-        </button>
+      <div
+        aria-label="Next"
+        className="absolute right-[120px] top-[1980px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            onNavigateDown?.();
+          }
+        }}
+        onPointerDown={() => onNavigateDown?.()}
+        role="button"
+        tabIndex={0}
+      >
+        <ArrowDown aria-hidden="true" className="h-full w-full text-[#ffffff66]" focusable="false" strokeWidth={1.5} />
       </div>
     </div>
   );

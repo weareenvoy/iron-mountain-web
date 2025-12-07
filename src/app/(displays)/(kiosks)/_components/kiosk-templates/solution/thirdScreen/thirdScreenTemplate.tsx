@@ -1,26 +1,28 @@
 'use client';
 
+import { type ComponentType, type ReactNode, type SVGProps } from 'react';
+
+import { ArrowDown, ArrowUp, Diamond as DiamondIcon } from 'lucide-react';
+
+import BlueDiamondThird from '@/components/ui/icons/Kiosks/Solutions/BlueDiamondThird';
+import GreenDiamondThird from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondThird';
+import GreenDiamondThird2 from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondThird2';
+import OrangeDiamondThird from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondThird';
+import OrangeDiamondThird2 from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondThird2';
+import TealGradientDiamondThird from '@/components/ui/icons/Kiosks/Solutions/TealGradientDiamondThird';
+
 import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
 
-const imgArrowNarrowDown = 'http://localhost:3845/assets/a6edb731c633feb0583f227ea6146050aabea4d5.svg';
-const imgSolutionIcon = 'http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg';
 const imgBackgroundVideo = '/_videos/v1/a532f40a2a6848e2a80788002b6cb925a1f4c3c2';
-const imgDiamondTextPrimary = 'http://localhost:3845/assets/c305073939f859c26f8ffc28f2589085f5374ce0.svg';
-const imgDiamondTextSecondary = 'http://localhost:3845/assets/e19ca6e666e2963daa98439a05f797e8b5fb6109.svg';
-const imgDiamondTextTertiary = 'http://localhost:3845/assets/fc8aaa8a1e0e36bb1b05680977193c3c60870516.svg';
-const imgDiamondTextQuaternary = 'http://localhost:3845/assets/55794205006219e11958e82002621a26c9a75a78.svg';
 const imgDiamondMediaLeft = 'http://localhost:3845/assets/bb9d9dd13fdcc4e78ef8886b4114de7fb75d7586.png';
 const imgDiamondMediaRight = 'http://localhost:3845/assets/2f62e81abe58763bf6bdbf710843b3c886f19583.png';
-const imgAccentDiamond = 'http://localhost:3845/assets/04c5d53f375e593c269131982829bc5be36f8abf.svg';
 
 export interface SolutionThirdScreenTemplateProps {
-  arrowIconSrc?: string;
   backgroundVideoSrc?: string;
   gradientEndColor?: string;
   gradientStartColor?: string;
   mediaDiamondLeftSrc?: string;
   mediaDiamondRightSrc?: string;
-  solutionIconSrc?: string;
   solutionLabel?: string;
   subheadline?: string | string[];
   title?: string;
@@ -34,13 +36,11 @@ export interface SolutionThirdScreenTemplateProps {
 }
 
 export default function SolutionThirdScreenTemplate({
-  arrowIconSrc = imgArrowNarrowDown,
   backgroundVideoSrc = imgBackgroundVideo,
   gradientEndColor = '#8a0d71',
   gradientStartColor = '#a2115e',
   mediaDiamondLeftSrc = imgDiamondMediaLeft,
   mediaDiamondRightSrc = imgDiamondMediaRight,
-  solutionIconSrc = imgSolutionIcon,
   solutionLabel = 'Solution',
   subheadline = 'Rich media &\n cultural heritage',
   title = 'How Iron Mountain\nSmart Vault works:',
@@ -48,7 +48,7 @@ export default function SolutionThirdScreenTemplate({
   topRightLabel = 'Digital\ntransformation',
   bottomLeftLabel = 'Smart Vault\narchiving',
   bottomRightLabel = 'AI-powered\nsearch',
-  accentDiamondSrc = imgAccentDiamond,
+  accentDiamondSrc,
   onNavigateDown,
   onNavigateUp,
 }: SolutionThirdScreenTemplateProps) {
@@ -57,16 +57,19 @@ export default function SolutionThirdScreenTemplate({
       {/* Background video */}
       <div className="absolute left-0 top-0 h-[1291px] w-full">
         <div className="absolute inset-0 overflow-hidden">
-          <video
-            autoPlay
-            className="absolute left-[-30.42%] top-[-30.96%] h-[172.5%] w-[181.73%] object-cover"
-            controlsList="nodownload"
-            loop
-            muted
-            playsInline
-          >
-            <source src={backgroundVideoSrc} type="video/mp4" />
-          </video>
+          <div className="relative h-full w-full">
+            <video
+              autoPlay
+              className="absolute left-[-30.42%] top-[-30.96%] h-[172.5%] w-[181.73%] object-cover"
+              controlsList="nodownload"
+              loop
+              muted
+              playsInline
+            >
+              <source src={backgroundVideoSrc} type="video/mp4" />
+            </video>
+            <div className="pointer-events-none absolute inset-0 bg-black/20" />
+          </div>
         </div>
       </div>
 
@@ -85,9 +88,7 @@ export default function SolutionThirdScreenTemplate({
       {/* Solution label */}
       <div className="absolute left-[128.17px] top-[745.23px] flex items-center gap-[41px]">
         <div className="relative flex h-[100px] w-[100px] items-center justify-center">
-          <div className="relative size-full rotate-[225deg] scale-y-[-1]">
-            <img alt="" className="block h-full w-full object-contain" src={solutionIconSrc} />
-          </div>
+          <DiamondIcon aria-hidden="true" className="h-[90px] w-[90px] text-[#ededed]" focusable="false" strokeWidth={1.25} />
         </div>
         <h1 className="whitespace-nowrap text-[126.031px] font-normal leading-[1.3] tracking-[-6.3015px] text-[#ededed]">
           {solutionLabel}
@@ -102,44 +103,41 @@ export default function SolutionThirdScreenTemplate({
       {/* Diamond cluster */}
       <div className="absolute left-[240px] top-[1850px] h-[2500px] w-[1680px]">
         {/* Top-left text diamond */}
-        <Diamond
-          className="left-[0px] top-[0px]"
-          label={topLeftLabel}
-          outlineSrc={imgDiamondTextPrimary}
-          textColor="#ededed"
-        />
+        <Diamond className="left-[0px] top-[0px]" label={topLeftLabel} Outline={BlueDiamondThird} textColor="#ededed" />
         {/* Top-right text diamond */}
-        <Diamond
-          className="left-[900px] top-[450px]"
-          label={topRightLabel}
-          outlineSrc={imgDiamondTextSecondary}
-          textColor="#ededed"
-        />
+        <Diamond className="left-[900px] top-[450px]" label={topRightLabel} Outline={GreenDiamondThird} textColor="#ededed" />
         {/* Bottom-left text diamond */}
-        <Diamond
-          className="left-[450px] top-[900px]"
-          label={bottomLeftLabel}
-          outlineSrc={imgDiamondTextTertiary}
-          textColor="#ededed"
-        />
+        <Diamond className="left-[450px] top-[900px]" label={bottomLeftLabel} Outline={OrangeDiamondThird} textColor="#ededed" />
         {/* Bottom-right text diamond */}
         <Diamond
           className="left-[1050px] top-[1400px]"
           label={bottomRightLabel}
-          outlineSrc={imgDiamondTextQuaternary}
+          Outline={TealGradientDiamondThird}
           textColor="#ededed"
         />
 
         {/* Media diamonds */}
-        <MediaDiamond className="left-[620px] top-[1230px]" imageSrc={mediaDiamondLeftSrc} />
-        <MediaDiamond className="left-[1220px] top-[1730px]" imageSrc={mediaDiamondRightSrc} />
-        <MediaDiamond className="left-[1180px] top-[2360px]" imageSrc={accentDiamondSrc} />
+        <MediaDiamond
+          className="left-[620px] top-[1230px]"
+          fallback={<GreenDiamondThird2 aria-hidden="true" className="h-full w-full" focusable="false" />}
+          imageSrc={mediaDiamondLeftSrc}
+        />
+        <MediaDiamond
+          className="left-[1220px] top-[1730px]"
+          fallback={<BlueDiamondThird aria-hidden="true" className="h-full w-full" focusable="false" />}
+          imageSrc={mediaDiamondRightSrc}
+        />
+        <MediaDiamond
+          className="left-[1180px] top-[2360px]"
+          fallback={<OrangeDiamondThird2 aria-hidden="true" className="h-full w-full" focusable="false" />}
+          imageSrc={accentDiamondSrc}
+        />
       </div>
 
       {/* Navigation arrows */}
       <div
         aria-label="Previous"
-        className="absolute right-[120px] top-[1755px] flex h-[118px] w-[118px] -scale-y-100 items-center justify-center"
+        className="absolute right-[120px] top-[1755px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
@@ -150,11 +148,11 @@ export default function SolutionThirdScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img alt="Up" className="h-full w-full object-contain" src={arrowIconSrc} />
+        <ArrowUp aria-hidden="true" className="h-full w-full text-[#ffffff66]" focusable="false" strokeWidth={1.5} />
       </div>
       <div
         aria-label="Next"
-        className="absolute right-[120px] top-[1980px] flex h-[118px] w-[118px] items-center justify-center"
+        className="absolute right-[120px] top-[1980px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
@@ -165,24 +163,26 @@ export default function SolutionThirdScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img alt="Down" className="h-full w-full object-contain" src={arrowIconSrc} />
+        <ArrowDown aria-hidden="true" className="h-full w-full text-[#ffffff66]" focusable="false" strokeWidth={1.5} />
       </div>
     </div>
   );
 }
 
 type DiamondProps = {
+  Outline?: ComponentType<SVGProps<SVGSVGElement>>;
   className: string;
   label?: string;
-  outlineSrc: string;
   textColor?: string;
 };
 
-function Diamond({ className, label, outlineSrc, textColor = '#ededed' }: DiamondProps) {
+function Diamond({ Outline, className, label, textColor = '#ededed' }: DiamondProps) {
   return (
     <div className={`absolute ${className}`}>
       <div className="relative size-[666px]">
-        <img alt="" className="block h-full w-full object-contain" src={outlineSrc} />
+        {Outline ? (
+          <Outline aria-hidden="true" className="block h-full w-full object-contain" focusable="false" />
+        ) : null}
         <div className="absolute left-1/2 top-1/2 flex w-[320px] -translate-x-1/2 -translate-y-1/2 flex-col items-center text-center">
           <p className="text-[67px] font-normal leading-[1.4] tracking-[-3.3px]" style={{ color: textColor }}>
             {renderRegisteredMark(label)}
@@ -195,14 +195,19 @@ function Diamond({ className, label, outlineSrc, textColor = '#ededed' }: Diamon
 
 type MediaDiamondProps = {
   className: string;
-  imageSrc: string;
+  fallback?: ReactNode;
+  imageSrc?: string;
 };
 
-function MediaDiamond({ className, imageSrc }: MediaDiamondProps) {
+function MediaDiamond({ className, fallback, imageSrc }: MediaDiamondProps) {
   return (
     <div className={`absolute ${className}`}>
       <div className="relative size-[666px] rotate-[45deg] overflow-hidden rounded-[120px]">
-        <img alt="" className="h-full w-full -rotate-[45deg] object-cover" src={imageSrc} />
+        {imageSrc ? (
+          <img alt="" className="h-full w-full -rotate-[45deg] object-cover" src={imageSrc} />
+        ) : (
+          <div className="flex h-full w-full -rotate-[45deg] items-center justify-center">{fallback}</div>
+        )}
       </div>
     </div>
   );

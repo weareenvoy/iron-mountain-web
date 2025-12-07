@@ -1,14 +1,15 @@
 'use client';
 
+import { ArrowDown, ArrowUp, Diamond } from 'lucide-react';
+
+import GreenDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondFourth';
+import OrangeDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondFourth';
+import OrangeGradientDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/OrangeGradientDiamondFourth';
+
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/shadcn/accordion';
 import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
 
-const imgArrowNarrowDown = 'http://localhost:3845/assets/97f3177f28b72f83a66a31756f22508b23a74857.svg';
-const imgSolutionIcon = 'http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg';
 const imgBackgroundVideo = '/_videos/v1/a532f40a2a6848e2a80788002b6cb925a1f4c3c2';
-const imgDiamondOutline = 'http://localhost:3845/assets/b6b7c8b0e4847f57ed11a3ba8973033d75f33e5b.svg';
-const imgSmallDiamond = 'http://localhost:3845/assets/77d8f0b8981f64912b3150ef65754963f5f83b1c.png';
-const imgAccentDiamond = 'http://localhost:3845/assets/1ae6d770b01a8ff9a48c6b2c16233c6a44c060f7.svg';
 type AccordionEntry = {
   id: string;
   number: string;
@@ -20,14 +21,12 @@ type AccordionEntry = {
 
 export interface SolutionFourthScreenTemplateProps {
   accordionItems?: AccordionEntry[];
-  arrowIconSrc?: string;
   backgroundVideoSrc?: string;
   gradientEndColor?: string;
   gradientStartColor?: string;
   mediaDiamondOutlineSrc?: string;
   mediaDiamondSolidSrc?: string;
   accentDiamondSrc?: string;
-  solutionIconSrc?: string;
   solutionLabel?: string;
   subheadline?: string | string[];
   title?: string;
@@ -73,14 +72,12 @@ const colorTokens = {
 
 export default function SolutionFourthScreenTemplate({
   accordionItems = defaultAccordionItems,
-  arrowIconSrc = imgArrowNarrowDown,
   backgroundVideoSrc = imgBackgroundVideo,
   gradientEndColor = '#8a0d71',
   gradientStartColor = '#a2115e',
-  mediaDiamondOutlineSrc = imgDiamondOutline,
-  mediaDiamondSolidSrc = imgSmallDiamond,
-  accentDiamondSrc = imgAccentDiamond,
-  solutionIconSrc = imgSolutionIcon,
+  mediaDiamondOutlineSrc,
+  mediaDiamondSolidSrc,
+  accentDiamondSrc,
   solutionLabel = 'Solution',
   subheadline = 'IT assets &\n data centers',
   title = "Iron Mountain's Asset Lifecycle Management",
@@ -95,16 +92,19 @@ export default function SolutionFourthScreenTemplate({
       {/* Background video */}
       <div className="absolute left-0 top-0 h-[1291px] w-full">
         <div className="absolute inset-0 overflow-hidden">
-          <video
-            autoPlay
-            className="absolute left-[-30.42%] top-[-30.96%] h-[172.5%] w-[181.73%] object-cover"
-            controlsList="nodownload"
-            loop
-            muted
-            playsInline
-          >
-            <source src={backgroundVideoSrc} type="video/mp4" />
-          </video>
+          <div className="relative h-full w-full">
+            <video
+              autoPlay
+              className="absolute left-[-30.42%] top-[-30.96%] h-[172.5%] w-[181.73%] object-cover"
+              controlsList="nodownload"
+              loop
+              muted
+              playsInline
+            >
+              <source src={backgroundVideoSrc} type="video/mp4" />
+            </video>
+            <div className="pointer-events-none absolute inset-0 bg-black/20" />
+          </div>
         </div>
       </div>
 
@@ -122,9 +122,7 @@ export default function SolutionFourthScreenTemplate({
       {/* Solution label */}
       <div className="absolute left-[128.17px] top-[745.23px] flex items-center gap-[41px]">
         <div className="relative flex h-[100px] w-[100px] items-center justify-center">
-          <div className="relative size-full rotate-[225deg] scale-y-[-1]">
-            <img alt="" className="block h-full w-full object-contain" src={solutionIconSrc} />
-          </div>
+          <Diamond aria-hidden="true" className="h-[90px] w-[90px] text-[#ededed]" focusable="false" strokeWidth={1.25} />
         </div>
         <h1 className="whitespace-nowrap text-[126.031px] font-normal leading-[1.3] tracking-[-6.3015px] text-[#ededed]">
           {solutionLabel}
@@ -183,19 +181,31 @@ export default function SolutionFourthScreenTemplate({
 
       {/* Decorative diamonds */}
       <div className="pointer-events-none absolute left-[200px] top-[3600px] w-[700px]">
-        <img alt="" className="h-full w-full object-contain" src={mediaDiamondOutlineSrc} />
+        {mediaDiamondOutlineSrc ? (
+          <img alt="" className="h-full w-full object-contain" src={mediaDiamondOutlineSrc} />
+        ) : (
+          <GreenDiamondFourth aria-hidden="true" className="h-full w-full" focusable="false" />
+        )}
       </div>
       <div className="pointer-events-none absolute left-[890px] top-[3800px] w-[360px]">
-        <img alt="" className="h-full w-full object-contain" src={mediaDiamondSolidSrc} />
+        {mediaDiamondSolidSrc ? (
+          <img alt="" className="h-full w-full object-contain" src={mediaDiamondSolidSrc} />
+        ) : (
+          <OrangeDiamondFourth aria-hidden="true" className="h-full w-full" focusable="false" />
+        )}
       </div>
       <div className="pointer-events-none absolute left-[1280px] top-[4050px] w-[480px]">
-        <img alt="" className="h-full w-full object-contain" src={accentDiamondSrc} />
+        {accentDiamondSrc ? (
+          <img alt="" className="h-full w-full object-contain" src={accentDiamondSrc} />
+        ) : (
+          <OrangeGradientDiamondFourth aria-hidden="true" className="h-full w-full" focusable="false" />
+        )}
       </div>
 
       {/* Navigation arrows */}
       <div
         aria-label="Previous"
-        className="absolute right-[120px] top-[1755px] flex h-[118px] w-[118px] -scale-y-100 items-center justify-center"
+        className="absolute right-[120px] top-[1755px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
@@ -206,11 +216,11 @@ export default function SolutionFourthScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img alt="Up" className="h-full w-full object-contain" src={arrowIconSrc} />
+        <ArrowUp aria-hidden="true" className="h-full w-full text-[#ffffff66]" focusable="false" strokeWidth={1.5} />
       </div>
       <div
         aria-label="Next"
-        className="absolute right-[120px] top-[1980px] flex h-[118px] w-[118px] items-center justify-center"
+        className="absolute right-[120px] top-[1980px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
@@ -221,7 +231,7 @@ export default function SolutionFourthScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img alt="Down" className="h-full w-full object-contain" src={arrowIconSrc} />
+        <ArrowDown aria-hidden="true" className="h-full w-full text-[#ffffff66]" focusable="false" strokeWidth={1.5} />
       </div>
     </div>
   );
