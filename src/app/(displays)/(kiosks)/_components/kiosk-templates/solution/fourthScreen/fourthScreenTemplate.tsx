@@ -92,7 +92,10 @@ export default function SolutionFourthScreenTemplate({
       />
 
       {/* Subheadline */}
-      <div className="absolute left-[120px] top-[368px] -translate-y-full text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#ededed]">
+      <div
+        className="absolute left-[120px] top-[368px] -translate-y-full text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#ededed]"
+        style={{ top: '400px', width: '390px' }}
+      >
         {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
       </div>
 
@@ -141,10 +144,19 @@ export default function SolutionFourthScreenTemplate({
                   ? 'rounded-b-[50px]'
                   : 'rounded-none';
 
+            const prevPalette = index > 0 ? palettes[entries[index - 1]?.color ?? 'white'] : undefined;
+
             return (
-              <AccordionItem className={`border-none ${roundedClass} overflow-hidden`} key={item.id} value={item.id}>
+              <AccordionItem className={`relative border-none ${roundedClass} overflow-hidden`} key={item.id} value={item.id}>
+                {index > 0 ? (
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute left-0 right-0 top-0 h-[50px]"
+                    style={{ backgroundColor: prevPalette?.header, zIndex: 0 }}
+                  />
+                ) : null}
                 <AccordionTrigger
-                  className={`group/accordion-trigger flex h-[120px] min-h-[240px] items-center px-[80px] text-left text-[52px] leading-[1.4] tracking-[-2.6px] transition-none hover:no-underline focus-visible:outline-none ${triggerRoundedClass}`}
+                  className={`relative z-[1] group/accordion-trigger flex h-[120px] min-h-[240px] items-center px-[80px] text-left text-[52px] leading-[1.4] tracking-[-2.6px] transition-none hover:no-underline focus-visible:outline-none ${triggerRoundedClass}`}
                   indicator={<PlusMinusIcon color={palette.text} />}
                   style={{
                     backgroundColor: palette.header,
@@ -152,6 +164,8 @@ export default function SolutionFourthScreenTemplate({
                     borderBottomRightRadius: index === entries.length - 1 ? '50px' : undefined,
                     borderTopLeftRadius: '50px',
                     borderTopRightRadius: '50px',
+                    paddingBottom: '20px',
+                    paddingTop: '30px',
                     color: palette.text,
                   }}
                 >
@@ -168,7 +182,11 @@ export default function SolutionFourthScreenTemplate({
                     >
                       <ul className="space-y-[16px] text-[52px] leading-[1.4] tracking-[-2.6px]">
                         {item.contentList?.map((bullet) => (
-                          <li className="list-disc" key={bullet} style={{ marginInlineStart: '70px', marginBottom: '0px' }}>
+                          <li
+                            className="list-disc"
+                            key={bullet}
+                            style={{ marginInlineStart: '70px', marginBottom: '0px', paddingInlineStart: '15px' }}
+                          >
                             {renderRegisteredMark(bullet)}
                           </li>
                         ))}
@@ -239,7 +257,7 @@ export default function SolutionFourthScreenTemplate({
 
 function PlusMinusIcon({ color }: { color: string }) {
   return (
-    <span aria-hidden className="relative block h-[32px] w-[32px]" style={{ color }}>
+    <span aria-hidden className="relative block h-[72px] w-[72px]" style={{ color }}>
       <Minus
         className="absolute inset-0 h-full w-full opacity-0 transition-opacity group-data-[state=open]/accordion-trigger:opacity-100"
         strokeWidth={1.5}
