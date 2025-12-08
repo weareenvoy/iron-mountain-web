@@ -1,4 +1,8 @@
 'use client';
+
+import challengeContent from '@public/api/kiosk-1-challenges.json';
+import solutionContent from '@public/api/kiosk-1-solutions.json';
+import valueContent from '@public/api/kiosk-1-values.json';
 import { useEffect, useState, type ReactElement } from 'react';
 import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
@@ -29,43 +33,38 @@ import HardCodedKiosk1ThirdScreenTemplate, {
 import SolutionFirstScreenTemplate, {
   type SolutionFirstScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/firstScreen/firstScreenTemplate';
-import SolutionSecondScreenTemplate, {
-  type SolutionSecondScreenTemplateProps,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/secondScreen/secondScreenTemplate';
-import SolutionThirdScreenTemplate, {
-  type SolutionThirdScreenTemplateProps,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/thirdScreen/thirdScreenTemplate';
 import SolutionFourthScreenTemplate, {
   type SolutionFourthScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/fourthScreen/fourthScreenTemplate';
+import SolutionSecondScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/secondScreen/secondScreenTemplate';
+import SolutionThirdScreenTemplate, {
+  type SolutionThirdScreenTemplateProps,
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/thirdScreen/thirdScreenTemplate';
 import ValueCarouselTemplate, {
   type ValueCarouselTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueCarouselTemplate';
 import hardCodedContent from '../hardCoded.json';
-import challengeContent from '../challenges.json';
-import solutionContent from '../solutions.json';
-import valueContent from '../values.json';
 // import styles from './kiosk-1.module.css';
 
-type Slide = { hasCarousel?: boolean; id: string; render: () => ReactElement; title: string };
+type Slide = { id: string; render: () => ReactElement; title: string };
+
+type SolutionSlidesConfig = {
+  firstScreen?: SolutionFirstScreenTemplateProps;
+  fourthScreen?: SolutionFourthScreenTemplateProps;
+  secondScreen?: Parameters<typeof SolutionSecondScreenTemplate>[0];
+  secondScreens?: Parameters<typeof SolutionSecondScreenTemplate>[0][];
+  thirdScreen?: SolutionThirdScreenTemplateProps;
+};
+
+type ValueSlidesConfig = {
+  valueScreens?: Omit<ValueCarouselTemplateProps, 'onNavigateDown' | 'onNavigateUp'>[];
+};
 
 type ChallengeSlidesConfig = {
   firstScreen: FirstScreenTemplateProps;
   initialScreen: InitialScreenTemplateProps;
   secondScreen: SecondScreenTemplateProps;
   thirdScreen: ThirdScreenTemplateProps;
-};
-
-type SolutionSlidesConfig = {
-  firstScreen?: SolutionFirstScreenTemplateProps;
-  secondScreen?: SolutionSecondScreenTemplateProps;
-  secondScreens?: SolutionSecondScreenTemplateProps[];
-  thirdScreen?: SolutionThirdScreenTemplateProps;
-  fourthScreen?: SolutionFourthScreenTemplateProps;
-};
-
-type ValueSlidesConfig = {
-  valueScreens?: Omit<ValueCarouselTemplateProps, 'onNavigateDown' | 'onNavigateUp'>[];
 };
 
 type HardCodedSlidesConfig = {
@@ -75,6 +74,9 @@ type HardCodedSlidesConfig = {
   secondScreens?: HardCodedKiosk1SecondScreenTemplateProps[];
   thirdScreen?: HardCodedKiosk1ThirdScreenTemplateProps;
 };
+
+const formatTitle = (value: string | string[] | undefined, fallback: string) =>
+  Array.isArray(value) ? value.join(' ') : (value ?? fallback);
 
 export default function Kiosk1View() {
   const controller: Controller = useKioskController();
@@ -277,7 +279,7 @@ export default function Kiosk1View() {
       goTo: (i: number) => {
         setTopIndex(Math.max(0, Math.min(i, slides.length - 1)));
         return true;
-      }
+      },
     });
     return () => controller.setRootHandlers(null);
   }, [controller]);

@@ -1,3 +1,9 @@
+import { ArrowDown, ArrowUp } from 'lucide-react';
+import Image from 'next/image';
+import { DEFAULT_KIOSK_ID, type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
+import BlueDiamondSecond from '@/components/ui/icons/Kiosks/Solutions/BlueDiamondSecond';
+import GreenDiamondSecond from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondSecond';
+import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
 import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
 
 type StepConfig = {
@@ -5,27 +11,20 @@ type StepConfig = {
   label?: string;
 };
 
-const imgArrowNarrowDown = 'http://localhost:3845/assets/4929e813dc10046943550e22e4bb36d08c29d8d5.svg';
-const imgSolutionIcon = 'http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg';
-const imgDiamondFilled = 'http://localhost:3845/assets/59d9fd95c90c1779271217ea48bc71a0ceb142f8.png';
-const imgDiamondOutlineLg = 'http://localhost:3845/assets/a9778f04639430558266e9867e209a1fd4e23b6f.svg';
-const imgDiamondOutlineSm = 'http://localhost:3845/assets/8b08f30de40cbe05fa92227a40f251d17baf8ca0.svg';
-const imgDiamondOutlineAccent = 'http://localhost:3845/assets/8b08f30de40cbe05fa92227a40f251d17baf8ca0.svg';
-const imgHeroDiamond = 'http://localhost:3845/assets/bb9d9dd13fdcc4e78ef8886b4114de7fb75d7586.png';
+const imgHeroDiamond = '/images/kiosks/kiosk2/02-solution/Solution-Image2-Diamond.png';
 
-export interface SolutionSecondScreenTemplateProps {
-  accentDiamondOutlineSrc?: string;
-  arrowIconSrc?: string;
-  filledDiamondSrc?: string;
+export type SolutionSecondScreenTemplateProps = Readonly<
+  SolutionSecondScreenCoreProps & SolutionSecondScreenStepsProps
+>;
+
+type SolutionSecondScreenCoreProps = {
   gradientEndColor?: string;
   gradientStartColor?: string;
   heroImageAlt?: string;
   heroImageSrc?: string;
-  largeDiamondOutlineSrc?: string;
-  mediumDiamondOutlineSrc?: string;
+  kioskId?: KioskId;
   onNavigateDown?: () => void;
   onNavigateUp?: () => void;
-  solutionIconSrc?: string;
   solutionLabel?: string;
   stepFourDescription?: string;
   stepFourLabel?: string;
@@ -35,118 +34,115 @@ export interface SolutionSecondScreenTemplateProps {
   stepThreeLabel?: string;
   stepTwoDescription?: string;
   stepTwoLabel?: string;
-  steps?: StepConfig[];
-  stepsDividerHeights?: number[];
   subheadline?: string | string[];
   title?: string | string[];
-}
+};
 
-export default function SolutionSecondScreenTemplate({
-  accentDiamondOutlineSrc = imgDiamondOutlineAccent,
-  arrowIconSrc = imgArrowNarrowDown,
-  filledDiamondSrc = imgDiamondFilled,
+type SolutionSecondScreenStepsProps = {
+  steps?: StepConfig[];
+  stepsDividerHeights?: number[];
+};
+
+const SolutionSecondScreenTemplate = ({
   gradientEndColor = '#8a0d71',
   gradientStartColor = '#a2115e',
   heroImageAlt = 'Solution highlight',
   heroImageSrc = imgHeroDiamond,
-  largeDiamondOutlineSrc = imgDiamondOutlineLg,
-  mediumDiamondOutlineSrc = imgDiamondOutlineSm,
+  kioskId = DEFAULT_KIOSK_ID,
   onNavigateDown,
   onNavigateUp,
-  solutionIconSrc = imgSolutionIcon,
   solutionLabel = 'Solution',
   stepFourDescription,
   stepFourLabel,
   stepOneDescription = 'Improved logistical costs due to extensive global footprint and in-house logistics',
   stepOneLabel = '01.',
+  steps,
+  stepsDividerHeights,
   stepThreeDescription = 'Helped maintain consistency and compliance across locations in North America, Europe, and APAC',
   stepThreeLabel = '03.',
   stepTwoDescription = 'Optimized delivery and transparency with end-to-end chain of custody, visibility through technology integration, and comprehensive reporting',
   stepTwoLabel = '02.',
-  steps,
-  stepsDividerHeights,
   subheadline = ['IT assets &', 'data centers'],
   title = 'Together, we:',
-}: SolutionSecondScreenTemplateProps) {
+}: SolutionSecondScreenTemplateProps) => {
   const legacySteps: StepConfig[] = [
-    { label: stepOneLabel, description: stepOneDescription },
-    { label: stepTwoLabel, description: stepTwoDescription },
-    { label: stepThreeLabel, description: stepThreeDescription },
+    { description: stepOneDescription, label: stepOneLabel },
+    { description: stepTwoDescription, label: stepTwoLabel },
+    { description: stepThreeDescription, label: stepThreeLabel },
   ];
 
   if (stepFourLabel || stepFourDescription) {
-    legacySteps.push({ label: stepFourLabel ?? '04.', description: stepFourDescription });
+    legacySteps.push({ description: stepFourDescription, label: stepFourLabel ?? '04.' });
   }
 
-  const timelineSteps = (steps?.length ? steps : legacySteps).filter(
-    (entry): entry is Required<StepConfig> => Boolean(entry.label && entry.description),
+  const timelineSteps = (steps?.length ? steps : legacySteps).filter((entry): entry is Required<StepConfig> =>
+    Boolean(entry.label && entry.description)
   );
 
   const dividerHeights =
     stepsDividerHeights && stepsDividerHeights.length >= timelineSteps.length - 1
       ? stepsDividerHeights
-      : [560, 320, 320];
+      : [768, 250, 250];
 
   const getOpacityClass = (index: number) => {
     if (index === 0) return 'opacity-100';
-    if (index === 1) return 'opacity-60';
+    if (index === 1) return 'opacity-50';
     return 'opacity-20';
   };
 
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-hidden bg-black" data-node-id="5168:9473">
+    <div
+      className="group/kiosk relative flex h-screen w-full flex-col overflow-hidden bg-black"
+      data-kiosk={kioskId}
+      data-node-id="5168:9473"
+    >
       {/* Gradient backdrop */}
       <div
-        className="absolute left-0 top-[-296px] h-[5416px] w-full rounded-t-[100px]"
+        className="absolute top-[-296px] left-0 h-[5416px] w-full rounded-t-[100px]"
         style={{ background: `linear-gradient(to bottom, ${gradientStartColor} 0%, ${gradientEndColor} 99%)` }}
       />
 
       {/* Decorative diamonds */}
-      <div className="pointer-events-none absolute left-[1210px] top-[1180px] h-[1330px] w-[1330px] rotate-[225deg]">
-        <img alt="" className="h-full w-full object-contain" src={largeDiamondOutlineSrc} />
+      <div className="pointer-events-none absolute top-[1100px] left-[-120px] z-[1] h-[1790px] w-[1790px]">
+        <BlueDiamondSecond aria-hidden="true" className="h-full w-full" focusable="false" />
       </div>
-      <div className="pointer-events-none absolute left-[1220px] top-[2100px] h-[660px] w-[660px] rotate-[225deg]">
-        <img alt="" className="h-full w-full object-contain" src={mediumDiamondOutlineSrc} />
-      </div>
-      <div className="pointer-events-none absolute left-[520px] top-[1500px] h-[660px] w-[660px] rotate-[225deg]">
-        <img alt="" className="h-full w-full object-contain" src={filledDiamondSrc} />
-      </div>
-      <div className="pointer-events-none absolute left-[1590px] top-[1420px] h-[660px] w-[660px] rotate-[225deg]">
-        <img alt="" className="h-full w-full object-contain" src={accentDiamondOutlineSrc} />
+      <div className="pointer-events-none absolute top-[1065px] left-[1325px] z-[1] h-[800px] w-[800px]">
+        <GreenDiamondSecond aria-hidden="true" className="h-full w-full" focusable="false" />
       </div>
 
       {/* Subheadline */}
-      <div className="absolute left-[120px] top-[368px] -translate-y-full text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#ededed]">
+      <div className="absolute top-[245px] left-[120px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
         {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
       </div>
 
       {/* Solution label */}
-      <div className="absolute left-[128px] top-[745px] flex items-center gap-[41px]">
-        <div className="relative flex h-[100px] w-[100px] items-center justify-center">
-          <div className="relative size-full rotate-[225deg] scale-y-[-1]">
-            <img alt="" className="block h-full w-full object-contain" src={solutionIconSrc} />
-          </div>
+      <div className="absolute top-[745px] left-[128px] flex items-center gap-[41px]">
+        <div className="relative flex h-[200px] w-[200px] items-center justify-center" style={{ left: -55, top: 25 }}>
+          <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
         </div>
-        <h1 className="whitespace-nowrap text-[126px] font-normal leading-[1.3] tracking-[-6.3px] text-[#ededed]">
+        <h1
+          className="text-[126px] leading-[1.3] font-normal tracking-[-6.3px] whitespace-nowrap text-[#ededed]"
+          style={{ left: -90, position: 'relative', top: 30 }}
+        >
           {renderRegisteredMark(solutionLabel)}
         </h1>
       </div>
 
       {/* Title */}
-      <p className="absolute left-[240px] top-[1568px] text-[100px] font-normal leading-[1.3] tracking-[-5px] text-white">
+      <p className="absolute top-[1600px] left-[240px] z-[1] text-[100px] leading-[1.3] font-normal tracking-[-5px] text-white">
         {renderRegisteredMark(title)}
       </p>
 
       {/* Timeline with steps */}
-      <div className="absolute left-[240px] top-[1855px] flex w-[1200px] flex-col gap-[80px] text-[60px] leading-[1.4] tracking-[-3px] text-[#ededed]">
+      <div className="absolute top-[1890px] left-[240px] z-[2] flex w-[960px] flex-col gap-[60px] text-[60px] leading-[1.4] tracking-[-3px] text-[#ededed]">
         {timelineSteps.map((step, index) => (
           <div key={`${step.label}-${index}`}>
-            <div className={`flex gap-10 ${getOpacityClass(index)}`}>
+            <div className={`flex gap-[10px] ${getOpacityClass(index)}`}>
               <p className="w-[120px]">{renderRegisteredMark(step.label)}</p>
-              <p className="w-[840px]">{renderRegisteredMark(step.description)}</p>
+              <p className="w-[760px]">{renderRegisteredMark(step.description)}</p>
             </div>
             {index < timelineSteps.length - 1 ? (
-              <div className="ml-[80px] mt-[30px]">
+              <div className="mt-[30px] ml-[140px]">
                 <div
                   className="border-l border-dashed border-[#ededed]/60"
                   style={{ height: `${dividerHeights[index] ?? 280}px` }}
@@ -158,46 +154,45 @@ export default function SolutionSecondScreenTemplate({
       </div>
 
       {/* Hero media diamond */}
-      <div className="absolute left-[1250px] top-[1950px]">
-        <div className="h-[360px] w-[360px] rotate-[45deg] overflow-hidden rounded-[80px] shadow-[0_30px_80px_rgba(0,0,0,0.4)]">
-          <img alt={heroImageAlt} className="h-full w-full -rotate-[45deg] object-cover" src={heroImageSrc} />
+      <div className="absolute top-[2180px] left-[1500px] z-[2]">
+        <div className="relative top-[-90px] left-[-180px] h-[800px] w-[800px] rotate-[45deg] overflow-hidden rounded-[80px]">
+          <Image alt={heroImageAlt} className="-rotate-[45deg] object-cover" fill sizes="800px" src={heroImageSrc} />
         </div>
       </div>
 
       {/* Timeline arrows */}
-      <div className="absolute right-[120px] top-[1755px] flex h-[118px] w-[118px] -scale-y-100 items-center justify-center">
-        <button
-          aria-label="Previous"
-          className="h-full w-full"
-          onClick={onNavigateUp}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-              event.preventDefault();
-              onNavigateUp?.();
-            }
-          }}
-          type="button"
-        >
-          <img alt="Up" className="h-full w-full object-contain" src={arrowIconSrc} />
-        </button>
+      <div
+        aria-label="Previous"
+        className="absolute top-[1755px] right-[120px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
+        onKeyDown={event => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            onNavigateUp?.();
+          }
+        }}
+        onPointerDown={() => onNavigateUp?.()}
+        role="button"
+        tabIndex={0}
+      >
+        <ArrowUp aria-hidden="true" className="h-full w-full text-[#ffffff66]" focusable="false" strokeWidth={1.5} />
       </div>
-      <div className="absolute right-[120px] top-[1980px] flex h-[118px] w-[118px] items-center justify-center">
-        <button
-          aria-label="Next"
-          className="h-full w-full"
-          onClick={onNavigateDown}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-              event.preventDefault();
-              onNavigateDown?.();
-            }
-          }}
-          type="button"
-        >
-          <img alt="Down" className="h-full w-full object-contain" src={arrowIconSrc} />
-        </button>
+      <div
+        aria-label="Next"
+        className="absolute top-[1980px] right-[120px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
+        onKeyDown={event => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            onNavigateDown?.();
+          }
+        }}
+        onPointerDown={() => onNavigateDown?.()}
+        role="button"
+        tabIndex={0}
+      >
+        <ArrowDown aria-hidden="true" className="h-full w-full text-[#ffffff66]" focusable="false" strokeWidth={1.5} />
       </div>
     </div>
   );
-}
+};
 
+export default SolutionSecondScreenTemplate;

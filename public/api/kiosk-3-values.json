@@ -1,0 +1,117 @@
+{
+  "valueScreens": [
+    {
+      "carouselId": "kiosk-3-value-overview",
+      "description": "Through its collaboration with Iron Mountain, a global healthcare customer improved compliance, visibility, and consistency in IT asset disposition across worldwide locations, while maximizing value recovery from retired end-user devices and data center components.",
+      "eyebrow": ["Information", "& data lifecycle"],
+      "headline": "Expanding possibilities",
+      "heroVideoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/03+-+Value/Value-header.webm",
+      "labelIconSrc": "http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg",
+      "labelText": "Value",
+      "slides": [
+        {
+          "badgeLabel": "Operational · Economic · Strategic",
+          "diamondCards": [
+            {
+              "color": "#f26522",
+              "label": "Strategic benefits",
+              "textColor": "#4a154b"
+            },
+            {
+              "color": "#8a0d71",
+              "label": "Operational benefits"
+            },
+            {
+              "color": "#1b75bc",
+              "label": "Economic benefits"
+            }
+          ],
+          "id": "value-trio-overview"
+        }
+      ]
+    },
+    {
+      "carouselId": "kiosk-3-value-carousel",
+      "description": "Through its collaboration with Iron Mountain, a global healthcare customer improved compliance, visibility, and consistency in IT asset disposition across worldwide locations, while maximizing value recovery from retired end-user devices and data center components.",
+      "eyebrow": ["Information", "& data lifecycle"],
+      "headline": "Expanding possibilities",
+      "heroVideoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/03+-+Value/Value-header.webm",
+      "labelIconSrc": "http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg",
+      "labelText": "Value",
+      "slides": [
+        {
+          "badgeLabel": "Operational benefits",
+          "bullets": [
+            "Improved accessibility and security of the museum’s assets.",
+            "Simplified, modern media access with digitized workflows available instantly from anywhere.",
+            "Post-production workflows include automation and annotation support for a digital preservation platform."
+          ],
+          "diamondCards": [
+            {
+              "color": "#f26522",
+              "label": "",
+              "textColor": "#4a154b"
+            },
+            {
+              "color": "#1b75bc",
+              "label": "Economic benefits"
+            },
+            {
+              "color": "#8a0d71",
+              "label": "Operational benefits"
+            }
+          ],
+          "id": "value-operational"
+        },
+        {
+          "badgeLabel": "Economic benefits",
+          "bullets": [
+            "Enabled new licensing opportunities for archived performances.",
+            "Enhanced licensing potential with multi-angle, high-resolution capture ready for partners.",
+            "Created repeatable revenue streams through curated content packages."
+          ],
+          "diamondCards": [
+            {
+              "color": "#8a0d71",
+              "label": ""
+            },
+            {
+              "color": "#f26522",
+              "label": "",
+              "textColor": "#4a154b"
+            },
+            {
+              "color": "#1b75bc",
+              "label": "Economic benefits"
+            }
+          ],
+          "id": "value-economic"
+        },
+        {
+          "badgeLabel": "Strategic benefits",
+          "bullets": [
+            "Safely archived and protected while enhancements are applied to the collection.",
+            "Positioned the museum for future innovation through trusted digital preservation pipelines.",
+            "Equipped administrators with advanced discovery tools to craft new storytelling moments."
+          ],
+          "diamondCards": [
+            {
+              "color": "#1b75bc",
+              "label": ""
+            },
+            {
+              "color": "#8a0d71",
+              "label": ""
+            },
+            {
+              "color": "#f26522",
+              "label": "Strategic benefits",
+              "textColor": "#4a154b"
+            }
+          ],
+          "id": "value-strategic"
+        }
+      ]
+    }
+  ]
+}

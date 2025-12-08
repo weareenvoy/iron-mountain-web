@@ -1,180 +1,202 @@
 'use client';
 
+import { ArrowDown, ArrowUp, Minus, Plus } from 'lucide-react';
+import Image from 'next/image';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/shadcn/accordion';
+import GreenDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondFourth';
+import OrangeDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondFourth';
+import OrangeGradientDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/OrangeGradientDiamondFourth';
+import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
 import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
 
-const imgArrowNarrowDown = 'http://localhost:3845/assets/97f3177f28b72f83a66a31756f22508b23a74857.svg';
-const imgSolutionIcon = 'http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg';
-const imgBackgroundVideo = '/_videos/v1/a532f40a2a6848e2a80788002b6cb925a1f4c3c2';
-const imgDiamondOutline = 'http://localhost:3845/assets/b6b7c8b0e4847f57ed11a3ba8973033d75f33e5b.svg';
-const imgSmallDiamond = 'http://localhost:3845/assets/77d8f0b8981f64912b3150ef65754963f5f83b1c.png';
-const imgAccentDiamond = 'http://localhost:3845/assets/1ae6d770b01a8ff9a48c6b2c16233c6a44c060f7.svg';
+type AccordionColor = 'blue' | 'lightBlue' | 'navy' | 'white';
+
 type AccordionEntry = {
+  color?: AccordionColor;
+  contentList?: string[];
+  expanded?: boolean;
   id: string;
   number: string;
   title: string;
-  color?: 'white' | 'lightBlue' | 'blue' | 'navy';
-  contentList?: string[];
-  expanded?: boolean;
 };
 
-export interface SolutionFourthScreenTemplateProps {
+type PaletteConfig = {
+  body: string;
+  header: string;
+  text: string;
+};
+
+const palettes: Record<AccordionColor, PaletteConfig> = {
+  blue: {
+    body: '#1b75bc',
+    header: '#1b75bc',
+    text: '#ededed',
+  },
+  lightBlue: {
+    body: '#6dcff6',
+    header: '#6dcff6',
+    text: '#14477d',
+  },
+  navy: {
+    body: '#14477d',
+    header: '#14477d',
+    text: '#ededed',
+  },
+  white: {
+    body: '#ededed',
+    header: '#ededed',
+    text: '#14477d',
+  },
+} as const;
+
+const DEFAULT_PHOTO_DIAMOND_SRC = '/images/kiosks/kiosk3/02-solution/Solution-Image2-Diamond.png';
+
+const defaultAccordionItems: AccordionEntry[] = [];
+
+export type SolutionFourthScreenTemplateProps = Readonly<{
+  accentDiamondSrc?: string;
   accordionItems?: AccordionEntry[];
-  arrowIconSrc?: string;
-  backgroundVideoSrc?: string;
   gradientEndColor?: string;
   gradientStartColor?: string;
   mediaDiamondOutlineSrc?: string;
   mediaDiamondSolidSrc?: string;
-  accentDiamondSrc?: string;
-  solutionIconSrc?: string;
+  onNavigateDown?: () => void;
+  onNavigateUp?: () => void;
   solutionLabel?: string;
   subheadline?: string | string[];
   title?: string;
-  onNavigateDown?: () => void;
-  onNavigateUp?: () => void;
-}
+}>;
 
-const defaultAccordionItems: AccordionEntry[] = [
-  {
-    color: 'white',
-    id: 'item-1',
-    number: '01.',
-    title: 'Device retrieval and redeployment services',
-  },
-  {
-    color: 'lightBlue',
-    id: 'item-2',
-    number: '02.',
-    title: 'IT asset disposition (ITAD) for end-user devices',
-  },
-  {
-    color: 'blue',
-    contentList: ['Data destruction', 'Flexible data sanitization', 'Secure media destruction'],
-    expanded: true,
-    id: 'item-3',
-    number: '03.',
-    title: 'Data center decommissioning & ITAD',
-  },
-  {
-    color: 'navy',
-    id: 'item-4',
-    number: '04.',
-    title: 'Decommissioning and logistics',
-  },
-];
-
-const colorTokens = {
-  white: { header: '#ededed', text: '#14477d', plus: '#14477d', body: '#ededed' },
-  lightBlue: { header: '#6dcff6', text: '#14477d', plus: '#14477d', body: '#6dcff6' },
-  blue: { header: '#1b75bc', text: '#ededed', plus: '#ededed', body: '#1b75bc' },
-  navy: { header: '#14477d', text: '#ededed', plus: '#ededed', body: '#14477d' },
-} as const;
-
-export default function SolutionFourthScreenTemplate({
+const SolutionFourthScreenTemplate = ({
+  accentDiamondSrc,
   accordionItems = defaultAccordionItems,
-  arrowIconSrc = imgArrowNarrowDown,
-  backgroundVideoSrc = imgBackgroundVideo,
   gradientEndColor = '#8a0d71',
   gradientStartColor = '#a2115e',
-  mediaDiamondOutlineSrc = imgDiamondOutline,
-  mediaDiamondSolidSrc = imgSmallDiamond,
-  accentDiamondSrc = imgAccentDiamond,
-  solutionIconSrc = imgSolutionIcon,
+  mediaDiamondOutlineSrc,
+  mediaDiamondSolidSrc = DEFAULT_PHOTO_DIAMOND_SRC,
+  onNavigateDown,
+  onNavigateUp,
   solutionLabel = 'Solution',
   subheadline = 'IT assets &\n data centers',
   title = "Iron Mountain's Asset Lifecycle Management",
-  onNavigateDown,
-  onNavigateUp,
-}: SolutionFourthScreenTemplateProps) {
+}: SolutionFourthScreenTemplateProps) => {
   const entries = accordionItems.length ? accordionItems : defaultAccordionItems;
-  const defaultValue = entries.find((item) => item.expanded)?.id ?? entries[0]?.id ?? 'item-1';
 
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden bg-black" data-node-id="5168:10496">
-      {/* Background video */}
-      <div className="absolute left-0 top-0 h-[1291px] w-full">
-        <div className="absolute inset-0 overflow-hidden">
-          <video
-            autoPlay
-            className="absolute left-[-30.42%] top-[-30.96%] h-[172.5%] w-[181.73%] object-cover"
-            controlsList="nodownload"
-            loop
-            muted
-            playsInline
-          >
-            <source src={backgroundVideoSrc} type="video/mp4" />
-          </video>
-        </div>
-      </div>
-
-      {/* Gradient body */}
+      {/* Background gradient */}
       <div
-        className="absolute left-0 top-[-296px] h-[5416px] w-full rounded-t-[100px]"
+        className="absolute top-0 left-0 h-[5120px] w-full"
         style={{ background: `linear-gradient(to bottom, ${gradientStartColor} 0%, ${gradientEndColor} 99%)` }}
       />
 
       {/* Subheadline */}
-      <div className="absolute left-[120px] top-[368px] -translate-y-full text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#ededed]">
+      <div
+        className="absolute top-[368px] left-[120px] -translate-y-full text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed]"
+        style={{ top: '400px', width: '390px' }}
+      >
         {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
       </div>
 
       {/* Solution label */}
-      <div className="absolute left-[128.17px] top-[745.23px] flex items-center gap-[41px]">
-        <div className="relative flex h-[100px] w-[100px] items-center justify-center">
-          <div className="relative size-full rotate-[225deg] scale-y-[-1]">
-            <img alt="" className="block h-full w-full object-contain" src={solutionIconSrc} />
-          </div>
+      <div
+        className="absolute top-[790px] left-[140px] flex items-center gap-[41px]"
+        style={{ left: '140px', top: '790px' }}
+      >
+        <div className="relative flex h-[200px] w-[200px] items-center justify-center" style={{ left: -55, top: -25 }}>
+          <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
         </div>
-        <h1 className="whitespace-nowrap text-[126.031px] font-normal leading-[1.3] tracking-[-6.3015px] text-[#ededed]">
+        <h1
+          className="text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]"
+          style={{ left: '-100px', position: 'relative', top: '-20px' }}
+        >
           {solutionLabel}
         </h1>
       </div>
 
       {/* Title */}
-      <div className="absolute left-[240px] top-[1428px] w-[1271px]">
-        <p className="text-[100px] font-normal leading-[1.3] tracking-[-5px] text-[#ededed] whitespace-pre-line">
+      <div className="absolute top-[1260px] left-[240px] w-[1300px]" style={{ top: '1260px', width: '1300px' }}>
+        <p className="text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]">
           {renderRegisteredMark(title)}
         </p>
       </div>
 
-      {/* Accordion */}
-      <div className="absolute left-[240px] top-[1820px] w-[1379px]">
-        <Accordion collapsible defaultValue={defaultValue} type="single">
-          {entries.map((item) => {
-            const palette = colorTokens[item.color ?? 'white'];
+      {/* Solution cards */}
+      <div className="absolute top-[1770px] left-[240px] w-[1379px] rounded-[80px] shadow-[0_20px_80px_rgba(0,0,0,0.25)]">
+        <Accordion
+          className="space-y-0 overflow-hidden rounded-[80px]"
+          collapsible
+          defaultValue={entries.find(entry => entry.expanded)?.id ?? entries[0]?.id ?? 'item-1'}
+          style={{ backgroundColor: '#ededed' }}
+          type="single"
+        >
+          {entries.map((item, index) => {
+            const palette = palettes[item.color ?? 'white'];
+            const hasContent = Boolean(item.contentList?.length);
+            const roundedClass =
+              index === 0 ? 'rounded-t-[80px]' : index === entries.length - 1 ? 'rounded-b-[80px]' : 'rounded-none';
+            const triggerRoundedClass =
+              index === 0 ? 'rounded-t-[50px]' : index === entries.length - 1 ? 'rounded-b-[50px]' : 'rounded-none';
+
+            const prevPalette = index > 0 ? palettes[entries[index - 1]?.color ?? 'white'] : undefined;
+
             return (
-              <AccordionItem key={item.id} value={item.id} className="border-none">
-                <div className="flex flex-col gap-4">
-                  <AccordionTrigger
-                    className="rounded-[64px] px-[80px] py-[40px] text-left text-[52px] transition-none"
-                    indicator={<PlusMinusIcon color={palette.plus} />}
-                    style={{ backgroundColor: palette.header, color: palette.text }}
-                  >
-                    <div className="flex w-full items-center justify-between gap-6">
-                      <div className="flex flex-col gap-0 leading-[1.4] tracking-[-2.6px] text-current">
-                        <span>{item.number}</span>
-                        <span>{renderRegisteredMark(item.title)}</span>
-                      </div>
+              <AccordionItem
+                className={`relative overflow-hidden border-none ${roundedClass}`}
+                key={item.id}
+                value={item.id}
+              >
+                {index > 0 ? (
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute top-0 right-0 left-0 h-[50px]"
+                    style={{ backgroundColor: prevPalette?.header, zIndex: 0 }}
+                  />
+                ) : null}
+                <AccordionTrigger
+                  className={`group/accordion-trigger relative z-[1] flex h-[120px] min-h-[240px] items-center px-[80px] text-left text-[52px] leading-[1.4] tracking-[-2.6px] transition-none hover:no-underline focus-visible:outline-none ${triggerRoundedClass}`}
+                  indicator={<PlusMinusIcon color={palette.text} />}
+                  style={{
+                    backgroundColor: palette.header,
+                    borderBottomLeftRadius: index === entries.length - 1 ? '50px' : undefined,
+                    borderBottomRightRadius: index === entries.length - 1 ? '50px' : undefined,
+                    borderTopLeftRadius: '50px',
+                    borderTopRightRadius: '50px',
+                    color: palette.text,
+                    paddingBottom: '20px',
+                    paddingTop: '30px',
+                  }}
+                >
+                  <div className="flex flex-1 items-center gap-[40px]">
+                    <span>{renderRegisteredMark(item.number)}</span>
+                    <span className="text-left">{renderRegisteredMark(item.title)}</span>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="[&>div]:pb-0">
+                  {hasContent ? (
+                    <div
+                      className="px-[80px] pt-[50px] pb-[120px] pl-[218px]"
+                      style={{
+                        backgroundColor: palette.body,
+                        color: palette.text,
+                        paddingLeft: '210px',
+                        paddingTop: '35px',
+                      }}
+                    >
+                      <ul className="space-y-[16px] text-[52px] leading-[1.4] tracking-[-2.6px]">
+                        {item.contentList?.map(bullet => (
+                          <li
+                            className="list-disc"
+                            key={bullet}
+                            style={{ marginBottom: '0px', marginInlineStart: '70px', paddingInlineStart: '15px' }}
+                          >
+                            {renderRegisteredMark(bullet)}
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-                  </AccordionTrigger>
-                  {item.contentList && (
-                    <AccordionContent>
-                      <div
-                        className="rounded-[48px] px-[80px] py-[40px]"
-                        style={{ backgroundColor: palette.body }}
-                      >
-                        <ul className="list-disc space-y-3 text-[48px] leading-[1.4] tracking-[-2px]" style={{ color: palette.text }}>
-                          {item.contentList.map((bullet) => (
-                            <li key={bullet} className="ms-8">
-                              {renderRegisteredMark(bullet)}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </AccordionContent>
-                  )}
-                </div>
+                  ) : null}
+                </AccordionContent>
               </AccordionItem>
             );
           })}
@@ -182,21 +204,55 @@ export default function SolutionFourthScreenTemplate({
       </div>
 
       {/* Decorative diamonds */}
-      <div className="pointer-events-none absolute left-[200px] top-[3600px] w-[700px]">
-        <img alt="" className="h-full w-full object-contain" src={mediaDiamondOutlineSrc} />
-      </div>
-      <div className="pointer-events-none absolute left-[890px] top-[3800px] w-[360px]">
-        <img alt="" className="h-full w-full object-contain" src={mediaDiamondSolidSrc} />
-      </div>
-      <div className="pointer-events-none absolute left-[1280px] top-[4050px] w-[480px]">
-        <img alt="" className="h-full w-full object-contain" src={accentDiamondSrc} />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 h-full w-full"
+        style={{
+          maskImage:
+            'linear-gradient(#fff 0%, #fff calc(100% - 140px), transparent calc(100% - 75px), transparent 100%)',
+          WebkitMaskImage:
+            'linear-gradient(#fff 0%, #fff calc(100% - 140px), transparent calc(100% - 75px), transparent 100%)',
+        }}
+      >
+        <div className="pointer-events-none absolute top-[3610px] left-[240px] h-[880px] w-[880px]">
+          {mediaDiamondOutlineSrc ? (
+            <div className="relative h-full w-full">
+              <Image
+                alt="Outline accent diamond"
+                className="object-contain"
+                fill
+                sizes="880px"
+                src={mediaDiamondOutlineSrc}
+              />
+            </div>
+          ) : (
+            <GreenDiamondFourth aria-hidden="true" className="h-full w-full" focusable="false" />
+          )}
+        </div>
+        <PhotoDiamond
+          className="pointer-events-none absolute top-[3960px] left-[790px] h-[1250px] w-[1250px]"
+          imageAlt="Solution highlight diamond photo"
+          imageSrc={mediaDiamondSolidSrc}
+        />
+        <div className="pointer-events-none absolute top-[4390px] left-[210px] h-[390px] w-[390px]">
+          {accentDiamondSrc ? (
+            <div className="relative h-full w-full">
+              <Image alt="Small accent diamond" className="object-contain" fill sizes="390px" src={accentDiamondSrc} />
+            </div>
+          ) : (
+            <OrangeGradientDiamondFourth aria-hidden="true" className="h-full w-full" focusable="false" />
+          )}
+        </div>
+        <div className="pointer-events-none absolute top-[4680px] left-[240px] h-[880px] w-[880px]">
+          <OrangeDiamondFourth aria-hidden="true" className="h-full w-full" focusable="false" />
+        </div>
       </div>
 
       {/* Navigation arrows */}
       <div
         aria-label="Previous"
-        className="absolute right-[120px] top-[1755px] flex h-[118px] w-[118px] -scale-y-100 items-center justify-center"
-        onKeyDown={(event) => {
+        className="absolute top-[1755px] right-[120px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
+        onKeyDown={event => {
           if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
             onNavigateUp?.();
@@ -206,12 +262,12 @@ export default function SolutionFourthScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img alt="Up" className="h-full w-full object-contain" src={arrowIconSrc} />
+        <ArrowUp aria-hidden="true" className="h-full w-full text-[#ffffff66]" focusable="false" strokeWidth={1.5} />
       </div>
       <div
         aria-label="Next"
-        className="absolute right-[120px] top-[1980px] flex h-[118px] w-[118px] items-center justify-center"
-        onKeyDown={(event) => {
+        className="absolute top-[1980px] right-[120px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
+        onKeyDown={event => {
           if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
             onNavigateDown?.();
@@ -221,25 +277,50 @@ export default function SolutionFourthScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img alt="Down" className="h-full w-full object-contain" src={arrowIconSrc} />
+        <ArrowDown aria-hidden="true" className="h-full w-full text-[#ffffff66]" focusable="false" strokeWidth={1.5} />
       </div>
     </div>
   );
-}
+};
 
-function PlusMinusIcon({ color }: { color: string }) {
+export default SolutionFourthScreenTemplate;
+
+const PlusMinusIcon = ({ color }: { readonly color: string }) => {
   return (
-    <span
-      aria-hidden
-      className="relative block h-[32px] w-[32px] text-current"
-      style={{ color }}
-    >
-      <span
-        className="absolute left-1/2 top-0 h-full w-[3px] -translate-x-1/2 rounded-full bg-current transition-opacity group-data-[state=open]/accordion-trigger:opacity-0"
-        style={{ backgroundColor: color }}
+    <span aria-hidden className="relative block h-[72px] w-[72px]" style={{ color }}>
+      <Minus
+        className="absolute inset-0 h-full w-full opacity-0 transition-opacity group-data-[state=open]/accordion-trigger:opacity-100"
+        strokeWidth={1.5}
       />
-      <span className="absolute left-0 top-1/2 h-[3px] w-full -translate-y-1/2 rounded-full bg-current" style={{ backgroundColor: color }} />
+      <Plus
+        className="absolute inset-0 h-full w-full transition-opacity group-data-[state=open]/accordion-trigger:opacity-0"
+        strokeWidth={1.5}
+      />
     </span>
   );
-}
+};
 
+const PhotoDiamond = ({
+  className,
+  imageAlt = 'Solution highlight diamond photo',
+  imageSrc,
+}: {
+  readonly className: string;
+  readonly imageAlt?: string;
+  readonly imageSrc?: string;
+}) => {
+  const shouldOverride = !imageSrc || imageSrc.includes('2f62e81abe58763bf6bdbf710843b3c886f19583');
+  const resolvedSrc = shouldOverride ? DEFAULT_PHOTO_DIAMOND_SRC : imageSrc;
+
+  return (
+    <div className={className}>
+      <div className="relative size-full rotate-[45deg] overflow-hidden rounded-[160px]">
+        {resolvedSrc ? (
+          <Image alt={imageAlt} className="-rotate-[45deg] object-cover" fill sizes="520px" src={resolvedSrc} />
+        ) : (
+          <div className="h-full w-full -rotate-[45deg] bg-[#6dcff6]" />
+        )}
+      </div>
+    </div>
+  );
+};

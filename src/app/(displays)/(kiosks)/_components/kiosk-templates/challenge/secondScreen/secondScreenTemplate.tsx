@@ -1,19 +1,20 @@
 'use client';
 
-// import styles from './secondScreenTemplate.module.css';
+import { ArrowDown, ArrowUp, Diamond } from 'lucide-react';
+import Image from 'next/image';
+import { DEFAULT_KIOSK_ID, type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
-// Asset constants from Figma MCP
-const imgArrowNarrowDown = 'http://localhost:3845/assets/a750fbdd00ef68fcb2ba9208e4bd977de111641b.svg';
-const imgHero = 'http://localhost:3845/assets/40afdcf461baafad39ec3925ac4fd501259151d6.png';
-const imgVector = 'http://localhost:3845/assets/40afdcf461baafad39ec3925ac4fd501259151d6.png';
-const imgVector1 = 'http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg';
+// import styles from './secondScreenTemplate.module.css';
 
-export interface SecondScreenTemplateProps {
-  arrowIconSrc?: string;
+// Asset constants from Figma MCP
+const imgHero = '/images/kiosks/kiosk1/02-solution/Solution-Image1-Full.png';
+const imgVector = '/images/kiosks/kiosk1/01-challenge/Challenge-Image1-Diamond.png';
+
+export type SecondScreenTemplateProps = Readonly<{
   bottomDescription?: string;
   bottomVideoSrc?: string;
-  challengeIconSrc?: string;
+  kioskId?: KioskId;
   largeIconSrc?: string;
   mainDescription?: string;
   onNavigateDown?: () => void;
@@ -22,13 +23,12 @@ export interface SecondScreenTemplateProps {
   statDescription?: string;
   subheadline?: string | string[];
   topImageSrc?: string;
-}
+}>;
 
-export default function SecondScreenTemplate({
-  arrowIconSrc = imgArrowNarrowDown,
+export const SecondScreenTemplate = ({
   bottomDescription = 'The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.',
-  bottomVideoSrc = '/_videos/v1/a532f40a2a6848e2a80788002b6cb925a1f4c3c2',
-  challengeIconSrc = imgVector1,
+  bottomVideoSrc = '',
+  kioskId = DEFAULT_KIOSK_ID,
   largeIconSrc = imgVector,
   mainDescription = 'The Museum also needed assistance with physical storage for a collection of historical music artifacts.',
   onNavigateDown,
@@ -37,55 +37,50 @@ export default function SecondScreenTemplate({
   statDescription = 'The Museum needed a secure, off-site, cloud-accessible, and easily managed solution to protect its one-of-a-kind, irreplaceable footage. Storing the only master copy locally presented a high risk of losing all assets in the event of a data failure or system crash.',
   subheadline = 'Rich media &\n cultural heritage',
   topImageSrc = imgHero,
-}: SecondScreenTemplateProps) {
+}: SecondScreenTemplateProps) => {
+  const showBottomVideo = Boolean(bottomVideoSrc);
+
   return (
     <div
       // className={styles.container}
       className="relative flex h-screen w-full flex-col overflow-hidden bg-black"
+      data-hero-image={topImageSrc}
+      data-kiosk={kioskId}
       data-node-id="5168:9907"
     >
-      {/* Hero Image */}
-      <div
-        // className={styles.topVideoContainer}
-        className="absolute left-0 top-0 z-[1] h-[1291px] w-full overflow-hidden"
-        data-node-id="5168:9909"
-      >
-        <img
-          alt=""
-          // className={styles.topVideo}
-          className="absolute left-[-7.5%] top-[-5.93%] h-[117.19%] w-[124.52%] object-cover object-center"
-          src={topImageSrc}
-        />
-      </div>
-
       {/* Bottom Video Section */}
-      <div
-        // className={styles.bottomVideoContainer}
-        className="absolute left-0 top-[4233px] z-[1] h-[1291px] w-full overflow-hidden"
-        data-node-id="5168:9908"
-      >
-        <video
-          autoPlay
-          loop
-          playsInline
-          muted
-          controlsList="nodownload"
-          // className={styles.bottomVideo}
-          className="absolute left-[-30.42%] top-[-30.96%] h-[172.5%] w-[181.73%] bg-red-500 object-cover object-center"
+      {showBottomVideo ? (
+        <div
+          // className={styles.bottomVideoContainer}
+          className="absolute top-[4233px] left-0 z-[1] h-[1291px] w-full overflow-hidden"
+          data-node-id="5168:9908"
         >
-          <source src={bottomVideoSrc} type="video/mp4" />
-        </video>
-      </div>
+          <div className="relative top-[-30.96%] left-[-30.42%] h-[172.5%] w-[181.73%]">
+            <video
+              autoPlay
+              className="h-full w-full object-cover object-center"
+              controlsList="nodownload"
+              loop
+              muted
+              playsInline
+              // className={styles.bottomVideo}
+            >
+              <source src={bottomVideoSrc} type="video/mp4" />
+            </video>
+            <div className="pointer-events-none absolute inset-0 bg-black/20" />
+          </div>
+        </div>
+      ) : null}
 
       {/* Subheadline */}
       <div
         // className={styles.subheadlineContainer}
-        className="absolute left-[120px] top-[368px] z-[10] -translate-y-full"
+        className="absolute top-[368px] left-[120px] z-[10] -translate-y-full"
         data-node-id="5168:9918"
       >
         <h2
           // className={styles.subheadline}
-          className="whitespace-pre-line text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#ededed]"
+          className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]"
         >
           {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
         </h2>
@@ -94,20 +89,18 @@ export default function SecondScreenTemplate({
       {/* Challenge Label */}
       <div
         // className={styles.challengeLabel}
-        className="absolute left-[128.17px] top-[745.23px] z-[10] flex items-center gap-[41px]"
+        className="absolute top-[745px] left-[128px] z-[10] flex items-center gap-[41px]"
         data-node-id="5168:9925"
       >
         <div
           // className={styles.challengeIcon}
-          className="relative mr-[15px] flex h-[100px] w-[100px] items-center justify-center"
+          className="relative mr-[5px] flex h-[120px] w-[120px] items-center justify-center"
         >
-          <div className="relative size-full rotate-[225deg] scale-y-[-1]">
-            <img alt="" className="block h-full w-full object-contain" src={challengeIconSrc} />
-          </div>
+          <Diamond aria-hidden="true" className="h-full w-full text-[#ededed]" focusable="false" strokeWidth={1.25} />
         </div>
         <h1
           // className={styles.challengeText}
-          className="whitespace-nowrap text-[126.031px] font-normal leading-[1.3] tracking-[-6.3015px] text-[#ededed]"
+          className="text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]"
         >
           Challenge
         </h1>
@@ -116,18 +109,18 @@ export default function SecondScreenTemplate({
       {/* Stat Section (Left) */}
       <div
         // className={styles.statSection}
-        className="absolute left-[124px] top-[1058px] z-[5] flex w-[1390px] flex-col gap-[60px] opacity-50"
+        className="absolute top-[1058px] left-[124px] z-[5] flex w-[940px] flex-col gap-[60px] opacity-60"
         data-node-id="5168:9913"
       >
         <div
           // className={styles.statAmount}
-          className="whitespace-nowrap text-[300px] font-[300] leading-[1.3] tracking-[-15px] text-[#6dcff6]"
+          className="text-[300px] leading-[1.3] font-[300] tracking-[-15px] whitespace-nowrap text-[#6dcff6]"
         >
           {renderRegisteredMark(statAmount)}
         </div>
         <p
           // className={styles.statDescription}
-          className="text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#6dcff6]"
+          className="text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#a8d4f6]"
         >
           {renderRegisteredMark(statDescription)}
         </p>
@@ -136,12 +129,12 @@ export default function SecondScreenTemplate({
       {/* Main Description (Right) */}
       <div
         // className={styles.mainDescription}
-        className="absolute right-[422px] top-[2065px] z-[5] w-[971px]"
+        className="absolute top-[2340px] left-[1160px] z-[6] w-[760px]"
         data-node-id="5168:9911"
       >
         <p
           // className={styles.descriptionText}
-          className="text-[60px] font-normal leading-[1.4] tracking-[-3px] text-white"
+          className="relative top-[-275px] left-[-390px] w-[980px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white"
         >
           {renderRegisteredMark(mainDescription)}
         </p>
@@ -150,12 +143,12 @@ export default function SecondScreenTemplate({
       {/* Bottom Description */}
       <div
         // className={styles.bottomDescriptionContainer}
-        className="absolute left-[120px] top-[4065px] z-[5] w-[971px]"
+        className="absolute top-[4065px] left-[120px] z-[5] w-[971px]"
         data-node-id="5168:9919"
       >
         <p
           // className={styles.bottomDescriptionText}
-          className="text-[60px] font-normal leading-[1.4] tracking-[-3px] text-white"
+          className="text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white"
         >
           {renderRegisteredMark(bottomDescription)}
         </p>
@@ -165,9 +158,9 @@ export default function SecondScreenTemplate({
       <div
         aria-label="Previous"
         // className={styles.arrowUp}
-        className="absolute right-[120px] top-[1755px] z-[10] flex h-[118px] w-[118px] -scale-y-100 items-center justify-center"
+        className="absolute top-[1755px] right-[130px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
         data-node-id="5168:9923"
-        onKeyDown={(event) => {
+        onKeyDown={event => {
           if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
             onNavigateUp?.();
@@ -177,14 +170,14 @@ export default function SecondScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img alt="Up" className="h-full w-full object-contain" src={arrowIconSrc} />
+        <ArrowUp aria-hidden="true" className="h-full w-full text-[#ffffff66]" focusable="false" strokeWidth={1.5} />
       </div>
       <div
         aria-label="Next"
         // className={styles.arrowDown}
-        className="absolute right-[120px] top-[1980px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
+        className="absolute top-[1975px] right-[130px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
         data-node-id="5168:9921"
-        onKeyDown={(event) => {
+        onKeyDown={event => {
           if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
             onNavigateDown?.();
@@ -194,34 +187,48 @@ export default function SecondScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img alt="Down" className="h-full w-full object-contain" src={arrowIconSrc} />
+        <ArrowDown aria-hidden="true" className="h-full w-full text-[#ffffff66]" focusable="false" strokeWidth={1.5} />
       </div>
 
       {/* Background Gradients */}
       <div
         // className={styles.gradientBg}
-        className="absolute left-0 top-[-223px] z-[2] h-[5504px] w-full rounded-[100px] bg-[linear-gradient(to_bottom,#1b75bc_0%,#14477d_98%)]"
+        className="absolute top-[-223px] left-0 z-[2] h-[5504px] w-full rounded-[100px] bg-[linear-gradient(to_bottom,#1b75bc_0%,#14477d_98%)]"
         data-node-id="5168:9910"
       />
       <div
         // className={styles.topGradientOverlay}
-        className="pointer-events-none absolute left-0 top-0 z-[3] h-[1291px] w-full bg-[linear-gradient(to_bottom,#1968ab_66.076%,rgba(26,108,175,0)_99.322%)]"
+        className="pointer-events-none absolute top-0 left-0 z-[3] h-[1291px] w-full bg-[linear-gradient(to_bottom,#1968ab_66.076%,rgba(26,108,175,0)_99.322%)]"
         data-node-id="5168:9916"
       />
       <div
         // className={styles.fadeOutGradient}
-        className="pointer-events-none absolute left-0 top-[3696px] z-[3] h-[1423px] w-full -scale-y-100 bg-[linear-gradient(to_bottom,#154c83_42.41%,rgba(21,75,130,0)_98.852%)]"
+        className="pointer-events-none absolute top-[3696px] left-0 z-[3] h-[1423px] w-full -scale-y-100 bg-[linear-gradient(to_bottom,#154c83_42.41%,rgba(21,75,130,0)_98.852%)]"
         data-node-id="5168:9920"
       />
 
       {/* Large Background Icon */}
       <div
         // className={styles.largeIcon}
-        className="pointer-events-none absolute left-[-12%] top-[46%] z-[4] flex h-[1106px] w-[1106px] -scale-y-100 items-center justify-center rotate-[225deg]"
+        className="pointer-events-none absolute top-[42%] left-[-21%] z-[4] flex size-[1506px] -scale-y-100 rotate-[180deg] items-center justify-center"
         data-node-id="5168:9917"
       >
-        <img alt="" className="block h-full w-full object-contain" src={largeIconSrc} />
+        <div className="relative h-full w-full">
+          <Image
+            alt="Large decorative background diamond"
+            className="object-contain"
+            fill
+            sizes="1506px"
+            src={largeIconSrc}
+            style={{ transform: 'scaleX(-1)' }}
+            unoptimized
+          />
+        </div>
       </div>
     </div>
   );
-}
+};
+
+SecondScreenTemplate.displayName = 'SecondScreenTemplate';
+
+export default SecondScreenTemplate;

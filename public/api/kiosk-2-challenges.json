@@ -1,0 +1,40 @@
+{
+  "firstScreen": {
+    "challengeLabel": "Challenge",
+    "problemDescription": "A large healthcare organization faced significant financial risk because it could not locate the appropriate documentation to confirm the eligibility of employee pension claims. The legal system ruled the organization liable to pay claims without evidence to disprove eligibility, resulting in millions of dollars paid in ineligible pension benefits.",
+    "savingsAmount": "$2M+",
+    "savingsDescription": "saved annually through the identification of “duplicate”\n pension payments",
+    "subheadline": ["Information", "& data lifecycle"],
+    "videoSrc": "/images/kiosks/kiosk2/01-challenge/Challenge-header.mp4"
+  },
+  "initialScreen": {
+    "attribution": "",
+    "backgroundImage": "/images/kiosks/kiosk2/Cover.png",
+    "buttonText": "Touch to explore",
+    "guidesImageSrc": "http://localhost:3845/assets/bbb0c30a6c52c72ecfe10371a7001daf550a68d1.svg",
+    "headline": "A global healthcare company mitigates risk and saves millions by finding certainty and clarity in its pension administration.",
+    "quote": "Our digital solutions centralized this healthcare organization's unstructured \"dark data.\" This enterprise-wide visibility prevented erroneous pension payments, elevated records management, and created a searchable, compliant digital core for ongoing operational improvement.",
+    "subheadline": ["Information", "& data lifecycle"]
+  },
+  "secondScreen": {
+    "bottomDescription": "The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.",
+    "bottomVideoSrc": "/images/kiosks/kiosk2/02-solution/Solution-header.mp4",
+    "largeIconSrc": "/images/kiosks/kiosk2/01-challenge/Challenge-Image1-Diamond.png",
+    "mainDescription": "Disparate, unstructured records across various locations and legacy systems—including paper, microfilm, CD, and digital formats—created costly, risk-laden pension administration.",
+    "statAmount": "",
+    "statDescription": "",
+    "subheadline": ["Information", "& data lifecycle"],
+    "topImageSrc": "/images/kiosks/kiosk2/02-solution/Solution-Image1-Full.png"
+  },
+  "thirdScreen": {
+    "description": "After multiple acquisitions with antiquated and disordered records, finding the required regulatory documentation was difficult to impossible.",
+    "heroImageSrc": "/images/kiosks/kiosk2/01-challenge/Challenge-Image2-Diamond.png",
+    "largeIconCenterSrc": "/images/kiosks/kiosk2/02-solution/Solution-Image3-Full.png",
+    "largeIconTopSrc": "/images/kiosks/kiosk2/02-solution/Solution-Image2-Full.png",
+    "metricAmount": "2.5M",
+    "metricDescription": "paper images are being digitized.",
+    "metricImageSrc": "/images/kiosks/kiosk2/01-challenge/Challenge-Image2-Diamond.png",
+    "subheadline": ["Information", "& data lifecycle"],
+    "videoSrc": "/images/kiosks/kiosk2/03-value/Value-header.mp4"
+  }
+}
