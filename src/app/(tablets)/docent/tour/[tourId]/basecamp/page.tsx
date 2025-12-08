@@ -6,12 +6,10 @@ import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
 import MomentsAndBeats from '@/app/(tablets)/docent/_components/ui/MomentsAndBeats';
-import { useDocentTranslation } from '@/hooks/use-docent-translation';
 import useMomentsNavigation from '@/hooks/use-moments-navigation';
 import type { Moment } from '@/lib/internal/types';
 
 const BasecampPage = ({ params }: PageProps<'/docent/tour/[tourId]/basecamp'>) => {
-  const { t } = useDocentTranslation();
   const { tourId } = use(params);
   const { basecampExhibitState, currentTour, data, setBasecampExhibitState } = useDocent();
 
@@ -32,9 +30,9 @@ const BasecampPage = ({ params }: PageProps<'/docent/tour/[tourId]/basecamp'>) =
     (): HeaderProps['leftButton'] => ({
       href: `/docent/tour/${tourId}`,
       icon: <ArrowLeft />,
-      text: t.docent.navigation.backToMenu,
+      text: data?.docent.navigation.backToMenu ?? 'Back to menu',
     }),
-    [tourId, t]
+    [tourId, data]
   );
 
   return (
