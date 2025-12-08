@@ -66,6 +66,9 @@ const Background = () => {
     hidden.loop = momentId === 'ambient';
 
     const go = () => {
+      // Guard against stale handler firing after beat changed
+      if (beatId !== lastBeat.current) return;
+
       setReadyBeatId(beatId);
 
       // Fade out visible, fade in hidden
@@ -83,10 +86,12 @@ const Background = () => {
       const nextIdx = currIdx + 1 < BEAT_ORDER.length ? currIdx + 1 : 0;
       const nextBeatId = BEAT_ORDER[nextIdx];
 
-      // Preload next video after crossfade completes
+      // Preload next video after crossfade completes. Use actual transition, not hardcoded timeout.
       if (nextBeatId) {
         const nextUrl = data.beats[nextBeatId].url;
-        if (nextUrl) setTimeout(() => (visible.src = nextUrl), CROSSFADE_DURATION_MS);
+        if (nextUrl) {
+          visible.addEventListener('transitionend', () => (visible.src = nextUrl), { once: true });
+        }
       }
     };
 
@@ -118,7 +123,7 @@ const Background = () => {
         muted
         onTimeUpdate={handleTimeUpdate}
         playsInline
-        preload={activeDisplay === 'a' ? 'auto' : 'metadata'}
+        preload="auto"
         ref={a}
         style={{ opacity: 1, transition: `opacity ${CROSSFADE_DURATION_MS}ms ease` }}
       />
@@ -127,7 +132,7 @@ const Background = () => {
         muted
         onTimeUpdate={handleTimeUpdate}
         playsInline
-        preload={activeDisplay === 'b' ? 'auto' : 'metadata'}
+        preload="auto"
         ref={b}
         style={{ opacity: 0, transition: `opacity ${CROSSFADE_DURATION_MS}ms ease` }}
       />

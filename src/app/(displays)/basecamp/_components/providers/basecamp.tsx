@@ -109,12 +109,14 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     (newState: Partial<ExhibitMqttState>) => {
       if (!client) return;
 
-      // Update state (pure function - no side effects)
+      // Compute updated state first, update ref immediately for consistency
+      const updatedState = { ...mqttStateRef.current, ...newState };
+      mqttStateRef.current = updatedState;
+
+      // Update React state (pure function - no side effects)
       setMqttState(prev => ({ ...prev, ...newState }));
 
-      // Side effect runs outside the updater
-      // Use ref to get latest state without adding to deps (avoids re-subscription cascade)
-      const updatedState = { ...mqttStateRef.current, ...newState };
+      // Side effect runs outside the updater with fresh ref value
       client.reportExhibitState('basecamp', updatedState, {
         onError: err => console.error('Basecamp: Failed to report state:', err),
       });
