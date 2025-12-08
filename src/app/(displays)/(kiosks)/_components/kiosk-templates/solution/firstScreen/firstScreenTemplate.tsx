@@ -1,11 +1,12 @@
 'use client';
 
-import { ArrowDown, ArrowUp, Diamond } from 'lucide-react';
+import { ArrowDown, ArrowUp } from 'lucide-react';
 
 import BlueDiamondMain from '@/components/ui/icons/Kiosks/Solutions/BlueDiamondMain';
 import GreenDiamondMain from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondMain';
 import OrangeDiamondMain from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondMain';
 
+import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
 import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
 
 export interface SolutionFirstScreenTemplateProps {
@@ -64,42 +65,45 @@ export default function SolutionFirstScreenTemplate({
       />
 
       {/* Subheadline */}
-      <div className="absolute left-[120px] top-[368px] -translate-y-full text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#ededed]">
+      <div className="absolute left-[120px] top-[240px] w-[500px] text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#ededed]">
         {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
       </div>
 
       {/* Solution label */}
-      <div className="absolute left-[128.17px] top-[745.23px] flex items-center gap-[41px]" data-node-id="5168:9697">
-        <div className="relative flex h-[100px] w-[100px] items-center justify-center">
-          <Diamond aria-hidden="true" className="h-[90px] w-[90px] text-[#ededed]" focusable="false" strokeWidth={1.25} />
+      <div className="absolute left-[140px] top-[790px] flex items-center gap-[41px]" data-node-id="5168:9697">
+        <div className="relative flex h-[200px] w-[200px] items-center justify-center" style={{ left: -55, top: -25 }}>
+          <OutlinedDiamond aria-hidden="true" focusable="false" />
         </div>
-        <h1 className="whitespace-nowrap text-[126.031px] font-normal leading-[1.3] tracking-[-6.3015px] text-[#ededed]">
+        <h1
+          className="relative whitespace-nowrap text-[126.031px] font-normal leading-[1.3] tracking-[-6.3015px] text-[#ededed]"
+          style={{ top: -20, left: -100 }}
+        >
           {solutionLabel}
         </h1>
       </div>
 
       {/* Body copy */}
-      <div className="absolute left-[239.94px] top-[1540px] flex w-auto max-w-[1271px] flex-col gap-[80px] text-white">
-        <p className="text-[100px] font-normal leading-[1.3] tracking-[-5px]">{renderRegisteredMark(title)}</p>
+      <div className="absolute left-[120px] top-[1260px] flex w-auto max-w-[1271px] flex-col gap-[80px] text-white">
+        <p className="w-[900px] text-[100px] font-normal leading-[1.3] tracking-[-5px]">{renderRegisteredMark(title)}</p>
         <p className="text-[60px] font-normal leading-[1.4] tracking-[-3px]">{renderRegisteredMark(description)}</p>
       </div>
 
       {/* Decorative diamonds */}
-      <div className="pointer-events-none absolute left-[-220px] top-[2550px] z-[3] h-[1330px] w-[1330px] opacity-60">
+      <div className="pointer-events-none absolute left-[-180px] top-[2400px] z-[3] h-[1770px] w-[1770px] opacity-60">
         {largeDiamondSrc ? (
         <img alt="" className="h-full w-full object-contain" src={largeDiamondSrc} />
         ) : (
           <BlueDiamondMain aria-hidden="true" className="h-full w-full" focusable="false" />
         )}
       </div>
-      <div className="pointer-events-none absolute left-[1410px] top-[2500px] z-[3] h-[660px] w-[660px] opacity-70">
+      <div className="pointer-events-none absolute left-[1240px] top-[2370px] z-[3] h-[800px] w-[800px] opacity-70">
         {mediumDiamondSrc ? (
         <img alt="" className="h-full w-full object-contain" src={mediumDiamondSrc} />
         ) : (
           <GreenDiamondMain aria-hidden="true" className="h-full w-full" focusable="false" />
         )}
       </div>
-      <div className="pointer-events-none absolute left-[1520px] top-[3350px] z-[3] h-[520px] w-[520px] opacity-70">
+      <div className="pointer-events-none absolute left-[1235px] top-[3394px] z-[3] h-[795px] w-[795px] opacity-70">
         {accentDiamondSrc ? (
           <img alt="" className="h-full w-full object-contain" src={accentDiamondSrc} />
         ) : (

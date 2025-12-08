@@ -13,8 +13,8 @@ import TealGradientDiamondThird from '@/components/ui/icons/Kiosks/Solutions/Tea
 
 import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
 
-const imgDiamondMediaLeft = '/images/kiosks/kiosk2/02-solution/Solution-Image3-Diamond.png';
-const imgDiamondMediaRight = '/images/kiosks/kiosk3/02-solution/Solution-Image2-Diamond.png';
+const imgDiamondMediaLeft = '/images/kiosks/kiosk2/02-solution/Solution-Image2-Diamond.png';
+const imgDiamondMediaRight = '/images/kiosks/kiosk2/02-solution/Solution-Image3-Diamond.png';
 
 export interface SolutionThirdScreenTemplateProps {
   gradientEndColor?: string;
