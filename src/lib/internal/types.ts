@@ -43,6 +43,34 @@ export const isSummitSection = (value: string): value is SummitSection => {
 export const isSection = (value: string): value is Section => {
   return isBasecampSection(value) || isOverlookSection(value) || isSummitSection(value);
 };
+
+// Beat IDs in presentation order
+export const BEAT_ORDER = [
+  'ambient-1',
+  'welcome-1',
+  'welcome-2',
+  'welcome-3',
+  'welcome-4',
+  'problem-1',
+  'problem-2',
+  'problem-3',
+  'problem-4',
+  'possibilities-1',
+  'possibilities-2',
+  'possibilities-3',
+  'possibilities-4',
+  'possibilities-5',
+  'ascend-1',
+  'ascend-2',
+  'ascend-3',
+] as const;
+
+export type BeatId = (typeof BEAT_ORDER)[number];
+
+export const isValidBeatId = (id: string): id is BeatId => {
+  return BEAT_ORDER.includes(id as BeatId);
+};
+
 // UI Navigation state for exhibits (local to UI, not MQTT)
 export interface ExhibitNavigationState {
   beatIdx: number;
@@ -71,7 +99,7 @@ export interface Tour {
 
 export interface BasecampData {
   readonly 'beats': {
-    readonly [key in Section]: {
+    readonly [key in BeatId]: {
       readonly url: string;
     };
   };

@@ -1,6 +1,7 @@
 'use client';
 
 import { useBasecamp } from '@/app/(displays)/basecamp/_components/providers/basecamp';
+import { BasecampData, BeatId, isValidBeatId } from '@/lib/internal/types';
 import AmbientView from './views/AmbientView';
 import PossibilitiesDetail from './views/PossibilitiesDetail';
 import PossibilitiesTitle from './views/PossibilitiesTitle';
@@ -9,10 +10,9 @@ import Problem2 from './views/Problem2';
 import Problem3 from './views/Problem3';
 import Problem4 from './views/Problem4';
 import WelcomeView from './views/WelcomeView';
-import type { BasecampData } from '@/lib/internal/types';
 import type { ReactElement } from 'react';
 
-const VIEWS: Record<string, (data: BasecampData) => null | ReactElement> = {
+const VIEWS: Partial<Record<BeatId, (data: BasecampData) => ReactElement>> = {
   // Ambient
   'ambient-1': () => <AmbientView />,
 
@@ -39,11 +39,14 @@ const Foreground = () => {
 
   if (!data) return null;
 
+  if (!isValidBeatId(beatId)) return null;
+
   const renderView = VIEWS[beatId];
-  const content = renderView?.(data);
 
   // Returns null for video-only beats (no overlay)
-  if (!content) return null;
+  if (!renderView) return null;
+
+  const content = renderView(data);
 
   return (
     <div className="absolute inset-0 z-10 transition-opacity duration-500" style={{ opacity: backgroundReady ? 1 : 0 }}>

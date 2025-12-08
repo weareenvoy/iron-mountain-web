@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useBasecamp } from '@/app/(displays)/basecamp/_components/providers/basecamp';
-import { BEAT_ORDER } from './utils';
+import { BEAT_ORDER, isValidBeatId } from '@/lib/internal/types';
+
+const CROSSFADE_DURATION_MS = 800;
 
 const Background = () => {
   const { data, exhibitState, setBackgroundReady } = useBasecamp();
@@ -19,7 +21,9 @@ const Background = () => {
   useEffect(() => {
     if (!data || !a.current || !b.current) return;
 
-    const url = data.beats[beatId as keyof typeof data.beats].url;
+    if (!isValidBeatId(beatId)) return;
+
+    const url = data.beats[beatId].url;
     if (!url || beatId === lastBeat.current) return;
 
     // First beat after page reload → force into A
@@ -39,9 +43,10 @@ const Background = () => {
       lastBeat.current = beatId;
 
       // Preload next into B
-      const nextIdx = BEAT_ORDER.indexOf(beatId as (typeof BEAT_ORDER)[number]) + 1;
-      if (nextIdx > 0 && nextIdx < BEAT_ORDER.length) {
-        const nextUrl = data.beats[BEAT_ORDER[nextIdx] as keyof typeof data.beats].url;
+      const nextIdx = BEAT_ORDER.indexOf(beatId) + 1;
+      const nextBeatId = BEAT_ORDER[nextIdx];
+      if (nextBeatId) {
+        const nextUrl = data.beats[nextBeatId].url;
         if (nextUrl) b.current.src = nextUrl;
       }
       return;
@@ -63,7 +68,7 @@ const Background = () => {
       setBackgroundReady(true);
 
       // Fade out visible, fade in hidden
-      visible.style.transition = hidden.style.transition = 'opacity 0.8s ease';
+      visible.style.transition = hidden.style.transition = `opacity ${CROSSFADE_DURATION_MS}ms ease`;
       visible.style.opacity = '0';
       hidden.style.opacity = '1';
 
@@ -73,10 +78,15 @@ const Background = () => {
       setActiveDisplay(active.current);
 
       // Assume docent would click the "next" beat, preload it.
-      const currIdx = BEAT_ORDER.indexOf(beatId as (typeof BEAT_ORDER)[number]);
+      const currIdx = BEAT_ORDER.indexOf(beatId);
       const nextIdx = currIdx + 1 < BEAT_ORDER.length ? currIdx + 1 : 0;
-      const nextUrl = data.beats[BEAT_ORDER[nextIdx] as keyof typeof data.beats].url;
-      if (nextUrl) setTimeout(() => (visible.src = nextUrl), 800); // 800 match fade duration
+      const nextBeatId = BEAT_ORDER[nextIdx];
+
+      // Preload next video after crossfade completes
+      if (nextBeatId) {
+        const nextUrl = data.beats[nextBeatId].url;
+        if (nextUrl) setTimeout(() => (visible.src = nextUrl), CROSSFADE_DURATION_MS);
+      }
     };
 
     hidden.addEventListener('canplaythrough', go, { once: true });
@@ -103,7 +113,7 @@ const Background = () => {
         playsInline
         preload="auto"
         ref={a}
-        style={{ opacity: 1, transition: 'opacity 0.8s ease' }}
+        style={{ opacity: 1, transition: `opacity ${CROSSFADE_DURATION_MS}ms ease` }}
       />
       <video
         className="absolute inset-0 h-full w-full object-cover"
@@ -112,7 +122,7 @@ const Background = () => {
         playsInline
         preload="auto"
         ref={b}
-        style={{ opacity: 0, transition: 'opacity 0.8s ease' }}
+        style={{ opacity: 0, transition: `opacity ${CROSSFADE_DURATION_MS}ms ease` }}
       />
 
       <div className="pointer-events-none absolute top-4 left-4 rounded bg-black/60 px-3 py-2 font-mono text-sm text-white">
