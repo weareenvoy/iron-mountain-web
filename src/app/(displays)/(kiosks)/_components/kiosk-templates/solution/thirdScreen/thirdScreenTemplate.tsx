@@ -22,6 +22,7 @@ export type SolutionThirdScreenTemplateProps = Readonly<{
   centerLabel?: string;
   gradientEndColor?: string;
   gradientStartColor?: string;
+  kioskId?: string;
   mediaDiamondLeftSrc?: string;
   mediaDiamondRightSrc?: string;
   onNavigateDown?: () => void;
@@ -58,6 +59,7 @@ const SolutionThirdScreenTemplate = ({
   centerLabel,
   gradientEndColor = '#8a0d71',
   gradientStartColor = '#a2115e',
+  kioskId,
   mediaDiamondLeftSrc = imgDiamondMediaLeft,
   mediaDiamondRightSrc = imgDiamondMediaRight,
   onNavigateDown,
@@ -114,7 +116,11 @@ const SolutionThirdScreenTemplate = ({
   ];
 
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-hidden bg-black" data-node-id="5168:9626">
+    <div
+      className="group/kiosk relative flex h-screen w-full flex-col overflow-hidden bg-black"
+      data-kiosk={kioskId}
+      data-node-id="5168:9626"
+    >
       {/* Gradient backdrop */}
       <div
         className="absolute top-[-296px] left-0 h-[5416px] w-full rounded-t-[100px]"
@@ -123,7 +129,7 @@ const SolutionThirdScreenTemplate = ({
       />
 
       {/* Subheadline */}
-      <div className="absolute top-[230px] left-[120px] w-[500px] -translate-y-full text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-3]/kiosk:relative group-data-[kiosk=kiosk-3]/kiosk:top-[410px] group-data-[kiosk=kiosk-3]/kiosk:left-auto group-data-[kiosk=kiosk-3]/kiosk:w-[380px] group-data-[kiosk=kiosk-3]/kiosk:translate-y-0">
+      <div className="absolute top-[230px] left-[120px] w-[500px] -translate-y-full text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:top-[250px] group-data-[kiosk=kiosk-2]/kiosk:translate-y-0 group-data-[kiosk=kiosk-3]/kiosk:relative group-data-[kiosk=kiosk-3]/kiosk:top-[410px] group-data-[kiosk=kiosk-3]/kiosk:left-auto group-data-[kiosk=kiosk-3]/kiosk:w-[380px] group-data-[kiosk=kiosk-3]/kiosk:translate-y-0">
         {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
       </div>
 
@@ -280,7 +286,7 @@ const FilledDiamond = ({
 }) => {
   return (
     <div className={`absolute ${className}`}>
-      <div className="relative size-[390px] rotate-[45deg] group-data-[kiosk=kiosk-1]/kiosk:size-[290px]">
+      <div className="relative size-[390px] rotate-[45deg] group-data-[kiosk=kiosk-1]/kiosk:size-[290px] group-data-[kiosk=kiosk-2]/kiosk:rotate-[0deg]">
         {imageSrc ? (
           <Image alt={imageAlt} className="-rotate-[45deg] object-cover" fill sizes="390px" src={imageSrc} />
         ) : (

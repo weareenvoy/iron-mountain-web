@@ -129,31 +129,29 @@ const Kiosk3View = () => {
       });
     });
 
-    if (solutions.thirdScreen) {
+    const kioskThreeDetailScreen = solutions.fourthScreen ?? solutions.thirdScreen;
+    if (kioskThreeDetailScreen) {
+      const useFourthTemplate = Boolean(solutions.fourthScreen);
       result.push({
-        id: 'solution-third',
-        render: () => (
-          <SolutionThirdScreenTemplate
-            {...solutions.thirdScreen}
-            onNavigateDown={() => controller.next()}
-            onNavigateUp={() => controller.prev()}
-          />
+        id: useFourthTemplate ? 'solution-fourth' : 'solution-third',
+        render: () =>
+          useFourthTemplate ? (
+            <SolutionFourthScreenTemplate
+              {...(kioskThreeDetailScreen as SolutionFourthScreenTemplateProps)}
+              onNavigateDown={() => controller.next()}
+              onNavigateUp={() => controller.prev()}
+            />
+          ) : (
+            <SolutionThirdScreenTemplate
+              {...(kioskThreeDetailScreen as SolutionThirdScreenTemplateProps)}
+              onNavigateDown={() => controller.next()}
+              onNavigateUp={() => controller.prev()}
+            />
+          ),
+        title: formatTitle(
+          kioskThreeDetailScreen.title,
+          useFourthTemplate ? 'Solution Details' : 'Solution Walkthrough'
         ),
-        title: formatTitle(solutions.thirdScreen.title, 'Solution Walkthrough'),
-      });
-    }
-
-    if (solutions.fourthScreen) {
-      result.push({
-        id: 'solution-fourth',
-        render: () => (
-          <SolutionFourthScreenTemplate
-            {...solutions.fourthScreen}
-            onNavigateDown={() => controller.next()}
-            onNavigateUp={() => controller.prev()}
-          />
-        ),
-        title: formatTitle(solutions.fourthScreen.title, 'Solution Details'),
       });
     }
 
