@@ -1,6 +1,7 @@
 'use client';
 
 import challengeContent from '@public/api/kiosk-2.json';
+import valueContent from '@public/api/kiosk-2-values.json';
 import { useEffect, useState, type ReactElement } from 'react';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
 import FirstScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/firstScreen/firstScreenTemplate';
@@ -19,7 +20,6 @@ import ValueCarouselTemplate, {
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueCarouselTemplate';
 import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
 import solutionContent from '../solutions.json';
-import valueContent from '../values.json';
 import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 // import styles from './kiosk-2.module.css';
 
