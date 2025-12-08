@@ -3,7 +3,7 @@
 import useEmblaCarousel from 'embla-carousel-react';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import Image from 'next/image';
-import { useId, type ComponentType, type SVGProps } from 'react';
+import { useId, type ComponentType, type CSSProperties, type SVGProps } from 'react';
 import BlueFilledDiamond from '@/components/ui/icons/Kiosks/Solutions/BlueFilledDiamond';
 import OrangeFilledDiamond from '@/components/ui/icons/Kiosks/Solutions/OrangeFilledDiamond';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
@@ -26,9 +26,9 @@ const defaultSlides = [
       'Enabled the organization to validate paid claims faster and more accurately upon deployment',
     ],
     diamondCards: [
-      { color: '#f26522', label: 'Operational benefits' },
+      { color: '#f26522', label: 'Strategic benefits' },
+      { color: '#8a0d71', label: 'Operational benefits' },
       { color: '#1b75bc', label: 'Economic benefits' },
-      { color: '#8a0d71', label: 'Strategic benefits' },
     ],
     id: 'operational-benefits',
   },
@@ -40,9 +40,9 @@ const defaultSlides = [
       'Unlocked downstream automation opportunities across governance, risk, and compliance teams',
     ],
     diamondCards: [
-      { color: '#f99d1c', label: 'Operational benefits' },
-      { color: '#00a89c', label: 'Economic benefits' },
-      { color: '#6dcff6', label: 'Strategic benefits' },
+      { color: '#8a0d71', label: 'Operational benefits' },
+      { color: '#1b75bc', label: 'Economic benefits' },
+      { color: '#f26522', label: 'Strategic benefits' },
     ],
     id: 'customer-outcomes',
   },
@@ -94,18 +94,40 @@ export type ValueCarouselTemplateProps = Readonly<{
   slides?: readonly ValueCarouselSlide[];
 }>;
 
-const DiamondStack = ({ cards }: Readonly<{ cards: readonly ValueDiamondCard[] }>) => {
+type DiamondStackVariant = 'carousel' | 'overview';
+
+const diamondLayouts: Record<
+  DiamondStackVariant,
+  Readonly<{ containerStyle?: CSSProperties; positions: readonly number[] }>
+> = {
+  carousel: {
+    containerStyle: { left: -330, position: 'relative' },
+    positions: [335, 490, 650],
+  },
+  overview: {
+    containerStyle: undefined,
+    positions: [0, 565, 1130],
+  },
+} as const;
+
+const DiamondStack = ({
+  cards,
+  variant = 'overview',
+}: Readonly<{ cards: readonly ValueDiamondCard[]; variant?: DiamondStackVariant }>) => {
+  const layout = diamondLayouts[variant];
+
   return (
-    <div className="relative flex h-[565px] w-[920px] items-center">
+    <div className="relative flex h-[565px] w-[920px] items-center" style={layout.containerStyle}>
       {cards.map((card, index) => {
         const Icon = getDiamondIcon(card);
         const fallbackColor = card.color ?? '#8a0d71';
+        const leftOffset = layout.positions[index] ?? index * 160;
 
         return (
           <div
-            className="absolute h-[400px] w-[400px] rotate-[45deg] rounded-[80px]"
+            className="absolute h-[550px] w-[550px] rotate-[45deg] rounded-[80px]"
             key={`${card.label ?? fallbackColor}-${index}`}
-            style={{ left: index * 160 }}
+            style={{ left: leftOffset }}
           >
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="h-full w-full -rotate-[45deg]">
@@ -153,6 +175,14 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
   const [emblaRef, emblaApi] = useEmblaCarousel({ align: 'start', loop: false });
 
   const slidesToRender = slides?.length ? slides : defaultSlides;
+
+  const getBulletItems = (slide: ValueCarouselSlide) =>
+    slide.bullets?.filter(entry => entry && entry.trim().length > 0) ?? [];
+
+  const hasCarouselSlides = slidesToRender.some(slide => getBulletItems(slide).length > 0);
+  const carouselColumnStyle: CSSProperties | undefined = hasCarouselSlides
+    ? { alignSelf: 'baseline', left: -330, position: 'relative' }
+    : undefined;
 
   const handleArrowUp = () => {
     if (emblaApi?.canScrollPrev()) {
@@ -203,10 +233,10 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
         className="absolute top-0 left-0 z-[2] flex h-[1284px] w-full flex-col justify-between px-[120px] py-[240px]"
         data-node-id="5688:14630"
       >
-        <p className="text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] whitespace-pre-line">
+        <p className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
           {renderRegisteredMark(Array.isArray(eyebrow) ? eyebrow.join('\n') : eyebrow)}
         </p>
-        <div className="flex items-center gap-[41px]">
+        <div className="flex items-center gap-[41px]" style={{ left: 10, position: 'relative', top: -100 }}>
           <div className="relative flex h-[200px] w-[200px] items-center justify-center" style={{ left: -55, top: 25 }}>
             <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
           </div>
@@ -230,7 +260,7 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
               {renderRegisteredMark(Array.isArray(description) ? description.join('\n') : description)}
             </p>
           </div>
-          <div className="flex flex-col items-end gap-[80px]">
+          <div className="flex flex-col items-end gap-[80px]" style={carouselColumnStyle}>
             <div className="w-full overflow-hidden" ref={emblaRef}>
               <div className="flex w-full">
                 {slidesToRender.map(slide => {
@@ -238,21 +268,22 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
                     slide.diamondCards && slide.diamondCards.length > 0
                       ? slide.diamondCards
                       : defaultSlides[0].diamondCards!;
-                  const bulletItems = slide.bullets?.filter(entry => entry && entry.trim().length > 0) ?? [];
+                  const bulletItems = getBulletItems(slide);
                   const hasBullets = bulletItems.length > 0;
+                  const stackVariant: DiamondStackVariant = hasBullets ? 'carousel' : 'overview';
                   return (
                     <div
                       className="flex min-h-[1600px] w-full min-w-full flex-row gap-[53px] pr-[80px]"
                       key={slide.id ?? slide.badgeLabel}
                     >
                       <div className="flex w-[920px] flex-col items-center gap-[71px]">
-                        <DiamondStack cards={cards} />
+                        <DiamondStack cards={cards} variant={stackVariant} />
                       </div>
                       {hasBullets ? (
                         <ul className="flex-1 text-[52px] leading-[1.4] font-normal tracking-[-2.6px] text-[#8a0d71]">
                           {bulletItems.map((bullet, idx) => (
                             <li
-                              className="relative mb-[48px] pl-[78px] last:mb-0"
+                              className="relative mb-[80px] w-[840px] pl-[40px] last:mb-0"
                               key={`${slide.id ?? slide.badgeLabel ?? 'bullet'}-${idx}`}
                             >
                               <span className="absolute top-[30px] left-0 size-[16px] -translate-y-1/2 rounded-full bg-[#8a0d71]" />

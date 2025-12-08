@@ -33,7 +33,7 @@
     {
       "carouselId": "kiosk-1-value-carousel",
       "description": "The partnership with Iron Mountain secured the Museum's legacy, dramatically improving its preservation workflow and content accessibility for future generations.",
-      "eyebrow": ["Rich media &", "\ncultural heritage"],
+      "eyebrow": ["Rich media &", "cultural heritage"],
       "headline": "Expanding possibilities",
       "heroVideoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/03+-+Value/Value-header.webm",
       "labelIconSrc": "http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg",
@@ -49,16 +49,16 @@
           "diamondCards": [
             {
               "color": "#f26522",
-              "label": "Operational benefits"
+              "label": "",
+              "textColor": "#4a154b"
             },
             {
               "color": "#1b75bc",
-              "label": "Economic benefits"
+              "label": ""
             },
             {
-              "color": "#f99d1c",
-              "label": "Strategic benefits",
-              "textColor": "#4a154b"
+              "color": "#8a0d71",
+              "label": "Operational benefits"
             }
           ],
           "id": "value-operational"
@@ -72,16 +72,17 @@
           ],
           "diamondCards": [
             {
-              "color": "#1b75bc",
-              "label": "Economic benefits"
-            },
-            {
               "color": "#8a0d71",
-              "label": "Strategic benefits"
+              "label": ""
             },
             {
               "color": "#f26522",
-              "label": "Operational benefits"
+              "label": "",
+              "textColor": "#4a154b"
+            },
+            {
+              "color": "#1b75bc",
+              "label": "Economic benefits"
             }
           ],
           "id": "value-economic"
@@ -95,17 +96,17 @@
           ],
           "diamondCards": [
             {
-              "color": "#f99d1c",
-              "label": "Strategic benefits",
-              "textColor": "#4a154b"
+              "color": "#1b75bc",
+              "label": ""
             },
             {
               "color": "#8a0d71",
-              "label": "Operational benefits"
+              "label": ""
             },
             {
-              "color": "#1b75bc",
-              "label": "Economic benefits"
+              "color": "#f26522",
+              "label": "Strategic benefits",
+              "textColor": "#4a154b"
             }
           ],
           "id": "value-strategic"
