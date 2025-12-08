@@ -10,12 +10,12 @@ export default function manifest(): MetadataRoute.Manifest {
     icons: [
       {
         sizes: '192x192',
-        src: '/images/iron-mountain-logo-white.svg',
+        src: '/logo.svg',
         type: 'image/svg+xml',
       },
       {
         sizes: '512x512',
-        src: '/images/iron-mountain-logo-white.svg',
+        src: '/logo.svg',
         type: 'image/svg+xml',
       },
     ],

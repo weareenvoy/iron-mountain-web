@@ -2,10 +2,10 @@
   "valueScreens": [
     {
       "carouselId": "kiosk-3-value-overview",
-      "description": "Iron Mountain’s trusted workflows connect the information and data lifecycle across operational, economic, and strategic priorities.",
+      "description": "Through its collaboration with Iron Mountain, a global healthcare customer improved compliance, visibility, and consistency in IT asset disposition across worldwide locations, while maximizing value recovery from retired end-user devices and data center components.",
       "eyebrow": ["Information", "& data lifecycle"],
       "headline": "Expanding possibilities",
-      "heroVideoSrc": "/_videos/v1/7b46056515a038f40d95647dc31113a9e8ce2a8c",
+      "heroVideoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/03+-+Value/Value-header.webm",
       "labelIconSrc": "http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg",
       "labelText": "Value",
       "slides": [
@@ -32,10 +32,10 @@
     },
     {
       "carouselId": "kiosk-3-value-carousel",
-      "description": "The partnership with Iron Mountain and implementation of InSight DXP transitioned the organization from unknown to certainty and clarity in pension administration.",
+      "description": "Through its collaboration with Iron Mountain, a global healthcare customer improved compliance, visibility, and consistency in IT asset disposition across worldwide locations, while maximizing value recovery from retired end-user devices and data center components.",
       "eyebrow": ["Information", "& data lifecycle"],
       "headline": "Expanding possibilities",
-      "heroVideoSrc": "/_videos/v1/7b46056515a038f40d95647dc31113a9e8ce2a8c",
+      "heroVideoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/03+-+Value/Value-header.webm",
       "labelIconSrc": "http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg",
       "labelText": "Value",
       "slides": [

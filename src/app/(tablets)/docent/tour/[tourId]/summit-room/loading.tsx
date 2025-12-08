@@ -1,5 +1,10 @@
+'use client';
+
+import { useDocentTranslation } from '@/hooks/use-docent-translation';
+
 const TourSummitLoading = () => {
-  return <div className="flex h-full w-full items-center justify-center">Loading summit room…</div>;
+  const { t } = useDocentTranslation();
+  return <div className="flex h-full w-full items-center justify-center">{t.loading.summitRoom}</div>;
 };
 
 export default TourSummitLoading;

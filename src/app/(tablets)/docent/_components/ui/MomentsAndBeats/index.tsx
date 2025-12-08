@@ -3,7 +3,7 @@
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { cn } from '@/lib/tailwind/utils/cn';
 import CaseStudyToggle from './CaseStudyToggle';
-import type { ExhibitNavigationState, Moment } from '@/lib/internal/types';
+import type { ExhibitNavigationState, Moment, Section } from '@/lib/internal/types';
 import type { MouseEvent } from 'react';
 
 interface MomentsAndBeatsProps {
@@ -18,7 +18,7 @@ const MomentsAndBeats = ({ content, exhibit, exhibitState, setExhibitState }: Mo
 
   const { beatIdx: currentBeatIdx, momentId } = exhibitState;
 
-  const publishNavigation = (momentId: string, beatIdx: number) => {
+  const publishNavigation = (momentId: Section, beatIdx: number) => {
     if (!client) return;
 
     // Format: ${moment}-${beatNumber} (1-indexed)
@@ -31,16 +31,16 @@ const MomentsAndBeats = ({ content, exhibit, exhibitState, setExhibitState }: Mo
     });
   };
 
-  const goTo = (momentId: string, beatIdx: number) => {
+  const goTo = (momentId: Section, beatIdx: number) => {
     setExhibitState({ beatIdx, momentId });
     publishNavigation(momentId, beatIdx);
   };
 
-  const handleBulletPointClick = (momentId: string) => () => {
+  const handleBulletPointClick = (momentId: Section) => () => {
     goTo(momentId, 0);
   };
 
-  const handleBeatClick = (beatIdx: number, momentId: string) => (event: MouseEvent<HTMLButtonElement>) => {
+  const handleBeatClick = (momentId: Section, beatIdx: number) => (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     goTo(momentId, beatIdx);
   };
@@ -70,30 +70,31 @@ const MomentsAndBeats = ({ content, exhibit, exhibitState, setExhibitState }: Mo
             <div className="flex items-center gap-[10px]">
               {Array.from({ length: moment.beatCount }, (_, beatIdx) => {
                 const isActiveBeat = isActiveMoment && beatIdx === currentBeatIdx;
-                const isVideoBeat = moment.id === 'case-study' && beatIdx === 1;
-
-                if (isVideoBeat) {
-                  return <CaseStudyToggle isActive={isActiveMoment} key={`${momentId}-${currentBeatIdx}`} />;
-                }
+                const isCaseStudyFirstBeat = moment.id === 'case-study' && beatIdx === 0;
 
                 return (
-                  <button
-                    className={cn(
-                      'relative flex h-[42px] w-[60px] items-center justify-center rounded-full border-[1.5px] transition-colors',
-                      isActiveBeat
-                        ? 'border-primary-bg-grey bg-transparent'
-                        : isActiveMoment
+                  <div className="flex items-center gap-2.5" key={beatIdx}>
+                    {/* Beat button */}
+                    <button
+                      className={cn(
+                        'relative flex h-[42px] w-[60px] items-center justify-center rounded-full border-[1.5px] transition-colors',
+                        isActiveBeat
                           ? 'border-primary-bg-grey bg-transparent'
-                          : 'border-white/0 bg-white/10'
-                    )}
-                    key={beatIdx}
-                    onClick={handleBeatClick(beatIdx, moment.id)}
-                  >
-                    {isActiveBeat && <div className="animate-flash-purple-gradient absolute inset-0 rounded-full" />}
-                    <span className="text-primary-bg-grey relative z-10 text-center text-xl leading-[1.2] tracking-[-1px]">
-                      {isActiveMoment ? beatIdx + 1 : ''}
-                    </span>
-                  </button>
+                          : isActiveMoment
+                            ? 'border-primary-bg-grey bg-transparent'
+                            : 'border-white/0 bg-white/10'
+                      )}
+                      onClick={handleBeatClick(moment.id, beatIdx)}
+                    >
+                      {isActiveBeat && <div className="animate-flash-purple-gradient absolute inset-0 rounded-full" />}
+                      <span className="text-primary-bg-grey relative z-10 text-center text-lg leading-[1.2] tracking-[-5%]">
+                        {isActiveMoment ? beatIdx + 1 : ''}
+                      </span>
+                    </button>
+
+                    {/* Insert the toggle right AFTER case-study 0 */}
+                    {isCaseStudyFirstBeat && <CaseStudyToggle isActive={isActiveMoment} />}
+                  </div>
                 );
               })}
             </div>

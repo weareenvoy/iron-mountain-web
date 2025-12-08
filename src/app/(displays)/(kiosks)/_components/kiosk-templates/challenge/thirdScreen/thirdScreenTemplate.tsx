@@ -1,21 +1,22 @@
 'use client';
 
-// import styles from './thirdScreenTemplate.module.css';
+import { ArrowDown, ArrowUp, Diamond } from 'lucide-react';
+import Image from 'next/image';
+import { DEFAULT_KIOSK_ID, type KioskId } from '../../../../_types/kiosk-id';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
-// Asset constants from Figma MCP
-const imgArrowNarrowDown = 'http://localhost:3845/assets/0317ffc66a61baf023ab7ce353692457254030a6.svg';
-const imgHeroDiamond = 'http://localhost:3845/assets/980d1dee1ed7de2996214b8db1a42986b97dc47d.png';
-const imgMetricDiamond = 'http://localhost:3845/assets/f52f006df3b7e80cef930718c449ddff29312f59.png';
-const imgVector = imgHeroDiamond;
-const imgVector1 = imgMetricDiamond;
-const imgVector2 = 'http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg';
+// import styles from './thirdScreenTemplate.module.css';
 
-export interface ThirdScreenTemplateProps {
-  arrowIconSrc?: string;
-  challengeIconSrc?: string;
+// Asset constants from Figma MCP
+const imgHeroDiamond = '/images/kiosks/kiosk1/04-custom-interactive/CU-Image1-Diamond.png';
+const imgMetricDiamond = '/images/kiosks/kiosk1/04-custom-interactive/CU-Image1-Diamond.png';
+const imgVector = '/images/kiosks/kiosk1/04-custom-interactive/CU-Image1-Full.png';
+const imgVector1 = imgMetricDiamond;
+
+export type ThirdScreenTemplateProps = Readonly<{
   description?: string;
   heroImageSrc?: string;
+  kioskId?: KioskId;
   largeIconCenterSrc?: string;
   largeIconTopSrc?: string;
   metricAmount?: string;
@@ -25,62 +26,64 @@ export interface ThirdScreenTemplateProps {
   onNavigateUp?: () => void;
   subheadline?: string | string[];
   videoSrc?: string;
-}
+}>;
 
-export default function ThirdScreenTemplate({
-  arrowIconSrc = imgArrowNarrowDown,
-  challengeIconSrc = imgVector2,
+export const ThirdScreenTemplate = ({
   description = 'The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.',
   heroImageSrc = imgHeroDiamond,
+  kioskId = DEFAULT_KIOSK_ID,
   largeIconCenterSrc = imgVector1,
   largeIconTopSrc = imgVector,
   metricAmount = '40 TB',
-  metricDescription = 'of existing footage of data migration from physical drives into Smart Vault.',
+  metricDescription = 'of existing footage of data migration from physical drives into Iron Mountain’s digital preservation platform.',
   metricImageSrc = imgMetricDiamond,
   onNavigateDown,
   onNavigateUp,
   subheadline = 'Rich media &\n cultural heritage',
-  videoSrc = '/_videos/v1/3742b7e5490c6c79474014f5d41e4d50fe21d59a',
-}: ThirdScreenTemplateProps) {
+  videoSrc = '/images/kiosks/kiosk1/03-value/Value-header.mp4',
+}: ThirdScreenTemplateProps) => {
   return (
     <div
       // className={styles.container}
-      className="relative flex h-screen w-full flex-col overflow-hidden bg-black"
+      className="group/kiosk relative flex h-screen w-full flex-col overflow-hidden bg-black"
+      data-hero-image={heroImageSrc}
+      data-kiosk={kioskId}
+      data-large-icon-center={largeIconCenterSrc}
+      data-large-icon-top={largeIconTopSrc}
       data-node-id="5168:9928"
+      data-video-src={videoSrc}
     >
       {/* Video Section */}
       <div
         // className={styles.videoContainer}
-        className="absolute left-0 top-0 z-[1] h-[1291px] w-full overflow-hidden"
+        className="absolute top-0 left-0 z-[1] h-[1291px] w-full overflow-hidden"
         data-node-id="5168:9929"
       >
-        <video
-          autoPlay
-          loop
-          playsInline
-          muted
-          controlsList="nodownload"
-          // className={styles.video}
-          className="absolute left-[-7.5%] top-[-5.93%] h-[117.19%] w-[124.52%] bg-red-500 object-cover object-center"
-        >
-          <source src={videoSrc} type="video/mp4" />
-        </video>
-      </div>
-
-      {/* Top Hero Diamond */}
-      <div className="absolute left-[240px] top-[640px] z-[4] flex size-[520px] -translate-x-1/2 rotate-[45deg]">
-        <img alt="" className="h-full w-full object-contain" src={heroImageSrc} />
+        <div className="relative top-[-5.93%] left-[-7.5%] h-[117.19%] w-[124.52%]">
+          <video
+            autoPlay
+            className="h-full w-full object-cover object-center"
+            controlsList="nodownload"
+            loop
+            muted
+            playsInline
+            // className={styles.video}
+          >
+            <source src={videoSrc} type="video/mp4" />
+          </video>
+          <div className="pointer-events-none absolute inset-0 bg-black/20" />
+        </div>
       </div>
 
       {/* Subheadline */}
       <div
         // className={styles.subheadlineContainer}
-        className="absolute left-[120px] top-[368px] z-[10] -translate-y-full"
+        className="absolute top-[368px] left-[120px] z-[10] -translate-y-full"
         data-node-id="5168:9935"
       >
         <h2
           // className={styles.subheadline}
-          className="whitespace-pre-line text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#ededed]"
+          className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]"
         >
           {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
         </h2>
@@ -89,20 +92,18 @@ export default function ThirdScreenTemplate({
       {/* Challenge Label */}
       <div
         // className={styles.challengeLabel}
-        className="absolute left-[135px] top-[750px] z-[10] flex items-center gap-[41px]"
+        className="absolute top-[750px] left-[135px] z-[10] flex items-center gap-[41px]"
         data-node-id="5168:9942"
       >
         <div
           // className={styles.challengeIcon}
-          className="relative mr-[15px] flex h-[100px] w-[100px] items-center justify-center"
+          className="relative mr-0 flex h-[110px] w-[110px] items-center justify-center"
         >
-          <div className="relative size-full rotate-[225deg] scale-y-[-1]">
-            <img alt="" className="block h-full w-full object-contain" src={challengeIconSrc} />
-          </div>
+          <Diamond aria-hidden="true" className="h-full w-full text-[#ededed]" focusable="false" strokeWidth={1.25} />
         </div>
         <h1
           // className={styles.challengeText}
-          className="whitespace-nowrap text-[126.031px] font-normal leading-[1.3] tracking-[-6.3015px] text-[#ededed]"
+          className="text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]"
         >
           Challenge
         </h1>
@@ -111,12 +112,12 @@ export default function ThirdScreenTemplate({
       {/* Description */}
       <div
         // className={styles.descriptionContainer}
-        className="absolute left-[118px] top-[2122px] z-[5] w-[971px]"
+        className="absolute top-[2115px] left-[120px] z-[5] w-[1010px]"
         data-node-id="5168:9932"
       >
         <p
           // className={styles.description}
-          className="text-[60px] font-normal leading-[1.4] tracking-[-3px] text-white"
+          className="text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white"
         >
           {renderRegisteredMark(description)}
         </p>
@@ -125,35 +126,30 @@ export default function ThirdScreenTemplate({
       {/* Metrics Section */}
       <div
         // className={styles.metricsSection}
-        className="absolute left-[-80px] top-[3324px] z-[5] flex w-[1390px] flex-col gap-[100px]"
+        className="absolute top-[3315px] left-[-80px] z-[5] flex w-[1390px] flex-col gap-[100px] group-data-[kiosk=kiosk-2]/kiosk:top-[3395px] group-data-[kiosk=kiosk-2]/kiosk:left-[-180px]"
         data-node-id="5168:9945"
       >
         <div
           // className={styles.metricAmount}
-          className="whitespace-nowrap text-center font-[300] text-[400px] leading-[1.3] tracking-[-20px] text-[#6dcff6]"
+          className="text-center text-[400px] leading-[1.3] font-[300] tracking-[-20px] whitespace-nowrap text-[#6dcff6]"
         >
           {renderRegisteredMark(metricAmount)}
         </div>
         <p
           // className={styles.metricDescription}
-          className="relative left-[200px] top-[-142px] text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#6dcff6]"
+          className="relative top-[-142px] left-[200px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#6dcff6] group-data-[kiosk=kiosk-2]/kiosk:left-[300px]"
         >
           {renderRegisteredMark(metricDescription)}
         </p>
-      </div>
-
-      {/* Bottom Media Diamond */}
-      <div className="absolute left-[332px] top-[3100px] z-[4] flex size-[520px] rotate-[45deg]">
-        <img alt="" className="h-full w-full object-contain" src={metricImageSrc} />
       </div>
 
       {/* Navigation Arrows */}
       <div
         aria-label="Previous"
         // className={styles.arrowUp}
-        className="absolute right-[120px] top-[1755px] z-[10] flex h-[118px] w-[118px] -scale-y-100 items-center justify-center"
+        className="absolute top-[1750px] right-[120px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
         data-node-id="5168:9940"
-        onKeyDown={(event) => {
+        onKeyDown={event => {
           if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
             onNavigateUp?.();
@@ -163,14 +159,14 @@ export default function ThirdScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img alt="Up" className="h-full w-full object-contain" src={arrowIconSrc} />
+        <ArrowUp aria-hidden="true" className="h-full w-full text-[#ffffff66]" focusable="false" strokeWidth={1.5} />
       </div>
       <div
         aria-label="Next"
         // className={styles.arrowDown}
-        className="absolute right-[120px] top-[1980px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
+        className="absolute top-[1980px] right-[120px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
         data-node-id="5168:9938"
-        onKeyDown={(event) => {
+        onKeyDown={event => {
           if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
             onNavigateDown?.();
@@ -180,36 +176,42 @@ export default function ThirdScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <img alt="Down" className="h-full w-full object-contain" src={arrowIconSrc} />
+        <ArrowDown aria-hidden="true" className="h-full w-full text-[#ffffff66]" focusable="false" strokeWidth={1.5} />
       </div>
 
       {/* Background Gradients */}
       <div
         // className={styles.gradientBg}
-        className="absolute left-[0.49px] top-[-224.49px] z-[2] h-[5549.29px] w-[2158.28px] rounded-[100px] bg-[linear-gradient(to_bottom,#1b75bc_0%,#14477d_98%)]"
+        className="absolute top-[-224px] left-[0px] z-[2] h-[5549px] w-[2158px] rounded-[100px] bg-[linear-gradient(to_bottom,#1b75bc_0%,#14477d_98%)]"
         data-node-id="5168:9930"
       />
       <div
         // className={styles.topGradientOverlay}
-        className="pointer-events-none absolute left-0 top-0 z-[3] h-[1732px] w-full bg-[linear-gradient(to_bottom,#1968ab_66.076%,rgba(26,108,175,0)_99.322%)]"
+        className="pointer-events-none absolute top-0 left-0 z-[3] h-[1732px] w-full bg-[linear-gradient(to_bottom,#1968ab_66.076%,rgba(26,108,175,0)_99.322%)]"
         data-node-id="5168:9934"
       />
 
-      {/* Large Background Icons */}
-      <div
-        // className={styles.largeIconTop}
-        className="pointer-events-none absolute left-[-152px] top-[666px] z-[4] flex h-[1056px] w-[860px] items-center justify-center rotate-[225deg] scale-y-[-1]"
-        data-node-id="5168:9933"
-      >
-        <img alt="" className="block h-full w-full object-contain" src={largeIconTopSrc} />
-      </div>
       <div
         // className={styles.largeIconCenter}
-        className="pointer-events-none absolute left-[1052px] top-[2536px] z-[4] flex h-[695px] w-[695px] items-center justify-center rotate-[225deg] scale-y-[-1]"
+        className="pointer-events-none absolute top-[2415px] left-[920px] z-[4] flex h-[945px] w-[945px] scale-y-[-1] rotate-[225deg] items-center justify-center"
         data-node-id="5168:9936"
       >
-        <img alt="" className="block h-full w-full object-contain" src={largeIconCenterSrc} />
+        <div className="relative h-full w-full">
+          <Image
+            alt={metricDescription ? `Graphic representing ${metricDescription}` : 'Metric highlight graphic'}
+            className="object-contain"
+            fill
+            sizes="795px"
+            src={metricImageSrc}
+            style={{ transform: 'rotate(45deg)' }}
+            unoptimized
+          />
+        </div>
       </div>
     </div>
   );
-}
+};
+
+ThirdScreenTemplate.displayName = 'ThirdScreenTemplate';
+
+export default ThirdScreenTemplate;

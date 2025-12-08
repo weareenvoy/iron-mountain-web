@@ -1,54 +1,73 @@
 {
-  "secondScreens": [
-    {
-      "subheadline": ["IT assets &", "data centers"],
-      "title": "Device retrieval & redeployment services",
-      "stepOneLabel": "01.",
-      "stepOneDescription": "Collect devices from branch offices, remote teams, and warehouse stock.",
-      "stepTwoLabel": "02.",
-      "stepTwoDescription": "Scan, sanitize, and transport every asset with documented chain of custody.",
-      "stepThreeLabel": "03.",
-      "stepThreeDescription": "Refurbish and redeploy hardware with current images and paperwork.",
-      "stepFourLabel": "04.",
-      "stepFourDescription": "Reconcile redeployments with finance and inventory controls."
-    },
-    {
-      "subheadline": ["IT assets &", "data centers"],
-      "title": "IT asset disposition (ITAD) for end-user devices",
-      "stepOneLabel": "01.",
-      "stepOneDescription": "Grade equipment, capture condition photos, and sort reusable components.",
-      "stepTwoLabel": "02.",
-      "stepTwoDescription": "Perform certified data sanitization tailored to compliance requirements.",
-      "stepThreeLabel": "03.",
-      "stepThreeDescription": "Remarket or recycle assets to maximize value recovery and sustainability.",
-      "stepFourLabel": "04.",
-      "stepFourDescription": "Report resale value, recycling volumes, and carbon savings."
-    },
-    {
-      "subheadline": ["IT assets &", "data centers"],
-      "title": "Decommissioning and logistics",
-      "stepOneLabel": "01.",
-      "stepOneDescription": "Plan crate-and-move timelines, label racks, and schedule secure transport.",
-      "stepTwoLabel": "02.",
-      "stepTwoDescription": "Provide detailed chain-of-custody records, insurance, and compliance reporting.",
-      "stepThreeLabel": "03.",
-      "stepThreeDescription": "Deliver assets to lifecycle facilities for reuse, redeployment, or disposal.",
-      "stepFourLabel": "04.",
-      "stepFourDescription": "Produce executive-ready closeout reports with photos and KPIs."
-    },
-    {
-      "subheadline": ["IT assets &", "data centers"],
-      "title": "Smart Vault archiving",
-      "stepOneLabel": "01.",
-      "stepOneDescription": "Digitize and enrich legacy records with searchable metadata.",
-      "stepTwoLabel": "02.",
-      "stepTwoDescription": "Store media in climate-controlled vaults and Smart Vault repositories.",
-      "stepThreeLabel": "03.",
-      "stepThreeDescription": "Provide global access, retention controls, and AI-powered search.",
-      "stepFourLabel": "04.",
-      "stepFourDescription": "Deliver analytics on usage, retention, and compliance readiness."
-    }
-  ],
-  "fourthScreen": {}
+  "firstScreen": {
+    "backgroundVideoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/02+-+Solution/Solution-header.webm",
+    "description": "Global IT teams rely on Iron Mountain to consolidate decommissioning, ITAD, and Smart Vault services into a single, auditable workflow.",
+    "subheadline": ["IT assets &", "data centers"],
+    "title": "Confidence across every disposition project"
+  },
+  "secondScreen": {
+    "heroImageSrc": "/images/kiosks/kiosk3/02-solution/Solution-Image1-Diamond.png",
+    "stepFourDescription": "Improved total cost of ownership (TCO) on IT assets due to maximized remarketing returns",
+    "stepFourLabel": "04.",
+    "stepOneDescription": "Improved logistical costs due to extensive global footprint and in-house logistics",
+    "stepOneLabel": "01.",
+    "stepThreeDescription": "Helped maintain consistency and compliance across locations in North America, Europe, and APAC",
+    "stepThreeLabel": "03.",
+    "stepTwoDescription": "Optimized delivery and transparency with end-to-end chain of custody, visibility through technology integration, and comprehensive reporting",
+    "stepTwoLabel": "02.",
+    "subheadline": ["IT assets &", "data centers"],
+    "title": "Together, we:"
+  },
+  "fourthScreen": {
+    "accordionItems": [
+      {
+        "color": "white",
+        "contentList": [
+          "Automated and scalable",
+          "Custom packaging",
+          "Real-time tracking",
+          "Redeployment of devices and peripherals"
+        ],
+        "expanded": true,
+        "id": "item-1",
+        "number": "01.",
+        "title": "Device retrieval and redeployment services"
+      },
+      {
+        "color": "lightBlue",
+        "contentList": [
+          "Secure chain of custody",
+          "Guaranteed data sanitization",
+          "Maximized value recovery",
+          "Clear sustainability reporting"
+        ],
+        "id": "item-2",
+        "number": "02.",
+        "title": "IT asset disposition (ITAD) for end-user devices"
+      },
+      {
+        "color": "blue",
+        "contentList": ["Data destruction", "Flexible data sanitization", "Secure media destruction"],
+        "id": "item-3",
+        "number": "03.",
+        "title": "Data center decommissioning & ITAD"
+      },
+      {
+        "color": "navy",
+        "contentList": ["Onsite inventory and removal", "Secure logistics"],
+        "id": "item-4",
+        "number": "04.",
+        "title": "Decommissioning and logistics"
+      }
+    ],
+    "accentDiamondSrc": "",
+    "backgroundVideoSrc": "",
+    "gradientEndColor": "#8a0d71",
+    "gradientStartColor": "#a2115e",
+    "mediaDiamondOutlineSrc": "",
+    "mediaDiamondSolidSrc": "/images/kiosks/kiosk3/02-solution/Solution-Image2-Diamond.png",
+    "solutionLabel": "Solution",
+    "subheadline": ["IT assets &", "data centers"],
+    "title": "Iron Mountain’s Asset Lifecycle Management"
+  }
 }
-

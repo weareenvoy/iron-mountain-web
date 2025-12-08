@@ -7,8 +7,9 @@ import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
 import { useMqtt } from '@/components/providers/mqtt-provider';
+import { useDocentTranslation } from '@/hooks/use-docent-translation';
 import { cn } from '@/lib/tailwind/utils/cn';
-import type { Tour } from '@/app/(tablets)/docent/_types';
+import type { Tour } from '@/lib/internal/types';
 
 interface TourByDate {
   readonly dayOfWeek: string;
@@ -16,14 +17,17 @@ interface TourByDate {
 }
 
 const SchedulePageClient = () => {
+  const { t } = useDocentTranslation();
   const router = useRouter();
   const { client } = useMqtt();
-  const { allTours, isConnected, isTourDataLoading, refreshTours, setCurrentTour } = useDocent();
+  const { data, isConnected, isTourDataLoading, refreshData, setCurrentTour } = useDocent();
 
   const [selectedTourId, setSelectedTourId] = useState<null | string>(null);
   const [currentMonthDate, setCurrentMonthDate] = useState(new Date());
 
   const toursByDate = useMemo<Record<string, TourByDate>>(() => {
+    const allTours = data?.tours ?? [];
+
     if (allTours.length === 0) {
       return {};
     }
@@ -61,7 +65,7 @@ const SchedulePageClient = () => {
       },
       {} as Record<string, TourByDate>
     );
-  }, [allTours]);
+  }, [data?.tours]);
 
   // For the 4 buttons in header
   const handlePreviousMonth = () => {
@@ -136,13 +140,13 @@ const SchedulePageClient = () => {
     (): HeaderProps['leftButton'] => ({
       href: '/docent',
       icon: <House className="size-[20px]" />,
-      text: 'Back to home',
+      text: t.docent.navigation.backToHome,
     }),
-    []
+    [t]
   );
 
   if (!isConnected) {
-    return <div>Connecting to MQTT...</div>;
+    return <div>{t.connection.connecting}</div>;
   }
 
   return (
@@ -151,16 +155,18 @@ const SchedulePageClient = () => {
       <Header leftButton={leftButton} />
       <div className="flex h-full w-full flex-col justify-between">
         {/* Header */}
-        <h1 className="text-primary-bg-grey mt-35 pl-5 text-4xl leading-loose tracking-[-1.8px]">EBC schedule</h1>
+        <h1 className="text-primary-bg-grey mt-40 pl-5 text-3xl leading-loose tracking-[-1.8px]">
+          {t.docent.schedule.title}
+        </h1>
         <div className="bg-primary-bg-grey relative flex w-full flex-col gap-[87px] rounded-t-[20px] px-6 py-11">
           <div className="text-primary-im-dark-blue flex items-center justify-between">
             <Button
-              className="border-primary-im-dark-blue text-primary-im-dark-blue h-13 w-24.5 text-xl leading-[1.4] tracking-[-1px]"
+              className="border-primary-im-dark-blue text-primary-im-dark-blue h-13 min-w-24.5 text-xl leading-[1.4] tracking-[-1px]"
               onClick={handleToday}
               size="sm"
               variant="outline"
             >
-              Today
+              {t.docent.actions.today}
             </Button>
             <div className="flex items-center gap-7">
               <button className="active:opacity-50" onClick={handlePreviousMonth}>
@@ -176,7 +182,7 @@ const SchedulePageClient = () => {
                 <ArrowRight className="size-[24px]" />
               </button>
             </div>
-            <button className="active:opacity-50" onClick={refreshTours}>
+            <button className="active:opacity-50" onClick={refreshData}>
               <RotateCw className="size-[24px]" />
             </button>
           </div>
@@ -184,12 +190,12 @@ const SchedulePageClient = () => {
           {/* Tours list */}
           <div className="h-[624px] space-y-0 overflow-y-auto">
             {isTourDataLoading ? (
-              <div>Loading...</div>
+              <div>{t.docent.schedule.loading}</div>
             ) : filteredTours.length === 0 ? (
-              <div className="text-primary-im-dark-blue">No tours available for this month.</div>
+              <div className="text-primary-im-dark-blue">{t.docent.schedule.noTours}</div>
             ) : (
               filteredTours.map(([date, { dayOfWeek, tours }]) => (
-                <div className="flex flex-col border-t border-[#C9C9C9] py-5" key={date}>
+                <div className="flex flex-col gap-5 border-t border-[#C9C9C9] py-5" key={date}>
                   {/* Day of week and date */}
                   <p className="text-primary-im-mid-blue ml-7.5 text-[18px] leading-loose">
                     <span>{dayOfWeek}, </span>
@@ -256,7 +262,7 @@ const SchedulePageClient = () => {
                               size="sm"
                               variant="secondary"
                             >
-                              Load
+                              {t.docent.actions.load}
                             </Button>
                           )}
                         </div>

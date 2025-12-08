@@ -1,2 +1,2 @@
-export { default as ChallengeInitialScreen } from './ChallengeInitialScreen';
-export type { ChallengeInitialScreenProps } from './ChallengeInitialScreen';
+export { default as ChallengeInitialScreen } from './initialScreen/initialScreenTemplate';
+export type { InitialScreenTemplateProps as ChallengeInitialScreenProps } from './initialScreen/initialScreenTemplate';

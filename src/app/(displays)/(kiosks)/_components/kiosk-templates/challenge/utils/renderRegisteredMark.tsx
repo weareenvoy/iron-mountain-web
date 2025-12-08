@@ -30,14 +30,14 @@ export const renderRegisteredMark = (text?: string | string[]): ReactNode => {
   let lastIndex = 0;
 
   matches.forEach((match, index) => {
-    const matchIndex = match.index ?? 0;
+    const matchIndex = typeof match.index === 'number' ? match.index : 0;
     if (matchIndex > lastIndex) {
       parts.push(normalized.slice(lastIndex, matchIndex));
     }
     parts.push(
       <span className="registered-mark" key={`registered-mark-${matchIndex}-${index}`}>
         {match[0]}
-      </span>,
+      </span>
     );
     lastIndex = matchIndex + match[0].length;
   });
@@ -50,4 +50,3 @@ export const renderRegisteredMark = (text?: string | string[]): ReactNode => {
 };
 
 export default renderRegisteredMark;
-

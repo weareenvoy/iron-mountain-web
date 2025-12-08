@@ -51,7 +51,7 @@ Always use this hook when building linear presentation flows to ensure consisten
 ### Tailwind CSS v4
 
 - Use the new v4 engine.
-- **Variables**: Define theme colors in `src/lib/tailwind/styles/globals.css` using standard CSS variables.
+- **Variables**: Define theme colors in `src/app/globals.css` using standard CSS variables.
 - **Spacing**: Stick to the default Tailwind spacing scale (4px increments).
 - **Fonts**: Use `font-interstate` for headings and `font-geometria` for body text (configured in `layout.tsx`).
 

@@ -1,82 +1,90 @@
 'use client';
 
-import { ArrowRight, CircleAlert, CircleCheck, ExternalLink, Volume2, VolumeX, X } from 'lucide-react';
-import Image from 'next/image';
+import {
+  ArrowLeft,
+  ArrowRight,
+  CircleAlert,
+  CircleCheck,
+  ExternalLink,
+  Lightbulb,
+  Volume2,
+  VolumeX,
+} from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useMemo } from 'react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import { Switch } from '@/app/(tablets)/docent/_components/ui/Switch';
 import { useMqtt } from '@/components/providers/mqtt-provider';
+import { useDocentTranslation } from '@/hooks/use-docent-translation';
 import { cn } from '@/lib/tailwind/utils/cn';
+import type { ExhibitControl } from '@/lib/internal/types';
 
 interface SettingsDrawerProps {
   readonly isOpen: boolean;
   readonly onClose: () => void;
 }
 
-interface ExhibitControl {
-  readonly errorMessage?: string;
-  readonly hasError?: boolean;
-  readonly id: string;
-  readonly isMuted: boolean;
-  readonly isOn: boolean;
-  readonly name: string;
-}
-
-// TODO Mock data for testing. How to get this data is not implemented yet
-const MOCK_EXHIBIT_CONTROLS: ExhibitControl[] = [
-  {
-    hasError: false,
-    id: 'entry-way',
-    isMuted: false,
-    isOn: true,
-    name: 'Entry Way',
-  },
-  {
-    hasError: false,
-    id: 'basecamp',
-    isMuted: false,
-    isOn: true,
-    name: 'Basecamp',
-  },
-  {
-    hasError: false,
-    id: 'overlook',
-    isMuted: true,
-    isOn: true,
-    name: 'Overlook',
-  },
-  {
-    hasError: false,
-    id: 'solution-pathways',
-    isMuted: false,
-    isOn: true,
-    name: 'Solution Pathways',
-  },
-  {
-    errorMessage: 'Offline',
-    hasError: true,
-    id: 'summit',
-    isMuted: false,
-    isOn: false,
-    name: 'Summit Room',
-  },
-];
+// Hardcoded exhibit IDs - these match the dictionary keys
+const EXHIBIT_IDS: readonly ('basecamp' | 'entry-way' | 'overlook' | 'solution-pathways' | 'summit')[] = [
+  'basecamp',
+  'entry-way',
+  'overlook',
+  'solution-pathways',
+  'summit',
+] as const;
 
 const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
+  const { t } = useDocentTranslation();
   const { client } = useMqtt();
   const { currentTour } = useDocent();
   const router = useRouter();
 
-  // TODO Convert GEC data to exhibit controls for display
-  // const exhibitControls: ExhibitControl[] = [];
+  // Build exhibit controls from dictionary
+  // TODO: State (isOn, isMuted, hasError) should come from GEC/MQTT in the future
+  const exhibitControls: ExhibitControl[] = useMemo(() => {
+    return EXHIBIT_IDS.map(id => {
+      const nameKey =
+        id === 'entry-way'
+          ? 'entryWay'
+          : id === 'solution-pathways'
+            ? 'solutionPathways'
+            : id === 'summit'
+              ? 'summitRoom'
+              : id;
+      const name = t.settings.exhibits[nameKey as keyof typeof t.settings.exhibits];
+
+      // Default state - will be replaced with real GEC state later
+      const defaultState: ExhibitControl = {
+        hasError: false,
+        id,
+        isMuted: false,
+        isOn: true,
+        name,
+      };
+
+      // Mock error state for summit (for testing)
+      if (id === 'summit') {
+        return {
+          errorMessage: t.settings.status.offline,
+          hasError: true,
+          id,
+          isMuted: false,
+          isOn: false,
+          name,
+        };
+      }
+
+      return defaultState;
+    });
+  }, [t]);
 
   const handleToggleMute = (exhibitId: string) => () => {
     if (!client) return;
 
     // Find current muted state
-    const exhibit = MOCK_EXHIBIT_CONTROLS.find(c => c.id === exhibitId);
+    const exhibit = exhibitControls.find(c => c.id === exhibitId);
     if (!exhibit) return;
 
     // Send setVolume command to GEC
@@ -118,23 +126,23 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
         )}
       >
         {/* Header */}
-        <div className="mt-35 mb-19 flex items-center justify-between">
-          <h2 className="text-primary-bg-grey text-4xl leading-[48px]">Settings (this is hardcoded for now!)</h2>
-          <Button className="mr-[-30px] h-13 gap-2.5 px-5" onClick={onClose} variant="outline-light-grey">
-            <X className="size-[24px]" />
-            <span className="h-6.25 text-[20px]">Close</span>
+        <div className="mt-10 mb-19 flex flex-col items-start justify-between gap-18">
+          <Button className="-mr-[30px] h-13 gap-2.5 px-5" onClick={onClose} variant="outline-light-grey">
+            <ArrowLeft className="size-[24px]" />
+            <span className="h-6.25 text-[20px]">{t.docent.actions.back}</span>
           </Button>
+          <h2 className="text-primary-bg-grey text-4xl leading-[48px]">{t.settings.title}</h2>
         </div>
 
         {/* Controls List */}
         <div className="space-y-8">
-          {MOCK_EXHIBIT_CONTROLS.map(control => (
+          {exhibitControls.map(control => (
             <div className="flex h-15 items-center justify-between" key={control.id}>
               <div className="flex flex-col gap-1">
                 {/* Status Icon and control name*/}
                 <div className="flex items-center gap-2.5">
                   {control.isOn ? (
-                    <CircleCheck className="size-[32px] fill-[#8dc13f] stroke-[#2e2e2e]" />
+                    <CircleCheck className="size-[32px] fill-[#6dcff6] stroke-[#2e2e2e]" />
                   ) : (
                     <CircleAlert className="size-[32px] fill-[#f7931e] stroke-[#2e2e2e]" />
                   )}
@@ -147,7 +155,7 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
 
                 {/* Error message */}
                 {control.hasError && (
-                  <span className="text-secondary-im-orange ml-11 text-[16px]">{control.errorMessage}</span>
+                  <span className="text-primary-im-grey ml-11 text-[16px]">{control.errorMessage}</span>
                 )}
               </div>
 
@@ -170,24 +178,24 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
         <div className="flex h-15 items-center justify-between">
           <div className="flex items-center gap-3">
             {/* Lightbulb icon */}
-            <Image alt="Lightbulb" height={24} src="/images/lightbulb.svg" width={24} />
+            <Lightbulb className="size-[28px]" color="#6DCFF6" />
 
-            <span className="text-primary-im-light-blue text-2xl">EBC Lights</span>
+            <span className="text-primary-im-light-blue text-2xl">{t.settings.ebcLights}</span>
           </div>
 
           {/* Switch to toggle EBC Lights. TODO Is the value from GEC state? */}
-          <Switch id="ebc-lights" onCheckedChange={handleToggleEBCLights} />
+          <Switch id="ebc-lights" onCheckedChange={handleToggleEBCLights} useIcon />
         </div>
 
         {/* End Tour Button */}
         <div className="my-8 border-t border-[#58595B]"></div>
         <div className="flex flex-col items-center justify-center gap-6 text-center">
           <Button className="flex h-16 w-full text-xl" onClick={handleEndTour} variant="primary">
-            <span>End tour & activate idle</span>
+            <span>{t.settings.endTourButton}</span>
             <ArrowRight className="size-[24px]" />
           </Button>
-          <p className="text-primary-bg-grey w-70 text-[16px] leading-loose tracking-[-0.8px]">
-            Tap to end the experience and bring all screens back to idle mode.
+          <p className="text-primary-bg-grey min-w-70 text-[16px] leading-loose tracking-[-0.8px]">
+            {t.settings.endTourDescription}
           </p>
         </div>
         {/* Open EBC Manual Link */}
@@ -197,7 +205,7 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
           target="_blank"
         >
           <ExternalLink className="size-[24px]" />
-          <span className="text-[16px] leading-loose">Open EBC Manual</span>
+          <span className="text-[16px] leading-loose">{t.settings.openManual}</span>
         </Link>
       </div>
     </>
