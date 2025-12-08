@@ -1,10 +1,10 @@
 'use client';
 
-import { useDocentTranslation } from '@/hooks/use-docent-translation';
+import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 
 const DocentLoading = () => {
-  const { t } = useDocentTranslation();
-  return <div className="flex h-full w-full items-center justify-center">{t.loading.default}</div>;
+  const { data } = useDocent();
+  return <div className="flex h-full w-full items-center justify-center">{data?.loading.default ?? 'Loading…'}</div>;
 };
 
 export default DocentLoading;

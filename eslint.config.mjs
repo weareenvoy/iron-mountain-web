@@ -65,7 +65,7 @@ const eslintConfig = defineConfig([
       // cspell (points at your repo-level config)
       '@cspell/spellchecker': ['warn', { autoFix: true, cspell: require('./cspell.config.cjs') }],
       '@next/next/no-img-element': 'warn',
-      '@typescript-eslint/member-ordering': ['error', { default: { order: 'alphabetically' } }],
+      '@typescript-eslint/member-ordering': 'off', // perfectionist/sort-object-types handles this
       '@typescript-eslint/no-deprecated': 'error',
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-unnecessary-condition': 'error',
@@ -95,7 +95,7 @@ const eslintConfig = defineConfig([
       'import/no-relative-parent-imports': 'off',
       'import/no-unassigned-import': 'off',
       'import/no-unresolved': 'off', // TS resolver handles this
-      'import/order': ['off'], // perfectionist/sort-imports handles this
+      'import/order': 'off', // perfectionist/sort-imports handles this
       'import/prefer-default-export': 'off',
       'no-console': ['error', { allow: ['error', 'info', 'warn'] }],
       'no-duplicate-imports': 'error',
@@ -190,7 +190,7 @@ const eslintConfig = defineConfig([
         },
       ],
       'react/jsx-pascal-case': ['warn', { allowNamespace: true }],
-      'react/jsx-sort-props': 'error',
+      'react/jsx-sort-props': 'off', // perfectionist/sort-jsx-props handles this
       // Disallow nesting components inside other components.
       // This helps prevent state loss and readability issues.
       'react/no-unstable-nested-components': 'error',

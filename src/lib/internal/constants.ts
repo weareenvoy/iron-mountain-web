@@ -12,7 +12,9 @@ export const ANIMATION_MID_DELAY_CLASS = 'delay-600' as const;
 export const ANIMATION_LONG_DELAY_NUMBER = 1000 as const;
 export const ANIMATION_LONG_DELAY_CLASS = 'delay-1000' as const;
 
-export const APPS: Readonly<{ readonly route: '/basecamp' | '/docent'; readonly title: string }[]> = [
+type AppRoute = '/basecamp' | '/docent' | '/summit';
+
+export const APPS: Readonly<{ readonly route: AppRoute; readonly title: string }[]> = [
   {
     route: '/docent',
     title: 'Docent Tablet',
@@ -20,5 +22,9 @@ export const APPS: Readonly<{ readonly route: '/basecamp' | '/docent'; readonly 
   {
     route: '/basecamp',
     title: 'Basecamp Display',
+  },
+  {
+    route: '/summit',
+    title: 'Summit Display',
   },
 ] as const;
