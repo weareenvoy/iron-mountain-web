@@ -1,6 +1,6 @@
 'use client';
 
-import challengeContent from '@public/api/kiosk-1.json';
+import challengeContent from '@public/api/kiosk-1-challenges.json';
 import { useEffect, useState } from 'react';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
 import FirstScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/firstScreen/firstScreenTemplate';
