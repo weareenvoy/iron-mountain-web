@@ -1,25 +1,32 @@
+'use client';
+
 import type { BasecampData } from '@/lib/internal/types';
 
 type Props = {
-  readonly data: BasecampData['problem-3'];
+  readonly data: BasecampData['problem-2'];
 };
 
+// 3 locks of text. First shows up in left, second in center, third in right
+
 const Problem3 = ({ data }: Props) => {
+  // Stagger delays: 2000ms, 3000ms, 4000ms
+  const delays = [2000, 3000, 4000];
+
   return (
-    <div className="absolute inset-0 flex items-center justify-center">
-      <div className="text-secondary-im-purple space-y-8 text-center">
-        <div className="text-5xl font-bold">{data.title}</div>
-        <div className="grid grid-cols-2 gap-8">
-          <div className="text-2xl font-semibold">{data['challenge-1'].title}</div>
-          <div className="text-lg">{data['challenge-1'].body}</div>
-          <div className="text-2xl font-semibold">{data['challenge-2'].title}</div>
-          <div className="text-lg">{data['challenge-2'].body}</div>
-          <div className="text-2xl font-semibold">{data['challenge-3'].title}</div>
-          <div className="text-lg">{data['challenge-3'].body}</div>
-          <div className="text-2xl font-semibold">{data['challenge-4'].title}</div>
-          <div className="text-lg">{data['challenge-4'].body}</div>
-        </div>
-      </div>
+    <div className="absolute inset-0 flex">
+      {data.map((item, index) => {
+        const key = `${item.percent}-${item.percentSubtitle}`;
+        const delay = delays[index] ?? 0;
+
+        return (
+          <div className="flex flex-1 flex-col items-center justify-center" key={key}>
+            <div className="animate-scale-fade-in space-y-2 text-center" style={{ animationDelay: `${delay}ms` }}>
+              <div className="text-8xl font-bold">{item.percent}</div>
+              <div className="text-2xl">{item.percentSubtitle}</div>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 };
