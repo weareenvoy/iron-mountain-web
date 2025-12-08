@@ -67,7 +67,7 @@ const getDiamondIcon = (card: ValueDiamondCard) => {
   return normalizedColor ? diamondIconMap[normalizedColor] : undefined;
 };
 
-const normalizeMultiline = (value?: string | readonly string[]): string | undefined => {
+const normalizeMultiline = (value?: readonly string[] | string): string | undefined => {
   if (value == null) return undefined;
   if (Array.isArray(value)) return value.join('\n');
   if (typeof value === 'string') return value;
