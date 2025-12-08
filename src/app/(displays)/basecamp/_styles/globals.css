@@ -25,3 +25,111 @@
 
 @layer utilities {
 }
+
+/* Animation Keyframes */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scale-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Problem2: Fade in, hold, then shrink and fly away */
+@keyframes problem2-sequence {
+  0% {
+    left: 8%;
+    opacity: 0;
+    top: 15%;
+    transform: scale(1);
+  }
+  14% {
+    left: 8%;
+    opacity: 1;
+    top: 15%;
+    transform: scale(1);
+  }
+  86% {
+    left: 8%;
+    opacity: 1;
+    top: 15%;
+    transform: scale(1);
+  }
+  100% {
+    left: -10%;
+    opacity: 0;
+    top: -5%;
+    transform: scale(0.5);
+  }
+}
+
+/* WelcomeView: Fade in, hold, move left and exit */
+@keyframes welcome-sequence {
+  0% {
+    opacity: 0;
+    transform: translateX(10%);
+  }
+  17% {
+    opacity: 1;
+    transform: translateX(10%);
+  }
+  67% {
+    opacity: 1;
+    transform: translateX(10%);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+}
+
+/* PossibilitiesTitle: Fade in, hold, fade out */
+@keyframes possibilities-title-sequence {
+  0% {
+    opacity: 0;
+  }
+  7% {
+    opacity: 0;
+  }
+  29% {
+    opacity: 1;
+  }
+  86% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out forwards;
+}
+
+.animate-scale-fade-in {
+  animation: scale-fade-in 0.7s ease-out both;
+}
+
+.animate-problem2 {
+  animation: problem2-sequence 3.5s ease-in-out forwards;
+}
+
+.animate-welcome {
+  animation: welcome-sequence 6s ease-in-out forwards;
+}
+
+.animate-possibilities-title {
+  animation: possibilities-title-sequence 7s ease-in-out forwards;
+}
