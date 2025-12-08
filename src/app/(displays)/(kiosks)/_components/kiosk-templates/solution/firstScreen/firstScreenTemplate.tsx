@@ -42,16 +42,16 @@ const SolutionFirstScreenTemplate = ({
       {/* Background video */}
       <div className="absolute top-[-5px] left-0 h-[1545px] w-full">
         <div className="relative h-full w-full">
-        <video
-          autoPlay
-          className="absolute h-full w-full bg-black object-cover"
-          controlsList="nodownload"
-          loop
+          <video
+            autoPlay
+            className="absolute h-full w-full bg-black object-cover"
+            controlsList="nodownload"
+            loop
             muted
-          playsInline
-        >
-          <source src={backgroundVideoSrc} type="video/mp4" />
-        </video>
+            playsInline
+          >
+            <source src={backgroundVideoSrc} type="video/mp4" />
+          </video>
           <div className="pointer-events-none absolute inset-0 bg-black/20" />
         </div>
       </div>

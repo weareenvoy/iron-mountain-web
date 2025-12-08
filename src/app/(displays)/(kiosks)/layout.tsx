@@ -6,7 +6,7 @@ import './_styles/globals.css';
 const KiosksRootLayout = ({ children }: PropsWithChildren) => {
   return (
     <ScaleWrapper targetHeight={config.height} targetWidth={config.width}>
-        <div data-app="displays-kiosks">{children}</div>
+      <div data-app="displays-kiosks">{children}</div>
     </ScaleWrapper>
   );
 };

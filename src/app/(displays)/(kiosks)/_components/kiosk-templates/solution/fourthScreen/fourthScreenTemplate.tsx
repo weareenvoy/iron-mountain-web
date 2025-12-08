@@ -153,7 +153,7 @@ const SolutionFourthScreenTemplate = ({
                     style={{ backgroundColor: prevPalette?.header, zIndex: 0 }}
                   />
                 ) : null}
-                  <AccordionTrigger
+                <AccordionTrigger
                   className={`group/accordion-trigger relative z-[1] flex h-[120px] min-h-[240px] items-center px-[80px] text-left text-[52px] leading-[1.4] tracking-[-2.6px] transition-none hover:no-underline focus-visible:outline-none ${triggerRoundedClass}`}
                   indicator={<PlusMinusIcon color={palette.text} />}
                   style={{
@@ -170,11 +170,11 @@ const SolutionFourthScreenTemplate = ({
                   <div className="flex flex-1 items-center gap-[40px]">
                     <span>{renderRegisteredMark(item.number)}</span>
                     <span className="text-left">{renderRegisteredMark(item.title)}</span>
-                    </div>
-                  </AccordionTrigger>
+                  </div>
+                </AccordionTrigger>
                 <AccordionContent className="[&>div]:pb-0">
                   {hasContent ? (
-                      <div
+                    <div
                       className="px-[80px] pt-[50px] pb-[120px] pl-[218px]"
                       style={{
                         backgroundColor: palette.body,
@@ -182,7 +182,7 @@ const SolutionFourthScreenTemplate = ({
                         paddingLeft: '210px',
                         paddingTop: '35px',
                       }}
-                      >
+                    >
                       <ul className="space-y-[16px] text-[52px] leading-[1.4] tracking-[-2.6px]">
                         {item.contentList?.map(bullet => (
                           <li
@@ -190,13 +190,13 @@ const SolutionFourthScreenTemplate = ({
                             key={bullet}
                             style={{ marginBottom: '0px', marginInlineStart: '70px', paddingInlineStart: '15px' }}
                           >
-                              {renderRegisteredMark(bullet)}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                            {renderRegisteredMark(bullet)}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   ) : null}
-                    </AccordionContent>
+                </AccordionContent>
               </AccordionItem>
             );
           })}
@@ -208,9 +208,9 @@ const SolutionFourthScreenTemplate = ({
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 h-full w-full"
         style={{
-          WebkitMaskImage:
-            'linear-gradient(#fff 0%, #fff calc(100% - 140px), transparent calc(100% - 75px), transparent 100%)',
           maskImage:
+            'linear-gradient(#fff 0%, #fff calc(100% - 140px), transparent calc(100% - 75px), transparent 100%)',
+          WebkitMaskImage:
             'linear-gradient(#fff 0%, #fff calc(100% - 140px), transparent calc(100% - 75px), transparent 100%)',
         }}
       >
