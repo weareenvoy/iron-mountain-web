@@ -97,17 +97,20 @@ export default function SolutionFourthScreenTemplate({
       </div>
 
       {/* Solution label */}
-      <div className="absolute left-[128.17px] top-[745.23px] flex items-center gap-[41px]">
+      <div className="absolute left-[140px] top-[790px] flex items-center gap-[41px]" style={{ left: '140px', top: '790px' }}>
         <div className="relative flex h-[200px] w-[200px] items-center justify-center" style={{ left: -55, top: -25 }}>
           <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
         </div>
-        <h1 className="whitespace-nowrap text-[126.031px] font-normal leading-[1.3] tracking-[-6.3015px] text-[#ededed]">
+        <h1
+          className="whitespace-nowrap text-[126.031px] font-normal leading-[1.3] tracking-[-6.3015px] text-[#ededed]"
+          style={{ left: '-100px', position: 'relative', top: '-20px' }}
+        >
           {solutionLabel}
         </h1>
       </div>
 
       {/* Title */}
-      <div className="absolute left-[240px] top-[1428px] w-[1271px]">
+      <div className="absolute left-[240px] top-[1260px] w-[1300px]" style={{ top: '1260px', width: '1300px' }}>
         <p className="text-[100px] font-normal leading-[1.3] tracking-[-5px] text-[#ededed] whitespace-pre-line">
           {renderRegisteredMark(title)}
         </p>
@@ -119,6 +122,7 @@ export default function SolutionFourthScreenTemplate({
           className="space-y-0 overflow-hidden rounded-[80px]"
           collapsible
           defaultValue={entries.find((entry) => entry.expanded)?.id ?? entries[0]?.id ?? 'item-1'}
+          style={{ backgroundColor: '#ededed' }}
           type="single"
         >
           {entries.map((item, index) => {
@@ -130,35 +134,48 @@ export default function SolutionFourthScreenTemplate({
                 : index === entries.length - 1
                   ? 'rounded-b-[80px]'
                   : 'rounded-none';
+            const triggerRoundedClass =
+              index === 0
+                ? 'rounded-t-[50px]'
+                : index === entries.length - 1
+                  ? 'rounded-b-[50px]'
+                  : 'rounded-none';
 
             return (
               <AccordionItem className={`border-none ${roundedClass} overflow-hidden`} key={item.id} value={item.id}>
-                  <AccordionTrigger
-                  className="group/accordion-trigger flex h-[120px] items-center px-[80px] text-left text-[52px] leading-[1.4] tracking-[-2.6px] transition-none hover:no-underline focus-visible:outline-none"
+                <AccordionTrigger
+                  className={`group/accordion-trigger flex h-[120px] min-h-[240px] items-center px-[80px] text-left text-[52px] leading-[1.4] tracking-[-2.6px] transition-none hover:no-underline focus-visible:outline-none ${triggerRoundedClass}`}
                   indicator={<PlusMinusIcon color={palette.text} />}
-                    style={{ backgroundColor: palette.header, color: palette.text }}
-                  >
+                  style={{
+                    backgroundColor: palette.header,
+                    borderBottomLeftRadius: index === entries.length - 1 ? '50px' : undefined,
+                    borderBottomRightRadius: index === entries.length - 1 ? '50px' : undefined,
+                    borderTopLeftRadius: '50px',
+                    borderTopRightRadius: '50px',
+                    color: palette.text,
+                  }}
+                >
                   <div className="flex flex-1 items-center gap-[40px]">
                     <span>{renderRegisteredMark(item.number)}</span>
                     <span className="text-left">{renderRegisteredMark(item.title)}</span>
-                    </div>
-                  </AccordionTrigger>
-                    <AccordionContent>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="[&>div]:pb-0">
                   {hasContent ? (
-                      <div
-                      className="px-[80px] pb-[60px] pl-[218px] pt-[100px]"
-                      style={{ backgroundColor: palette.body, color: palette.text }}
-                      >
+                    <div
+                      className="px-[80px] pb-[120px] pl-[218px] pt-[50px]"
+                      style={{ backgroundColor: palette.body, color: palette.text, paddingLeft: '210px', paddingTop: '35px' }}
+                    >
                       <ul className="space-y-[16px] text-[52px] leading-[1.4] tracking-[-2.6px]">
                         {item.contentList?.map((bullet) => (
-                          <li className="ms-[78px] list-disc" key={bullet}>
-                              {renderRegisteredMark(bullet)}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                          <li className="list-disc" key={bullet} style={{ marginInlineStart: '70px', marginBottom: '0px' }}>
+                            {renderRegisteredMark(bullet)}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   ) : null}
-                    </AccordionContent>
+                </AccordionContent>
               </AccordionItem>
             );
           })}

@@ -35,29 +35,66 @@ export interface SolutionThirdScreenTemplateProps {
 }
 
 export default function SolutionThirdScreenTemplate({
+  accentDiamondSrc,
+  bottomLeftLabel,
+  bottomRightLabel,
+  centerLabel,
   gradientEndColor = '#8a0d71',
   gradientStartColor = '#a2115e',
   mediaDiamondLeftSrc = imgDiamondMediaLeft,
   mediaDiamondRightSrc = imgDiamondMediaRight,
-  solutionLabel = 'Solution',
-  subheadline = 'Rich media &\n cultural heritage',
-  title = 'How Iron Mountain\nSmart Vault works:',
-  topLeftLabel = 'Platform centralization',
-  topRightLabel = 'Metadata enrichment',
-  bottomLeftLabel = 'Automated workflows',
-  bottomRightLabel = 'Searchable repository of pension information',
-  centerLabel = 'Document digitization',
-  accentDiamondSrc,
   onNavigateDown,
   onNavigateUp,
+  solutionLabel,
+  subheadline,
+  title,
+  topLeftLabel,
+  topRightLabel,
 }: SolutionThirdScreenTemplateProps) {
-  const textDiamonds = [
-    { className: 'left-[540px] top-[1460px]', label: centerLabel, Outline: GreenDiamondThird },
-    { className: 'left-[180px] top-[1880px]', label: topLeftLabel, Outline: OrangeDiamondThird },
-    { className: 'left-[1020px] top-[1680px]', label: topRightLabel, Outline: BlueDiamondThird },
-    { className: 'left-[480px] top-[2180px]', label: bottomLeftLabel, Outline: OrangeDiamondThird2 },
-    { className: 'left-[940px] top-[2440px]', label: bottomRightLabel, Outline: GreenDiamondThird2 },
-  ] as const;
+  type TextDiamondConfig = {
+    className: string;
+    label?: string;
+    Outline?: ComponentType<SVGProps<SVGSVGElement>>;
+    sizeClass?: string;
+    textWrapperClassName?: string;
+    textWrapperStyles?: Record<string, string>;
+  };
+
+  const textDiamonds: ReadonlyArray<TextDiamondConfig> = [
+    {
+      className: 'left-[240px] top-[350px]',
+      label: centerLabel,
+      Outline: GreenDiamondThird,
+      sizeClass: 'size-[910px]',
+      textWrapperClassName: 'w-[660px] group-data-[kiosk=kiosk-1]/kiosk:w-[500px]',
+      textWrapperStyles: { left: '500px' },
+    },
+    {
+      className: 'left-[-270px] top-[880px]',
+      label: topLeftLabel,
+      Outline: OrangeDiamondThird,
+      sizeClass: 'size-[910px]',
+    },
+    {
+      className: 'left-[760px] top-[880px]',
+      label: topRightLabel,
+      Outline: BlueDiamondThird,
+      sizeClass: 'size-[900px]',
+      textWrapperStyles: { width: '700px' },
+    },
+    {
+      className: 'left-[245px] top-[1410px]',
+      label: bottomLeftLabel,
+      Outline: OrangeDiamondThird2,
+      sizeClass: 'size-[900px]',
+    },
+    {
+      className: 'left-[760px] top-[1970px]',
+      label: bottomRightLabel,
+      Outline: GreenDiamondThird2,
+      sizeClass: 'size-[900px]',
+    },
+  ];
 
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden bg-black" data-node-id="5168:9626">
@@ -69,42 +106,62 @@ export default function SolutionThirdScreenTemplate({
       />
 
       {/* Subheadline */}
-      <div className="absolute left-[120px] top-[368px] -translate-y-full text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#ededed]">
+      <div
+        className="absolute left-[120px] top-[230px] w-[500px] -translate-y-full text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-3]/kiosk:relative group-data-[kiosk=kiosk-3]/kiosk:left-auto group-data-[kiosk=kiosk-3]/kiosk:top-[410px] group-data-[kiosk=kiosk-3]/kiosk:w-[380px] group-data-[kiosk=kiosk-3]/kiosk:translate-y-0"
+      >
         {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
       </div>
 
       {/* Solution label */}
       <div className="absolute left-[128.17px] top-[745.23px] flex items-center gap-[41px]">
-        <div className="relative flex h-[200px] w-[200px] items-center justify-center" style={{ left: -55, top: -25 }}>
+        <div className="relative flex h-[200px] w-[200px] items-center justify-center" style={{ left: -45, top: 15 }}>
           <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
         </div>
-        <h1 className="whitespace-nowrap text-[126.031px] font-normal leading-[1.3] tracking-[-6.3015px] text-[#ededed]">
+        <h1
+          className="relative whitespace-nowrap text-[126.031px] font-normal leading-[1.3] tracking-[-6.3015px] text-[#ededed] left-[-80px] top-[20px] group-data-[kiosk=kiosk-3]/kiosk:left-[-100px] group-data-[kiosk=kiosk-3]/kiosk:top-[-20px]"
+        >
           {solutionLabel}
         </h1>
       </div>
 
       {/* Title */}
-      <div className="absolute left-[240px] top-[1428px] w-[1271px] text-white">
+      <div className="absolute left-[240px] top-[1210px] w-[1300px] text-white group-data-[kiosk=kiosk-3]/kiosk:top-[1260px]">
         <p className="text-[100px] font-normal leading-[1.3] tracking-[-5px] whitespace-pre-line">{renderRegisteredMark(title)}</p>
       </div>
 
       {/* Diamond cluster */}
       <div className="absolute left-[240px] top-[1400px] h-[2800px] w-[1680px]">
-        {textDiamonds.map(({ className, label, Outline }) => (
-          <Diamond className={className} key={`${className}-${label}`} label={label} Outline={Outline} textColor="#ededed" />
-        ))}
+        {textDiamonds.map(({ className, label, Outline, sizeClass, textWrapperClassName, textWrapperStyles }) =>
+          label ? (
+            <Diamond
+              className={className}
+              key={`${className}-${label}`}
+              label={label}
+              Outline={Outline}
+              sizeClass={sizeClass}
+              textWrapperClassName={textWrapperClassName}
+              textWrapperStyles={textWrapperStyles}
+              textColor="#ededed"
+            />
+          ) : null,
+        )}
 
         <MediaDiamond
-          className="left-[140px] top-[2480px]"
+          className="left-[-280px] top-[1950px]"
           fallback={<GreenDiamondThird2 aria-hidden="true" className="h-full w-full" focusable="false" />}
           imageSrc={mediaDiamondLeftSrc}
+          sizeClass="size-[900px]"
         />
         <MediaDiamond
-          className="left-[860px] top-[2680px]"
-          fallback={<BlueDiamondThird aria-hidden="true" className="h-full w-full" focusable="false" />}
+          className="left-[1295px] top-[1425px]"
+          fallback={<BlueDiamondThird aria-hidden="true" className="h-full w/full" focusable="false" />}
           imageSrc={mediaDiamondRightSrc}
+          sizeClass="size-[900px]"
         />
-        <FilledDiamond className="left-[1380px] top-[1820px]" imageSrc={accentDiamondSrc} />
+        <FilledDiamond
+          className="left-[1285px] top-[605px] rotate-[45deg] group-data-[kiosk=kiosk-1]/kiosk:left-[1330px] group-data-[kiosk=kiosk-1]/kiosk:top-[650px]"
+          imageSrc={accentDiamondSrc}
+        />
       </div>
 
       {/* Navigation arrows */}
@@ -146,17 +203,33 @@ type DiamondProps = {
   Outline?: ComponentType<SVGProps<SVGSVGElement>>;
   className: string;
   label?: string;
+  sizeClass?: string;
   textColor?: string;
+  textWrapperClassName?: string;
+  textWrapperStyles?: Record<string, string>;
 };
 
-function Diamond({ Outline, className, label, textColor = '#ededed' }: DiamondProps) {
+function Diamond({
+  Outline,
+  className,
+  label,
+  sizeClass = 'size-[666px]',
+  textColor = '#ededed',
+  textWrapperClassName,
+  textWrapperStyles,
+}: DiamondProps) {
   return (
     <div className={`absolute ${className}`}>
-      <div className="relative size-[666px]">
+      <div className={`relative ${sizeClass}`}>
         {Outline ? (
           <Outline aria-hidden="true" className="block h-full w-full object-contain" focusable="false" />
         ) : null}
-        <div className="absolute left-1/2 top-1/2 flex w-[320px] -translate-x-1/2 -translate-y-1/2 flex-col items-center text-center">
+        <div
+          className={`absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center text-center ${
+            textWrapperClassName ?? 'w-[460px]'
+          }`}
+          style={textWrapperStyles}
+        >
           <p className="text-[67px] font-normal leading-[1.4] tracking-[-3.3px]" style={{ color: textColor }}>
             {renderRegisteredMark(label)}
           </p>
@@ -170,12 +243,13 @@ type MediaDiamondProps = {
   className: string;
   fallback?: ReactNode;
   imageSrc?: string;
+  sizeClass?: string;
 };
 
-function MediaDiamond({ className, fallback, imageSrc }: MediaDiamondProps) {
+function MediaDiamond({ className, fallback, imageSrc, sizeClass = 'size-[666px]' }: MediaDiamondProps) {
   return (
     <div className={`absolute ${className}`}>
-      <div className="relative size-[666px] rotate-[45deg] overflow-hidden rounded-[120px]">
+      <div className={`relative ${sizeClass} rotate-[45deg] overflow-hidden rounded-[120px]`}>
         {imageSrc ? (
           <img alt="" className="h-full w-full -rotate-[45deg] object-cover" src={imageSrc} />
         ) : (
@@ -189,7 +263,7 @@ function MediaDiamond({ className, fallback, imageSrc }: MediaDiamondProps) {
 function FilledDiamond({ className, imageSrc }: { className: string; imageSrc?: string }) {
   return (
     <div className={`absolute ${className}`}>
-      <div className="relative size-[360px] rotate-[45deg]">
+      <div className="relative size-[390px] rotate-[45deg] group-data-[kiosk=kiosk-1]/kiosk:size-[290px]">
         {imageSrc ? (
         <img alt="" className="h-full w-full -rotate-[45deg] object-cover" src={imageSrc} />
         ) : (
