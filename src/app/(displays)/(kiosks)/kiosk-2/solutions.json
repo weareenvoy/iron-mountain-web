@@ -2,8 +2,8 @@
   "firstScreen": {
     "backgroundVideoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-header.webm",
     "description": "A dedicated Iron Mountain asset lifecycle team provides a single program to retrieve, redeploy, or retire every device across the healthcare enterprise.",
-    "subheadline": ["Healthcare IT", "asset lifecycle"],
-    "title": "Lifecycle logistics built for global scale"
+    "subheadline": ["Information", "& data lifecycle"],
+    "title": "Lifecycle logistics built for global scale" 
   },
   "fourthScreen": {
     "accordionItems": [],
@@ -15,8 +15,8 @@
     "mediaDiamondOutlineSrc": "",
     "mediaDiamondSolidSrc": "",
     "solutionIconSrc": "",
-    "solutionLabel": "",
-    "subheadline": [],
+    "solutionLabel": "Solution",
+    "subheadline": ["Information", "& data lifecycle"],
     "title": ""
   },
   "secondScreen": {
@@ -24,22 +24,21 @@
     "backgroundGlyphSrc": "",
     "gradientEndColor": "#8a0d71",
     "gradientStartColor": "#a2115e",
+    "heroImageSrc": "/images/kiosks/kiosk2/02-solution/Solution-Image1-Diamond.png",
     "largeDiamondOutlineSrc": "",
     "mediumDiamondOutlineSrc": "",
     "solutionIconSrc": "",
-    "solutionLabel": "",
-    "stepFourDescription": "Sync redeployment status with ITSM tools for downstream transparency.",
-    "stepFourLabel": "04.",
-    "stepOneDescription": "Collect devices across enterprise offices, remote teams, and global warehouses.",
+    "solutionLabel": "Solution",
+    "stepOneDescription": "Converted all document formats (including handwritten papers, microfilm, CD/DVD) into digital form, then identified and extracted key data to enrich the records with searchable metadata",
     "stepOneLabel": "01.",
-    "stepThreeDescription": "Refurbish and redeploy hardware with updated images and documentation.",
+    "stepThreeDescription": "Migrated legacy systems to InSight DXP to house all pension information",
     "stepThreeLabel": "03.",
-    "stepTwoDescription": "Scan, sanitize, and transport each asset with full chain-of-custody visibility.",
+    "stepTwoDescription": "Created a complete repository of digitized and searchable pension information",
     "stepTwoLabel": "02.",
-    "subheadline": ["IT assets &", "data centers"],
+    "subheadline": ["Information", "& data lifecycle"],
     "timelineDividerLongSrc": "",
     "timelineDividerShortSrc": "",
-    "title": "Device retrieval & redeployment services"
+    "title": "Together, we:"
   },
   "thirdScreen": {
     "accentDiamondSrc": "",
@@ -52,8 +51,8 @@
     "mediaDiamondLeftSrc": "",
     "mediaDiamondRightSrc": "",
     "solutionIconSrc": "",
-    "solutionLabel": "",
-    "subheadline": [],
+    "solutionLabel": "Solution",
+    "subheadline": ["Information", "& data lifecycle"],
     "title": "",
     "topLeftLabel": "",
     "topRightLabel": ""

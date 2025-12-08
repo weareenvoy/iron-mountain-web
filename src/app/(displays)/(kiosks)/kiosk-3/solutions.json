@@ -6,16 +6,17 @@
     "title": "Confidence across every disposition project"
   },
   "secondScreen": {
-    "stepFourDescription": "Reconcile redeployments with finance and inventory controls.",
+    "heroImageSrc": "/images/kiosks/kiosk3/02-solution/Solution-Image1-Diamond.png",
+    "stepFourDescription": "Improved total cost of ownership (TCO) on IT assets due to maximized remarketing returns",
     "stepFourLabel": "04.",
-    "stepOneDescription": "Collect devices from branch offices, remote teams, and warehouse stock.",
+    "stepOneDescription": "Improved logistical costs due to extensive global footprint and in-house logistics",
     "stepOneLabel": "01.",
-    "stepThreeDescription": "Refurbish and redeploy hardware with updated images and documentation.",
+    "stepThreeDescription": "Helped maintain consistency and compliance across locations in North America, Europe, and APAC",
     "stepThreeLabel": "03.",
-    "stepTwoDescription": "Scan, sanitize, and transport every asset with documented chain of custody.",
+    "stepTwoDescription": "Optimized delivery and transparency with end-to-end chain of custody, visibility through technology integration, and comprehensive reporting",
     "stepTwoLabel": "02.",
     "subheadline": ["IT assets &", "data centers"],
-    "title": "Device retrieval & redeployment services"
+    "title": "Together, we:"
   },
   "fourthScreen": {
     "accordionItems": [

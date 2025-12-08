@@ -2,15 +2,15 @@
 
 import { type ComponentType, type ReactNode, type SVGProps } from 'react';
 
-import { ArrowDown, ArrowUp, Diamond as DiamondIcon } from 'lucide-react';
+import { ArrowDown, ArrowUp } from 'lucide-react';
 
 import BlueDiamondThird from '@/components/ui/icons/Kiosks/Solutions/BlueDiamondThird';
 import GreenDiamondThird from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondThird';
 import GreenDiamondThird2 from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondThird2';
 import OrangeDiamondThird from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondThird';
 import OrangeDiamondThird2 from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondThird2';
+import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
 import TealGradientDiamondThird from '@/components/ui/icons/Kiosks/Solutions/TealGradientDiamondThird';
-
 import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
 
 const imgDiamondMediaLeft = '/images/kiosks/kiosk2/02-solution/Solution-Image2-Diamond.png';
@@ -75,8 +75,8 @@ export default function SolutionThirdScreenTemplate({
 
       {/* Solution label */}
       <div className="absolute left-[128.17px] top-[745.23px] flex items-center gap-[41px]">
-        <div className="relative flex h-[100px] w-[100px] items-center justify-center">
-          <DiamondIcon aria-hidden="true" className="h-[90px] w-[90px] text-[#ededed]" focusable="false" strokeWidth={1.25} />
+        <div className="relative flex h-[200px] w-[200px] items-center justify-center" style={{ left: -55, top: -25 }}>
+          <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
         </div>
         <h1 className="whitespace-nowrap text-[126.031px] font-normal leading-[1.3] tracking-[-6.3015px] text-[#ededed]">
           {solutionLabel}
@@ -191,7 +191,7 @@ function FilledDiamond({ className, imageSrc }: { className: string; imageSrc?: 
     <div className={`absolute ${className}`}>
       <div className="relative size-[360px] rotate-[45deg]">
         {imageSrc ? (
-          <img alt="" className="h-full w-full -rotate-[45deg] object-cover" src={imageSrc} />
+        <img alt="" className="h-full w-full -rotate-[45deg] object-cover" src={imageSrc} />
         ) : (
           <TealGradientDiamondThird aria-hidden="true" className="h-full w-full -rotate-[45deg]" focusable="false" />
         )}

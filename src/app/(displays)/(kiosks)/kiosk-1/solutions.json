@@ -8,16 +8,18 @@
   "secondScreen": {
     "gradientEndColor": "#8a0d71",
     "gradientStartColor": "#a2115e",
-    "stepFourDescription": "Update inventory and user records so redeployed assets stay traceable.",
+    "heroImageSrc": "/images/kiosks/kiosk1/02-solution/Solution-Image1-Diamond.png",
+    "stepFourDescription": "Stored 1,000 cubic feet total of physical, historic assets in climate-controlled, private vaults",
     "stepFourLabel": "04.",
-    "stepOneDescription": "Collect devices from global offices, remote teams, and warehouse locations.",
+    "stepOneDescription": "Digitized 786 videotapes (e.g., DVCPRO, Beta SP, MiniDV)",
     "stepOneLabel": "01.",
-    "stepThreeDescription": "Refurbish and redeploy hardware with updated images and documentation.",
+    "stepThreeDescription": "Restored 33 hard drives (67 TB) featuring GRAMMY Award shows",
     "stepThreeLabel": "03.",
-    "stepTwoDescription": "Scan, sanitize, and transport each asset with full chain-of-custody visibility.",
+    "stepTwoDescription": "Restored six hard drives (~19 TB)",
     "stepTwoLabel": "02.",
-    "subheadline": ["IT assets &", "data centers"],
-    "title": "Device retrieval & redeployment services"
+    "subheadline": ["Rich media &", "cultural heritage"],
+    "solutionLabel": "Solution",
+    "title": "Together, we:"
   },
   "thirdScreen": {
     "accentDiamondSrc": "http://localhost:3845/assets/04c5d53f375e593c269131982829bc5be36f8abf.svg",

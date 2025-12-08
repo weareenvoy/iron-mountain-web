@@ -1,7 +1,9 @@
-import { ArrowDown, ArrowUp, Diamond } from 'lucide-react';
+import { ArrowDown, ArrowUp } from 'lucide-react';
 
+import { DEFAULT_KIOSK_ID, type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import BlueDiamondSecond from '@/components/ui/icons/Kiosks/Solutions/BlueDiamondSecond';
 import GreenDiamondSecond from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondSecond';
+import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
 
 import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
 
@@ -13,6 +15,7 @@ type StepConfig = {
 const imgHeroDiamond = '/images/kiosks/kiosk2/02-solution/Solution-Image2-Diamond.png';
 
 export interface SolutionSecondScreenTemplateProps {
+  kioskId?: KioskId;
   gradientEndColor?: string;
   gradientStartColor?: string;
   heroImageAlt?: string;
@@ -35,6 +38,7 @@ export interface SolutionSecondScreenTemplateProps {
 }
 
 export default function SolutionSecondScreenTemplate({
+  kioskId = DEFAULT_KIOSK_ID,
   gradientEndColor = '#8a0d71',
   gradientStartColor = '#a2115e',
   heroImageAlt = 'Solution highlight',
@@ -81,7 +85,11 @@ export default function SolutionSecondScreenTemplate({
   };
 
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-hidden bg-black" data-node-id="5168:9473">
+    <div
+      className="group/kiosk relative flex h-screen w-full flex-col overflow-hidden bg-black"
+      data-kiosk={kioskId}
+      data-node-id="5168:9473"
+    >
       {/* Gradient backdrop */}
       <div
         className="absolute left-0 top-[-296px] h-[5416px] w-full rounded-t-[100px]"
@@ -89,43 +97,46 @@ export default function SolutionSecondScreenTemplate({
       />
 
       {/* Decorative diamonds */}
-      <div className="pointer-events-none absolute left-[-220px] top-[1420px] z-[1] h-[1700px] w-[1700px]">
+      <div className="pointer-events-none absolute left-[-120px] top-[1100px] z-[1] h-[1790px] w-[1790px]">
         <BlueDiamondSecond aria-hidden="true" className="h-full w-full" focusable="false" />
       </div>
-      <div className="pointer-events-none absolute left-[1200px] top-[1840px] z-[1] h-[820px] w-[820px]">
+      <div className="pointer-events-none absolute left-[1325px] top-[1065px] z-[1] h-[800px] w-[800px]">
         <GreenDiamondSecond aria-hidden="true" className="h-full w-full" focusable="false" />
       </div>
 
       {/* Subheadline */}
-      <div className="absolute left-[120px] top-[368px] -translate-y-full text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#ededed]">
+      <div className="absolute left-[120px] top-[245px] w-[500px] whitespace-pre-line text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#ededed]">
         {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
       </div>
 
       {/* Solution label */}
       <div className="absolute left-[128px] top-[745px] flex items-center gap-[41px]">
-        <div className="relative flex h-[100px] w-[100px] items-center justify-center">
-          <Diamond aria-hidden="true" className="h-[90px] w-[90px] text-[#ededed]" focusable="false" strokeWidth={1.25} />
+        <div className="relative flex h-[200px] w-[200px] items-center justify-center" style={{ left: -55, top: 25 }}>
+          <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
         </div>
-        <h1 className="whitespace-nowrap text-[126px] font-normal leading-[1.3] tracking-[-6.3px] text-[#ededed]">
+        <h1
+          className="whitespace-nowrap text-[126px] font-normal leading-[1.3] tracking-[-6.3px] text-[#ededed]"
+          style={{ left: -90, position: 'relative', top: 30 }}
+        >
           {renderRegisteredMark(solutionLabel)}
         </h1>
       </div>
 
       {/* Title */}
-      <p className="absolute left-[360px] top-[1568px] text-[100px] font-normal leading-[1.3] tracking-[-5px] text-white">
+      <p className="absolute left-[240px] top-[1600px] z-[1] text-[100px] font-normal leading-[1.3] tracking-[-5px] text-white">
         {renderRegisteredMark(title)}
       </p>
 
       {/* Timeline with steps */}
-      <div className="absolute left-[360px] top-[1855px] z-[2] flex w-[960px] flex-col gap-[80px] text-[60px] leading-[1.4] tracking-[-3px] text-[#ededed]">
+      <div className="absolute left-[240px] top-[1890px] z-[2] flex w-[960px] flex-col gap-[60px] text-[60px] leading-[1.4] tracking-[-3px] text-[#ededed]">
         {timelineSteps.map((step, index) => (
           <div key={`${step.label}-${index}`}>
-            <div className={`flex gap-10 ${getOpacityClass(index)}`}>
+            <div className={`flex gap-[10px] ${getOpacityClass(index)}`}>
               <p className="w-[120px]">{renderRegisteredMark(step.label)}</p>
               <p className="w-[760px]">{renderRegisteredMark(step.description)}</p>
             </div>
             {index < timelineSteps.length - 1 ? (
-              <div className="ml-[80px] mt-[30px]">
+              <div className="ml-[140px] mt-[30px]">
                 <div
                   className="border-l border-dashed border-[#ededed]/60"
                   style={{ height: `${dividerHeights[index] ?? 280}px` }}
@@ -138,7 +149,9 @@ export default function SolutionSecondScreenTemplate({
 
       {/* Hero media diamond */}
       <div className="absolute left-[1500px] top-[2180px] z-[2]">
-        <div className="h-[360px] w-[360px] rotate-[45deg] overflow-hidden rounded-[80px]">
+        <div
+          className="relative left-[-180px] top-[-90px] h-[800px] w-[800px] rotate-[45deg] overflow-hidden rounded-[80px]"
+        >
           <img alt={heroImageAlt} className="h-full w-full -rotate-[45deg] object-cover" src={heroImageSrc} />
         </div>
       </div>

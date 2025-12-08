@@ -1,10 +1,11 @@
 'use client';
 
-import { ArrowDown, ArrowUp, Diamond, Minus, Plus } from 'lucide-react';
+import { ArrowDown, ArrowUp, Minus, Plus } from 'lucide-react';
 
 import GreenDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondFourth';
 import OrangeDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondFourth';
 import OrangeGradientDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/OrangeGradientDiamondFourth';
+import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/shadcn/accordion';
 
 import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
@@ -97,8 +98,8 @@ export default function SolutionFourthScreenTemplate({
 
       {/* Solution label */}
       <div className="absolute left-[128.17px] top-[745.23px] flex items-center gap-[41px]">
-        <div className="relative flex h-[100px] w-[100px] items-center justify-center">
-          <Diamond aria-hidden="true" className="h-[90px] w-[90px] text-[#ededed]" focusable="false" strokeWidth={1.25} />
+        <div className="relative flex h-[200px] w-[200px] items-center justify-center" style={{ left: -55, top: -25 }}>
+          <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
         </div>
         <h1 className="whitespace-nowrap text-[126.031px] font-normal leading-[1.3] tracking-[-6.3015px] text-[#ededed]">
           {solutionLabel}

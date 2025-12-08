@@ -107,6 +107,7 @@ const Kiosk3View = () => {
         render: () => (
           <SolutionSecondScreenTemplate
             {...solutions.secondScreen}
+            kioskId="kiosk-3"
             onNavigateDown={() => controller.next()}
             onNavigateUp={() => controller.prev()}
           />
