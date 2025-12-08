@@ -47,21 +47,14 @@
       },
       {
         "color": "blue",
-        "contentList": [
-          "Data destruction",
-          "Flexible data sanitization",
-          "Secure media destruction"
-        ],
+        "contentList": ["Data destruction", "Flexible data sanitization", "Secure media destruction"],
         "id": "item-3",
         "number": "03.",
         "title": "Data center decommissioning & ITAD"
       },
       {
         "color": "navy",
-        "contentList": [
-          "Onsite inventory and removal",
-          "Secure logistics"
-        ],
+        "contentList": ["Onsite inventory and removal", "Secure logistics"],
         "id": "item-4",
         "number": "04.",
         "title": "Decommissioning and logistics"
