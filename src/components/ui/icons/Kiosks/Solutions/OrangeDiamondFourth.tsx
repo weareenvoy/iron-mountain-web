@@ -16,4 +16,3 @@ const OrangeDiamondFourth = (props: SVGProps<SVGSVGElement>) => {
 OrangeDiamondFourth.displayName = 'OrangeDiamondFourth';
 
 export default OrangeDiamondFourth;
-

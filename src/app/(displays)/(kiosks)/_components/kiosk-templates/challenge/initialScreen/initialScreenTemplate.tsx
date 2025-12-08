@@ -87,14 +87,14 @@ export const InitialScreenTemplate = ({
         <div className="absolute top-[2910px] left-[120px] z-[3] flex h-[180px] w-[710px] items-center group-data-[kiosk=kiosk-2]/kiosk:top-[2870px] group-data-[kiosk=kiosk-3]/kiosk:hidden">
           <div className="relative h-full w-full">
             {logoCombinedSrc ? (
-            <Image
-              alt="Partner logos"
-              className="object-contain"
-              fill
-              sizes="710px"
+              <Image
+                alt="Partner logos"
+                className="object-contain"
+                fill
+                sizes="710px"
                 src={logoCombinedSrc}
-              unoptimized
-            />
+                unoptimized
+              />
             ) : (
               <WhiteLogoSimple aria-hidden="true" className="h-full w-full" preserveAspectRatio="xMidYMid meet" />
             )}

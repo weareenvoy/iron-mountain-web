@@ -11,7 +11,14 @@ const BlueDiamondMain = (props: SVGProps<SVGSVGElement>) => {
         strokeWidth={5}
       />
       <defs>
-        <linearGradient id={gradientId} x1="261.035" x2="1271.29" y1="150.769" y2="1263.83" gradientUnits="userSpaceOnUse">
+        <linearGradient
+          gradientUnits="userSpaceOnUse"
+          id={gradientId}
+          x1="261.035"
+          x2="1271.29"
+          y1="150.769"
+          y2="1263.83"
+        >
           <stop stopColor="#6DCFF6" />
           <stop offset=".98" stopColor="#1B75BC" />
         </linearGradient>
@@ -23,4 +30,3 @@ const BlueDiamondMain = (props: SVGProps<SVGSVGElement>) => {
 BlueDiamondMain.displayName = 'BlueDiamondMain';
 
 export default BlueDiamondMain;
-

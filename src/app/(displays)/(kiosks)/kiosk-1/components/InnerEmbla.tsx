@@ -2,10 +2,9 @@
 
 import useEmblaCarousel from 'embla-carousel-react';
 import { useEffect, type ReactNode } from 'react';
-
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
 
-type Props = { id?: string; slides?: ReactNode[] };
+type Props = { readonly id?: string; readonly slides?: ReactNode[] };
 
 const InnerEmbla = ({ id = 'inner-embla', slides }: Props) => {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false });
@@ -16,25 +15,22 @@ const InnerEmbla = ({ id = 'inner-embla', slides }: Props) => {
 
     controller.register(id, {
       goTo: i => {
-        if (emblaApi) {
-          emblaApi.scrollTo(i);
-          return true;
-        }
-        return false;
+        emblaApi.scrollTo(i);
+        return true;
       },
       next: () => {
-        if (emblaApi && emblaApi.canScrollNext()) {
-          emblaApi.scrollNext();
-          return true;
+        if (!emblaApi.canScrollNext()) {
+          return false;
         }
-        return false;
+        emblaApi.scrollNext();
+        return true;
       },
       prev: () => {
-        if (emblaApi && emblaApi.canScrollPrev()) {
-          emblaApi.scrollPrev();
-          return true;
+        if (!emblaApi.canScrollPrev()) {
+          return false;
         }
-        return false;
+        emblaApi.scrollPrev();
+        return true;
       },
     });
 
@@ -63,4 +59,3 @@ const InnerEmbla = ({ id = 'inner-embla', slides }: Props) => {
 InnerEmbla.displayName = 'InnerEmbla';
 
 export default InnerEmbla;
-

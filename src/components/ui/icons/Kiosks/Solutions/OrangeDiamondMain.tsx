@@ -11,7 +11,14 @@ const OrangeDiamondMain = (props: SVGProps<SVGSVGElement>) => {
         strokeWidth={5}
       />
       <defs>
-        <linearGradient id={gradientId} x1="387.977" x2="683.351" y1="150.22" y2="556.722" gradientUnits="userSpaceOnUse">
+        <linearGradient
+          gradientUnits="userSpaceOnUse"
+          id={gradientId}
+          x1="387.977"
+          x2="683.351"
+          y1="150.22"
+          y2="556.722"
+        >
           <stop stopColor="#F7931E" />
           <stop offset="1" stopColor="#F4751F" />
         </linearGradient>
@@ -23,4 +30,3 @@ const OrangeDiamondMain = (props: SVGProps<SVGSVGElement>) => {
 OrangeDiamondMain.displayName = 'OrangeDiamondMain';
 
 export default OrangeDiamondMain;
-

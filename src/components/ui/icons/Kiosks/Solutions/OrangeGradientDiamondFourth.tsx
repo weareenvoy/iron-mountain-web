@@ -10,7 +10,7 @@ const OrangeGradientDiamondFourth = (props: SVGProps<SVGSVGElement>) => {
         fill={`url(#${gradientId})`}
       />
       <defs>
-        <linearGradient id={gradientId} x1="92.713" x2="300.016" y1="92.73" y2="300.033" gradientUnits="userSpaceOnUse">
+        <linearGradient gradientUnits="userSpaceOnUse" id={gradientId} x1="92.713" x2="300.016" y1="92.73" y2="300.033">
           <stop stopColor="#F7931E" />
           <stop offset="1" stopColor="#F4751F" />
         </linearGradient>
@@ -22,4 +22,3 @@ const OrangeGradientDiamondFourth = (props: SVGProps<SVGSVGElement>) => {
 OrangeGradientDiamondFourth.displayName = 'OrangeGradientDiamondFourth';
 
 export default OrangeGradientDiamondFourth;
-

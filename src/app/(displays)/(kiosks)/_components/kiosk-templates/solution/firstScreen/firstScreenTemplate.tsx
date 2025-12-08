@@ -1,14 +1,14 @@
 'use client';
 
+import { ArrowDown, ArrowUp } from 'lucide-react';
+import Image from 'next/image';
 import BlueDiamondMain from '@/components/ui/icons/Kiosks/Solutions/BlueDiamondMain';
 import GreenDiamondMain from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondMain';
 import OrangeDiamondMain from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondMain';
-
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
-import { ArrowDown, ArrowUp } from 'lucide-react';
 import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
 
-export interface SolutionFirstScreenTemplateProps {
+export type SolutionFirstScreenTemplateProps = Readonly<{
   accentDiamondSrc?: string;
   backgroundVideoSrc?: string;
   description?: string;
@@ -21,9 +21,9 @@ export interface SolutionFirstScreenTemplateProps {
   solutionLabel?: string;
   subheadline?: string | string[];
   title?: string;
-}
+}>;
 
-export default function SolutionFirstScreenTemplate({
+const SolutionFirstScreenTemplate = ({
   accentDiamondSrc,
   backgroundVideoSrc = '/_videos/v1/872a6328a0acba2e645646ef71d669f72bbd05db',
   description = 'With a focus on physical storage and a secure digital archive, Iron Mountain provided climate-controlled, private vaults for physical artifacts and implemented Smart Vault for digital preservation.',
@@ -36,75 +36,101 @@ export default function SolutionFirstScreenTemplate({
   solutionLabel = 'Solution',
   subheadline = 'Rich media &\n cultural heritage',
   title = 'A partnership with Iron Mountain',
-}: SolutionFirstScreenTemplateProps) {
+}: SolutionFirstScreenTemplateProps) => {
   return (
-    <div className="bg-black flex flex-col h-screen overflow-hidden relative w-full" data-node-id="5168:9669">
+    <div className="relative flex h-screen w-full flex-col overflow-hidden bg-black" data-node-id="5168:9669">
       {/* Background video */}
-      <div className="absolute h-[1545px] left-0 top-[-5px] w-full">
-        <div className="h-full relative w-full">
+      <div className="absolute top-[-5px] left-0 h-[1545px] w-full">
+        <div className="relative h-full w-full">
         <video
           autoPlay
-          className="absolute bg-black h-full object-cover w-full"
+          className="absolute h-full w-full bg-black object-cover"
           controlsList="nodownload"
           loop
+            muted
           playsInline
-          muted
         >
           <source src={backgroundVideoSrc} type="video/mp4" />
         </video>
-          <div className="absolute bg-black/20 inset-0 pointer-events-none" />
+          <div className="pointer-events-none absolute inset-0 bg-black/20" />
         </div>
       </div>
 
       {/* Gradient body */}
       <div
-        className="absolute h-[4085px] left-0 rounded-t-[100px] top-[1058px] w-full"
-        style={{ background: `linear-gradient(to bottom, ${gradientStartColor} 0%, ${gradientEndColor} 99%)` }}
+        className="absolute top-[1058px] left-0 h-[4085px] w-full rounded-t-[100px]"
         data-node-id="5168:9671"
+        style={{ background: `linear-gradient(to bottom, ${gradientStartColor} 0%, ${gradientEndColor} 99%)` }}
       />
 
       {/* Subheadline */}
-      <div className="absolute font-normal leading-[1.4] left-[120px] text-[#ededed] text-[60px] top-[240px] tracking-[-3px] w-[500px]">
+      <div className="absolute top-[240px] left-[120px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed]">
         {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
       </div>
 
       {/* Solution label */}
-      <div className="absolute flex gap-[41px] items-center left-[140px] top-[790px]" data-node-id="5168:9697">
-        <div className="flex h-[200px] items-center justify-center relative w-[200px]" style={{ left: -55, top: -25 }}>
+      <div className="absolute top-[790px] left-[140px] flex items-center gap-[41px]" data-node-id="5168:9697">
+        <div className="relative flex h-[200px] w-[200px] items-center justify-center" style={{ left: -55, top: -25 }}>
           <OutlinedDiamond aria-hidden="true" focusable="false" />
         </div>
         <h1
-          className="font-normal leading-[1.3] relative text-[#ededed] text-[126.031px] tracking-[-6.3015px] whitespace-nowrap"
-          style={{ top: -20, left: -100 }}
+          className="relative text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]"
+          style={{ left: -100, top: -20 }}
         >
           {solutionLabel}
         </h1>
       </div>
 
       {/* Body copy */}
-      <div className="absolute flex flex-col gap-[80px] left-[120px] max-w-[1271px] text-white top-[1260px] w-auto">
-        <p className="font-normal leading-[1.3] text-[100px] tracking-[-5px] w-[900px]">{renderRegisteredMark(title)}</p>
-        <p className="font-normal leading-[1.4] text-[60px] tracking-[-3px]">{renderRegisteredMark(description)}</p>
+      <div className="absolute top-[1260px] left-[120px] flex w-auto max-w-[1271px] flex-col gap-[80px] text-white">
+        <p className="w-[900px] text-[100px] leading-[1.3] font-normal tracking-[-5px]">
+          {renderRegisteredMark(title)}
+        </p>
+        <p className="text-[60px] leading-[1.4] font-normal tracking-[-3px]">{renderRegisteredMark(description)}</p>
       </div>
 
       {/* Decorative diamonds */}
-      <div className="absolute h-[1770px] left-[-180px] opacity-60 pointer-events-none top-[2400px] w-[1770px] z-[3]">
+      <div className="pointer-events-none absolute top-[2400px] left-[-180px] z-[3] h-[1770px] w-[1770px] opacity-60">
         {largeDiamondSrc ? (
-        <img alt="" className="h-full object-contain w-full" src={largeDiamondSrc} />
+          <div className="relative h-full w-full">
+            <Image
+              alt="Large gradient diamond accent"
+              className="object-contain"
+              fill
+              sizes="1770px"
+              src={largeDiamondSrc}
+            />
+          </div>
         ) : (
           <BlueDiamondMain aria-hidden="true" className="h-full w-full" focusable="false" />
         )}
       </div>
-      <div className="absolute h-[800px] left-[1240px] opacity-70 pointer-events-none top-[2370px] w-[800px] z-[3]">
+      <div className="pointer-events-none absolute top-[2370px] left-[1240px] z-[3] h-[800px] w-[800px] opacity-70">
         {mediumDiamondSrc ? (
-        <img alt="" className="h-full object-contain w-full" src={mediumDiamondSrc} />
+          <div className="relative h-full w-full">
+            <Image
+              alt="Medium green diamond accent"
+              className="object-contain"
+              fill
+              sizes="800px"
+              src={mediumDiamondSrc}
+            />
+          </div>
         ) : (
           <GreenDiamondMain aria-hidden="true" className="h-full w-full" focusable="false" />
         )}
       </div>
-      <div className="absolute h-[795px] left-[1235px] opacity-70 pointer-events-none top-[3394px] w-[795px] z-[3]">
+      <div className="pointer-events-none absolute top-[3394px] left-[1235px] z-[3] h-[795px] w-[795px] opacity-70">
         {accentDiamondSrc ? (
-          <img alt="" className="h-full object-contain w-full" src={accentDiamondSrc} />
+          <div className="relative h-full w-full">
+            <Image
+              alt="Small orange accent diamond"
+              className="object-contain"
+              fill
+              sizes="795px"
+              src={accentDiamondSrc}
+            />
+          </div>
         ) : (
           <OrangeDiamondMain aria-hidden="true" className="h-full w-full" focusable="false" />
         )}
@@ -113,9 +139,9 @@ export default function SolutionFirstScreenTemplate({
       {/* Navigation arrows */}
       <div
         aria-label="Previous"
-        className="absolute flex h-[118px] items-center justify-center right-[120px] top-[1755px] w-[118px] z-[10]"
+        className="absolute top-[1755px] right-[120px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
         data-node-id="5168:9695"
-        onKeyDown={(event) => {
+        onKeyDown={event => {
           if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
             onNavigateUp?.();
@@ -125,13 +151,13 @@ export default function SolutionFirstScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <ArrowUp aria-hidden="true" className="h-full text-[#ffffff66] w-full" focusable="false" strokeWidth={1.5} />
+        <ArrowUp aria-hidden="true" className="h-full w-full text-[#ffffff66]" focusable="false" strokeWidth={1.5} />
       </div>
       <div
         aria-label="Next"
-        className="absolute flex h-[118px] items-center justify-center right-[120px] top-[1980px] w-[118px] z-[10]"
+        className="absolute top-[1980px] right-[120px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
         data-node-id="5168:9693"
-        onKeyDown={(event) => {
+        onKeyDown={event => {
           if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
             onNavigateDown?.();
@@ -141,9 +167,10 @@ export default function SolutionFirstScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <ArrowDown aria-hidden="true" className="h-full text-[#ffffff66] w-full" focusable="false" strokeWidth={1.5} />
+        <ArrowDown aria-hidden="true" className="h-full w-full text-[#ffffff66]" focusable="false" strokeWidth={1.5} />
       </div>
     </div>
   );
-}
+};
 
+export default SolutionFirstScreenTemplate;

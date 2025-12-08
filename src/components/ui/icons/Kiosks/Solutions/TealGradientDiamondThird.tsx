@@ -10,7 +10,14 @@ const TealGradientDiamondThird = (props: SVGProps<SVGSVGElement>) => {
         fill={`url(#${gradientId})`}
       />
       <defs>
-        <linearGradient id={gradientId} x1="91.084" x2="294.778" y1="91.047" y2="294.741" gradientUnits="userSpaceOnUse">
+        <linearGradient
+          gradientUnits="userSpaceOnUse"
+          id={gradientId}
+          x1="91.084"
+          x2="294.778"
+          y1="91.047"
+          y2="294.741"
+        >
           <stop stopColor="#6DCEF5" />
           <stop offset=".99" stopColor="#00A88D" />
         </linearGradient>
@@ -22,4 +29,3 @@ const TealGradientDiamondThird = (props: SVGProps<SVGSVGElement>) => {
 TealGradientDiamondThird.displayName = 'TealGradientDiamondThird';
 
 export default TealGradientDiamondThird;
-

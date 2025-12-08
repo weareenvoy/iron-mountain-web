@@ -2,8 +2,6 @@
 
 import challengeContent from '@public/api/kiosk-2.json';
 import { useEffect, useState, type ReactElement } from 'react';
-
-import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
 import FirstScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/firstScreen/firstScreenTemplate';
 import InitialScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/initialScreen/initialScreenTemplate';
@@ -18,19 +16,20 @@ import SolutionThirdScreenTemplate, {
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/thirdScreen/thirdScreenTemplate';
 import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
 import solutionContent from '../solutions.json';
+import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 // import styles from './kiosk-2.module.css';
 
 type Slide = { id: string; render: () => ReactElement; title: string };
 
 type SolutionSlidesConfig = {
   firstScreen?: SolutionFirstScreenTemplateProps;
+  fourthScreen?: SolutionThirdScreenTemplateProps;
   secondScreen?: Parameters<typeof SolutionSecondScreenTemplate>[0];
   thirdScreen?: SolutionThirdScreenTemplateProps;
-  fourthScreen?: SolutionThirdScreenTemplateProps;
 };
 
 const formatTitle = (value: string | string[] | undefined, fallback: string) =>
-  Array.isArray(value) ? value.join(' ') : value ?? fallback;
+  Array.isArray(value) ? value.join(' ') : (value ?? fallback);
 
 const Kiosk2View = () => {
   const controller: Controller = useKioskController();
@@ -41,18 +40,13 @@ const Kiosk2View = () => {
   const challengeSlides: Slide[] = [
     {
       id: 'challenge-initial',
-      title: 'Challenge Intro',
       render: () => (
-        <InitialScreenTemplate
-          {...challenges.initialScreen}
-          contentBoxBgColor="#8DC13F"
-          kioskId="kiosk-2"
-        />
+        <InitialScreenTemplate {...challenges.initialScreen} contentBoxBgColor="#8DC13F" kioskId="kiosk-2" />
       ),
+      title: 'Challenge Intro',
     },
     {
       id: 'challenge-first',
-      title: 'Challenge Story',
       render: () => (
         <FirstScreenTemplate
           {...challenges.firstScreen}
@@ -61,10 +55,10 @@ const Kiosk2View = () => {
           onNavigateUp={() => controller.prev()}
         />
       ),
+      title: 'Challenge Story',
     },
     {
       id: 'challenge-second',
-      title: 'Challenge Stats',
       render: () => (
         <SecondScreenTemplate
           {...challenges.secondScreen}
@@ -73,10 +67,10 @@ const Kiosk2View = () => {
           onNavigateUp={() => controller.prev()}
         />
       ),
+      title: 'Challenge Stats',
     },
     {
       id: 'challenge-third',
-      title: 'Challenge Impact',
       render: () => (
         <ThirdScreenTemplate
           {...challenges.thirdScreen}
@@ -85,6 +79,7 @@ const Kiosk2View = () => {
           onNavigateUp={() => controller.prev()}
         />
       ),
+      title: 'Challenge Impact',
     },
   ];
 
@@ -93,14 +88,13 @@ const Kiosk2View = () => {
     if (solutions.firstScreen) {
       result.push({
         id: 'solution-first',
-      title: formatTitle(solutions.firstScreen.title, 'Solution Intro'),
         render: () => <SolutionFirstScreenTemplate {...solutions.firstScreen!} />,
+        title: formatTitle(solutions.firstScreen.title, 'Solution Intro'),
       });
     }
     if (solutions.secondScreen) {
       result.push({
         id: 'solution-second',
-        title: formatTitle(solutions.secondScreen.title ?? solutions.thirdScreen?.title, 'Solution Step 1'),
         render: () => (
           <SolutionSecondScreenTemplate
             {...solutions.secondScreen}
@@ -109,12 +103,12 @@ const Kiosk2View = () => {
             onNavigateUp={() => controller.prev()}
           />
         ),
+        title: formatTitle(solutions.secondScreen.title ?? solutions.thirdScreen?.title, 'Solution Step 1'),
       });
     }
     if (solutions.thirdScreen) {
       result.push({
         id: 'solution-third',
-        title: formatTitle(solutions.thirdScreen.title, 'Solution Walkthrough'),
         render: () => (
           <SolutionThirdScreenTemplate
             {...solutions.thirdScreen}
@@ -122,6 +116,7 @@ const Kiosk2View = () => {
             onNavigateUp={() => controller.prev()}
           />
         ),
+        title: formatTitle(solutions.thirdScreen.title, 'Solution Walkthrough'),
       });
     }
     return result;
@@ -145,7 +140,7 @@ const Kiosk2View = () => {
       },
     });
     return () => controller.setRootHandlers(null);
-  }, [controller]);
+  }, [controller, slides.length]);
 
   return (
     <div

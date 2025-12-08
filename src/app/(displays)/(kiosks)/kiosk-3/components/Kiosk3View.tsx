@@ -2,38 +2,37 @@
 
 import challengeContent from '@public/api/kiosk-3.json';
 import { useEffect, useState, type ReactElement } from 'react';
-
-import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
 import FirstScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/firstScreen/firstScreenTemplate';
 import InitialScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/initialScreen/initialScreenTemplate';
 import SecondScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/secondScreen/secondScreenTemplate';
+import ThirdScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/thirdScreen/thirdScreenTemplate';
 import SolutionFirstScreenTemplate, {
   type SolutionFirstScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/firstScreen/firstScreenTemplate';
+import SolutionFourthScreenTemplate, {
+  type SolutionFourthScreenTemplateProps,
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/fourthScreen/fourthScreenTemplate';
 import SolutionSecondScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/secondScreen/secondScreenTemplate';
 import SolutionThirdScreenTemplate, {
   type SolutionThirdScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/thirdScreen/thirdScreenTemplate';
-import SolutionFourthScreenTemplate, {
-  type SolutionFourthScreenTemplateProps,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/fourthScreen/fourthScreenTemplate';
-import ThirdScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/thirdScreen/thirdScreenTemplate';
 import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
 import solutionContent from '../solutions.json';
+import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 // import styles from './kiosk-3.module.css';
 
 type Slide = { id: string; render: () => ReactElement; title: string };
 
 type SolutionSlidesConfig = {
   firstScreen?: SolutionFirstScreenTemplateProps;
+  fourthScreen?: SolutionFourthScreenTemplateProps;
   secondScreen?: Parameters<typeof SolutionSecondScreenTemplate>[0];
   thirdScreen?: SolutionThirdScreenTemplateProps;
-  fourthScreen?: SolutionFourthScreenTemplateProps;
 };
 
 const formatTitle = (value: string | string[] | undefined, fallback: string) =>
-  Array.isArray(value) ? value.join(' ') : value ?? fallback;
+  Array.isArray(value) ? value.join(' ') : (value ?? fallback);
 
 const Kiosk3View = () => {
   const controller: Controller = useKioskController();
@@ -44,18 +43,13 @@ const Kiosk3View = () => {
   const challengeSlides: Slide[] = [
     {
       id: 'challenge-initial',
-      title: 'Challenge Intro',
       render: () => (
-        <InitialScreenTemplate
-          {...challenges.initialScreen}
-          contentBoxBgColor="#00A88E"
-          kioskId="kiosk-3"
-        />
+        <InitialScreenTemplate {...challenges.initialScreen} contentBoxBgColor="#00A88E" kioskId="kiosk-3" />
       ),
+      title: 'Challenge Intro',
     },
     {
       id: 'challenge-first',
-      title: 'Challenge Story',
       render: () => (
         <FirstScreenTemplate
           {...challenges.firstScreen}
@@ -64,10 +58,10 @@ const Kiosk3View = () => {
           onNavigateUp={() => controller.prev()}
         />
       ),
+      title: 'Challenge Story',
     },
     {
       id: 'challenge-second',
-      title: 'Challenge Stats',
       render: () => (
         <SecondScreenTemplate
           {...challenges.secondScreen}
@@ -76,10 +70,10 @@ const Kiosk3View = () => {
           onNavigateUp={() => controller.prev()}
         />
       ),
+      title: 'Challenge Stats',
     },
     {
       id: 'challenge-third',
-      title: 'Challenge Impact',
       render: () => (
         <ThirdScreenTemplate
           {...challenges.thirdScreen}
@@ -88,6 +82,7 @@ const Kiosk3View = () => {
           onNavigateUp={() => controller.prev()}
         />
       ),
+      title: 'Challenge Impact',
     },
   ];
 
@@ -96,14 +91,13 @@ const Kiosk3View = () => {
     if (solutions.firstScreen) {
       result.push({
         id: 'solution-first',
-      title: formatTitle(solutions.firstScreen.title, 'Solution Intro'),
         render: () => <SolutionFirstScreenTemplate {...solutions.firstScreen!} />,
+        title: formatTitle(solutions.firstScreen.title, 'Solution Intro'),
       });
     }
     if (solutions.secondScreen) {
       result.push({
         id: 'solution-second',
-        title: formatTitle(solutions.secondScreen.title ?? solutions.thirdScreen?.title, 'Solution Step 1'),
         render: () => (
           <SolutionSecondScreenTemplate
             {...solutions.secondScreen}
@@ -112,6 +106,7 @@ const Kiosk3View = () => {
             onNavigateUp={() => controller.prev()}
           />
         ),
+        title: formatTitle(solutions.secondScreen.title ?? solutions.thirdScreen?.title, 'Solution Step 1'),
       });
     }
     const kioskThreeDetailScreen = solutions.fourthScreen ?? solutions.thirdScreen;
@@ -119,10 +114,6 @@ const Kiosk3View = () => {
       const useFourthTemplate = Boolean(solutions.fourthScreen);
       result.push({
         id: useFourthTemplate ? 'solution-fourth' : 'solution-third',
-        title: formatTitle(
-          kioskThreeDetailScreen.title,
-          useFourthTemplate ? 'Solution Details' : 'Solution Walkthrough',
-        ),
         render: () =>
           useFourthTemplate ? (
             <SolutionFourthScreenTemplate
@@ -137,6 +128,10 @@ const Kiosk3View = () => {
               onNavigateUp={() => controller.prev()}
             />
           ),
+        title: formatTitle(
+          kioskThreeDetailScreen.title,
+          useFourthTemplate ? 'Solution Details' : 'Solution Walkthrough'
+        ),
       });
     }
     return result;
@@ -160,7 +155,7 @@ const Kiosk3View = () => {
       },
     });
     return () => controller.setRootHandlers(null);
-  }, [controller]);
+  }, [controller, slides.length]);
 
   return (
     <div
