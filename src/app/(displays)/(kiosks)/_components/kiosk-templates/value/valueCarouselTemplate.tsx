@@ -48,6 +48,8 @@ const defaultSlides = [
   },
 ];
 
+const fallbackDiamondCards: readonly ValueDiamondCard[] = defaultSlides[0]?.diamondCards ?? [];
+
 const diamondIconMap: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
   '#1b75bc': BlueFilledDiamond,
   '#6dcff6': BlueFilledDiamond,
@@ -63,6 +65,13 @@ const getDiamondIcon = (card: ValueDiamondCard) => {
 
   const normalizedColor = card.color?.toLowerCase();
   return normalizedColor ? diamondIconMap[normalizedColor] : undefined;
+};
+
+const normalizeMultiline = (value?: string | readonly string[]): string | undefined => {
+  if (value == null) return undefined;
+  if (Array.isArray(value)) return value.join('\n');
+  if (typeof value === 'string') return value;
+  return undefined;
 };
 
 export type ValueDiamondCard = Readonly<{
@@ -234,7 +243,7 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
         data-node-id="5688:14630"
       >
         <p className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
-          {renderRegisteredMark(Array.isArray(eyebrow) ? eyebrow.join('\n') : eyebrow)}
+          {renderRegisteredMark(normalizeMultiline(eyebrow))}
         </p>
         <div className="flex items-center gap-[41px]" style={{ left: 10, position: 'relative', top: -100 }}>
           <div className="relative flex h-[200px] w-[200px] items-center justify-center" style={{ left: -55, top: 25 }}>
@@ -257,17 +266,15 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
           <div>
             <p className="text-[100px] leading-[1.3] font-normal tracking-[-5px]">{renderRegisteredMark(headline)}</p>
             <p className="mt-[80px] text-[60px] leading-[1.4] font-normal tracking-[-3px]" style={{ width: '1480px' }}>
-              {renderRegisteredMark(Array.isArray(description) ? description.join('\n') : description)}
+              {renderRegisteredMark(normalizeMultiline(description))}
             </p>
           </div>
           <div className="flex flex-col items-end gap-[80px]" style={carouselColumnStyle}>
             <div className="w-full overflow-hidden" ref={emblaRef}>
               <div className="flex w-full">
                 {slidesToRender.map(slide => {
-                  const cards =
-                    slide.diamondCards && slide.diamondCards.length > 0
-                      ? slide.diamondCards
-                      : defaultSlides[0].diamondCards!;
+                  const cards: readonly ValueDiamondCard[] =
+                    slide.diamondCards && slide.diamondCards.length > 0 ? slide.diamondCards : fallbackDiamondCards;
                   const bulletItems = getBulletItems(slide);
                   const hasBullets = bulletItems.length > 0;
                   const stackVariant: DiamondStackVariant = hasBullets ? 'carousel' : 'overview';
