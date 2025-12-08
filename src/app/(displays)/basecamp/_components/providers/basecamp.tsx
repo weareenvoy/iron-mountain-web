@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useCallback, useContext, useEffect, useState, type PropsWithChildren } from 'react';
+import { createContext, useCallback, useContext, useEffect, useRef, useState, type PropsWithChildren } from 'react';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getLocaleForTesting } from '@/flags/flags';
 import { getBasecampData } from '@/lib/internal/data/get-basecamp';
@@ -14,14 +14,14 @@ import {
 import type { ExhibitMqttState } from '@/lib/mqtt/types';
 
 interface BasecampContextType {
-  backgroundReady: boolean;
   data: BasecampData | null;
   dict: Dictionary | null;
   error: null | string;
   exhibitState: ExhibitNavigationState;
   loading: boolean;
   locale: Locale;
-  setBackgroundReady: (ready: boolean) => void;
+  readyBeatId: null | string;
+  setReadyBeatId: (beatId: null | string) => void;
 }
 
 export const BasecampContext = createContext<BasecampContextType | undefined>(undefined);
@@ -58,16 +58,20 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     momentId: 'ambient',
   });
 
-  // Used for background to tell foreground when video is ready. So foreground can start animation.
-  const [backgroundReady, setBackgroundReady] = useState(false);
+  // Which beat's video is ready. Foreground compares its beatId to this.
+  const [readyBeatId, setReadyBeatId] = useState<null | string>(null);
 
   // MQTT state (what we report to GEC)
-  const [, setMqttState] = useState<ExhibitMqttState>({
+  const [mqttState, setMqttState] = useState<ExhibitMqttState>({
     'beat-id': 'ambient-1',
     'tour-id': null,
     'volume-level': 1.0,
     'volume-muted': false,
   });
+
+  // Ref to access latest mqttState without causing dependency changes. Avoids re-subscription.
+  const mqttStateRef = useRef(mqttState);
+  mqttStateRef.current = mqttState;
 
   const [data, setData] = useState<BasecampData | null>(null);
   const [dict, setDict] = useState<Dictionary | null>(null);
@@ -105,14 +109,14 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     (newState: Partial<ExhibitMqttState>) => {
       if (!client) return;
 
-      setMqttState(prev => {
-        const updatedState = { ...prev, ...newState };
+      // Update state (pure function - no side effects)
+      setMqttState(prev => ({ ...prev, ...newState }));
 
-        client.reportExhibitState('basecamp', updatedState, {
-          onError: err => console.error('Basecamp: Failed to report state:', err),
-        });
-
-        return updatedState;
+      // Side effect runs outside the updater
+      // Use ref to get latest state without adding to deps (avoids re-subscription cascade)
+      const updatedState = { ...mqttStateRef.current, ...newState };
+      client.reportExhibitState('basecamp', updatedState, {
+        onError: err => console.error('Basecamp: Failed to report state:', err),
       });
     },
     [client]
@@ -267,17 +271,21 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
 
     // Subscribe once on mount to get retained state
     client.subscribeToTopic('state/basecamp', handleOwnState);
+
+    return () => {
+      client.unsubscribeFromTopic('state/basecamp', handleOwnState);
+    };
   }, [client, fetchData]);
 
   const contextValue = {
-    backgroundReady,
     data,
     dict,
     error,
     exhibitState,
     loading,
     locale,
-    setBackgroundReady,
+    readyBeatId,
+    setReadyBeatId,
   };
 
   return <BasecampContext.Provider value={contextValue}>{children}</BasecampContext.Provider>;

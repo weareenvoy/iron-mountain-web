@@ -33,13 +33,16 @@ const VIEWS: Partial<Record<BeatId, (data: BasecampData) => ReactElement>> = {
 };
 
 const Foreground = () => {
-  const { backgroundReady, data, exhibitState } = useBasecamp();
+  const { data, exhibitState, readyBeatId } = useBasecamp();
   const { beatIdx, momentId } = exhibitState;
   const beatId = `${momentId}-${beatIdx + 1}`;
 
-  if (!data) return null;
+  // Only render content when THIS beat's background is ready
+  const isReady = readyBeatId === beatId;
 
+  if (!data) return null;
   if (!isValidBeatId(beatId)) return null;
+  if (!isReady) return null;
 
   const renderView = VIEWS[beatId];
 
@@ -48,11 +51,7 @@ const Foreground = () => {
 
   const content = renderView(data);
 
-  return (
-    <div className="absolute inset-0 z-10 transition-opacity duration-500" style={{ opacity: backgroundReady ? 1 : 0 }}>
-      {content}
-    </div>
-  );
+  return <div className="absolute inset-0 z-10">{content}</div>;
 };
 
 export default Foreground;

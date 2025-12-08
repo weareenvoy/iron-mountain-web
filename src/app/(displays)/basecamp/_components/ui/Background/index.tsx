@@ -7,7 +7,7 @@ import { BEAT_ORDER, isValidBeatId } from '@/lib/internal/types';
 const CROSSFADE_DURATION_MS = 800;
 
 const Background = () => {
-  const { data, exhibitState, setBackgroundReady } = useBasecamp();
+  const { data, exhibitState, setReadyBeatId } = useBasecamp();
   const { beatIdx, momentId } = exhibitState;
   const beatId = `${momentId}-${beatIdx + 1}`;
 
@@ -28,13 +28,14 @@ const Background = () => {
 
     // First beat after page reload → force into A
     if (!lastBeat.current) {
-      setBackgroundReady(false);
+      setReadyBeatId(null);
       a.current.src = url;
       a.current.currentTime = 0;
       a.current.loop = momentId === 'ambient';
 
       const onReady = () => {
-        setBackgroundReady(true);
+        setReadyBeatId(beatId);
+        console.info('Background: Video is ready, playing', beatId);
         a.current?.play();
       };
 
@@ -56,8 +57,8 @@ const Background = () => {
     const visible = active.current === 'a' ? a.current : b.current;
     const hidden = active.current === 'a' ? b.current : a.current;
 
-    // This is used to tell foreground element when to be visible
-    setBackgroundReady(false);
+    // Clear ready state - foreground will wait until this beat is ready
+    setReadyBeatId(null);
 
     // Set hidden video to use incoming beat's url
     hidden.src = url;
@@ -65,7 +66,7 @@ const Background = () => {
     hidden.loop = momentId === 'ambient';
 
     const go = () => {
-      setBackgroundReady(true);
+      setReadyBeatId(beatId);
 
       // Fade out visible, fade in hidden
       visible.style.transition = hidden.style.transition = `opacity ${CROSSFADE_DURATION_MS}ms ease`;
@@ -89,11 +90,17 @@ const Background = () => {
       }
     };
 
-    hidden.addEventListener('canplaythrough', go, { once: true });
-    hidden.load();
+    // If video is already loaded from preload, fire immediately
+    // readyState >= 3 means HAVE_FUTURE_DATA or HAVE_ENOUGH_DATA
+    if (hidden.readyState >= 3) {
+      go();
+    } else {
+      hidden.addEventListener('canplaythrough', go, { once: true });
+      hidden.load();
+    }
 
     lastBeat.current = beatId;
-  }, [beatId, data, momentId, setBackgroundReady]);
+  }, [beatId, data, momentId, setReadyBeatId]);
 
   // For debugging only. Update display time
   const timeDisplayRef = useRef<HTMLSpanElement>(null);
@@ -111,7 +118,7 @@ const Background = () => {
         muted
         onTimeUpdate={handleTimeUpdate}
         playsInline
-        preload="auto"
+        preload={activeDisplay === 'a' ? 'auto' : 'metadata'}
         ref={a}
         style={{ opacity: 1, transition: `opacity ${CROSSFADE_DURATION_MS}ms ease` }}
       />
@@ -120,7 +127,7 @@ const Background = () => {
         muted
         onTimeUpdate={handleTimeUpdate}
         playsInline
-        preload="auto"
+        preload={activeDisplay === 'b' ? 'auto' : 'metadata'}
         ref={b}
         style={{ opacity: 0, transition: `opacity ${CROSSFADE_DURATION_MS}ms ease` }}
       />
