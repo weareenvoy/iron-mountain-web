@@ -10,9 +10,6 @@ import ThirdScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-tem
 import SolutionFirstScreenTemplate, {
   type SolutionFirstScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/firstScreen/firstScreenTemplate';
-import SolutionFourthScreenTemplate, {
-  type SolutionFourthScreenTemplateProps,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/fourthScreen/fourthScreenTemplate';
 import SolutionSecondScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/secondScreen/secondScreenTemplate';
 import SolutionThirdScreenTemplate, {
   type SolutionThirdScreenTemplateProps,
@@ -30,7 +27,6 @@ type Slide = { id: string; render: () => ReactElement; title: string };
 
 type SolutionSlidesConfig = {
   firstScreen?: SolutionFirstScreenTemplateProps;
-  fourthScreen?: SolutionFourthScreenTemplateProps;
   secondScreen?: Parameters<typeof SolutionSecondScreenTemplate>[0];
   secondScreens?: Parameters<typeof SolutionSecondScreenTemplate>[0][];
   thirdScreen?: SolutionThirdScreenTemplateProps;
@@ -135,25 +131,12 @@ const Kiosk2View = () => {
         render: () => (
           <SolutionThirdScreenTemplate
             {...solutions.thirdScreen}
+            kioskId="kiosk-2"
             onNavigateDown={() => controller.next()}
             onNavigateUp={() => controller.prev()}
           />
         ),
         title: formatTitle(solutions.thirdScreen.title, 'Solution Walkthrough'),
-      });
-    }
-
-    if (solutions.fourthScreen) {
-      result.push({
-        id: 'solution-fourth',
-        render: () => (
-          <SolutionFourthScreenTemplate
-            {...solutions.fourthScreen}
-            onNavigateDown={() => controller.next()}
-            onNavigateUp={() => controller.prev()}
-          />
-        ),
-        title: formatTitle(solutions.fourthScreen.title, 'Solution Details'),
       });
     }
 
