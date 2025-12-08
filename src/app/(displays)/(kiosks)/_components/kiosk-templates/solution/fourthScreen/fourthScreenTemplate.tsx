@@ -1,16 +1,14 @@
 'use client';
 
-import { ArrowDown, ArrowUp, Minus, Plus } from 'lucide-react';
-
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/shadcn/accordion';
 import GreenDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondFourth';
 import OrangeDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondFourth';
 import OrangeGradientDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/OrangeGradientDiamondFourth';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/shadcn/accordion';
-
+import { ArrowDown, ArrowUp, Minus, Plus } from 'lucide-react';
 import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
 
-type AccordionColor = 'white' | 'lightBlue' | 'blue' | 'navy';
+type AccordionColor = 'blue' | 'lightBlue' | 'navy' | 'white';
 
 type AccordionEntry = {
   color?: AccordionColor;
@@ -84,28 +82,31 @@ export default function SolutionFourthScreenTemplate({
   const entries = accordionItems.length ? accordionItems : defaultAccordionItems;
 
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-hidden bg-black" data-node-id="5168:10496">
+    <div className="bg-black flex flex-col h-screen overflow-hidden relative w-full" data-node-id="5168:10496">
       {/* Background gradient */}
       <div
-        className="absolute left-0 top-0 h-[5120px] w-full"
+        className="absolute h-[5120px] left-0 top-0 w-full"
         style={{ background: `linear-gradient(to bottom, ${gradientStartColor} 0%, ${gradientEndColor} 99%)` }}
       />
 
       {/* Subheadline */}
       <div
-        className="absolute left-[120px] top-[368px] -translate-y-full text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#ededed]"
+        className="-translate-y-full absolute font-normal leading-[1.4] left-[120px] text-[#ededed] text-[60px] top-[368px] tracking-[-3px]"
         style={{ top: '400px', width: '390px' }}
       >
         {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
       </div>
 
       {/* Solution label */}
-      <div className="absolute left-[140px] top-[790px] flex items-center gap-[41px]" style={{ left: '140px', top: '790px' }}>
-        <div className="relative flex h-[200px] w-[200px] items-center justify-center" style={{ left: -55, top: -25 }}>
+      <div
+        className="absolute flex gap-[41px] items-center left-[140px] top-[790px]"
+        style={{ left: '140px', top: '790px' }}
+      >
+        <div className="flex h-[200px] items-center justify-center relative w-[200px]" style={{ left: -55, top: -25 }}>
           <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
         </div>
         <h1
-          className="whitespace-nowrap text-[126.031px] font-normal leading-[1.3] tracking-[-6.3015px] text-[#ededed]"
+          className="font-normal leading-[1.3] text-[#ededed] text-[126.031px] tracking-[-6.3015px] whitespace-nowrap"
           style={{ left: '-100px', position: 'relative', top: '-20px' }}
         >
           {solutionLabel}
@@ -114,17 +115,17 @@ export default function SolutionFourthScreenTemplate({
 
       {/* Title */}
       <div className="absolute left-[240px] top-[1260px] w-[1300px]" style={{ top: '1260px', width: '1300px' }}>
-        <p className="text-[100px] font-normal leading-[1.3] tracking-[-5px] text-[#ededed] whitespace-pre-line">
+        <p className="font-normal leading-[1.3] text-[#ededed] text-[100px] tracking-[-5px] whitespace-pre-line">
           {renderRegisteredMark(title)}
         </p>
       </div>
 
       {/* Solution cards */}
-      <div className="absolute left-[240px] top-[1770px] w-[1379px] rounded-[80px] shadow-[0_20px_80px_rgba(0,0,0,0.25)]">
+      <div className="absolute left-[240px] rounded-[80px] shadow-[0_20px_80px_rgba(0,0,0,0.25)] top-[1770px] w-[1379px]">
         <Accordion
-          className="space-y-0 overflow-hidden rounded-[80px]"
+          className="overflow-hidden rounded-[80px] space-y-0"
           collapsible
-          defaultValue={entries.find((entry) => entry.expanded)?.id ?? entries[0]?.id ?? 'item-1'}
+          defaultValue={entries.find(entry => entry.expanded)?.id ?? entries[0]?.id ?? 'item-1'}
           style={{ backgroundColor: '#ededed' }}
           type="single"
         >
@@ -132,31 +133,27 @@ export default function SolutionFourthScreenTemplate({
             const palette = palettes[item.color ?? 'white'];
             const hasContent = Boolean(item.contentList?.length);
             const roundedClass =
-              index === 0
-                ? 'rounded-t-[80px]'
-                : index === entries.length - 1
-                  ? 'rounded-b-[80px]'
-                  : 'rounded-none';
+              index === 0 ? 'rounded-t-[80px]' : index === entries.length - 1 ? 'rounded-b-[80px]' : 'rounded-none';
             const triggerRoundedClass =
-              index === 0
-                ? 'rounded-t-[50px]'
-                : index === entries.length - 1
-                  ? 'rounded-b-[50px]'
-                  : 'rounded-none';
+              index === 0 ? 'rounded-t-[50px]' : index === entries.length - 1 ? 'rounded-b-[50px]' : 'rounded-none';
 
             const prevPalette = index > 0 ? palettes[entries[index - 1]?.color ?? 'white'] : undefined;
 
             return (
-              <AccordionItem className={`relative border-none ${roundedClass} overflow-hidden`} key={item.id} value={item.id}>
+              <AccordionItem
+                className={`border-none overflow-hidden relative ${roundedClass}`}
+                key={item.id}
+                value={item.id}
+              >
                 {index > 0 ? (
                   <div
                     aria-hidden="true"
-                    className="pointer-events-none absolute left-0 right-0 top-0 h-[50px]"
+                    className="absolute h-[50px] left-0 pointer-events-none right-0 top-0"
                     style={{ backgroundColor: prevPalette?.header, zIndex: 0 }}
                   />
                 ) : null}
                 <AccordionTrigger
-                  className={`relative z-[1] group/accordion-trigger flex h-[120px] min-h-[240px] items-center px-[80px] text-left text-[52px] leading-[1.4] tracking-[-2.6px] transition-none hover:no-underline focus-visible:outline-none ${triggerRoundedClass}`}
+                  className={`flex focus-visible:outline-none group/accordion-trigger h-[120px] hover:no-underline items-center leading-[1.4] min-h-[240px] px-[80px] relative text-[52px] text-left tracking-[-2.6px] transition-none z-[1] ${triggerRoundedClass}`}
                   indicator={<PlusMinusIcon color={palette.text} />}
                   style={{
                     backgroundColor: palette.header,
@@ -169,7 +166,7 @@ export default function SolutionFourthScreenTemplate({
                     color: palette.text,
                   }}
                 >
-                  <div className="flex flex-1 items-center gap-[40px]">
+                  <div className="flex flex-1 gap-[40px] items-center">
                     <span>{renderRegisteredMark(item.number)}</span>
                     <span className="text-left">{renderRegisteredMark(item.title)}</span>
                   </div>
@@ -177,11 +174,16 @@ export default function SolutionFourthScreenTemplate({
                 <AccordionContent className="[&>div]:pb-0">
                   {hasContent ? (
                     <div
-                      className="px-[80px] pb-[120px] pl-[218px] pt-[50px]"
-                      style={{ backgroundColor: palette.body, color: palette.text, paddingLeft: '210px', paddingTop: '35px' }}
+                      className="pb-[120px] pl-[218px] pt-[50px] px-[80px]"
+                      style={{
+                        backgroundColor: palette.body,
+                        color: palette.text,
+                        paddingLeft: '210px',
+                        paddingTop: '35px',
+                      }}
                     >
-                      <ul className="space-y-[16px] text-[52px] leading-[1.4] tracking-[-2.6px]">
-                        {item.contentList?.map((bullet) => (
+                      <ul className="leading-[1.4] space-y-[16px] text-[52px] tracking-[-2.6px]">
+                        {item.contentList?.map(bullet => (
                           <li
                             className="list-disc"
                             key={bullet}
@@ -201,30 +203,33 @@ export default function SolutionFourthScreenTemplate({
       </div>
 
       {/* Decorative diamonds */}
-      <div className="pointer-events-none absolute left-[240px] top-[3480px] h-[840px] w-[840px]">
+      <div className="absolute h-[840px] left-[240px] pointer-events-none top-[3480px] w-[840px]">
         {mediaDiamondOutlineSrc ? (
-        <img alt="" className="h-full w-full object-contain" src={mediaDiamondOutlineSrc} />
+          <img alt="" className="h-full object-contain w-full" src={mediaDiamondOutlineSrc} />
         ) : (
           <GreenDiamondFourth aria-hidden="true" className="h-full w-full" focusable="false" />
         )}
       </div>
-      <PhotoDiamond className="pointer-events-none absolute left-[1260px] top-[3580px] h-[520px] w-[520px]" imageSrc={mediaDiamondSolidSrc} />
-      <div className="pointer-events-none absolute left-[1040px] top-[3920px] h-[300px] w-[300px]">
+      <PhotoDiamond
+        className="absolute h-[520px] left-[1260px] pointer-events-none top-[3580px] w-[520px]"
+        imageSrc={mediaDiamondSolidSrc}
+      />
+      <div className="absolute h-[300px] left-[1040px] pointer-events-none top-[3920px] w-[300px]">
         {accentDiamondSrc ? (
-          <img alt="" className="h-full w-full object-contain" src={accentDiamondSrc} />
+          <img alt="" className="h-full object-contain w-full" src={accentDiamondSrc} />
         ) : (
           <OrangeGradientDiamondFourth aria-hidden="true" className="h-full w-full" focusable="false" />
         )}
       </div>
-      <div className="pointer-events-none absolute left-[920px] top-[4080px] h-[220px] w-[220px]">
+      <div className="absolute h-[220px] left-[920px] pointer-events-none top-[4080px] w-[220px]">
         <OrangeDiamondFourth aria-hidden="true" className="h-full w-full" focusable="false" />
       </div>
 
       {/* Navigation arrows */}
       <div
         aria-label="Previous"
-        className="absolute right-[120px] top-[1755px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
-        onKeyDown={(event) => {
+        className="absolute flex h-[118px] items-center justify-center right-[120px] top-[1755px] w-[118px] z-[10]"
+        onKeyDown={event => {
           if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
             onNavigateUp?.();
@@ -234,12 +239,12 @@ export default function SolutionFourthScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <ArrowUp aria-hidden="true" className="h-full w-full text-[#ffffff66]" focusable="false" strokeWidth={1.5} />
+        <ArrowUp aria-hidden="true" className="h-full text-[#ffffff66] w-full" focusable="false" strokeWidth={1.5} />
       </div>
       <div
         aria-label="Next"
-        className="absolute right-[120px] top-[1980px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
-        onKeyDown={(event) => {
+        className="absolute flex h-[118px] items-center justify-center right-[120px] top-[1980px] w-[118px] z-[10]"
+        onKeyDown={event => {
           if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
             onNavigateDown?.();
@@ -249,7 +254,7 @@ export default function SolutionFourthScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <ArrowDown aria-hidden="true" className="h-full w-full text-[#ffffff66]" focusable="false" strokeWidth={1.5} />
+        <ArrowDown aria-hidden="true" className="h-full text-[#ffffff66] w-full" focusable="false" strokeWidth={1.5} />
       </div>
     </div>
   );
@@ -257,12 +262,15 @@ export default function SolutionFourthScreenTemplate({
 
 function PlusMinusIcon({ color }: { color: string }) {
   return (
-    <span aria-hidden className="relative block h-[72px] w-[72px]" style={{ color }}>
+    <span aria-hidden className="block h-[72px] relative w-[72px]" style={{ color }}>
       <Minus
-        className="absolute inset-0 h-full w-full opacity-0 transition-opacity group-data-[state=open]/accordion-trigger:opacity-100"
+        className="absolute group-data-[state=open]/accordion-trigger:opacity-100 h-full inset-0 opacity-0 transition-opacity w-full"
         strokeWidth={1.5}
       />
-      <Plus className="absolute inset-0 h-full w-full transition-opacity group-data-[state=open]/accordion-trigger:opacity-0" strokeWidth={1.5} />
+      <Plus
+        className="absolute group-data-[state=open]/accordion-trigger:opacity-0 h-full inset-0 transition-opacity w-full"
+        strokeWidth={1.5}
+      />
     </span>
   );
 }
@@ -273,11 +281,11 @@ function PhotoDiamond({ className, imageSrc }: { className: string; imageSrc?: s
 
   return (
     <div className={className}>
-      <div className="relative size-full rotate-[45deg] overflow-hidden rounded-[160px]">
+      <div className="overflow-hidden relative rotate-[45deg] rounded-[160px] size-full">
         {resolvedSrc ? (
-          <img alt="" className="h-full w-full -rotate-[45deg] object-cover" src={resolvedSrc} />
+          <img alt="" className="-rotate-[45deg] h-full object-cover w-full" src={resolvedSrc} />
         ) : (
-          <div className="h-full w-full -rotate-[45deg] bg-[#6dcff6]" />
+          <div className="-rotate-[45deg] bg-[#6dcff6] h-full w-full" />
         )}
       </div>
     </div>

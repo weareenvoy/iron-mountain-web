@@ -9,6 +9,7 @@
     "gradientEndColor": "#8a0d71",
     "gradientStartColor": "#a2115e",
     "heroImageSrc": "/images/kiosks/kiosk1/02-solution/Solution-Image1-Diamond.png",
+    "solutionLabel": "Solution",
     "stepFourDescription": "Stored 1,000 cubic feet total of physical, historic assets in climate-controlled, private vaults",
     "stepFourLabel": "04.",
     "stepOneDescription": "Digitized 786 videotapes (e.g., DVCPRO, Beta SP, MiniDV)",
@@ -18,7 +19,6 @@
     "stepTwoDescription": "Restored six hard drives (~19 TB)",
     "stepTwoLabel": "02.",
     "subheadline": ["Rich media &", "cultural heritage"],
-    "solutionLabel": "Solution",
     "title": "Together, we:"
   },
   "thirdScreen": {

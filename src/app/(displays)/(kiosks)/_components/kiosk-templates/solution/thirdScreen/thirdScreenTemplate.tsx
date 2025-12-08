@@ -1,9 +1,6 @@
 'use client';
 
-import { type ComponentType, type ReactNode, type SVGProps } from 'react';
-
-import { ArrowDown, ArrowUp } from 'lucide-react';
-
+import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
 import BlueDiamondThird from '@/components/ui/icons/Kiosks/Solutions/BlueDiamondThird';
 import GreenDiamondThird from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondThird';
 import GreenDiamondThird2 from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondThird2';
@@ -11,27 +8,28 @@ import OrangeDiamondThird from '@/components/ui/icons/Kiosks/Solutions/OrangeDia
 import OrangeDiamondThird2 from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondThird2';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
 import TealGradientDiamondThird from '@/components/ui/icons/Kiosks/Solutions/TealGradientDiamondThird';
-import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
+import { ArrowDown, ArrowUp } from 'lucide-react';
+import { type ComponentType, type ReactNode, type SVGProps } from 'react';
 
 const imgDiamondMediaLeft = '/images/kiosks/kiosk2/02-solution/Solution-Image2-Diamond.png';
 const imgDiamondMediaRight = '/images/kiosks/kiosk2/02-solution/Solution-Image3-Diamond.png';
 
 export interface SolutionThirdScreenTemplateProps {
+  accentDiamondSrc?: string;
+  bottomLeftLabel?: string;
+  bottomRightLabel?: string;
+  centerLabel?: string;
   gradientEndColor?: string;
   gradientStartColor?: string;
   mediaDiamondLeftSrc?: string;
   mediaDiamondRightSrc?: string;
+  onNavigateDown?: () => void;
+  onNavigateUp?: () => void;
   solutionLabel?: string;
   subheadline?: string | string[];
   title?: string;
   topLeftLabel?: string;
   topRightLabel?: string;
-  bottomLeftLabel?: string;
-  bottomRightLabel?: string;
-  centerLabel?: string;
-  accentDiamondSrc?: string;
-  onNavigateDown?: () => void;
-  onNavigateUp?: () => void;
 }
 
 export default function SolutionThirdScreenTemplate({
@@ -97,43 +95,43 @@ export default function SolutionThirdScreenTemplate({
   ];
 
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-hidden bg-black" data-node-id="5168:9626">
+    <div className="bg-black flex flex-col h-screen overflow-hidden relative w-full" data-node-id="5168:9626">
       {/* Gradient backdrop */}
       <div
-        className="absolute left-0 top-[-296px] h-[5416px] w-full rounded-t-[100px]"
+        className="absolute h-[5416px] left-0 rounded-t-[100px] top-[-296px] w-full"
         style={{ background: `linear-gradient(to bottom, ${gradientStartColor} 0%, ${gradientEndColor} 99%)` }}
         data-node-id="5168:9628"
       />
 
       {/* Subheadline */}
       <div
-        className="absolute left-[120px] top-[230px] w-[500px] -translate-y-full text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-3]/kiosk:relative group-data-[kiosk=kiosk-3]/kiosk:left-auto group-data-[kiosk=kiosk-3]/kiosk:top-[410px] group-data-[kiosk=kiosk-3]/kiosk:w-[380px] group-data-[kiosk=kiosk-3]/kiosk:translate-y-0"
+        className="-translate-y-full absolute font-normal group-data-[kiosk=kiosk-3]/kiosk:left-auto group-data-[kiosk=kiosk-3]/kiosk:relative group-data-[kiosk=kiosk-3]/kiosk:top-[410px] group-data-[kiosk=kiosk-3]/kiosk:translate-y-0 group-data-[kiosk=kiosk-3]/kiosk:w-[380px] leading-[1.4] left-[120px] text-[#ededed] text-[60px] top-[230px] tracking-[-3px] w-[500px]"
       >
         {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
       </div>
 
       {/* Solution label */}
-      <div className="absolute left-[128.17px] top-[745.23px] flex items-center gap-[41px]">
-        <div className="relative flex h-[200px] w-[200px] items-center justify-center" style={{ left: -45, top: 15 }}>
+      <div className="absolute flex gap-[41px] items-center left-[128.17px] top-[745.23px]">
+        <div className="flex h-[200px] items-center justify-center relative w-[200px]" style={{ left: -45, top: 15 }}>
           <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
         </div>
         <h1
-          className="relative whitespace-nowrap text-[126.031px] font-normal leading-[1.3] tracking-[-6.3015px] text-[#ededed] left-[-80px] top-[20px] group-data-[kiosk=kiosk-3]/kiosk:left-[-100px] group-data-[kiosk=kiosk-3]/kiosk:top-[-20px]"
+          className="font-normal group-data-[kiosk=kiosk-3]/kiosk:left-[-100px] group-data-[kiosk=kiosk-3]/kiosk:top-[-20px] leading-[1.3] left-[-80px] relative text-[#ededed] text-[126.031px] top-[20px] tracking-[-6.3015px] whitespace-nowrap"
         >
           {solutionLabel}
         </h1>
       </div>
 
       {/* Title */}
-      <div className="absolute left-[240px] top-[1210px] w-[1300px] text-white group-data-[kiosk=kiosk-3]/kiosk:top-[1260px]">
-        <p className="text-[100px] font-normal leading-[1.3] tracking-[-5px] whitespace-pre-line">{renderRegisteredMark(title)}</p>
+      <div className="absolute group-data-[kiosk=kiosk-3]/kiosk:top-[1260px] left-[240px] text-white top-[1210px] w-[1300px]">
+        <p className="font-normal leading-[1.3] text-[100px] tracking-[-5px] whitespace-pre-line">{renderRegisteredMark(title)}</p>
       </div>
 
       {/* Diamond cluster */}
-      <div className="absolute left-[240px] top-[1400px] h-[2800px] w-[1680px]">
+      <div className="absolute h-[2800px] left-[240px] top-[1400px] w-[1680px]">
         {textDiamonds.map(({ className, label, Outline, sizeClass, textWrapperClassName, textWrapperStyles }) =>
           label ? (
-            <Diamond
+        <Diamond
               className={className}
               key={`${className}-${label}`}
               label={label}
@@ -141,8 +139,8 @@ export default function SolutionThirdScreenTemplate({
               sizeClass={sizeClass}
               textWrapperClassName={textWrapperClassName}
               textWrapperStyles={textWrapperStyles}
-              textColor="#ededed"
-            />
+          textColor="#ededed"
+        />
           ) : null,
         )}
 
@@ -154,12 +152,12 @@ export default function SolutionThirdScreenTemplate({
         />
         <MediaDiamond
           className="left-[1295px] top-[1425px]"
-          fallback={<BlueDiamondThird aria-hidden="true" className="h-full w/full" focusable="false" />}
+          fallback={<BlueDiamondThird aria-hidden="true" className="h-full w-full" focusable="false" />}
           imageSrc={mediaDiamondRightSrc}
           sizeClass="size-[900px]"
         />
         <FilledDiamond
-          className="left-[1285px] top-[605px] rotate-[45deg] group-data-[kiosk=kiosk-1]/kiosk:left-[1330px] group-data-[kiosk=kiosk-1]/kiosk:top-[650px]"
+          className="group-data-[kiosk=kiosk-1]/kiosk:left-[1330px] group-data-[kiosk=kiosk-1]/kiosk:top-[650px] left-[1285px] rotate-[45deg] top-[605px]"
           imageSrc={accentDiamondSrc}
         />
       </div>
@@ -167,7 +165,7 @@ export default function SolutionThirdScreenTemplate({
       {/* Navigation arrows */}
       <div
         aria-label="Previous"
-        className="absolute right-[120px] top-[1755px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
+        className="absolute flex h-[118px] items-center justify-center right-[120px] top-[1755px] w-[118px] z-[10]"
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
@@ -178,11 +176,11 @@ export default function SolutionThirdScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <ArrowUp aria-hidden="true" className="h-full w-full text-[#ffffff66]" focusable="false" strokeWidth={1.5} />
+        <ArrowUp aria-hidden="true" className="h-full text-[#ffffff66] w-full" focusable="false" strokeWidth={1.5} />
       </div>
       <div
         aria-label="Next"
-        className="absolute right-[120px] top-[1980px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
+        className="absolute flex h-[118px] items-center justify-center right-[120px] top-[1980px] w-[118px] z-[10]"
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
@@ -193,7 +191,7 @@ export default function SolutionThirdScreenTemplate({
         role="button"
         tabIndex={0}
       >
-        <ArrowDown aria-hidden="true" className="h-full w-full text-[#ffffff66]" focusable="false" strokeWidth={1.5} />
+        <ArrowDown aria-hidden="true" className="h-full text-[#ffffff66] w-full" focusable="false" strokeWidth={1.5} />
       </div>
     </div>
   );
@@ -222,15 +220,15 @@ function Diamond({
     <div className={`absolute ${className}`}>
       <div className={`relative ${sizeClass}`}>
         {Outline ? (
-          <Outline aria-hidden="true" className="block h-full w-full object-contain" focusable="false" />
+          <Outline aria-hidden="true" className="block h-full object-contain w-full" focusable="false" />
         ) : null}
         <div
-          className={`absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center text-center ${
+          className={`-translate-x-1/2 -translate-y-1/2 absolute flex flex-col items-center left-1/2 text-center top-1/2 ${
             textWrapperClassName ?? 'w-[460px]'
           }`}
           style={textWrapperStyles}
         >
-          <p className="text-[67px] font-normal leading-[1.4] tracking-[-3.3px]" style={{ color: textColor }}>
+          <p className="font-normal leading-[1.4] text-[67px] tracking-[-3.3px]" style={{ color: textColor }}>
             {renderRegisteredMark(label)}
           </p>
         </div>
@@ -249,11 +247,11 @@ type MediaDiamondProps = {
 function MediaDiamond({ className, fallback, imageSrc, sizeClass = 'size-[666px]' }: MediaDiamondProps) {
   return (
     <div className={`absolute ${className}`}>
-      <div className={`relative ${sizeClass} rotate-[45deg] overflow-hidden rounded-[120px]`}>
+      <div className={`relative ${sizeClass} overflow-hidden rotate-[45deg] rounded-[120px]`}>
         {imageSrc ? (
-          <img alt="" className="h-full w-full -rotate-[45deg] object-cover" src={imageSrc} />
+          <img alt="" className="-rotate-[45deg] h-full object-cover w-full" src={imageSrc} />
         ) : (
-          <div className="flex h-full w-full -rotate-[45deg] items-center justify-center">{fallback}</div>
+          <div className="-rotate-[45deg] flex h-full items-center justify-center w-full">{fallback}</div>
         )}
       </div>
     </div>
@@ -263,11 +261,11 @@ function MediaDiamond({ className, fallback, imageSrc, sizeClass = 'size-[666px]
 function FilledDiamond({ className, imageSrc }: { className: string; imageSrc?: string }) {
   return (
     <div className={`absolute ${className}`}>
-      <div className="relative size-[390px] rotate-[45deg] group-data-[kiosk=kiosk-1]/kiosk:size-[290px]">
+      <div className="group-data-[kiosk=kiosk-1]/kiosk:size-[290px] relative rotate-[45deg] size-[390px]">
         {imageSrc ? (
-        <img alt="" className="h-full w-full -rotate-[45deg] object-cover" src={imageSrc} />
+        <img alt="" className="-rotate-[45deg] h-full object-cover w-full" src={imageSrc} />
         ) : (
-          <TealGradientDiamondThird aria-hidden="true" className="h-full w-full -rotate-[45deg]" focusable="false" />
+          <TealGradientDiamondThird aria-hidden="true" className="-rotate-[45deg] h-full w-full" focusable="false" />
         )}
       </div>
     </div>
