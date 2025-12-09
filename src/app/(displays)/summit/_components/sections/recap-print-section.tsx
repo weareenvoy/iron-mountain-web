@@ -1,5 +1,6 @@
 'use client';
 
+import NotificationTextIcon from '@/components/ui/icons/NotificationTextIcon';
 import useLocalStorage from '@/hooks/use-local-storage';
 import type { RecapTone } from '@/app/(displays)/summit/_components/sections/recap-section';
 import type { SummitRecap } from '@/app/(displays)/summit/_types';
@@ -33,14 +34,10 @@ const RecapPrintSection = ({ actionSlot, placeholder = '', recap, storageKey, to
         style={{ backgroundColor: palette.accentBg, color: palette.bodyColor }}
       >
         <div className="flex items-center gap-2.5" style={{ color: palette.accentColor }}>
-          <span
+          <NotificationTextIcon
             aria-hidden
-            className="inline-block h-7 w-7"
-            style={{
-              backgroundColor: palette.iconColor || palette.accentColor,
-              mask: 'url(/images/notification-text.svg) no-repeat center / contain',
-              WebkitMask: 'url(/images/notification-text.svg) no-repeat center / contain',
-            }}
+            className="h-7 w-7"
+            style={{ color: palette.iconColor || palette.accentColor }}
           />
           <span className="text-[1.75rem] font-normal">{recap.title}</span>
         </div>
