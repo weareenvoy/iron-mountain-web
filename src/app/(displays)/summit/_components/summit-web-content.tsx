@@ -75,12 +75,10 @@ type SummitSegment = {
 };
 
 const SummitWebContent = () => {
-  const { data, dict, error, loading } = useSummit();
+  const { data, error, loading } = useSummit();
   const printableRef = useRef<HTMLDivElement>(null);
 
-  const loadingDict = dict?.loading;
-  const summitDict = dict?.summit;
-  const heroTitleFallback = summitDict?.hero.title ?? data?.hero.title ?? 'Your personalized journey map';
+  const heroTitleFallback = data?.hero.title ?? 'Your personalized journey map';
 
   const handlePrint = useReactToPrint({
     contentRef: printableRef,
@@ -88,9 +86,8 @@ const SummitWebContent = () => {
     pageStyle: PRINT_PAGE_STYLE,
   });
 
-  const loadErrorMessage = summitDict?.errors.loadFailed ?? 'Unable to load summit content.';
-  const loadingMessage =
-    loadingDict?.summit ?? loadingDict?.summitRoom ?? loadingDict?.default ?? 'Loading summit experience…';
+  const loadErrorMessage = 'Unable to load summit content.';
+  const loadingMessage = 'Loading summit experience…';
 
   if (loading) {
     return (
@@ -112,19 +109,38 @@ const SummitWebContent = () => {
   const legacyRecap = (data as { recap?: SummitRecap }).recap;
   const recapList = recapsFromData.length > 0 ? [...recapsFromData] : legacyRecap ? [legacyRecap] : [];
 
-  const consideringTitle =
-    summitDict?.sections.consideringPossibilities ?? data.strategies[0]?.title ?? 'Considering possibilities';
+  const strategiesWithFallback = data.strategies.map((strategy, strategyIndex) => {
+    if (strategyIndex !== 3) return strategy;
+
+    const hasThreeBoxes = strategy.items.length >= 3;
+    if (hasThreeBoxes) return strategy;
+
+    const stories = data.stories.items;
+    if (stories.length === 0) return strategy;
+
+    return {
+      eyebrow: strategy.eyebrow,
+      items: stories.map(story => ({
+        body: [story.description],
+        title: story.title,
+      })),
+      summary: strategy.summary,
+      title: strategy.title ?? data.stories.title,
+    };
+  });
+
+  const consideringTitle = strategiesWithFallback[0]?.title ?? 'Considering possibilities';
   const heroLabels = {
-    company: summitDict?.hero.labels.company ?? 'Company',
-    dateOfEngagement: summitDict?.hero.labels.dateOfEngagement ?? 'Date of engagement',
-    location: summitDict?.hero.labels.location ?? 'Location',
+    company: 'Company',
+    dateOfEngagement: 'Date of engagement',
+    location: 'Location',
   };
-  const heroTitle = summitDict?.hero.title ?? data.hero.title ?? 'Your personalized journey map';
-  const recapPlaceholder = summitDict?.recap.placeholder ?? 'Type your notes here';
-  const relevantSolutionsTitle =
-    summitDict?.sections.relevantSolutions ?? data.strategies[1]?.title ?? 'Relevant solutions';
-  const unlockFutureTitle = summitDict?.sections.unlockYourFuture ?? data.strategies[2]?.title ?? 'Unlock your future';
-  const storiesOfImpactTitle = summitDict?.sections.storiesOfImpact ?? data.strategies[3]?.title ?? 'Stories of impact';
+  const heroTitle = data.hero.title ?? 'Your personalized journey map';
+  const recapPlaceholder = 'Type your notes here';
+  const relevantSolutionsTitle = strategiesWithFallback[1]?.title ?? 'Relevant solutions';
+  const unlockFutureTitle = strategiesWithFallback[2]?.title ?? 'Unlock your future';
+  const storiesOfImpactTitle =
+    strategiesWithFallback[3]?.title ?? strategiesWithFallback[3]?.eyebrow ?? 'Stories of impact';
   const strategyTitles = [consideringTitle, relevantSolutionsTitle, unlockFutureTitle, storiesOfImpactTitle];
 
   const segments: SummitSegment[] = (() => {
@@ -140,7 +156,7 @@ const SummitWebContent = () => {
     }
     assembled.push({ blocks: overviewBlocks, id: 'overview' });
 
-    data.strategies.forEach((strategy, strategyIndex) => {
+    strategiesWithFallback.forEach((strategy, strategyIndex) => {
       const blocks: SummitSegmentBlock[] = [
         {
           accentColor: STRATEGY_ACCENT_COLORS[strategyIndex] ?? '#8A0D71',
@@ -175,7 +191,7 @@ const SummitWebContent = () => {
     }
 
     if (block.kind === 'strategy') {
-      const strategy = data.strategies[block.strategyIndex];
+      const strategy = strategiesWithFallback[block.strategyIndex];
       if (!strategy) return null;
       return <StrategiesSection accentColor={block.accentColor} strategy={strategy} title={block.title} />;
     }
@@ -193,7 +209,7 @@ const SummitWebContent = () => {
     }
 
     if (block.kind === 'strategy') {
-      const strategy = data.strategies[block.strategyIndex];
+      const strategy = strategiesWithFallback[block.strategyIndex];
       if (!strategy) return null;
       return <StrategiesSection accentColor={block.accentColor} strategy={strategy} title={block.title} />;
     }
