@@ -1,9 +1,9 @@
 'use client';
 
-import type { ReactNode } from 'react';
 import useLocalStorage from '@/hooks/use-local-storage';
-import type { SummitRecap } from '@/app/(displays)/summit/_types';
 import type { RecapTone } from '@/app/(displays)/summit/_components/sections/recap-section';
+import type { SummitRecap } from '@/app/(displays)/summit/_types';
+import type { ReactNode } from 'react';
 
 type RecapPrintSectionProps = {
   readonly actionSlot?: ReactNode;
@@ -27,27 +27,26 @@ const RecapPrintSection = ({ actionSlot, placeholder = '', recap, storageKey, to
   const rightTextColor = palette.rightTextColor ?? '#12406A';
 
   return (
-    <section className="bg-white flex flex-col gap-0 overflow-hidden rounded-xl shadow-[0_20px_55px_rgba(12,35,80,0.12)] sm:flex-row">
+    <section className="flex flex-col gap-0 overflow-hidden rounded-xl bg-white shadow-[0_20px_55px_rgba(12,35,80,0.12)] sm:flex-row">
       <div
-        className="flex flex-1 flex-col font-semibold gap-4 px-8 py-6 text-lg sm:flex-none sm:px-10 sm:py-8 sm:w-5/12"
+        className="flex flex-1 flex-col items-start gap-3 px-8 py-6 text-lg font-semibold sm:w-5/12 sm:flex-none sm:px-10 sm:py-7"
         style={{ backgroundColor: palette.accentBg, color: palette.bodyColor }}
       >
-        <div className="flex gap-3 items-center" style={{ color: palette.accentColor }}>
-          {/* We use span instead of img because we need to pass color to the icon */}
+        <div className="flex items-center gap-2.5" style={{ color: palette.accentColor }}>
           <span
             aria-hidden
-            className="h-8 inline-block w-8"
+            className="inline-block h-7 w-7"
             style={{
               backgroundColor: palette.iconColor || palette.accentColor,
               mask: 'url(/images/notification-text.svg) no-repeat center / contain',
               WebkitMask: 'url(/images/notification-text.svg) no-repeat center / contain',
             }}
           />
-          <span className="font-normal text-3xl">{recap.title}</span>
+          <span className="text-[1.75rem] font-normal">{recap.title}</span>
         </div>
         {actionSlot}
       </div>
-      <div className="flex flex-1 px-8 py-6 sm:px-10 sm:py-8">
+      <div className="flex flex-1 px-6 py-6 sm:px-10 sm:py-7">
         <p className="text-base whitespace-pre-line" style={{ color: rightTextColor }}>
           {noteValue || '\u00A0'}
         </p>
@@ -57,4 +56,3 @@ const RecapPrintSection = ({ actionSlot, placeholder = '', recap, storageKey, to
 };
 
 export default RecapPrintSection;
-

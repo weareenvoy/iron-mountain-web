@@ -9,7 +9,7 @@ import RecapPrintSection from '@/app/(displays)/summit/_components/sections/reca
 import RecapSection, { type RecapTone } from '@/app/(displays)/summit/_components/sections/recap-section';
 import StrategiesSection from '@/app/(displays)/summit/_components/sections/strategies-section';
 import SummitPrintableDocument from '@/app/(displays)/summit/_components/summit-printable-document';
-import { Button } from '@/components/shadcn/button';
+import PrintIcon from '@/components/ui/icons/PrintIcon';
 import type { SummitRecap } from '@/app/(displays)/summit/_types';
 
 const PAGE_CONTAINER_CLASS = 'flex flex-col gap-14 py-10';
@@ -221,9 +221,14 @@ const SummitWebContent = () => {
       <div className={SECTION_WRAPPER_CLASS}>
         <HeroSection
           actionSlot={
-            <Button className="font-semibold text-[#12406A]" onClick={handlePrintClick} size="lg" variant="outline">
-              Print document
-            </Button>
+            <button
+              className="inline-flex items-center gap-2 rounded-full border border-[#14477D] bg-white px-5 py-2 text-sm font-semibold text-[#14477D] shadow-[0_2px_6px_rgba(20,71,125,0.15)] transition hover:shadow-md focus-visible:ring-2 focus-visible:ring-[#14477D]/30 focus-visible:outline-none"
+              onClick={handlePrintClick}
+              type="button"
+            >
+              <span>Generate PDF</span>
+              <PrintIcon aria-hidden className="h-4 w-4" />
+            </button>
           }
           hero={data.hero}
           labels={heroLabels}

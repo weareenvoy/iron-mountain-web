@@ -1,7 +1,8 @@
 import Image from 'next/image';
-import type { ReactNode } from 'react';
+import SummitRootDiamondsBg from '@/components/ui/icons/SummitRootDiamondsBg';
 import { cn } from '@/lib/tailwind/utils/cn';
 import type { SummitHero } from '@/app/(displays)/summit/_types';
+import type { ReactNode } from 'react';
 
 export type HeroMetadataLabels = {
   readonly company: string;
@@ -32,22 +33,37 @@ const HeroSection = ({ actionSlot, hero, labels, title, variant = 'web' }: HeroS
   ];
   const heading = title ?? hero.title ?? 'Your personalized journey map';
 
-  const containerGap = variant === 'print' ? 'gap-4 pb-4 pt-4' : 'gap-10 pb-10 pt-12';
-  const headingSpacing = variant === 'print' ? 'mb-3 mt-6' : 'mb-8 mt-16';
-  const containerClassName = cn('flex flex-col relative z-10', containerGap);
+  const containerGap = variant === 'print' ? 'gap-3 pb-3 pt-3' : 'gap-10 pb-10 pt-12';
+  const headingSpacing = variant === 'print' ? 'mb-2 mt-4' : 'mb-8 mt-16';
+  const containerClassName = cn('relative z-10 flex flex-col', containerGap);
   const headingClassName = cn(
-    'font-normal leading-tight lg:max-w-xl lg:text-7xl max-w-[24rem] sm:max-w-120 sm:text-5xl text-4xl text-[#58595B] text-balance',
+    'font-normal text-[#58595B] text-balance',
+    variant === 'print'
+      ? 'text-[2.15rem] leading-[1.1] tracking-[-0.05em] sm:text-[2.6rem] lg:text-[3rem]'
+      : 'text-4xl leading-tight sm:text-5xl lg:max-w-xl lg:text-7xl max-w-[24rem] sm:max-w-120 tracking-[-0.04em]',
     headingSpacing
+  );
+  const headingStyle =
+    variant === 'print'
+      ? { fontFamily: 'var(--font-interstate)', letterSpacing: '-0.05em' }
+      : { fontFamily: 'var(--font-interstate)', letterSpacing: '-0.04em' };
+  const metadataWrapperClassName = cn('grid gap-6 text-sm sm:grid-cols-3', variant === 'print' && 'gap-4 text-xs');
+  const metadataValueClassName = cn(
+    'font-medium text-[#58595B]',
+    variant === 'print' ? 'text-sm leading-snug' : 'text-base'
   );
 
   return (
-    <section className="isolate overflow-visible relative">
-      <div aria-hidden className="-right-20 -top-6 -z-10 absolute hidden lg:block pointer-events-none">
+    <section className="relative isolate overflow-visible">
+      <div aria-hidden className="pointer-events-none absolute -top-6 -right-20 -z-10 hidden lg:block">
         <Image alt="" height={420} priority src="/images/summit-root-diamonds-bg2.svg" width={420} />
+      </div>
+      <div className="pointer-events-none fixed hidden print:top-0 print:right-0 print:block">
+        <SummitRootDiamondsBg className="h-36 w-36" />
       </div>
 
       <div className={containerClassName}>
-        <div className="flex flex-wrap gap-6 items-start justify-between w-full">
+        <div className="flex w-full flex-wrap items-start justify-between gap-6">
           <Image
             alt={hero.logoAlt}
             className="h-auto w-60 sm:w-80"
@@ -58,27 +74,28 @@ const HeroSection = ({ actionSlot, hero, labels, title, variant = 'web' }: HeroS
           />
         </div>
 
-        <h1
-          className={headingClassName}
-          style={{ fontFamily: 'var(--font-interstate)', letterSpacing: '-0.04em' }}
+        <div
+          className={cn(
+            'flex w-full flex-col gap-3',
+            variant === 'web' && 'md:flex-row md:items-center md:justify-between'
+          )}
         >
-          {heading}
-        </h1>
+          <h1 className={headingClassName} style={headingStyle}>
+            {heading}
+          </h1>
+          {variant === 'web' && actionSlot ? <div className="print:hidden">{actionSlot}</div> : null}
+        </div>
 
-        {variant === 'web' && actionSlot ? (
-          <div className="flex justify-start">{actionSlot}</div>
-        ) : null}
-
-        <dl className="gap-6 grid sm:grid-cols-3 text-sm">
+        <dl className={metadataWrapperClassName}>
           {metadata.map(item => (
             <div className="flex flex-col gap-1" key={item.label}>
               <dt className="text-muted-foreground">{item.label}</dt>
-              <dd className="text-base font-medium text-[#58595B]">{item.value}</dd>
+              <dd className={metadataValueClassName}>{item.value}</dd>
             </div>
           ))}
         </dl>
 
-        <div className="border-[#D0D0D3] border-t" />
+        <div className="border-t border-[#D0D0D3]" />
       </div>
     </section>
   );

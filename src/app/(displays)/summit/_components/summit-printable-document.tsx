@@ -1,10 +1,9 @@
 'use client';
 
+import { forwardRef, type ForwardedRef, type ReactNode } from 'react';
 import SummitPrintLayout from '@/app/(displays)/summit/_components/layouts/summit-print-layout';
-import HeroSection from '@/app/(displays)/summit/_components/sections/hero-section';
-import type { HeroMetadataLabels } from '@/app/(displays)/summit/_components/sections/hero-section';
+import HeroSection, { type HeroMetadataLabels } from '@/app/(displays)/summit/_components/sections/hero-section';
 import type { SummitHero } from '@/app/(displays)/summit/_types';
-import type { ForwardedRef, forwardRef, ReactNode } from 'react';
 
 type PrintablePage = {
   readonly id: string;
@@ -25,7 +24,7 @@ const SummitPrintableDocument = (
   return (
     <div
       aria-hidden
-      className="pointer-events-none absolute top-0 left-[-9999px] flex flex-col gap-8 print:pointer-events-auto print:static print:top-auto print:left-auto print:flex"
+      className="pointer-events-none absolute top-0 left-[-9999px] flex flex-col gap-6 print:pointer-events-auto print:static print:top-auto print:left-auto print:flex"
       ref={ref}
     >
       {pages.map((page, index) => (
@@ -35,11 +34,13 @@ const SummitPrintableDocument = (
           style={{ pageBreakAfter: index === pages.length - 1 ? 'auto' : 'always' }}
         >
           <SummitPrintLayout>
-            <HeroSection hero={hero} labels={heroLabels} title={heroTitle} variant="print" />
-            <div className="flex flex-col gap-8">
-              {page.sections.map((section, sectionIndex) => (
-                <div key={`${page.id}-section-${sectionIndex}`}>{section}</div>
-              ))}
+            <div className="flex flex-col gap-6 text-[0.92rem] leading-[1.35] tracking-[-0.01em]">
+              <HeroSection hero={hero} labels={heroLabels} title={heroTitle} variant="print" />
+              <div className="flex flex-col gap-5">
+                {page.sections.map((section, sectionIndex) => (
+                  <div key={`${page.id}-section-${sectionIndex}`}>{section}</div>
+                ))}
+              </div>
             </div>
           </SummitPrintLayout>
         </div>
