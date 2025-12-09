@@ -36,7 +36,6 @@ export interface DocentContextType {
   readonly isConnected: boolean;
   readonly isGecStateLoading: boolean;
   readonly isSettingsOpen: boolean;
-  readonly isSummitRoomJourneyMapLaunched: boolean;
   readonly isTourDataLoading: boolean;
   readonly lastUpdated: Date | null;
   readonly locale: Locale;
@@ -46,14 +45,13 @@ export interface DocentContextType {
 
   readonly setCurrentTour: (tour: null | Tour) => void;
   readonly setIsSettingsOpen: (open: boolean) => void;
-  readonly setIsSummitRoomJourneyMapLaunched: (launched: boolean) => void;
   readonly setLocale: (locale: Locale) => void;
   readonly setOverlookExhibitState: (state: Partial<ExhibitNavigationState>) => void;
 
-  readonly setSummitRoomSlideIdx: (idx: number) => void;
+  readonly setSummitRoomBeatId: (beatId: string) => void;
 
-  // Summit Room state
-  readonly summitRoomSlideIdx: number;
+  // Summit Room state - 'journey-intro' or 'journey-1' through 'journey-5'
+  readonly summitRoomBeatId: string;
 }
 
 export const DocentContext = createContext<DocentContextType | undefined>(undefined);
@@ -94,8 +92,8 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     beatIdx: 0,
     momentId: 'ambient',
   });
-  const [summitRoomSlideIdx, setSummitRoomSlideIdx] = useState(0);
-  const [isSummitRoomJourneyMapLaunched, setIsSummitRoomJourneyMapLaunched] = useState(false);
+  // Summit Room: 'journey-intro' or 'journey-1' through 'journey-5'
+  const [summitRoomBeatId, setSummitRoomBeatId] = useState('journey-intro');
 
   // Full state from GEC
   const [docentAppState, setDocentAppState] = useState<DocentAppState | null>(null);
@@ -243,8 +241,7 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     if (currentTour) {
       setBasecampExhibitStateRaw({ beatIdx: 0, momentId: 'ambient' });
       setOverlookExhibitStateRaw({ beatIdx: 0, momentId: 'ambient' });
-      setSummitRoomSlideIdx(0);
-      setIsSummitRoomJourneyMapLaunched(false);
+      setSummitRoomBeatId('journey-intro');
     }
   }, [currentTour]);
 
@@ -260,7 +257,6 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     isConnected,
     isGecStateLoading,
     isSettingsOpen,
-    isSummitRoomJourneyMapLaunched,
     isTourDataLoading,
     lastUpdated,
     locale,
@@ -269,11 +265,10 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     setBasecampExhibitState,
     setCurrentTour,
     setIsSettingsOpen,
-    setIsSummitRoomJourneyMapLaunched,
     setLocale,
     setOverlookExhibitState,
-    setSummitRoomSlideIdx,
-    summitRoomSlideIdx,
+    setSummitRoomBeatId,
+    summitRoomBeatId,
   };
 
   return <DocentContext.Provider value={contextValue}>{children}</DocentContext.Provider>;
