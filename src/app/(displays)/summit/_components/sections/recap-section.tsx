@@ -1,3 +1,4 @@
+import NotificationTextIcon from '@/components/ui/icons/NotificationTextIcon';
 import useLocalStorage from '@/hooks/use-local-storage';
 import type { SummitRecap } from '@/app/(displays)/summit/_types';
 import type { ChangeEvent, ReactNode } from 'react';
@@ -23,7 +24,7 @@ export const RECAP_DEFAULT_TONE: RecapTone = {
   accentColor: '#14477D',
   bodyColor: '#4B4B4D',
   iconColor: '#0D3C69',
-} as const;
+};
 
 const RecapSection = ({
   actionSlot,
@@ -48,16 +49,7 @@ const RecapSection = ({
         style={{ backgroundColor: palette.accentBg, color: palette.bodyColor }}
       >
         <div className="flex items-center gap-3" style={{ color: palette.accentColor }}>
-          {/* We use span instead of img because we need to pass color to the icon */}
-          <span
-            aria-hidden
-            className="inline-block h-8 w-8"
-            style={{
-              backgroundColor: palette.iconColor || palette.accentColor,
-              mask: 'url(/images/notification-text.svg) no-repeat center / contain',
-              WebkitMask: 'url(/images/notification-text.svg) no-repeat center / contain',
-            }}
-          />
+          <NotificationTextIcon aria-hidden className="h-8 w-8" style={{ color: palette.iconColor }} />
           <span className="text-3xl font-normal">{recap.title}</span>
         </div>
         {actionSlot}

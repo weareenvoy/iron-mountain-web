@@ -12,7 +12,6 @@ const PRECACHE_URLS = [
   '/fonts/Geometria.woff2',
   '/fonts/InterstateRegular.woff2',
   '/api/basecamp.json',
-  '/api/tours.json',
 ];
 
 self.__CONFIG = {
@@ -32,8 +31,17 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches
       .open(PRECACHE)
-      .then(cache => cache.addAll(PRECACHE_URLS))
-      .then(self.skipWaiting())
+      .then(cache =>
+        Promise.allSettled(
+          PRECACHE_URLS.map(url =>
+            cache.add(url).catch(err => {
+              console.warn(`Service Worker: Failed to cache ${url}:`, err);
+              return null;
+            })
+          )
+        )
+      )
+      .then(() => self.skipWaiting())
   );
 });
 

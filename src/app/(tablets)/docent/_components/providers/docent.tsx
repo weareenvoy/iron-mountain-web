@@ -12,10 +12,8 @@ import {
 } from 'react';
 import { DocentAppState, type SyncState } from '@/app/(tablets)/docent/_types';
 import { useMqtt } from '@/components/providers/mqtt-provider';
-import { getLocaleForTesting } from '@/flags/flags';
 import { getDocentData } from '@/lib/internal/data/get-docent';
-import { getDictionary } from '@/lib/internal/dictionaries';
-import type { Dictionary, DocentData, ExhibitNavigationState, Locale, Tour } from '@/lib/internal/types';
+import type { DocentData, ExhibitNavigationState, Locale, Tour } from '@/lib/internal/types';
 import type { Route } from 'next';
 
 const isDocentRoute = (path: string): path is Route => {
@@ -26,7 +24,6 @@ export interface DocentContextType {
   readonly basecampExhibitState: ExhibitNavigationState;
   readonly currentTour: null | Tour;
   readonly data: DocentData | null;
-  readonly dict: Dictionary | null;
   // Full state from GEC (combines tour, UI mode, exhibit settings)
   readonly docentAppState: DocentAppState | null;
   // Exhibit availability status
@@ -73,24 +70,15 @@ export const useDocent = () => {
   return context;
 };
 
-/**
- * Hook to get the current locale/language for the Docent app.
- * Always returns a valid locale (never null).
- *
- * @returns The current locale ('en' | 'pt')
- */
-export const useLocale = (): Locale => {
-  const { locale } = useDocent();
-  return locale;
-};
-
 export const DocentProvider = ({ children }: DocentProviderProps) => {
   const { client, isConnected } = useMqtt();
   const router = useRouter();
   const pathname = usePathname();
-  const [data, setData] = useState<DocentData | null>(null);
-  const [dict, setDict] = useState<Dictionary | null>(null);
-  const [locale, setLocale] = useState<Locale>(getLocaleForTesting());
+  const [dataByLocale, setDataByLocale] = useState<{ en: DocentData | null; pt: DocentData | null }>({
+    en: null,
+    pt: null,
+  });
+  const [locale, setLocale] = useState<Locale>('en');
   const [currentTour, setCurrentTour] = useState<null | Tour>(null);
   const [isTourDataLoading, setIsTourDataLoading] = useState(true);
   const [isGecStateLoading, setIsGecStateLoading] = useState(true);
@@ -127,25 +115,19 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     setOverlookExhibitStateRaw(prev => ({ ...prev, ...state }));
   };
 
-  // Fetch dictionary based on current locale
-  const fetchDictionary = useCallback(async (currentLocale: Locale) => {
-    try {
-      const dictionary = await getDictionary(currentLocale);
-      setDict(dictionary);
-    } catch (error) {
-      console.error('Failed to fetch dictionary:', error);
-    }
-  }, []);
-
   // Fetch all docent data (includes tours and slides)
   const fetchDocentData = useCallback(async () => {
     setIsTourDataLoading(true);
     try {
       const docentData = await getDocentData();
-      setData(docentData.data);
+      setDataByLocale({
+        en: docentData.data.en,
+        pt: docentData.data.pt,
+      });
       setLastUpdated(new Date());
 
-      if (currentTour && !docentData.data.tours.find(tour => tour.id === currentTour.id)) {
+      const currentData = docentData.data[locale];
+      if (currentTour && !currentData.tours.find(tour => tour.id === currentTour.id)) {
         setCurrentTour(null);
       }
     } catch (error) {
@@ -153,12 +135,7 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     } finally {
       setIsTourDataLoading(false);
     }
-  }, [currentTour]);
-
-  // Fetch dictionary when locale changes
-  useEffect(() => {
-    fetchDictionary(locale);
-  }, [locale, fetchDictionary]);
+  }, [currentTour, locale]);
 
   useEffect(() => {
     fetchDocentData();
@@ -195,7 +172,7 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
           state.exhibits?.overlook?.['tour-id'] ||
           state.exhibits?.summit?.['tour-id'];
 
-        const allTours = data?.tours ?? [];
+        const allTours = dataByLocale[locale]?.tours ?? [];
 
         if (tourId && allTours.length > 0) {
           const tour = allTours.find(t => t.id === tourId);
@@ -230,7 +207,7 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     return () => {
       client.unsubscribeFromTopic('state/docent-app', handleDocentAppState);
     };
-  }, [client, data?.tours, currentTour?.id, pathname, router]);
+  }, [client, dataByLocale, locale, currentTour?.id, pathname, router]);
 
   // TODO TBD Subscribe to which topic??
   useEffect(() => {
@@ -271,11 +248,13 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     }
   }, [currentTour]);
 
+  // Get current locale's data
+  const data = dataByLocale[locale];
+
   const contextValue = {
     basecampExhibitState,
     currentTour,
     data,
-    dict,
     docentAppState,
     exhibitAvailability,
     isConnected,

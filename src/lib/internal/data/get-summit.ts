@@ -1,59 +1,84 @@
 import { getLocaleForTesting, shouldUseStaticPlaceholderData } from '@/flags/flags';
-import { getDictionary } from '@/lib/internal/dictionaries';
-import type { SummitData } from '@/app/(displays)/summit/_types';
-import type { Dictionary, Locale } from '@/lib/internal/types';
+import type { SummitApiResponse, SummitDataResponse } from '@/lib/internal/types';
+import summitStatic from '@public/api/summit.json';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
-const SUMMIT_STATIC_DATA_VERSION = '2024-12-02';
-const SUMMIT_STATIC_ENDPOINT = `/api/summit.json?v=${SUMMIT_STATIC_DATA_VERSION}`;
-
-type SummitApiResponse = {
-  readonly data: SummitData;
-  readonly locale: Locale;
+const pickSummitData = (
+  rawData: SummitApiResponse | { readonly data: unknown; readonly locale?: string },
+  locale: string,
+  fallback?: SummitDataResponse['data']
+) => {
+  if (Array.isArray(rawData)) {
+    const matchingData = rawData.find(item => item.locale === locale)?.data ?? rawData[0]?.data;
+    if (matchingData) {
+      return matchingData;
+    }
+  }
+  if ('data' in rawData) {
+    return rawData.data as SummitDataResponse['data'];
+  }
+  return fallback;
 };
 
-const loadStaticSummitData = async (): Promise<{
-  readonly data: SummitData;
-  readonly dict: Dictionary;
-  readonly locale: Locale;
-}> => {
-  const response = await fetch(SUMMIT_STATIC_ENDPOINT, { cache: 'force-cache' });
-  const data = (await response.json()) as SummitData;
-  const locale = getLocaleForTesting();
-  const dict = await getDictionary(locale);
-  return { data, dict, locale };
+const resolveSummitData = (
+  rawData: SummitApiResponse | { readonly data: unknown; readonly locale?: string },
+  locale: string
+) => {
+  const staticFallback = pickSummitData(summitStatic as SummitApiResponse, locale);
+  const data = pickSummitData(rawData, locale, staticFallback);
+
+  if (!data) {
+    throw new Error(`Missing data for locale: ${locale}`);
+  }
+
+  return data;
 };
 
-export const getSummitData = async (): Promise<{
-  readonly data: SummitData;
-  readonly dict: Dictionary;
-  readonly locale: Locale;
-}> => {
+export async function getSummitData(): Promise<SummitDataResponse> {
+  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 3500);
 
   try {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (shouldUseStaticPlaceholderData()) {
+      const res = await fetch('/api/summit.json', { cache: 'force-cache' });
       clearTimeout(timeout);
-      return await loadStaticSummitData();
+      const rawData = (await res.json()) as SummitApiResponse | { readonly data: unknown; readonly locale?: string };
+      const locale = getLocaleForTesting();
+      const data = resolveSummitData(rawData, locale);
+
+      return {
+        data,
+        locale,
+      };
     }
 
-    const response = await fetch(`${API_BASE}/summit`, {
+    // Online first
+    const res = await fetch(`${API_BASE}/summit`, {
       cache: 'no-store',
       signal: controller.signal,
     });
     clearTimeout(timeout);
-    if (!response.ok) throw new Error(`Bad status: ${response.status}`);
-    const rawData = (await response.json()) as SummitApiResponse;
-    const dict = await getDictionary(rawData.locale);
+    if (!res.ok) throw new Error(`Bad status: ${res.status}`);
+    const rawData = (await res.json()) as SummitApiResponse | { readonly data: unknown; readonly locale?: string };
+    const locale = getLocaleForTesting();
+    const data = resolveSummitData(rawData, locale);
+
     return {
-      data: rawData.data,
-      dict,
-      locale: rawData.locale,
+      data,
+      locale,
     };
   } catch {
     clearTimeout(timeout);
-    return await loadStaticSummitData();
+    // Offline/static fallback
+    const res = await fetch('/api/summit.json', { cache: 'force-cache' });
+    const rawData = (await res.json()) as SummitApiResponse | { readonly data: unknown; readonly locale?: string };
+    const locale = getLocaleForTesting();
+    const data = resolveSummitData(rawData, locale);
+
+    return {
+      data,
+      locale,
+    };
   }
-};
+}

@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import IronMountainLogoBlue from '@/components/ui/icons/IronMountainLogoBlue';
 import SummitRootDiamondsBg from '@/components/ui/icons/SummitRootDiamondsBg';
 import { cn } from '@/lib/tailwind/utils/cn';
 import type { SummitHero } from '@/app/(displays)/summit/_types';
@@ -56,21 +56,18 @@ const HeroSection = ({ actionSlot, hero, labels, title, variant = 'web' }: HeroS
   return (
     <section className="relative isolate overflow-visible">
       <div aria-hidden className="pointer-events-none absolute -top-6 -right-20 -z-10 hidden lg:block">
-        <Image alt="" height={420} priority src="/images/summit-root-diamonds-bg2.svg" width={420} />
+        <SummitRootDiamondsBg className="h-[420px] w-[420px]" />
       </div>
-      <div className="pointer-events-none fixed hidden print:top-0 print:right-0 print:block">
+      <div aria-hidden className="pointer-events-none fixed hidden print:top-0 print:right-0 print:block">
         <SummitRootDiamondsBg className="h-36 w-36" />
       </div>
 
       <div className={containerClassName}>
         <div className="flex w-full flex-wrap items-start justify-between gap-6">
-          <Image
-            alt={hero.logoAlt}
-            className="h-auto w-60 sm:w-80"
-            height={48}
-            priority
-            src={hero.logoSrc}
-            width={260}
+          <IronMountainLogoBlue
+            aria-label={hero.logoAlt}
+            className="h-auto w-[300px] max-w-full sm:w-[360px]"
+            role="img"
           />
         </div>
 

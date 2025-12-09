@@ -1,64 +1,57 @@
 'use client';
 
 import { useBasecamp } from '@/app/(displays)/basecamp/_components/providers/basecamp';
+import { BasecampData, BeatId, isValidBeatId } from '@/lib/internal/types';
+import AmbientView from './views/AmbientView';
 import PossibilitiesDetail from './views/PossibilitiesDetail';
 import PossibilitiesTitle from './views/PossibilitiesTitle';
 import Problem1 from './views/Problem1';
 import Problem2 from './views/Problem2';
 import Problem3 from './views/Problem3';
+import Problem4 from './views/Problem4';
 import WelcomeView from './views/WelcomeView';
-import type { BasecampData } from '@/lib/internal/types';
 import type { ReactElement } from 'react';
 
-type DataKey =
-  | 'possibilities'
-  | 'possibilities-a'
-  | 'possibilities-b'
-  | 'possibilities-c'
-  | 'problem-1'
-  | 'problem-2'
-  | 'problem-3'
-  | 'welcome';
+const VIEWS: Partial<Record<BeatId, (data: BasecampData) => ReactElement>> = {
+  // Ambient
+  'ambient-1': () => <AmbientView />,
 
-// Mapping from moment + beatIdx to data key
-const getDataKey = (moment: string, beatIdx: number): DataKey | null => {
-  if (moment === 'welcome' && beatIdx === 0) return 'welcome';
-  if (moment === 'problem' && beatIdx === 0) return 'problem-1';
-  if (moment === 'problem' && beatIdx === 2) return 'problem-2';
-  if (moment === 'problem' && beatIdx === 3) return 'problem-3';
-  if (moment === 'possibilities' && beatIdx === 0) return 'possibilities';
-  if (moment === 'possibilities' && beatIdx === 2) return 'possibilities-a';
-  if (moment === 'possibilities' && beatIdx === 3) return 'possibilities-b';
-  if (moment === 'possibilities' && beatIdx === 4) return 'possibilities-c';
-  return null; // No content for this moment/beatIdx combination
+  // Possibilities
+  'possibilities-1': data => <PossibilitiesTitle data={data.possibilities} />,
+  'possibilities-3': data => <PossibilitiesDetail data={data['possibilities-a']} />,
+  'possibilities-4': data => <PossibilitiesDetail data={data['possibilities-b']} />,
+  'possibilities-5': data => <PossibilitiesDetail data={data['possibilities-c']} />,
+
+  // Problem
+  'problem-1': data => <Problem1 data={data['problem-1']} />,
+  'problem-2': data => <Problem2 data={data['problem-1']} />, // Problem 2 uses Problem 1 data, the text shrinks and flies away.
+  'problem-3': data => <Problem3 data={data['problem-2']} />,
+  'problem-4': data => <Problem4 data={data['problem-3']} />,
+
+  // Welcome
+  'welcome-1': data => <WelcomeView data={data.welcome} />,
 };
 
-const RENDERERS: { [K in DataKey]: (data: BasecampData[K]) => ReactElement } = {
-  'possibilities': data => <PossibilitiesTitle data={data} />,
-  'possibilities-a': data => <PossibilitiesDetail data={data} />,
-  'possibilities-b': data => <PossibilitiesDetail data={data} />,
-  'possibilities-c': data => <PossibilitiesDetail data={data} />,
-  'problem-1': data => <Problem1 data={data} />,
-  'problem-2': data => <Problem2 data={data} />,
-  'problem-3': data => <Problem3 data={data} />,
-  'welcome': data => <WelcomeView data={data} />,
-} as const;
-
 const Foreground = () => {
-  const { data, exhibitState } = useBasecamp();
+  const { data, exhibitState, readyBeatId } = useBasecamp();
   const { beatIdx, momentId } = exhibitState;
+  const beatId = `${momentId}-${beatIdx + 1}`;
 
-  const dataKey = getDataKey(momentId, beatIdx);
-  if (!dataKey || !data) {
-    return null;
-  }
+  // Only render content when THIS beat's background is ready
+  const isReady = readyBeatId === beatId;
 
-  const content = data[dataKey] as BasecampData[typeof dataKey];
+  if (!data) return null;
+  if (!isValidBeatId(beatId)) return null;
+  if (!isReady) return null;
 
-  const render = RENDERERS[dataKey] as (d: typeof content) => ReactElement;
+  const renderView = VIEWS[beatId];
 
-  // Single positioned wrapper to enable parent-controlled transitions
-  return <div className="absolute inset-0">{render(content)}</div>;
+  // Returns null for video-only beats (no overlay)
+  if (!renderView) return null;
+
+  const content = renderView(data);
+
+  return <div className="absolute inset-0 z-10">{content}</div>;
 };
 
 export default Foreground;

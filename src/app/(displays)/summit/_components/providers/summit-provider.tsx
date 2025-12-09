@@ -4,13 +4,12 @@ import { createContext, PropsWithChildren, useCallback, useContext, useEffect, u
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getLocaleForTesting } from '@/flags/flags';
 import { getSummitData } from '@/lib/internal/data/get-summit';
-import { isSection, type Dictionary, type ExhibitNavigationState, type Locale } from '@/lib/internal/types';
+import { isSection, type ExhibitNavigationState, type Locale } from '@/lib/internal/types';
 import type { SummitData } from '@/app/(displays)/summit/_types';
 import type { ExhibitMqttState } from '@/lib/mqtt/types';
 
 interface SummitContextValue {
   readonly data: null | SummitData;
-  readonly dict: Dictionary | null;
   readonly error: null | string;
   readonly exhibitState: ExhibitNavigationState;
   readonly loading: boolean;
@@ -36,7 +35,6 @@ export const useSummit = () => {
 export const SummitProvider = ({ children }: PropsWithChildren) => {
   const { client } = useMqtt();
   const [data, setData] = useState<null | SummitData>(null);
-  const [dict, setDict] = useState<Dictionary | null>(null);
   const [error, setError] = useState<null | string>(null);
   const [exhibitState, setExhibitState] = useState<ExhibitNavigationState>(DEFAULT_EXHIBIT_STATE);
   const [loading, setLoading] = useState(true);
@@ -55,7 +53,6 @@ export const SummitProvider = ({ children }: PropsWithChildren) => {
     try {
       const fetchedData = await getSummitData();
       setData(fetchedData.data);
-      setDict(fetchedData.dict);
       setError(null);
       setLocale(fetchedData.locale);
       return true;
@@ -235,14 +232,13 @@ export const SummitProvider = ({ children }: PropsWithChildren) => {
   const contextValue = useMemo<SummitContextValue>(
     () => ({
       data,
-      dict,
       error,
       exhibitState,
       loading,
       locale,
       refetch: fetchData,
     }),
-    [data, dict, error, exhibitState, fetchData, loading, locale]
+    [data, error, exhibitState, fetchData, loading, locale]
   );
 
   return <SummitContext.Provider value={contextValue}>{children}</SummitContext.Provider>;

@@ -2,8 +2,7 @@
 
 import { Lightbulb, LightbulbOff } from 'lucide-react';
 import { Root, Thumb } from '@radix-ui/react-switch';
-import { useLocale } from '@/app/(tablets)/docent/_components/providers/docent';
-import { useDocentTranslation } from '@/hooks/use-docent-translation';
+import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { cn } from '@/lib/tailwind/utils/cn';
 import type { ComponentProps } from 'react';
 
@@ -14,11 +13,10 @@ interface SwitchProps extends ComponentProps<typeof Root> {
 }
 
 const Switch = ({ className, offLabel, onLabel, useIcon, ...props }: SwitchProps) => {
-  const { t } = useDocentTranslation();
-  const locale = useLocale();
+  const { data, locale } = useDocent();
 
-  const offLabelText = offLabel == undefined ? t.ui.off : offLabel;
-  const onLabelText = onLabel == undefined ? t.ui.on : onLabel;
+  const offLabelText = offLabel == undefined ? (data?.ui.off ?? 'Off') : offLabel;
+  const onLabelText = onLabel == undefined ? (data?.ui.on ?? 'On') : onLabel;
   const width = locale == 'en' || useIcon ? 'w-[108.87px]' : 'w-[150px]';
   const translateX =
     locale == 'en' || useIcon
