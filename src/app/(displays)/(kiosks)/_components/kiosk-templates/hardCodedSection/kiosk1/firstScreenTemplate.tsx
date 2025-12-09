@@ -1,187 +1,177 @@
 'use client';
 
-import { useEffect, useId, useState } from 'react';
-import useEmblaCarousel from 'embla-carousel-react';
-import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
+import Image from 'next/image';
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
 
+const defaultHeroImageSrc = 'http://localhost:3845/assets/3a4d46cd05506bd4cd1111ed8cd2d3dfe9681cd9.png';
 const defaultEyebrow = ['Rich media &', 'cultural heritage'];
-const defaultHeadline = 'From archive to access';
-const defaultDescription = 'Explore each section to learn how Iron Mountain can transform your enterprise';
-const defaultBackCtaLabel = 'Back to menu';
-const defaultSlides: CarouselSlideConfig[] = [
-  { id: 'intake', title: 'Intake', subtitle: 'and assessment' },
-  { id: 'digitization', title: 'Digitization', subtitle: 'and remediation' },
-  { id: 'preservation', title: 'Digital', subtitle: 'Preservation', highlight: true },
-  { id: 'search', title: 'Search and', subtitle: 'discover' },
-  { id: 'share', title: 'Share, stream', subtitle: 'and monetize' },
+const defaultHeadline = [
+  'Learn more about how we unlocked new possibilities',
+  'for our partners',
+];
+const defaultPrimaryCtaLabel = 'From archive to access';
+const defaultSecondaryCtaLabel = 'Virtual walkthrough';
+const defaultSaveForLaterLabel = 'Save for later';
+
+const defaultDecorativeDiamonds: DecorativeDiamondConfig[] = [
+  {
+    borderColor: 'rgba(237,237,237,0.25)',
+    height: 360,
+    left: 460,
+    opacity: 1,
+    top: 1870,
+    width: 360,
+  },
+  {
+    borderColor: 'rgba(237,237,237,0.25)',
+    height: 520,
+    left: 680,
+    opacity: 1,
+    top: 2100,
+    width: 520,
+  },
+  {
+    fillColor: '#f26522',
+    height: 140,
+    left: 520,
+    opacity: 1,
+    top: 2250,
+    width: 140,
+  },
 ];
 
-export type CarouselSlideConfig = {
-  highlight?: boolean;
-  id?: string;
-  subtitle?: string;
-  title: string;
+type DecorativeDiamondConfig = {
+  borderColor?: string;
+  fillColor?: string;
+  height?: number;
+  left?: number;
+  opacity?: number;
+  top?: number;
+  width?: number;
 };
 
 export interface HardCodedKiosk1FirstScreenTemplateProps {
-  backCtaLabel?: string;
   backgroundEndColor?: string;
   backgroundStartColor?: string;
-  carouselId?: string;
-  description?: string | string[];
+  decorativeDiamonds?: DecorativeDiamondConfig[];
   eyebrow?: string | string[];
   headline?: string | string[];
-  onBackToMenu?: () => void;
-  slides?: CarouselSlideConfig[];
+  heroImageAlt?: string;
+  heroImageSrc?: string;
+  onPrimaryCta?: () => void;
+  onSecondaryCta?: () => void;
+  primaryCtaLabel?: string;
+  saveForLaterLabel?: string;
+  secondaryCtaLabel?: string;
 }
 
-const ArrowButton = ({
-  direction,
-  onClick,
-}: {
-  direction: 'prev' | 'next';
-  onClick: () => void;
-}) => (
-  <button
-    aria-label={direction === 'prev' ? 'Previous' : 'Next'}
-    className="flex h-[64px] w-[64px] items-center justify-center rounded-full border border-white/40 text-white transition hover:bg-white/10"
-    onClick={onClick}
-    type="button"
+const gradientDefaults = {
+  backgroundEndColor: '#14477d',
+  backgroundStartColor: '#1b75bc',
+};
+
+const SaveIcon = () => (
+  <svg
+    aria-hidden="true"
+    className="h-[68px] w-[76px]"
+    fill="none"
+    viewBox="0 0 76 68"
+    xmlns="http://www.w3.org/2000/svg"
   >
-    <svg
-      className={`h-6 w-6 ${direction === 'prev' ? 'rotate-180' : ''}`}
-      fill="none"
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-    </svg>
-  </button>
+    <path
+      d="M38 63.01S6 47.377 6 25.5C6 13.073 15.402 5 26.625 5 33.094 5 38 10.833 38 10.833S42.906 5 49.375 5C60.598 5 70 13.073 70 25.5 70 47.377 38 63.01 38 63.01Z"
+      stroke="#ededed"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="6"
+    />
+  </svg>
 );
 
-const BackButton = ({ label, onClick }: { label: string | React.ReactNode; onClick?: () => void }) => (
-  <button
-    className="flex h-[200px] items-center gap-8 rounded-[1000px] border border-white/60 px-[90px] text-[55px] font-normal leading-[1.2] tracking-[-2.7px] text-white transition hover:bg-white/10"
-    onClick={onClick}
-    type="button"
+const ArrowIcon = () => (
+  <svg
+    aria-hidden="true"
+    className="h-[61px] w-[126px]"
+    fill="none"
+    viewBox="0 0 126 61"
+    xmlns="http://www.w3.org/2000/svg"
   >
-    <span className="flex h-[55px] w-[55px] items-center justify-center rounded-full border border-white/60">
-      <svg
-        className="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path d="M15 6l-6 6 6 6" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-      </svg>
-    </span>
-    {typeof label === 'string' ? renderRegisteredMark(label) : label}
-  </button>
+    <path
+      d="M3 30.5h120M94.5 6l24 24.5-24 24.5"
+      stroke="#14477d"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="6"
+    />
+  </svg>
 );
 
-const Diamond = ({
-  label,
-  secondaryLabel,
-  highlight,
-}: {
-  highlight?: boolean;
-  label: string;
-  secondaryLabel?: string;
-}) => (
+const PlayIcon = () => (
+  <svg
+    aria-hidden="true"
+    className="h-[88px] w-[88px]"
+    fill="none"
+    viewBox="0 0 88 88"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <rect height="82" rx="19" stroke="#ededed" strokeWidth="6" width="82" x="3" y="3" />
+    <path d="M36 61V27l24 17-24 17Z" fill="#ededed" />
+  </svg>
+);
+
+const DecorativeDiamond = ({
+  borderColor,
+  fillColor,
+  height = 300,
+  left = 0,
+  opacity = 1,
+  top = 0,
+  width = 300,
+}: DecorativeDiamondConfig) => (
   <div
-    className={`relative flex h-[320px] w-[320px] items-center justify-center rounded-[64px] border ${
-      highlight ? 'border-[#ededed] bg-white text-[#14477d]' : 'border-white/30 bg-white/0 text-white'
-    } rotate-[45deg] shadow-[0_30px_80px_rgba(0,0,0,0.35)]`}
+    className="pointer-events-none absolute rotate-[45deg]"
+    style={{
+      borderColor,
+      borderStyle: borderColor ? 'solid' : undefined,
+      borderWidth: borderColor ? '4px' : undefined,
+      height,
+      left,
+      opacity,
+      top,
+      width,
+    }}
   >
-    <div className="flex -rotate-[45deg] flex-col items-center justify-center px-8 text-center">
-      <p className="text-[48px] font-normal leading-[1.2] tracking-[-2.4px]">{renderRegisteredMark(label)}</p>
-      {secondaryLabel ? (
-        <p className="text-[32px] font-normal leading-[1.2] tracking-[-1.6px]">{renderRegisteredMark(secondaryLabel)}</p>
-      ) : null}
-      {highlight ? (
-        <div className="mt-6 flex h-[48px] w-[48px] items-center justify-center rounded-full border border-[#14477d] bg-transparent">
-          <svg fill="none" height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8 3v10M3 8h10" stroke="#14477d" strokeLinecap="round" strokeWidth="2" />
-          </svg>
-        </div>
-      ) : null}
-    </div>
+    <div
+      className="absolute inset-[12%] rounded-[48px]"
+      style={{
+        backgroundColor: fillColor,
+      }}
+    />
   </div>
 );
 
 export default function HardCodedKiosk1FirstScreenTemplate({
-  backCtaLabel = defaultBackCtaLabel,
-  backgroundEndColor = '#0a2f5c',
-  backgroundStartColor = '#1b75bc',
-  carouselId,
-  description = defaultDescription,
+  backgroundEndColor = gradientDefaults.backgroundEndColor,
+  backgroundStartColor = gradientDefaults.backgroundStartColor,
+  decorativeDiamonds = defaultDecorativeDiamonds,
   eyebrow = defaultEyebrow,
   headline = defaultHeadline,
-  onBackToMenu,
-  slides,
+  heroImageAlt = 'Visitors smiling while viewing content',
+  heroImageSrc = defaultHeroImageSrc,
+  onPrimaryCta,
+  onSecondaryCta,
+  primaryCtaLabel = defaultPrimaryCtaLabel,
+  saveForLaterLabel = defaultSaveForLaterLabel,
+  secondaryCtaLabel = defaultSecondaryCtaLabel,
 }: HardCodedKiosk1FirstScreenTemplateProps) {
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const controller = useKioskController();
-  const [emblaRef, emblaApi] = useEmblaCarousel({ align: 'center', dragFree: true });
-  const componentId = useId();
-  const resolvedCarouselId = carouselId ?? `hardcoded-k1-first-${componentId}`;
-
-  const slidesToRender = slides && slides.length > 0 ? slides : defaultSlides;
-
-  useEffect(() => {
-    if (!emblaApi) return;
-    const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap());
-    emblaApi.on('select', onSelect);
-    onSelect();
-    return () => {
-      emblaApi.off('select', onSelect);
-    };
-  }, [emblaApi]);
-
-  useEffect(() => {
-    if (!emblaApi) return;
-    controller.register(resolvedCarouselId, {
-      next: () => {
-        if (emblaApi && emblaApi.canScrollNext()) {
-          emblaApi.scrollNext();
-          return true;
-        }
-        return false;
-      },
-      prev: () => {
-        if (emblaApi && emblaApi.canScrollPrev()) {
-          emblaApi.scrollPrev();
-          return true;
-        }
-        return false;
-      },
-    });
-    return () => controller.unregister(resolvedCarouselId);
-  }, [controller, emblaApi, resolvedCarouselId]);
-
-  const handlePrev = () => {
-    if (emblaApi && emblaApi.canScrollPrev()) {
-      emblaApi.scrollPrev();
-    } else {
-      controller.prev();
-    }
-  };
-
-  const handleNext = () => {
-    if (emblaApi && emblaApi.canScrollNext()) {
-      emblaApi.scrollNext();
-    } else {
-      controller.next();
-    }
-  };
-
   const eyebrowText = Array.isArray(eyebrow) ? eyebrow.join('\n') : eyebrow;
   const headlineText = Array.isArray(headline) ? headline.join('\n') : headline;
-  const descriptionText = Array.isArray(description) ? description.join('\n') : description;
 
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-hidden" data-node-id="5893:7489">
+    <div
+      className="relative flex h-screen w-full flex-col overflow-hidden bg-[#14477d]"
+      data-node-id="5893:7411"
+    >
       <div
         className="absolute inset-0"
         style={{
@@ -189,47 +179,62 @@ export default function HardCodedKiosk1FirstScreenTemplate({
         }}
       />
 
-      <div className="absolute left-[120px] top-[240px] text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#ededed] whitespace-pre-line">
+      <div className="absolute left-[120px] top-[240px] text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#ededed]">
         {renderRegisteredMark(eyebrowText)}
       </div>
 
-      <div className="absolute left-[240px] top-[820px] text-[100px] font-normal leading-[1.3] tracking-[-5px] text-[#ededed]">
+      <div className="absolute left-[240px] top-[1284px] w-[1380px] text-[100px] font-normal leading-[1.3] tracking-[-5px] text-[#ededed]">
         {renderRegisteredMark(headlineText)}
       </div>
 
-      <p className="absolute left-[240px] top-[1310px] w-[660px] text-[52px] font-normal leading-[1.4] tracking-[-2.6px] text-[#ededed]">
-        {renderRegisteredMark(descriptionText)}
-      </p>
-
-      <div className="absolute right-[240px] top-[1190px]">
-        <BackButton label={renderRegisteredMark(backCtaLabel)} onClick={onBackToMenu} />
+      <div className="absolute left-[240px] top-[1925px] flex items-center gap-[40px] text-[52px] font-normal leading-[1.4] tracking-[-2.6px] text-[#ededed]">
+        <SaveIcon />
+        <p>{renderRegisteredMark(saveForLaterLabel)}</p>
       </div>
 
-      <div className="absolute left-[240px] right-[240px] bottom-[420px] flex flex-col items-center gap-[80px]">
-        <div className="w-full overflow-hidden" ref={emblaRef}>
-          <div className="flex gap-[200px]" style={{ padding: '80px 0' }}>
-            {slidesToRender.map((slide, index) => (
-              <div className="flex min-w-full flex-col items-center gap-12" key={slide.id ?? `${slide.title}-${index}`}>
-                <Diamond highlight label={slide.title} secondaryLabel={slide.subtitle} />
-              </div>
-            ))}
+      <div className="absolute left-[240px] top-[2249px] flex w-[1013px] flex-col gap-[84px]">
+        <button
+          className="flex h-[200px] items-center justify-between rounded-[999px] bg-[#ededed] px-[100px] text-[60px] font-normal leading-[1.2] tracking-[-1.8px] text-[#14477d] transition-transform duration-150 hover:scale-[1.01]"
+          onClick={onPrimaryCta}
+          type="button"
+        >
+          <span>{renderRegisteredMark(primaryCtaLabel)}</span>
+          <ArrowIcon />
+        </button>
+        <button
+          className="flex h-[200px] items-center justify-between rounded-[999px] bg-[#8a0d71] px-[100px] text-[60px] font-normal leading-[1.2] tracking-[-1.8px] text-white transition-transform duration-150 hover:scale-[1.01]"
+          onClick={onSecondaryCta}
+          type="button"
+        >
+          <span>{renderRegisteredMark(secondaryCtaLabel)}</span>
+          <div className="flex items-center justify-center">
+            <PlayIcon />
           </div>
-        </div>
-        <div className="flex flex-wrap justify-center gap-10 text-[40px] font-normal leading-[1.2] tracking-[-2px]">
-          {slidesToRender.map((slide, index) => (
-            <span
-              className={index === selectedIndex ? 'text-white' : 'text-white/50'}
-              key={`label-${slide.id ?? `${slide.title}-${index}`}`}
-            >
-              {renderRegisteredMark(`${slide.title}${slide.subtitle ? ` ${slide.subtitle}` : ''}`)}
-            </span>
-          ))}
-        </div>
-        <div className="flex items-center gap-8">
-          <ArrowButton direction="prev" onClick={handlePrev} />
-          <ArrowButton direction="next" onClick={handleNext} />
-        </div>
+        </button>
       </div>
+
+      <div className="pointer-events-none absolute right-[180px] top-[1850px] h-[640px] w-[640px] rotate-[45deg] overflow-hidden rounded-[120px] border border-[#ededed]/40 bg-[#14477d] shadow-[0_40px_120px_rgba(0,0,0,0.4)] relative">
+        <Image
+          alt={heroImageAlt}
+          className="-rotate-[45deg] object-cover"
+          src={heroImageSrc}
+          fill
+          sizes="640px"
+        />
+      </div>
+
+      {decorativeDiamonds.map((diamond, index) => (
+        <DecorativeDiamond
+          borderColor={diamond.borderColor}
+          fillColor={diamond.fillColor}
+          height={diamond.height}
+          key={`${diamond.left}-${diamond.top}-${index}`}
+          left={diamond.left}
+          opacity={diamond.opacity}
+          top={diamond.top}
+          width={diamond.width}
+        />
+      ))}
     </div>
   );
 }

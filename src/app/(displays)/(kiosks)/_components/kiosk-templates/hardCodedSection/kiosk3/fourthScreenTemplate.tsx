@@ -2,7 +2,7 @@
 
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
 
-export interface HardCodedKiosk1FourthScreenTemplateProps {
+export interface HardCodedKiosk3FourthScreenTemplateProps {
   backgroundEndColor?: string;
   backgroundStartColor?: string;
   cardBackgroundColor?: string;
@@ -19,13 +19,13 @@ const defaults = {
   backgroundStartColor: '#1b75bc',
   cardBackgroundColor: '#e0e0e0',
   cardHeight: 1080,
-  cardLabel: 'Virtual walkthrough',
+  cardLabel: 'Demo',
   cardTextColor: '#4a4a4a',
   cardWidth: 1920,
   headline: ['Section title lorem ipsum', 'dolor sit.'],
 };
 
-export default function HardCodedKiosk1FourthScreenTemplate({
+export default function HardCodedKiosk3FourthScreenTemplate({
   backgroundEndColor = defaults.backgroundEndColor,
   backgroundStartColor = defaults.backgroundStartColor,
   cardBackgroundColor = defaults.cardBackgroundColor,
@@ -35,12 +35,12 @@ export default function HardCodedKiosk1FourthScreenTemplate({
   cardWidth = defaults.cardWidth,
   headline = defaults.headline,
   onCta,
-}: HardCodedKiosk1FourthScreenTemplateProps) {
+}: HardCodedKiosk3FourthScreenTemplateProps) {
   const headlineText = Array.isArray(headline) ? headline.join('\n') : headline;
   const cardText = Array.isArray(cardLabel) ? cardLabel.join('\n') : cardLabel;
 
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-hidden" data-node-id="5890:16731">
+    <div className="relative flex h-screen w-full flex-col overflow-hidden" data-node-id="5896:13159">
       <div
         className="absolute inset-0"
         style={{

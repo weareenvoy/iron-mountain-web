@@ -1,93 +1,197 @@
 'use client';
 
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from '@/components/shadcn/carousel';
+import HCBlueDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCBlueDiamond';
+import HCWhiteDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCWhiteDiamond';
+import { ArrowLeft, ChevronLeft, ChevronRight, CirclePlus } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
-const defaultEyebrow = ['Rich media &', 'cultural heritage'];
-const defaultHeadline = 'Intake and assessment';
-const defaultDescription =
-  'Assets, whether film, audio, digital, or physical, are logged, evaluated for condition and risk, and prioritized based on preservation and activation potential.';
-const defaultBackLabel = 'Back';
+type Step = {
+  label: string;
+};
 
-export interface HardCodedKiosk1SecondScreenTemplateProps {
-  backLabel?: string;
-  backgroundImageSrc?: string;
-  description?: string | string[];
+type EmblaApi = {
+  off: (...args: unknown[]) => void;
+  on: (...args: unknown[]) => void;
+  selectedScrollSnap: () => number;
+  scrollNext?: () => void;
+  scrollPrev?: () => void;
+  canScrollNext?: () => boolean;
+  canScrollPrev?: () => boolean;
+};
+
+export type HardCodedKiosk1SecondScreenTemplateProps = Readonly<{
+  backgroundEndColor?: string;
+  backgroundStartColor?: string;
   eyebrow?: string | string[];
   headline?: string | string[];
-  iconImageAlt?: string;
-  iconImageSrc?: string;
   onBack?: () => void;
-  panelBackgroundColor?: string;
-}
+  steps?: readonly Step[];
+}>;
+
+const defaultSteps: readonly Step[] = [
+  { label: 'Intake and assessment' },
+  { label: 'Digitization and remediation' },
+  { label: 'Digital preservation' },
+  { label: 'Search and discover' },
+  { label: 'Share, stream and monetize' },
+];
+
+const gradientDefaults = {
+  backgroundEndColor: '#0a2f5c',
+  backgroundStartColor: '#1b75bc',
+};
+
+const textDefaults = {
+  eyebrow: ['Rich media &', 'cultural heritage'],
+  headline: ['From archive', 'to access'],
+};
+
+const normalizeText = (value?: string | string[]) => (Array.isArray(value) ? value.join('\n') : value);
 
 export default function HardCodedKiosk1SecondScreenTemplate({
-  backLabel = defaultBackLabel,
-  backgroundImageSrc = 'http://localhost:3845/assets/654867e73dd58b462c4290a35fc661c2add46d6b.png',
-  description = defaultDescription,
-  eyebrow = defaultEyebrow,
-  headline = defaultHeadline,
-  iconImageAlt = 'Media intake icons',
-  iconImageSrc = backgroundImageSrc,
+  backgroundEndColor = gradientDefaults.backgroundEndColor,
+  backgroundStartColor = gradientDefaults.backgroundStartColor,
+  eyebrow = textDefaults.eyebrow,
+  headline = textDefaults.headline,
   onBack,
-  panelBackgroundColor = '#6dcff6',
+  steps = defaultSteps,
 }: HardCodedKiosk1SecondScreenTemplateProps) {
-  const eyebrowText = Array.isArray(eyebrow) ? eyebrow.join('\n') : eyebrow;
-  const headlineText = Array.isArray(headline) ? headline.join('\n') : headline;
-  const descriptionText = Array.isArray(description) ? description.join('\n') : description;
+  const eyebrowText = normalizeText(eyebrow);
+  const headlineText = normalizeText(headline);
+  const normalizedSteps = steps && steps.length > 0 ? steps : defaultSteps;
+
+  const [emblaApi, setEmblaApi] = useState<EmblaApi>();
+  const [selectedIndex, setSelectedIndex] = useState(2);
+  const lastIndex = normalizedSteps.length - 1;
+
+  useEffect(() => {
+    if (!emblaApi) return undefined;
+    if (emblaApi.selectedScrollSnap() !== 2) {
+      (emblaApi as any).scrollTo?.(2);
+    }
+    const handleSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap());
+    handleSelect();
+    emblaApi.on('select', handleSelect);
+    return () => {
+      emblaApi.off('select', handleSelect);
+    };
+  }, [emblaApi]);
+
+  const handlePrev = () => {
+    if (emblaApi?.scrollPrev) {
+      emblaApi.scrollPrev();
+      return;
+    }
+    const target = selectedIndex == 0 ? lastIndex : selectedIndex - 1;
+    (emblaApi as any)?.scrollTo?.(target);
+  };
+
+  const handleNext = () => {
+    if (emblaApi?.scrollNext) {
+      emblaApi.scrollNext();
+      return;
+    }
+    const target = selectedIndex == lastIndex ? 0 : selectedIndex + 1;
+    (emblaApi as any)?.scrollTo?.(target);
+  };
 
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-hidden" data-node-id="5896:12352">
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#1b75bc] to-[#0a2f5c]" />
-        <div className="absolute inset-0 bg-black/30 backdrop-blur-[50px]" />
-      </div>
+    <div className="relative flex h-screen w-full flex-col overflow-hidden" data-node-id="hardcoded-k1-second">
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `linear-gradient(180deg, ${backgroundStartColor} 0%, ${backgroundEndColor} 100%)`,
+        }}
+      />
 
-      <div className="absolute left-[120px] top-[240px] text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#ededed] whitespace-pre-line">
+      <div className="absolute left-[120px] top-[120px] text-[42px] font-normal leading-[1.4] tracking-[-2.1px] text-[#ededed]">
         {renderRegisteredMark(eyebrowText)}
       </div>
 
-      <div
-        className="absolute left-[120px] top-[1160px] w-[1920px] rounded-[80px] p-[120px]"
-        style={{ backgroundColor: panelBackgroundColor }}
+      <div className="absolute left-[120px] top-[280px] w-[720px] text-[78px] font-normal leading-[1.2] tracking-[-3.9px] text-[#ededed]">
+        {renderRegisteredMark(headlineText)}
+      </div>
+
+      <p className="absolute left-[120px] top-[520px] w-[620px] text-[40px] font-normal leading-[1.3] tracking-[-2px] text-[#ededed]/90">
+        {renderRegisteredMark('Explore each section to learn how Iron Mountain can transform your enterprise')}
+      </p>
+
+      <button
+        className="absolute right-[200px] top-[440px] flex h-[120px] items-center gap-[12px] rounded-full bg-white px-[40px] text-[40px] font-normal leading-[1.2] tracking-[-2px] text-[#14477d] shadow-[0_16px_40px_rgba(0,0,0,0.25)] transition-transform duration-150 hover:scale-[1.02]"
+        onClick={onBack}
+        type="button"
       >
-        <div className="flex items-center justify-between">
-          <button
-            className="flex h-[200px] items-center gap-[30px] rounded-[1000px] bg-[#ededed] px-[90px] text-[54px] font-normal leading-[1.4] tracking-[-2.7px] text-[#14477d] transition hover:scale-[1.01]"
-            onClick={onBack}
-            type="button"
-          >
-            <span className="flex h-[55px] w-[55px] items-center justify-center rounded-full border border-[#14477d]">
-              <svg
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M15 6l-6 6 6 6" stroke="#14477d" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-              </svg>
-            </span>
-            {renderRegisteredMark(backLabel)}
-          </button>
-        </div>
+        <ArrowLeft className="h-[36px] w-[36px]" />
+        Back
+      </button>
 
-        <div className="mt-[200px] max-w-[1270px] text-[#14477d]">
-          <p className="text-[100px] font-normal leading-[1.3] tracking-[-5px]">{renderRegisteredMark(headlineText)}</p>
-          <p className="mt-[100px] text-[60px] font-normal leading-[1.4] tracking-[-3px]">
-            {renderRegisteredMark(descriptionText)}
-          </p>
-        </div>
-
-        <div className="mt-[200px] flex items-center justify-center">
-          <div className="relative h-[640px] w-[640px] rotate-[45deg] rounded-[120px] border-[8px] border-[#ededed]/80">
-            <div className="absolute inset-0 rounded-[112px] bg-white/10" />
-            <div className="absolute inset-[60px] -rotate-[45deg] flex items-center justify-center">
-              <img alt={iconImageAlt} className="h-[360px] w-[360px] object-contain" src={iconImageSrc} />
-            </div>
+      <div className="absolute left-1/2 top-[960px] w-full max-w-[2200px] -translate-x-1/2">
+        <Carousel className="w-full" opts={{ align: 'center', loop: true }} setApi={setEmblaApi as any}>
+          <CarouselContent className="flex gap-[80px] px-[300px]">
+            {normalizedSteps.map((step, idx) => {
+              const isActive = idx === selectedIndex;
+              return (
+                <CarouselItem className="w-[320px]" key={`${step.label}-${idx}`}>
+                  <div className="flex flex-col items-center gap-[28px]">
+                    <button
+                      className="relative flex items-center justify-center"
+                      onClick={() => (emblaApi as any)?.scrollTo?.(idx)}
+                      type="button"
+                    >
+                      {isActive ? (
+                        <HCWhiteDiamond className="h-[360px] w-[360px]" aria-hidden="true" focusable="false" />
+                      ) : (
+                        <HCBlueDiamond className="h-[240px] w-[240px]" aria-hidden="true" focusable="false" />
+                      )}
+                      <div className="absolute inset-0 flex items-center justify-center px-8 text-center">
+                        <span
+                          className={
+                            isActive
+                              ? 'text-[44px] font-semibold leading-[1.2] tracking-[-2.2px] text-[#14477d]'
+                              : 'text-[30px] font-semibold leading-[1.2] tracking-[-1.5px] text-[#ededed]'
+                          }
+                          style={{ width: isActive ? '240px' : '200px' }}
+                        >
+                          {renderRegisteredMark(step.label)}
+                        </span>
+                        {isActive ? (
+                          <span className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                            <CirclePlus className="h-[56px] w-[56px] text-[#14477d]" />
+                          </span>
+                        ) : null}
+                      </div>
+                    </button>
+                  </div>
+                </CarouselItem>
+              );
+            })}
+          </CarouselContent>
+          <div className="pointer-events-none absolute inset-x-0 -bottom-[220px] flex items-center justify-center gap-[48px]">
+            <button
+              aria-label="Previous"
+              className="pointer-events-auto flex h-[64px] w-[64px] items-center justify-center rounded-full border-2 border-white/70 text-white shadow-[0_10px_30px_rgba(0,0,0,0.25)] transition-transform duration-150 hover:scale-105"
+              onClick={handlePrev}
+              type="button"
+            >
+              <ChevronLeft className="h-[28px] w-[28px]" />
+            </button>
+            <button
+              aria-label="Next"
+              className="pointer-events-auto flex h-[64px] w-[64px] items-center justify-center rounded-full border-2 border-white/70 text-white shadow-[0_10px_30px_rgba(0,0,0,0.25)] transition-transform duration-150 hover:scale-105"
+              onClick={handleNext}
+              type="button"
+            >
+              <ChevronRight className="h-[28px] w-[28px]" />
+            </button>
           </div>
-        </div>
+        </Carousel>
       </div>
     </div>
   );
 }
-
-

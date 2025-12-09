@@ -1,33 +1,25 @@
 'use client';
 
+import hardCodedContent from '@public/api/kiosk-3-hardcoded.json';
 import challengeContent from '@public/api/kiosk-3-challenges.json';
 import solutionContent from '@public/api/kiosk-3-solutions.json';
 import valueContent from '@public/api/kiosk-3-values.json';
 import { useEffect, useState, type ReactElement } from 'react';
-import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
-import InitialScreenTemplate, {
-  type InitialScreenTemplateProps,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/initialScreen/initialScreenTemplate';
-import FirstScreenTemplate, {
-  type FirstScreenTemplateProps,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/firstScreen/firstScreenTemplate';
-import SecondScreenTemplate, {
-  type SecondScreenTemplateProps,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/secondScreen/secondScreenTemplate';
-import ThirdScreenTemplate, {
-  type ThirdScreenTemplateProps,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/thirdScreen/thirdScreenTemplate';
-import HardCodedKiosk3FirstScreenTemplate, {
+import FirstScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/firstScreen/firstScreenTemplate';
+import InitialScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/initialScreen/initialScreenTemplate';
+import SecondScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/secondScreen/secondScreenTemplate';
+import ThirdScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/thirdScreen/thirdScreenTemplate';
+import HardCodedFirstScreenTemplate, {
   type HardCodedKiosk3FirstScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk3/firstScreenTemplate';
-import HardCodedKiosk3InitialScreenTemplate, {
-  type HardCodedKiosk3InitialScreenTemplateProps,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk3/initialScreenTemplate';
-import HardCodedKiosk3SecondScreenTemplate, {
+import HardCodedFourthScreenTemplate, {
+  type HardCodedKiosk3FourthScreenTemplateProps,
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk3/fourthScreenTemplate';
+import HardCodedSecondScreenTemplate, {
   type HardCodedKiosk3SecondScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk3/secondScreenTemplate';
-import HardCodedKiosk3ThirdScreenTemplate, {
+import HardCodedThirdScreenTemplate, {
   type HardCodedKiosk3ThirdScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk3/thirdScreenTemplate';
 import SolutionFirstScreenTemplate, {
@@ -43,11 +35,13 @@ import SolutionThirdScreenTemplate, {
 import ValueCarouselTemplate, {
   type ValueCarouselTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueCarouselTemplate';
-import InnerEmbla from '../../kiosk-1/components/InnerEmbla';
-import hardCodedContent from '../hardCoded.json';
+import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
+import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 // import styles from './kiosk-3.module.css';
 
-type Slide = { hasCarousel?: boolean; id: string; render: () => ReactElement; title: string };
+
+
+type Slide = { id: string; render: () => ReactElement; title: string };
 
 type SolutionSlidesConfig = {
   firstScreen?: SolutionFirstScreenTemplateProps;
@@ -60,21 +54,13 @@ type SolutionSlidesConfig = {
 type ValueSlidesConfig = {
   valueScreens?: Omit<ValueCarouselTemplateProps, 'onNavigateDown' | 'onNavigateUp'>[];
 };
-
-type ChallengeSlidesConfig = {
-  firstScreen: FirstScreenTemplateProps;
-  initialScreen: InitialScreenTemplateProps;
-  secondScreen: SecondScreenTemplateProps;
-  thirdScreen: ThirdScreenTemplateProps;
-};
-
 type HardCodedSlidesConfig = {
   firstScreen?: HardCodedKiosk3FirstScreenTemplateProps;
-  initialScreen?: HardCodedKiosk3InitialScreenTemplateProps;
+  fourthScreen?: HardCodedKiosk3FourthScreenTemplateProps;
   secondScreen?: HardCodedKiosk3SecondScreenTemplateProps;
-  secondScreens?: HardCodedKiosk3SecondScreenTemplateProps[];
   thirdScreen?: HardCodedKiosk3ThirdScreenTemplateProps;
 };
+
 
 const formatTitle = (value: string | string[] | undefined, fallback: string) =>
   Array.isArray(value) ? value.join(' ') : (value ?? fallback);
@@ -82,117 +68,54 @@ const formatTitle = (value: string | string[] | undefined, fallback: string) =>
 const Kiosk3View = () => {
   const controller: Controller = useKioskController();
   const [topIndex, setTopIndex] = useState(0);
-  const challenges = challengeContent as unknown as ChallengeSlidesConfig;
-  const hardCoded = hardCodedContent as unknown as HardCodedSlidesConfig;
-  const solutions = solutionContent as unknown as SolutionSlidesConfig;
-  const values = valueContent as unknown as ValueSlidesConfig;
-
-  const hardCodedSlides: Slide[] = [];
-
-  if (hardCoded.initialScreen) {
-    hardCodedSlides.push({
-      id: 'hardcoded-initial',
-      title: Array.isArray(hardCoded.initialScreen.headline)
-        ? hardCoded.initialScreen.headline[0] ?? 'Hard-coded Initial'
-        : hardCoded.initialScreen.headline ?? 'Hard-coded Initial',
-      render: () => <HardCodedKiosk3InitialScreenTemplate {...hardCoded.initialScreen!} />,
-    });
-  }
-
-  if (hardCoded.firstScreen) {
-    hardCodedSlides.push({
-      id: 'hardcoded-first',
-      title: Array.isArray(hardCoded.firstScreen.headline)
-        ? hardCoded.firstScreen.headline[0] ?? 'Hard-coded First'
-        : hardCoded.firstScreen.headline ?? 'Hard-coded First',
-      render: () => (
-        <HardCodedKiosk3FirstScreenTemplate
-          {...hardCoded.firstScreen!}
-          onPrimaryCta={() => controller.goTo(0)}
-          onSecondaryCta={() => controller.goTo(0)}
-        />
-      ),
-    });
-  }
-
-  const hardCodedSecondScreens =
-    (hardCoded.secondScreens && hardCoded.secondScreens.length > 0
-      ? hardCoded.secondScreens
-      : hardCoded.secondScreen
-        ? [hardCoded.secondScreen]
-        : []) ?? [];
-
-  hardCodedSecondScreens.forEach((config, idx) => {
-    hardCodedSlides.push({
-      id: `hardcoded-second-${idx}`,
-      title: Array.isArray(config.sectionHeadline)
-        ? config.sectionHeadline[0] ?? `Hard-coded Second ${idx + 1}`
-        : config.sectionHeadline ?? `Hard-coded Second ${idx + 1}`,
-      render: () => (
-        <HardCodedKiosk3SecondScreenTemplate
-          {...config}
-          onBack={() => controller.prev()}
-          onNextStep={() => controller.next()}
-          onPrevStep={() => controller.prev()}
-        />
-      ),
-    });
-  });
-
-  if (hardCoded.thirdScreen) {
-    hardCodedSlides.push({
-      id: 'hardcoded-third',
-      title: Array.isArray(hardCoded.thirdScreen.headline)
-        ? hardCoded.thirdScreen.headline[0] ?? 'Hard-coded Third'
-        : hardCoded.thirdScreen.headline ?? 'Hard-coded Third',
-      render: () => (
-        <HardCodedKiosk3ThirdScreenTemplate
-          {...hardCoded.thirdScreen!}
-          onCta={() => controller.goTo(0)}
-        />
-      ),
-    });
-  }
+  const challenges: KioskChallenges = parseKioskChallenges(challengeContent, 'kiosk-3');
+  const solutions = solutionContent as SolutionSlidesConfig;
+  const values = valueContent as ValueSlidesConfig;
+  const hardCoded = hardCodedContent as HardCodedSlidesConfig;
 
   const challengeSlides: Slide[] = [
     {
       id: 'challenge-initial',
+      render: () => (
+        <InitialScreenTemplate {...challenges.initialScreen} contentBoxBgColor="#00A88E" kioskId="kiosk-3" />
+      ),
       title: 'Challenge Intro',
-      render: () => <InitialScreenTemplate {...challenges.initialScreen} />,
     },
     {
       id: 'challenge-first',
-      title: 'Challenge Story',
-      hasCarousel: true,
       render: () => (
         <FirstScreenTemplate
           {...challenges.firstScreen}
+          kioskId="kiosk-3"
           onNavigateDown={() => controller.next()}
           onNavigateUp={() => controller.prev()}
         />
       ),
+      title: 'Challenge Story',
     },
     {
       id: 'challenge-second',
-      title: 'Challenge Stats',
       render: () => (
         <SecondScreenTemplate
           {...challenges.secondScreen}
+          kioskId="kiosk-3"
           onNavigateDown={() => controller.next()}
           onNavigateUp={() => controller.prev()}
         />
       ),
+      title: 'Challenge Stats',
     },
     {
       id: 'challenge-third',
-      title: 'Challenge Impact',
       render: () => (
         <ThirdScreenTemplate
           {...challenges.thirdScreen}
+          kioskId="kiosk-3"
           onNavigateDown={() => controller.next()}
           onNavigateUp={() => controller.prev()}
         />
       ),
+      title: 'Challenge Impact',
     },
   ];
 
@@ -202,66 +125,67 @@ const Kiosk3View = () => {
     if (solutions.firstScreen) {
       result.push({
         id: 'solution-first',
-        title: solutions.firstScreen.title ?? 'Solution Intro',
         render: () => <SolutionFirstScreenTemplate {...solutions.firstScreen!} />,
+        title: formatTitle(solutions.firstScreen.title, 'Solution Intro'),
       });
     }
 
     const secondScreens =
-      (solutions.secondScreens && solutions.secondScreens.length > 0
+      solutions.secondScreens && solutions.secondScreens.length > 0
         ? solutions.secondScreens
         : solutions.secondScreen
           ? [solutions.secondScreen]
-          : []) ?? [];
+          : [];
 
     secondScreens.forEach((config, idx) => {
       result.push({
         id: `solution-second-${idx}`,
-        title: config.title ?? `Solution Step ${idx + 1}`,
         render: () => (
           <SolutionSecondScreenTemplate
             {...config}
+            kioskId="kiosk-3"
             onNavigateDown={() => controller.next()}
             onNavigateUp={() => controller.prev()}
           />
         ),
+        title: formatTitle(config.title, `Solution Step ${idx + 1}`),
       });
     });
 
-    if (solutions.thirdScreen) {
+    const kioskThreeDetailScreen = solutions.fourthScreen ?? solutions.thirdScreen;
+    if (kioskThreeDetailScreen) {
+      const useFourthTemplate = Boolean(solutions.fourthScreen);
       result.push({
-        id: 'solution-third',
-        title: solutions.thirdScreen.title ?? 'Solution Walkthrough',
-        render: () => (
-          <SolutionThirdScreenTemplate
-            {...solutions.thirdScreen}
-            onNavigateDown={() => controller.next()}
-            onNavigateUp={() => controller.prev()}
-          />
-        ),
-      });
-    }
-    if (solutions.fourthScreen) {
-      result.push({
-        id: 'solution-fourth',
-        title: solutions.fourthScreen.title ?? 'Solution Details',
-        render: () => (
-          <SolutionFourthScreenTemplate
-            {...solutions.fourthScreen}
-            onNavigateDown={() => controller.next()}
-            onNavigateUp={() => controller.prev()}
-          />
+        id: useFourthTemplate ? 'solution-fourth' : 'solution-third',
+        render: () =>
+          useFourthTemplate ? (
+            <SolutionFourthScreenTemplate
+              {...(kioskThreeDetailScreen as SolutionFourthScreenTemplateProps)}
+              onNavigateDown={() => controller.next()}
+              onNavigateUp={() => controller.prev()}
+            />
+          ) : (
+            <SolutionThirdScreenTemplate
+              {...(kioskThreeDetailScreen as SolutionThirdScreenTemplateProps)}
+              kioskId="kiosk-3"
+              onNavigateDown={() => controller.next()}
+              onNavigateUp={() => controller.prev()}
+            />
+          ),
+        title: formatTitle(
+          kioskThreeDetailScreen.title,
+          useFourthTemplate ? 'Solution Details' : 'Solution Walkthrough'
         ),
       });
     }
 
     return result;
   };
+  const solutionSlides = buildSolutionSlides();
 
   const valueSlides =
     values.valueScreens?.map((config, idx) => ({
       id: `value-${idx}`,
-      title: config.headline ?? config.labelText ?? `Value ${idx + 1}`,
       render: () => (
         <ValueCarouselTemplate
           {...config}
@@ -270,12 +194,41 @@ const Kiosk3View = () => {
           onNavigateUp={() => controller.prev()}
         />
       ),
+      title: config.headline ?? config.labelText ?? `Value ${idx + 1}`,
     })) ?? [];
 
-  const slides = [...challengeSlides, ...buildSolutionSlides(), ...valueSlides, ...hardCodedSlides];
+  const hardCodedSlides: Slide[] = [
+    {
+      id: 'hardcoded-first',
+      render: () => <HardCodedFirstScreenTemplate {...(hardCoded.firstScreen ?? {})} />,
+      title: 'Hardcoded First',
+    },
+    {
+      id: 'hardcoded-second',
+      render: () => <HardCodedSecondScreenTemplate {...(hardCoded.secondScreen ?? {})} />,
+      title: 'Hardcoded Second',
+    },
+    {
+      id: 'hardcoded-third',
+      render: () => <HardCodedThirdScreenTemplate {...(hardCoded.thirdScreen ?? {})} />,
+      title: 'Hardcoded Third',
+    },
+    {
+      id: 'hardcoded-fourth',
+      render: () => <HardCodedFourthScreenTemplate {...(hardCoded.fourthScreen ?? {})} />,
+      title: 'Hardcoded Fourth',
+    },
+  ];
+
+
+  const slides = [...challengeSlides, ...solutionSlides, ...valueSlides, ...hardCodedSlides];
 
   useEffect(() => {
     controller.setRootHandlers({
+      goTo: (i: number) => {
+        setTopIndex(Math.max(0, Math.min(i, slides.length - 1)));
+        return true;
+      },
       next: () => {
         setTopIndex((i: number) => Math.min(i + 1, slides.length - 1));
         return true;
@@ -284,13 +237,10 @@ const Kiosk3View = () => {
         setTopIndex((i: number) => Math.max(i - 1, 0));
         return true;
       },
-      goTo: (i: number) => {
-        setTopIndex(Math.max(0, Math.min(i, slides.length - 1)));
-        return true;
-      },
     });
+
     return () => controller.setRootHandlers(null);
-  }, [controller]);
+  }, [controller, slides.length]);
 
   return (
     <div
@@ -304,19 +254,18 @@ const Kiosk3View = () => {
       >
         {slides.map((slide, idx) => (
           <section
-            key={slide.id}
             // className={styles.slide}
             className="flex h-full w-full flex-col items-center justify-center"
             data-active={idx === topIndex}
+            key={slide.id}
           >
             {slide.render()}
-            {slide.hasCarousel ? <InnerEmbla id={`inner-${slide.id}`} /> : null}
           </section>
         ))}
       </div>
       <div
         // className={styles.debugControls}
-        className="absolute bottom-[12px] right-[12px] z-[1000] flex gap-2"
+        className="absolute right-[12px] bottom-[12px] z-[1000] flex gap-2"
       >
         <button onClick={() => controller.prev()}>Prev</button>
         <button onClick={() => controller.next()}>Next</button>
@@ -324,5 +273,7 @@ const Kiosk3View = () => {
     </div>
   );
 };
+
+Kiosk3View.displayName = 'Kiosk3View';
 
 export default Kiosk3View;
