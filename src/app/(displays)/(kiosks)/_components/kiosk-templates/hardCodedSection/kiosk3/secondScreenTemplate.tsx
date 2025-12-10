@@ -31,8 +31,18 @@ export default function HardCodedKiosk3SecondScreenTemplate({
   tapToBeginLabel = defaultTapToBeginLabel,
 }: HardCodedKiosk3SecondScreenTemplateProps) {
   const eyebrowText = Array.isArray(eyebrow) ? eyebrow.join('\n') : eyebrow;
-  const headlineText = Array.isArray(headline) ? headline.join('\n') : headline;
-  const descriptionText = Array.isArray(description) ? description.join('\n') : description;
+
+  const rawHeadline = Array.isArray(headline) ? headline.join('\n') : headline ?? '';
+  const headlineText = rawHeadline.replace(
+    'Centralized management of services via API',
+    'Centralized management\nof services via API'
+  );
+
+  const rawDescription = Array.isArray(description) ? description.join('\n') : description ?? '';
+  const descriptionText = rawDescription.replace(
+    'Explore each section to learn how Iron Mountain can transform your enterprise',
+    'Explore each section to learn\nhow Iron Mountain can\ntransform your enterprise'
+  );
 
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden" data-node-id="5896:13301">
@@ -55,18 +65,18 @@ export default function HardCodedKiosk3SecondScreenTemplate({
         {renderRegisteredMark(eyebrowText)}
       </div>
 
-      <div className="absolute left-[120px] top-[400px] max-w-[1200px] text-white">
-        <h1 className="text-[80px] font-bold leading-[1.2] tracking-[-4px] mb-[40px]">
+      <div className="absolute left-[240px] top-[820px] max-w-[1200px] text-white">
+        <h1 className="mb-[40px] text-[100px] font-bold leading-[1.3] tracking-[-5px] whitespace-pre-line">
           {renderRegisteredMark(headlineText)}
         </h1>
-        <p className="text-[40px] font-normal leading-[1.4] tracking-[-2px] text-white/90">
+        <p className="relative top-[190px] text-[52px] font-normal leading-[1.4] tracking-[-2.6px] text-white/90 whitespace-pre-line">
           {renderRegisteredMark(descriptionText)}
         </p>
       </div>
 
       <div className="absolute right-[120px] top-[240px]">
         <button
-          className="flex h-[120px] items-center gap-[20px] rounded-[1000px] bg-[#ededed] px-[60px] text-[40px] font-normal leading-[1.4] tracking-[-2px] text-[#14477d] transition hover:scale-[1.01]"
+          className="relative top-[1080px] flex h-[200px] items-center gap-[20px] rounded-[1000px] bg-[#ededed] px-[110px] text-[54px] font-normal leading-[1.4] tracking-[-2px] text-[#14477d] transition hover:scale-[1.01]"
           onClick={onBack}
           type="button"
         >

@@ -117,7 +117,7 @@ export default function HardCodedKiosk1FirstScreenTemplate({
           }}
           type="button"
         >
-          <span className="pl-[320px]">{renderRegisteredMark(secondaryCtaLabel)}</span>
+          <span className="pl-[330px]">{renderRegisteredMark(secondaryCtaLabel)}</span>
           <div className="flex items-center justify-center">
             <SquarePlay
               aria-hidden
