@@ -6,6 +6,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from '@/components/shadcn/carousel';
+import NextImage from 'next/image';
 import HCBlueDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCBlueDiamond';
 import HCWhiteDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCWhiteDiamond';
 import { ArrowLeft, ChevronLeft, ChevronRight, CirclePlus } from 'lucide-react';
@@ -46,18 +47,65 @@ export type HardCodedKiosk1SecondScreenTemplateProps = Readonly<{
 }>;
 
 const defaultSteps: readonly Step[] = [
-  { label: 'Intake and assessment' },
-  { label: 'Digitization and remediation' },
-  { label: 'Digital preservation' },
-  { label: 'Search and discover' },
-  { label: 'Share, stream and monetize' },
+  {
+    label: 'Intake and assessment',
+    modal: {
+      body: [
+        'Assets, whether film, audio, digital, or physical, are logged, evaluated for condition and risk, and prioritized based on preservation and activation potential.',
+      ],
+      imageAlt: 'Intake and assessment illustration',
+      imageSrc: '/images/kiosks/kiosk1/04-custom-interactive/Illustrations/intake-and-assessment.webp',
+    },
+  },
+  {
+    label: 'Digitization and remediation',
+    modal: {
+      body: [
+        'Physical media is digitized to archival standards, with restoration applied as needed and metadata extracted to ensure assets are searchable, playable, and accessible.',
+      ],
+      imageAlt: 'Digitization and remediation illustration',
+      imageSrc: '/images/kiosks/kiosk1/04-custom-interactive/Illustrations/digitization-and-remediation.webp',
+    },
+  },
+  {
+    label: 'Digital preservation',
+    modal: {
+      body: [
+        'Iron Mountain’s digital preservation platform provides a fully managed digital repository with triple-redundant geo-distributed storage, secure access, and intuitive navigation.',
+      ],
+      imageAlt: 'Digital preservation illustration',
+      imageSrc: '/images/kiosks/kiosk1/04-custom-interactive/Illustrations/digital-preservation.webp',
+    },
+  },
+  {
+    label: 'Search and discover',
+    modal: {
+      body: [
+        'The entire archive becomes searchable through AI-powered metadata, custom filters, and integrated preview tools, enabling fast discovery from any location.',
+      ],
+      imageAlt: 'Search and discover illustration',
+      imageSrc: '/images/kiosks/kiosk1/04-custom-interactive/Illustrations/search-and-discover.webp',
+    },
+  },
+  {
+    label: 'Share, stream and monetize',
+    modal: {
+      body: [
+        'Digitized content is ready for licensing, streaming, and storytelling, unlocking new value across platforms while maintaining archival integrity.',
+      ],
+      imageAlt: 'Share, stream and monetize illustration',
+      imageSrc: '/images/kiosks/kiosk1/04-custom-interactive/Illustrations/share-stream-and-monetize.webp',
+    },
+  },
 ];
 
 const defaultModal: ModalContent = {
-  body: 'Learn more about this capability.',
-  heading: 'More details',
-  imageAlt: 'Modal illustration',
-  imageSrc: '/images/kiosks/default-modal.jpg',
+  body: [
+    'Iron Mountain’s digital preservation platform provides a fully managed digital repository with triple-redundant geo-distributed storage, secure access, and intuitive navigation.',
+  ],
+  heading: 'Digital preservation',
+  imageAlt: 'Digital preservation illustration',
+  imageSrc: '/images/kiosks/kiosk1/04-custom-interactive/Illustrations/digital-preservation.webp',
 };
 
 const gradientDefaults = {
@@ -352,37 +400,57 @@ export default function HardCodedKiosk1SecondScreenTemplate({
       {activeModalContent
         ? createPortal(
             <div className="absolute inset-0 z-[200] flex items-center justify-center" style={{ pointerEvents: 'auto' }}>
-              <div className="absolute inset-0 bg-black/70" onClick={() => setOpenModalIndex(null)} />
-              <div className="relative z-[201] flex max-h-[90vh] w-[90vw] max-w-4xl flex-col gap-6 overflow-auto rounded-[24px] bg-white p-10 text-[#14477d] shadow-[0_40px_120px_rgba(0,0,0,0.45)]">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <h2 className="text-[32px] leading-[1.2] tracking-[-1.6px]">{activeModalContent.heading}</h2>
-                  </div>
+              <div className="absolute inset-0 bg-black/60 backdrop-blur-[30px]" onClick={() => setOpenModalIndex(null)} />
+              <div className="relative z-[201] flex max-h-[90vh] w-[90vw] max-w-[1400px] flex-col overflow-hidden rounded-[48px] bg-[#97e9ff] p-[80px] text-[#14477d] shadow-[0_40px_120px_rgba(0,0,0,0.45)]">
+                <div className="flex items-center justify-between">
                   <button
-                    aria-label="Close dialog"
-                    className="rounded-full bg-[#14477d] px-4 py-2 text-[16px] font-semibold text-white"
+                    className="flex h-[100px] items-center gap-[24px] rounded-[1000px] bg-[#ededed] px-[60px] text-[36px] font-normal leading-[1.4] tracking-[-1.8px] text-[#14477d] transition hover:scale-[1.02]"
                     onClick={() => setOpenModalIndex(null)}
                     type="button"
                   >
-                    Close
+                    <span className="flex h-[44px] w-[44px] items-center justify-center rounded-full border border-[#14477d]">
+                      <svg
+                        aria-hidden="true"
+                        className="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path d="M15 6l-6 6 6 6" stroke="#14477d" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                      </svg>
+                    </span>
+                    Back
                   </button>
                 </div>
-                <div className="text-[20px] leading-[1.5] tracking-[-0.5px] text-[#14477d]/80">
-                  {activeModalBody?.map((line, idx) => (
-                    <p key={idx} className={idx > 0 ? 'mt-4' : undefined}>
-                      {line}
-                    </p>
-                  ))}
-                </div>
-                {activeModalContent.imageSrc ? (
-                  <div className="overflow-hidden rounded-xl">
-                    <img
-                      alt={activeModalContent.imageAlt}
-                      className="h-auto w-full object-cover"
-                      src={activeModalContent.imageSrc}
-                    />
+
+                <div className="mt-[80px] grid gap-[80px] text-[#14477d]">
+                  <div className="max-w-[1100px] space-y-[60px]">
+                    <h2 className="text-[72px] font-normal leading-[1.25] tracking-[-3.6px]">{activeModalContent.heading}</h2>
+                    <div className="space-y-[32px] text-[36px] font-normal leading-[1.4] tracking-[-1.8px]">
+                      {activeModalBody?.map((line, idx) => (
+                        <p key={idx} className="whitespace-pre-line">
+                          {line}
+                        </p>
+                      ))}
+                    </div>
                   </div>
-                ) : null}
+
+                  {activeModalContent.imageSrc ? (
+                    <div className="flex items-center justify-center">
+                      <div className="relative h-[540px] w-[540px] rotate-[45deg] rounded-[100px] border-[8px] border-[#ededed]/80 bg-[#5ad2ff]">
+                        <div className="absolute inset-[40px] -rotate-[45deg] flex items-center justify-center rounded-[80px] bg-white/10">
+                          <NextImage
+                            alt={activeModalContent.imageAlt ?? "Modal illustration"}
+                            className="object-contain"
+                            height={320}
+                            src={activeModalContent.imageSrc}
+                            width={320}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
               </div>
             </div>,
             containerRef.current ?? document.body,
