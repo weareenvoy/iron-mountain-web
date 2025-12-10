@@ -1,5 +1,12 @@
 {
-  "firstScreen": {},
+  "firstScreen": {
+    "eyebrow": [
+      "IT assets &",
+      "data centers"
+    ],
+    "primaryCtaLabel": "Centralized management of services",
+    "secondaryCtaLabel": "Launch demo"
+  },
   "fourthScreen": {},
   "secondScreen": {},
   "thirdScreen": {}

@@ -11,8 +11,8 @@ import InitialScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-t
 import SecondScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/secondScreen/secondScreenTemplate';
 import ThirdScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/thirdScreen/thirdScreenTemplate';
 import HardCodedFirstScreenTemplate, {
-  type HardCodedKiosk3FirstScreenTemplateProps,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk3/firstScreenTemplate';
+  type HardCodedKiosk1FirstScreenTemplateProps,
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/firstScreenTemplate';
 import HardCodedFourthScreenTemplate, {
   type HardCodedKiosk3FourthScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk3/fourthScreenTemplate';
@@ -55,7 +55,7 @@ type ValueSlidesConfig = {
   valueScreens?: Omit<ValueCarouselTemplateProps, 'onNavigateDown' | 'onNavigateUp'>[];
 };
 type HardCodedSlidesConfig = {
-  firstScreen?: HardCodedKiosk3FirstScreenTemplateProps;
+  firstScreen?: HardCodedKiosk1FirstScreenTemplateProps;
   fourthScreen?: HardCodedKiosk3FourthScreenTemplateProps;
   secondScreen?: HardCodedKiosk3SecondScreenTemplateProps;
   thirdScreen?: HardCodedKiosk3ThirdScreenTemplateProps;

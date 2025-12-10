@@ -12,7 +12,7 @@ import SecondScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-te
 import ThirdScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/thirdScreen/thirdScreenTemplate';
 import HardCodedFirstScreenTemplate, {
   type HardCodedKiosk1FirstScreenTemplateProps,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk1/firstScreenTemplate';
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/firstScreenTemplate';
 import HardCodedSecondScreenTemplate, {
   type HardCodedKiosk1SecondScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk1/secondScreenTemplate';

@@ -100,7 +100,7 @@ export default function HardCodedKiosk1FirstScreenTemplate({
       </div>
 
       {/* CTA buttons */}
-      <div className="absolute left-[245px] top-[2220px] flex w-[1013px] flex-col gap-[90px]">
+      <div className="absolute left-[245px] top-[2220px] flex w-[1360px] flex-col gap-[90px]">
         <button
           className="flex h-[200px] items-center justify-between rounded-[999px] bg-[#ededed] px-[100px] text-[60px] font-normal leading-[1.2] tracking-[-1.8px] text-[#14477d] transition-transform duration-150 hover:scale-[1.01] shadow-[0_20px_60px_rgba(0,0,0,0.25)]"
           onClick={onPrimaryCta}
@@ -117,11 +117,11 @@ export default function HardCodedKiosk1FirstScreenTemplate({
           }}
           type="button"
         >
-          <span className="pl-[70px]">{renderRegisteredMark(secondaryCtaLabel)}</span>
+          <span className="pl-[320px]">{renderRegisteredMark(secondaryCtaLabel)}</span>
           <div className="flex items-center justify-center">
             <SquarePlay
               aria-hidden
-              className="relative left-[-70px] h-[90px] w-[90px]"
+              className="relative left-[-330px] h-[90px] w-[90px]"
               color="#ededed"
               strokeWidth={2}
             />
