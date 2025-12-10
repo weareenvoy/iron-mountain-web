@@ -9,10 +9,19 @@ import {
 import HCBlueDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCBlueDiamond';
 import HCWhiteDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCWhiteDiamond';
 import { ArrowLeft, ChevronLeft, ChevronRight, CirclePlus } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+
+type ModalContent = {
+  body: string | readonly string[];
+  heading: string;
+  imageAlt?: string;
+  imageSrc?: string;
+};
 
 type Step = {
   label: string;
+  modal?: Partial<ModalContent>;
 };
 
 type EmblaApi = {
@@ -44,6 +53,13 @@ const defaultSteps: readonly Step[] = [
   { label: 'Share, stream and monetize' },
 ];
 
+const defaultModal: ModalContent = {
+  body: 'Learn more about this capability.',
+  heading: 'More details',
+  imageAlt: 'Modal illustration',
+  imageSrc: '/images/kiosks/default-modal.jpg',
+};
+
 const gradientDefaults = {
   backgroundEndColor: '#0a2f5c',
   backgroundStartColor: '#1b75bc',
@@ -69,8 +85,25 @@ export default function HardCodedKiosk1SecondScreenTemplate({
   const normalizedSteps = steps && steps.length > 0 ? steps : defaultSteps;
 
   const [emblaApi, setEmblaApi] = useState<EmblaApi>();
+  const [openModalIndex, setOpenModalIndex] = useState<number | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(2);
   const totalSlides = normalizedSteps.length;
+
+  const activeStep = openModalIndex !== null ? normalizedSteps[openModalIndex] : null;
+  const activeModalContent: ModalContent | null = activeStep
+    ? {
+        body: activeStep.modal?.body ?? defaultModal.body,
+        heading: activeStep.modal?.heading ?? activeStep.label,
+        imageAlt: activeStep.modal?.imageAlt ?? defaultModal.imageAlt,
+        imageSrc: activeStep.modal?.imageSrc ?? defaultModal.imageSrc,
+      }
+    : null;
+  const activeModalBody = Array.isArray(activeModalContent?.body)
+    ? activeModalContent?.body
+    : activeModalContent?.body
+      ? [activeModalContent.body]
+      : [];
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const applyEdgeTransforms = useCallback(
     (currentIndex: number) => {
@@ -176,13 +209,14 @@ export default function HardCodedKiosk1SecondScreenTemplate({
 
 
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-hidden" data-node-id="hardcoded-k1-second">
-      <div
-        className="absolute inset-0"
-        style={{
-          background: `linear-gradient(180deg, ${backgroundStartColor} 0%, ${backgroundEndColor} 100%)`,
-        }}
-      />
+    <>
+      <div ref={containerRef} className="relative flex h-screen w-full flex-col overflow-hidden" data-node-id="hardcoded-k1-second">
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `linear-gradient(180deg, ${backgroundStartColor} 0%, ${backgroundEndColor} 100%)`,
+          }}
+        />
 
       <div className="absolute left-[120px] top-[120px] text-[42px] font-normal leading-[1.4] tracking-[-2.1px] text-[#ededed]">
         {renderRegisteredMark(eyebrowText)}
@@ -226,46 +260,70 @@ export default function HardCodedKiosk1SecondScreenTemplate({
                   ? 'translate3d(-240px, 0px, 0px)'
                   : undefined;
               return (
-                <CarouselItem
-                  className="basis-[560px] shrink-0 grow-0 pl-0"
-                  key={`${step.label}-${idx}`}
-                  style={itemTransform ? { transform: itemTransform } : undefined}
-                >
-                  <div className="flex flex-col items-center gap-[28px]">
-                    <button
-                      className="relative flex items-center justify-center"
-                      onClick={() => (emblaApi as any)?.scrollTo?.(idx)}
-                      type="button"
-                    >
-                      {isActive ? (
-                        <HCWhiteDiamond className="h-[880px] w-[880px]" aria-hidden="true" focusable="false" />
-                      ) : (
-                        <HCBlueDiamond
-                          className={inactiveSize === 440 ? 'h-[440px] w-[440px]' : 'h-[640px] w-[640px]'}
-                          aria-hidden="true"
-                          focusable="false"
-                        />
-                      )}
-                      <div className="absolute inset-0 flex items-center justify-center px-8 text-center">
-                        <span
-                          className={
-                            isActive
-                              ? 'text-[44px] font-semibold leading-[1.2] tracking-[-2.2px] text-[#14477d]'
-                              : 'text-[30px] font-semibold leading-[1.2] tracking-[-1.5px] text-[#ededed]'
+                  <CarouselItem
+                    className="basis-[560px] shrink-0 grow-0 pl-0"
+                    style={
+                      itemTransform || isActive
+                        ? {
+                            transform: itemTransform,
+                            zIndex: isActive ? 10 : undefined,
                           }
-                          style={{ width: isActive ? '240px' : '200px' }}
-                        >
-                          {renderRegisteredMark(step.label)}
-                        </span>
+                        : undefined
+                    }
+                  >
+                    <div className="flex flex-col items-center gap-[28px]">
+                      <button
+                        className="relative z-[1] flex items-center justify-center"
+                        onClick={() => (emblaApi as any)?.scrollTo?.(idx)}
+                        type="button"
+                      >
                         {isActive ? (
-                          <span className="pointer-events-none absolute inset-0 flex items-center justify-center">
-                            <CirclePlus className="h-[56px] w-[56px] text-[#14477d]" />
+                          <HCWhiteDiamond className="h-[880px] w-[880px]" aria-hidden="true" focusable="false" />
+                        ) : (
+                          <HCBlueDiamond
+                            className={inactiveSize === 440 ? 'h-[440px] w-[440px]' : 'h-[640px] w-[640px]'}
+                            aria-hidden="true"
+                            focusable="false"
+                          />
+                        )}
+                        <div className="absolute inset-0 flex items-center justify-center px-8 text-center">
+                          <span
+                            className={
+                              isActive
+                                ? 'text-[44px] font-semibold leading-[1.2] tracking-[-2.2px] text-[#14477d]'
+                                : 'text-[30px] font-semibold leading-[1.2] tracking-[-1.5px] text-[#ededed]'
+                            }
+                            style={{ width: isActive ? '240px' : '200px' }}
+                          >
+                            {renderRegisteredMark(step.label)}
                           </span>
-                        ) : null}
-                      </div>
-                    </button>
-                  </div>
-                </CarouselItem>
+                          {isActive ? (
+                            <div
+                              aria-label="Open details"
+                              className="absolute inset-0 flex cursor-pointer items-center justify-center"
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                setOpenModalIndex(idx);
+                              }}
+                              onKeyDown={(event) => {
+                                if (event.key === 'Enter' || event.key === ' ') {
+                                  event.preventDefault();
+                                  event.stopPropagation();
+                                  setOpenModalIndex(idx);
+                                }
+                              }}
+                              role="button"
+                              style={{ paddingRight: '5px', paddingTop: '490px' }}
+                              tabIndex={0}
+                            >
+                              <CirclePlus className="h-[80px] w-[80px] text-[#14477d]" />
+                            </div>
+                          ) : null}
+                        </div>
+                      </button>
+                    </div>
+                  </CarouselItem>
+
               );
             })}
           </CarouselContent>
@@ -290,5 +348,46 @@ export default function HardCodedKiosk1SecondScreenTemplate({
         </Carousel>
       </div>
     </div>
+
+      {activeModalContent
+        ? createPortal(
+            <div className="absolute inset-0 z-[200] flex items-center justify-center" style={{ pointerEvents: 'auto' }}>
+              <div className="absolute inset-0 bg-black/70" onClick={() => setOpenModalIndex(null)} />
+              <div className="relative z-[201] flex max-h-[90vh] w-[90vw] max-w-4xl flex-col gap-6 overflow-auto rounded-[24px] bg-white p-10 text-[#14477d] shadow-[0_40px_120px_rgba(0,0,0,0.45)]">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h2 className="text-[32px] leading-[1.2] tracking-[-1.6px]">{activeModalContent.heading}</h2>
+                  </div>
+                  <button
+                    aria-label="Close dialog"
+                    className="rounded-full bg-[#14477d] px-4 py-2 text-[16px] font-semibold text-white"
+                    onClick={() => setOpenModalIndex(null)}
+                    type="button"
+                  >
+                    Close
+                  </button>
+                </div>
+                <div className="text-[20px] leading-[1.5] tracking-[-0.5px] text-[#14477d]/80">
+                  {activeModalBody?.map((line, idx) => (
+                    <p key={idx} className={idx > 0 ? 'mt-4' : undefined}>
+                      {line}
+                    </p>
+                  ))}
+                </div>
+                {activeModalContent.imageSrc ? (
+                  <div className="overflow-hidden rounded-xl">
+                    <img
+                      alt={activeModalContent.imageAlt}
+                      className="h-auto w-full object-cover"
+                      src={activeModalContent.imageSrc}
+                    />
+                  </div>
+                ) : null}
+              </div>
+            </div>,
+            containerRef.current ?? document.body,
+          )
+        : null}
+    </>
   );
 }
