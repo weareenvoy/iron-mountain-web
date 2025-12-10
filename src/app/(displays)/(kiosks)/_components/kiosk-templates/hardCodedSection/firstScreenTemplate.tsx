@@ -130,7 +130,7 @@ export default function HardCodedKiosk1FirstScreenTemplate({
       </div>
 
       {/* Hero diamond image */}
-      <div className="pointer-events-none absolute left-[1100px] bottom-[160px] h-[1380px] w-[1380px] rotate-[45deg] overflow-hidden rounded-[140px]">
+      <div className="pointer-events-none absolute left-[1100px] bottom-[160px] h-[2550px] w-[2550px] rotate-[45deg] overflow-hidden rounded-[140px]">
         <Image
           alt={heroImageAlt}
           className="-rotate-[45deg] object-cover"
