@@ -8,9 +8,10 @@ import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import SummitRoomDiamonds from '@/components/ui/icons/SummitRoomDiamonds';
+import { getBeatIdFromSlideIndex, getSlideIndexFromBeatId, type SummitRoomBeatId } from '@/lib/internal/types';
 import { cn } from '@/lib/tailwind/utils/cn';
 
-// Summit Room has 5 slides. First slide has no border, no diamond icon, but has image. Other slides have a border and a diamond icon.
+const INITIAL_BEAT_ID: SummitRoomBeatId = 'journey-intro';
 
 const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room'>) => {
   const { tourId } = use(params);
@@ -18,10 +19,12 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
   const { currentTour, data, setSummitRoomBeatId, summitRoomBeatId } = useDocent();
 
   const summitRoomSlides = data?.slides ?? [];
+  const slideCount = summitRoomSlides.length;
+
   // State is either 'journey-intro' (not launched), or 'journey-1' through 'journey-5' carousel.
-  const isJourneyMapLaunched = summitRoomBeatId !== 'journey-intro';
-  // Extract slide index from beatId: 'journey-1' → 0, 'journey-2' → 1, etc.
-  const slideIdx = isJourneyMapLaunched ? parseInt(summitRoomBeatId.replace('journey-', ''), 10) - 1 : 0;
+  const isJourneyMapLaunched = summitRoomBeatId !== INITIAL_BEAT_ID;
+  // Extract slide index from beatId
+  const slideIdx = isJourneyMapLaunched ? getSlideIndexFromBeatId(summitRoomBeatId) : 0;
 
   // Embla carousel
   const [emblaRef, emblaApi] = useEmblaCarousel();
@@ -37,13 +40,19 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
   // Helper to update beatId state and send MQTT command.
   const goToSlide = useCallback(
     (newSlideIdx: number) => {
-      const beatId = `journey-${newSlideIdx + 1}`;
+      // Bounds checking
+      if (newSlideIdx < 0 || newSlideIdx >= slideCount) {
+        console.error('Invalid slide index:', newSlideIdx);
+        return;
+      }
+      const beatId = getBeatIdFromSlideIndex(newSlideIdx);
       setSummitRoomBeatId(beatId);
       client?.gotoBeat('summit', beatId, {
         onError: (err: Error) => console.error('Summit: Failed to navigate:', err),
+        onSuccess: () => console.info(`Sent goto-beat: ${beatId} to summit`),
       });
     },
-    [client, setSummitRoomBeatId]
+    [client, setSummitRoomBeatId, slideCount]
   );
 
   // Embla onSelect handler
@@ -173,11 +182,7 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
               <ArrowLeft className="size-[36px]" />
             </Button>
             {/* Next Button */}
-            <Button
-              className="size-[80px] rounded-full"
-              disabled={slideIdx === summitRoomSlides.length - 1}
-              onClick={handleNext}
-            >
+            <Button className="size-[80px] rounded-full" disabled={slideIdx === slideCount - 1} onClick={handleNext}>
               <ArrowRight className="size-[36px]" />
             </Button>
           </div>

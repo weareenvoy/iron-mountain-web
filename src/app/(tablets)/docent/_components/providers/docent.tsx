@@ -13,7 +13,7 @@ import {
 import { DocentAppState, type SyncState } from '@/app/(tablets)/docent/_types';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getDocentData } from '@/lib/internal/data/get-docent';
-import type { DocentData, ExhibitNavigationState, Locale, Tour } from '@/lib/internal/types';
+import type { DocentData, ExhibitNavigationState, Locale, SummitRoomBeatId, Tour } from '@/lib/internal/types';
 import type { Route } from 'next';
 
 const isDocentRoute = (path: string): path is Route => {
@@ -48,10 +48,10 @@ export interface DocentContextType {
   readonly setLocale: (locale: Locale) => void;
   readonly setOverlookExhibitState: (state: Partial<ExhibitNavigationState>) => void;
 
-  readonly setSummitRoomBeatId: (beatId: string) => void;
+  readonly setSummitRoomBeatId: (beatId: SummitRoomBeatId) => void;
 
   // Summit Room state - 'journey-intro' or 'journey-1' through 'journey-5'
-  readonly summitRoomBeatId: string;
+  readonly summitRoomBeatId: SummitRoomBeatId;
 }
 
 export const DocentContext = createContext<DocentContextType | undefined>(undefined);
@@ -93,7 +93,7 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     momentId: 'ambient',
   });
   // Summit Room: 'journey-intro' or 'journey-1' through 'journey-5'
-  const [summitRoomBeatId, setSummitRoomBeatId] = useState('journey-intro');
+  const [summitRoomBeatId, setSummitRoomBeatId] = useState<SummitRoomBeatId>('journey-intro');
 
   // Full state from GEC
   const [docentAppState, setDocentAppState] = useState<DocentAppState | null>(null);
@@ -159,9 +159,15 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
         const state: DocentAppState = msg.body;
         console.info('Docent: Received GEC state:', state);
 
-        // TODO TBD about data structure. I can no longer find the info in the Docs.
+        // TODO TBD still under discussion what topic to use to get the data. Or do we even use a topic.
         // Save the full state
         setDocentAppState(state);
+
+        // Update exhibit beat states from GEC
+        // const basecampBeatId = state.exhibits?.basecamp?.['beat-id'];
+        // const overlookBeatId = state.exhibits?.overlook?.['beat-id'];
+        // const summitBeatId = state.exhibits?.summit?.['beat-id'];
+        // validate beat IDS and set raw state
 
         // Update tour if provided and different from current
         // Get tour-id from any exhibit (they should all match)
