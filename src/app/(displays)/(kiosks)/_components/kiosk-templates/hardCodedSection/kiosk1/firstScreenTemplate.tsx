@@ -10,7 +10,8 @@ import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-te
 const defaultHeroImageSrc = '/images/kiosks/kiosk1/04-custom-interactive/CU-Image1-Diamond.png';
 const defaultEyebrow = ['Rich media &', 'cultural heritage'];
 const defaultHeadline = [
-  'Learn more about how we unlocked new possibilities',
+  'Learn more about how we',
+  'unlocked new possibilities',
   'for our partners',
 ];
 const defaultPrimaryCtaLabel = 'From archive to access';
@@ -88,24 +89,24 @@ export default function HardCodedKiosk1FirstScreenTemplate({
       </div>
 
       {/* Headline */}
-      <div className="absolute left-[120px] top-[640px] w-[1400px] text-[100px] font-normal leading-[1.3] tracking-[-5px] text-[#ededed] whitespace-pre-line">
+      <div className="absolute left-[250px] top-[1250px] w-full text-[100px] font-normal leading-[1.3] tracking-[-5px] text-[#ededed] whitespace-pre-line">
         {renderRegisteredMark(headlineText)}
       </div>
 
       {/* Save for later */}
-      <div className="absolute left-[120px] top-[1040px] flex items-center gap-[32px] text-[52px] font-normal leading-[1.4] tracking-[-2.6px] text-[#ededed]">
-        <Heart aria-hidden className="h-[68px] w-[68px]" color="#ededed" strokeWidth={3} />
+      <div className="absolute left-[230px] top-[1890px] flex items-center gap-[32px] text-[52px] font-normal leading-[1.4] tracking-[-2.6px] text-[#ededed]">
+        <Heart aria-hidden className="h-[90px] w-[90px]" color="#ededed" strokeWidth={3} />
         <p>{renderRegisteredMark(saveForLaterLabel)}</p>
       </div>
 
       {/* CTA buttons */}
-      <div className="absolute left-[120px] top-[1260px] flex w-[1013px] flex-col gap-[64px]">
+      <div className="absolute left-[245px] top-[2220px] flex w-[1013px] flex-col gap-[90px]">
         <button
           className="flex h-[200px] items-center justify-between rounded-[999px] bg-[#ededed] px-[100px] text-[60px] font-normal leading-[1.2] tracking-[-1.8px] text-[#14477d] transition-transform duration-150 hover:scale-[1.01] shadow-[0_20px_60px_rgba(0,0,0,0.25)]"
           onClick={onPrimaryCta}
           type="button"
         >
-          <span>{renderRegisteredMark(primaryCtaLabel)}</span>
+          <span className="pt-[10px] pl-[10px]">{renderRegisteredMark(primaryCtaLabel)}</span>
           <ArrowIcon />
         </button>
         <button
@@ -116,11 +117,11 @@ export default function HardCodedKiosk1FirstScreenTemplate({
           }}
           type="button"
         >
-          <span>{renderRegisteredMark(secondaryCtaLabel)}</span>
+          <span className="pl-[70px]">{renderRegisteredMark(secondaryCtaLabel)}</span>
           <div className="flex items-center justify-center">
             <SquarePlay
               aria-hidden
-              className="h-[72px] w-[72px]"
+              className="relative left-[-70px] h-[90px] w-[90px]"
               color="#ededed"
               strokeWidth={2}
             />
@@ -129,7 +130,7 @@ export default function HardCodedKiosk1FirstScreenTemplate({
       </div>
 
       {/* Hero diamond image */}
-      <div className="pointer-events-none absolute right-[140px] bottom-[120px] h-[680px] w-[680px] rotate-[45deg] overflow-hidden rounded-[140px]">
+      <div className="pointer-events-none absolute left-[1100px] bottom-[160px] h-[1380px] w-[1380px] rotate-[45deg] overflow-hidden rounded-[140px]">
         <Image
           alt={heroImageAlt}
           className="-rotate-[45deg] object-cover"
@@ -140,15 +141,9 @@ export default function HardCodedKiosk1FirstScreenTemplate({
       </div>
 
       {/* Decorative diamonds */}
-      <HCHollowBlueDiamond
-        className="pointer-events-none absolute left-[320px] bottom-[260px] h-[520px] w-[520px] overflow-visible"
-        style={{ overflow: 'visible' }}
-      />
-      <HCFilledOrangeDiamond className="pointer-events-none absolute left-[200px] bottom-[500px] h-[160px] w-[160px]" />
-      <HCHollowOrangeDiamond
-        className="pointer-events-none absolute left-[360px] bottom-[60px] h-[340px] w-[340px] overflow-visible"
-        style={{ overflow: 'visible' }}
-      />
+      <HCHollowBlueDiamond className="pointer-events-none absolute left-[510px] bottom-[1400px] h-[520px] w-[520px] overflow-visible" />
+      <HCFilledOrangeDiamond className="pointer-events-none absolute left-[280px] bottom-[640px] h-[420px] w-[800px]" />
+      <HCHollowOrangeDiamond className="pointer-events-none absolute left-[500px] bottom-[410px] h-[340px] w-[340px] overflow-visible" />
     </div>
   );
 }
