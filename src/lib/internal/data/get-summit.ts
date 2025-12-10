@@ -1,6 +1,6 @@
+import summitStatic from '@public/api/summit.json';
 import { getLocaleForTesting, shouldUseStaticPlaceholderData } from '@/flags/flags';
 import type { SummitApiResponse, SummitDataResponse } from '@/lib/internal/types';
-import summitStatic from '@public/api/summit.json';
 
 const pickSummitData = (
   rawData: SummitApiResponse | { readonly data: unknown; readonly locale?: string },
