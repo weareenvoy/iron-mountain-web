@@ -130,6 +130,7 @@ export default function HardCodedKiosk1SecondScreenTemplate({
 }: HardCodedKiosk1SecondScreenTemplateProps) {
   const eyebrowText = normalizeText(eyebrow);
   const headlineText = normalizeText(headline);
+  const headlineWithForcedBreak = headlineText?.replace(/archive\s+/i, "archive\n") ?? headlineText;
   const normalizedSteps = steps && steps.length > 0 ? steps : defaultSteps;
 
   const [emblaApi, setEmblaApi] = useState<EmblaApi>();
@@ -283,20 +284,26 @@ export default function HardCodedKiosk1SecondScreenTemplate({
           }}
         />
 
-      <div className="absolute left-[120px] top-[120px] text-[42px] font-normal leading-[1.4] tracking-[-2.1px] text-[#ededed]">
+      <div className="absolute left-[120px] top-[240px] whitespace-pre-line text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#ededed]">
         {renderRegisteredMark(eyebrowText)}
       </div>
 
-      <div className="absolute left-[120px] top-[280px] w-[720px] text-[78px] font-normal leading-[1.2] tracking-[-3.9px] text-[#ededed]">
-        {renderRegisteredMark(headlineText)}
+      <div
+        className="absolute w-full whitespace-pre-line text-[100px] font-normal leading-[1.2] tracking-[-5px] text-[#ededed]"
+        style={{ left: "240px", top: "830px", width: "100%" }}
+      >
+        {renderRegisteredMark(headlineWithForcedBreak)}
       </div>
 
-      <p className="absolute left-[120px] top-[520px] w-[620px] text-[40px] font-normal leading-[1.3] tracking-[-2px] text-[#ededed]/90">
+      <p
+        className="absolute text-[52px] font-normal text-[#ededed]/90"
+        style={{ left: "250px", letterSpacing: "-2.6px", lineHeight: "1.4", top: "1320px", width: "640px" }}
+      >
         {renderRegisteredMark('Explore each section to learn how Iron Mountain can transform your enterprise')}
       </p>
 
       <button
-        className="absolute right-[200px] top-[440px] flex h-[120px] items-center gap-[12px] rounded-full bg-white px-[40px] text-[40px] font-normal leading-[1.2] tracking-[-2px] text-[#14477d] shadow-[0_16px_40px_rgba(0,0,0,0.25)] transition-transform duration-150 hover:scale-[1.02]"
+        className="absolute right-[310px] top-[1320px] flex h-[190px] items-center gap-[12px] rounded-full bg-white px-[140px] text-[40px] font-normal leading-[1.2] tracking-[-2px] text-[#14477d] shadow-[0_16px_40px_rgba(0,0,0,0.25)] transition-transform duration-150 hover:scale-[1.02]"
         onClick={onBack}
         type="button"
       >
@@ -396,19 +403,19 @@ export default function HardCodedKiosk1SecondScreenTemplate({
           <div className="pointer-events-none absolute inset-x-0 -bottom-[220px] flex items-center justify-center gap-[48px]">
             <button
               aria-label="Previous"
-              className="pointer-events-auto flex h-[64px] w-[64px] items-center justify-center rounded-full border-2 border-white/70 text-white shadow-[0_10px_30px_rgba(0,0,0,0.25)] transition-transform duration-150 hover:scale-105"
+              className="pointer-events-auto flex h-[64px] w-[64px] items-center justify-center text-white transition-transform duration-150 hover:scale-110"
               onClick={handlePrev}
               type="button"
             >
-              <ChevronLeft className="h-[28px] w-[28px]" />
+              <ChevronLeft className="h-[36px] w-[36px]" />
             </button>
             <button
               aria-label="Next"
-              className="pointer-events-auto flex h-[64px] w-[64px] items-center justify-center rounded-full border-2 border-white/70 text-white shadow-[0_10px_30px_rgba(0,0,0,0.25)] transition-transform duration-150 hover:scale-105"
+              className="pointer-events-auto flex h-[64px] w-[64px] items-center justify-center text-white transition-transform duration-150 hover:scale-110"
               onClick={handleNext}
               type="button"
             >
-              <ChevronRight className="h-[28px] w-[28px]" />
+              <ChevronRight className="h-[36px] w-[36px]" />
             </button>
           </div>
         </Carousel>

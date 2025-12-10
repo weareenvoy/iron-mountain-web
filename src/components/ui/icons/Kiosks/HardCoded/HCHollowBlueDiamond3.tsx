@@ -1,0 +1,9 @@
+import * as React from 'react';
+
+const HCHollowBlueDiamond3 = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="921" height="727" fill="none"><path stroke="#6DCFF6" stroke-miterlimit="10" stroke-width="6.226" d="M483.914 24.047 24.047 483.914c-27.912 27.912-27.912 73.166 0 101.078l459.867 459.868c27.912 27.91 73.166 27.91 101.078 0l459.868-459.868c27.91-27.912 27.91-73.166 0-101.078L584.992 24.047c-27.912-27.912-73.166-27.912-101.078 0Z"/></svg>
+);
+
+HCHollowBlueDiamond3.displayName = 'HCHollowBlueDiamond3';
+
+export default HCHollowBlueDiamond3;

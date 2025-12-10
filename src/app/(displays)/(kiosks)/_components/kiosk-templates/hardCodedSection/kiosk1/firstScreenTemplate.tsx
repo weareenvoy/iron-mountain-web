@@ -1,9 +1,13 @@
 'use client';
 
 import Image from 'next/image';
+import { Heart, SquarePlay } from 'lucide-react';
+import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCFilledOrangeDiamond';
+import HCHollowBlueDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollowBlueDiamond';
+import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollowOrangeDiamond';
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
 
-const defaultHeroImageSrc = 'http://localhost:3845/assets/3a4d46cd05506bd4cd1111ed8cd2d3dfe9681cd9.png';
+const defaultHeroImageSrc = '/images/kiosks/kiosk1/04-custom-interactive/CU-Image1-Diamond.png';
 const defaultEyebrow = ['Rich media &', 'cultural heritage'];
 const defaultHeadline = [
   'Learn more about how we unlocked new possibilities',
@@ -13,47 +17,9 @@ const defaultPrimaryCtaLabel = 'From archive to access';
 const defaultSecondaryCtaLabel = 'Virtual walkthrough';
 const defaultSaveForLaterLabel = 'Save for later';
 
-const defaultDecorativeDiamonds: DecorativeDiamondConfig[] = [
-  {
-    borderColor: 'rgba(237,237,237,0.25)',
-    height: 360,
-    left: 460,
-    opacity: 1,
-    top: 1870,
-    width: 360,
-  },
-  {
-    borderColor: 'rgba(237,237,237,0.25)',
-    height: 520,
-    left: 680,
-    opacity: 1,
-    top: 2100,
-    width: 520,
-  },
-  {
-    fillColor: '#f26522',
-    height: 140,
-    left: 520,
-    opacity: 1,
-    top: 2250,
-    width: 140,
-  },
-];
-
-type DecorativeDiamondConfig = {
-  borderColor?: string;
-  fillColor?: string;
-  height?: number;
-  left?: number;
-  opacity?: number;
-  top?: number;
-  width?: number;
-};
-
 export interface HardCodedKiosk1FirstScreenTemplateProps {
   backgroundEndColor?: string;
   backgroundStartColor?: string;
-  decorativeDiamonds?: DecorativeDiamondConfig[];
   eyebrow?: string | string[];
   headline?: string | string[];
   heroImageAlt?: string;
@@ -69,24 +35,6 @@ const gradientDefaults = {
   backgroundEndColor: '#14477d',
   backgroundStartColor: '#1b75bc',
 };
-
-const SaveIcon = () => (
-  <svg
-    aria-hidden="true"
-    className="h-[68px] w-[76px]"
-    fill="none"
-    viewBox="0 0 76 68"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M38 63.01S6 47.377 6 25.5C6 13.073 15.402 5 26.625 5 33.094 5 38 10.833 38 10.833S42.906 5 49.375 5C60.598 5 70 13.073 70 25.5 70 47.377 38 63.01 38 63.01Z"
-      stroke="#ededed"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="6"
-    />
-  </svg>
-);
 
 const ArrowIcon = () => (
   <svg
@@ -106,54 +54,9 @@ const ArrowIcon = () => (
   </svg>
 );
 
-const PlayIcon = () => (
-  <svg
-    aria-hidden="true"
-    className="h-[88px] w-[88px]"
-    fill="none"
-    viewBox="0 0 88 88"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <rect height="82" rx="19" stroke="#ededed" strokeWidth="6" width="82" x="3" y="3" />
-    <path d="M36 61V27l24 17-24 17Z" fill="#ededed" />
-  </svg>
-);
-
-const DecorativeDiamond = ({
-  borderColor,
-  fillColor,
-  height = 300,
-  left = 0,
-  opacity = 1,
-  top = 0,
-  width = 300,
-}: DecorativeDiamondConfig) => (
-  <div
-    className="pointer-events-none absolute rotate-[45deg]"
-    style={{
-      borderColor,
-      borderStyle: borderColor ? 'solid' : undefined,
-      borderWidth: borderColor ? '4px' : undefined,
-      height,
-      left,
-      opacity,
-      top,
-      width,
-    }}
-  >
-    <div
-      className="absolute inset-[12%] rounded-[48px]"
-      style={{
-        backgroundColor: fillColor,
-      }}
-    />
-  </div>
-);
-
 export default function HardCodedKiosk1FirstScreenTemplate({
   backgroundEndColor = gradientDefaults.backgroundEndColor,
   backgroundStartColor = gradientDefaults.backgroundStartColor,
-  decorativeDiamonds = defaultDecorativeDiamonds,
   eyebrow = defaultEyebrow,
   headline = defaultHeadline,
   heroImageAlt = 'Visitors smiling while viewing content',
@@ -169,7 +72,7 @@ export default function HardCodedKiosk1FirstScreenTemplate({
 
   return (
     <div
-      className="relative flex h-screen w-full flex-col overflow-hidden bg-[#14477d]"
+      className="relative flex h-screen w-full flex-col overflow-hidden"
       data-node-id="5893:7411"
     >
       <div
@@ -179,22 +82,26 @@ export default function HardCodedKiosk1FirstScreenTemplate({
         }}
       />
 
-      <div className="absolute left-[120px] top-[240px] text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#ededed]">
+      {/* Eyebrow */}
+      <div className="absolute left-[120px] top-[200px] text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#ededed] whitespace-pre-line">
         {renderRegisteredMark(eyebrowText)}
       </div>
 
-      <div className="absolute left-[240px] top-[1284px] w-[1380px] text-[100px] font-normal leading-[1.3] tracking-[-5px] text-[#ededed]">
+      {/* Headline */}
+      <div className="absolute left-[120px] top-[640px] w-[1400px] text-[100px] font-normal leading-[1.3] tracking-[-5px] text-[#ededed] whitespace-pre-line">
         {renderRegisteredMark(headlineText)}
       </div>
 
-      <div className="absolute left-[240px] top-[1925px] flex items-center gap-[40px] text-[52px] font-normal leading-[1.4] tracking-[-2.6px] text-[#ededed]">
-        <SaveIcon />
+      {/* Save for later */}
+      <div className="absolute left-[120px] top-[1040px] flex items-center gap-[32px] text-[52px] font-normal leading-[1.4] tracking-[-2.6px] text-[#ededed]">
+        <Heart aria-hidden className="h-[68px] w-[68px]" color="#ededed" strokeWidth={3} />
         <p>{renderRegisteredMark(saveForLaterLabel)}</p>
       </div>
 
-      <div className="absolute left-[240px] top-[2249px] flex w-[1013px] flex-col gap-[84px]">
+      {/* CTA buttons */}
+      <div className="absolute left-[120px] top-[1260px] flex w-[1013px] flex-col gap-[64px]">
         <button
-          className="flex h-[200px] items-center justify-between rounded-[999px] bg-[#ededed] px-[100px] text-[60px] font-normal leading-[1.2] tracking-[-1.8px] text-[#14477d] transition-transform duration-150 hover:scale-[1.01]"
+          className="flex h-[200px] items-center justify-between rounded-[999px] bg-[#ededed] px-[100px] text-[60px] font-normal leading-[1.2] tracking-[-1.8px] text-[#14477d] transition-transform duration-150 hover:scale-[1.01] shadow-[0_20px_60px_rgba(0,0,0,0.25)]"
           onClick={onPrimaryCta}
           type="button"
         >
@@ -202,41 +109,46 @@ export default function HardCodedKiosk1FirstScreenTemplate({
           <ArrowIcon />
         </button>
         <button
-          className="flex h-[200px] items-center justify-between rounded-[999px] bg-[#8a0d71] px-[100px] text-[60px] font-normal leading-[1.2] tracking-[-1.8px] text-white transition-transform duration-150 hover:scale-[1.01]"
+          className="flex h-[200px] items-center justify-between rounded-[999px] px-[100px] text-[60px] font-normal leading-[1.2] tracking-[-1.8px] text-white transition-transform duration-150 hover:scale-[1.01] shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px]"
           onClick={onSecondaryCta}
+          style={{
+            background: 'linear-gradient(296deg, #A2115E 28.75%, #8A0D71 82.59%)',
+          }}
           type="button"
         >
           <span>{renderRegisteredMark(secondaryCtaLabel)}</span>
           <div className="flex items-center justify-center">
-            <PlayIcon />
+            <SquarePlay
+              aria-hidden
+              className="h-[72px] w-[72px]"
+              color="#ededed"
+              strokeWidth={2}
+            />
           </div>
         </button>
       </div>
 
-      <div className="pointer-events-none absolute right-[180px] top-[1850px] h-[640px] w-[640px] rotate-[45deg] overflow-hidden rounded-[120px] border border-[#ededed]/40 bg-[#14477d] shadow-[0_40px_120px_rgba(0,0,0,0.4)] relative">
+      {/* Hero diamond image */}
+      <div className="pointer-events-none absolute right-[140px] bottom-[120px] h-[680px] w-[680px] rotate-[45deg] overflow-hidden rounded-[140px]">
         <Image
           alt={heroImageAlt}
           className="-rotate-[45deg] object-cover"
           src={heroImageSrc}
           fill
-          sizes="640px"
+          sizes="680px"
         />
       </div>
 
-      {decorativeDiamonds.map((diamond, index) => (
-        <DecorativeDiamond
-          borderColor={diamond.borderColor}
-          fillColor={diamond.fillColor}
-          height={diamond.height}
-          key={`${diamond.left}-${diamond.top}-${index}`}
-          left={diamond.left}
-          opacity={diamond.opacity}
-          top={diamond.top}
-          width={diamond.width}
-        />
-      ))}
+      {/* Decorative diamonds */}
+      <HCHollowBlueDiamond
+        className="pointer-events-none absolute left-[320px] bottom-[260px] h-[520px] w-[520px] overflow-visible"
+        style={{ overflow: 'visible' }}
+      />
+      <HCFilledOrangeDiamond className="pointer-events-none absolute left-[200px] bottom-[500px] h-[160px] w-[160px]" />
+      <HCHollowOrangeDiamond
+        className="pointer-events-none absolute left-[360px] bottom-[60px] h-[340px] w-[340px] overflow-visible"
+        style={{ overflow: 'visible' }}
+      />
     </div>
   );
 }
-
-
