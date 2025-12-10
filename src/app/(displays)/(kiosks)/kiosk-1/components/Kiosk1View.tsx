@@ -13,9 +13,6 @@ import ThirdScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-tem
 import HardCodedFirstScreenTemplate, {
   type HardCodedKiosk1FirstScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk1/firstScreenTemplate';
-import HardCodedFourthScreenTemplate, {
-  type HardCodedKiosk1FourthScreenTemplateProps,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk1/fourthScreenTemplate';
 import HardCodedSecondScreenTemplate, {
   type HardCodedKiosk1SecondScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk1/secondScreenTemplate';
@@ -56,7 +53,6 @@ type ValueSlidesConfig = {
 };
 type HardCodedSlidesConfig = {
   firstScreen?: HardCodedKiosk1FirstScreenTemplateProps;
-  fourthScreen?: HardCodedKiosk1FourthScreenTemplateProps;
   secondScreen?: HardCodedKiosk1SecondScreenTemplateProps;
   thirdScreen?: HardCodedKiosk1ThirdScreenTemplateProps;
 };
@@ -207,11 +203,6 @@ const Kiosk1View = () => {
       id: 'hardcoded-third',
       render: () => <HardCodedThirdScreenTemplate {...(hardCoded.thirdScreen ?? {})} />,
       title: 'Hardcoded Third',
-    },
-    {
-      id: 'hardcoded-fourth',
-      render: () => <HardCodedFourthScreenTemplate {...(hardCoded.fourthScreen ?? {})} />,
-      title: 'Hardcoded Fourth',
     },
   ];
 

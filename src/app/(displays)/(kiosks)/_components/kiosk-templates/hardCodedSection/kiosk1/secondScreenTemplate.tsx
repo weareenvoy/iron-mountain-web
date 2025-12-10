@@ -133,6 +133,7 @@ export default function HardCodedKiosk1SecondScreenTemplate({
   const normalizedSteps = steps && steps.length > 0 ? steps : defaultSteps;
 
   const [emblaApi, setEmblaApi] = useState<EmblaApi>();
+  const hasAppliedInitialAlignment = useRef(false);
   const [openModalIndex, setOpenModalIndex] = useState<number | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(2);
   const totalSlides = normalizedSteps.length;
@@ -231,7 +232,6 @@ export default function HardCodedKiosk1SecondScreenTemplate({
     emblaApi.on('reInit', handleSelect);
     emblaApi.on('scroll', handleSelect);
     emblaApi.on('select', handleSelect);
-    handleSelect();
     return () => {
       emblaApi.off('select', handleSelect);
       emblaApi.off('reInit', handleSelect);
@@ -242,6 +242,23 @@ export default function HardCodedKiosk1SecondScreenTemplate({
   useEffect(() => {
     applyEdgeTransforms(selectedIndex);
   }, [applyEdgeTransforms, selectedIndex]);
+
+  useEffect(() => {
+    if (!emblaApi) return undefined;
+    const frame = requestAnimationFrame(() => {
+      applyEdgeTransforms(selectedIndex);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [applyEdgeTransforms, emblaApi, selectedIndex]);
+
+  useEffect(() => {
+    if (!emblaApi || totalSlides === 0 || hasAppliedInitialAlignment.current) return;
+    const desiredIndex = Math.min(totalSlides - 1, 2);
+    hasAppliedInitialAlignment.current = true;
+    emblaApi.scrollTo?.(desiredIndex, true);
+    setSelectedIndex(desiredIndex);
+    applyEdgeTransforms(desiredIndex);
+  }, [applyEdgeTransforms, emblaApi, totalSlides]);
 
   const handlePrev = () => {
     if (!emblaApi || totalSlides === 0) return;
@@ -310,6 +327,7 @@ export default function HardCodedKiosk1SecondScreenTemplate({
               return (
                   <CarouselItem
                     className="basis-[560px] shrink-0 grow-0 pl-0"
+                    data-slide-index={idx}
                     style={
                       itemTransform || isActive
                         ? {
