@@ -1,4 +1,5 @@
 import SummitSlideLayout from '@/app/(displays)/summit/_components/layouts/summit-slide-layout';
+import SummitSlidesScreen from '@/app/(displays)/summit/_components/slides/summit-slides-screen';
 import type { SummitSlideScreen } from '@/app/(displays)/summit/_types';
 
 const SLIDE_SCREENS: readonly SummitSlideScreen[] = ['primary', 'secondary'];
@@ -13,7 +14,7 @@ const SummitSlidesPage = async ({ params }: PageProps<'/summit/slides/[screen]'>
 
   return (
     <SummitSlideLayout>
-      <div className="flex flex-1 items-center justify-center text-4xl capitalize">Slide: {slideScreen}</div>
+      <SummitSlidesScreen screen={slideScreen} />
     </SummitSlideLayout>
   );
 };
