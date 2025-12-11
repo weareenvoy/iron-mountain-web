@@ -1,8 +1,15 @@
 'use client';
 
 import Image from 'next/image';
-import { ArrowLeft, ArrowRight, Play } from 'lucide-react';
+import { ArrowLeft, ArrowRight, SquarePlay } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import HCBlueFilledDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCBlueFilledDiamond';
+import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCFilledOrangeDiamond';
+import HCFilledOrangeDiamond2 from '@/components/ui/icons/Kiosks/HardCoded/HCFilledOrangeDiamond2';
+import HCFilledTealDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCFilledTealDiamond';
+import HCHollowBlueDiamond2 from '@/components/ui/icons/Kiosks/HardCoded/HCHollowBlueDiamond2';
+import HCHollowGreenDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollowGreenDiamond';
+import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollowOrangeDiamond';
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
 
 type CarouselSlide = {
@@ -11,8 +18,9 @@ type CarouselSlide = {
   sectionTitle: string | string[];
   primaryImageAlt: string;
   primaryImageSrc: string;
+  primaryVideoSrc?: string;
   secondaryImageAlt: string;
-  secondaryImageSrc: string;
+  secondaryImageSrc?: string;
   eyebrow?: string | string[];
   headline?: string | string[];
 };
@@ -40,8 +48,9 @@ const defaultSlides: CarouselSlide[] = [
     id: 'slide-1',
     primaryImageAlt: 'Professional with tablet in data center',
     primaryImageSrc: '/images/kiosks/kiosk3/01-challenge/Challenge-Image1-Diamond.png',
+    primaryVideoSrc: '/images/kiosks/kiosk3/04-custom-interactive/CU-Video1-Full.mp4',
     secondaryImageAlt: 'Hand touching smart interface',
-    secondaryImageSrc: '/images/kiosks/kiosk3/01-challenge/Challenge-Image2-Diamond.png',
+    secondaryImageSrc: '/images/kiosks/kiosk3/04-custom-interactive/CU-Image2-Diamond.png',
     sectionTitle: 'Data configuration',
   },
   {
@@ -51,8 +60,9 @@ const defaultSlides: CarouselSlide[] = [
     id: 'slide-2',
     primaryImageAlt: 'Professional with tablet in data center',
     primaryImageSrc: '/images/kiosks/kiosk3/01-challenge/Challenge-Image1-Diamond.png',
+    primaryVideoSrc: '/images/kiosks/kiosk3/04-custom-interactive/CU-Video2-Full.mp4',
     secondaryImageAlt: 'Hand touching smart interface',
-    secondaryImageSrc: '/images/kiosks/kiosk3/01-challenge/Challenge-Image2-Diamond.png',
+    secondaryImageSrc: undefined,
     sectionTitle: 'Device storage',
   },
   {
@@ -62,8 +72,9 @@ const defaultSlides: CarouselSlide[] = [
     id: 'slide-3',
     primaryImageAlt: 'Professional with tablet in data center',
     primaryImageSrc: '/images/kiosks/kiosk3/01-challenge/Challenge-Image1-Diamond.png',
+    primaryVideoSrc: '/images/kiosks/kiosk3/04-custom-interactive/CU-Video3-Full.mp4',
     secondaryImageAlt: 'Hand touching smart interface',
-    secondaryImageSrc: '/images/kiosks/kiosk3/01-challenge/Challenge-Image2-Diamond.png',
+    secondaryImageSrc: '/images/kiosks/kiosk3/04-custom-interactive/CU-Image3-Diamond.png',
     sectionTitle: 'Device configuration',
   },
   {
@@ -73,8 +84,9 @@ const defaultSlides: CarouselSlide[] = [
     id: 'slide-4',
     primaryImageAlt: 'Professional with tablet in data center',
     primaryImageSrc: '/images/kiosks/kiosk3/01-challenge/Challenge-Image1-Diamond.png',
+    primaryVideoSrc: '/images/kiosks/kiosk3/04-custom-interactive/CU-Video4-Full.mp4',
     secondaryImageAlt: 'Hand touching smart interface',
-    secondaryImageSrc: '/images/kiosks/kiosk3/01-challenge/Challenge-Image2-Diamond.png',
+    secondaryImageSrc: '/images/kiosks/kiosk3/04-custom-interactive/CU-Image4-Diamond.png',
     sectionTitle: 'Device deployment',
   },
   {
@@ -84,8 +96,9 @@ const defaultSlides: CarouselSlide[] = [
     id: 'slide-5',
     primaryImageAlt: 'Professional with tablet in data center',
     primaryImageSrc: '/images/kiosks/kiosk3/01-challenge/Challenge-Image1-Diamond.png',
+    primaryVideoSrc: '/images/kiosks/kiosk3/04-custom-interactive/CU-Video5-Full.mp4',
     secondaryImageAlt: 'Hand touching smart interface',
-    secondaryImageSrc: '/images/kiosks/kiosk3/01-challenge/Challenge-Image2-Diamond.png',
+    secondaryImageSrc: undefined,
     sectionTitle: 'Device maintenance',
   },
   {
@@ -95,8 +108,9 @@ const defaultSlides: CarouselSlide[] = [
     id: 'slide-6',
     primaryImageAlt: 'Professional with tablet in data center',
     primaryImageSrc: '/images/kiosks/kiosk3/01-challenge/Challenge-Image1-Diamond.png',
+    primaryVideoSrc: '/images/kiosks/kiosk3/04-custom-interactive/CU-Video6-Full.mp4',
     secondaryImageAlt: 'Hand touching smart interface',
-    secondaryImageSrc: '/images/kiosks/kiosk3/01-challenge/Challenge-Image2-Diamond.png',
+    secondaryImageSrc: '/images/kiosks/kiosk3/04-custom-interactive/CU-Image5-Diamond.png',
     sectionTitle: 'Device reverse logistics',
   },
 ];
@@ -111,6 +125,18 @@ export default function HardCodedKiosk3ThirdScreenTemplate({
 
   const total = slides.length;
   const current = slides[index] ?? slides[0] ?? defaultSlides[0];
+  const isSlide2 = current?.id === 'slide-2';
+  const isSlide5 = current?.id === 'slide-5';
+  const isSlide3 = current?.id === 'slide-3';
+  const isSlide6 = current?.id === 'slide-6';
+  const primaryDiamondClass = isSlide2 || isSlide5
+    ? 'absolute left-[510px] bottom-[670px] h-[1200px] w-[1200px] rotate-[45deg] overflow-hidden rounded-[90px] shadow-[0_30px_90px_rgba(0,0,0,0.35)]'
+    : isSlide3 || isSlide6
+      ? 'absolute left-[340px] bottom-[340px] h-[1130px] w-[1130px] rotate-[45deg] overflow-hidden rounded-[90px] shadow-[0_30px_90px_rgba(0,0,0,0.35)]'
+      : 'absolute left-[700px] bottom-[1120px] h-[830px] w-[830px] rotate-[45deg] overflow-hidden rounded-[90px] shadow-[0_30px_90px_rgba(0,0,0,0.35)]';
+  const secondaryDiamondClass = isSlide3 || isSlide6
+    ? 'absolute left-[1390px] bottom-[1150px] h-[800px] w-[800px] rotate-[45deg] overflow-hidden rounded-[80px] shadow-[0_24px_70px_rgba(0,0,0,0.32)]'
+    : 'absolute left-[1380px] bottom-[400px] h-[880px] w-[880px] rotate-[45deg] overflow-hidden rounded-[80px] shadow-[0_24px_70px_rgba(0,0,0,0.32)]';
 
   const headlineText = useMemo(
     () => (Array.isArray(headline) ? headline.join('\n') : headline ?? ''),
@@ -138,21 +164,25 @@ export default function HardCodedKiosk3ThirdScreenTemplate({
       <div className="absolute inset-0 bg-black/15 backdrop-blur-[12px]" />
 
       {/* Eyebrow */}
-      <div className="absolute left-[120px] top-[140px] text-[48px] font-normal leading-[1.35] tracking-[-2.5px] text-[#ededed] whitespace-pre-line">
+      <div className="absolute left-[120px] top-[240px] text-[57px] font-normal leading-[1.5] tracking-[-1.8px] text-[#ededed] whitespace-pre-line">
         {renderRegisteredMark(eyebrowText)}
       </div>
 
       {/* Main headline */}
-      <div className="absolute left-[120px] top-[260px] max-w-[1200px] text-[74px] font-semibold leading-[1.15] tracking-[-3.5px] text-white whitespace-pre-line">
+      <div className="absolute left-[240px] top-[830px] max-w-[1200px] text-[100px] font-semibold leading-[1.2] tracking-[-5px] text-white whitespace-pre-line">
         {renderRegisteredMark(headlineText)}
       </div>
 
       {/* Data configuration + bullets */}
-      <div className="absolute left-[120px] top-[520px] max-w-[920px] space-y-[36px] text-white">
-        <h2 className="text-[54px] font-semibold leading-[1.2] tracking-[-2.7px]">{renderRegisteredMark(sectionTitle)}</h2>
-        <ul className="space-y-[22px] text-[38px] font-normal leading-[1.3] tracking-[-2px] text-white">
+      <div className="absolute left-[240px] top-[1650px] max-w-[920px] space-y-[36px] text-white">
+        <h2 className="text-[78px] font-semibold leading-[1.2] tracking-[-2.7px]">{renderRegisteredMark(sectionTitle)}</h2>
+        <ul className="space-y-[22px] text-[38px] font-normal leading-[1.3] tracking-[-2px] text-white mt-[110px] ml-[60px] tracking-[-4.3px]">
           {current?.bullets.map((item, i) => (
-            <li key={`${current?.id}-bullet-${i}`} className="flex items-start gap-[16px]">
+            <li
+              key={`${current?.id}-bullet-${i}`}
+              className="flex items-start gap-[16px] text-[64px]"
+              style={{ width: '1100px' }}
+            >
               <span className="mt-[14px] inline-block h-[18px] w-[18px] rotate-[45deg] rounded-[4px] border border-white/80" />
               <span>{renderRegisteredMark(item)}</span>
             </li>
@@ -162,11 +192,12 @@ export default function HardCodedKiosk3ThirdScreenTemplate({
 
       {/* CTA */}
       <button
-        className="absolute left-[120px] top-[900px] flex h-[140px] items-center gap-[18px] rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[80px] text-[46px] font-semibold leading-[1.1] tracking-[-2px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)]"
+        className="absolute left-[240px] top-[2630px] flex h-[200px] items-center gap-[18px] rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[110px] text-[55px] font-semibold leading-[1.1] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)]"
+        style={{ letterSpacing: '2px' }}
         type="button"
       >
         Launch demo
-        <Play aria-hidden className="h-[40px] w-[40px]" strokeWidth={2.2} />
+        <SquarePlay aria-hidden className="ml-[60px] h-[40px] w-[40px]" strokeWidth={2} />
       </button>
 
       {/* Circle carousel control */}
@@ -216,34 +247,71 @@ export default function HardCodedKiosk3ThirdScreenTemplate({
       </div>
 
       {/* Bottom diamond collage */}
-      <div className="absolute bottom-[120px] left-1/2 flex -translate-x-1/2 items-end gap-[80px]">
-        <div className="relative h-[520px] w-[520px] rotate-[45deg] overflow-hidden rounded-[90px] shadow-[0_30px_90px_rgba(0,0,0,0.35)]">
+      <div className="pointer-events-none absolute inset-0">
+        <div className={primaryDiamondClass}>
           <div className="absolute inset-0 -rotate-[45deg]">
-            <Image
-              alt={current?.primaryImageAlt ?? 'Primary slide image'}
-              className="object-cover"
-              fill
-              sizes="520px"
-              src={current?.primaryImageSrc ?? defaultSlides[0]?.primaryImageSrc ?? ''}
-            />
+            {current?.primaryVideoSrc ? (
+              <video
+                autoPlay
+            className="h-full w-full origin-center scale-[1.35] object-cover"
+                loop
+                muted
+                playsInline
+                poster={current?.primaryImageSrc ?? defaultSlides[0]?.primaryImageSrc ?? ''}
+                src={current.primaryVideoSrc}
+              />
+            ) : (
+              <Image
+                alt={current?.primaryImageAlt ?? 'Primary slide image'}
+                className="object-cover origin-center scale-[1.35]"
+                fill
+                sizes="830px"
+                src={current?.primaryImageSrc ?? defaultSlides[0]?.primaryImageSrc ?? ''}
+              />
+            )}
           </div>
         </div>
-        <div className="relative h-[440px] w-[440px] rotate-[45deg] overflow-hidden rounded-[80px] shadow-[0_24px_70px_rgba(0,0,0,0.32)]">
-          <div className="absolute inset-0 -rotate-[45deg]">
-            <Image
-              alt={current?.secondaryImageAlt ?? 'Secondary slide image'}
-              className="object-cover"
-              fill
-              sizes="440px"
-              src={current?.secondaryImageSrc ?? defaultSlides[0]?.secondaryImageSrc ?? ''}
-            />
+        {current?.secondaryImageSrc && (
+          <div className={secondaryDiamondClass}>
+            <div className="absolute inset-0 -rotate-[45deg]">
+              <Image
+                alt={current?.secondaryImageAlt ?? 'Secondary slide image'}
+                className="object-cover origin-center scale-[1.35]"
+                fill
+                sizes="880px"
+                src={current.secondaryImageSrc}
+              />
+            </div>
           </div>
-        </div>
-      </div>
+        )}
 
-      {/* Decorative diamonds */}
-      <div className="absolute left-[180px] bottom-[220px] h-[220px] w-[220px] rotate-[45deg] rounded-[50px] bg-gradient-to-br from-[#5bbbf5] to-[#1b75bc] shadow-[0_20px_60px_rgba(0,0,0,0.25)]" />
-      <div className="absolute left-1/2 bottom-[80px] h-[360px] w-[360px] -translate-x-1/2 rotate-[45deg] rounded-[80px] border-[6px] border-[#f79420] opacity-85" />
+        {/* Decorative diamonds */}
+        {isSlide2 || isSlide5 ? (
+          <>
+            <HCFilledTealDiamond className="pointer-events-none absolute left-[-20px] bottom-[670px] h-[510px] w-[560px]" />
+            <HCHollowBlueDiamond2 className="pointer-events-none absolute left-[-10px] bottom-[-1560px] h-[2400px] w-[2400px] overflow-visible" />
+            <HCFilledOrangeDiamond2 className="pointer-events-none absolute left-[1100px] bottom-[-1555px] h-[1200px] w-[1200px] overflow-visible rotate-[45deg]" />
+            <HCHollowOrangeDiamond className="pointer-events-none absolute left-[1240px] bottom-[-980px] h-[1800px] w-[1800px] overflow-visible" />
+          </>
+        ) : isSlide3 || isSlide6 ? (
+          <>
+            <HCFilledOrangeDiamond
+              className={`pointer-events-none absolute ${
+                isSlide3 || isSlide6
+                  ? 'left-[1880px] bottom-[670px] h-[450px] w-[450px]'
+                  : 'left-[490px] bottom-[590px] h-[510px] w-[560px]'
+              }`}
+            />
+            <HCHollowBlueDiamond2 className="pointer-events-none absolute left-[1290px] bottom-[-1650px] h-[2400px] w-[2400px] overflow-visible" />
+            <HCHollowGreenDiamond className="pointer-events-none absolute left-[0px] bottom-[-1240px] h-[1800px] w-[1800px] overflow-visible" />
+          </>
+        ) : (
+          <>
+            <HCBlueFilledDiamond className="pointer-events-none absolute left-[490px] bottom-[590px] h-[510px] w-[560px]" />
+            <HCHollowOrangeDiamond className="pointer-events-none absolute left-[650px] bottom-[-1755px] h-[2400px] w-[2400px] overflow-visible" />
+          </>
+        )}
+      </div>
     </div>
   );
 }
