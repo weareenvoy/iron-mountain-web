@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { ArrowLeft, ArrowRight, SquarePlay } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, SquarePlay } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import HCBlueFilledDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCBlueFilledDiamond';
 import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCFilledOrangeDiamond';
@@ -183,7 +183,7 @@ export default function HardCodedKiosk3ThirdScreenTemplate({
               className="flex items-start gap-[16px] text-[64px]"
               style={{ width: '1100px' }}
             >
-              <span className="mt-[14px] inline-block h-[18px] w-[18px] rotate-[45deg] rounded-[4px] border border-white/80" />
+              <span className="inline-block h-[35px] w-[35px] rotate-[45deg] rounded-[4px] border border-white/80 ml-[-50px] mr-[40px] mt-[20px]" />
               <span>{renderRegisteredMark(item)}</span>
             </li>
           ))}
@@ -197,51 +197,54 @@ export default function HardCodedKiosk3ThirdScreenTemplate({
         type="button"
       >
         Launch demo
-        <SquarePlay aria-hidden className="ml-[60px] h-[40px] w-[40px]" strokeWidth={2} />
+        <SquarePlay aria-hidden className="ml-[40px] h-[90px] w-[90px]" strokeWidth={2} />
       </button>
 
       {/* Circle carousel control */}
-      <div className="absolute right-[160px] top-[460px] h-[320px] w-[320px]">
+      <div className="absolute right-[120px] top-[1670px] h-[520px] w-[520px]">
         <div className="relative h-full w-full">
           <div className="absolute inset-0 rounded-full border-[8px] border-[#6dcff6]/70" />
-          <div className="absolute inset-[18px] rounded-full border-[12px] border-[#1b75bc]" />
-          <div className="absolute inset-[44px] rounded-full border-[6px] border-[#6dcff6]/70" />
+          <div className="absolute inset-[18px] rounded-full border-[12px] border-transparent" />
+          <div className="absolute inset-[44px] rounded-full border-[6px] border-transparent" />
 
-          <div className="absolute inset-0 flex items-center justify-center text-white text-[38px] font-semibold">
+          <div className="absolute inset-0 flex items-center justify-center text-white text-[60px] font-semibold leading-[1.4] tracking-[-3px]">
             {String(index + 1).padStart(2, '0')}
           </div>
 
           {/* Dots */}
-          {Array.from({ length: 8 }).map((_, i) => (
+          {[
+            { top: '0%', left: '50%' },
+            { top: '28%', left: '95%' },
+            { top: '73%', left: '94%' },
+            { top: '100%', left: '52%' },
+            { top: '73%', left: '7%' },
+            { top: '27%', left: '7%' },
+          ].map((pos, i) => (
             <div
               key={i}
               className="absolute"
-              style={{
-                top: '50%',
-                left: '50%',
-                transform: `translate(-50%, -50%) rotate(${i * 45}deg) translateY(-150px)`,
-              }}
+              style={{ top: pos.top, left: pos.left, transform: 'translate(-50%, -50%)' }}
             >
-              <div className="h-[18px] w-[18px] rounded-full bg-[#6dcff6]" />
+              <div className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]" />
             </div>
           ))}
 
           {/* Arrows */}
           <button
             aria-label="Previous slide"
-            className="absolute left-[44px] top-1/2 flex h-[52px] w-[52px] -translate-y-1/2 items-center justify-center rounded-full bg-white/20 text-white transition hover:bg-white/35"
+            className="absolute left-[100px] top-1/2 flex h-[102px] w-[102px] -translate-y-1/2 items-center justify-center transition hover:opacity-80"
             onClick={goPrev}
             type="button"
           >
-            <ArrowLeft className="h-[28px] w-[28px]" strokeWidth={2.2} />
+            <ChevronLeft className="h-[102px] w-[102px]" color="#6DCFF6" strokeWidth={2.2} />
           </button>
           <button
             aria-label="Next slide"
-            className="absolute right-[44px] top-1/2 flex h-[52px] w-[52px] -translate-y-1/2 items-center justify-center rounded-full bg-white/20 text-white transition hover:bg-white/35"
+            className="absolute right-[70px] top-1/2 flex h-[102px] w-[102px] -translate-y-1/2 items-center justify-center transition hover:opacity-80"
             onClick={goNext}
             type="button"
           >
-            <ArrowRight className="h-[28px] w-[28px]" strokeWidth={2.2} />
+            <ChevronRight className="h-[102px] w-[102px]" color="#6DCFF6" strokeWidth={2.2} />
           </button>
         </div>
       </div>
