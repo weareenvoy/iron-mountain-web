@@ -16,6 +16,7 @@ export interface SummitHero {
   readonly date: string;
   readonly location: string;
   readonly logoAlt: string;
+  readonly logoSrc: string;
   readonly subtitle: string;
   readonly title?: string;
 }

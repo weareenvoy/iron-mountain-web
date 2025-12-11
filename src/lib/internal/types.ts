@@ -365,7 +365,9 @@ export interface SummitData {
     readonly date: string;
     readonly location: string;
     readonly logoAlt: string;
+    readonly logoSrc: string;
     readonly subtitle: string;
+    readonly title?: string;
   };
   readonly metrics: {
     readonly description: string;
