@@ -1,5 +1,5 @@
 import { useMqtt } from '@/components/providers/mqtt-provider';
-import type { ExhibitNavigationState, Moment, Section } from '@/lib/internal/types';
+import type { ExhibitBeatId, ExhibitNavigationState, Moment, Section } from '@/lib/internal/types';
 
 // moments/beats navigation hook
 const useMomentsNavigation = (
@@ -21,7 +21,7 @@ const useMomentsNavigation = (
     const beatId = `${momentId}-${beatIdx + 1}`;
 
     // Send goto-beat command to exhibit
-    client.gotoBeat(exhibit, beatId, {
+    client.gotoBeat(exhibit, beatId as ExhibitBeatId, {
       onError: (err: Error) => console.error(`Failed to send goto-beat to ${exhibit}:`, err),
       onSuccess: () => console.info(`Sent goto-beat: ${beatId} to ${exhibit}`),
     });

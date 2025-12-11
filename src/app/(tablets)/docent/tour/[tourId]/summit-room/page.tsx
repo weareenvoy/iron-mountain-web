@@ -1,107 +1,99 @@
 'use client';
 
+import useEmblaCarousel from 'embla-carousel-react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { use, useEffect, useMemo, useRef } from 'react';
-import { A11y, Navigation, Pagination } from 'swiper/modules';
-import { Swiper, SwiperSlide, type SwiperClass } from 'swiper/react';
+import { use, useCallback, useEffect, useMemo } from 'react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import SummitRoomDiamonds from '@/components/ui/icons/SummitRoomDiamonds';
+import { getBeatIdFromSlideIndex, getSlideIndexFromBeatId, type SummitRoomBeatId } from '@/lib/internal/types';
 import { cn } from '@/lib/tailwind/utils/cn';
 
-// Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/a11y';
-
-// Summit Room has 5 slides. First slide has no border, no diamond icon, but has image. Other slides have a border and a diamond icon.
+const INITIAL_BEAT_ID: SummitRoomBeatId = 'journey-intro';
 
 const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room'>) => {
   const { tourId } = use(params);
   const { client } = useMqtt();
-  const {
-    currentTour,
-    data,
-    isSummitRoomJourneyMapLaunched,
-    setIsSummitRoomJourneyMapLaunched,
-    setSummitRoomSlideIdx,
-    summitRoomSlideIdx,
-  } = useDocent();
+  const { currentTour, data, setSummitRoomBeatId, summitRoomBeatId } = useDocent();
 
-  // Local UI state
   const summitRoomSlides = data?.slides ?? [];
-  const isJourneyMapLaunched = isSummitRoomJourneyMapLaunched;
-  const setIsJourneyMapLaunched = setIsSummitRoomJourneyMapLaunched;
-  const currentSlideIdx = summitRoomSlideIdx;
-  const setCurrentSlideIdx = setSummitRoomSlideIdx;
+  const slideCount = summitRoomSlides.length;
 
-  const swiperRef = useRef<null | SwiperClass>(null); // Create a ref for Swiper instance
+  // State is either 'journey-intro' (not launched), or 'journey-1' through 'journey-5' carousel.
+  const isJourneyMapLaunched = summitRoomBeatId !== INITIAL_BEAT_ID;
+  // Extract slide index from beatId
+  const slideIdx = isJourneyMapLaunched ? getSlideIndexFromBeatId(summitRoomBeatId) : 0;
 
-  // Helper to send MQTT command when slide changes
-  const sendSummitSlideCommand = (slideIdx: number) => {
-    if (!client) return;
-
-    // Generate slide name based on index
-    // journey-intro for intro screen (slideIdx 0)
-    const slideName = slideIdx === 0 ? 'journey-intro' : `journey-${slideIdx}`;
-
-    console.info(`Sending summit goto-beat: ${slideName}`);
-
-    client.gotoBeat('summit', slideName, {
-      onError: (err: Error) => console.error('Summit: Failed to navigate:', err),
-      onSuccess: () => console.info(`Summit: Navigated to ${slideName}`),
-    });
-  };
-
-  // Sync Swiper with currentSlideIdx
+  // Embla carousel
+  const [emblaRef, emblaApi] = useEmblaCarousel();
+  // Sync embla position when beatId changes externally
   useEffect(() => {
-    if (swiperRef.current) {
-      swiperRef.current.slideTo(currentSlideIdx);
+    if (!emblaApi || !isJourneyMapLaunched) return;
+    const currentEmblaIdx = emblaApi.selectedScrollSnap();
+    if (currentEmblaIdx !== slideIdx) {
+      emblaApi.scrollTo(slideIdx, false);
     }
-  }, [currentSlideIdx]);
+  }, [emblaApi, isJourneyMapLaunched, slideIdx]);
 
-  const handlePrevious = () => {
-    if (currentSlideIdx > 0) {
-      const newIdx = currentSlideIdx - 1;
-      setCurrentSlideIdx(newIdx);
-      // Send MQTT command
-      sendSummitSlideCommand(newIdx);
+  // Helper to update beatId state and send MQTT command.
+  const goToSlide = useCallback(
+    (newSlideIdx: number) => {
+      // Bounds checking
+      if (newSlideIdx < 0 || newSlideIdx >= slideCount) {
+        console.error('Invalid slide index:', newSlideIdx);
+        return;
+      }
+      const beatId = getBeatIdFromSlideIndex(newSlideIdx);
+      setSummitRoomBeatId(beatId);
+      client?.gotoBeat('summit', beatId, {
+        onError: (err: Error) => console.error('Summit: Failed to navigate:', err),
+        onSuccess: () => console.info(`Sent goto-beat: ${beatId} to summit`),
+      });
+    },
+    [client, setSummitRoomBeatId, slideCount]
+  );
+
+  // Embla onSelect handler
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    const index = emblaApi.selectedScrollSnap();
+    // Only update if different from current
+    if (index !== slideIdx) {
+      goToSlide(index);
     }
-  };
+  }, [emblaApi, goToSlide, slideIdx]);
 
-  const handleNext = () => {
-    if (currentSlideIdx < summitRoomSlides.length - 1) {
-      const newIdx = currentSlideIdx + 1;
-      setCurrentSlideIdx(newIdx);
-      // Send MQTT command
-      sendSummitSlideCommand(newIdx);
-    }
-  };
+  useEffect(() => {
+    if (!emblaApi) return;
 
-  const handleSlideIndicatorClick = (index: number) => () => {
-    setCurrentSlideIdx(index);
-    // Send MQTT command
-    sendSummitSlideCommand(index);
-  };
+    emblaApi.on('select', onSelect);
+    emblaApi.on('reInit', onSelect);
+    return () => {
+      emblaApi.off('select', onSelect);
+      emblaApi.off('reInit', onSelect);
+    };
+  }, [emblaApi, onSelect]);
+
+  const handlePrevious = useCallback(() => {
+    emblaApi?.scrollPrev();
+  }, [emblaApi]);
+
+  const handleNext = useCallback(() => {
+    emblaApi?.scrollNext();
+  }, [emblaApi]);
+
+  const handleSlideIndicatorClick = useCallback(
+    (index: number) => () => {
+      emblaApi?.scrollTo(index);
+    },
+    [emblaApi]
+  );
 
   const handleLaunchJourneyMap = () => {
-    setIsJourneyMapLaunched(true);
-    setCurrentSlideIdx(0);
-    // Send MQTT command (journey-intro)
-    sendSummitSlideCommand(0);
-  };
-
-  const handleSlideChange = (swiper: SwiperClass) => {
-    setCurrentSlideIdx(swiper.activeIndex);
-    // Send MQTT command
-    sendSummitSlideCommand(swiper.activeIndex);
-  };
-
-  const handleSwiper = (swiper: SwiperClass) => {
-    swiperRef.current = swiper;
+    // Show first slide, and send command
+    goToSlide(0);
   };
 
   const leftButton = useMemo(
@@ -127,43 +119,29 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
       {/* Main Content Area */}
       <div className="mt-30 flex items-center justify-center">
         {isJourneyMapLaunched ? (
-          <Swiper
-            allowTouchMove={true}
-            className="h-[361px] w-[605px]" // Make the area bigger so the box shadow is visible
-            initialSlide={currentSlideIdx}
-            keyboard={{
-              enabled: true,
-            }}
-            modules={[Navigation, Pagination, A11y]}
-            navigation={false}
-            onSlideChange={handleSlideChange}
-            onSwiper={handleSwiper}
-            pagination={false}
-            slidesPerView={1}
-            spaceBetween={30}
-          >
-            {summitRoomSlides.map(slide => (
-              <SwiperSlide key={slide.id}>
-                <div className="bg-primary-bg-grey relative ml-5 flex h-[313px] w-[557px] flex-col items-center justify-center rounded-[16px] shadow-[16px_16px_16px_0px_rgba(94,94,94,0.25)]">
-                  {slide.id === 1 ? (
-                    // Simple text
-                    <div className="flex h-full w-full flex-col items-center justify-center gap-8">
-                      <h2 className="text-center text-2xl leading-[normal] tracking-[-1.2px] text-black">
-                        {slide.title}
-                      </h2>
-                    </div>
-                  ) : (
-                    // Text with colorful border and diamond icon
-                    <div className={cn('flex items-center gap-5 rounded-full border-2 px-8 py-5', slide.borderColor)}>
-                      <div className={cn('h-4.25 w-4.25 rotate-45 border', slide.borderColor)}></div>
-                      <h2 className="text-xl leading-[normal] tracking-[-1.2px] text-black">{slide.title}</h2>
-                    </div>
-                  )}
-                  <SummitRoomDiamonds className="absolute right-0 bottom-0 h-[159px] w-[177px]" />
+          <div className="h-[361px] w-[605px] overflow-hidden" ref={emblaRef}>
+            <div className="flex h-full">
+              {summitRoomSlides.map(slide => (
+                <div className="ml-[15px] flex-[0_0_100%]" key={slide.id}>
+                  <div className="bg-primary-bg-grey relative flex h-[313px] w-[557px] flex-col items-center justify-center rounded-[16px] shadow-[16px_16px_16px_0px_rgba(94,94,94,0.25)]">
+                    {slide.id === 1 ? (
+                      <div className="flex h-full w-full flex-col items-center justify-center gap-8">
+                        <h2 className="text-center text-2xl leading-[normal] tracking-[-1.2px] text-black">
+                          {slide.title}
+                        </h2>
+                      </div>
+                    ) : (
+                      <div className={cn('flex items-center gap-5 rounded-full border-2 px-8 py-5', slide.borderColor)}>
+                        <div className={cn('h-4.25 w-4.25 rotate-45 border', slide.borderColor)}></div>
+                        <h2 className="text-xl leading-[normal] tracking-[-1.2px] text-black">{slide.title}</h2>
+                      </div>
+                    )}
+                    <SummitRoomDiamonds className="absolute right-0 bottom-0 h-[159px] w-[177px]" />
+                  </div>
                 </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+              ))}
+            </div>
+          </div>
         ) : (
           <div className="relative mt-50 flex">
             <div className="border-primary-im-light-blue absolute top-1/2 left-1/2 h-82 w-82 -translate-x-1/2 -translate-y-1/2 rotate-45 rounded-[40px] border-2" />
@@ -184,7 +162,7 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
           <div className="flex items-center justify-center gap-5">
             {summitRoomSlides.map((_, index) => {
               const slideNumber = index + 1;
-              const isActive = index === currentSlideIdx;
+              const isActive = index === slideIdx;
               return (
                 <button
                   className={cn(
@@ -200,15 +178,11 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
 
           <div className="flex flex-row items-center justify-center gap-10">
             {/* Previous Button */}
-            <Button className="size-[80px] rounded-full" disabled={currentSlideIdx === 0} onClick={handlePrevious}>
+            <Button className="size-[80px] rounded-full" disabled={slideIdx === 0} onClick={handlePrevious}>
               <ArrowLeft className="size-[36px]" />
             </Button>
             {/* Next Button */}
-            <Button
-              className="size-[80px] rounded-full"
-              disabled={currentSlideIdx === summitRoomSlides.length - 1}
-              onClick={handleNext}
-            >
+            <Button className="size-[80px] rounded-full" disabled={slideIdx === slideCount - 1} onClick={handleNext}>
               <ArrowRight className="size-[36px]" />
             </Button>
           </div>
