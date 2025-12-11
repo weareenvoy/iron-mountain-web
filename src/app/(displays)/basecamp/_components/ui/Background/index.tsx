@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useBasecamp } from '@/app/(displays)/basecamp/_components/providers/basecamp';
-import { BEAT_ORDER, isValidBeatId } from '@/lib/internal/types';
+import { BASECAMP_BEAT_ORDER, isValidBasecampBeatId } from '@/lib/internal/types';
 
 const CROSSFADE_DURATION_MS = 800;
 
@@ -21,7 +21,7 @@ const Background = () => {
   useEffect(() => {
     if (!data || !a.current || !b.current) return;
 
-    if (!isValidBeatId(beatId)) return;
+    if (!isValidBasecampBeatId(beatId)) return;
 
     const url = data.beats[beatId].url;
     if (!url || beatId === lastBeat.current) return;
@@ -44,8 +44,8 @@ const Background = () => {
       lastBeat.current = beatId;
 
       // Preload next into B
-      const nextIdx = BEAT_ORDER.indexOf(beatId) + 1;
-      const nextBeatId = BEAT_ORDER[nextIdx];
+      const nextIdx = BASECAMP_BEAT_ORDER.indexOf(beatId) + 1;
+      const nextBeatId = BASECAMP_BEAT_ORDER[nextIdx];
       if (nextBeatId) {
         const nextUrl = data.beats[nextBeatId].url;
         if (nextUrl) b.current.src = nextUrl;
@@ -82,9 +82,9 @@ const Background = () => {
       setActiveDisplay(active.current);
 
       // Assume docent would click the "next" beat, preload it.
-      const currIdx = BEAT_ORDER.indexOf(beatId);
-      const nextIdx = currIdx + 1 < BEAT_ORDER.length ? currIdx + 1 : 0;
-      const nextBeatId = BEAT_ORDER[nextIdx];
+      const currIdx = BASECAMP_BEAT_ORDER.indexOf(beatId);
+      const nextIdx = currIdx + 1 < BASECAMP_BEAT_ORDER.length ? currIdx + 1 : 0;
+      const nextBeatId = BASECAMP_BEAT_ORDER[nextIdx];
 
       // Preload next video after crossfade completes. Use actual transition, not hardcoded timeout.
       if (nextBeatId) {
