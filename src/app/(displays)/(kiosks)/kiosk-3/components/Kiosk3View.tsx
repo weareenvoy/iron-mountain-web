@@ -200,7 +200,7 @@ const Kiosk3View = () => {
   const hardCodedSlides: Slide[] = [
     {
       id: 'hardcoded-first',
-      render: () => <HardCodedFirstScreenTemplate {...(hardCoded.firstScreen ?? {})} />,
+      render: () => <HardCodedFirstScreenTemplate kioskId="kiosk-3" {...(hardCoded.firstScreen ?? {})} />,
       title: 'Hardcoded First',
     },
     {
