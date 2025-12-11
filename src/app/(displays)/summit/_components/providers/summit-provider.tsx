@@ -2,7 +2,6 @@
 
 import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useMqtt } from '@/components/providers/mqtt-provider';
-import { getLocaleForTesting } from '@/flags/flags';
 import { getSummitData } from '@/lib/internal/data/get-summit';
 import { isSection, type ExhibitNavigationState, type Locale } from '@/lib/internal/types';
 import type { SummitData } from '@/app/(displays)/summit/_types';
@@ -38,7 +37,7 @@ export const SummitProvider = ({ children }: PropsWithChildren) => {
   const [error, setError] = useState<null | string>(null);
   const [exhibitState, setExhibitState] = useState<ExhibitNavigationState>(DEFAULT_EXHIBIT_STATE);
   const [loading, setLoading] = useState(true);
-  const [locale, setLocale] = useState<Locale>(getLocaleForTesting());
+  const [locale, setLocale] = useState<Locale>('en');
   const [mqttState, setMqttState] = useState<ExhibitMqttState>({
     'beat-id': 'idle',
     'tour-id': null,

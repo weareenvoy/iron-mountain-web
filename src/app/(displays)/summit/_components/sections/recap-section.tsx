@@ -3,37 +3,30 @@ import useLocalStorage from '@/hooks/use-local-storage';
 import type { SummitRecap } from '@/app/(displays)/summit/_types';
 import type { ChangeEvent, ReactNode } from 'react';
 
-export type RecapTone = {
-  readonly accentBg: string;
-  readonly accentColor: string;
-  readonly bodyColor: string;
-  readonly iconColor?: string;
-  readonly rightTextColor?: string;
-};
-
 type RecapSectionProps = {
   readonly actionSlot?: ReactNode;
   readonly placeholder?: string;
   readonly recap: SummitRecap;
   readonly storageKey?: string;
-  readonly tone?: RecapTone;
+  readonly tone?: {
+    accentBg: string;
+    accentColor: string;
+    bodyColor: string;
+    iconColor?: string;
+    rightTextColor?: string;
+  };
 };
 
-export const RECAP_DEFAULT_TONE: RecapTone = {
+const DEFAULT_TONE = {
   accentBg: '#6DCFF6',
   accentColor: '#14477D',
   bodyColor: '#4B4B4D',
   iconColor: '#0D3C69',
-};
+} as const;
 
-const RecapSection = ({
-  actionSlot,
-  placeholder = '',
-  recap,
-  storageKey,
-  tone = RECAP_DEFAULT_TONE,
-}: RecapSectionProps) => {
-  const palette = { ...RECAP_DEFAULT_TONE, ...tone };
+const RecapSection = ({ actionSlot, placeholder = '', recap, storageKey, tone = DEFAULT_TONE }: RecapSectionProps) => {
+  const palette = { ...DEFAULT_TONE, ...tone };
+  const iconColor = palette.iconColor;
   const key = storageKey ?? `summit-recap:${recap.title}`;
   const [note, setNote] = useLocalStorage<string>(key, '');
   const rightTextColor = palette.rightTextColor ?? '#12406A';
@@ -49,7 +42,7 @@ const RecapSection = ({
         style={{ backgroundColor: palette.accentBg, color: palette.bodyColor }}
       >
         <div className="flex items-center gap-3" style={{ color: palette.accentColor }}>
-          <NotificationTextIcon aria-hidden className="h-8 w-8" style={{ color: palette.iconColor }} />
+          <NotificationTextIcon aria-hidden className="h-8 w-8" style={{ color: iconColor }} />
           <span className="text-3xl font-normal">{recap.title}</span>
         </div>
         {actionSlot}
