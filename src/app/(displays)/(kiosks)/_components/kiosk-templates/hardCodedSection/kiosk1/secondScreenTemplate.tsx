@@ -8,6 +8,7 @@ import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-te
 import { Carousel, CarouselContent, CarouselItem } from '@/components/shadcn/carousel';
 import HCBlueDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCBlueDiamond';
 import HCWhiteDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCWhiteDiamond';
+import type { UseEmblaCarouselType } from 'embla-carousel-react';
 
 export type HardCodedKiosk1SecondScreenTemplateProps = Readonly<{
   backgroundEndColor?: string;
@@ -30,17 +31,7 @@ type Step = {
   modal?: Partial<ModalContent>;
 };
 
-type EmblaApi = {
-  canScrollNext?: () => boolean;
-  canScrollPrev?: () => boolean;
-  off: (...args: unknown[]) => void;
-  on: (...args: unknown[]) => void;
-  rootNode?: () => HTMLElement;
-  scrollNext?: () => void;
-  scrollPrev?: () => void;
-  scrollTo?: (index: number, jump?: boolean) => void;
-  selectedScrollSnap: () => number;
-};
+type EmblaApi = UseEmblaCarouselType[1];
 
 const defaultSteps: readonly Step[] = [
   {
@@ -114,7 +105,11 @@ const textDefaults = {
   headline: ['From archive', 'to access'],
 };
 
-const normalizeText = (value?: readonly string[] | string) => (Array.isArray(value) ? value.join('\n') : (value ?? ''));
+const normalizeText = (value?: readonly string[] | string): string => {
+  if (Array.isArray(value)) return value.join('\n');
+  if (typeof value === 'string') return value;
+  return '';
+};
 
 const HardCodedKiosk1SecondScreenTemplate = ({
   backgroundEndColor = gradientDefaults.backgroundEndColor,
@@ -124,12 +119,12 @@ const HardCodedKiosk1SecondScreenTemplate = ({
   onBack,
   steps = defaultSteps,
 }: HardCodedKiosk1SecondScreenTemplateProps) => {
-  const eyebrowText = normalizeText(eyebrow);
-  const headlineText = normalizeText(headline);
+  const eyebrowText: string = normalizeText(eyebrow);
+  const headlineText: string = normalizeText(headline);
   const headlineWithForcedBreak = headlineText.replace(/archive\s+/i, 'archive\n');
   const normalizedSteps = steps.length > 0 ? steps : defaultSteps;
 
-  const [emblaApi, setEmblaApi] = useState<EmblaApi>();
+  const [emblaApi, setEmblaApi] = useState<EmblaApi | undefined>(undefined);
   const hasAppliedInitialAlignment = useRef(false);
   const [openModalIndex, setOpenModalIndex] = useState<null | number>(null);
   const [selectedIndex, setSelectedIndex] = useState(2);
@@ -165,7 +160,7 @@ const HardCodedKiosk1SecondScreenTemplate = ({
       let activeSlide: HTMLElement | null = null;
       let activeDistance = Number.POSITIVE_INFINITY;
 
-      slides.forEach(slide => {
+      slides.forEach((slide: HTMLElement) => {
         const indexAttr =
           slide.dataset.slideIndex ??
           slide.getAttribute('data-embla-slide-index') ??
@@ -183,7 +178,7 @@ const HardCodedKiosk1SecondScreenTemplate = ({
         }
       });
 
-      slides.forEach(slide => {
+      slides.forEach((slide: HTMLElement) => {
         const indexAttr =
           slide.dataset.slideIndex ??
           slide.getAttribute('data-embla-slide-index') ??
@@ -250,19 +245,19 @@ const HardCodedKiosk1SecondScreenTemplate = ({
     if (!emblaApi || totalSlides === 0 || hasAppliedInitialAlignment.current) return;
     const desiredIndex = Math.min(totalSlides - 1, 2);
     hasAppliedInitialAlignment.current = true;
-    emblaApi.scrollTo?.(desiredIndex, true);
+    emblaApi.scrollTo(desiredIndex, true);
   }, [applyEdgeTransforms, emblaApi, totalSlides]);
 
   const handlePrev = () => {
     if (!emblaApi || totalSlides === 0) return;
     const target = (selectedIndex - 1 + totalSlides) % totalSlides;
-    emblaApi.scrollTo?.(target);
+    emblaApi.scrollTo(target);
   };
 
   const handleNext = () => {
     if (!emblaApi || totalSlides === 0) return;
     const target = (selectedIndex + 1) % totalSlides;
-    emblaApi.scrollTo?.(target);
+    emblaApi.scrollTo(target);
   };
 
   useEffect(() => {
@@ -353,7 +348,10 @@ const HardCodedKiosk1SecondScreenTemplate = ({
                     <div className="flex flex-col items-center gap-[28px]">
                       <button
                         className="relative z-[1] flex items-center justify-center"
-                        onClick={() => emblaApi?.scrollTo?.(idx)}
+                        onClick={() => {
+                          if (!emblaApi) return;
+                          emblaApi.scrollTo(idx);
+                        }}
                         type="button"
                       >
                         {isActive ? (
