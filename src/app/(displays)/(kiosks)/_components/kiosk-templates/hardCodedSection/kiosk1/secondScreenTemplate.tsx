@@ -400,22 +400,24 @@ export default function HardCodedKiosk1SecondScreenTemplate({
               );
             })}
           </CarouselContent>
-          <div className="pointer-events-none absolute inset-x-0 -bottom-[220px] flex items-center justify-center gap-[48px]">
+          <div className="pointer-events-none absolute inset-x-0 -bottom-[220px] flex items-center justify-center gap-[48px]" style={{ bottom: '-290px' }}>
             <button
               aria-label="Previous"
               className="pointer-events-auto flex h-[64px] w-[64px] items-center justify-center text-white transition-transform duration-150 hover:scale-110"
               onClick={handlePrev}
               type="button"
+              style={{ height: '102px', width: '102px', marginRight: '25px' }}
             >
-              <ChevronLeft className="h-[36px] w-[36px]" />
+              <ChevronLeft className="h-[36px] w-[36px]" style={{ height: '102px', width: '102px' }} />
             </button>
             <button
               aria-label="Next"
               className="pointer-events-auto flex h-[64px] w-[64px] items-center justify-center text-white transition-transform duration-150 hover:scale-110"
               onClick={handleNext}
               type="button"
+              style={{ height: '102px', width: '102px', marginLeft: '25px' }}
             >
-              <ChevronRight className="h-[36px] w-[36px]" />
+              <ChevronRight className="h-[36px] w-[36px]" style={{ height: '102px', width: '102px' }} />
             </button>
           </div>
         </Carousel>
@@ -470,7 +472,7 @@ export default function HardCodedKiosk1SecondScreenTemplate({
                         className="relative rotate-[45deg] rounded-[80px]"
                         style={{ height: '1680px', width: '1680px', top: '130px', background: 'transparent', border: 'none' }}
                       >
-                        <div className="absolute inset-0 -rotate-[45deg] flex items-center justify-center rounded-[80px] bg-white/10">
+                        <div className="absolute inset-0 -rotate-[45deg] flex items-center justify-center rounded-[80px]" style={{ background: 'transparent' }}>
                           <NextImage
                             alt={activeModalContent.imageAlt ?? 'Modal illustration'}
                             className="h-full w-full object-contain"
