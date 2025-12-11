@@ -1,9 +1,0 @@
-import * as React from 'react';
-
-const HCHollowOrangeDiamond2 = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="1127" height="662" fill="none"><path stroke="#F79421" stroke-miterlimit="10" stroke-width="6.559" d="M509.803 25.333 25.336 509.801c-29.405 29.405-29.405 77.079 0 106.484l484.467 484.465c29.405 29.41 77.08 29.41 106.485 0l484.472-484.465c29.4-29.405 29.4-77.079 0-106.484L616.288 25.333c-29.405-29.405-77.08-29.405-106.485 0Z"/></svg>
-);
-
-HCHollowOrangeDiamond2.displayName = 'HCHollowOrangeDiamond2';
-
-export default HCHollowOrangeDiamond2;
