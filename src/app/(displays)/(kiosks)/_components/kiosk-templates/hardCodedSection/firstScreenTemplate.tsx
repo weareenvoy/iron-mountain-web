@@ -1,36 +1,32 @@
 'use client';
 
-import Image from 'next/image';
 import { Heart, SquarePlay } from 'lucide-react';
+import Image from 'next/image';
+import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
 import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCFilledOrangeDiamond';
 import HCHollowBlueDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollowBlueDiamond';
 import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollowOrangeDiamond';
-import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
 
 const defaultHeroImageSrc = '/images/kiosks/kiosk1/04-custom-interactive/CU-Image1-Diamond.png';
 const defaultEyebrow = ['Rich media &', 'cultural heritage'];
-const defaultHeadline = [
-  'Learn more about how we',
-  'unlocked new possibilities',
-  'for our partners',
-];
+const defaultHeadline = ['Learn more about how we', 'unlocked new possibilities', 'for our partners'];
 const defaultPrimaryCtaLabel = 'From archive to access';
 const defaultSecondaryCtaLabel = 'Virtual walkthrough';
 const defaultSaveForLaterLabel = 'Save for later';
 
 export interface HardCodedKiosk1FirstScreenTemplateProps {
-  backgroundEndColor?: string;
-  backgroundStartColor?: string;
-  eyebrow?: string | string[];
-  headline?: string | string[];
-  kioskId?: 'kiosk-1' | 'kiosk-3';
-  heroImageAlt?: string;
-  heroImageSrc?: string;
-  onPrimaryCta?: () => void;
-  onSecondaryCta?: () => void;
-  primaryCtaLabel?: string;
-  saveForLaterLabel?: string;
-  secondaryCtaLabel?: string;
+  readonly backgroundEndColor?: string;
+  readonly backgroundStartColor?: string;
+  readonly eyebrow?: string | string[];
+  readonly headline?: string | string[];
+  readonly heroImageAlt?: string;
+  readonly heroImageSrc?: string;
+  readonly kioskId?: 'kiosk-1' | 'kiosk-3';
+  readonly onPrimaryCta?: () => void;
+  readonly onSecondaryCta?: () => void;
+  readonly primaryCtaLabel?: string;
+  readonly saveForLaterLabel?: string;
+  readonly secondaryCtaLabel?: string;
 }
 
 const gradientDefaults = {
@@ -43,9 +39,10 @@ const ArrowIcon = () => (
     aria-hidden="true"
     className="h-[61px] w-[126px]"
     fill="none"
+    height="61"
     viewBox="0 0 126 61"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+    width="126"
+    xmlns="http://www.w3.org/2000/svg">
     <path
       d="M3 30.5h120M94.5 6l24 24.5-24 24.5"
       stroke="#14477d"
@@ -56,7 +53,7 @@ const ArrowIcon = () => (
   </svg>
 );
 
-export default function HardCodedKiosk1FirstScreenTemplate({
+const HardCodedKiosk1FirstScreenTemplate = ({
   backgroundEndColor = gradientDefaults.backgroundEndColor,
   backgroundStartColor = gradientDefaults.backgroundStartColor,
   eyebrow = defaultEyebrow,
@@ -69,7 +66,7 @@ export default function HardCodedKiosk1FirstScreenTemplate({
   primaryCtaLabel = defaultPrimaryCtaLabel,
   saveForLaterLabel = defaultSaveForLaterLabel,
   secondaryCtaLabel = defaultSecondaryCtaLabel,
-}: HardCodedKiosk1FirstScreenTemplateProps) {
+}: HardCodedKiosk1FirstScreenTemplateProps) => {
   const eyebrowText = Array.isArray(eyebrow) ? eyebrow.join('\n') : eyebrow;
   const headlineText = Array.isArray(headline) ? headline.join('\n') : headline;
   const isKiosk3 = kioskId === 'kiosk-3';
@@ -78,10 +75,7 @@ export default function HardCodedKiosk1FirstScreenTemplate({
   const secondaryIconOffset = isKiosk3 ? 'left-[-330px]' : 'left-[-70px]';
 
   return (
-    <div
-      className="relative flex h-screen w-full flex-col overflow-hidden"
-      data-node-id="5893:7411"
-    >
+    <div className="relative flex h-screen w-full flex-col overflow-hidden" data-node-id="5893:7411">
       <div
         className="absolute inset-0"
         style={{
@@ -90,12 +84,12 @@ export default function HardCodedKiosk1FirstScreenTemplate({
       />
 
       {/* Eyebrow */}
-      <div className="absolute left-[120px] top-[200px] text-[60px] font-normal leading-[1.4] tracking-[-3px] text-[#ededed] whitespace-pre-line">
+      <div className="absolute top-[200px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
         {renderRegisteredMark(eyebrowText)}
       </div>
 
       {/* Headline */}
-      <div className="absolute left-[250px] top-[1250px] w-full text-[100px] font-normal leading-[1.3] tracking-[-5px] text-[#ededed] whitespace-pre-line">
+      <div className="absolute top-[1250px] left-[250px] w-full text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]">
         {renderRegisteredMark(headlineText)}
       </div>
 
@@ -137,13 +131,7 @@ export default function HardCodedKiosk1FirstScreenTemplate({
 
       {/* Hero diamond image */}
       <div className="pointer-events-none absolute left-[1100px] bottom-[160px] h-[1380px] w-[1380px] rotate-[45deg] overflow-hidden rounded-[140px]">
-        <Image
-          alt={heroImageAlt}
-          className="-rotate-[45deg] object-cover"
-          src={heroImageSrc}
-          fill
-          sizes="680px"
-        />
+        <Image alt={heroImageAlt} className="-rotate-[45deg] object-cover" fill sizes="680px" src={heroImageSrc} />
       </div>
 
       {/* Decorative diamonds */}
@@ -152,4 +140,6 @@ export default function HardCodedKiosk1FirstScreenTemplate({
       <HCHollowOrangeDiamond className="pointer-events-none absolute left-[500px] bottom-[410px] h-[340px] w-[340px] overflow-visible" />
     </div>
   );
-}
+};
+
+export default HardCodedKiosk1FirstScreenTemplate;
