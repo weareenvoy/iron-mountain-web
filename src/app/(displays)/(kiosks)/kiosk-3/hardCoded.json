@@ -29,10 +29,7 @@
       }
     ],
     "eyebrow": ["Rich media &", "cultural heritage"],
-    "headline": [
-      "Learn more about how we unlocked new possibilities",
-      "for our partners"
-    ],
+    "headline": ["Learn more about how we unlocked new possibilities", "for our partners"],
     "heroImageAlt": "Visitors review digital experiences",
     "heroImageSrc": "http://localhost:3845/assets/3a4d46cd05506bd4cd1111ed8cd2d3dfe9681cd9.png",
     "primaryCtaLabel": "Centralized management of services",
@@ -151,13 +148,7 @@
       "heroImageAlt": "Developer portal UI",
       "heroImageSrc": "http://localhost:3845/assets/bbb0c30a6c52c72ecfe10371a7001daf550a68d1.svg",
       "sectionHeadline": "Developer enablement",
-      "steps": [
-        "API key lifecycle",
-        "Sandbox datasets",
-        "Webhook testing",
-        "SDK distribution",
-        "Usage analytics"
-      ],
+      "steps": ["API key lifecycle", "Sandbox datasets", "Webhook testing", "SDK distribution", "Usage analytics"],
       "subheadline": "Give platform teams a ready-to-use build kit.",
       "tapIndicatorLabel": "05"
     },
@@ -188,5 +179,3 @@
     "headline": ["Section title lorem ipsum", "dolor sit."]
   }
 }
-
-

@@ -29,10 +29,7 @@
       }
     ],
     "eyebrow": ["Rich media &", "cultural heritage"],
-    "headline": [
-      "Learn more about how we unlocked new possibilities",
-      "for our partners"
-    ],
+    "headline": ["Learn more about how we unlocked new possibilities", "for our partners"],
     "heroImageAlt": "Visitors review digital media inside the Grammy Museum",
     "heroImageSrc": "http://localhost:3845/assets/3a4d46cd05506bd4cd1111ed8cd2d3dfe9681cd9.png",
     "primaryCtaLabel": "From archive to access",
@@ -151,5 +148,3 @@
     "headline": ["Section title lorem ipsum", "dolor sit."]
   }
 }
-
-
