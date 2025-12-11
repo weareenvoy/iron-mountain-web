@@ -70,6 +70,8 @@ const SolutionThirdScreenTemplate = ({
   topLeftLabel,
   topRightLabel,
 }: SolutionThirdScreenTemplateProps) => {
+  const isKiosk1 = kioskId === 'kiosk-1';
+  const accentDiamondImageSrc = isKiosk1 ? undefined : accentDiamondSrc;
   type TextDiamondConfig = {
     className: string;
     label?: string;
@@ -182,9 +184,9 @@ const SolutionThirdScreenTemplate = ({
           sizeClass="size-[900px]"
         />
         <FilledDiamond
-          className="top-[605px] left-[1285px] rotate-[45deg] group-data-[kiosk=kiosk-1]/kiosk:top-[650px] group-data-[kiosk=kiosk-1]/kiosk:left-[1330px]"
+          className="top-[605px] left-[1285px] rotate-[45deg] group-data-[kiosk=kiosk-1]/kiosk:top-[650px] group-data-[kiosk=kiosk-1]/kiosk:left-[1330px] group-data-[kiosk=kiosk-1]/kiosk:rotate-0"
           imageAlt="Accent gradient diamond"
-          imageSrc={accentDiamondSrc}
+          imageSrc={accentDiamondImageSrc}
         />
       </div>
 
