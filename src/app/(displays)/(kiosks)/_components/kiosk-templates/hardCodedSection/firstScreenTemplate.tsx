@@ -42,7 +42,8 @@ const ArrowIcon = () => (
     height="61"
     viewBox="0 0 126 61"
     width="126"
-    xmlns="http://www.w3.org/2000/svg">
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <path
       d="M3 30.5h120M94.5 6l24 24.5-24 24.5"
       stroke="#14477d"
@@ -94,15 +95,15 @@ const HardCodedKiosk1FirstScreenTemplate = ({
       </div>
 
       {/* Save for later */}
-      <div className="absolute left-[230px] top-[1890px] flex items-center gap-[32px] text-[52px] font-normal leading-[1.4] tracking-[-2.6px] text-[#ededed]">
+      <div className="absolute top-[1890px] left-[230px] flex items-center gap-[32px] text-[52px] leading-[1.4] font-normal tracking-[-2.6px] text-[#ededed]">
         <Heart aria-hidden className="h-[90px] w-[90px]" color="#ededed" strokeWidth={3} />
         <p>{renderRegisteredMark(saveForLaterLabel)}</p>
       </div>
 
       {/* CTA buttons */}
-      <div className={`absolute left-[245px] top-[2220px] flex flex-col gap-[90px] ${ctaWidthClass}`}>
+      <div className={`absolute top-[2220px] left-[245px] flex flex-col gap-[90px] ${ctaWidthClass}`}>
         <button
-          className="flex h-[200px] items-center justify-between rounded-[999px] bg-[#ededed] px-[100px] text-[60px] font-normal leading-[1.2] tracking-[-1.8px] text-[#14477d] transition-transform duration-150 hover:scale-[1.01] shadow-[0_20px_60px_rgba(0,0,0,0.25)]"
+          className="flex h-[200px] items-center justify-between rounded-[999px] bg-[#ededed] px-[100px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-[#14477d] shadow-[0_20px_60px_rgba(0,0,0,0.25)] transition-transform duration-150 hover:scale-[1.01]"
           onClick={onPrimaryCta}
           type="button"
         >
@@ -110,7 +111,7 @@ const HardCodedKiosk1FirstScreenTemplate = ({
           <ArrowIcon />
         </button>
         <button
-          className="flex h-[200px] items-center justify-between rounded-[999px] px-[100px] text-[60px] font-normal leading-[1.2] tracking-[-1.8px] text-white transition-transform duration-150 hover:scale-[1.01] shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px]"
+          className="flex h-[200px] items-center justify-between rounded-[999px] px-[100px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-transform duration-150 hover:scale-[1.01]"
           onClick={onSecondaryCta}
           style={{
             background: 'linear-gradient(296deg, #A2115E 28.75%, #8A0D71 82.59%)',
@@ -130,14 +131,14 @@ const HardCodedKiosk1FirstScreenTemplate = ({
       </div>
 
       {/* Hero diamond image */}
-      <div className="pointer-events-none absolute left-[1100px] bottom-[160px] h-[1380px] w-[1380px] rotate-[45deg] overflow-hidden rounded-[140px]">
+      <div className="pointer-events-none absolute bottom-[160px] left-[1100px] h-[1380px] w-[1380px] rotate-[45deg] overflow-hidden rounded-[140px]">
         <Image alt={heroImageAlt} className="-rotate-[45deg] object-cover" fill sizes="680px" src={heroImageSrc} />
       </div>
 
       {/* Decorative diamonds */}
-      <HCHollowBlueDiamond className="pointer-events-none absolute left-[510px] bottom-[1400px] h-[520px] w-[520px] overflow-visible" />
-      <HCFilledOrangeDiamond className="pointer-events-none absolute left-[280px] bottom-[640px] h-[420px] w-[800px]" />
-      <HCHollowOrangeDiamond className="pointer-events-none absolute left-[500px] bottom-[410px] h-[340px] w-[340px] overflow-visible" />
+      <HCHollowBlueDiamond className="pointer-events-none absolute bottom-[1400px] left-[510px] h-[520px] w-[520px] overflow-visible" />
+      <HCFilledOrangeDiamond className="pointer-events-none absolute bottom-[640px] left-[280px] h-[420px] w-[800px]" />
+      <HCHollowOrangeDiamond className="pointer-events-none absolute bottom-[410px] left-[500px] h-[340px] w-[340px] overflow-visible" />
     </div>
   );
 };

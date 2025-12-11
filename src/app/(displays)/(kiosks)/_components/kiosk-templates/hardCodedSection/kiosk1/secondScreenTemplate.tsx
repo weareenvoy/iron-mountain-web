@@ -1,20 +1,16 @@
 'use client';
 
-import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from '@/components/shadcn/carousel';
-import NextImage from 'next/image';
-import HCBlueDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCBlueDiamond';
-import HCWhiteDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCWhiteDiamond';
 import { ArrowLeft, ChevronLeft, ChevronRight, CirclePlus } from 'lucide-react';
+import NextImage from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/shadcn/carousel';
+import HCBlueDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCBlueDiamond';
+import HCWhiteDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCWhiteDiamond';
 
 type ModalContent = {
-  body: string | readonly string[];
+  body: readonly string[] | string;
   heading: string;
   imageAlt?: string;
   imageSrc?: string;
@@ -25,26 +21,26 @@ type Step = {
   modal?: Partial<ModalContent>;
 };
 
-type EmblaApi = {
-  off: (...args: unknown[]) => void;
-  on: (...args: unknown[]) => void;
-  rootNode?: () => HTMLElement;
-  selectedScrollSnap: () => number;
-  scrollNext?: () => void;
-  scrollPrev?: () => void;
-  canScrollNext?: () => boolean;
-  canScrollPrev?: () => boolean;
-  scrollTo?: (index: number, jump?: boolean) => void;
-};
-
 export type HardCodedKiosk1SecondScreenTemplateProps = Readonly<{
   backgroundEndColor?: string;
   backgroundStartColor?: string;
-  eyebrow?: string | string[];
-  headline?: string | string[];
+  eyebrow?: readonly string[] | string;
+  headline?: readonly string[] | string;
   onBack?: () => void;
   steps?: readonly Step[];
 }>;
+
+type EmblaApi = {
+  canScrollNext?: () => boolean;
+  canScrollPrev?: () => boolean;
+  off: (...args: unknown[]) => void;
+  on: (...args: unknown[]) => void;
+  rootNode?: () => HTMLElement;
+  scrollNext?: () => void;
+  scrollPrev?: () => void;
+  scrollTo?: (index: number, jump?: boolean) => void;
+  selectedScrollSnap: () => number;
+};
 
 const defaultSteps: readonly Step[] = [
   {
@@ -118,16 +114,16 @@ const textDefaults = {
   headline: ['From archive', 'to access'],
 };
 
-const normalizeText = (value?: string | string[]) => (Array.isArray(value) ? value.join('\n') : value);
+const normalizeText = (value?: string | readonly string[]) => (Array.isArray(value) ? value.join('\n') : value);
 
-export default function HardCodedKiosk1SecondScreenTemplate({
+const HardCodedKiosk1SecondScreenTemplate = ({
   backgroundEndColor = gradientDefaults.backgroundEndColor,
   backgroundStartColor = gradientDefaults.backgroundStartColor,
   eyebrow = textDefaults.eyebrow,
   headline = textDefaults.headline,
   onBack,
   steps = defaultSteps,
-}: HardCodedKiosk1SecondScreenTemplateProps) {
+}: HardCodedKiosk1SecondScreenTemplateProps) => {
   const eyebrowText = normalizeText(eyebrow);
   const headlineText = normalizeText(headline);
   const headlineWithForcedBreak = headlineText?.replace(/archive\s+/i, "archive\n") ?? headlineText;
@@ -492,4 +488,6 @@ export default function HardCodedKiosk1SecondScreenTemplate({
         : null}
     </>
   );
-}
+};
+
+export default HardCodedKiosk1SecondScreenTemplate;
