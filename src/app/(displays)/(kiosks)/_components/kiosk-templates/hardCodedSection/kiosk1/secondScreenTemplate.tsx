@@ -426,32 +426,36 @@ export default function HardCodedKiosk1SecondScreenTemplate({
         ? createPortal(
             <div className="absolute inset-0 z-[200] flex items-center justify-center" style={{ pointerEvents: 'auto' }}>
               <div className="absolute inset-0 bg-black/60 backdrop-blur-[30px]" onClick={() => setOpenModalIndex(null)} />
-              <div className="relative z-[201] flex max-h-[90vh] w-[90vw] max-w-[1400px] flex-col overflow-hidden rounded-[48px] bg-[#97e9ff] p-[80px] text-[#14477d] shadow-[0_40px_120px_rgba(0,0,0,0.45)]">
+              <div
+                className="relative z-[201] flex max-h-[90vh] w-[90vw] flex-col overflow-hidden rounded-[48px] bg-[#97e9ff] p-[80px] text-[#14477d] shadow-[0_40px_120px_rgba(0,0,0,0.45)]"
+                style={{ width: '1920px', height: '2800px' }}
+              >
                 <div className="flex items-center justify-between">
                   <button
-                    className="flex h-[100px] items-center gap-[24px] rounded-[1000px] bg-[#ededed] px-[60px] text-[36px] font-normal leading-[1.4] tracking-[-1.8px] text-[#14477d] transition hover:scale-[1.02]"
+                    className="relative flex h-[200px] items-center gap-[24px] rounded-[1000px] bg-[#ededed] px-[75px] text-[55px] font-normal leading-[1.4] tracking-[-2.7px] text-[#14477d] transition hover:scale-[1.02]"
                     onClick={() => setOpenModalIndex(null)}
                     type="button"
+                    style={{ top: '45px', left: '60px', paddingRight: '100px' }}
                   >
-                    <span className="flex h-[44px] w-[44px] items-center justify-center rounded-full border border-[#14477d]">
-                      <svg
-                        aria-hidden="true"
-                        className="h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path d="M15 6l-6 6 6 6" stroke="#14477d" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                      </svg>
+                    <span className="flex items-center justify-center">
+                      <ArrowLeft aria-hidden className="h-[52px] w-[52px] mr-[30px]" color="#14477d" strokeWidth={2} />
                     </span>
                     Back
                   </button>
                 </div>
 
                 <div className="mt-[80px] grid gap-[80px] text-[#14477d]">
-                  <div className="max-w-[1100px] space-y-[60px]">
-                    <h2 className="text-[72px] font-normal leading-[1.25] tracking-[-3.6px]">{activeModalContent.heading}</h2>
-                    <div className="space-y-[32px] text-[36px] font-normal leading-[1.4] tracking-[-1.8px]">
+                  <div className="space-y-[60px]" style={{ position: 'relative', top: '150px', left: '45px' }}>
+                    <h2
+                      className="text-[72px] font-normal leading-[1.25] tracking-[-3.6px]"
+                      style={{ fontSize: '100px', letterSpacing: '-5px', lineHeight: '1.3', marginBottom: '105px' }}
+                    >
+                      {activeModalContent.heading}
+                    </h2>
+                    <div
+                      className="space-y-[32px] text-[36px] font-normal leading-[1.4] tracking-[-1.8px]"
+                      style={{ fontSize: '60px', lineHeight: '1.4', letterSpacing: '-3px', width: '1170px' }}
+                    >
                       {activeModalBody?.map((line, idx) => (
                         <p key={idx} className="whitespace-pre-line">
                           {line}
@@ -462,14 +466,17 @@ export default function HardCodedKiosk1SecondScreenTemplate({
 
                   {activeModalContent.imageSrc ? (
                     <div className="flex items-center justify-center">
-                      <div className="relative h-[540px] w-[540px] rotate-[45deg] rounded-[100px] border-[8px] border-[#ededed]/80 bg-[#5ad2ff]">
-                        <div className="absolute inset-[40px] -rotate-[45deg] flex items-center justify-center rounded-[80px] bg-white/10">
+                      <div
+                        className="relative rotate-[45deg] rounded-[80px]"
+                        style={{ height: '1680px', width: '1680px', top: '130px', background: 'transparent', border: 'none' }}
+                      >
+                        <div className="absolute inset-0 -rotate-[45deg] flex items-center justify-center rounded-[80px] bg-white/10">
                           <NextImage
-                            alt={activeModalContent.imageAlt ?? "Modal illustration"}
-                            className="object-contain"
-                            height={320}
+                            alt={activeModalContent.imageAlt ?? 'Modal illustration'}
+                            className="h-full w-full object-contain"
+                            height={1394}
                             src={activeModalContent.imageSrc}
-                            width={320}
+                            width={1680}
                           />
                         </div>
                       </div>
