@@ -3,15 +3,15 @@
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
 
 export interface HardCodedKiosk3FourthScreenTemplateProps {
-  backgroundEndColor?: string;
-  backgroundStartColor?: string;
-  cardBackgroundColor?: string;
-  cardHeight?: number;
-  cardLabel?: string | string[];
-  cardTextColor?: string;
-  cardWidth?: number;
-  headline?: string | string[];
-  onCta?: () => void;
+  readonly backgroundEndColor?: string;
+  readonly backgroundStartColor?: string;
+  readonly cardBackgroundColor?: string;
+  readonly cardHeight?: number;
+  readonly cardLabel?: string | string[];
+  readonly cardTextColor?: string;
+  readonly cardWidth?: number;
+  readonly headline?: string | string[];
+  readonly onCta?: () => void;
 }
 
 const defaults = {
@@ -25,7 +25,7 @@ const defaults = {
   headline: ['Section title lorem ipsum', 'dolor sit.'],
 };
 
-export default function HardCodedKiosk3FourthScreenTemplate({
+const HardCodedKiosk3FourthScreenTemplate = ({
   backgroundEndColor = defaults.backgroundEndColor,
   backgroundStartColor = defaults.backgroundStartColor,
   cardBackgroundColor = defaults.cardBackgroundColor,
@@ -35,7 +35,7 @@ export default function HardCodedKiosk3FourthScreenTemplate({
   cardWidth = defaults.cardWidth,
   headline = defaults.headline,
   onCta,
-}: HardCodedKiosk3FourthScreenTemplateProps) {
+}: HardCodedKiosk3FourthScreenTemplateProps) => {
   const headlineText = Array.isArray(headline) ? headline.join('\n') : headline;
   const cardText = Array.isArray(cardLabel) ? cardLabel.join('\n') : cardLabel;
 
@@ -49,23 +49,25 @@ export default function HardCodedKiosk3FourthScreenTemplate({
       />
       <div className="absolute inset-0 bg-black/30 backdrop-blur-[50px]" />
 
-      <div className="absolute left-[240px] top-[780px] w-[1680px] text-[100px] font-normal leading-[1.3] tracking-[-5px] text-white whitespace-pre-line">
+      <div className="absolute top-[780px] left-[240px] w-[1680px] text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-white">
         {renderRegisteredMark(headlineText)}
       </div>
 
       <div
-        className="absolute left-[120px] top-[1290px] rounded-[20px] shadow-[0_40px_120px_rgba(0,0,0,0.45)]"
-        style={{ height: `${cardHeight}px`, width: `${cardWidth}px`, backgroundColor: cardBackgroundColor }}
+        className="absolute top-[1290px] left-[120px] rounded-[20px] shadow-[0_40px_120px_rgba(0,0,0,0.45)]"
+        style={{ backgroundColor: cardBackgroundColor, height: `${cardHeight}px`, width: `${cardWidth}px` }}
       >
         <button
-          className="flex h-full w-full items-center justify-center rounded-[20px] text-[80px] font-normal leading-[1.3] tracking-[-4px]"
+          className="flex h-full w-full items-center justify-center rounded-[20px] text-[80px] leading-[1.3] font-normal tracking-[-4px]"
           onClick={onCta}
-          type="button"
           style={{ color: cardTextColor }}
+          type="button"
         >
           {renderRegisteredMark(cardText)}
         </button>
       </div>
     </div>
   );
-}
+};
+
+export default HardCodedKiosk3FourthScreenTemplate;

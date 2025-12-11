@@ -1,7 +1,7 @@
 'use client';
 
-import hardCodedContent from '@public/api/kiosk-1-hardcoded.json';
 import challengeContent from '@public/api/kiosk-1-challenges.json';
+import hardCodedContent from '@public/api/kiosk-1-hardcoded.json';
 import solutionContent from '@public/api/kiosk-1-solutions.json';
 import valueContent from '@public/api/kiosk-1-values.json';
 import { useEffect, useState, type ReactElement } from 'react';
@@ -36,8 +36,6 @@ import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(ki
 import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 // import styles from './kiosk-1.module.css';
 
-
-
 type Slide = { id: string; render: () => ReactElement; title: string };
 
 type SolutionSlidesConfig = {
@@ -56,7 +54,6 @@ type HardCodedSlidesConfig = {
   secondScreen?: HardCodedKiosk1SecondScreenTemplateProps;
   thirdScreen?: HardCodedKiosk1ThirdScreenTemplateProps;
 };
-
 
 const formatTitle = (value: string | string[] | undefined, fallback: string) =>
   Array.isArray(value) ? value.join(' ') : (value ?? fallback);
@@ -205,7 +202,6 @@ const Kiosk1View = () => {
       title: 'Hardcoded Third',
     },
   ];
-
 
   const slides = [...challengeSlides, ...solutionSlides, ...valueSlides, ...hardCodedSlides];
 

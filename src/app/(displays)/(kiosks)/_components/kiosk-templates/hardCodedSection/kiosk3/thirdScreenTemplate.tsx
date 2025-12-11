@@ -1,8 +1,9 @@
 'use client';
 
+import { ChevronLeft, ChevronRight, SquarePlay } from 'lucide-react';
 import Image from 'next/image';
-import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, SquarePlay } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
+import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
 import HCBlueFilledDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCBlueFilledDiamond';
 import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCFilledOrangeDiamond';
 import HCFilledOrangeDiamond2 from '@/components/ui/icons/Kiosks/HardCoded/HCFilledOrangeDiamond2';
@@ -10,27 +11,26 @@ import HCFilledTealDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCFilled
 import HCHollowBlueDiamond2 from '@/components/ui/icons/Kiosks/HardCoded/HCHollowBlueDiamond2';
 import HCHollowGreenDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollowGreenDiamond';
 import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollowOrangeDiamond';
-import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
+
+export interface HardCodedKiosk3ThirdScreenTemplateProps {
+  readonly backgroundEndColor?: string;
+  readonly backgroundStartColor?: string;
+  readonly headline?: string | string[];
+  readonly slides?: CarouselSlide[];
+}
 
 type CarouselSlide = {
   bullets: string[];
+  eyebrow?: string | string[];
+  headline?: string | string[];
   id: string;
-  sectionTitle: string | string[];
   primaryImageAlt: string;
   primaryImageSrc: string;
   primaryVideoSrc?: string;
   secondaryImageAlt: string;
   secondaryImageSrc?: string;
-  eyebrow?: string | string[];
-  headline?: string | string[];
+  sectionTitle: string | string[];
 };
-
-export interface HardCodedKiosk3ThirdScreenTemplateProps {
-  backgroundEndColor?: string;
-  backgroundStartColor?: string;
-  headline?: string | string[];
-  slides?: CarouselSlide[];
-}
 
 const defaultHeadline = ['Centralized management', 'of services via API'];
 
@@ -115,45 +115,39 @@ const defaultSlides: CarouselSlide[] = [
   },
 ];
 
-export default function HardCodedKiosk3ThirdScreenTemplate({
+const HardCodedKiosk3ThirdScreenTemplate = ({
   backgroundEndColor = '#0a2f5c',
   backgroundStartColor = '#1b75bc',
   headline = defaultHeadline,
   slides = defaultSlides,
-}: HardCodedKiosk3ThirdScreenTemplateProps) {
+}: HardCodedKiosk3ThirdScreenTemplateProps) => {
   const [index, setIndex] = useState(0);
 
-  const total = slides.length;
-  const current = slides[index] ?? slides[0] ?? defaultSlides[0];
-  const isSlide2 = current?.id === 'slide-2';
-  const isSlide5 = current?.id === 'slide-5';
-  const isSlide3 = current?.id === 'slide-3';
-  const isSlide6 = current?.id === 'slide-6';
-  const primaryDiamondClass = isSlide2 || isSlide5
-    ? 'absolute left-[510px] bottom-[670px] h-[1200px] w-[1200px] rotate-[45deg] overflow-hidden rounded-[90px] shadow-[0_30px_90px_rgba(0,0,0,0.35)]'
-    : isSlide3 || isSlide6
-      ? 'absolute left-[340px] bottom-[340px] h-[1130px] w-[1130px] rotate-[45deg] overflow-hidden rounded-[90px] shadow-[0_30px_90px_rgba(0,0,0,0.35)]'
-      : 'absolute left-[700px] bottom-[1120px] h-[830px] w-[830px] rotate-[45deg] overflow-hidden rounded-[90px] shadow-[0_30px_90px_rgba(0,0,0,0.35)]';
-  const secondaryDiamondClass = isSlide3 || isSlide6
-    ? 'absolute left-[1390px] bottom-[1150px] h-[800px] w-[800px] rotate-[45deg] overflow-hidden rounded-[80px] shadow-[0_24px_70px_rgba(0,0,0,0.32)]'
-    : 'absolute left-[1380px] bottom-[400px] h-[880px] w-[880px] rotate-[45deg] overflow-hidden rounded-[80px] shadow-[0_24px_70px_rgba(0,0,0,0.32)]';
+  const safeSlides = slides.length > 0 ? slides : defaultSlides;
+  const total = safeSlides.length || defaultSlides.length;
+  const currentIndex = total > 0 ? index % total : 0;
+  const current = (safeSlides[currentIndex] ?? defaultSlides[0])!;
+  const isSlide2 = current.id === 'slide-2';
+  const isSlide5 = current.id === 'slide-5';
+  const isSlide3 = current.id === 'slide-3';
+  const isSlide6 = current.id === 'slide-6';
+  const primaryDiamondClass =
+    isSlide2 || isSlide5
+      ? 'absolute left-[510px] bottom-[670px] h-[1200px] w-[1200px] rotate-[45deg] overflow-hidden rounded-[90px] shadow-[0_30px_90px_rgba(0,0,0,0.35)]'
+      : isSlide3 || isSlide6
+        ? 'absolute left-[340px] bottom-[340px] h-[1130px] w-[1130px] rotate-[45deg] overflow-hidden rounded-[90px] shadow-[0_30px_90px_rgba(0,0,0,0.35)]'
+        : 'absolute left-[700px] bottom-[1120px] h-[830px] w-[830px] rotate-[45deg] overflow-hidden rounded-[90px] shadow-[0_30px_90px_rgba(0,0,0,0.35)]';
+  const secondaryDiamondClass =
+    isSlide3 || isSlide6
+      ? 'absolute left-[1390px] bottom-[1150px] h-[800px] w-[800px] rotate-[45deg] overflow-hidden rounded-[80px] shadow-[0_24px_70px_rgba(0,0,0,0.32)]'
+      : 'absolute left-[1380px] bottom-[400px] h-[880px] w-[880px] rotate-[45deg] overflow-hidden rounded-[80px] shadow-[0_24px_70px_rgba(0,0,0,0.32)]';
 
-  const headlineText = useMemo(
-    () => (Array.isArray(headline) ? headline.join('\n') : headline ?? ''),
-    [headline]
-  );
+  const headlineText = Array.isArray(headline) ? headline.join('\n') : headline;
+  const eyebrowText = Array.isArray(current.eyebrow) ? current.eyebrow.join('\n') : current.eyebrow;
+  const sectionTitle = Array.isArray(current.sectionTitle) ? current.sectionTitle.join('\n') : current.sectionTitle;
 
-  const eyebrowText = useMemo(
-    () => (Array.isArray(current?.eyebrow) ? current.eyebrow.join('\n') : current?.eyebrow ?? ''),
-    [current?.eyebrow]
-  );
-  const sectionTitle = useMemo(
-    () => (Array.isArray(current?.sectionTitle) ? current.sectionTitle.join('\n') : current?.sectionTitle ?? ''),
-    [current?.sectionTitle]
-  );
-
-  const goNext = () => setIndex((i) => (i + 1) % total);
-  const goPrev = () => setIndex((i) => (i - 1 + total) % total);
+  const goNext = () => setIndex(i => (i + 1) % total);
+  const goPrev = () => setIndex(i => (i - 1 + total) % total);
 
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden" data-node-id="5896:13360">
@@ -164,26 +158,28 @@ export default function HardCodedKiosk3ThirdScreenTemplate({
       <div className="absolute inset-0 bg-black/15 backdrop-blur-[12px]" />
 
       {/* Eyebrow */}
-      <div className="absolute left-[120px] top-[240px] text-[57px] font-normal leading-[1.5] tracking-[-1.8px] text-[#ededed] whitespace-pre-line">
+      <div className="absolute top-[240px] left-[120px] text-[57px] leading-[1.5] font-normal tracking-[-1.8px] whitespace-pre-line text-[#ededed]">
         {renderRegisteredMark(eyebrowText)}
       </div>
 
       {/* Main headline */}
-      <div className="absolute left-[240px] top-[830px] max-w-[1200px] text-[100px] font-semibold leading-[1.2] tracking-[-5px] text-white whitespace-pre-line">
+      <div className="absolute top-[830px] left-[240px] max-w-[1200px] text-[100px] leading-[1.2] font-semibold tracking-[-5px] whitespace-pre-line text-white">
         {renderRegisteredMark(headlineText)}
       </div>
 
       {/* Data configuration + bullets */}
-      <div className="absolute left-[240px] top-[1650px] max-w-[920px] space-y-[36px] text-white">
-        <h2 className="text-[78px] font-semibold leading-[1.2] tracking-[-2.7px]">{renderRegisteredMark(sectionTitle)}</h2>
-        <ul className="space-y-[22px] text-[38px] font-normal leading-[1.3] tracking-[-2px] text-white mt-[110px] ml-[60px] tracking-[-4.3px]">
-          {current?.bullets.map((item, i) => (
+      <div className="absolute top-[1650px] left-[240px] max-w-[920px] space-y-[36px] text-white">
+        <h2 className="text-[78px] leading-[1.2] font-semibold tracking-[-2.7px]">
+          {renderRegisteredMark(sectionTitle)}
+        </h2>
+        <ul className="mt-[110px] ml-[60px] space-y-[22px] text-[38px] leading-[1.3] font-normal tracking-[-2px] tracking-[-4.3px] text-white">
+          {current.bullets.map((item, i) => (
             <li
-              key={`${current?.id}-bullet-${i}`}
               className="flex items-start gap-[16px] text-[64px]"
+              key={`${current.id}-bullet-${i}`}
               style={{ width: '1100px' }}
             >
-              <span className="inline-block h-[35px] w-[35px] rotate-[45deg] rounded-[4px] border border-white/80 ml-[-50px] mr-[40px] mt-[20px]" />
+              <span className="mt-[20px] mr-[40px] ml-[-50px] inline-block h-[35px] w-[35px] rotate-[45deg] rounded-[4px] border border-white/80" />
               <span>{renderRegisteredMark(item)}</span>
             </li>
           ))}
@@ -192,7 +188,7 @@ export default function HardCodedKiosk3ThirdScreenTemplate({
 
       {/* CTA */}
       <button
-        className="absolute left-[240px] top-[2630px] flex h-[200px] items-center gap-[18px] rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[110px] text-[55px] font-semibold leading-[1.1] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)]"
+        className="absolute top-[2630px] left-[240px] flex h-[200px] items-center gap-[18px] rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[110px] text-[55px] leading-[1.1] font-semibold text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)]"
         style={{ letterSpacing: '2px' }}
         type="button"
       >
@@ -201,29 +197,29 @@ export default function HardCodedKiosk3ThirdScreenTemplate({
       </button>
 
       {/* Circle carousel control */}
-      <div className="absolute right-[120px] top-[1670px] h-[520px] w-[520px]">
+      <div className="absolute top-[1670px] right-[120px] h-[520px] w-[520px]">
         <div className="relative h-full w-full">
           <div className="absolute inset-0 rounded-full border-[8px] border-[#6dcff6]/70" />
           <div className="absolute inset-[18px] rounded-full border-[12px] border-transparent" />
           <div className="absolute inset-[44px] rounded-full border-[6px] border-transparent" />
 
-          <div className="absolute inset-0 flex items-center justify-center text-white text-[60px] font-semibold leading-[1.4] tracking-[-3px]">
+          <div className="absolute inset-0 flex items-center justify-center text-[60px] leading-[1.4] font-semibold tracking-[-3px] text-white">
             {String(index + 1).padStart(2, '0')}
           </div>
 
           {/* Dots */}
           {[
-            { top: '0%', left: '50%' },
-            { top: '28%', left: '95%' },
-            { top: '73%', left: '94%' },
-            { top: '100%', left: '52%' },
-            { top: '73%', left: '7%' },
-            { top: '27%', left: '7%' },
+            { left: '50%', top: '0%' },
+            { left: '95%', top: '28%' },
+            { left: '94%', top: '73%' },
+            { left: '52%', top: '100%' },
+            { left: '7%', top: '73%' },
+            { left: '7%', top: '27%' },
           ].map((pos, i) => (
             <div
-              key={i}
               className="absolute"
-              style={{ top: pos.top, left: pos.left, transform: 'translate(-50%, -50%)' }}
+              key={i}
+              style={{ left: pos.left, top: pos.top, transform: 'translate(-50%, -50%)' }}
             >
               <div className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]" />
             </div>
@@ -232,7 +228,7 @@ export default function HardCodedKiosk3ThirdScreenTemplate({
           {/* Arrows */}
           <button
             aria-label="Previous slide"
-            className="absolute left-[100px] top-1/2 flex h-[102px] w-[102px] -translate-y-1/2 items-center justify-center transition hover:opacity-80"
+            className="absolute top-1/2 left-[100px] flex h-[102px] w-[102px] -translate-y-1/2 items-center justify-center transition hover:opacity-80"
             onClick={goPrev}
             type="button"
           >
@@ -240,7 +236,7 @@ export default function HardCodedKiosk3ThirdScreenTemplate({
           </button>
           <button
             aria-label="Next slide"
-            className="absolute right-[70px] top-1/2 flex h-[102px] w-[102px] -translate-y-1/2 items-center justify-center transition hover:opacity-80"
+            className="absolute top-1/2 right-[70px] flex h-[102px] w-[102px] -translate-y-1/2 items-center justify-center transition hover:opacity-80"
             onClick={goNext}
             type="button"
           >
@@ -253,33 +249,33 @@ export default function HardCodedKiosk3ThirdScreenTemplate({
       <div className="pointer-events-none absolute inset-0">
         <div className={primaryDiamondClass}>
           <div className="absolute inset-0 -rotate-[45deg]">
-            {current?.primaryVideoSrc ? (
+            {current.primaryVideoSrc ? (
               <video
                 autoPlay
-            className="h-full w-full origin-center scale-[1.35] object-cover"
+                className="h-full w-full origin-center scale-[1.35] object-cover"
                 loop
                 muted
                 playsInline
-                poster={current?.primaryImageSrc ?? defaultSlides[0]?.primaryImageSrc ?? ''}
+                poster={current.primaryImageSrc}
                 src={current.primaryVideoSrc}
               />
             ) : (
               <Image
-                alt={current?.primaryImageAlt ?? 'Primary slide image'}
-                className="object-cover origin-center scale-[1.35]"
+                alt={current.primaryImageAlt || 'Primary slide image'}
+                className="origin-center scale-[1.35] object-cover"
                 fill
                 sizes="830px"
-                src={current?.primaryImageSrc ?? defaultSlides[0]?.primaryImageSrc ?? ''}
+                src={current.primaryImageSrc}
               />
             )}
           </div>
         </div>
-        {current?.secondaryImageSrc && (
+        {current.secondaryImageSrc && (
           <div className={secondaryDiamondClass}>
             <div className="absolute inset-0 -rotate-[45deg]">
               <Image
-                alt={current?.secondaryImageAlt ?? 'Secondary slide image'}
-                className="object-cover origin-center scale-[1.35]"
+                alt={current.secondaryImageAlt || 'Secondary slide image'}
+                className="origin-center scale-[1.35] object-cover"
                 fill
                 sizes="880px"
                 src={current.secondaryImageSrc}
@@ -291,31 +287,32 @@ export default function HardCodedKiosk3ThirdScreenTemplate({
         {/* Decorative diamonds */}
         {isSlide2 || isSlide5 ? (
           <>
-            <HCFilledTealDiamond className="pointer-events-none absolute left-[-20px] bottom-[670px] h-[510px] w-[560px]" />
-            <HCHollowBlueDiamond2 className="pointer-events-none absolute left-[-10px] bottom-[-1560px] h-[2400px] w-[2400px] overflow-visible" />
-            <HCFilledOrangeDiamond2 className="pointer-events-none absolute left-[1100px] bottom-[-1555px] h-[1200px] w-[1200px] overflow-visible rotate-[45deg]" />
-            <HCHollowOrangeDiamond className="pointer-events-none absolute left-[1240px] bottom-[-980px] h-[1800px] w-[1800px] overflow-visible" />
+            <HCFilledTealDiamond className="pointer-events-none absolute bottom-[670px] left-[-20px] h-[510px] w-[560px]" />
+            <HCHollowBlueDiamond2 className="pointer-events-none absolute bottom-[-1560px] left-[-10px] h-[2400px] w-[2400px] overflow-visible" />
+            <HCFilledOrangeDiamond2 className="pointer-events-none absolute bottom-[-1555px] left-[1100px] h-[1200px] w-[1200px] rotate-[45deg] overflow-visible" />
+            <HCHollowOrangeDiamond className="pointer-events-none absolute bottom-[-980px] left-[1240px] h-[1800px] w-[1800px] overflow-visible" />
           </>
         ) : isSlide3 || isSlide6 ? (
           <>
             <HCFilledOrangeDiamond
               className={`pointer-events-none absolute ${
                 isSlide3 || isSlide6
-                  ? 'left-[1880px] bottom-[670px] h-[450px] w-[450px]'
-                  : 'left-[490px] bottom-[590px] h-[510px] w-[560px]'
+                  ? 'bottom-[670px] left-[1880px] h-[450px] w-[450px]'
+                  : 'bottom-[590px] left-[490px] h-[510px] w-[560px]'
               }`}
             />
-            <HCHollowBlueDiamond2 className="pointer-events-none absolute left-[1290px] bottom-[-1650px] h-[2400px] w-[2400px] overflow-visible" />
-            <HCHollowGreenDiamond className="pointer-events-none absolute left-[0px] bottom-[-1240px] h-[1800px] w-[1800px] overflow-visible" />
+            <HCHollowBlueDiamond2 className="pointer-events-none absolute bottom-[-1650px] left-[1290px] h-[2400px] w-[2400px] overflow-visible" />
+            <HCHollowGreenDiamond className="pointer-events-none absolute bottom-[-1240px] left-[0px] h-[1800px] w-[1800px] overflow-visible" />
           </>
         ) : (
           <>
-            <HCBlueFilledDiamond className="pointer-events-none absolute left-[490px] bottom-[590px] h-[510px] w-[560px]" />
-            <HCHollowOrangeDiamond className="pointer-events-none absolute left-[650px] bottom-[-1755px] h-[2400px] w-[2400px] overflow-visible" />
+            <HCBlueFilledDiamond className="pointer-events-none absolute bottom-[590px] left-[490px] h-[510px] w-[560px]" />
+            <HCHollowOrangeDiamond className="pointer-events-none absolute bottom-[-1755px] left-[650px] h-[2400px] w-[2400px] overflow-visible" />
           </>
         )}
       </div>
     </div>
   );
-}
+};
 
+export default HardCodedKiosk3ThirdScreenTemplate;

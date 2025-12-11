@@ -1,18 +1,17 @@
 'use client';
 
-import * as React from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
+import * as React from 'react';
 import { cn } from '@/lib/tailwind/utils/cn';
 
 type EmblaApi = ReturnType<typeof useEmblaCarousel>[1];
 
-type CarouselProps = Readonly<{
-  alignControls?: 'center' | 'between';
-  className?: string;
-  opts?: Parameters<typeof useEmblaCarousel>[0];
-  setApi?: (api: EmblaApi | undefined) => void;
-}> &
-  React.HTMLAttributes<HTMLDivElement>;
+type CarouselProps = React.HTMLAttributes<HTMLDivElement> &
+  Readonly<{
+    className?: string;
+    opts?: Parameters<typeof useEmblaCarousel>[0];
+    setApi?: (api: EmblaApi | undefined) => void;
+  }>;
 
 type CarouselContextValue = {
   readonly api: EmblaApi | undefined;
@@ -33,7 +32,7 @@ export const useCarousel = () => {
 };
 
 export const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
-  ({ alignControls = 'between', children, className, opts, setApi, ...props }, ref) => {
+  ({ children, className, opts, setApi, ...props }, ref) => {
     const [emblaRef, api] = useEmblaCarousel(opts);
     const [canScrollPrev, setCanScrollPrev] = React.useState(false);
     const [canScrollNext, setCanScrollNext] = React.useState(false);
@@ -77,9 +76,9 @@ CarouselContent.displayName = 'CarouselContent';
 
 type CarouselItemProps = React.HTMLAttributes<HTMLDivElement>;
 
-export const CarouselItem = React.forwardRef<HTMLDivElement, CarouselItemProps>(
-  ({ className, ...props }, ref) => <div className={cn('min-w-0 shrink-0 grow-0 pl-4', className)} ref={ref} {...props} />
-);
+export const CarouselItem = React.forwardRef<HTMLDivElement, CarouselItemProps>(({ className, ...props }, ref) => (
+  <div className={cn('min-w-0 shrink-0 grow-0 pl-4', className)} ref={ref} {...props} />
+));
 CarouselItem.displayName = 'CarouselItem';
 
 type CarouselButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
@@ -89,7 +88,7 @@ const baseButtonClasses =
 
 export const CarouselPrevious = React.forwardRef<HTMLButtonElement, CarouselButtonProps>(
   ({ className, disabled, ...props }, ref) => {
-    const { scrollPrev, canScrollPrev } = useCarousel();
+    const { canScrollPrev, scrollPrev } = useCarousel();
     const isDisabled = disabled ?? !canScrollPrev;
     return (
       <button
@@ -110,7 +109,7 @@ CarouselPrevious.displayName = 'CarouselPrevious';
 
 export const CarouselNext = React.forwardRef<HTMLButtonElement, CarouselButtonProps>(
   ({ className, disabled, ...props }, ref) => {
-    const { scrollNext, canScrollNext } = useCarousel();
+    const { canScrollNext, scrollNext } = useCarousel();
     const isDisabled = disabled ?? !canScrollNext;
     return (
       <button
@@ -128,4 +127,3 @@ export const CarouselNext = React.forwardRef<HTMLButtonElement, CarouselButtonPr
   }
 );
 CarouselNext.displayName = 'CarouselNext';
-
