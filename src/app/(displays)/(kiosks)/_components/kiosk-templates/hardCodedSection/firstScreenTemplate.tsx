@@ -23,6 +23,7 @@ export interface HardCodedKiosk1FirstScreenTemplateProps {
   backgroundStartColor?: string;
   eyebrow?: string | string[];
   headline?: string | string[];
+  kioskId?: 'kiosk-1' | 'kiosk-3';
   heroImageAlt?: string;
   heroImageSrc?: string;
   onPrimaryCta?: () => void;
@@ -62,6 +63,7 @@ export default function HardCodedKiosk1FirstScreenTemplate({
   headline = defaultHeadline,
   heroImageAlt = 'Visitors smiling while viewing content',
   heroImageSrc = defaultHeroImageSrc,
+  kioskId,
   onPrimaryCta,
   onSecondaryCta,
   primaryCtaLabel = defaultPrimaryCtaLabel,
@@ -70,6 +72,10 @@ export default function HardCodedKiosk1FirstScreenTemplate({
 }: HardCodedKiosk1FirstScreenTemplateProps) {
   const eyebrowText = Array.isArray(eyebrow) ? eyebrow.join('\n') : eyebrow;
   const headlineText = Array.isArray(headline) ? headline.join('\n') : headline;
+  const isKiosk3 = kioskId === 'kiosk-3';
+  const ctaWidthClass = isKiosk3 ? 'w-[1360px]' : 'w-[1020px]';
+  const secondaryLabelPadding = isKiosk3 ? 'pl-[320px]' : 'pl-[80px]';
+  const secondaryIconOffset = isKiosk3 ? 'left-[-330px]' : 'left-[-70px]';
 
   return (
     <div
@@ -100,7 +106,7 @@ export default function HardCodedKiosk1FirstScreenTemplate({
       </div>
 
       {/* CTA buttons */}
-      <div className="absolute left-[245px] top-[2220px] flex w-[1360px] flex-col gap-[90px]">
+      <div className={`absolute left-[245px] top-[2220px] flex flex-col gap-[90px] ${ctaWidthClass}`}>
         <button
           className="flex h-[200px] items-center justify-between rounded-[999px] bg-[#ededed] px-[100px] text-[60px] font-normal leading-[1.2] tracking-[-1.8px] text-[#14477d] transition-transform duration-150 hover:scale-[1.01] shadow-[0_20px_60px_rgba(0,0,0,0.25)]"
           onClick={onPrimaryCta}
@@ -117,11 +123,11 @@ export default function HardCodedKiosk1FirstScreenTemplate({
           }}
           type="button"
         >
-          <span className="pl-[330px]">{renderRegisteredMark(secondaryCtaLabel)}</span>
+          <span className={secondaryLabelPadding}>{renderRegisteredMark(secondaryCtaLabel)}</span>
           <div className="flex items-center justify-center">
             <SquarePlay
               aria-hidden
-              className="relative left-[-330px] h-[90px] w-[90px]"
+              className={`relative h-[90px] w-[90px] ${secondaryIconOffset}`}
               color="#ededed"
               strokeWidth={2}
             />
@@ -130,7 +136,7 @@ export default function HardCodedKiosk1FirstScreenTemplate({
       </div>
 
       {/* Hero diamond image */}
-      <div className="pointer-events-none absolute left-[1100px] bottom-[160px] h-[2550px] w-[2550px] rotate-[45deg] overflow-hidden rounded-[140px]">
+      <div className="pointer-events-none absolute left-[1100px] bottom-[160px] h-[1380px] w-[1380px] rotate-[45deg] overflow-hidden rounded-[140px]">
         <Image
           alt={heroImageAlt}
           className="-rotate-[45deg] object-cover"
