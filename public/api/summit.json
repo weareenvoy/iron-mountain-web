@@ -8,7 +8,6 @@
         "date": "October 12, 2025",
         "location": "Summit Room · Boston, MA",
         "logoAlt": "Iron Mountain",
-        "logoSrc": "",
         "subtitle": "Prepared for your Iron Mountain visit"
       },
       "metrics": {
@@ -202,23 +201,34 @@
           "items": [
             {
               "body": [
-                "Unlock a path forward with those who have done it before.",
-                "See how others made the leap and found success.",
-                "Gain confidence with examples that mirror your challenges."
+                "Illustrate secure data activation for regulated industries.",
+                "Highlight measurable results from digital transformation."
               ],
-              "title": "Stories of impact"
+              "title": "Large Global Bank"
+            },
+            {
+              "body": [
+                "Demonstrate modern information governance and lifecycle services.",
+                "Showcase sustainable operations."
+              ],
+              "title": "Information & data lifecycle"
+            },
+            {
+              "body": [
+                "Show rich media preservation and monetization at scale.",
+                "Prove how metadata unlocks cultural content."
+              ],
+              "title": "Rich media & cultural heritage"
             }
           ],
-          "summary": "Stories that reinforce your vision and de-risk your next steps."
+          "summary": "Proof points that connect today’s challenges with real outcomes."
         }
       ],
       "summary": {
-        "body": "This personalized roadmap is built for your needs. When you’re ready, we can prioritize next steps together and move forward with clarity.",
-        "cta": "Schedule your next session",
-        "title": "Summary"
+        "body": "Bring your teams, data, and ambitions together with a trusted partner.",
+        "cta": "Schedule working sessions for each workstream within the next 30 days.",
+        "title": "Next steps"
       }
     }
   }
 ]
-
-
