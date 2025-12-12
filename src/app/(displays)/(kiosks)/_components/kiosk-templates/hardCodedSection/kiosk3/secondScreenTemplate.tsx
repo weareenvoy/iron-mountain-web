@@ -15,7 +15,7 @@ const defaultVideoSrc = '/images/kiosks/kiosk3/04-custom-interactive/CU-Video1-F
 
 export interface HardCodedKiosk3SecondScreenTemplateProps {
   readonly backgroundImageSrc?: string;
-  readonly backLabel?: string; // eslint-disable-line @typescript-eslint/member-ordering
+  readonly backLabel?: string;
   readonly description?: string | string[];
   readonly eyebrow?: string | string[];
   readonly headline?: string | string[];
