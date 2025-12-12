@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, useRef, type ReactElement } from 'react';
+import { Fragment, useRef, useState, type ReactElement } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import { useSummit } from '@/app/(displays)/summit/_components/providers/summit-provider';
 import HeroSection from '@/app/(displays)/summit/_components/sections/hero-section';
@@ -77,17 +77,27 @@ type SummitSegment = {
 const SummitWebContent = () => {
   const { data, error, loading } = useSummit();
   const printableRef = useRef<HTMLDivElement>(null);
+  const [isPrinting, setIsPrinting] = useState(false);
+  const [printError, setPrintError] = useState<null | string>(null);
 
   const heroTitleFallback = data?.hero.title ?? 'Your personalized journey map';
 
   const handlePrint = useReactToPrint({
     contentRef: printableRef,
     documentTitle: heroTitleFallback,
+    onAfterPrint: () => {
+      setIsPrinting(false);
+    },
+    onPrintError: () => {
+      setPrintError(printErrorMessage);
+      setIsPrinting(false);
+    },
     pageStyle: PRINT_PAGE_STYLE,
   });
 
   const loadErrorMessage = 'Unable to load summit content.';
   const loadingMessage = 'Loading summit experience…';
+  const printErrorMessage = 'Unable to generate PDF. Please try again.';
 
   if (loading) {
     return (
@@ -228,8 +238,18 @@ const SummitWebContent = () => {
     }))
     .filter(page => page.sections.length > 0);
 
-  const handlePrintClick = () => {
-    handlePrint();
+  const handlePrintClick = async () => {
+    setPrintError(null);
+
+    setIsPrinting(true);
+    await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+
+    try {
+      await handlePrint();
+    } catch (printException) {
+      console.error('Failed to start print job', printException);
+      setPrintError(printErrorMessage);
+    }
   };
 
   return (
@@ -237,14 +257,24 @@ const SummitWebContent = () => {
       <div className={SECTION_WRAPPER_CLASS}>
         <HeroSection
           actionSlot={
-            <button
-              className="inline-flex items-center gap-2 rounded-full border border-[#14477D] bg-white px-5 py-2 text-sm font-semibold text-[#14477D] shadow-[0_2px_6px_rgba(20,71,125,0.15)] transition hover:shadow-md focus-visible:ring-2 focus-visible:ring-[#14477D]/30 focus-visible:outline-none"
-              onClick={handlePrintClick}
-              type="button"
-            >
-              <span>Generate PDF</span>
-              <PrintIcon aria-hidden className="h-4 w-4" />
-            </button>
+            <div className="flex flex-col items-end gap-1">
+              <button
+                aria-busy={isPrinting}
+                aria-label="Generate PDF"
+                className="inline-flex items-center gap-2 rounded-full border border-[#14477D] bg-white px-5 py-2 text-sm font-semibold text-[#14477D] shadow-[0_2px_6px_rgba(20,71,125,0.15)] transition hover:shadow-md focus-visible:ring-2 focus-visible:ring-[#14477D]/30 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60"
+                disabled={isPrinting}
+                onClick={handlePrintClick}
+                type="button"
+              >
+                <span>{isPrinting ? 'Generating…' : 'Generate PDF'}</span>
+                <PrintIcon aria-hidden className="h-4 w-4" />
+              </button>
+              {printError ? (
+                <p className="text-right text-sm text-destructive" role="alert">
+                  {printError}
+                </p>
+              ) : null}
+            </div>
           }
           hero={data.hero}
           labels={heroLabels}

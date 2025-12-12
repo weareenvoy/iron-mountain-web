@@ -4,6 +4,7 @@ import { createMqttMessage } from './create-mqtt-message';
 import { generateClientId } from './generate-client-id';
 import { getAvailabilityTopic } from './get-availability-topic';
 import type { DeviceId, MqttError, MqttServiceConfig, PublishArgsConfig } from '../types';
+import type { ExhibitBeatId } from '@/lib/internal/types';
 
 export class MqttService {
   private readonly availabilityTopic: string;
@@ -124,7 +125,11 @@ export class MqttService {
   }
 
   // Docent App → Exhibit: Direct command to go to a specific beat
-  public gotoBeat(exhibit: 'basecamp' | 'overlook' | 'summit', beatId: string, config?: PublishArgsConfig): void {
+  public gotoBeat(
+    exhibit: 'basecamp' | 'overlook' | 'summit',
+    beatId: ExhibitBeatId,
+    config?: PublishArgsConfig
+  ): void {
     const message = createMqttMessage('docent-app', {
       'beat-id': beatId,
     });
