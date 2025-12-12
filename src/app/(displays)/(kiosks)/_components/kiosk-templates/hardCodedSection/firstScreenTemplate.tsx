@@ -1,6 +1,6 @@
 'use client';
 
-import { Heart, SquarePlay } from 'lucide-react';
+import { SquarePlay } from 'lucide-react';
 import Image from 'next/image';
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
 import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCFilledOrangeDiamond';
@@ -12,7 +12,6 @@ const defaultEyebrow = ['Rich media &', 'cultural heritage'];
 const defaultHeadline = ['Learn more about how we', 'unlocked new possibilities', 'for our partners'];
 const defaultPrimaryCtaLabel = 'From archive to access';
 const defaultSecondaryCtaLabel = 'Virtual walkthrough';
-const defaultSaveForLaterLabel = 'Save for later';
 
 export interface HardCodedKiosk1FirstScreenTemplateProps {
   readonly backgroundEndColor?: string;
@@ -25,7 +24,6 @@ export interface HardCodedKiosk1FirstScreenTemplateProps {
   readonly onPrimaryCta?: () => void;
   readonly onSecondaryCta?: () => void;
   readonly primaryCtaLabel?: string;
-  readonly saveForLaterLabel?: string;
   readonly secondaryCtaLabel?: string;
 }
 
@@ -65,7 +63,6 @@ const HardCodedKiosk1FirstScreenTemplate = ({
   onPrimaryCta,
   onSecondaryCta,
   primaryCtaLabel = defaultPrimaryCtaLabel,
-  saveForLaterLabel = defaultSaveForLaterLabel,
   secondaryCtaLabel = defaultSecondaryCtaLabel,
 }: HardCodedKiosk1FirstScreenTemplateProps) => {
   const eyebrowText = Array.isArray(eyebrow) ? eyebrow.join('\n') : eyebrow;
@@ -92,12 +89,6 @@ const HardCodedKiosk1FirstScreenTemplate = ({
       {/* Headline */}
       <div className="absolute top-[1250px] left-[250px] w-full text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]">
         {renderRegisteredMark(headlineText)}
-      </div>
-
-      {/* Save for later */}
-      <div className="absolute top-[1890px] left-[230px] flex items-center gap-[32px] text-[52px] leading-[1.4] font-normal tracking-[-2.6px] text-[#ededed]">
-        <Heart aria-hidden className="h-[90px] w-[90px]" color="#ededed" strokeWidth={3} />
-        <p>{renderRegisteredMark(saveForLaterLabel)}</p>
       </div>
 
       {/* CTA buttons */}
