@@ -2,13 +2,13 @@
 
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header from '@/app/(tablets)/docent/_components/ui/Header';
 import MountainIllustration from '@/components/ui/icons/MountainIllustration';
-import { useDocentTranslation } from '@/hooks/use-docent-translation';
 
 const DocentHomePage = ({}: PageProps<'/docent'>) => {
-  const { t } = useDocentTranslation();
+  const { data } = useDocent();
   // const { isTourDataLoading, isGecStateLoading } = useDocent();
 
   return (
@@ -44,7 +44,7 @@ const DocentHomePage = ({}: PageProps<'/docent'>) => {
             // TODO instead of using a loading spinner, we could disable the button when data is loading.
             // disabled={isTourDataLoading || isGecStateLoading}
           >
-            <span className="text-2xl tracking-[-1.2px]">{t.docent.actions.startTour}</span>
+            <span className="text-2xl tracking-[-1.2px]">{data?.docent.actions.startTour ?? 'Launch calendar'}</span>
             <ArrowRight className="size-[24px]" />
           </Button>
         </Link>

@@ -26,7 +26,7 @@
       "cache": false
     },
     "lint": {
-      "cache": true
+      "cache": false
     },
     "start": {
       "cache": false,
@@ -34,6 +34,43 @@
       "persistent": true
     },
     "type-check": {
+      "cache": false
+    },
+    "verify": {
+      "cache": false
+    },
+    "next:analyze": {
+      "env": ["ANALYZE"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+    },
+    "next:build": {
+      "env": ["NODE_ENV", "VERCEL_ENV"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+    },
+    "next:build-check": {
+      "cache": false,
+      "env": ["NODE_ENV", "VERCEL_ENV"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+    },
+    "next:dev": {
+      "cache": false,
+      "env": ["NODE_ENV", "VERCEL_ENV"],
+      "persistent": true
+    },
+    "next:format": {
+      "cache": false
+    },
+    "next:lint": {
+      "cache": true
+    },
+    "next:start": {
+      "cache": false,
+      "env": ["NODE_ENV", "VERCEL_ENV"],
+      "persistent": true
+    },
+    "next:type-check": {
       "cache": true
     }
   }

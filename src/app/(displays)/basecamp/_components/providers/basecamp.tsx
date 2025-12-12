@@ -1,25 +1,19 @@
 'use client';
 
-import { createContext, useCallback, useContext, useEffect, useState, type PropsWithChildren } from 'react';
+import { createContext, useCallback, useContext, useEffect, useRef, useState, type PropsWithChildren } from 'react';
 import { useMqtt } from '@/components/providers/mqtt-provider';
-import { getLocaleForTesting } from '@/flags/flags';
 import { getBasecampData } from '@/lib/internal/data/get-basecamp';
-import {
-  isBasecampSection,
-  type BasecampData,
-  type Dictionary,
-  type ExhibitNavigationState,
-  type Locale,
-} from '@/lib/internal/types';
+import { isBasecampSection, type BasecampData, type ExhibitNavigationState, type Locale } from '@/lib/internal/types';
 import type { ExhibitMqttState } from '@/lib/mqtt/types';
 
 interface BasecampContextType {
   data: BasecampData | null;
-  dict: Dictionary | null;
   error: null | string;
   exhibitState: ExhibitNavigationState;
   loading: boolean;
   locale: Locale;
+  readyBeatId: null | string;
+  setReadyBeatId: (beatId: null | string) => void;
 }
 
 export const BasecampContext = createContext<BasecampContextType | undefined>(undefined);
@@ -36,17 +30,6 @@ export const useBasecamp = () => {
   return context;
 };
 
-/**
- * Hook to get the current locale/language for the Basecamp app.
- * Always returns a valid locale (never null).
- *
- * @returns The current locale ('en' | 'pt')
- */
-export const useLocale = (): Locale => {
-  const { locale } = useBasecamp();
-  return locale;
-};
-
 export const BasecampProvider = ({ children }: BasecampProviderProps) => {
   const { client } = useMqtt();
 
@@ -56,6 +39,9 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     momentId: 'ambient',
   });
 
+  // Which beat's video is ready. Foreground compares its beatId to this.
+  const [readyBeatId, setReadyBeatId] = useState<null | string>(null);
+
   // MQTT state (what we report to GEC)
   const [mqttState, setMqttState] = useState<ExhibitMqttState>({
     'beat-id': 'ambient-1',
@@ -64,9 +50,12 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     'volume-muted': false,
   });
 
+  // Ref to access latest mqttState without causing dependency changes. Avoids re-subscription.
+  const mqttStateRef = useRef(mqttState);
+  mqttStateRef.current = mqttState;
+
   const [data, setData] = useState<BasecampData | null>(null);
-  const [dict, setDict] = useState<Dictionary | null>(null);
-  const [locale, setLocale] = useState<Locale>(getLocaleForTesting());
+  const [locale, setLocale] = useState<Locale>('en');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<null | string>(null);
 
@@ -78,7 +67,6 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     try {
       const basecampData = await getBasecampData();
       setData(basecampData.data);
-      setDict(basecampData.dict);
       setLocale(basecampData.locale);
       setError(null);
       return true;
@@ -100,15 +88,19 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     (newState: Partial<ExhibitMqttState>) => {
       if (!client) return;
 
-      const updatedState = { ...mqttState, ...newState };
-      setMqttState(updatedState);
+      // Compute updated state first, update ref immediately for consistency
+      const updatedState = { ...mqttStateRef.current, ...newState };
+      mqttStateRef.current = updatedState;
 
+      // Update React state (pure function - no side effects)
+      setMqttState(prev => ({ ...prev, ...newState }));
+
+      // Side effect runs outside the updater with fresh ref value
       client.reportExhibitState('basecamp', updatedState, {
         onError: err => console.error('Basecamp: Failed to report state:', err),
-        onSuccess: () => console.info('Basecamp: Reported state:', updatedState),
       });
     },
-    [client, mqttState]
+    [client]
   );
 
   // Subscribe to GEC commands (broadcasts to ALL exhibits)
@@ -203,9 +195,9 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     };
 
     // Subscribe to broadcast commands (all exhibits listen to same topics)
+    // TODO Confirm with Lucas. Currently not receiving anything from these topics.
     client.subscribeToTopic('cmd/dev/all/load-tour', handleLoadTour);
     client.subscribeToTopic('cmd/dev/all/end-tour', handleEndTour);
-
     // Also subscribe to basecamp-specific goto-beat (direct from Docent)
     client.subscribeToTopic('cmd/dev/basecamp/goto-beat', handleGotoBeat);
 
@@ -250,6 +242,8 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
         if (state['tour-id']) {
           fetchData();
         }
+        // We just need to get retained state once, so unsubscribe after we got the state
+        client.unsubscribeFromTopic('state/basecamp', handleOwnState);
       } catch (error) {
         console.error('Basecamp: Error parsing own state:', error);
       }
@@ -265,11 +259,12 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
 
   const contextValue = {
     data,
-    dict,
     error,
     exhibitState,
     loading,
     locale,
+    readyBeatId,
+    setReadyBeatId,
   };
 
   return <BasecampContext.Provider value={contextValue}>{children}</BasecampContext.Provider>;

@@ -17,7 +17,6 @@ import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import { Switch } from '@/app/(tablets)/docent/_components/ui/Switch';
 import { useMqtt } from '@/components/providers/mqtt-provider';
-import { useDocentTranslation } from '@/hooks/use-docent-translation';
 import { cn } from '@/lib/tailwind/utils/cn';
 import type { ExhibitControl } from '@/lib/internal/types';
 
@@ -36,9 +35,8 @@ const EXHIBIT_IDS: readonly ('basecamp' | 'entry-way' | 'overlook' | 'solution-p
 ] as const;
 
 const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
-  const { t } = useDocentTranslation();
   const { client } = useMqtt();
-  const { currentTour } = useDocent();
+  const { currentTour, data } = useDocent();
   const router = useRouter();
 
   // Build exhibit controls from dictionary
@@ -53,7 +51,7 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
             : id === 'summit'
               ? 'summitRoom'
               : id;
-      const name = t.settings.exhibits[nameKey as keyof typeof t.settings.exhibits];
+      const name = data?.settings.exhibits[nameKey as keyof typeof data.settings.exhibits] ?? id;
 
       // Default state - will be replaced with real GEC state later
       const defaultState: ExhibitControl = {
@@ -67,7 +65,7 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
       // Mock error state for summit (for testing)
       if (id === 'summit') {
         return {
-          errorMessage: t.settings.status.offline,
+          errorMessage: data?.settings.status.offline ?? 'Offline',
           hasError: true,
           id,
           isMuted: false,
@@ -78,7 +76,7 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
 
       return defaultState;
     });
-  }, [t]);
+  }, [data]);
 
   const handleToggleMute = (exhibitId: string) => () => {
     if (!client) return;
@@ -129,9 +127,9 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
         <div className="mt-10 mb-19 flex flex-col items-start justify-between gap-18">
           <Button className="-mr-[30px] h-13 gap-2.5 px-5" onClick={onClose} variant="outline-light-grey">
             <ArrowLeft className="size-[24px]" />
-            <span className="h-6.25 text-[20px]">{t.docent.actions.back}</span>
+            <span className="h-6.25 text-[20px]">{data?.docent.actions.back ?? 'Back'}</span>
           </Button>
-          <h2 className="text-primary-bg-grey text-4xl leading-[48px]">{t.settings.title}</h2>
+          <h2 className="text-primary-bg-grey text-4xl leading-[48px]">{data?.settings.title ?? 'Settings'}</h2>
         </div>
 
         {/* Controls List */}
@@ -180,7 +178,7 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
             {/* Lightbulb icon */}
             <Lightbulb className="size-[28px]" color="#6DCFF6" />
 
-            <span className="text-primary-im-light-blue text-2xl">{t.settings.ebcLights}</span>
+            <span className="text-primary-im-light-blue text-2xl">{data?.settings.ebcLights ?? 'EBC Lights'}</span>
           </div>
 
           {/* Switch to toggle EBC Lights. TODO Is the value from GEC state? */}
@@ -191,11 +189,11 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
         <div className="my-8 border-t border-[#58595B]"></div>
         <div className="flex flex-col items-center justify-center gap-6 text-center">
           <Button className="flex h-16 w-full text-xl" onClick={handleEndTour} variant="primary">
-            <span>{t.settings.endTourButton}</span>
+            <span>{data?.settings.endTourButton ?? 'End tour & activate idle'}</span>
             <ArrowRight className="size-[24px]" />
           </Button>
           <p className="text-primary-bg-grey min-w-70 text-[16px] leading-loose tracking-[-0.8px]">
-            {t.settings.endTourDescription}
+            {data?.settings.endTourDescription ?? 'Tap to end the experience and bring all screens back to idle mode.'}
           </p>
         </div>
         {/* Open EBC Manual Link */}
@@ -205,7 +203,7 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
           target="_blank"
         >
           <ExternalLink className="size-[24px]" />
-          <span className="text-[16px] leading-loose">{t.settings.openManual}</span>
+          <span className="text-[16px] leading-loose">{data?.settings.openManual ?? 'Open EBC Manual'}</span>
         </Link>
       </div>
     </>
