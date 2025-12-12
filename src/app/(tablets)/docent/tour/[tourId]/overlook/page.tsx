@@ -7,14 +7,12 @@ import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
 import MomentsAndBeats from '@/app/(tablets)/docent/_components/ui/MomentsAndBeats';
 import CastOff from '@/components/ui/icons/CastOff';
-import { useDocentTranslation } from '@/hooks/use-docent-translation';
 import useMomentsNavigation from '@/hooks/use-moments-navigation';
 import type { Moment } from '@/lib/internal/types';
 
 const OverlookPage = ({ params }: PageProps<'/docent/tour/[tourId]/overlook'>) => {
   const { tourId } = use(params);
   const { currentTour, data, overlookExhibitState, setOverlookExhibitState } = useDocent();
-  const { t } = useDocentTranslation();
   // TODO does this live in GEC state?
   const [isOverlookCastMode, setIsOverlookCastMode] = useState(false);
 
@@ -39,9 +37,9 @@ const OverlookPage = ({ params }: PageProps<'/docent/tour/[tourId]/overlook'>) =
     (): HeaderProps['leftButton'] => ({
       href: `/docent/tour/${tourId}`,
       icon: <ArrowLeft />,
-      text: t.docent.navigation.backToMenu,
+      text: data?.docent.navigation.backToMenu ?? 'Back to menu',
     }),
-    [tourId, t]
+    [tourId, data]
   );
 
   return (
@@ -52,9 +50,9 @@ const OverlookPage = ({ params }: PageProps<'/docent/tour/[tourId]/overlook'>) =
       {/* Cast Button */}
       <div className="text-primary-bg-grey absolute top-50 right-5 z-50 flex flex-row items-center gap-2 p-0.5">
         {isOverlookCastMode ? (
-          <span className="text-lg">{t.docent.actions.startPresenting}</span>
+          <span className="text-lg">{data?.docent.actions.startPresenting ?? 'Start presenting'}</span>
         ) : (
-          <span className="text-lg">{t.docent.actions.stopPresenting}</span>
+          <span className="text-lg">{data?.docent.actions.stopPresenting ?? 'Stop presenting'}</span>
         )}
         <button className="active: border-none p-0" onClick={toggleOverlookCastMode}>
           {isOverlookCastMode ? (
