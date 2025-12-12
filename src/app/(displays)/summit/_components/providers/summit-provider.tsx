@@ -4,8 +4,7 @@ import { createContext, PropsWithChildren, useCallback, useContext, useEffect, u
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getLocaleForTesting } from '@/flags/flags';
 import { getSummitData } from '@/lib/internal/data/get-summit';
-import { isSection, type ExhibitNavigationState, type Locale } from '@/lib/internal/types';
-import type { SummitData } from '@/app/(displays)/summit/_types';
+import { isSection, type ExhibitNavigationState, type Locale, type SummitData } from '@/lib/internal/types';
 import type { ExhibitMqttState } from '@/lib/mqtt/types';
 
 interface SummitContextValue {

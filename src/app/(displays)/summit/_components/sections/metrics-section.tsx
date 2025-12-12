@@ -1,35 +1,36 @@
 import Image from 'next/image';
-import type { SummitMetrics, SummitObstacles } from '@/app/(displays)/summit/_types';
+import type { SummitProblem2Item, SummitProblem3 } from '@/lib/internal/types';
 
 type MetricsSectionProps = {
-  readonly metrics: SummitMetrics;
-  readonly obstacles: SummitObstacles;
+  readonly challenges: SummitProblem3;
+  readonly stats: readonly SummitProblem2Item[];
+  readonly title: string;
 };
 
-const MetricsSection = ({ metrics, obstacles }: MetricsSectionProps) => {
+const MetricsSection = ({ challenges, stats, title }: MetricsSectionProps) => {
   return (
     <section className="flex flex-col gap-12">
       <header className="flex flex-col gap-3">
         <div className="flex items-center gap-3 text-2xl font-semibold text-[#58595B] sm:text-3xl">
           <span aria-hidden className="h-4 w-4 rotate-45 rounded-xs border-2 border-[#6DCFF6]" />
-          <span>{metrics.title}</span>
+          <span>{title}</span>
         </div>
       </header>
 
       <div className="grid gap-8 sm:grid-cols-3 print:grid-cols-3 print:gap-6">
-        {metrics.items.map(item => (
-          <div className="flex flex-col gap-1 text-left" key={item.label}>
+        {stats.map(item => (
+          <div className="flex flex-col gap-1 text-left" key={item.title}>
             <p className="text-5xl font-semibold text-[#44A6E6] sm:text-6xl print:text-[2.5rem] print:leading-[1.1]">
-              {item.value}
+              {item.title}
             </p>
-            <p className="text-sm text-[#58595B] print:text-xs print:leading-snug">{item.description}</p>
+            <p className="text-sm text-[#58595B] print:text-xs print:leading-snug">{item.subtitle}</p>
           </div>
         ))}
       </div>
 
       <div className="rounded-xl border border-[#6DCFF6] bg-white px-6 py-8 shadow-sm sm:px-8 lg:px-10 lg:py-10 print:mt-4 print:px-5 print:py-5">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 print:grid-cols-4 print:gap-4">
-          {obstacles.items.map(item => (
+          {challenges.challenges.map(item => (
             <article className="flex flex-col items-center gap-4 text-center" key={item.title}>
               <span className="rounded-full bg-[#0D3C69] px-4 py-1 text-sm font-semibold text-white">{item.title}</span>
               <div className="flex h-28 w-28 items-center justify-center print:h-24 print:w-24">

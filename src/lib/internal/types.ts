@@ -359,62 +359,92 @@ export interface DocentData {
 }
 
 export interface SummitData {
-  readonly hero: {
-    readonly advisorName: string;
-    readonly clientName: string;
-    readonly date: string;
-    readonly location: string;
-    readonly logoAlt: string;
-    readonly logoSrc: string;
-    readonly subtitle: string;
-    readonly title?: string;
-  };
-  readonly metrics: {
-    readonly description: string;
-    readonly items: readonly {
-      readonly description: string;
-      readonly label: string;
-      readonly value: string;
-    }[];
-    readonly title: string;
-  };
-  readonly obstacles: {
-    readonly description: string;
-    readonly items: readonly {
-      readonly body: string;
-      readonly icon: string;
-      readonly title: string;
-    }[];
-    readonly title: string;
-  };
-  readonly recaps: readonly {
-    readonly body: string;
-    readonly cta: string;
-    readonly title: string;
-  }[];
-  readonly stories: {
-    readonly description: string;
-    readonly items: readonly {
-      readonly category: string;
-      readonly description: string;
-      readonly title: string;
-    }[];
-    readonly title: string;
-  };
-  readonly strategies: readonly {
-    readonly eyebrow: string;
-    readonly items: readonly {
-      readonly body: readonly string[];
-      readonly title: string;
-    }[];
-    readonly summary: string;
-  }[];
-  readonly summary: {
-    readonly body: string;
-    readonly cta: string;
-    readonly title: string;
-  };
+  readonly 'basecamp': SummitBasecamp;
+  readonly 'kiosk-1': SummitKiosk;
+  readonly 'kiosk-2': SummitKiosk;
+  readonly 'kiosk-3': SummitKiosk;
+  readonly 'meta': SummitMeta;
+  readonly 'overlook': SummitOverlook;
 }
+
+export interface SummitBasecamp {
+  readonly 'possibilities': { readonly title: string };
+  readonly 'possibilities-a': SummitPossibility;
+  readonly 'possibilities-b': SummitPossibility;
+  readonly 'possibilities-c': SummitPossibility;
+  readonly 'problem-1': { readonly title: string };
+  readonly 'problem-2': readonly SummitProblem2Item[];
+  readonly 'problem-3': SummitProblem3;
+}
+
+export interface SummitChallenge {
+  readonly body: string;
+  readonly icon: string;
+  readonly title: string;
+}
+
+export interface SummitFuturescaping {
+  readonly body: string;
+  readonly image: string;
+  readonly title: string;
+}
+
+export interface SummitKiosk {
+  readonly ambient: SummitKioskAmbient;
+}
+
+export interface SummitKioskAmbient {
+  readonly 'attribution': string;
+  readonly 'body': string;
+  readonly 'headline': string;
+  readonly 'solution-title': string;
+  readonly 'subheader': string;
+}
+
+export interface SummitMapLocation {
+  readonly body: string;
+  readonly title: string;
+}
+
+export interface SummitMapLocations {
+  readonly 'map-location-1': SummitMapLocation;
+  readonly 'map-location-2': SummitMapLocation;
+  readonly 'map-location-3': SummitMapLocation;
+}
+
+export interface SummitMeta {
+  readonly 'company': string;
+  readonly 'location': string;
+  readonly 'start-date': string;
+}
+
+export interface SummitOverlook {
+  readonly 'activate': SummitMapLocations;
+  readonly 'connect': SummitMapLocations;
+  readonly 'futurescaping-1': SummitFuturescaping;
+  readonly 'futurescaping-2': SummitFuturescaping;
+  readonly 'futurescaping-3': SummitFuturescaping;
+  readonly 'protect': SummitMapLocations;
+}
+
+export interface SummitPossibility {
+  readonly 'body-1': string;
+  readonly 'body-2': string;
+  readonly 'body-3': string;
+  readonly 'title': string;
+}
+
+export interface SummitProblem2Item {
+  readonly subtitle: string;
+  readonly title: string;
+}
+
+export interface SummitProblem3 {
+  readonly challenges: readonly SummitChallenge[];
+  readonly title: string;
+}
+
+export type SummitSlideScreen = 'primary' | 'secondary';
 
 export type Locale = 'en' | 'pt';
 

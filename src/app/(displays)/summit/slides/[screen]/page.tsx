@@ -1,5 +1,5 @@
 import SummitSlideLayout from '@/app/(displays)/summit/_components/layouts/summit-slide-layout';
-import type { SummitSlideScreen } from '@/app/(displays)/summit/_types';
+import type { SummitSlideScreen } from '@/lib/internal/types';
 
 const SLIDE_SCREENS: readonly SummitSlideScreen[] = ['primary', 'secondary'];
 

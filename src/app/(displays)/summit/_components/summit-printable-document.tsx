@@ -2,8 +2,7 @@
 
 import { forwardRef, type ForwardedRef, type ReactNode } from 'react';
 import SummitPrintLayout from '@/app/(displays)/summit/_components/layouts/summit-print-layout';
-import HeroSection, { type HeroMetadataLabels } from '@/app/(displays)/summit/_components/sections/hero-section';
-import type { SummitHero } from '@/app/(displays)/summit/_types';
+import HeroSection from '@/app/(displays)/summit/_components/sections/hero-section';
 
 type PrintablePage = {
   readonly id: string;
@@ -11,14 +10,15 @@ type PrintablePage = {
 };
 
 type SummitPrintableDocumentProps = {
-  readonly hero: SummitHero;
-  readonly heroLabels: HeroMetadataLabels;
+  readonly company: string;
+  readonly date: string;
   readonly heroTitle: string;
+  readonly location: string;
   readonly pages: readonly PrintablePage[];
 };
 
 const SummitPrintableDocument = (
-  { hero, heroLabels, heroTitle, pages }: SummitPrintableDocumentProps,
+  { company, date, heroTitle, location, pages }: SummitPrintableDocumentProps,
   ref: ForwardedRef<HTMLDivElement>
 ) => {
   return (
@@ -35,7 +35,7 @@ const SummitPrintableDocument = (
         >
           <SummitPrintLayout>
             <div className="flex flex-col gap-6 text-[0.92rem] leading-[1.35] tracking-[-0.01em]">
-              <HeroSection hero={hero} labels={heroLabels} title={heroTitle} variant="print" />
+              <HeroSection company={company} date={date} location={location} title={heroTitle} variant="print" />
               <div className="flex flex-col gap-5">
                 {page.sections.map((section, sectionIndex) => (
                   <div key={`${page.id}-section-${sectionIndex}`}>{section}</div>
