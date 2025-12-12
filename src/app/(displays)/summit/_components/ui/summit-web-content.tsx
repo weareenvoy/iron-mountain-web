@@ -1,3 +1,5 @@
+// Comment out fow now. This file is not being used?
+/*
 'use client';
 
 import { useSummit } from '@/app/(displays)/summit/_components/providers/summit-provider';
@@ -164,3 +166,4 @@ const SummitWebContent = () => {
 };
 
 export default SummitWebContent;
+*/
