@@ -31,7 +31,7 @@
     "eyebrow": ["Rich media &", "cultural heritage"],
     "headline": ["Learn more about how we unlocked new possibilities", "for our partners"],
     "heroImageAlt": "Visitors review digital experiences",
-    "heroImageSrc": "http://localhost:3845/assets/3a4d46cd05506bd4cd1111ed8cd2d3dfe9681cd9.png",
+    "heroImageSrc": "",
     "primaryCtaLabel": "Centralized management of services",
     "saveForLaterLabel": "Save for later",
     "secondaryCtaLabel": "Launch demo"
@@ -66,7 +66,7 @@
     "eyebrow": ["Rich media &", "cultural heritage"],
     "headline": ["Centralized management", "of services via API"],
     "heroImageAlt": "Two teammates reviewing a digital prototype",
-    "heroImageSrc": "http://localhost:3845/assets/3a4d46cd05506bd4cd1111ed8cd2d3dfe9681cd9.png",
+    "heroImageSrc": "",
     "primaryCtaLabel": "Centralized management of services",
     "saveForLaterLabel": "Save for later",
     "secondaryCtaLabel": "Launch demo",
@@ -78,7 +78,7 @@
       "backgroundEndColor": "#05254b",
       "backgroundStartColor": "#1b75bc",
       "heroImageAlt": "API workflow overview",
-      "heroImageSrc": "http://localhost:3845/assets/7d3328b5922016537da64d61b7a374afc1baca1d.png",
+      "heroImageSrc": "",
       "sectionHeadline": "Data configuration",
       "steps": [
         "Decommissioning services",
@@ -95,7 +95,7 @@
       "backgroundEndColor": "#04234a",
       "backgroundStartColor": "#1966a6",
       "heroImageAlt": "Logistics command center",
-      "heroImageSrc": "http://localhost:3845/assets/40afdcf461baafad39ec3925ac4fd501259151d6.png",
+      "heroImageSrc": "",
       "sectionHeadline": "Logistics orchestration",
       "steps": [
         "Automated site scheduling",
@@ -112,7 +112,7 @@
       "backgroundEndColor": "#04224a",
       "backgroundStartColor": "#175c94",
       "heroImageAlt": "Security analytics dashboard",
-      "heroImageSrc": "http://localhost:3845/assets/980d1dee1ed7de2996214b8db1a42986b97dc47d.png",
+      "heroImageSrc": "",
       "sectionHeadline": "Security automation",
       "steps": [
         "Chain-of-custody tokens",
@@ -129,7 +129,7 @@
       "backgroundEndColor": "#05254b",
       "backgroundStartColor": "#134b7d",
       "heroImageAlt": "Circular economy planning",
-      "heroImageSrc": "http://localhost:3845/assets/f52f006df3b7e80cef930718c449ddff29312f59.png",
+      "heroImageSrc": "",
       "sectionHeadline": "Circular planning",
       "steps": [
         "Asset grading models",
@@ -146,7 +146,7 @@
       "backgroundEndColor": "#041f44",
       "backgroundStartColor": "#103d6c",
       "heroImageAlt": "Developer portal UI",
-      "heroImageSrc": "http://localhost:3845/assets/bbb0c30a6c52c72ecfe10371a7001daf550a68d1.svg",
+      "heroImageSrc": "",
       "sectionHeadline": "Developer enablement",
       "steps": ["API key lifecycle", "Sandbox datasets", "Webhook testing", "SDK distribution", "Usage analytics"],
       "subheadline": "Give platform teams a ready-to-use build kit.",
@@ -157,7 +157,7 @@
       "backgroundEndColor": "#031a3a",
       "backgroundStartColor": "#0e3055",
       "heroImageAlt": "Executive analytics board",
-      "heroImageSrc": "http://localhost:3845/assets/38289b05b71863e8503d53ef14e909f42b7886ac.svg",
+      "heroImageSrc": "",
       "sectionHeadline": "Insights & reporting",
       "steps": [
         "Live KPI scorecards",

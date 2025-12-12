@@ -6,7 +6,7 @@
       "eyebrow": ["Information", "& data lifecycle"],
       "headline": "Expanding possibilities",
       "heroVideoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/03+-+Value/Value-header.webm",
-      "labelIconSrc": "http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg",
+      "labelIconSrc": "",
       "labelText": "Value",
       "slides": [
         {
@@ -36,7 +36,7 @@
       "eyebrow": ["Information", "& data lifecycle"],
       "headline": "Expanding possibilities",
       "heroVideoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/03+-+Value/Value-header.webm",
-      "labelIconSrc": "http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg",
+      "labelIconSrc": "",
       "labelText": "Value",
       "slides": [
         {
@@ -54,7 +54,7 @@
             },
             {
               "color": "#1b75bc",
-              "label": "Economic benefits"
+              "label": ""
             },
             {
               "color": "#8a0d71",

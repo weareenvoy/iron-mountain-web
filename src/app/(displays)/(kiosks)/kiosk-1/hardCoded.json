@@ -31,7 +31,7 @@
     "eyebrow": ["Rich media &", "cultural heritage"],
     "headline": ["Learn more about how we unlocked new possibilities", "for our partners"],
     "heroImageAlt": "Visitors review digital media inside the Grammy Museum",
-    "heroImageSrc": "http://localhost:3845/assets/3a4d46cd05506bd4cd1111ed8cd2d3dfe9681cd9.png",
+    "heroImageSrc": "",
     "primaryCtaLabel": "From archive to access",
     "saveForLaterLabel": "Save for later",
     "secondaryCtaLabel": "Virtual walkthrough"
@@ -75,7 +75,7 @@
   "secondScreens": [
     {
       "backLabel": "Back",
-      "backgroundImageSrc": "http://localhost:3845/assets/654867e73dd58b462c4290a35fc661c2add46d6b.png",
+      "backgroundImageSrc": "",
       "description": [
         "Assets, whether film, audio, digital, or physical, are logged, evaluated for condition and risk,",
         "and prioritized based on preservation and activation potential."
@@ -83,12 +83,12 @@
       "eyebrow": ["Rich media &", "cultural heritage"],
       "headline": "Intake and assessment",
       "iconImageAlt": "Logbook and film reel",
-      "iconImageSrc": "http://localhost:3845/assets/654867e73dd58b462c4290a35fc661c2add46d6b.png",
+      "iconImageSrc": "",
       "panelBackgroundColor": "#6dcff6"
     },
     {
       "backLabel": "Back",
-      "backgroundImageSrc": "http://localhost:3845/assets/40afdcf461baafad39ec3925ac4fd501259151d6.png",
+      "backgroundImageSrc": "",
       "description": [
         "Every handoff is captured with digital chain-of-custody signatures,",
         "providing real-time transparency across museums, archives, and Iron Mountain vaults."
@@ -96,12 +96,12 @@
       "eyebrow": ["Rich media &", "cultural heritage"],
       "headline": "Chain-of-custody visibility",
       "iconImageAlt": "Chain of custody visualization",
-      "iconImageSrc": "http://localhost:3845/assets/40afdcf461baafad39ec3925ac4fd501259151d6.png",
+      "iconImageSrc": "",
       "panelBackgroundColor": "#67d6ff"
     },
     {
       "backLabel": "Back",
-      "backgroundImageSrc": "http://localhost:3845/assets/980d1dee1ed7de2996214b8db1a42986b97dc47d.png",
+      "backgroundImageSrc": "",
       "description": [
         "Materials are stabilized, humidity-controlled, and cataloged with preservation notes",
         "so curators can understand risk and readiness before activation."
@@ -109,12 +109,12 @@
       "eyebrow": ["Rich media &", "cultural heritage"],
       "headline": "Preservation readiness",
       "iconImageAlt": "Preservation environment graphic",
-      "iconImageSrc": "http://localhost:3845/assets/980d1dee1ed7de2996214b8db1a42986b97dc47d.png",
+      "iconImageSrc": "",
       "panelBackgroundColor": "#6ac5f8"
     },
     {
       "backLabel": "Back",
-      "backgroundImageSrc": "http://localhost:3845/assets/f52f006df3b7e80cef930718c449ddff29312f59.png",
+      "backgroundImageSrc": "",
       "description": [
         "Sensors monitor temperature, vibration, and light exposure with automated alerts,",
         "ensuring priceless artifacts stay within safe tolerances."
@@ -122,12 +122,12 @@
       "eyebrow": ["Rich media &", "cultural heritage"],
       "headline": "Environmental monitoring",
       "iconImageAlt": "Sensor dashboard illustration",
-      "iconImageSrc": "http://localhost:3845/assets/f52f006df3b7e80cef930718c449ddff29312f59.png",
+      "iconImageSrc": "",
       "panelBackgroundColor": "#5ec0f2"
     },
     {
       "backLabel": "Back",
-      "backgroundImageSrc": "http://localhost:3845/assets/bbb0c30a6c52c72ecfe10371a7001daf550a68d1.svg",
+      "backgroundImageSrc": "",
       "description": [
         "Curators select highlight reels, transcripts, and metadata bundles",
         "to accelerate publishing across galleries, education partners, and streaming endpoints."
@@ -135,7 +135,7 @@
       "eyebrow": ["Rich media &", "cultural heritage"],
       "headline": "Activation planning",
       "iconImageAlt": "Activation planning icon",
-      "iconImageSrc": "http://localhost:3845/assets/bbb0c30a6c52c72ecfe10371a7001daf550a68d1.svg",
+      "iconImageSrc": "",
       "panelBackgroundColor": "#58b9eb"
     }
   ],

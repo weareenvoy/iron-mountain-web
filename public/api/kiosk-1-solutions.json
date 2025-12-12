@@ -22,8 +22,8 @@
     "title": "Together, we:"
   },
   "thirdScreen": {
-    "accentDiamondSrc": "http://localhost:3845/assets/04c5d53f375e593c269131982829bc5be36f8abf.svg",
-    "arrowIconSrc": "http://localhost:3845/assets/a6edb731c633feb0583f227ea6146050aabea4d5.svg",
+    "accentDiamondSrc": "",
+    "arrowIconSrc": "",
     "backgroundVideoSrc": "/_videos/v1/a532f40a2a6848e2a80788002b6cb925a1f4c3c2",
     "bottomLeftLabel": "Digital repository \n archiving",
     "bottomRightLabel": "AI-powered\nsearch",
@@ -32,7 +32,7 @@
     "gradientStartColor": "#a2115e",
     "mediaDiamondLeftSrc": "/images/kiosks/kiosk2/02-solution/Solution-Image2-Diamond.png",
     "mediaDiamondRightSrc": "/images/kiosks/kiosk2/02-solution/Solution-Image3-Diamond.png",
-    "solutionIconSrc": "http://localhost:3845/assets/bd84ed1c8b13a5ec5d89dedbe4a98c69925933c3.svg",
+    "solutionIconSrc": "",
     "solutionLabel": "Solution",
     "subheadline": ["Rich media &", "cultural heritage"],
     "title": "How Iron Mountain's digital preservation platform works:",

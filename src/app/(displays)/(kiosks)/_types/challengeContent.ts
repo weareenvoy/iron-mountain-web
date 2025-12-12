@@ -9,7 +9,6 @@ const initialScreenSchema = z.object({
   attribution: textString,
   backgroundImage: assetString,
   buttonText: textString,
-  guidesImageSrc: assetString,
   headline: textString,
   logoCombinedSrc: assetString.optional(),
   quote: textString,

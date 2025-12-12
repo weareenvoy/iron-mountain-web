@@ -184,7 +184,7 @@ const SolutionThirdScreenTemplate = ({
           sizeClass="size-[900px]"
         />
         <FilledDiamond
-          className="top-[605px] left-[1285px] rotate-[45deg] group-data-[kiosk=kiosk-1]/kiosk:top-[650px] group-data-[kiosk=kiosk-1]/kiosk:left-[1330px] group-data-[kiosk=kiosk-1]/kiosk:rotate-0"
+          className="top-[605px] left-[1285px] rotate-0 group-data-[kiosk=kiosk-1]/kiosk:top-[650px] group-data-[kiosk=kiosk-1]/kiosk:left-[1330px]"
           imageAlt="Accent gradient diamond"
           imageSrc={accentDiamondImageSrc}
         />
