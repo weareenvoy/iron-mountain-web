@@ -9,11 +9,11 @@
         "Information",
         "& data lifecycle"
       ],
-      "videoSrc": "/images/kiosks/kiosk2/01-challenge/Challenge-header.mp4"
+      "videoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/01+-+Challenge/Challenge-header.webm"
     },
     "initialScreen": {
       "attribution": "",
-      "backgroundImage": "/images/kiosks/kiosk2/Cover.png",
+      "backgroundImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/Cover.webp",
       "buttonText": "Touch to explore",
       "headline": "A global healthcare company mitigates risk and saves millions by finding certainty and clarity in its pension administration.",
       "quote": "Our digital solutions centralized this healthcare organization's unstructured \"dark data.\" This enterprise-wide visibility prevented erroneous pension payments, elevated records management, and created a searchable, compliant digital core for ongoing operational improvement.",
@@ -24,8 +24,8 @@
     },
     "secondScreen": {
       "bottomDescription": "The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.",
-      "bottomVideoSrc": "/images/kiosks/kiosk2/02-solution/Solution-header.mp4",
-      "largeIconSrc": "/images/kiosks/kiosk2/01-challenge/Challenge-Image1-Diamond.png",
+      "bottomVideoSrc": "",
+      "largeIconSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/01+-+Challenge/Challenge-Image1-Diamond.webp",
       "mainDescription": "Disparate, unstructured records across various locations and legacy systems—including paper, microfilm, CD, and digital formats—created costly, risk-laden pension administration.",
       "statAmount": "",
       "statDescription": "",
@@ -33,21 +33,21 @@
         "Information",
         "& data lifecycle"
       ],
-      "topImageSrc": "/images/kiosks/kiosk2/02-solution/Solution-Image1-Full.png"
+      "topImageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image1-Diamond.webp"
     },
     "thirdScreen": {
       "description": "After multiple acquisitions with antiquated and disordered records, finding the required regulatory documentation was difficult to impossible.",
-      "heroImageSrc": "/images/kiosks/kiosk2/01-challenge/Challenge-Image2-Diamond.png",
-      "largeIconCenterSrc": "/images/kiosks/kiosk2/02-solution/Solution-Image3-Full.png",
-      "largeIconTopSrc": "/images/kiosks/kiosk2/02-solution/Solution-Image2-Full.png",
+      "heroImageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/01+-+Challenge/Challenge-Image2-Diamond.webp",
+      "largeIconCenterSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image3-Diamond.webp",
+      "largeIconTopSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image2-Diamond.webp",
       "metricAmount": "2.5M",
       "metricDescription": "paper images are being digitized.",
-      "metricImageSrc": "/images/kiosks/kiosk2/01-challenge/Challenge-Image2-Diamond.png",
+      "metricImageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/01+-+Challenge/Challenge-Image2-Diamond.webp",
       "subheadline": [
         "Information",
         "& data lifecycle"
       ],
-      "videoSrc": "/images/kiosks/kiosk2/03-value/Value-header.mp4"
+      "videoSrc": ""
     }
   },
   "solutions": {
@@ -63,7 +63,7 @@
     "secondScreen": {
       "arrowIconSrc": "",
       "backgroundGlyphSrc": "",
-      "heroImageSrc": "/images/kiosks/kiosk2/02-solution/Solution-Image1-Diamond.png",
+      "heroImageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image1-Diamond.webp",
       "largeDiamondOutlineSrc": "",
       "mediumDiamondOutlineSrc": "",
       "solutionIconSrc": "",
@@ -89,8 +89,8 @@
       "bottomLeftLabel": "Automated workflows",
       "bottomRightLabel": "Searchable repository of pension information",
       "centerLabel": "Document digitization",
-      "mediaDiamondLeftSrc": "/images/kiosks/kiosk2/02-solution/Solution-Image1-Diamond.png",
-      "mediaDiamondRightSrc": "/images/kiosks/kiosk2/02-solution/Solution-Image2-Diamond.png",
+      "mediaDiamondLeftSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image1-Diamond.webp",
+      "mediaDiamondRightSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image2-Diamond.webp",
       "solutionIconSrc": "",
       "solutionLabel": "Solution",
       "subheadline": [

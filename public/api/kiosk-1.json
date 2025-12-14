@@ -32,7 +32,7 @@
         "statBody": "of existing footage of data migration from physical drives into Smart Vault.",
         "statTitle": "40 TB",
         "staticAsset": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/01+-+Challenge/Challenge-Image2-Diamond.webp",
-        "videoAsset": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/03+-+Value/Value-header.webm"
+        "videoAsset": ""
       }
     },
     "solutions": {
@@ -106,6 +106,8 @@
           "Rich media &",
           "cultural heritage"
         ],
+        "heroImageAlt": "Visitors smiling while viewing content",
+        "heroImageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/CU-Image1-Diamond.webp",
         "primaryCtaLabel": "From archive to access",
         "secondaryCtaLabel": "Virtual walkthrough"
       },

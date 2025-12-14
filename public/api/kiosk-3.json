@@ -9,11 +9,11 @@
         "IT assets &",
         "data centers"
       ],
-      "videoSrc": "/images/kiosks/kiosk3/01-challenge/Challenge-header.mp4"
+      "videoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/01+-+Challenge/Challenge-header.webm"
     },
     "initialScreen": {
       "attribution": "",
-      "backgroundImage": "/images/kiosks/kiosk3/Cover.png",
+      "backgroundImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/Cover.webp",
       "buttonText": "Touch to explore",
       "headline": "",
       "quote": "A global healthcare company optimizes IT asset management, improves transparency, and boosts remarketing returns by partnering with Iron Mountain Asset Lifecycle Management.",
@@ -24,8 +24,8 @@
     },
     "secondScreen": {
       "bottomDescription": "",
-      "bottomVideoSrc": "/images/kiosks/kiosk3/02-solution/Solution-header.mp4",
-      "largeIconSrc": "/images/kiosks/kiosk3/01-challenge/Challenge-Image1-Diamond.png",
+      "bottomVideoSrc": "",
+      "largeIconSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/01+-+Challenge/Challenge-Image1-Diamond.webp",
       "mainDescription": "A large bank acquired a competitor, which resulted in redundant and costly data center operations.",
       "statAmount": "",
       "statDescription": "",
@@ -33,21 +33,21 @@
         "IT assets &",
         "data centers"
       ],
-      "topImageSrc": "/images/kiosks/kiosk3/02-solution/Solution-Image1-Full.png"
+      "topImageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/01+-+Challenge/Challenge-Image1-Diamond.webp"
     },
     "thirdScreen": {
       "description": "Prior to partnering with Iron Mountain, the enterprise also faced challenges in optimizing remarketing potential across end-user devices and data center assets.",
-      "heroImageSrc": "/images/kiosks/kiosk3/04-custom-interactive/CU-Image1-Diamond.png",
-      "largeIconCenterSrc": "/images/kiosks/kiosk3/04-custom-interactive/CU-Image2-Full.png",
-      "largeIconTopSrc": "/images/kiosks/kiosk3/04-custom-interactive/CU-Image1-Full.png",
+      "heroImageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/01+-+Challenge/Challenge-Image2-Diamond.webp",
+      "largeIconCenterSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/02+-+Solution/Solution-Image3-Diamond.webp",
+      "largeIconTopSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/02+-+Solution/Solution-Image2-Diamond.webp",
       "metricAmount": "20+",
       "metricDescription": "data centers requiring expert support for asset refresh and decommissioning projects.",
-      "metricImageSrc": "/images/kiosks/kiosk3/04-custom-interactive/CU-Image2-Diamond.png",
+      "metricImageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/01+-+Challenge/Challenge-Image2-Diamond.webp",
       "subheadline": [
         "IT assets &",
         "data centers"
       ],
-      "videoSrc": "/images/kiosks/kiosk3/03-value/Value-header.mp4"
+      "videoSrc": ""
     }
   },
   "solutions": {
@@ -108,7 +108,7 @@
       "accentDiamondSrc": "",
       "backgroundVideoSrc": "",
       "mediaDiamondOutlineSrc": "",
-      "mediaDiamondSolidSrc": "/images/kiosks/kiosk3/02-solution/Solution-Image2-Diamond.png",
+      "mediaDiamondSolidSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/02+-+Solution/Solution-Image2-Diamond.webp",
       "solutionLabel": "Solution",
       "subheadline": [
         "IT assets &",
@@ -117,7 +117,7 @@
       "title": "Iron Mountain’s Asset Lifecycle Management"
     },
     "secondScreen": {
-      "heroImageSrc": "/images/kiosks/kiosk3/02-solution/Solution-Image1-Diamond.png",
+      "heroImageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/02+-+Solution/Solution-Image1-Diamond.webp",
       "stepFourDescription": "Improved total cost of ownership (TCO) on IT assets due to maximized remarketing returns",
       "stepFourLabel": "04.",
       "stepOneDescription": "Improved logistical costs due to extensive global footprint and in-house logistics",
@@ -246,6 +246,8 @@
         "IT assets &",
         "data centers"
       ],
+      "heroImageAlt": "Visitors smiling while viewing content",
+      "heroImageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image1-Diamond.webp",
       "primaryCtaLabel": "Centralized management of services",
       "secondaryCtaLabel": "Launch demo"
     },
@@ -259,7 +261,7 @@
       ],
       "headline": "Centralized management of services via API",
       "tapToBeginLabel": "Tap to begin",
-      "videoAsset": "/images/kiosks/kiosk3/04-custom-interactive/CU-Video1-Full.mp4"
+      "videoAsset": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video1-Full.webm"
     },
     "thirdScreen": {
       "headline": [
@@ -284,12 +286,117 @@
             "of services via API"
           ],
           "id": "slide-1",
-          "primaryImageAlt": "Professional with tablet in data center",
-          "primaryImageSrc": "/images/kiosks/kiosk3/01-challenge/Challenge-Image1-Diamond.png",
-          "primaryVideoSrc": "/images/kiosks/kiosk3/04-custom-interactive/CU-Video1-Full.mp4",
-          "secondaryImageAlt": "Hand touching smart interface",
-          "secondaryImageSrc": "/images/kiosks/kiosk3/04-custom-interactive/CU-Image2-Diamond.png",
+          "primaryImageAlt": "",
+          "primaryImageSrc": "",
+          "primaryVideoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video1-Full.webm",
+          "secondaryImageAlt": "Hand touching button on a data driven touch screen device.",
+          "secondaryImageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image2-Diamond.webp",
           "sectionTitle": "Data configuration"
+        },
+        {
+          "bullets": [
+            "Asset tagging",
+            "Asset tracking",
+            "Inventory management",
+            "Audits",
+            "Legal holds"
+          ],
+          "eyebrow": [
+            "IT assets &",
+            "data centers"
+          ],
+          "headline": [
+            "Centralized management",
+            "of services via API"
+          ],
+          "id": "slide-2",
+          "primaryImageAlt": "",
+          "primaryImageSrc": "",
+          "primaryVideoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video2-Full.webm",
+          "secondaryImageAlt": "",
+          "secondaryImageSrc": null,
+          "sectionTitle": "Device storage"
+        },
+        {
+          "bullets": [
+            "Kitting",
+            "Cleaning",
+            "Planning/scheduling",
+            "Imaging",
+            "Required upgrades"
+          ],
+          "eyebrow": [
+            "IT assets &",
+            "data centers"
+          ],
+          "headline": [
+            "Device configuration"
+          ],
+          "id": "slide-3",
+          "primaryImageAlt": "",
+          "primaryImageSrc": "",
+          "primaryVideoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video3-Full.webm",
+          "secondaryImageAlt": "Hand touching smart interface",
+          "secondaryImageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image3-Diamond.webp",
+          "sectionTitle": "Device configuration"
+        },
+        {
+          "bullets": [
+            "Shipment of PC and peripherals",
+            "Advanced exchange for repair or refresh"
+          ],
+          "eyebrow": [
+            "IT assets &",
+            "data centers"
+          ],
+          "headline": [
+            "Device deployment"
+          ],
+          "id": "slide-4",
+          "primaryImageAlt": "",
+          "primaryImageSrc": "",
+          "primaryVideoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video4-Full.webm",
+          "secondaryImageAlt": "Surveyor taking notes on inventory.",
+          "secondaryImageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image4-Diamond.webp",
+          "sectionTitle": "Device deployment"
+        },
+        {
+          "bullets": [
+            "Management of warranty and support extension, including break/fix"
+          ],
+          "eyebrow": [
+            "IT assets &",
+            "data centers"
+          ],
+          "headline": [
+            "Device maintenance"
+          ],
+          "id": "slide-5",
+          "primaryImageAlt": "",
+          "primaryImageSrc": "",
+          "primaryVideoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video5-Full.webm",
+          "secondaryImageAlt": "",
+          "secondaryImageSrc": null,
+          "sectionTitle": "Device maintenance"
+        },
+        {
+          "bullets": [
+            "Retrieval of PC and peripherals"
+          ],
+          "eyebrow": [
+            "IT assets &",
+            "data centers"
+          ],
+          "headline": [
+            "Device reverse logistics"
+          ],
+          "id": "slide-6",
+          "primaryImageAlt": "",
+          "primaryImageSrc": "",
+          "primaryVideoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video6-Full.webm",
+          "secondaryImageAlt": "Pair pointing towards computer with data in data center.",
+          "secondaryImageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image5-Diamond.webp",
+          "sectionTitle": "Device reverse logistics"
         }
       ]
     },
