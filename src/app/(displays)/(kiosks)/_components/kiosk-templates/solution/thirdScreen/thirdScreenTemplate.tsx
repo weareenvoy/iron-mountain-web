@@ -20,8 +20,6 @@ export type SolutionThirdScreenTemplateProps = Readonly<{
   bottomLeftLabel?: string;
   bottomRightLabel?: string;
   centerLabel?: string;
-  gradientEndColor?: string;
-  gradientStartColor?: string;
   kioskId?: string;
   mediaDiamondLeftSrc?: string;
   mediaDiamondRightSrc?: string;
@@ -57,8 +55,6 @@ const SolutionThirdScreenTemplate = ({
   bottomLeftLabel,
   bottomRightLabel,
   centerLabel,
-  gradientEndColor = '#8a0d71',
-  gradientStartColor = '#a2115e',
   kioskId,
   mediaDiamondLeftSrc = imgDiamondMediaLeft,
   mediaDiamondRightSrc = imgDiamondMediaRight,
@@ -122,12 +118,13 @@ const SolutionThirdScreenTemplate = ({
       className="group/kiosk relative flex h-screen w-full flex-col overflow-hidden bg-black"
       data-kiosk={kioskId}
       data-node-id="5168:9626"
+      style={{ background: 'transparent' }}
     >
       {/* Gradient backdrop */}
       <div
         className="absolute top-[-296px] left-0 h-[5416px] w-full rounded-t-[100px]"
         data-node-id="5168:9628"
-        style={{ background: `linear-gradient(to bottom, ${gradientStartColor} 0%, ${gradientEndColor} 99%)` }}
+        style={{ background: 'transparent' }}
       />
 
       {/* Subheadline */}
@@ -288,7 +285,7 @@ const FilledDiamond = ({
 }) => {
   return (
     <div className={`absolute ${className}`}>
-      <div className="relative size-[390px] rotate-[45deg] group-data-[kiosk=kiosk-1]/kiosk:size-[290px] group-data-[kiosk=kiosk-2]/kiosk:rotate-[0deg]">
+      <div className="relative size-[390px] rotate-[45deg] group-data-[kiosk=kiosk-1]/kiosk:size-[290px]">
         {imageSrc ? (
           <Image alt={imageAlt} className="-rotate-[45deg] object-cover" fill sizes="390px" src={imageSrc} />
         ) : (

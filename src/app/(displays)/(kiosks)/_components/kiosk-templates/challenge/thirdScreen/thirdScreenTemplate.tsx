@@ -53,28 +53,6 @@ export const ThirdScreenTemplate = ({
       data-node-id="5168:9928"
       data-video-src={videoSrc}
     >
-      {/* Video Section */}
-      <div
-        // className={styles.videoContainer}
-        className="absolute top-0 left-0 z-[1] h-[1291px] w-full overflow-hidden"
-        data-node-id="5168:9929"
-      >
-        <div className="relative top-[-5.93%] left-[-7.5%] h-[117.19%] w-[124.52%]">
-          <video
-            autoPlay
-            className="h-full w-full object-cover object-center"
-            controlsList="nodownload"
-            loop
-            muted
-            playsInline
-            // className={styles.video}
-          >
-            <source src={videoSrc} type="video/mp4" />
-          </video>
-          <div className="pointer-events-none absolute inset-0 bg-black/20" />
-        </div>
-      </div>
-
       {/* Subheadline */}
       <div
         // className={styles.subheadlineContainer}
@@ -182,12 +160,12 @@ export const ThirdScreenTemplate = ({
       {/* Background Gradients */}
       <div
         // className={styles.gradientBg}
-        className="absolute top-[-224px] left-[0px] z-[2] h-[5549px] w-[2158px] rounded-[100px] bg-[linear-gradient(to_bottom,#1b75bc_0%,#14477d_98%)]"
+        className="absolute top-[-224px] left-[0px] z-[2] h-[5549px] w-[2158px] rounded-[100px] bg-transparent"
         data-node-id="5168:9930"
       />
       <div
         // className={styles.topGradientOverlay}
-        className="pointer-events-none absolute top-0 left-0 z-[3] h-[1732px] w-full bg-[linear-gradient(to_bottom,#1968ab_66.076%,rgba(26,108,175,0)_99.322%)]"
+        className="pointer-events-none absolute top-0 left-0 z-[3] h-[1732px] w-full bg-transparent"
         data-node-id="5168:9934"
       />
 

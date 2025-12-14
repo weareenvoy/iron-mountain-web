@@ -1,163 +1,35 @@
 'use client';
 
-import challengeContent from '@public/api/kiosk-2-challenges.json';
-import solutionContent from '@public/api/kiosk-2-solutions.json';
-import valueContent from '@public/api/kiosk-2-values.json';
-import { useEffect, useState, type ReactElement } from 'react';
+import kioskContent from '@public/api/kiosk-2.json';
+import { Fragment, useEffect, useState } from 'react';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
-import FirstScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/firstScreen/firstScreenTemplate';
-import InitialScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/initialScreen/initialScreenTemplate';
-import SecondScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/secondScreen/secondScreenTemplate';
-import ThirdScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/thirdScreen/thirdScreenTemplate';
-import SolutionFirstScreenTemplate, {
-  type SolutionFirstScreenTemplateProps,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/firstScreen/firstScreenTemplate';
-import SolutionSecondScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/secondScreen/secondScreenTemplate';
-import SolutionThirdScreenTemplate, {
-  type SolutionThirdScreenTemplateProps,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/thirdScreen/thirdScreenTemplate';
-import ValueCarouselTemplate, {
-  type ValueCarouselTemplateProps,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueCarouselTemplate';
+import { buildChallengeSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeTemplate';
+import { buildSolutionSlides, type SolutionScreens } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/solutionTemplate';
+import { type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
+import { buildValueSlides, type ValueScreens } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueTemplate';
 import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
 import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 // import styles from './kiosk-2.module.css';
 
-type Slide = { id: string; render: () => ReactElement; title: string };
-
-type SolutionSlidesConfig = {
-  firstScreen?: SolutionFirstScreenTemplateProps;
-  secondScreen?: Parameters<typeof SolutionSecondScreenTemplate>[0];
-  secondScreens?: Parameters<typeof SolutionSecondScreenTemplate>[0][];
-  thirdScreen?: SolutionThirdScreenTemplateProps;
-};
-
-type ValueSlidesConfig = {
-  valueScreens?: Omit<ValueCarouselTemplateProps, 'onNavigateDown' | 'onNavigateUp'>[];
-};
-
-const formatTitle = (value: string | string[] | undefined, fallback: string) =>
-  Array.isArray(value) ? value.join(' ') : (value ?? fallback);
-
 const Kiosk2View = () => {
   const controller: Controller = useKioskController();
   const [topIndex, setTopIndex] = useState(0);
-  const challenges: KioskChallenges = parseKioskChallenges(challengeContent, 'kiosk-2');
-  const solutions = solutionContent as SolutionSlidesConfig;
-  const values = valueContent as ValueSlidesConfig;
+  const challenges: KioskChallenges = parseKioskChallenges(kioskContent.challenges, 'kiosk-2');
+  const solutions = kioskContent.solutions as SolutionScreens;
+  const values = kioskContent.value as ValueScreens;
 
-  const challengeSlides: Slide[] = [
-    {
-      id: 'challenge-initial',
-      render: () => (
-        <InitialScreenTemplate {...challenges.initialScreen} contentBoxBgColor="#8DC13F" kioskId="kiosk-2" />
-      ),
-      title: 'Challenge Intro',
-    },
-    {
-      id: 'challenge-first',
-      render: () => (
-        <FirstScreenTemplate
-          {...challenges.firstScreen}
-          kioskId="kiosk-2"
-          onNavigateDown={() => controller.next()}
-          onNavigateUp={() => controller.prev()}
-        />
-      ),
-      title: 'Challenge Story',
-    },
-    {
-      id: 'challenge-second',
-      render: () => (
-        <SecondScreenTemplate
-          {...challenges.secondScreen}
-          kioskId="kiosk-2"
-          onNavigateDown={() => controller.next()}
-          onNavigateUp={() => controller.prev()}
-        />
-      ),
-      title: 'Challenge Stats',
-    },
-    {
-      id: 'challenge-third',
-      render: () => (
-        <ThirdScreenTemplate
-          {...challenges.thirdScreen}
-          kioskId="kiosk-2"
-          onNavigateDown={() => controller.next()}
-          onNavigateUp={() => controller.prev()}
-        />
-      ),
-      title: 'Challenge Impact',
-    },
+  const slides: Slide[] = [
+    ...buildChallengeSlides(challenges, 'kiosk-2', controller, {
+      initialScreen: { ...challenges.initialScreen, contentBoxBgColor: '#8DC13F' },
+    }),
+    ...buildSolutionSlides(solutions, 'kiosk-2', controller),
+    ...buildValueSlides(values, 'kiosk-2', controller),
   ];
-
-  const buildSolutionSlides = (): Slide[] => {
-    const result: Slide[] = [];
-
-    if (solutions.firstScreen) {
-      result.push({
-        id: 'solution-first',
-        render: () => <SolutionFirstScreenTemplate {...solutions.firstScreen!} />,
-        title: formatTitle(solutions.firstScreen.title, 'Solution Intro'),
-      });
-    }
-
-    const secondScreens =
-      solutions.secondScreens && solutions.secondScreens.length > 0
-        ? solutions.secondScreens
-        : solutions.secondScreen
-          ? [solutions.secondScreen]
-          : [];
-
-    secondScreens.forEach((config, idx) => {
-      result.push({
-        id: `solution-second-${idx}`,
-        render: () => (
-          <SolutionSecondScreenTemplate
-            {...config}
-            kioskId="kiosk-2"
-            onNavigateDown={() => controller.next()}
-            onNavigateUp={() => controller.prev()}
-          />
-        ),
-        title: formatTitle(config.title, `Solution Step ${idx + 1}`),
-      });
-    });
-
-    if (solutions.thirdScreen) {
-      result.push({
-        id: 'solution-third',
-        render: () => (
-          <SolutionThirdScreenTemplate
-            {...solutions.thirdScreen}
-            kioskId="kiosk-2"
-            onNavigateDown={() => controller.next()}
-            onNavigateUp={() => controller.prev()}
-          />
-        ),
-        title: formatTitle(solutions.thirdScreen.title, 'Solution Walkthrough'),
-      });
-    }
-
-    return result;
-  };
-
-  const valueSlides =
-    values.valueScreens?.map((config, idx) => ({
-      id: `value-${idx}`,
-      render: () => (
-        <ValueCarouselTemplate
-          {...config}
-          carouselId={config.carouselId ?? `kiosk-2-value-${idx}`}
-          onNavigateDown={() => controller.next()}
-          onNavigateUp={() => controller.prev()}
-        />
-      ),
-      title: config.headline ?? config.labelText ?? `Value ${idx + 1}`,
-    })) ?? [];
-
-  const slides = [...challengeSlides, ...buildSolutionSlides(), ...valueSlides];
+  const challengeCount = buildChallengeSlides(challenges, 'kiosk-2', controller, {
+    initialScreen: { ...challenges.initialScreen, contentBoxBgColor: '#8DC13F' },
+  }).length;
+  const solutionCount = buildSolutionSlides(solutions, 'kiosk-2', controller).length;
+  const valueCount = buildValueSlides(values, 'kiosk-2', controller).length;
 
   useEffect(() => {
     controller.setRootHandlers({
@@ -183,21 +55,24 @@ const Kiosk2View = () => {
       // className={styles.root}
       className="relative h-full w-full"
     >
-      <div
-        // className={styles.parallaxContainer}
-        className="h-full w-full"
-        data-top-index={topIndex}
-      >
-        {slides.map((slide, idx) => (
-          <section
-            // className={styles.slide}
-            className="flex h-full w-full flex-col items-center justify-center"
-            data-active={idx === topIndex}
-            key={slide.id}
-          >
-            {slide.render()}
-          </section>
-        ))}
+      <div className="h-full w-full" data-top-index={topIndex}>
+        <section className="h-full w-full" data-section="challenges">
+          {slides.slice(0, challengeCount).map((slide, idx) => (
+            <Fragment key={slide.id}>{slide.render(idx === topIndex)}</Fragment>
+          ))}
+        </section>
+        <section className="h-full w-full" data-section="solutions">
+          {slides.slice(challengeCount, challengeCount + solutionCount).map((slide, idx) => (
+            <Fragment key={slide.id}>{slide.render(challengeCount + idx === topIndex)}</Fragment>
+          ))}
+        </section>
+        <section className="h-full w-full" data-section="value">
+          {slides.slice(challengeCount + solutionCount).map((slide, idx) => (
+            <Fragment key={slide.id}>
+              {slide.render(challengeCount + solutionCount + idx === topIndex)}
+            </Fragment>
+          ))}
+        </section>
       </div>
       <div
         // className={styles.debugControls}

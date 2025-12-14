@@ -34,6 +34,7 @@ export const FirstScreenTemplate = ({
       className="group/kiosk relative flex h-screen w-full flex-col overflow-hidden bg-black"
       data-kiosk={kioskId}
       data-node-id="5168:9882"
+      style={{ overflow: 'visible' }}
     >
       {/* Video Section */}
       <div
@@ -146,6 +147,7 @@ export const FirstScreenTemplate = ({
         // className={styles.gradientBg}
         className="absolute top-[1060px] left-0 z-[2] h-[4085px] w-full rounded-t-[100px] bg-[linear-gradient(to_bottom,#1b75bc_0%,#14477d_98%)]"
         data-node-id="5168:9884"
+        style={{ height: '14570px' }}
       />
 
       {/* Savings Metrics Section */}
@@ -173,6 +175,7 @@ export const FirstScreenTemplate = ({
         // className={styles.fadeOutGradient}
         className="pointer-events-none absolute top-[3750px] left-0 z-[3] h-[1369px] w-full -scale-y-100 bg-[linear-gradient(to_bottom,#154c83_42.41%,rgba(21,75,130,0)_98.852%)]"
         data-node-id="5168:9895"
+        style={{ height: '11880px' }}
       />
     </div>
   );

@@ -18,8 +18,6 @@ export type SolutionSecondScreenTemplateProps = Readonly<
 >;
 
 type SolutionSecondScreenCoreProps = {
-  gradientEndColor?: string;
-  gradientStartColor?: string;
   heroImageAlt?: string;
   heroImageSrc?: string;
   kioskId?: KioskId;
@@ -44,8 +42,6 @@ type SolutionSecondScreenStepsProps = {
 };
 
 const SolutionSecondScreenTemplate = ({
-  gradientEndColor = '#8a0d71',
-  gradientStartColor = '#a2115e',
   heroImageAlt = 'Solution highlight',
   heroImageSrc = imgHeroDiamond,
   kioskId = DEFAULT_KIOSK_ID,
@@ -95,11 +91,15 @@ const SolutionSecondScreenTemplate = ({
       className="group/kiosk relative flex h-screen w-full flex-col overflow-hidden bg-black"
       data-kiosk={kioskId}
       data-node-id="5168:9473"
+      style={{ overflow: 'visible', background: 'transparent' }}
     >
       {/* Gradient backdrop */}
       <div
         className="absolute top-[-296px] left-0 h-[5416px] w-full rounded-t-[100px]"
-        style={{ background: `linear-gradient(to bottom, ${gradientStartColor} 0%, ${gradientEndColor} 99%)` }}
+        style={{
+          background: 'transparent',
+          height: '14575px',
+        }}
       />
 
       {/* Decorative diamonds */}

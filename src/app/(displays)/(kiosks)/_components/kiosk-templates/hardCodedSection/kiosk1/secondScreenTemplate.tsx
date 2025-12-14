@@ -270,11 +270,12 @@ const HardCodedKiosk1SecondScreenTemplate = ({
         className="relative flex h-screen w-full flex-col overflow-hidden"
         data-node-id="hardcoded-k1-second"
         ref={containerRef}
+        style={{ overflow: 'visible', background: 'transparent' }}
       >
         <div
           className="absolute inset-0"
           style={{
-            background: `linear-gradient(180deg, ${backgroundStartColor} 0%, ${backgroundEndColor} 100%)`,
+            background: 'transparent',
           }}
         />
 

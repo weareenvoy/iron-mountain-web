@@ -65,6 +65,7 @@ const HardCodedKiosk1FirstScreenTemplate = ({
   primaryCtaLabel = defaultPrimaryCtaLabel,
   secondaryCtaLabel = defaultSecondaryCtaLabel,
 }: HardCodedKiosk1FirstScreenTemplateProps) => {
+  const isKiosk1 = kioskId === 'kiosk-1';
   const eyebrowText = Array.isArray(eyebrow) ? eyebrow.join('\n') : eyebrow;
   const headlineText = Array.isArray(headline) ? headline.join('\n') : headline;
   const isKiosk3 = kioskId === 'kiosk-3';
@@ -73,11 +74,16 @@ const HardCodedKiosk1FirstScreenTemplate = ({
   const secondaryIconOffset = isKiosk3 ? 'left-[-330px]' : 'left-[-70px]';
 
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-hidden" data-node-id="5893:7411">
+    <div
+      className="relative flex h-screen w-full flex-col overflow-hidden"
+      data-node-id="5893:7411"
+      style={isKiosk1 || isKiosk3 ? { overflow: 'visible' } : undefined}
+    >
       <div
         className="absolute inset-0"
         style={{
           background: `linear-gradient(180deg, ${backgroundStartColor} 0%, ${backgroundEndColor} 100%)`,
+          height: isKiosk1 || isKiosk3 ? '15630px' : undefined,
         }}
       />
 
