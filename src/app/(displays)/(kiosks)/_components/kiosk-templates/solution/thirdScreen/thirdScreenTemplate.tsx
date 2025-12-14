@@ -201,7 +201,7 @@ const SolutionThirdScreenTemplate = ({
         role="button"
         tabIndex={0}
       >
-      <ArrowUp aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
+        <ArrowUp aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
       </div>
       <div
         aria-label="Next"
@@ -216,7 +216,7 @@ const SolutionThirdScreenTemplate = ({
         role="button"
         tabIndex={0}
       >
-      <ArrowDown aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
+        <ArrowDown aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
       </div>
     </div>
   );
