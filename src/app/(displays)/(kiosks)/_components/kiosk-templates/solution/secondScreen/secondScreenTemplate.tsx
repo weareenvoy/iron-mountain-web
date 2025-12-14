@@ -91,7 +91,7 @@ const SolutionSecondScreenTemplate = ({
       className="group/kiosk relative flex h-screen w-full flex-col overflow-hidden bg-black"
       data-kiosk={kioskId}
       data-node-id="5168:9473"
-      style={{ overflow: 'visible', background: 'transparent' }}
+      style={{ background: 'transparent', overflow: 'visible' }}
     >
       {/* Gradient backdrop */}
       <div

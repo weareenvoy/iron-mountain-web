@@ -233,7 +233,7 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
       className="relative flex h-screen w-full flex-col overflow-hidden bg-black"
       data-carousel-id={resolvedCarouselId}
       data-node-id="5688:14628"
-      style={{ overflow: 'visible', background: 'transparent' }}
+      style={{ background: 'transparent', overflow: 'visible' }}
     >
       <div className="absolute top-0 left-0 z-[1] h-[1284px] w-full overflow-hidden">
         {heroVideo ? (
@@ -294,16 +294,12 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
             <div className="w-full overflow-hidden" ref={emblaRef}>
               <div className="flex w-full">
                 {slidesWithDefaults.map(slide => {
-                  const cards: readonly ValueDiamondCard[] =
-                    slide.diamondCards && slide.diamondCards.length > 0 ? slide.diamondCards : fallbackDiamondCards;
+                  const cards: readonly ValueDiamondCard[] = slide.diamondCards;
                   const bulletItems = getBulletItems(slide);
                   const hasBullets = bulletItems.length > 0;
                   const stackVariant: DiamondStackVariant = hasBullets ? 'carousel' : 'overview';
                   return (
-                    <div
-                      className="flex min-h-[1600px] w-full min-w-full flex-row gap-[53px] pr-[80px]"
-                      key={slide.id ?? slide.badgeLabel}
-                    >
+                    <div className="flex min-h-[1600px] w-full min-w-full flex-row gap-[53px] pr-[80px]" key={slide.id}>
                       <div className="flex w-[920px] flex-col items-center gap-[71px]">
                         <DiamondStack cards={cards} variant={stackVariant} />
                       </div>
@@ -312,7 +308,7 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
                           {bulletItems.map((bullet, idx) => (
                             <li
                               className="relative mb-[80px] w-[840px] pl-[40px] last:mb-0"
-                              key={`${slide.id ?? slide.badgeLabel ?? 'bullet'}-${idx}`}
+                              key={`${slide.id}-bullet-${idx}`}
                             >
                               <span className="absolute top-[30px] left-0 size-[16px] -translate-y-1/2 rounded-full bg-[#8a0d71]" />
                               <span>{renderRegisteredMark(bullet)}</span>

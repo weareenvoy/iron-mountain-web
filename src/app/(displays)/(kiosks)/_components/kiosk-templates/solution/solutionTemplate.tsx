@@ -1,4 +1,5 @@
 import { type Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
+import { SectionSlide, type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
 import SolutionFirstScreenTemplate, {
   type SolutionFirstScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/firstScreen/firstScreenTemplate';
@@ -11,7 +12,6 @@ import SolutionSecondScreenTemplate, {
 import SolutionThirdScreenTemplate, {
   type SolutionThirdScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/thirdScreen/thirdScreenTemplate';
-import { SectionSlide, type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
 import { type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 export type SolutionScreens = Readonly<{

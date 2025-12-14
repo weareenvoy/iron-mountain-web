@@ -156,8 +156,8 @@ const SolutionFourthScreenTemplate = ({
               <AccordionItem
                 className={`relative overflow-hidden border-none ${roundedClass}`}
                 key={item.id}
-                value={item.id}
                 style={index === entries.length - 1 ? { backgroundColor: palette.header } : undefined}
+                value={item.id}
               >
                 {index > 0 ? (
                   <div

@@ -4,13 +4,15 @@ import kioskContent from '@public/api/kiosk-1.json';
 import { Fragment, useEffect, useState } from 'react';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
 import { buildChallengeSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeTemplate';
-import { buildHardcodedSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/hardCodedTemplate';
-import { type HardCodedScreens } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/hardCodedTemplate';
+import {
+  buildHardcodedSlides,
+  type HardCodedScreens,
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/hardCodedTemplate';
+import { type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
 import {
   buildSolutionSlides,
   type SolutionScreens,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/solutionTemplate';
-import { type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
 import {
   buildValueSlides,
   type ValueScreens,
@@ -28,7 +30,7 @@ const Kiosk1View = () => {
   );
   const solutions = mapSolutions(kioskContent.data.solutions) as SolutionScreens;
   const values = mapValue(kioskContent.data.value) as ValueScreens;
-  const hardCoded = (kioskContent.data.hardcoded ?? {}) as HardCodedScreens;
+  const hardCoded = kioskContent.data.hardcoded as HardCodedScreens;
 
   const slides: Slide[] = [
     ...buildChallengeSlides(challenges, 'kiosk-1', controller),
@@ -113,8 +115,8 @@ type ChallengeScreen = {
   body?: string;
   slideTitle?: string;
   statBody?: string;
-  statTitle?: string;
   staticAsset?: string;
+  statTitle?: string;
   videoAsset?: string;
 };
 
@@ -158,14 +160,6 @@ type ValueContent = {
 const splitLines = (value?: string) => (value ? value.split('\n') : undefined);
 
 const mapChallenges = (challenge: ChallengeContent, ambient: Ambient): KioskChallenges => ({
-  initialScreen: {
-    attribution: ambient.quoteSource ?? '- Michael Rohrabacher, Technical Director at the GRAMMY Museum',
-    backgroundImage: ambient.backgroundImage ?? '',
-    buttonText: 'Touch to explore',
-    headline: ambient.headline ?? '',
-    quote: ambient.body ?? '',
-    subheadline: splitLines(ambient.title) ?? 'Rich media & cultural heritage',
-  },
   firstScreen: {
     challengeLabel: 'Challenge',
     problemDescription: challenge.firstScreen?.body ?? '',
@@ -173,6 +167,14 @@ const mapChallenges = (challenge: ChallengeContent, ambient: Ambient): KioskChal
     savingsDescription: challenge.firstScreen?.statBody ?? '',
     subheadline: splitLines(challenge.firstScreen?.slideTitle) ?? 'Rich media & cultural heritage',
     videoSrc: challenge.firstScreen?.videoAsset ?? '',
+  },
+  initialScreen: {
+    attribution: ambient.quoteSource ?? '- Michael Rohrabacher, Technical Director at the GRAMMY Museum',
+    backgroundImage: ambient.backgroundImage ?? '',
+    buttonText: 'Touch to explore',
+    headline: ambient.headline ?? '',
+    quote: ambient.body ?? '',
+    subheadline: splitLines(ambient.title) ?? 'Rich media & cultural heritage',
   },
   secondScreen: {
     bottomDescription: '',
@@ -278,13 +280,12 @@ const mapValue = (value: ValueContent): ValueScreens => {
     ];
   };
 
-  const carouselSlides =
-    benefits.map(benefit => ({
-      badgeLabel: benefit.label,
-      bullets: benefit.bullets,
-      diamondCards: buildDiamondCards(benefit.label),
-      id: `value-${(benefit.label ?? '').toLowerCase().replace(/\s+/g, '-')}`,
-    })) ?? [];
+  const carouselSlides = benefits.map(benefit => ({
+    badgeLabel: benefit.label,
+    bullets: benefit.bullets,
+    diamondCards: buildDiamondCards(benefit.label),
+    id: `value-${(benefit.label ?? '').toLowerCase().replace(/\s+/g, '-')}`,
+  }));
 
   return {
     valueScreens: [

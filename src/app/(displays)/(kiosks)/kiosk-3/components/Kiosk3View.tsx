@@ -8,11 +8,11 @@ import {
   buildHardcodedSlides,
   type HardCodedScreens,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/hardCodedTemplate';
+import { type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
 import {
   buildSolutionSlides,
   type SolutionScreens,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/solutionTemplate';
-import { type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
 import {
   buildValueSlides,
   type ValueScreens,

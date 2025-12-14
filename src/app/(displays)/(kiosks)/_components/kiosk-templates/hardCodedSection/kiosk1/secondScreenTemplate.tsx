@@ -261,7 +261,7 @@ const HardCodedKiosk1SecondScreenTemplate = ({
         className="relative flex h-screen w-full flex-col overflow-hidden"
         data-node-id="hardcoded-k1-second"
         ref={containerRef}
-        style={{ overflow: 'visible', background: 'transparent' }}
+        style={{ background: 'transparent', overflow: 'visible' }}
       >
         <div
           className="absolute inset-0"

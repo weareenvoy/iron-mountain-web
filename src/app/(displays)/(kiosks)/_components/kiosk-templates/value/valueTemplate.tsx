@@ -1,8 +1,8 @@
 import { type Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
+import { SectionSlide, type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
 import ValueCarouselTemplate, {
   type ValueCarouselTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueCarouselTemplate';
-import { SectionSlide, type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
 import { type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 export type ValueScreens = Readonly<{

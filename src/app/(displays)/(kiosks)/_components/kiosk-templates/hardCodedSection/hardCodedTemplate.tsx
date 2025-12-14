@@ -1,18 +1,18 @@
 import HardCodedFirstScreenTemplate, {
   type HardCodedKiosk1FirstScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/firstScreenTemplate';
-import HardCodedKiosk1SecondScreenTemplate, {
-  type HardCodedKiosk1SecondScreenTemplateProps,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk1/secondScreenTemplate';
-import HardCodedKiosk1ThirdScreenTemplate, {
-  type HardCodedKiosk1ThirdScreenTemplateProps,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk1/thirdScreenTemplate';
 import HardCodedKiosk3FourthScreenTemplate, {
   type HardCodedKiosk3FourthScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk3/fourthScreenTemplate';
+import HardCodedKiosk1SecondScreenTemplate, {
+  type HardCodedKiosk1SecondScreenTemplateProps,
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk1/secondScreenTemplate';
 import HardCodedKiosk3SecondScreenTemplate, {
   type HardCodedKiosk3SecondScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk3/secondScreenTemplate';
+import HardCodedKiosk1ThirdScreenTemplate, {
+  type HardCodedKiosk1ThirdScreenTemplateProps,
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk1/thirdScreenTemplate';
 import HardCodedKiosk3ThirdScreenTemplate, {
   type HardCodedKiosk3ThirdScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk3/thirdScreenTemplate';

@@ -4,11 +4,11 @@ import kioskContent from '@public/api/kiosk-2.json';
 import { Fragment, useEffect, useState } from 'react';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
 import { buildChallengeSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeTemplate';
+import { type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
 import {
   buildSolutionSlides,
   type SolutionScreens,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/solutionTemplate';
-import { type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
 import {
   buildValueSlides,
   type ValueScreens,
