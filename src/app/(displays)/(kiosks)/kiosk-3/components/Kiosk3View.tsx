@@ -35,7 +35,7 @@ const Kiosk3View = () => {
     }),
     ...buildSolutionSlides(solutions, 'kiosk-3', controller),
     ...buildValueSlides(values, 'kiosk-3', controller),
-    ...buildHardcodedSlides(hardCoded, 'kiosk-3', controller),
+    ...buildHardcodedSlides(hardCoded, 'kiosk-3'),
   ];
   const challengeCount = buildChallengeSlides(challenges, 'kiosk-3', controller, {
     initialScreen: { ...challenges.initialScreen, contentBoxBgColor: '#00A88E' },

@@ -13,8 +13,6 @@ import HCHollowGreenDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollo
 import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollowOrangeDiamond';
 
 export interface HardCodedKiosk3ThirdScreenTemplateProps {
-  readonly backgroundEndColor?: string;
-  readonly backgroundStartColor?: string;
   readonly headline?: string | string[];
   readonly slides?: CarouselSlide[];
 }
@@ -116,8 +114,6 @@ const defaultSlides: CarouselSlide[] = [
 ];
 
 const HardCodedKiosk3ThirdScreenTemplate = ({
-  backgroundEndColor = '#0a2f5c',
-  backgroundStartColor = '#1b75bc',
   headline = defaultHeadline,
   slides = defaultSlides,
 }: HardCodedKiosk3ThirdScreenTemplateProps) => {

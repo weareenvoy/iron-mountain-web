@@ -12,6 +12,7 @@ import SolutionThirdScreenTemplate, {
   type SolutionThirdScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/thirdScreen/thirdScreenTemplate';
 import { SectionSlide, type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
+import { type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 export type SolutionScreens = Readonly<{
   firstScreen?: SolutionFirstScreenTemplateProps;
@@ -21,13 +22,13 @@ export type SolutionScreens = Readonly<{
   thirdScreen?: SolutionThirdScreenTemplateProps;
 }>;
 
-export const buildSolutionSlides = (solutions: SolutionScreens, kioskId: string, controller: Controller): Slide[] => {
+export const buildSolutionSlides = (solutions: SolutionScreens, kioskId: KioskId, controller: Controller): Slide[] => {
   const slides: Slide[] = [];
 
   if (solutions.firstScreen) {
     slides.push({
       id: 'solution-first',
-      render: isActive => (
+      render: (isActive: boolean) => (
         <SectionSlide isActive={isActive}>
           <SolutionFirstScreenTemplate
             {...solutions.firstScreen}
@@ -50,7 +51,7 @@ export const buildSolutionSlides = (solutions: SolutionScreens, kioskId: string,
   secondScreens.forEach((config, idx) => {
     slides.push({
       id: `solution-second-${idx}`,
-      render: isActive => (
+      render: (isActive: boolean) => (
         <SectionSlide isActive={isActive}>
           <SolutionSecondScreenTemplate
             {...config}
@@ -71,7 +72,7 @@ export const buildSolutionSlides = (solutions: SolutionScreens, kioskId: string,
   if (solutions.thirdScreen && !solutions.fourthScreen) {
     slides.push({
       id: 'solution-third',
-      render: isActive => (
+      render: (isActive: boolean) => (
         <SectionSlide isActive={isActive}>
           <SolutionThirdScreenTemplate
             {...solutions.thirdScreen}
@@ -81,16 +82,14 @@ export const buildSolutionSlides = (solutions: SolutionScreens, kioskId: string,
           />
         </SectionSlide>
       ),
-      title:
-        solutions.thirdScreen.title ??
-        (Array.isArray(solutions.thirdScreen.title) ? solutions.thirdScreen.title.join(' ') : 'Solution Walkthrough'),
+      title: solutions.thirdScreen.title ?? 'Solution Walkthrough',
     });
   }
 
   if (solutions.fourthScreen) {
     slides.push({
       id: 'solution-fourth',
-      render: isActive => (
+      render: (isActive: boolean) => (
         <SectionSlide isActive={isActive}>
           <SolutionFourthScreenTemplate
             {...solutions.fourthScreen}

@@ -35,7 +35,6 @@ const Kiosk2View = () => {
     initialScreen: { ...challenges.initialScreen, contentBoxBgColor: '#8DC13F' },
   }).length;
   const solutionCount = buildSolutionSlides(solutions, 'kiosk-2', controller).length;
-  const valueCount = buildValueSlides(values, 'kiosk-2', controller).length;
 
   useEffect(() => {
     controller.setRootHandlers({

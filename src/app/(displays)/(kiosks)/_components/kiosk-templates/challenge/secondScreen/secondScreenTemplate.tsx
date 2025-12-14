@@ -13,7 +13,6 @@ const imgVector = '/images/kiosks/kiosk1/01-challenge/Challenge-Image1-Diamond.p
 
 export type SecondScreenTemplateProps = Readonly<{
   bottomDescription?: string;
-  bottomVideoSrc?: string;
   kioskId?: KioskId;
   largeIconSrc?: string;
   mainDescription?: string;
@@ -27,7 +26,6 @@ export type SecondScreenTemplateProps = Readonly<{
 
 export const SecondScreenTemplate = ({
   bottomDescription = 'The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.',
-  bottomVideoSrc = '',
   kioskId = DEFAULT_KIOSK_ID,
   largeIconSrc = imgVector,
   mainDescription = 'The Museum also needed assistance with physical storage for a collection of historical music artifacts.',

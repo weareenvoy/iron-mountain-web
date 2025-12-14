@@ -34,7 +34,7 @@ const Kiosk1View = () => {
     ...buildChallengeSlides(challenges, 'kiosk-1', controller),
     ...buildSolutionSlides(solutions, 'kiosk-1', controller),
     ...buildValueSlides(values, 'kiosk-1', controller),
-    ...buildHardcodedSlides(hardCoded, 'kiosk-1', controller),
+    ...buildHardcodedSlides(hardCoded, 'kiosk-1'),
   ];
   const challengeCount = buildChallengeSlides(challenges, 'kiosk-1', controller).length;
   const solutionCount = buildSolutionSlides(solutions, 'kiosk-1', controller).length;

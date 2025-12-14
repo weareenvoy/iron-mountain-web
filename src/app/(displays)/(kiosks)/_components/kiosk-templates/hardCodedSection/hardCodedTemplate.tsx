@@ -1,4 +1,3 @@
-import { type Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 import HardCodedFirstScreenTemplate, {
   type HardCodedKiosk1FirstScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/firstScreenTemplate';
@@ -26,11 +25,7 @@ export type HardCodedScreens = Readonly<{
   thirdScreen?: HardCodedKiosk1ThirdScreenTemplateProps & HardCodedKiosk3ThirdScreenTemplateProps;
 }>;
 
-export const buildHardcodedSlides = (
-  hardCoded: HardCodedScreens,
-  kioskId: 'kiosk-1' | 'kiosk-2' | 'kiosk-3',
-  controller: Controller
-): Slide[] => {
+export const buildHardcodedSlides = (hardCoded: HardCodedScreens, kioskId: 'kiosk-1' | 'kiosk-2' | 'kiosk-3'): Slide[] => {
   if (kioskId === 'kiosk-2') return [];
 
   const slides: Slide[] = [];
@@ -38,7 +33,7 @@ export const buildHardcodedSlides = (
   if (hardCoded.firstScreen) {
     slides.push({
       id: 'hardcoded-first',
-      render: isActive => (
+      render: (isActive: boolean) => (
         <SectionSlide isActive={isActive}>
           <HardCodedFirstScreenTemplate kioskId={kioskId} {...hardCoded.firstScreen} />
         </SectionSlide>
@@ -53,7 +48,7 @@ export const buildHardcodedSlides = (
 
     slides.push({
       id: 'hardcoded-second',
-      render: isActive => (
+      render: (isActive: boolean) => (
         <SectionSlide isActive={isActive}>
           <KioskSecond {...hardCoded.secondScreen} />
         </SectionSlide>
@@ -67,7 +62,7 @@ export const buildHardcodedSlides = (
 
     slides.push({
       id: 'hardcoded-third',
-      render: isActive => (
+      render: (isActive: boolean) => (
         <SectionSlide isActive={isActive}>
           <KioskThird {...hardCoded.thirdScreen} />
         </SectionSlide>
@@ -79,7 +74,7 @@ export const buildHardcodedSlides = (
   if (kioskId === 'kiosk-3' && hardCoded.fourthScreen) {
     slides.push({
       id: 'hardcoded-fourth',
-      render: isActive => (
+      render: (isActive: boolean) => (
         <SectionSlide isActive={isActive}>
           <HardCodedKiosk3FourthScreenTemplate {...hardCoded.fourthScreen} />
         </SectionSlide>

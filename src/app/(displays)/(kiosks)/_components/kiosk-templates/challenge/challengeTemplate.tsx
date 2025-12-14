@@ -34,7 +34,7 @@ export const buildChallengeSlides = (
     const initialScreen = { ...challenges.initialScreen, ...overrides?.initialScreen };
     slides.push({
       id: 'challenge-initial',
-      render: isActive => (
+      render: (isActive: boolean) => (
         <SectionSlide isActive={isActive}>
           <InitialScreenTemplate {...initialScreen} kioskId={kioskId} />
         </SectionSlide>
@@ -46,7 +46,7 @@ export const buildChallengeSlides = (
   if (challenges.firstScreen) {
     slides.push({
       id: 'challenge-first',
-      render: isActive => (
+      render: (isActive: boolean) => (
         <SectionSlide isActive={isActive}>
           <FirstScreenTemplate
             {...challenges.firstScreen}
@@ -63,7 +63,7 @@ export const buildChallengeSlides = (
   if (challenges.secondScreen) {
     slides.push({
       id: 'challenge-second',
-      render: isActive => (
+      render: (isActive: boolean) => (
         <SectionSlide isActive={isActive}>
           <SecondScreenTemplate
             {...challenges.secondScreen}
@@ -80,7 +80,7 @@ export const buildChallengeSlides = (
   if (challenges.thirdScreen) {
     slides.push({
       id: 'challenge-third',
-      render: isActive => (
+      render: (isActive: boolean) => (
         <SectionSlide isActive={isActive}>
           <ThirdScreenTemplate
             {...challenges.thirdScreen}

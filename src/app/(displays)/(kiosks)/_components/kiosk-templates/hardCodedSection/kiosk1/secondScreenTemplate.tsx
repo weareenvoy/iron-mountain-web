@@ -11,8 +11,6 @@ import HCWhiteDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCWhiteDiamon
 import type { UseEmblaCarouselType } from 'embla-carousel-react';
 
 export type HardCodedKiosk1SecondScreenTemplateProps = Readonly<{
-  backgroundEndColor?: string;
-  backgroundStartColor?: string;
   eyebrow?: readonly string[] | string;
   headline?: readonly string[] | string;
   onBack?: () => void;
@@ -95,11 +93,6 @@ const defaultModal: ModalContent = {
   imageSrc: '/images/kiosks/kiosk1/04-custom-interactive/Illustrations/digital-preservation.webp',
 };
 
-const gradientDefaults = {
-  backgroundEndColor: '#0a2f5c',
-  backgroundStartColor: '#1b75bc',
-};
-
 const textDefaults = {
   eyebrow: ['Rich media &', 'cultural heritage'],
   headline: ['From archive', 'to access'],
@@ -112,8 +105,6 @@ const normalizeText = (value?: readonly string[] | string): string => {
 };
 
 const HardCodedKiosk1SecondScreenTemplate = ({
-  backgroundEndColor = gradientDefaults.backgroundEndColor,
-  backgroundStartColor = gradientDefaults.backgroundStartColor,
   eyebrow = textDefaults.eyebrow,
   headline = textDefaults.headline,
   onBack,

@@ -3,17 +3,18 @@ import ValueCarouselTemplate, {
   type ValueCarouselTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueCarouselTemplate';
 import { SectionSlide, type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
+import { type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 export type ValueScreens = Readonly<{
   valueScreens?: Omit<ValueCarouselTemplateProps, 'onNavigateDown' | 'onNavigateUp'>[];
 }>;
 
-export const buildValueSlides = (values: ValueScreens, kioskId: string, controller: Controller): Slide[] => {
+export const buildValueSlides = (values: ValueScreens, kioskId: KioskId, controller: Controller): Slide[] => {
   const valueScreens = values.valueScreens ?? [];
 
   return valueScreens.map((config, idx) => ({
     id: `value-${idx}`,
-    render: isActive => (
+    render: (isActive: boolean) => (
       <SectionSlide isActive={isActive}>
         <ValueCarouselTemplate
           {...config}
