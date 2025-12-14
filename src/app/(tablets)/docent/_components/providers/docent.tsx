@@ -13,7 +13,7 @@ import {
 import { DocentAppState, type SyncState } from '@/app/(tablets)/docent/_types';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getDocentData } from '@/lib/internal/data/get-docent';
-import type { DocentData, ExhibitNavigationState, Locale, Tour } from '@/lib/internal/types';
+import type { DocentData, ExhibitNavigationState, Locale, SummitRoomBeatId, Tour } from '@/lib/internal/types';
 import type { Route } from 'next';
 
 const isDocentRoute = (path: string): path is Route => {
@@ -36,7 +36,6 @@ export interface DocentContextType {
   readonly isConnected: boolean;
   readonly isGecStateLoading: boolean;
   readonly isSettingsOpen: boolean;
-  readonly isSummitRoomJourneyMapLaunched: boolean;
   readonly isTourDataLoading: boolean;
   readonly lastUpdated: Date | null;
   readonly locale: Locale;
@@ -46,14 +45,13 @@ export interface DocentContextType {
 
   readonly setCurrentTour: (tour: null | Tour) => void;
   readonly setIsSettingsOpen: (open: boolean) => void;
-  readonly setIsSummitRoomJourneyMapLaunched: (launched: boolean) => void;
   readonly setLocale: (locale: Locale) => void;
   readonly setOverlookExhibitState: (state: Partial<ExhibitNavigationState>) => void;
 
-  readonly setSummitRoomSlideIdx: (idx: number) => void;
+  readonly setSummitRoomBeatId: (beatId: SummitRoomBeatId) => void;
 
-  // Summit Room state
-  readonly summitRoomSlideIdx: number;
+  // Summit Room state - 'journey-intro' or 'journey-1' through 'journey-5'
+  readonly summitRoomBeatId: SummitRoomBeatId;
 }
 
 export const DocentContext = createContext<DocentContextType | undefined>(undefined);
@@ -94,8 +92,8 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     beatIdx: 0,
     momentId: 'ambient',
   });
-  const [summitRoomSlideIdx, setSummitRoomSlideIdx] = useState(0);
-  const [isSummitRoomJourneyMapLaunched, setIsSummitRoomJourneyMapLaunched] = useState(false);
+  // Summit Room: 'journey-intro' or 'journey-1' through 'journey-5'
+  const [summitRoomBeatId, setSummitRoomBeatId] = useState<SummitRoomBeatId>('journey-intro');
 
   // Full state from GEC
   const [docentAppState, setDocentAppState] = useState<DocentAppState | null>(null);
@@ -161,9 +159,15 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
         const state: DocentAppState = msg.body;
         console.info('Docent: Received GEC state:', state);
 
-        // TODO TBD about data structure. I can no longer find the info in the Docs.
+        // TODO TBD still under discussion what topic to use to get the data. Or do we even use a topic.
         // Save the full state
         setDocentAppState(state);
+
+        // Update exhibit beat states from GEC
+        // const basecampBeatId = state.exhibits?.basecamp?.['beat-id'];
+        // const overlookBeatId = state.exhibits?.overlook?.['beat-id'];
+        // const summitBeatId = state.exhibits?.summit?.['beat-id'];
+        // validate beat IDS and set raw state
 
         // Update tour if provided and different from current
         // Get tour-id from any exhibit (they should all match)
@@ -243,8 +247,7 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     if (currentTour) {
       setBasecampExhibitStateRaw({ beatIdx: 0, momentId: 'ambient' });
       setOverlookExhibitStateRaw({ beatIdx: 0, momentId: 'ambient' });
-      setSummitRoomSlideIdx(0);
-      setIsSummitRoomJourneyMapLaunched(false);
+      setSummitRoomBeatId('journey-intro');
     }
   }, [currentTour]);
 
@@ -260,7 +263,6 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     isConnected,
     isGecStateLoading,
     isSettingsOpen,
-    isSummitRoomJourneyMapLaunched,
     isTourDataLoading,
     lastUpdated,
     locale,
@@ -269,11 +271,10 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     setBasecampExhibitState,
     setCurrentTour,
     setIsSettingsOpen,
-    setIsSummitRoomJourneyMapLaunched,
     setLocale,
     setOverlookExhibitState,
-    setSummitRoomSlideIdx,
-    summitRoomSlideIdx,
+    setSummitRoomBeatId,
+    summitRoomBeatId,
   };
 
   return <DocentContext.Provider value={contextValue}>{children}</DocentContext.Provider>;
