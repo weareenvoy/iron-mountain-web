@@ -21,11 +21,7 @@ export type SolutionScreens = Readonly<{
   thirdScreen?: SolutionThirdScreenTemplateProps;
 }>;
 
-export const buildSolutionSlides = (
-  solutions: SolutionScreens,
-  kioskId: string,
-  controller: Controller
-): Slide[] => {
+export const buildSolutionSlides = (solutions: SolutionScreens, kioskId: string, controller: Controller): Slide[] => {
   const slides: Slide[] = [];
 
   if (solutions.firstScreen) {
@@ -64,7 +60,11 @@ export const buildSolutionSlides = (
           />
         </SectionSlide>
       ),
-      title: config.title ? (Array.isArray(config.title) ? config.title.join(' ') : config.title) : `Solution Step ${idx + 1}`,
+      title: config.title
+        ? Array.isArray(config.title)
+          ? config.title.join(' ')
+          : config.title
+        : `Solution Step ${idx + 1}`,
     });
   });
 
@@ -105,4 +105,3 @@ export const buildSolutionSlides = (
 
   return slides;
 };
-

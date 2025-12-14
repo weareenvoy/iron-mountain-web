@@ -91,4 +91,3 @@ export const buildHardcodedSlides = (
   // Keep navigation external: handled by slide order in view
   return slides;
 };
-

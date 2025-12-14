@@ -47,7 +47,10 @@ const thirdScreenSchema = z.object({
   metricDescription: textString,
   metricImageSrc: assetString,
   subheadline: subheadlineSchema,
-  videoSrc: z.union([assetString, z.literal('')]).optional().default(''),
+  videoSrc: z
+    .union([assetString, z.literal('')])
+    .optional()
+    .default(''),
 });
 
 export const kioskChallengesSchema = z.object({

@@ -196,7 +196,7 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
   const isOverview = resolvedCarouselId.includes('overview');
   const contentHeight = isOverview ? '9360px' : '4150px';
   const contentBackground = isOverview ? '#ededed' : 'transparent';
-  const heroVideo = isOverview ? heroVideoSrc ?? defaultHeroVideoSrc : undefined;
+  const heroVideo = isOverview ? (heroVideoSrc ?? defaultHeroVideoSrc) : undefined;
 
   const slidesToRender = slides?.length ? slides : defaultSlides;
   const slidesWithDefaults = slidesToRender.map(slide => ({

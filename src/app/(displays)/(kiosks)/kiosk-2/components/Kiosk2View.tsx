@@ -4,9 +4,15 @@ import kioskContent from '@public/api/kiosk-2.json';
 import { Fragment, useEffect, useState } from 'react';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
 import { buildChallengeSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeTemplate';
-import { buildSolutionSlides, type SolutionScreens } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/solutionTemplate';
+import {
+  buildSolutionSlides,
+  type SolutionScreens,
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/solutionTemplate';
 import { type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
-import { buildValueSlides, type ValueScreens } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueTemplate';
+import {
+  buildValueSlides,
+  type ValueScreens,
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueTemplate';
 import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
 import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 // import styles from './kiosk-2.module.css';
@@ -68,9 +74,7 @@ const Kiosk2View = () => {
         </section>
         <section className="h-full w-full" data-section="value">
           {slides.slice(challengeCount + solutionCount).map((slide, idx) => (
-            <Fragment key={slide.id}>
-              {slide.render(challengeCount + solutionCount + idx === topIndex)}
-            </Fragment>
+            <Fragment key={slide.id}>{slide.render(challengeCount + solutionCount + idx === topIndex)}</Fragment>
           ))}
         </section>
       </div>

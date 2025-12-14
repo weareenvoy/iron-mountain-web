@@ -149,13 +149,15 @@ const SolutionFourthScreenTemplate = ({
                       ? { body: '#14477D', header: '#14477D', text: '#ededed' }
                       : undefined
                 : undefined;
-            const prevPalette = prevOverride ?? (index > 0 ? palettes[entries[index - 1]?.color ?? 'white'] : undefined);
+            const prevPalette =
+              prevOverride ?? (index > 0 ? palettes[entries[index - 1]?.color ?? 'white'] : undefined);
 
             return (
               <AccordionItem
                 className={`relative overflow-hidden border-none ${roundedClass}`}
                 key={item.id}
                 value={item.id}
+                style={index === entries.length - 1 ? { backgroundColor: palette.header } : undefined}
               >
                 {index > 0 ? (
                   <div

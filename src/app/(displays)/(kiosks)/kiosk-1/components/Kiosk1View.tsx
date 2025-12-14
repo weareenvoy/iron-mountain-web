@@ -6,9 +6,15 @@ import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-cont
 import { buildChallengeSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeTemplate';
 import { buildHardcodedSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/hardCodedTemplate';
 import { type HardCodedScreens } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/hardCodedTemplate';
-import { buildSolutionSlides, type SolutionScreens } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/solutionTemplate';
+import {
+  buildSolutionSlides,
+  type SolutionScreens,
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/solutionTemplate';
 import { type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
-import { buildValueSlides, type ValueScreens } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueTemplate';
+import {
+  buildValueSlides,
+  type ValueScreens,
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueTemplate';
 import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
 import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 // import styles from './kiosk-1.module.css';
@@ -71,16 +77,12 @@ const Kiosk1View = () => {
         </section>
         <section className="h-full w-full" data-section="value">
           {slides.slice(challengeCount + solutionCount, challengeCount + solutionCount + valueCount).map((s, idx) => (
-            <Fragment key={s.id}>
-              {s.render(challengeCount + solutionCount + idx === topIndex)}
-            </Fragment>
+            <Fragment key={s.id}>{s.render(challengeCount + solutionCount + idx === topIndex)}</Fragment>
           ))}
         </section>
         <section className="h-full w-full" data-section="hardcoded">
           {slides.slice(challengeCount + solutionCount + valueCount).map((s, idx) => (
-            <Fragment key={s.id}>
-              {s.render(challengeCount + solutionCount + valueCount + idx === topIndex)}
-            </Fragment>
+            <Fragment key={s.id}>{s.render(challengeCount + solutionCount + valueCount + idx === topIndex)}</Fragment>
           ))}
         </section>
       </div>

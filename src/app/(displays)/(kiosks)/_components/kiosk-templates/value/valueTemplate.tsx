@@ -26,4 +26,3 @@ export const buildValueSlides = (values: ValueScreens, kioskId: string, controll
     title: config.headline ?? config.labelText ?? `Value ${idx + 1}`,
   }));
 };
-
