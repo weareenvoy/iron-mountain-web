@@ -25,7 +25,10 @@ export type HardCodedScreens = Readonly<{
   thirdScreen?: HardCodedKiosk1ThirdScreenTemplateProps & HardCodedKiosk3ThirdScreenTemplateProps;
 }>;
 
-export const buildHardcodedSlides = (hardCoded: HardCodedScreens, kioskId: 'kiosk-1' | 'kiosk-2' | 'kiosk-3'): Slide[] => {
+export const buildHardcodedSlides = (
+  hardCoded: HardCodedScreens,
+  kioskId: 'kiosk-1' | 'kiosk-2' | 'kiosk-3'
+): Slide[] => {
   if (kioskId === 'kiosk-2') return [];
 
   const slides: Slide[] = [];
