@@ -58,11 +58,7 @@ importers:
         version: 8.6.0(react@19.2.3)
       flags:
         specifier: ^4.0.2
-<<<<<<< HEAD
-        version: 4.0.2(next@16.0.10(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
-=======
-        version: 4.0.2(next@16.0.7(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
->>>>>>> 2b5fbef (refresh lock file for build)
+        version: 4.0.2(next@16.0.10(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       lucide-react:
         specifier: ^0.556.0
         version: 0.556.0(react@19.2.3)
@@ -70,13 +66,8 @@ importers:
         specifier: ^5.14.1
         version: 5.14.1
       next:
-<<<<<<< HEAD
         specifier: ^16.0.10
-        version: 16.0.10(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
-=======
-        specifier: ^16.0.7
-        version: 16.0.7(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
->>>>>>> 2b5fbef (refresh lock file for build)
+        version: 16.0.10(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       next-themes:
         specifier: ^0.4.6
         version: 0.4.6(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -88,23 +79,16 @@ importers:
         version: 9.12.0(react@19.2.3)
       react-dom:
         specifier: ^19.2.1
-<<<<<<< HEAD
-        version: 19.2.1(react@19.2.1)
+        version: 19.2.3(react@19.2.3)
       react-to-print:
         specifier: ^3.2.0
-        version: 3.2.0(react@19.2.1)
-      sonner:
-        specifier: ^2.0.7
-        version: 2.0.7(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
-=======
-        version: 19.2.3(react@19.2.3)
+        version: 3.2.0(react@19.2.3)
       sonner:
         specifier: ^2.0.7
         version: 2.0.7(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       swiper:
         specifier: ^12.0.3
         version: 12.0.3
->>>>>>> 2b5fbef (refresh lock file for build)
       tailwind-merge:
         specifier: ^3.4.0
         version: 3.4.0
@@ -1711,13 +1695,8 @@ packages:
     resolution: {integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==}
     engines: {node: '>=6'}
 
-<<<<<<< HEAD
-  caniuse-lite@1.0.30001760:
-    resolution: {integrity: sha512-7AAMPcueWELt1p3mi13HR/LHH0TJLT11cnwDJEs3xA4+CK/PLKeO9Kl1oru24htkyUKtkGCvAx4ohB0Ttry8Dw==}
-=======
   caniuse-lite@1.0.30001755:
     resolution: {integrity: sha512-44V+Jm6ctPj7R52Na4TLi3Zri4dWUljJd+RDm+j8LtNCc/ihLCT+X1TzoOAkRETEWqjuLnh9581Tl80FvK7jVA==}
->>>>>>> 2b5fbef (refresh lock file for build)
 
   chalk@4.1.2:
     resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
@@ -2932,18 +2911,13 @@ packages:
       '@types/react':
         optional: true
 
-<<<<<<< HEAD
   react-to-print@3.2.0:
     resolution: {integrity: sha512-IX2D0mebKMgYTBD6s5tf9B7YRL3RFWjRoevYK8JKgRwn94Rep7PFZyeOTGjCmXofKB1SKzvPSzDrAMG4I2PIwg==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ~19
 
-  react@19.2.1:
-    resolution: {integrity: sha512-DGrYcCWK7tvYMnWh79yrPHt+vdx9tY+1gPZa7nJQtO/p8bLTDaHp4dzwEhQB7pZ4Xe3ok4XKuEPrVuc+wlpkmw==}
-=======
   react@19.2.3:
     resolution: {integrity: sha512-Ku/hhYbVjOQnXDZFv2+RibmLFGwFdeeKHFcOTlrt7xplBnya5OGn/hIRDsqDiSUcfORsDC7MPxwork8jBwsIWA==}
->>>>>>> 2b5fbef (refresh lock file for build)
     engines: {node: '>=0.10.0'}
 
   readable-stream@3.6.2:
@@ -3150,6 +3124,10 @@ packages:
   supports-preserve-symlinks-flag@1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
+
+  swiper@12.0.3:
+    resolution: {integrity: sha512-BHd6U1VPEIksrXlyXjMmRWO0onmdNPaTAFduzqR3pgjvi7KfmUCAm/0cj49u2D7B0zNjMw02TSeXfinC1hDCXg==}
+    engines: {node: '>= 4.7.0'}
 
   synckit@0.11.11:
     resolution: {integrity: sha512-MeQTA1r0litLUf0Rp/iisCaL8761lKAZHaimlbGK4j0HysC4PLfqygQj9srcs0m2RdtDYnF8UuYyKpbjHYp7Jw==}
@@ -4901,11 +4879,7 @@ snapshots:
   browserslist@4.28.0:
     dependencies:
       baseline-browser-mapping: 2.8.29
-<<<<<<< HEAD
-      caniuse-lite: 1.0.30001760
-=======
       caniuse-lite: 1.0.30001755
->>>>>>> 2b5fbef (refresh lock file for build)
       electron-to-chromium: 1.5.255
       node-releases: 2.0.27
       update-browserslist-db: 1.1.4(browserslist@4.28.0)
@@ -4936,11 +4910,7 @@ snapshots:
 
   callsites@3.1.0: {}
 
-<<<<<<< HEAD
-  caniuse-lite@1.0.30001760: {}
-=======
   caniuse-lite@1.0.30001755: {}
->>>>>>> 2b5fbef (refresh lock file for build)
 
   chalk@4.1.2:
     dependencies:
@@ -5541,24 +5511,14 @@ snapshots:
       locate-path: 6.0.0
       path-exists: 4.0.0
 
-<<<<<<< HEAD
-  flags@4.0.2(next@16.0.10(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(react-dom@19.2.1(react@19.2.1))(react@19.2.1):
-=======
-  flags@4.0.2(next@16.0.7(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
->>>>>>> 2b5fbef (refresh lock file for build)
+  flags@4.0.2(next@16.0.10(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
     dependencies:
       '@edge-runtime/cookies': 5.0.2
       jose: 5.10.0
     optionalDependencies:
-<<<<<<< HEAD
-      next: 16.0.10(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
-      react: 19.2.1
-      react-dom: 19.2.1(react@19.2.1)
-=======
-      next: 16.0.7(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      next: 16.0.10(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       react: 19.2.3
       react-dom: 19.2.3(react@19.2.3)
->>>>>>> 2b5fbef (refresh lock file for build)
 
   flat-cache@4.0.1:
     dependencies:
@@ -6027,19 +5987,11 @@ snapshots:
       react: 19.2.3
       react-dom: 19.2.3(react@19.2.3)
 
-<<<<<<< HEAD
-  next@16.0.10(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1):
-=======
-  next@16.0.7(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
->>>>>>> 2b5fbef (refresh lock file for build)
+  next@16.0.10(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
     dependencies:
       '@next/env': 16.0.10
       '@swc/helpers': 0.5.15
-<<<<<<< HEAD
-      caniuse-lite: 1.0.30001760
-=======
       caniuse-lite: 1.0.30001755
->>>>>>> 2b5fbef (refresh lock file for build)
       postcss: 8.4.31
       react: 19.2.3
       react-dom: 19.2.3(react@19.2.3)
@@ -6240,15 +6192,11 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.7
 
-<<<<<<< HEAD
-  react-to-print@3.2.0(react@19.2.1):
+  react-to-print@3.2.0(react@19.2.3):
     dependencies:
-      react: 19.2.1
+      react: 19.2.3
 
-  react@19.2.1: {}
-=======
   react@19.2.3: {}
->>>>>>> 2b5fbef (refresh lock file for build)
 
   readable-stream@3.6.2:
     dependencies:
@@ -6526,6 +6474,8 @@ snapshots:
       has-flag: 4.0.0
 
   supports-preserve-symlinks-flag@1.0.0: {}
+
+  swiper@12.0.3: {}
 
   synckit@0.11.11:
     dependencies:
