@@ -91,9 +91,7 @@ import { MqttProvider } from '@/components/providers/mqtt-provider';
 export default function BasecampLayout({ children }: LayoutProps<'/basecamp'>) {
   return (
     <MqttProvider topic="basecamp">
-      <AudioProvider appId="basecamp">
-        {children}
-      </AudioProvider>
+      <AudioProvider appId="basecamp">{children}</AudioProvider>
     </MqttProvider>
   );
 }
@@ -229,11 +227,7 @@ import { useAudioSettings } from '@/components/providers/audio-provider';
 export function AudioDebug() {
   const settings = useAudioSettings();
 
-  return (
-    <pre style={{ fontSize: 12 }}>
-      {JSON.stringify(settings, null, 2)}
-    </pre>
-  );
+  return <pre style={{ fontSize: 12 }}>{JSON.stringify(settings, null, 2)}</pre>;
 }
 ```
 
