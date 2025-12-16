@@ -1,85 +1,96 @@
 export interface SummitData {
-  readonly footerStats?: readonly string[];
-  readonly hero: SummitHero;
-  readonly metrics: SummitMetrics;
-  readonly obstacles: SummitObstacles;
-  readonly recap?: SummitRecap; // legacy support
-  readonly recaps?: readonly SummitRecap[];
-  readonly stories: SummitStories;
-  readonly strategies: readonly SummitStrategy[];
-  readonly summary: SummitSummary;
+  readonly activateTitle: string;
+  readonly basecamp: SummitBasecamp;
+  readonly connectTitle: string;
+  readonly kiosk1: SummitKiosk;
+  readonly kiosk2: SummitKiosk;
+  readonly kiosk3: SummitKiosk;
+  readonly meta: SummitMeta;
+  readonly overlook: SummitOverlook;
+  readonly protectTitle: string;
+  readonly summitSlides: readonly SummitJourneySlide[];
 }
 
-export interface SummitHero {
-  readonly advisorName: string;
-  readonly clientName: string;
-  readonly date: string;
-  readonly location: string;
-  readonly logoAlt: string;
-  readonly logoSrc: string;
-  readonly subtitle: string;
-  readonly title?: string;
+export interface SummitBasecamp {
+  readonly possibilities: { readonly title: string };
+  readonly possibilitiesA: SummitPossibility;
+  readonly possibilitiesB: SummitPossibility;
+  readonly possibilitiesC: SummitPossibility;
+  readonly problem1: { readonly title: string };
+  readonly problem2: readonly SummitProblem2Item[];
+  readonly problem3: SummitProblem3;
 }
 
-export interface SummitMetricItem {
-  readonly description: string;
-  readonly label: string;
-  readonly value: string;
-}
-
-export interface SummitMetrics {
-  readonly description: string;
-  readonly items: readonly SummitMetricItem[];
-  readonly title: string;
-}
-
-export interface SummitObstacleItem {
+export interface SummitChallenge {
   readonly body: string;
   readonly icon: string;
   readonly title: string;
 }
 
-export interface SummitObstacles {
-  readonly description: string;
-  readonly items: readonly SummitObstacleItem[];
+export interface SummitFuturescaping {
+  readonly body: string;
+  readonly image: string;
   readonly title: string;
 }
 
-export interface SummitRecap {
+export interface SummitJourneySlide {
+  readonly handle: string;
+  readonly title: string;
+}
+
+export interface SummitKiosk {
+  readonly ambient: SummitKioskAmbient;
+}
+
+export interface SummitKioskAmbient {
+  readonly attribution: string;
   readonly body: string;
-  readonly cta: string;
+  readonly headline: string;
+  readonly solutionTitle: string;
+  readonly subheader: string;
+}
+
+export interface SummitMapLocation {
+  readonly body: string;
+  readonly title: string;
+}
+
+export interface SummitMapLocations {
+  readonly mapLocation1: SummitMapLocation;
+  readonly mapLocation2: SummitMapLocation;
+  readonly mapLocation3: SummitMapLocation;
+}
+
+export interface SummitMeta {
+  readonly company: string;
+  readonly location: string;
+  readonly startDate: string;
+}
+
+export interface SummitOverlook {
+  readonly activate: SummitMapLocations;
+  readonly connect: SummitMapLocations;
+  readonly futurescaping1: SummitFuturescaping;
+  readonly futurescaping2: SummitFuturescaping;
+  readonly futurescaping3: SummitFuturescaping;
+  readonly protect: SummitMapLocations;
+}
+
+export interface SummitPossibility {
+  readonly body1: string;
+  readonly body2: string;
+  readonly body3: string;
+  readonly title: string;
+}
+
+export interface SummitProblem2Item {
+  readonly subtitle: string;
+  readonly title: string;
+}
+
+export interface SummitProblem3 {
+  readonly challenges: readonly SummitChallenge[];
   readonly title: string;
 }
 
 export type SummitSlideScreen = 'primary' | 'secondary';
-
-export interface SummitStories {
-  readonly description: string;
-  readonly items: readonly SummitStoryItem[];
-  readonly title: string;
-}
-
-export interface SummitStoryItem {
-  readonly category: string;
-  readonly description: string;
-  readonly title: string;
-}
-
-export interface SummitStrategy {
-  readonly eyebrow: string;
-  readonly items: readonly SummitStrategyItem[];
-  readonly summary: string;
-  readonly title?: string;
-}
-
-export interface SummitStrategyItem {
-  readonly body: readonly string[];
-  readonly title: string;
-}
-
-export interface SummitSummary {
-  readonly body: string;
-  readonly cta: string;
-  readonly title: string;
-}
-

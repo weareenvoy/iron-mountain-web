@@ -6,28 +6,28 @@
         "possibilities": {
           "title": "Discover new possibilities"
         },
-        "possibilities-a": {
-          "body-1": "Inventory and prioritize high-value content collections.",
-          "body-2": "Retire redundant repositories to reduce cost and risk.",
-          "body-3": "Establish metadata guardrails for AI readiness.",
+        "possibilitiesA": {
+          "body1": "Inventory and prioritize high-value content collections.",
+          "body2": "Retire redundant repositories to reduce cost and risk.",
+          "body3": "Establish metadata guardrails for AI readiness.",
           "title": "Making data accessible"
         },
-        "possibilities-b": {
-          "body-1": "Pair digitization with workflow automation pilots.",
-          "body-2": "Co-develop business cases tied to KPIs.",
-          "body-3": "Stage data for analytics and AI services.",
+        "possibilitiesB": {
+          "body1": "Pair digitization with workflow automation pilots.",
+          "body2": "Co-develop business cases tied to KPIs.",
+          "body3": "Stage data for analytics and AI services.",
           "title": "Unlocking new value streams"
         },
-        "possibilities-c": {
-          "body-1": "Modernize storage tiers for performance and compliance.",
-          "body-2": "Automate retention and defensible disposition.",
-          "body-3": "Extend zero-trust controls across hybrid estates.",
+        "possibilitiesC": {
+          "body1": "Modernize storage tiers for performance and compliance.",
+          "body2": "Automate retention and defensible disposition.",
+          "body3": "Extend zero-trust controls across hybrid estates.",
           "title": "Optimizing your assets"
         },
-        "problem-1": {
+        "problem1": {
           "title": "What's standing in your way?"
         },
-        "problem-2": [
+        "problem2": [
           {
             "subtitle": "of data remains dark",
             "title": "80%"
@@ -41,7 +41,7 @@
             "title": "< 1%"
           }
         ],
-        "problem-3": {
+        "problem3": {
           "challenges": [
             {
               "body": "1,300 exabytes of enterprise data created daily—scattered across systems and formats",
@@ -67,92 +67,92 @@
           "title": "What's holding you back?"
         }
       },
-      "kiosk-1": {
+      "kiosk1": {
         "ambient": {
           "attribution": "- Michael Rohrabacher, Technical Director at the GRAMMY Museum",
           "body": "\"It's been a pleasure working with Iron Mountain. We feel very confident that the GRAMMY Museum's physical artifacts and digital content are safely protected. Iron Mountain's digital preservation platform also provides significant reassurance that our iconic artist performances and interviews will remain preserved and accessible, which is a huge benefit to the GRAMMY Museum.\"",
           "headline": "The GRAMMY Museum® preserves the soundtrack of history.",
-          "solution-title": "Large Global Bank",
+          "solutionTitle": "Large Global Bank",
           "subheader": ""
         }
       },
-      "kiosk-2": {
+      "kiosk2": {
         "ambient": {
           "attribution": "",
           "body": "Our digital solutions centralized this healthcare organization's unstructured \"dark data.\" This enterprise-wide visibility prevented erroneous pension payments, elevated records management, and created a searchable, compliant digital core for ongoing operational improvement.",
           "headline": "A global healthcare company mitigates risk and saves millions by finding certainty and clarity in its pension administration.",
-          "solution-title": "Information & data lifecycle",
+          "solutionTitle": "Information & data lifecycle",
           "subheader": ""
         }
       },
-      "kiosk-3": {
+      "kiosk3": {
         "ambient": {
           "attribution": "",
           "body": "",
           "headline": "A global healthcare company optimizes IT asset management, improves transparency, and boosts remarketing returns by partnering with Iron Mountain Asset Lifecycle Management.",
-          "solution-title": "Rich media & cultural heritage",
+          "solutionTitle": "Rich media & cultural heritage",
           "subheader": ""
         }
       },
       "meta": {
         "company": "Company Name goes here",
         "location": "São Paulo, BR",
-        "start-date": "24/12/2025"
+        "startDate": "24/12/2025"
       },
       "overlook": {
         "activate": {
-          "map-location-1": {
+          "mapLocation1": {
             "body": "Find new ways forward in document driven processes.",
             "title": "Discover new efficiencies through Intelligent Business Process Management (iBPM)"
           },
-          "map-location-2": {
+          "mapLocation2": {
             "body": "Innovative tokenization and blockchain technology to authenticate and verify access rights, while being able to monetize more content.",
             "title": "Generate new revenue streams with Asset Monetization Platform (AMP)"
           },
-          "map-location-3": {
+          "mapLocation3": {
             "body": "Uses primary and secondary resale paths for retired IT assets.",
             "title": "Maximize value recovery and lower TCO"
           }
         },
         "connect": {
-          "map-location-1": {
+          "mapLocation1": {
             "body": "Intelligent document processing has 97% accuracy.",
             "title": "AI-powered document processing"
           },
-          "map-location-2": {
+          "mapLocation2": {
             "body": "Incorporates asset receiving, tagging, tracking, and storage.",
             "title": "Deploy IT assets at any moment"
           },
-          "map-location-3": {
+          "mapLocation3": {
             "body": "Archival-quality imaging, digitization, and restoration transform media and connect with audiences of all types.",
             "title": "Digitize, organize, and access assets"
           }
         },
-        "futurescaping-1": {
+        "futurescaping1": {
           "body": "How can you safeguard your most critical assets against emerging threats?",
           "image": "/images/summit/futurescaping/protect.jpg",
           "title": "Protect"
         },
-        "futurescaping-2": {
+        "futurescaping2": {
           "body": "How can you prepare your data infrastructure to unlock new possibilities?",
           "image": "/images/summit/futurescaping/connect.jpg",
           "title": "Connect"
         },
-        "futurescaping-3": {
+        "futurescaping3": {
           "body": "What if every archived asset could generate new value for your organization?",
           "image": "/images/summit/futurescaping/activate.jpg",
           "title": "Activate"
         },
         "protect": {
-          "map-location-1": {
+          "mapLocation1": {
             "body": "Enhanced with certifications, including GDPR, SOC 2 Type II, ISO, HIPAA, and FedRamp.",
             "title": "Secure chain of custody"
           },
-          "map-location-2": {
+          "mapLocation2": {
             "body": "Ensures your data is protected, along with onsite and offsite destruction for all media types.",
             "title": "World-class data sanitization"
           },
-          "map-location-3": {
+          "mapLocation3": {
             "body": "Secure content with a digital preservation platform purpose-built for rich media workflows.",
             "title": "Museum-grade security"
           }

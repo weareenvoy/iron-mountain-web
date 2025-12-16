@@ -57,7 +57,7 @@ const StrategiesSection = (props: StrategiesSectionProps) => {
               {variant === 'possibilities' && (item as PossibilityItem).title}
               {variant === 'solutions' && (item as SolutionItem).title}
               {variant === 'futurescaping' && (item as FuturescopingItem).title}
-              {variant === 'stories' && (item as StoryItem)['solution-title']}
+              {variant === 'stories' && (item as StoryItem).solutionTitle}
             </h3>
             <div className="mt-4 text-sm whitespace-pre-line text-[#4B4B4D]">
               {variant === 'possibilities' && renderPossibility(item as PossibilityItem)}
@@ -74,9 +74,9 @@ const StrategiesSection = (props: StrategiesSectionProps) => {
 
 const renderPossibility = (item: PossibilityItem) => (
   <>
-    <p>{item['body-1']}</p>
-    <p className="mt-2">{item['body-2']}</p>
-    <p className="mt-2">{item['body-3']}</p>
+    <p>{item.body1}</p>
+    <p className="mt-2">{item.body2}</p>
+    <p className="mt-2">{item.body3}</p>
   </>
 );
 
@@ -84,12 +84,12 @@ const renderSolution = (item: SolutionItem) => {
   const locations = item.locations;
   return (
     <>
-      <p className="font-bold">{locations['map-location-1'].title}</p>
-      <p> {locations['map-location-1'].body}</p>
-      <p className="mt-2 font-bold">{locations['map-location-2'].title}</p>
-      <p className="mt-2"> {locations['map-location-2'].body}</p>
-      <p className="mt-2 font-bold"> {locations['map-location-3'].title}</p>
-      <p className="mt-2"> {locations['map-location-3'].body}</p>
+      <p className="font-bold">{locations.mapLocation1.title}</p>
+      <p> {locations.mapLocation1.body}</p>
+      <p className="mt-2 font-bold">{locations.mapLocation2.title}</p>
+      <p className="mt-2"> {locations.mapLocation2.body}</p>
+      <p className="mt-2 font-bold"> {locations.mapLocation3.title}</p>
+      <p className="mt-2"> {locations.mapLocation3.body}</p>
     </>
   );
 };

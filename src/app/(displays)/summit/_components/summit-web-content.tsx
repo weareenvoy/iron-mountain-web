@@ -55,7 +55,7 @@ const SummitWebContent = () => {
   const [printError, setPrintError] = useState<null | string>(null);
 
   const heroTitle =
-    data?.['summitSlides']?.find(slide => slide.handle === 'journey-intro')?.title || 'Your personalized journey map';
+    data?.['summitSlides']?.find(slide => slide.handle === 'journey-1')?.title || 'Your personalized journey map';
   const recapPlaceholder = 'Type your notes here';
 
   const handlePrint = useReactToPrint({
@@ -91,10 +91,7 @@ const SummitWebContent = () => {
     );
   }
 
-  const { basecamp, meta, overlook, summitSlides } = data;
-  const kiosk1 = data['kiosk-1'];
-  const kiosk2 = data['kiosk-2'];
-  const kiosk3 = data['kiosk-3'];
+  const { basecamp, kiosk1, kiosk2, kiosk3, meta, overlook, summitSlides } = data;
 
   const handlePrintClick = async () => {
     setPrintError(null);
@@ -115,17 +112,13 @@ const SummitWebContent = () => {
 
   // Render sections
   const renderMetrics = () => (
-    <MetricsSection
-      challenges={basecamp['problem-3']}
-      stats={basecamp['problem-2']}
-      title={basecamp['problem-1'].title}
-    />
+    <MetricsSection challenges={basecamp.problem3} stats={basecamp.problem2} title={basecamp.problem1.title} />
   );
 
   const renderPossibilities = () => (
     <StrategiesSection
       accentColor={STRATEGY_COLORS[0]}
-      items={[basecamp['possibilities-a'], basecamp['possibilities-b'], basecamp['possibilities-c']]}
+      items={[basecamp.possibilitiesA, basecamp.possibilitiesB, basecamp.possibilitiesC]}
       title={journey3Title}
     />
   );
@@ -146,7 +139,7 @@ const SummitWebContent = () => {
   const renderFuturescaping = () => (
     <StrategiesSection
       accentColor={STRATEGY_COLORS[2]}
-      items={[overlook['futurescaping-1'], overlook['futurescaping-2'], overlook['futurescaping-3']]}
+      items={[overlook.futurescaping1, overlook.futurescaping2, overlook.futurescaping3]}
       title={journey5Title}
       variant="futurescaping"
     />
@@ -212,7 +205,7 @@ const SummitWebContent = () => {
             </div>
           }
           company={meta.company}
-          date={meta['start-date']}
+          date={meta.startDate}
           location={meta.location}
           title={heroTitle}
         />
@@ -252,7 +245,7 @@ const SummitWebContent = () => {
 
       <SummitPrintableDocument
         company={meta.company}
-        date={meta['start-date']}
+        date={meta.startDate}
         heroTitle={heroTitle}
         location={meta.location}
         pages={printablePages}
