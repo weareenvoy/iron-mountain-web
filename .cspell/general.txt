@@ -1,9 +1,10 @@
 # PACKAGES
+embla
+GSAP
+insightdxp
 Mosquitto
 shadcn
 TTFB
 Turborepo
 vercel
 weareenvoy
-embla
-insightdxp
