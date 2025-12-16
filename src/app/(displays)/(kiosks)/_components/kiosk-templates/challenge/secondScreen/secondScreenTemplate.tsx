@@ -3,6 +3,8 @@
 import { ArrowDown, ArrowUp, Diamond } from 'lucide-react';
 import Image from 'next/image';
 import { DEFAULT_KIOSK_ID, type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
+import { useScrollNavigation } from '../../hooks/useScrollNavigation';
+import { secondScreenScrollSections } from './scrollConfig';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
 // import styles from './secondScreenTemplate.module.css';
@@ -36,8 +38,18 @@ export const SecondScreenTemplate = ({
   subheadline = 'Rich media &\n cultural heritage',
   topImageSrc = imgHero,
 }: SecondScreenTemplateProps) => {
+  // Use scalable scroll navigation hook
+  const { containerRef, handleNavigateDown, handleNavigateUp } = useScrollNavigation({
+    behavior: 'smooth',
+    duration: 800,
+    onNavigateDown,
+    onNavigateUp,
+    sections: secondScreenScrollSections,
+  });
+
   return (
     <div
+      ref={containerRef}
       // className={styles.container}
       className="relative flex h-screen w-full flex-col overflow-hidden bg-black"
       data-hero-image={topImageSrc}
@@ -83,6 +95,7 @@ export const SecondScreenTemplate = ({
         // className={styles.statSection}
         className="absolute top-[1058px] left-[124px] z-[5] flex w-[940px] flex-col gap-[60px] opacity-60"
         data-node-id="5168:9913"
+        data-scroll-section="stat-section"
       >
         <div
           // className={styles.statAmount}
@@ -103,6 +116,7 @@ export const SecondScreenTemplate = ({
         // className={styles.mainDescription}
         className="absolute top-[2340px] left-[1160px] z-[6] w-[760px]"
         data-node-id="5168:9911"
+        data-scroll-section="main-description"
       >
         <p
           // className={styles.descriptionText}
@@ -117,6 +131,7 @@ export const SecondScreenTemplate = ({
         // className={styles.bottomDescriptionContainer}
         className="absolute top-[4065px] left-[120px] z-[5] w-[971px]"
         data-node-id="5168:9919"
+        data-scroll-section="bottom-description"
       >
         <p
           // className={styles.bottomDescriptionText}
@@ -135,10 +150,10 @@ export const SecondScreenTemplate = ({
         onKeyDown={event => {
           if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
-            onNavigateUp?.();
+            handleNavigateUp();
           }
         }}
-        onPointerDown={() => onNavigateUp?.()}
+        onPointerDown={handleNavigateUp}
         role="button"
         tabIndex={0}
       >
@@ -152,10 +167,10 @@ export const SecondScreenTemplate = ({
         onKeyDown={event => {
           if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
-            onNavigateDown?.();
+            handleNavigateDown();
           }
         }}
-        onPointerDown={() => onNavigateDown?.()}
+        onPointerDown={handleNavigateDown}
         role="button"
         tabIndex={0}
       >

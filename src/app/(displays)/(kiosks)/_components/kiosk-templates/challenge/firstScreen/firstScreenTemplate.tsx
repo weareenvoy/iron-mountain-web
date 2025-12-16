@@ -3,6 +3,8 @@
 import { ArrowDown, ArrowUp, Diamond } from 'lucide-react';
 import { DEFAULT_KIOSK_ID, type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 // import styles from './firstScreenTemplate.module.css';
+import { useScrollNavigation } from '../../hooks/useScrollNavigation';
+import { firstScreenScrollSections } from './scrollConfig';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
 export type FirstScreenTemplateProps = Readonly<{
@@ -28,8 +30,18 @@ export const FirstScreenTemplate = ({
   subheadline = 'Rich media &\n cultural heritage',
   videoSrc = '/images/kiosks/kiosk1/01-challenge/Challenge-Header.mp4',
 }: FirstScreenTemplateProps) => {
+  // Use scalable scroll navigation hook
+  const { containerRef, handleNavigateDown, handleNavigateUp } = useScrollNavigation({
+    behavior: 'smooth',
+    duration: 800, // Custom scroll duration in ms
+    onNavigateDown,
+    onNavigateUp,
+    sections: firstScreenScrollSections,
+  });
+
   return (
     <div
+      ref={containerRef}
       // className={styles.container}
       className="group/kiosk relative flex h-screen w-full flex-col overflow-hidden bg-black"
       data-kiosk={kioskId}
@@ -101,10 +113,10 @@ export const FirstScreenTemplate = ({
         onKeyDown={event => {
           if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
-            onNavigateUp?.();
+            handleNavigateUp();
           }
         }}
-        onPointerDown={() => onNavigateUp?.()}
+        onPointerDown={handleNavigateUp}
         role="button"
         tabIndex={0}
       >
@@ -118,10 +130,10 @@ export const FirstScreenTemplate = ({
         onKeyDown={event => {
           if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
-            onNavigateDown?.();
+            handleNavigateDown();
           }
         }}
-        onPointerDown={() => onNavigateDown?.()}
+        onPointerDown={handleNavigateDown}
         role="button"
         tabIndex={0}
       >
@@ -133,6 +145,7 @@ export const FirstScreenTemplate = ({
         // className={styles.problemSection}
         className="absolute top-[1230px] left-[115px] z-[5] w-[1390px] group-data-[kiosk=kiosk-2]/kiosk:top-[1240px] group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-2]/kiosk:w-[1370px]"
         data-node-id="5168:9893"
+        data-scroll-section="problem-description"
       >
         <p
           // className={styles.problemText}
@@ -155,6 +168,7 @@ export const FirstScreenTemplate = ({
         // className={styles.savingsSection}
         className="absolute top-[2465px] left-[-45px] z-[5] flex w-[1390px] flex-col group-data-[kiosk=kiosk-2]/kiosk:left-[-105px] group-data-[kiosk=kiosk-3]/kiosk:top-[2445px] group-data-[kiosk=kiosk-3]/kiosk:left-[-15px]"
         data-node-id="5168:9904"
+        data-scroll-section="savings-metrics"
       >
         <div
           // className={styles.savingsAmount}

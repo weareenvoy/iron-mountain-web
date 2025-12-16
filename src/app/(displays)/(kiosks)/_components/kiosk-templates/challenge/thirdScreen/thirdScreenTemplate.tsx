@@ -3,6 +3,8 @@
 import { ArrowDown, ArrowUp, Diamond } from 'lucide-react';
 import Image from 'next/image';
 import { DEFAULT_KIOSK_ID, type KioskId } from '../../../../_types/kiosk-id';
+import { useScrollNavigation } from '../../hooks/useScrollNavigation';
+import { thirdScreenScrollSections } from './scrollConfig';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
 // import styles from './thirdScreenTemplate.module.css';
@@ -42,8 +44,18 @@ export const ThirdScreenTemplate = ({
   subheadline = 'Rich media &\n cultural heritage',
   videoSrc = '/images/kiosks/kiosk1/03-value/Value-header.mp4',
 }: ThirdScreenTemplateProps) => {
+  // Use scalable scroll navigation hook
+  const { containerRef, handleNavigateDown, handleNavigateUp } = useScrollNavigation({
+    behavior: 'smooth',
+    duration: 800,
+    onNavigateDown,
+    onNavigateUp,
+    sections: thirdScreenScrollSections,
+  });
+
   return (
     <div
+      ref={containerRef}
       // className={styles.container}
       className="group/kiosk relative flex h-screen w-full flex-col overflow-hidden bg-black"
       data-hero-image={heroImageSrc}
@@ -92,6 +104,7 @@ export const ThirdScreenTemplate = ({
         // className={styles.descriptionContainer}
         className="absolute top-[2115px] left-[120px] z-[5] w-[1010px]"
         data-node-id="5168:9932"
+        data-scroll-section="description"
       >
         <p
           // className={styles.description}
@@ -106,6 +119,7 @@ export const ThirdScreenTemplate = ({
         // className={styles.metricsSection}
         className="absolute top-[3315px] left-[-80px] z-[5] flex w-[1390px] flex-col gap-[100px] group-data-[kiosk=kiosk-2]/kiosk:top-[3395px] group-data-[kiosk=kiosk-2]/kiosk:left-[-180px]"
         data-node-id="5168:9945"
+        data-scroll-section="metrics-section"
       >
         <div
           // className={styles.metricAmount}
@@ -130,10 +144,10 @@ export const ThirdScreenTemplate = ({
         onKeyDown={event => {
           if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
-            onNavigateUp?.();
+            handleNavigateUp();
           }
         }}
-        onPointerDown={() => onNavigateUp?.()}
+        onPointerDown={handleNavigateUp}
         role="button"
         tabIndex={0}
       >
@@ -147,10 +161,10 @@ export const ThirdScreenTemplate = ({
         onKeyDown={event => {
           if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
-            onNavigateDown?.();
+            handleNavigateDown();
           }
         }}
-        onPointerDown={() => onNavigateDown?.()}
+        onPointerDown={handleNavigateDown}
         role="button"
         tabIndex={0}
       >
