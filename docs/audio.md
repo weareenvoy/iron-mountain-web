@@ -71,7 +71,7 @@ applies the latest retained + live updates to the master gain.
 Some apps also **report** their own MQTT state periodically (e.g., Basecamp). If the app stops listening after “boot
 state”, it can accidentally overwrite later mute updates.
 
-This PR updates Basecamp to keep listening to `state/basecamp` (retained + live updates) so Docent-driven mute stays
+To avoid this, exhibits should keep listening to `state/<appId>` (retained + live updates) so Docent-driven mute stays
 sticky.
 
 ---
