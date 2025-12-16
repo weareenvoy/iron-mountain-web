@@ -1,0 +1,246 @@
+/* Displays → Welcome-wall scoped variables */
+[data-app='displays-welcome-wall'] {
+  /* Overrides of root variables (Welcome-wall) */
+  /* e.g. --foreground: oklch(...); */
+
+  /* Custom (Welcome-wall-only) */
+  /* e.g. --welcome-accent: #...; */
+  --IM-dark-blue: #14477d;
+  --primary-bg-grey: #ededed;
+}
+
+[data-theme='dark'] [data-app='displays-welcome-wall'],
+.dark [data-app='displays-welcome-wall'] {
+  /* Overrides of root variables (Welcome-wall, dark) */
+  /* e.g. --foreground: oklch(...); */
+
+  /* Custom (Welcome-wall-only, dark) */
+  /* e.g. --welcome-wall-accent: #...; */
+}
+
+@source '../**/**/**/*.{ts,tsx}';
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+.welcome-container {
+  background-color: var(--primary-bg-grey);
+}
+
+.logo-container {
+  /* position: absolute;
+  z-index: 10;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  background-color: red; */
+
+  display: flex; /* Enables Flexbox */
+  justify-content: center; /* Centers items horizontally (left to right) */
+  align-items: center; /* Centers items vertically (top to bottom) */
+  /* gap: 20px; Adds space between the two logos */
+
+  /* Optional: Use this to center them on the WHOLE screen */
+  height: 100vh;
+  /* background-color: red; */
+  /* padding: 0 600px; */
+}
+
+.logo-left {
+  /* background-color: green; */
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-right {
+  /* background-color: blue; */
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* h-[402.64px] w-[1556.35px] */
+.logo {
+  /* width: auto; /* Ensures logos aren't too big */
+  /* height: 243px; Maintains aspect ratio */
+  height: auto;
+  width: 50%;
+}
+
+.message-container {
+  /* background-color: blue; */
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-image: url('/images/welcome-wall-temp/welcome-wall-message-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.message-container h1 {
+  font-size: 204.51px;
+  font-weight: 400;
+  line-height: 110%;
+  padding: 0 204px;
+  font-family: var(--font-geometria);
+  color: var(--IM-dark-blue);
+}
+
+.footer-container {
+  width: 100%;
+  height: 20%;
+  position: absolute;
+  bottom: 0%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 400;
+  font-size: 65.49px;
+}
+
+.footer-left {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-left: 204px;
+  /* background-color: greenyellow; */
+}
+
+.footer-right {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-right: 204px;
+  /* background-color: aqua; */
+}
+
+.footer-location-text {
+  padding-left: 50px;
+}
+
+.footer-elevation-text {
+  padding-left: 50px;
+}
+
+@layer base {
+}
+
+@layer utilities {
+}
+
+/* Animation Keyframes */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scale-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Problem2: Fade in, hold, then shrink and fly away */
+@keyframes problem2-sequence {
+  0% {
+    left: 8%;
+    opacity: 0;
+    top: 15%;
+    transform: scale(1);
+  }
+  14% {
+    left: 8%;
+    opacity: 1;
+    top: 15%;
+    transform: scale(1);
+  }
+  86% {
+    left: 8%;
+    opacity: 1;
+    top: 15%;
+    transform: scale(1);
+  }
+  100% {
+    left: -10%;
+    opacity: 0;
+    top: -5%;
+    transform: scale(0.5);
+  }
+}
+
+/* WelcomeView: Fade in, hold, move left and exit */
+@keyframes welcome-sequence {
+  0% {
+    opacity: 0;
+    transform: translateX(10%);
+  }
+  17% {
+    opacity: 1;
+    transform: translateX(10%);
+  }
+  67% {
+    opacity: 1;
+    transform: translateX(10%);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+}
+
+/* PossibilitiesTitle: Fade in, hold, fade out */
+@keyframes possibilities-title-sequence {
+  0% {
+    opacity: 0;
+  }
+  7% {
+    opacity: 0;
+  }
+  29% {
+    opacity: 1;
+  }
+  86% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out forwards;
+}
+
+.animate-scale-fade-in {
+  animation: scale-fade-in 0.7s ease-out both;
+}
+
+.animate-problem2 {
+  animation: problem2-sequence 3.5s ease-in-out forwards;
+}
+
+.animate-welcome {
+  animation: welcome-sequence 6s ease-in-out forwards;
+}
+
+.animate-possibilities-title {
+  animation: possibilities-title-sequence 7s ease-in-out forwards;
+}

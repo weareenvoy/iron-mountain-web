@@ -7,7 +7,15 @@ export type PublishArgsConfig = {
   onSuccess?: () => void;
 };
 
-export type DeviceId = 'basecamp' | 'docent-app' | 'kiosk-01' | 'kiosk-02' | 'kiosk-03' | 'overlook' | 'summit';
+export type DeviceId =
+  | 'basecamp'
+  | 'docent-app'
+  | 'kiosk-01'
+  | 'kiosk-02'
+  | 'kiosk-03'
+  | 'overlook'
+  | 'summit'
+  | 'welcome-wall';
 
 export type MqttServiceConfig = {
   deviceId: DeviceId; // e.g., "docent-app", "basecamp", "kiosk-01"
