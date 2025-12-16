@@ -157,7 +157,36 @@
             "title": "Museum-grade security"
           }
         }
-      }
+      },
+      "summitSlides": [
+          {
+            "handle": "journey-intro",
+            "title": "Launch your journey"
+          },
+          {
+            "handle": "journey-1",
+            "title": "Your personalized journey map"
+          },
+          {
+            "handle": "journey-3",
+            "title": "Considering possibilities"
+          },
+          {
+            "handle": "journey-4",
+            "title": "Relevant solutions"
+          },
+          {
+            "handle": "journey-5",
+            "title": "Unlock your future"
+          },
+          {
+            "handle": "journey-6",
+            "title": "Stories of impact"
+          }
+      ],
+      "protectTitle": "Protect",
+      "connectTitle": "Connect",
+      "activateTitle": "Activate"
     }
   }
 ]

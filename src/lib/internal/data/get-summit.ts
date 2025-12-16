@@ -1,27 +1,20 @@
 import summitStatic from '@public/api/summit.json';
 import { getLocaleForTesting, shouldUseStaticPlaceholderData } from '@/flags/flags';
-import type { Locale, SummitData } from '@/lib/internal/types';
-
-export interface SummitDataResponse {
-  readonly data: SummitData;
-  readonly locale: Locale;
-}
-
-type SummitApiResponse = readonly { readonly data: SummitData; readonly locale: string }[];
+import type { SummitApiResponse, SummitDataResponse } from '@/lib/internal/types';
 
 const pickSummitData = (
   rawData: SummitApiResponse | { readonly data: unknown; readonly locale?: string },
   locale: string,
-  fallback?: SummitData
-): SummitData | undefined => {
+  fallback?: SummitDataResponse['data']
+) => {
   if (Array.isArray(rawData)) {
-    const matchingItem = rawData.find(item => item.locale === locale) ?? rawData[0];
-    if (matchingItem) {
-      return matchingItem.data;
+    const matchingData = rawData.find(item => item.locale === locale)?.data ?? rawData[0]?.data;
+    if (matchingData) {
+      return matchingData;
     }
   }
   if ('data' in rawData) {
-    return rawData.data as SummitData;
+    return rawData.data as SummitDataResponse['data'];
   }
   return fallback;
 };
@@ -29,7 +22,7 @@ const pickSummitData = (
 const resolveSummitData = (
   rawData: SummitApiResponse | { readonly data: unknown; readonly locale?: string },
   locale: string
-): SummitData => {
+) => {
   const staticFallback = pickSummitData(summitStatic as SummitApiResponse, locale);
   const data = pickSummitData(rawData, locale, staticFallback);
 

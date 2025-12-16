@@ -359,12 +359,21 @@ export interface DocentData {
 }
 
 export interface SummitData {
+  readonly 'activateTitle': string;
   readonly 'basecamp': SummitBasecamp;
+  readonly 'connectTitle': string;
   readonly 'kiosk-1': SummitKiosk;
   readonly 'kiosk-2': SummitKiosk;
   readonly 'kiosk-3': SummitKiosk;
   readonly 'meta': SummitMeta;
   readonly 'overlook': SummitOverlook;
+  readonly 'protectTitle': string;
+  readonly 'summitSlides': readonly SummitJourneySlide[];
+}
+
+export interface SummitJourneySlide {
+  readonly handle: string;
+  readonly title: string;
 }
 
 export interface SummitBasecamp {

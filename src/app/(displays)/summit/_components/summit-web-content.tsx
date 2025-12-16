@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, type ReactElement } from 'react';
+import { ReactElement, useRef, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import { useSummit } from '@/app/(displays)/summit/_components/providers/summit-provider';
 import HeroSection from '@/app/(displays)/summit/_components/sections/hero-section';
@@ -44,7 +44,7 @@ const RECAP_TONES: readonly (RecapTone | undefined)[] = [
     iconColor: '#FFFFFF',
     rightTextColor: '#12406A',
   },
-];
+] as const;
 const SECTION_WRAPPER_CLASS = 'lg:px-12 max-w-[1200px] mx-auto px-4 sm:px-8 w-full';
 const STRATEGY_COLORS = ['#8A0D71', '#00A88E', '#F7931E', '#1B75BC'] as const;
 
@@ -54,7 +54,8 @@ const SummitWebContent = () => {
   const [isPrinting, setIsPrinting] = useState(false);
   const [printError, setPrintError] = useState<null | string>(null);
 
-  const heroTitle = 'Your personalized journey map'; // This will come from Simple CMS.
+  const heroTitle =
+    data?.['summitSlides']?.find(slide => slide.handle === 'journey-intro')?.title || 'Your personalized journey map';
   const recapPlaceholder = 'Type your notes here';
 
   const handlePrint = useReactToPrint({
@@ -90,7 +91,7 @@ const SummitWebContent = () => {
     );
   }
 
-  const { basecamp, meta, overlook } = data;
+  const { basecamp, meta, overlook, summitSlides } = data;
   const kiosk1 = data['kiosk-1'];
   const kiosk2 = data['kiosk-2'];
   const kiosk3 = data['kiosk-3'];
@@ -107,6 +108,11 @@ const SummitWebContent = () => {
     }
   };
 
+  const journey3Title = summitSlides.find(slide => slide.handle === 'journey-3')?.title || 'Considering possibilities';
+  const journey4Title = summitSlides.find(slide => slide.handle === 'journey-4')?.title || 'Relevant solutions';
+  const journey5Title = summitSlides.find(slide => slide.handle === 'journey-5')?.title || 'Unlock your future';
+  const journey6Title = summitSlides.find(slide => slide.handle === 'journey-6')?.title || 'Stories of impact';
+
   // Render sections
   const renderMetrics = () => (
     <MetricsSection
@@ -120,7 +126,7 @@ const SummitWebContent = () => {
     <StrategiesSection
       accentColor={STRATEGY_COLORS[0]}
       items={[basecamp['possibilities-a'], basecamp['possibilities-b'], basecamp['possibilities-c']]}
-      title={basecamp.possibilities.title}
+      title={journey3Title}
     />
   );
 
@@ -128,11 +134,11 @@ const SummitWebContent = () => {
     <StrategiesSection
       accentColor={STRATEGY_COLORS[1]}
       items={[
-        { locations: overlook.protect, title: 'Protect' }, // TODO The 3 titles will come from Simple CMS.
-        { locations: overlook.connect, title: 'Connect' },
-        { locations: overlook.activate, title: 'Activate' },
+        { locations: overlook.protect, title: data.protectTitle },
+        { locations: overlook.connect, title: data.connectTitle },
+        { locations: overlook.activate, title: data.activateTitle },
       ]}
-      title="Relevant solutions"
+      title={journey4Title}
       variant="solutions"
     />
   );
@@ -141,7 +147,7 @@ const SummitWebContent = () => {
     <StrategiesSection
       accentColor={STRATEGY_COLORS[2]}
       items={[overlook['futurescaping-1'], overlook['futurescaping-2'], overlook['futurescaping-3']]}
-      title="Unlock your future" // TODO All the titles will come from Simple CMS.
+      title={journey5Title}
       variant="futurescaping"
     />
   );
@@ -150,7 +156,7 @@ const SummitWebContent = () => {
     <StrategiesSection
       accentColor={STRATEGY_COLORS[3]}
       items={[kiosk1.ambient, kiosk2.ambient, kiosk3.ambient]}
-      title="Stories of impact"
+      title={journey6Title}
       variant="stories"
     />
   );
@@ -173,13 +179,13 @@ const SummitWebContent = () => {
     />
   );
 
-  const printablePages = [
+  const printablePages: readonly { readonly id: string; readonly sections: readonly ReactElement[] }[] = [
     { id: 'overview', sections: [renderMetrics(), renderRecapPrint(0)] },
     { id: 'possibilities', sections: [renderPossibilities(), renderRecapPrint(1)] },
     { id: 'solutions', sections: [renderSolutions(), renderRecapPrint(2)] },
     { id: 'futurescaping', sections: [renderFuturescaping(), renderRecapPrint(3)] },
     { id: 'stories', sections: [renderStories(), renderRecapPrint(4)] },
-  ].filter(p => p.sections.length > 0) as { id: string; sections: ReactElement[] }[];
+  ] as const;
 
   return (
     <div className={PAGE_CONTAINER_CLASS}>
