@@ -3,35 +3,44 @@
 import type { BasecampData } from '@/lib/internal/types';
 
 type Props = {
-  readonly data: BasecampData['possibilities-a'];
+  readonly data: BasecampData['possibilitiesA'] | BasecampData['possibilitiesB'] | BasecampData['possibilitiesC'];
 };
 
-// 3 blocks of text show up 1 by 1, starting from left bottom corner,
+// Animation timing constants
+const BODY_BLOCK_DELAYS_MS = [2500, 4000, 5500] as const;
+const WORD_STAGGER_MS = 80 as const;
 
 const PossibilitiesDetail = ({ data }: Props) => {
-  const bodyItems = [data['body-1'], data['body-2'], data['body-3']];
+  const bodyItems = [data.body1, data.body2, data.body3];
 
-  // Stagger delays: 500ms, 1200ms, 1900ms
-  const delays = [500, 1200, 1900];
-
+  // Use title as key to force remount when data changes (resets animations)
   return (
-    <div className="absolute inset-0 text-black">
-      {/* Title at top */}
-      <div className="absolute top-[10%] right-0 left-0 text-left text-5xl font-bold">{data.title}</div>
+    <div className="absolute inset-0 text-black" key={data.title}>
+      {/* Title: slide up from below */}
+      <div className="animate-slide-up absolute top-24 right-0 left-56 font-geometria text-[55px] font-bold">
+        {data.title}
+      </div>
 
-      {/* 3 portions appear one by one, then disappear all at once */}
-      <div className="absolute right-0 bottom-[15%] left-0 flex items-end justify-start gap-12 px-[8%]">
+      {/* 3 body blocks: Each block shows up word by word */}
+      <div className="absolute bottom-20 flex justify-start gap-12 px-20">
         {bodyItems.map((bodyText, index) => {
-          const key = `${index}-${bodyText}`;
-          const delay = delays[index] ?? 0;
+          const baseDelay = BODY_BLOCK_DELAYS_MS[index] ?? 0;
+          const words = bodyText.split(' ');
 
           return (
-            <div
-              className="animate-scale-fade-in space-y-2 text-center"
-              key={key}
-              style={{ animationDelay: `${delay}ms` }}
-            >
-              <p>{bodyText}</p>
+            <div className="space-y-2 text-center" key={`${data.title}-body-${index}`}>
+              <p className="w-120 text-left text-4xl">
+                {words.map((word, i) => (
+                  <span
+                    className="animate-char-in inline-block"
+                    key={i}
+                    style={{ animationDelay: `${baseDelay + i * WORD_STAGGER_MS}ms` }}
+                  >
+                    {word}
+                    {i < words.length - 1 && '\u00A0'}
+                  </span>
+                ))}
+              </p>
             </div>
           );
         })}

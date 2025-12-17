@@ -14,6 +14,11 @@
 
   /* Custom (Basecamp-only, dark) */
   /* e.g. --basecamp-accent: #...; */
+  --primary-im-dark-blue: #14477d;
+}
+
+@theme inline {
+  --color-primary-im-dark-blue: var(--primary-im-dark-blue);
 }
 
 @source '../**/**/**/*.{ts,tsx}';
@@ -47,45 +52,76 @@
   }
 }
 
-/* Problem2: Fade in, hold, then shrink and fly away */
-@keyframes problem2-sequence {
-  0% {
-    left: 8%;
+/* Character/word fade in with small jump (reusable) */
+@keyframes char-in {
+  from {
     opacity: 0;
-    top: 15%;
-    transform: scale(1);
+    transform: translateY(-10px);
   }
-  14% {
-    left: 8%;
+  to {
     opacity: 1;
-    top: 15%;
-    transform: scale(1);
+    transform: translateY(0);
   }
-  86% {
-    left: 8%;
+}
+
+/* Slide up from below */
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
     opacity: 1;
-    top: 15%;
-    transform: scale(1);
+    transform: translateY(0);
+  }
+}
+
+/* Fade out */
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Horizontal grow from center */
+@keyframes grow-x {
+  from {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+/* ProblemIntro: Shrink and fly to top-left */
+@keyframes problem-exit {
+  0% {
+    opacity: 1;
+    transform: scale(1) translate(0, 0);
+  }
+  16% {
+    opacity: 1;
+    transform: scale(1) translate(0, 0);
   }
   100% {
-    left: -10%;
     opacity: 0;
-    top: -5%;
-    transform: scale(0.5);
+    transform: scale(0.8) translate(-20vw, -80vh);
   }
 }
 
 /* WelcomeView: Fade in, hold, move left and exit */
 @keyframes welcome-sequence {
   0% {
-    opacity: 0;
-    transform: translateX(10%);
-  }
-  17% {
     opacity: 1;
     transform: translateX(10%);
   }
-  67% {
+  /* start moving at around 5s */
+  72% {
     opacity: 1;
     transform: translateX(10%);
   }
@@ -95,41 +131,36 @@
   }
 }
 
-/* PossibilitiesTitle: Fade in, hold, fade out */
-@keyframes possibilities-title-sequence {
-  0% {
-    opacity: 0;
-  }
-  7% {
-    opacity: 0;
-  }
-  29% {
-    opacity: 1;
-  }
-  86% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
+.animate-char-in {
+  animation: char-in 0.4s ease-out both;
+  opacity: 0;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.6s ease-out both;
+}
+
+.animate-fade-out {
+  animation: fade-out 0.4s ease-out forwards;
+}
+
+.animate-grow-x {
+  animation: grow-x 0.5s ease-out both;
+  transform-origin: center;
 }
 
 .animate-fade-in {
   animation: fade-in 0.3s ease-out forwards;
 }
 
+.animate-problem-exit {
+  animation: problem-exit 6s ease-in-out forwards;
+}
+
 .animate-scale-fade-in {
   animation: scale-fade-in 0.7s ease-out both;
 }
 
-.animate-problem2 {
-  animation: problem2-sequence 3.5s ease-in-out forwards;
-}
-
 .animate-welcome {
-  animation: welcome-sequence 6s ease-in-out forwards;
-}
-
-.animate-possibilities-title {
-  animation: possibilities-title-sequence 7s ease-in-out forwards;
+  animation: welcome-sequence 7s ease-in-out forwards;
 }

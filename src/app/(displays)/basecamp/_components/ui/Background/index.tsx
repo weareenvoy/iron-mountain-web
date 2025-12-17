@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useBasecamp } from '@/app/(displays)/basecamp/_components/providers/basecamp';
 import { BASECAMP_BEAT_ORDER, isValidBasecampBeatId } from '@/lib/internal/types';
 
-const CROSSFADE_DURATION_MS = 800;
+const CROSSFADE_DURATION_MS = 800 as const;
 
 const Background = () => {
   const { data, exhibitState, setReadyBeatId } = useBasecamp();
@@ -16,7 +16,7 @@ const Background = () => {
   const b = useRef<HTMLVideoElement>(null);
   const active = useRef<'a' | 'b'>('a');
   const [activeDisplay, setActiveDisplay] = useState<'a' | 'b'>('a');
-  const lastBeat = useRef<string>('');
+  const lastBeat = useRef<null | string>(null);
 
   useEffect(() => {
     if (!data || !a.current || !b.current) return;
@@ -27,31 +27,8 @@ const Background = () => {
     if (!url || beatId === lastBeat.current) return;
 
     // First beat after page reload → force into A
-    if (!lastBeat.current) {
-      setReadyBeatId(null);
-      a.current.src = url;
-      a.current.currentTime = 0;
-      a.current.loop = momentId === 'ambient';
-
-      const onReady = () => {
-        setReadyBeatId(beatId);
-        console.info('Background: Video is ready, playing', beatId);
-        a.current?.play();
-      };
-
-      a.current.addEventListener('canplaythrough', onReady, { once: true });
-      a.current.load();
-      lastBeat.current = beatId;
-
-      // Preload next into B
-      const nextIdx = BASECAMP_BEAT_ORDER.indexOf(beatId) + 1;
-      const nextBeatId = BASECAMP_BEAT_ORDER[nextIdx];
-      if (nextBeatId) {
-        const nextUrl = data.beats[nextBeatId].url;
-        if (nextUrl) b.current.src = nextUrl;
-      }
-      return;
-    }
+    const isFirstLoad = lastBeat.current === null;
+    const isAmbient = momentId === 'ambient';
 
     // Determine visible and invisible
     const visible = active.current === 'a' ? a.current : b.current;
@@ -60,48 +37,84 @@ const Background = () => {
     // Clear ready state - foreground will wait until this beat is ready
     setReadyBeatId(null);
 
-    // Set hidden video to use incoming beat's url
-    hidden.src = url;
-    hidden.currentTime = 0;
-    hidden.loop = momentId === 'ambient';
-
-    const go = () => {
-      // Guard against stale handler firing after beat changed
-      if (beatId !== lastBeat.current) return;
-
-      setReadyBeatId(beatId);
-
-      // Fade out visible, fade in hidden
-      visible.style.transition = hidden.style.transition = `opacity ${CROSSFADE_DURATION_MS}ms ease`;
-      visible.style.opacity = '0';
-      hidden.style.opacity = '1';
-
-      // Play hidden video
-      hidden.play();
-      active.current = active.current === 'a' ? 'b' : 'a';
-      setActiveDisplay(active.current);
-
-      // Assume docent would click the "next" beat, preload it.
-      const currIdx = BASECAMP_BEAT_ORDER.indexOf(beatId);
-      const nextIdx = currIdx + 1 < BASECAMP_BEAT_ORDER.length ? currIdx + 1 : 0;
-      const nextBeatId = BASECAMP_BEAT_ORDER[nextIdx];
-
-      // Preload next video after crossfade completes. Use actual transition, not hardcoded timeout.
-      if (nextBeatId) {
-        const nextUrl = data.beats[nextBeatId].url;
-        if (nextUrl) {
-          visible.addEventListener('transitionend', () => (visible.src = nextUrl), { once: true });
-        }
-      }
+    // Configure the incoming video
+    const setupIncomingVideo = (video: HTMLVideoElement) => {
+      video.src = url;
+      video.currentTime = 0;
+      video.loop = isAmbient;
+      video.load();
     };
 
-    // If video is already loaded from preload, fire immediately
-    // readyState >= 3 means HAVE_FUTURE_DATA or HAVE_ENOUGH_DATA
-    if (hidden.readyState >= 3) {
-      go();
+    const startPlaybackAndSignalReady = (video: HTMLVideoElement) => {
+      video.play().catch(e => console.error('Play failed:', e));
+
+      video.addEventListener(
+        'playing',
+        () => {
+          if (lastBeat.current !== beatId) return; // Stale
+          setReadyBeatId(beatId);
+        },
+        { once: true }
+      );
+    };
+
+    if (isFirstLoad) {
+      // First load: use video A directly
+      setupIncomingVideo(a.current!);
+      active.current = 'a';
+
+      a.current!.addEventListener('canplaythrough', () => startPlaybackAndSignalReady(a.current!), { once: true });
     } else {
-      hidden.addEventListener('canplaythrough', go, { once: true });
-      hidden.load();
+      // Subsequent: use hidden video
+      setupIncomingVideo(hidden);
+
+      const Goal = () => {
+        if (lastBeat.current !== beatId) return;
+
+        // Crossfade
+        visible.style.transition = hidden.style.transition = `opacity ${CROSSFADE_DURATION_MS}ms ease`;
+        visible.style.opacity = '0';
+        hidden.style.opacity = '1';
+
+        startPlaybackAndSignalReady(hidden);
+
+        // Switch active
+        active.current = active.current === 'a' ? 'b' : 'a';
+        setActiveDisplay(active.current);
+      };
+
+      // If already buffered enough, start immediately
+      if (hidden.readyState >= 3) {
+        Goal();
+      } else {
+        hidden.addEventListener('canplaythrough', Goal, { once: true });
+      }
+    }
+
+    // Preload next beat into the now-visible (soon-to-be-hidden) video
+    const currentIndex = BASECAMP_BEAT_ORDER.indexOf(beatId);
+    const nextIndex = isAmbient ? currentIndex : (currentIndex + 1) % BASECAMP_BEAT_ORDER.length;
+    const nextBeatId = BASECAMP_BEAT_ORDER[nextIndex];
+
+    if (nextBeatId && data.beats[nextBeatId].url) {
+      // For first load: preload into B immediately
+      // For transitions: preload into the video that will be hidden next (i.e. current visible)
+      const preloadTarget = isFirstLoad ? b.current! : visible;
+
+      if (isFirstLoad) {
+        preloadTarget.src = data.beats[nextBeatId].url;
+      } else {
+        // Wait until crossfade ends
+        visible.addEventListener(
+          'transitionend',
+          () => {
+            if (lastBeat.current === beatId) {
+              preloadTarget.src = data.beats[nextBeatId].url;
+            }
+          },
+          { once: true }
+        );
+      }
     }
 
     lastBeat.current = beatId;

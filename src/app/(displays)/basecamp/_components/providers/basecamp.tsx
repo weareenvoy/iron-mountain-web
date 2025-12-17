@@ -7,13 +7,13 @@ import { isBasecampSection, type BasecampData, type ExhibitNavigationState, type
 import type { ExhibitMqttState } from '@/lib/mqtt/types';
 
 interface BasecampContextType {
-  data: BasecampData | null;
-  error: null | string;
-  exhibitState: ExhibitNavigationState;
-  loading: boolean;
-  locale: Locale;
-  readyBeatId: null | string;
-  setReadyBeatId: (beatId: null | string) => void;
+  readonly data: BasecampData | null;
+  readonly error: null | string;
+  readonly exhibitState: ExhibitNavigationState;
+  readonly loading: boolean;
+  readonly locale: Locale;
+  readonly readyBeatId: null | string;
+  readonly setReadyBeatId: (beatId: null | string) => void;
 }
 
 export const BasecampContext = createContext<BasecampContextType | undefined>(undefined);
@@ -183,7 +183,6 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
           // Convert 1-indexed beat number to 0-indexed
           const beatIdx = beatNumber - 1;
 
-          console.info(`Parsed beat: moment=${momentId}, beatIdx=${beatIdx}`);
           setExhibitState({ beatIdx, momentId });
 
           // Report updated state with new beat-id

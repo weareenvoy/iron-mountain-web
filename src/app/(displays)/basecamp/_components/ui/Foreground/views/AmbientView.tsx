@@ -1,10 +1,9 @@
-import LogoDark from '@/components/ui/icons/LogoDark';
+import LogoColored from '@/components/ui/icons/LogoColored';
 
 const AmbientView = () => {
-  // TODO ask for colored logo svg
   return (
-    <div className="absolute inset-0 flex items-center justify-center">
-      <LogoDark className="h-[78px] w-[300px]" />
+    <div className="absolute top-40 left-1/2 flex -translate-x-1/2 items-center justify-center">
+      <LogoColored className="h-[182px] w-[700px]" />
     </div>
   );
 };
