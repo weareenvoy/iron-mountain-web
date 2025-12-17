@@ -2,7 +2,6 @@
 
 import { Fragment, useEffect, useState } from 'react';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
-import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers';
 import { buildChallengeSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeTemplate';
 import {
   buildHardcodedSlides,
@@ -17,20 +16,21 @@ import {
   buildValueSlides,
   type ValueScreens,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueTemplate';
+import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers';
 import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
 import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 // import styles from './kiosk-3.module.css';
 
 const Kiosk3View = () => {
   const controller: Controller = useKioskController();
-  const { data: kioskData, loading, error } = useKiosk();
+  const { data: kioskData, error, loading } = useKiosk();
   const [topIndex, setTopIndex] = useState(0);
 
   // Prepare data (with safe defaults for loading state)
   const challenges: KioskChallenges | null = kioskData ? parseKioskChallenges(kioskData.challenges, 'kiosk-3') : null;
-  const solutions = (kioskData?.solutions as SolutionScreens) ?? null;
-  const values = (kioskData?.value as ValueScreens) ?? null;
-  const hardCoded = (kioskData?.hardcoded as HardCodedScreens) ?? null;
+  const solutions = (kioskData?.solutions as SolutionScreens | undefined) || null;
+  const values = (kioskData?.value as undefined | ValueScreens) || null;
+  const hardCoded = (kioskData?.hardcoded as HardCodedScreens | undefined) || null;
 
   const slides: Slide[] =
     challenges && solutions && values && hardCoded

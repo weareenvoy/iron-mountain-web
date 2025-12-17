@@ -2,7 +2,6 @@
 
 import { Fragment, useEffect, useState } from 'react';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
-import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers';
 import { buildChallengeSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeTemplate';
 import {
   buildHardcodedSlides,
@@ -17,28 +16,40 @@ import {
   buildValueSlides,
   type ValueScreens,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueTemplate';
+import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers';
 import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
 import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 // import styles from './kiosk-1.module.css';
 
 const Kiosk1View = () => {
   const controller: Controller = useKioskController();
-  const { data: kioskData, loading, error } = useKiosk();
+  const { data: kioskData, error, loading } = useKiosk();
   const [topIndex, setTopIndex] = useState(0);
 
   // Prepare data (with safe defaults for loading state)
   // Type assertion for kiosk-1 specific structure
-  const kioskContent = kioskData as any;
+  const kioskContent = kioskData as
+    | null
+    | undefined
+    | {
+        data?: {
+          ambient?: unknown;
+          challenge?: unknown;
+          hardcoded?: unknown;
+          solutions?: unknown;
+          value?: unknown;
+        };
+      };
 
   const challenges: KioskChallenges | null =
-    kioskContent?.data?.challenge && kioskContent?.data?.ambient
+    kioskContent?.data?.challenge && kioskContent.data.ambient
       ? parseKioskChallenges(mapChallenges(kioskContent.data.challenge, kioskContent.data.ambient), 'kiosk-1')
       : null;
   const solutions = kioskContent?.data?.solutions
     ? (mapSolutions(kioskContent.data.solutions) as SolutionScreens)
     : null;
   const values = kioskContent?.data?.value ? (mapValue(kioskContent.data.value) as ValueScreens) : null;
-  const hardCoded = (kioskContent?.data?.hardcoded as HardCodedScreens) ?? null;
+  const hardCoded = (kioskContent?.data?.hardcoded as HardCodedScreens | undefined) || null;
 
   const slides: Slide[] =
     challenges && solutions && values && hardCoded
