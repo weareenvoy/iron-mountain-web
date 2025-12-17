@@ -2,6 +2,11 @@
   {
     "locale": "en",
     "data": {
+      "meta": [
+        {"label": "Company", "value": "Boyer-Boyer"},
+        {"label": "Date of engagement", "value":"24/12/2025"},
+        {"label": "Location", "value":"São Paulo, BR"}
+      ],
       "basecamp": {
         "possibilities": {
           "title": "Discover new possibilities"
@@ -93,11 +98,6 @@
           "solutionTitle": "Rich media & cultural heritage",
           "subheader": ""
         }
-      },
-      "meta": {
-        "company": "Company Name goes here",
-        "location": "São Paulo, BR",
-        "startDate": "24/12/2025"
       },
       "overlook": {
         "activate": {

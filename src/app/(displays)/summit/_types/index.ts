@@ -61,11 +61,12 @@ export interface SummitMapLocations {
   readonly mapLocation3: SummitMapLocation;
 }
 
-export interface SummitMeta {
-  readonly company: string;
-  readonly location: string;
-  readonly startDate: string;
+export interface SummitMetaItem {
+  readonly label: string;
+  readonly value: string;
 }
+
+export type SummitMeta = readonly SummitMetaItem[];
 
 export interface SummitOverlook {
   readonly activate: SummitMapLocations;

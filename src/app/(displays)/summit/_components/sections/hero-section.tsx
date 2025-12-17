@@ -1,25 +1,17 @@
 import IronMountainLogoBlue from '@/components/ui/icons/IronMountainLogoBlue';
 import SummitRootDiamondsBg from '@/components/ui/icons/SummitRootDiamondsBg';
 import { cn } from '@/lib/tailwind/utils/cn';
+import type { SummitMeta } from '@/app/(displays)/summit/_types';
 import type { ReactNode } from 'react';
 
 type HeroSectionProps = {
   readonly actionSlot?: ReactNode;
-  readonly company: string;
-  readonly date: string;
-  readonly location: string;
+  readonly meta: SummitMeta;
   readonly title: string;
   readonly variant?: 'print' | 'web';
 };
 
-const HeroSection = ({ actionSlot, company, date, location, title, variant = 'web' }: HeroSectionProps) => {
-  // tour details from CTRL
-  const metadata = [
-    { label: 'Company', value: company },
-    { label: 'Date of engagement', value: date },
-    { label: 'Location', value: location },
-  ];
-
+const HeroSection = ({ actionSlot, meta, title, variant = 'web' }: HeroSectionProps) => {
   const containerGap = variant === 'print' ? 'gap-3 pb-3 pt-3' : 'gap-10 pb-10 pt-12';
   const headingSpacing = variant === 'print' ? 'mb-2 mt-4' : 'mb-8 mt-16';
   const containerClassName = cn('relative z-10 flex flex-col', containerGap);
@@ -71,7 +63,7 @@ const HeroSection = ({ actionSlot, company, date, location, title, variant = 'we
         </div>
 
         <dl className={metadataWrapperClassName}>
-          {metadata.map(item => (
+          {meta.map(item => (
             <div className="flex flex-col gap-1" key={item.label}>
               <dt className="text-muted-foreground">{item.label}</dt>
               <dd className={metadataValueClassName}>{item.value}</dd>

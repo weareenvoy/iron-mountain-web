@@ -3,6 +3,7 @@
 import { forwardRef, type ForwardedRef, type ReactNode } from 'react';
 import SummitPrintLayout from '@/app/(displays)/summit/_components/layouts/summit-print-layout';
 import HeroSection from '@/app/(displays)/summit/_components/sections/hero-section';
+import type { SummitMeta } from '@/app/(displays)/summit/_types';
 
 type PrintablePage = {
   readonly id: string;
@@ -10,15 +11,13 @@ type PrintablePage = {
 };
 
 type SummitPrintableDocumentProps = {
-  readonly company: string;
-  readonly date: string;
   readonly heroTitle: string;
-  readonly location: string;
+  readonly meta: SummitMeta;
   readonly pages: readonly PrintablePage[];
 };
 
 const SummitPrintableDocument = (
-  { company, date, heroTitle, location, pages }: SummitPrintableDocumentProps,
+  { heroTitle, meta, pages }: SummitPrintableDocumentProps,
   ref: ForwardedRef<HTMLDivElement>
 ) => {
   return (
@@ -35,7 +34,7 @@ const SummitPrintableDocument = (
         >
           <SummitPrintLayout>
             <div className="flex flex-col gap-6 text-[0.92rem] leading-[1.35] tracking-[-0.01em]">
-              <HeroSection company={company} date={date} location={location} title={heroTitle} variant="print" />
+              <HeroSection meta={meta} title={heroTitle} variant="print" />
               <div className="flex flex-col gap-5">
                 {page.sections.map((section, sectionIndex) => (
                   <div key={`${page.id}-section-${sectionIndex}`}>{section}</div>

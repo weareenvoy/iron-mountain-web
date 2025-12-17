@@ -102,6 +102,7 @@ const SummitWebContent = () => {
     } catch (e) {
       console.error('Failed to start print job', e);
       setPrintError('Unable to generate PDF. Please try again.');
+      setIsPrinting(false);
     }
   };
 
@@ -204,9 +205,7 @@ const SummitWebContent = () => {
               ) : null}
             </div>
           }
-          company={meta.company}
-          date={meta.startDate}
-          location={meta.location}
+          meta={meta}
           title={heroTitle}
         />
       </div>
@@ -243,14 +242,7 @@ const SummitWebContent = () => {
       <div className={SECTION_WRAPPER_CLASS}>{renderStories()}</div>
       <div className={SECTION_WRAPPER_CLASS}>{renderRecap(4)}</div>
 
-      <SummitPrintableDocument
-        company={meta.company}
-        date={meta.startDate}
-        heroTitle={heroTitle}
-        location={meta.location}
-        pages={printablePages}
-        ref={printableRef}
-      />
+      <SummitPrintableDocument heroTitle={heroTitle} meta={meta} pages={printablePages} ref={printableRef} />
     </div>
   );
 };
