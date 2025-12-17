@@ -45,10 +45,13 @@ const defaultSlides: CarouselSlide[] = [
     headline: ['Centralized management', 'of services via API'],
     id: 'slide-1',
     primaryImageAlt: 'Professional with tablet in data center',
-    primaryImageSrc: '/images/kiosks/kiosk3/01-challenge/Challenge-Image1-Diamond.png',
-    primaryVideoSrc: '/images/kiosks/kiosk3/04-custom-interactive/CU-Video1-Full.mp4',
+    primaryImageSrc:
+      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/01+-+Challenge/Challenge-Image1-Diamond.webp',
+    primaryVideoSrc:
+      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video1-Full.webm',
     secondaryImageAlt: 'Hand touching smart interface',
-    secondaryImageSrc: '/images/kiosks/kiosk3/04-custom-interactive/CU-Image2-Diamond.png',
+    secondaryImageSrc:
+      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image2-Diamond.webp',
     sectionTitle: 'Data configuration',
   },
   {
@@ -57,8 +60,10 @@ const defaultSlides: CarouselSlide[] = [
     headline: ['Centralized management', 'of services via API'],
     id: 'slide-2',
     primaryImageAlt: 'Professional with tablet in data center',
-    primaryImageSrc: '/images/kiosks/kiosk3/01-challenge/Challenge-Image1-Diamond.png',
-    primaryVideoSrc: '/images/kiosks/kiosk3/04-custom-interactive/CU-Video2-Full.mp4',
+    primaryImageSrc:
+      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/01+-+Challenge/Challenge-Image1-Diamond.webp',
+    primaryVideoSrc:
+      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video2-Full.webm',
     secondaryImageAlt: 'Hand touching smart interface',
     secondaryImageSrc: undefined,
     sectionTitle: 'Device storage',
@@ -69,10 +74,13 @@ const defaultSlides: CarouselSlide[] = [
     headline: ['Device configuration'],
     id: 'slide-3',
     primaryImageAlt: 'Professional with tablet in data center',
-    primaryImageSrc: '/images/kiosks/kiosk3/01-challenge/Challenge-Image1-Diamond.png',
-    primaryVideoSrc: '/images/kiosks/kiosk3/04-custom-interactive/CU-Video3-Full.mp4',
+    primaryImageSrc:
+      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/01+-+Challenge/Challenge-Image1-Diamond.webp',
+    primaryVideoSrc:
+      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video3-Full.webm',
     secondaryImageAlt: 'Hand touching smart interface',
-    secondaryImageSrc: '/images/kiosks/kiosk3/04-custom-interactive/CU-Image3-Diamond.png',
+    secondaryImageSrc:
+      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image3-Diamond.webp',
     sectionTitle: 'Device configuration',
   },
   {
@@ -81,10 +89,13 @@ const defaultSlides: CarouselSlide[] = [
     headline: ['Device deployment'],
     id: 'slide-4',
     primaryImageAlt: 'Professional with tablet in data center',
-    primaryImageSrc: '/images/kiosks/kiosk3/01-challenge/Challenge-Image1-Diamond.png',
-    primaryVideoSrc: '/images/kiosks/kiosk3/04-custom-interactive/CU-Video4-Full.mp4',
+    primaryImageSrc:
+      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/01+-+Challenge/Challenge-Image1-Diamond.webp',
+    primaryVideoSrc:
+      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video4-Full.webm',
     secondaryImageAlt: 'Hand touching smart interface',
-    secondaryImageSrc: '/images/kiosks/kiosk3/04-custom-interactive/CU-Image4-Diamond.png',
+    secondaryImageSrc:
+      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image4-Diamond.webp',
     sectionTitle: 'Device deployment',
   },
   {
@@ -93,8 +104,10 @@ const defaultSlides: CarouselSlide[] = [
     headline: ['Device maintenance'],
     id: 'slide-5',
     primaryImageAlt: 'Professional with tablet in data center',
-    primaryImageSrc: '/images/kiosks/kiosk3/01-challenge/Challenge-Image1-Diamond.png',
-    primaryVideoSrc: '/images/kiosks/kiosk3/04-custom-interactive/CU-Video5-Full.mp4',
+    primaryImageSrc:
+      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/01+-+Challenge/Challenge-Image1-Diamond.webp',
+    primaryVideoSrc:
+      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video5-Full.webm',
     secondaryImageAlt: 'Hand touching smart interface',
     secondaryImageSrc: undefined,
     sectionTitle: 'Device maintenance',
@@ -105,10 +118,13 @@ const defaultSlides: CarouselSlide[] = [
     headline: ['Device reverse logistics'],
     id: 'slide-6',
     primaryImageAlt: 'Professional with tablet in data center',
-    primaryImageSrc: '/images/kiosks/kiosk3/01-challenge/Challenge-Image1-Diamond.png',
-    primaryVideoSrc: '/images/kiosks/kiosk3/04-custom-interactive/CU-Video6-Full.mp4',
+    primaryImageSrc:
+      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/01+-+Challenge/Challenge-Image1-Diamond.webp',
+    primaryVideoSrc:
+      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video6-Full.webm',
     secondaryImageAlt: 'Hand touching smart interface',
-    secondaryImageSrc: '/images/kiosks/kiosk3/04-custom-interactive/CU-Image5-Diamond.png',
+    secondaryImageSrc:
+      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image5-Diamond.webp',
     sectionTitle: 'Device reverse logistics',
   },
 ];
