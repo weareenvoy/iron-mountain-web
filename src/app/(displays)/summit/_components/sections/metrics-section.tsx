@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import type { SummitProblem2Item, SummitProblem3 } from '@/lib/internal/types';
+import type { SummitProblem2Item, SummitProblem3 } from '@/app/(displays)/summit/_types';
 
 type MetricsSectionProps = {
   readonly challenges: SummitProblem3;

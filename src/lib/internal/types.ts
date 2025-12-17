@@ -358,41 +358,7 @@ export interface DocentData {
   };
 }
 
-import type {
-  SummitBasecamp,
-  SummitChallenge,
-  SummitData,
-  SummitFuturescaping,
-  SummitJourneySlide,
-  SummitKiosk,
-  SummitKioskAmbient,
-  SummitMapLocation,
-  SummitMapLocations,
-  SummitMeta,
-  SummitOverlook,
-  SummitPossibility,
-  SummitProblem2Item,
-  SummitProblem3,
-  SummitSlideScreen,
-} from '@/app/(displays)/summit/_types';
-
-export type {
-  SummitBasecamp,
-  SummitChallenge,
-  SummitData,
-  SummitFuturescaping,
-  SummitJourneySlide,
-  SummitKiosk,
-  SummitKioskAmbient,
-  SummitMapLocation,
-  SummitMapLocations,
-  SummitMeta,
-  SummitOverlook,
-  SummitPossibility,
-  SummitProblem2Item,
-  SummitProblem3,
-  SummitSlideScreen,
-};
+import type { SummitData } from '@/app/(displays)/summit/_types';
 
 export type Locale = 'en' | 'pt';
 

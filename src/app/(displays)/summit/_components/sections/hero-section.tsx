@@ -20,6 +20,7 @@ const HeroSection = ({
   title = 'Your personalized journey map', // TODO. This will be from Simple CMS. Wait.
   variant = 'web',
 }: HeroSectionProps) => {
+  // tour details from CTRL
   const metadata = [
     { label: 'Company', value: company },
     { label: 'Date of engagement', value: date },

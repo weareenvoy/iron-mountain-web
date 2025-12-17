@@ -3,7 +3,7 @@ import type {
   SummitKioskAmbient,
   SummitMapLocations,
   SummitPossibility,
-} from '@/lib/internal/types';
+} from '@/app/(displays)/summit/_types';
 
 // Different item types based on variant
 type PossibilityItem = SummitPossibility;
@@ -37,9 +37,12 @@ type StrategiesSectionProps =
       readonly variant: 'stories';
     };
 
-const StrategiesSection = (props: StrategiesSectionProps) => {
-  const { accentColor = '#8A0D71', items, title, variant = 'possibilities' } = props;
-
+const StrategiesSection = ({
+  accentColor = '#8A0D71',
+  items,
+  title,
+  variant = 'possibilities',
+}: StrategiesSectionProps) => {
   return (
     <section className="flex flex-col gap-8">
       <div className="flex items-center gap-3 text-2xl font-semibold text-[#58595B] sm:text-3xl">
@@ -48,25 +51,52 @@ const StrategiesSection = (props: StrategiesSectionProps) => {
       </div>
 
       <div className="grid gap-6 sm:grid-cols-3">
-        {items.map((item, index) => (
-          <article className="rounded-xl border p-6 shadow-sm" key={index} style={{ borderColor: accentColor }}>
-            <p className="text-sm font-semibold" style={{ color: accentColor }}>
-              {String(index + 1).padStart(2, '0')}
-            </p>
-            <h3 className="mt-4 text-lg font-semibold text-[#4B4B4D]">
-              {variant === 'possibilities' && (item as PossibilityItem).title}
-              {variant === 'solutions' && (item as SolutionItem).title}
-              {variant === 'futurescaping' && (item as FuturescopingItem).title}
-              {variant === 'stories' && (item as StoryItem).solutionTitle}
-            </h3>
-            <div className="mt-4 text-sm whitespace-pre-line text-[#4B4B4D]">
-              {variant === 'possibilities' && renderPossibility(item as PossibilityItem)}
-              {variant === 'solutions' && renderSolution(item as SolutionItem)}
-              {variant === 'futurescaping' && renderFuturescaping(item as FuturescopingItem)}
-              {variant === 'stories' && renderStory(item as StoryItem)}
-            </div>
-          </article>
-        ))}
+        {items.map((item, index) => {
+          let content: React.ReactNode;
+          let itemKey: string;
+          let itemTitle: string;
+
+          switch (variant) {
+            case 'futurescaping': {
+              const typedItem = item as FuturescopingItem;
+              content = renderFuturescaping(typedItem);
+              itemKey = typedItem.title;
+              itemTitle = typedItem.title;
+              break;
+            }
+            case 'possibilities': {
+              const typedItem = item as PossibilityItem;
+              content = renderPossibility(typedItem);
+              itemKey = typedItem.title;
+              itemTitle = typedItem.title;
+              break;
+            }
+            case 'solutions': {
+              const typedItem = item as SolutionItem;
+              content = renderSolution(typedItem);
+              itemKey = typedItem.title;
+              itemTitle = typedItem.title;
+              break;
+            }
+            case 'stories': {
+              const typedItem = item as StoryItem;
+              content = renderStory(typedItem);
+              itemKey = typedItem.solutionTitle;
+              itemTitle = typedItem.solutionTitle;
+              break;
+            }
+          }
+
+          return (
+            <article className="rounded-xl border p-6 shadow-sm" key={itemKey} style={{ borderColor: accentColor }}>
+              <p className="text-sm font-semibold" style={{ color: accentColor }}>
+                {String(index + 1).padStart(2, '0')}
+              </p>
+              <h3 className="mt-4 text-lg font-semibold text-[#4B4B4D]">{itemTitle}</h3>
+              <div className="mt-4 text-sm whitespace-pre-line text-[#4B4B4D]">{content}</div>
+            </article>
+          );
+        })}
       </div>
     </section>
   );
