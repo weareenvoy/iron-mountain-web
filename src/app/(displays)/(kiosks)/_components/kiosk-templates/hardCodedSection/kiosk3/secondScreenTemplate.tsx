@@ -11,7 +11,8 @@ const defaultHeadline = 'Centralized management of services via API';
 const defaultDescription = 'Explore each section to learn how Iron Mountain can transform your enterprise';
 const defaultBackLabel = 'Back';
 const defaultTapToBeginLabel = 'Tap to begin';
-const defaultVideoSrc = 'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video1-Full.webm';
+const defaultVideoSrc =
+  'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video1-Full.webm';
 
 export interface HardCodedKiosk3SecondScreenTemplateProps {
   readonly backgroundImageSrc?: string;
