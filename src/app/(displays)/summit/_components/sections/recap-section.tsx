@@ -18,12 +18,12 @@ type RecapSectionProps = {
   readonly tone?: RecapTone;
 };
 
-export const RECAP_DEFAULT_TONE: RecapTone = {
+export const RECAP_DEFAULT_TONE = {
   accentBg: '#6DCFF6',
   accentColor: '#14477D',
   bodyColor: '#4B4B4D',
   iconColor: '#0D3C69',
-};
+} as const;
 
 const RecapSection = ({
   actionSlot,
