@@ -120,17 +120,6 @@ export const isValidSummitRoomBeatId = (id: string): id is SummitRoomBeatId => {
 // Union type for all exhibit beat IDs
 export type ExhibitBeatId = BasecampBeatId | OverlookBeatId | SummitRoomBeatId;
 
-// Get the maximum slide index based on available journey beat IDs (excluding journey-intro)
-const getMaxSlideIndexFromBeatIds = (): number => {
-  const journeyBeatIds = SUMMIT_ROOM_BEAT_IDS.filter(id => id !== 'journey-intro' && id.startsWith('journey-'));
-  if (journeyBeatIds.length === 0) return 0;
-  const numbers = journeyBeatIds.map(id => {
-    const match = id.match(/^journey-(\d+)$/);
-    return match && match[1] ? parseInt(match[1], 10) : 0;
-  });
-  return Math.max(...numbers) - 1; // Convert to 0-based index
-};
-
 // Convert carousel beatId (journey-1 through journey-N) to slide index (0-based).
 // Note: journey-intro is NOT a slide - it's the pre-carousel state.
 export const getSlideIndexFromBeatId = (beatId: SummitRoomBeatId): number => {
@@ -143,11 +132,10 @@ export const getSlideIndexFromBeatId = (beatId: SummitRoomBeatId): number => {
 };
 
 // Convert slide index (0-based) to carousel beatId (journey-1 through journey-N).
-// maxSlideIndex: Optional max index based on actual data length (defaults to calculating from SUMMIT_ROOM_BEAT_IDS)
-export const getBeatIdFromSlideIndex = (slideIndex: number, maxSlideIndex?: number): SummitRoomBeatId => {
-  const maxIndex = maxSlideIndex ?? getMaxSlideIndexFromBeatIds();
-  if (slideIndex < 0 || slideIndex > maxIndex) {
-    console.warn('Invalid slide index:', slideIndex, `(max: ${maxIndex})`);
+// maxSlideIndex: Maximum slide index based on actual data length (0-based, so pass slideCount - 1)
+export const getBeatIdFromSlideIndex = (slideIndex: number, maxSlideIndex: number): SummitRoomBeatId => {
+  if (slideIndex < 0 || slideIndex > maxSlideIndex) {
+    console.warn('Invalid slide index:', slideIndex, `(max: ${maxSlideIndex})`);
     return 'journey-1';
   }
   return `journey-${slideIndex + 1}` as SummitRoomBeatId;

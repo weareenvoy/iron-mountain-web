@@ -26,6 +26,7 @@ const MomentsAndBeats = ({ content, exhibit, exhibitState, setExhibitState }: Mo
 
   // Reset to playing whenever the active beat changes (any navigation)
   useEffect(() => {
+    // TODO how to not use setState inside of this useEffect?
     setVideoPlaying(true);
   }, [exhibitState.momentId, exhibitState.beatIdx]);
 
