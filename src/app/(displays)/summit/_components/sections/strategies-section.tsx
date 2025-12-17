@@ -1,29 +1,13 @@
-import type {
-  SummitFuturescaping,
-  SummitKioskAmbient,
-  SummitMapLocations,
-  SummitPossibility,
-} from '@/app/(displays)/summit/_types';
-
-// Different item types based on variant
-type PossibilityItem = SummitPossibility;
-type SolutionItem = { readonly locations: SummitMapLocations; readonly title: string };
-type FuturescopingItem = SummitFuturescaping;
-type StoryItem = SummitKioskAmbient;
+import {
+  renderFuturescaping,
+  renderPossibility,
+  renderSolution,
+  renderStory,
+  type SolutionItem,
+} from '@/app/(displays)/summit/_utils';
+import type { SummitFuturescaping, SummitKioskAmbient, SummitPossibility } from '@/app/(displays)/summit/_types';
 
 type StrategiesSectionProps =
-  | {
-      readonly accentColor?: string;
-      readonly items: readonly FuturescopingItem[];
-      readonly title: string;
-      readonly variant: 'futurescaping';
-    }
-  | {
-      readonly accentColor?: string;
-      readonly items: readonly PossibilityItem[];
-      readonly title: string;
-      readonly variant?: 'possibilities';
-    }
   | {
       readonly accentColor?: string;
       readonly items: readonly SolutionItem[];
@@ -32,9 +16,21 @@ type StrategiesSectionProps =
     }
   | {
       readonly accentColor?: string;
-      readonly items: readonly StoryItem[];
+      readonly items: readonly SummitFuturescaping[];
+      readonly title: string;
+      readonly variant: 'futurescaping';
+    }
+  | {
+      readonly accentColor?: string;
+      readonly items: readonly SummitKioskAmbient[];
       readonly title: string;
       readonly variant: 'stories';
+    }
+  | {
+      readonly accentColor?: string;
+      readonly items: readonly SummitPossibility[];
+      readonly title: string;
+      readonly variant?: 'possibilities';
     };
 
 const StrategiesSection = ({
@@ -58,14 +54,14 @@ const StrategiesSection = ({
 
           switch (variant) {
             case 'futurescaping': {
-              const typedItem = item as FuturescopingItem;
+              const typedItem = item as SummitFuturescaping;
               content = renderFuturescaping(typedItem);
               itemKey = typedItem.title;
               itemTitle = typedItem.title;
               break;
             }
             case 'possibilities': {
-              const typedItem = item as PossibilityItem;
+              const typedItem = item as SummitPossibility;
               content = renderPossibility(typedItem);
               itemKey = typedItem.title;
               itemTitle = typedItem.title;
@@ -79,7 +75,7 @@ const StrategiesSection = ({
               break;
             }
             case 'stories': {
-              const typedItem = item as StoryItem;
+              const typedItem = item as SummitKioskAmbient;
               content = renderStory(typedItem);
               itemKey = typedItem.solutionTitle;
               itemTitle = typedItem.solutionTitle;
@@ -101,37 +97,5 @@ const StrategiesSection = ({
     </section>
   );
 };
-
-const renderPossibility = (item: PossibilityItem) => (
-  <>
-    <p>{item.body1}</p>
-    <p className="mt-2">{item.body2}</p>
-    <p className="mt-2">{item.body3}</p>
-  </>
-);
-
-const renderSolution = (item: SolutionItem) => {
-  const locations = item.locations;
-  return (
-    <>
-      <p className="font-bold">{locations.mapLocation1.title}</p>
-      <p> {locations.mapLocation1.body}</p>
-      <p className="mt-2 font-bold">{locations.mapLocation2.title}</p>
-      <p className="mt-2"> {locations.mapLocation2.body}</p>
-      <p className="mt-2 font-bold"> {locations.mapLocation3.title}</p>
-      <p className="mt-2"> {locations.mapLocation3.body}</p>
-    </>
-  );
-};
-
-const renderFuturescaping = (item: FuturescopingItem) => <p>{item.body}</p>;
-
-const renderStory = (item: StoryItem) => (
-  <>
-    {item.headline && <p className="font-semibold">{item.headline}</p>}
-    {item.body && <p className="mt-2">{item.body}</p>}
-    {item.attribution && <p className="mt-2 italic">{item.attribution}</p>}
-  </>
-);
 
 export default StrategiesSection;
