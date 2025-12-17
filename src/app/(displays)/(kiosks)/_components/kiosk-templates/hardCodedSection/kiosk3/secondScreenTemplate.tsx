@@ -11,7 +11,7 @@ const defaultHeadline = 'Centralized management of services via API';
 const defaultDescription = 'Explore each section to learn how Iron Mountain can transform your enterprise';
 const defaultBackLabel = 'Back';
 const defaultTapToBeginLabel = 'Tap to begin';
-const defaultVideoSrc = '/images/kiosks/kiosk3/04-custom-interactive/CU-Video1-Full.mp4';
+const defaultVideoSrc = 'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video1-Full.webm';
 
 export interface HardCodedKiosk3SecondScreenTemplateProps {
   readonly backgroundImageSrc?: string;
@@ -22,6 +22,7 @@ export interface HardCodedKiosk3SecondScreenTemplateProps {
   readonly onBack?: () => void;
   readonly onTapToBegin?: () => void;
   readonly tapToBeginLabel?: string;
+  readonly videoAsset?: string;
 }
 
 const HardCodedKiosk3SecondScreenTemplate = ({
@@ -33,6 +34,7 @@ const HardCodedKiosk3SecondScreenTemplate = ({
   onBack,
   onTapToBegin,
   tapToBeginLabel = defaultTapToBeginLabel,
+  videoAsset = defaultVideoSrc,
 }: HardCodedKiosk3SecondScreenTemplateProps) => {
   const eyebrowText = Array.isArray(eyebrow) ? eyebrow.join('\n') : eyebrow;
 
@@ -62,7 +64,7 @@ const HardCodedKiosk3SecondScreenTemplate = ({
             muted
             playsInline
             poster={backgroundImageSrc}
-            src={defaultVideoSrc}
+            src={videoAsset}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
         </div>
