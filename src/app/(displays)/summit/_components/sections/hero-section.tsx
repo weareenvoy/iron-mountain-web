@@ -8,18 +8,11 @@ type HeroSectionProps = {
   readonly company: string;
   readonly date: string;
   readonly location: string;
-  readonly title?: string;
+  readonly title: string;
   readonly variant?: 'print' | 'web';
 };
 
-const HeroSection = ({
-  actionSlot,
-  company,
-  date,
-  location,
-  title = 'Your personalized journey map', // TODO. This will be from Simple CMS. Wait.
-  variant = 'web',
-}: HeroSectionProps) => {
+const HeroSection = ({ actionSlot, company, date, location, title, variant = 'web' }: HeroSectionProps) => {
   // tour details from CTRL
   const metadata = [
     { label: 'Company', value: company },

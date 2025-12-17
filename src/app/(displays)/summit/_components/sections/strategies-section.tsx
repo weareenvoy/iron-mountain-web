@@ -33,6 +33,52 @@ type StrategiesSectionProps =
       readonly variant?: 'possibilities';
     };
 
+type ProcessedItem = {
+  readonly content: React.ReactNode;
+  readonly itemKey: string;
+  readonly itemTitle: string;
+};
+
+const processItem = (
+  item: SolutionItem | SummitFuturescaping | SummitKioskAmbient | SummitPossibility,
+  variant: 'futurescaping' | 'possibilities' | 'solutions' | 'stories'
+): ProcessedItem => {
+  switch (variant) {
+    case 'futurescaping': {
+      const typedItem = item as SummitFuturescaping;
+      return {
+        content: renderFuturescaping(typedItem),
+        itemKey: typedItem.title,
+        itemTitle: typedItem.title,
+      };
+    }
+    case 'possibilities': {
+      const typedItem = item as SummitPossibility;
+      return {
+        content: renderPossibility(typedItem),
+        itemKey: typedItem.title,
+        itemTitle: typedItem.title,
+      };
+    }
+    case 'solutions': {
+      const typedItem = item as SolutionItem;
+      return {
+        content: renderSolution(typedItem),
+        itemKey: typedItem.title,
+        itemTitle: typedItem.title,
+      };
+    }
+    case 'stories': {
+      const typedItem = item as SummitKioskAmbient;
+      return {
+        content: renderStory(typedItem),
+        itemKey: typedItem.solutionTitle,
+        itemTitle: typedItem.solutionTitle,
+      };
+    }
+  }
+};
+
 const StrategiesSection = ({
   accentColor = '#8A0D71',
   items,
@@ -48,40 +94,7 @@ const StrategiesSection = ({
 
       <div className="grid gap-6 sm:grid-cols-3">
         {items.map((item, index) => {
-          let content: React.ReactNode;
-          let itemKey: string;
-          let itemTitle: string;
-
-          switch (variant) {
-            case 'futurescaping': {
-              const typedItem = item as SummitFuturescaping;
-              content = renderFuturescaping(typedItem);
-              itemKey = typedItem.title;
-              itemTitle = typedItem.title;
-              break;
-            }
-            case 'possibilities': {
-              const typedItem = item as SummitPossibility;
-              content = renderPossibility(typedItem);
-              itemKey = typedItem.title;
-              itemTitle = typedItem.title;
-              break;
-            }
-            case 'solutions': {
-              const typedItem = item as SolutionItem;
-              content = renderSolution(typedItem);
-              itemKey = typedItem.title;
-              itemTitle = typedItem.title;
-              break;
-            }
-            case 'stories': {
-              const typedItem = item as SummitKioskAmbient;
-              content = renderStory(typedItem);
-              itemKey = typedItem.solutionTitle;
-              itemTitle = typedItem.solutionTitle;
-              break;
-            }
-          }
+          const { content, itemKey, itemTitle } = processItem(item, variant);
 
           return (
             <article className="rounded-xl border p-6 shadow-sm" key={itemKey} style={{ borderColor: accentColor }}>

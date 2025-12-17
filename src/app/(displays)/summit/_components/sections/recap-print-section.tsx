@@ -1,8 +1,8 @@
 'use client';
 
+import { RECAP_DEFAULT_TONE, type RecapTone } from '@/app/(displays)/summit/_components/sections/recap-section';
 import NotificationTextIcon from '@/components/ui/icons/NotificationTextIcon';
 import useLocalStorage from '@/hooks/use-local-storage';
-import type { RecapTone } from '@/app/(displays)/summit/_components/sections/recap-section';
 import type { ReactNode } from 'react';
 
 type RecapPrintSectionProps = {
@@ -20,13 +20,8 @@ const RecapPrintSection = ({
   title = 'Recap',
   tone,
 }: RecapPrintSectionProps) => {
-  const palette = tone ?? {
-    accentBg: '#6DCFF6',
-    accentColor: '#14477D',
-    bodyColor: '#4B4B4D',
-    iconColor: '#0D3C69',
-    rightTextColor: '#12406A',
-  };
+  const palette = tone ?? { ...RECAP_DEFAULT_TONE, rightTextColor: '#12406A' };
+
   const [note] = useLocalStorage<string>(storageKey, '');
   const noteValue = note.trim().length > 0 ? note : placeholder;
   const rightTextColor = palette.rightTextColor ?? '#12406A';

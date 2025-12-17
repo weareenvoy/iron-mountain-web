@@ -18,7 +18,7 @@ type RecapSectionProps = {
   readonly tone?: RecapTone;
 };
 
-export const RECAP_DEFAULT_TONE = {
+export const RECAP_DEFAULT_TONE: RecapTone = {
   accentBg: '#6DCFF6',
   accentColor: '#14477D',
   bodyColor: '#4B4B4D',
