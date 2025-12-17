@@ -1,8 +1,8 @@
 'use client';
 
-import kioskContent from '@public/api/kiosk-3.json';
 import { Fragment, useEffect, useState } from 'react';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
+import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers';
 import { buildChallengeSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeTemplate';
 import {
   buildHardcodedSlides,
@@ -23,27 +23,42 @@ import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-con
 
 const Kiosk3View = () => {
   const controller: Controller = useKioskController();
+  const { data: kioskData, loading, error } = useKiosk();
   const [topIndex, setTopIndex] = useState(0);
-  const challenges: KioskChallenges = parseKioskChallenges(kioskContent.challenges, 'kiosk-3');
-  const solutions = kioskContent.solutions as SolutionScreens;
-  const values = kioskContent.value as ValueScreens;
-  const hardCoded = kioskContent.hardcoded as HardCodedScreens;
 
-  const slides: Slide[] = [
-    ...buildChallengeSlides(challenges, 'kiosk-3', controller, {
-      initialScreen: { ...challenges.initialScreen, contentBoxBgColor: '#00A88E' },
-    }),
-    ...buildSolutionSlides(solutions, 'kiosk-3', controller),
-    ...buildValueSlides(values, 'kiosk-3', controller),
-    ...buildHardcodedSlides(hardCoded, 'kiosk-3'),
-  ];
-  const challengeCount = buildChallengeSlides(challenges, 'kiosk-3', controller, {
-    initialScreen: { ...challenges.initialScreen, contentBoxBgColor: '#00A88E' },
-  }).length;
-  const solutionCount = buildSolutionSlides(solutions, 'kiosk-3', controller).length;
-  const valueCount = buildValueSlides(values, 'kiosk-3', controller).length;
+  // Prepare data (with safe defaults for loading state)
+  const challenges: KioskChallenges | null = kioskData
+    ? parseKioskChallenges(kioskData.challenges, 'kiosk-3')
+    : null;
+  const solutions = (kioskData?.solutions as SolutionScreens) ?? null;
+  const values = (kioskData?.value as ValueScreens) ?? null;
+  const hardCoded = (kioskData?.hardcoded as HardCodedScreens) ?? null;
 
+  const slides: Slide[] =
+    challenges && solutions && values && hardCoded
+      ? [
+          ...buildChallengeSlides(challenges, 'kiosk-3', controller, {
+            initialScreen: { ...challenges.initialScreen, contentBoxBgColor: '#00A88E' },
+          }),
+          ...buildSolutionSlides(solutions, 'kiosk-3', controller),
+          ...buildValueSlides(values, 'kiosk-3', controller),
+          ...buildHardcodedSlides(hardCoded, 'kiosk-3'),
+        ]
+      : [];
+
+  const challengeCount =
+    challenges
+      ? buildChallengeSlides(challenges, 'kiosk-3', controller, {
+          initialScreen: { ...challenges.initialScreen, contentBoxBgColor: '#00A88E' },
+        }).length
+      : 0;
+  const solutionCount = solutions ? buildSolutionSlides(solutions, 'kiosk-3', controller).length : 0;
+  const valueCount = values ? buildValueSlides(values, 'kiosk-3', controller).length : 0;
+
+  // All hooks must be called before any conditional returns
   useEffect(() => {
+    if (slides.length === 0) return;
+
     controller.setRootHandlers({
       goTo: (i: number) => {
         setTopIndex(Math.max(0, Math.min(i, slides.length - 1)));
@@ -61,6 +76,23 @@ const Kiosk3View = () => {
 
     return () => controller.setRootHandlers(null);
   }, [controller, slides.length]);
+
+  // Now safe to do conditional rendering after all hooks are called
+  if (loading) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-black">
+        <div className="text-white">Loading kiosk data...</div>
+      </div>
+    );
+  }
+
+  if (error || !kioskData) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-black">
+        <div className="text-red-500">Error loading kiosk data: {error}</div>
+      </div>
+    );
+  }
 
   return (
     <div

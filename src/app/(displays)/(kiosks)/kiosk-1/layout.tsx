@@ -1,11 +1,11 @@
 import { KioskControllerProvider } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
-import { MqttProvider } from '@/components/providers/mqtt-provider';
+import { KioskProvider } from '@/app/(displays)/(kiosks)/_components/providers';
 
 const Kiosk1Layout = ({ children }: LayoutProps<'/kiosk-1'>) => {
   return (
-    <MqttProvider topic="kiosk-01">
+    <KioskProvider kioskId="kiosk-1">
       <KioskControllerProvider kioskId="kiosk-1">{children}</KioskControllerProvider>
-    </MqttProvider>
+    </KioskProvider>
   );
 };
 
