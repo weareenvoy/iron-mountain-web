@@ -127,6 +127,10 @@ const StaticWelcomeSlide = ({
         crossOrigin="anonymous"
         loop
         muted
+        onError={event => {
+          const video = event.currentTarget;
+          video.style.display = 'none';
+        }}
         playsInline
         preload="auto"
         src={WELCOME_BG_VIDEO}
