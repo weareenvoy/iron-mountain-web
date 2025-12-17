@@ -7,16 +7,21 @@ import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
 import MomentsAndBeats from '@/app/(tablets)/docent/_components/ui/MomentsAndBeats';
 import useMomentsNavigation from '@/hooks/use-moments-navigation';
-import type { Moment } from '@/lib/internal/types';
+import type { Section } from '@/lib/internal/types';
 
 const BasecampPage = ({ params }: PageProps<'/docent/tour/[tourId]/basecamp'>) => {
   const { tourId } = use(params);
   const { basecampExhibitState, currentTour, data, setBasecampExhibitState } = useDocent();
 
-  // Use moments directly from data (titles included)
-  const basecampContent: Readonly<Moment[]> = useMemo(() => {
-    return (data?.moments.basecamp ?? []) as Readonly<Moment[]>;
-  }, [data?.moments.basecamp]);
+  // Transform basecampMoments
+  const basecampContent = useMemo(() => {
+    if (!data?.basecampMoments) return [];
+    return data.basecampMoments.map(moment => ({
+      beats: moment.beats,
+      id: moment.handle as Section,
+      title: moment.title,
+    }));
+  }, [data]);
 
   // MomentsAndBeats navigation.
   const { handleNext, handlePrevious, isNextDisabled, isPreviousDisabled } = useMomentsNavigation(

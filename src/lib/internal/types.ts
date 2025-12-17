@@ -2,10 +2,10 @@ export type BasecampSection = 'ambient' | 'ascend' | 'possibilities' | 'problem'
 export type OverlookSection =
   | 'activate'
   | 'ambient'
-  | 'case-study'
   | 'connect'
-  | 'futurescape'
-  | 'insight-dxp'
+  | 'futurescaping'
+  | 'impact'
+  | 'insightdxp'
   | 'protect'
   | 'unlock';
 
@@ -19,10 +19,10 @@ const BASECAMP_SECTIONS: readonly BasecampSection[] = ['ambient', 'ascend', 'pos
 const OVERLOOK_SECTIONS: readonly OverlookSection[] = [
   'activate',
   'ambient',
-  'case-study',
   'connect',
-  'futurescape',
-  'insight-dxp',
+  'futurescaping',
+  'impact',
+  'insightdxp',
   'protect',
   'unlock',
 ];
@@ -108,6 +108,7 @@ export const SUMMIT_ROOM_BEAT_IDS = [
   'journey-3',
   'journey-4',
   'journey-5',
+  'journey-6',
 ] as const;
 
 export type SummitRoomBeatId = (typeof SUMMIT_ROOM_BEAT_IDS)[number];
@@ -119,7 +120,18 @@ export const isValidSummitRoomBeatId = (id: string): id is SummitRoomBeatId => {
 // Union type for all exhibit beat IDs
 export type ExhibitBeatId = BasecampBeatId | OverlookBeatId | SummitRoomBeatId;
 
-// Convert carousel beatId (journey-1 through journey-5) to slide index (0-4).
+// Get the maximum slide index based on available journey beat IDs (excluding journey-intro)
+const getMaxSlideIndexFromBeatIds = (): number => {
+  const journeyBeatIds = SUMMIT_ROOM_BEAT_IDS.filter(id => id !== 'journey-intro' && id.startsWith('journey-'));
+  if (journeyBeatIds.length === 0) return 0;
+  const numbers = journeyBeatIds.map(id => {
+    const match = id.match(/^journey-(\d+)$/);
+    return match && match[1] ? parseInt(match[1], 10) : 0;
+  });
+  return Math.max(...numbers) - 1; // Convert to 0-based index
+};
+
+// Convert carousel beatId (journey-1 through journey-N) to slide index (0-based).
 // Note: journey-intro is NOT a slide - it's the pre-carousel state.
 export const getSlideIndexFromBeatId = (beatId: SummitRoomBeatId): number => {
   if (beatId === 'journey-intro') {
@@ -130,10 +142,12 @@ export const getSlideIndexFromBeatId = (beatId: SummitRoomBeatId): number => {
   return parseInt(match[1], 10) - 1;
 };
 
-// Convert slide index (0-4) to carousel beatId (journey-1 through journey-5).
-export const getBeatIdFromSlideIndex = (slideIndex: number): SummitRoomBeatId => {
-  if (slideIndex < 0 || slideIndex > 4) {
-    console.warn('Invalid slide index:', slideIndex);
+// Convert slide index (0-based) to carousel beatId (journey-1 through journey-N).
+// maxSlideIndex: Optional max index based on actual data length (defaults to calculating from SUMMIT_ROOM_BEAT_IDS)
+export const getBeatIdFromSlideIndex = (slideIndex: number, maxSlideIndex?: number): SummitRoomBeatId => {
+  const maxIndex = maxSlideIndex ?? getMaxSlideIndexFromBeatIds();
+  if (slideIndex < 0 || slideIndex > maxIndex) {
+    console.warn('Invalid slide index:', slideIndex, `(max: ${maxIndex})`);
     return 'journey-1';
   }
   return `journey-${slideIndex + 1}` as SummitRoomBeatId;
@@ -147,10 +161,15 @@ export interface ExhibitNavigationState {
 
 // Used in MomentsAndBeats component.
 // A bullet point row is a moment, each moment has multiple beats.
+export interface Beat {
+  readonly handle: string;
+  readonly type?: 'video';
+}
+
 export interface Moment {
-  beatCount: number;
-  id: Section; // e.g., "ambient", "welcome" for basecamp, "case-study" for overlook.
-  title: string; // e.g., "Ambient", "Welcome"
+  readonly beats: readonly Beat[];
+  readonly id: Section; // e.g., "ambient", "welcome" for basecamp, "impact" for overlook.
+  readonly title: string; // e.g., "Ambient", "Welcome"
 }
 
 // Mock data structure.
@@ -228,9 +247,8 @@ export interface BasecampData {
 }
 
 export interface SummitSlide {
-  borderColor: null | string;
-  id: number;
-  title: string;
+  readonly handle: string;
+  readonly title: string;
 }
 
 export interface ExhibitControl {
@@ -243,12 +261,13 @@ export interface ExhibitControl {
 }
 
 export interface MomentData {
-  beatCount: number;
-  id: Section;
-  title: string;
+  readonly beats: readonly { readonly handle: string; readonly type?: 'video' }[];
+  readonly handle: string;
+  readonly title: string;
 }
 
 export interface DocentData {
+  readonly basecampMoments: readonly MomentData[];
   readonly connection: {
     readonly connecting: string;
   };
@@ -301,10 +320,7 @@ export interface DocentData {
     readonly summitRoom: string;
     readonly tour: string;
   };
-  readonly moments: {
-    readonly basecamp: readonly MomentData[];
-    readonly overlook: readonly MomentData[];
-  };
+  readonly overlookMoments: readonly MomentData[];
   readonly settings: {
     readonly ebcLights: string;
     readonly endTourButton: string;
@@ -322,7 +338,6 @@ export interface DocentData {
     };
     readonly title: string;
   };
-  readonly slides: readonly SummitSlide[];
   readonly summit: {
     readonly errors: {
       readonly loadFailed: string;
@@ -346,6 +361,7 @@ export interface DocentData {
       readonly unlockYourFuture: string;
     };
   };
+  readonly summitSlides: readonly SummitSlide[];
   readonly tours: readonly Tour[];
   readonly ui: {
     readonly display: string;

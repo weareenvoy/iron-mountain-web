@@ -138,6 +138,21 @@ export class MqttService {
     this.publish(`cmd/dev/${exhibit}/goto-beat`, JSON.stringify(message), { qos: 1, retain: false }, config);
   }
 
+  // This is for video beat
+  public gotoBeatWithPlayPause(
+    exhibit: 'basecamp' | 'overlook' | 'summit',
+    beatId: ExhibitBeatId,
+    playPause: boolean,
+    config?: PublishArgsConfig
+  ): void {
+    const message = createMqttMessage('docent-app', {
+      'beat-id': beatId,
+      'playpause': playPause,
+    });
+
+    this.publish(`cmd/dev/${exhibit}/goto-beat`, JSON.stringify(message), { qos: 1, retain: false }, config);
+  }
+
   // Docent App → GEC: Load tour
   public loadTour(tourId: string, config?: PublishArgsConfig): void {
     const message = createMqttMessage('docent-app', {

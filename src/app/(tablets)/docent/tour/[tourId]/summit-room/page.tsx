@@ -13,12 +13,33 @@ import { cn } from '@/lib/tailwind/utils/cn';
 
 const INITIAL_BEAT_ID: SummitRoomBeatId = 'journey-intro';
 
+// Confirmed with design that the colors will be hardcoded.
+const getSlideBorderColor = (handle: string): null | string => {
+  switch (handle) {
+    case 'journey-1':
+      return null; // First slide has no border
+    case 'journey-2':
+      return 'border-primary-im-light-blue';
+    case 'journey-3':
+      return 'border-secondary-im-purple';
+    case 'journey-4':
+      return 'border-secondary-im-teal';
+    case 'journey-5':
+      return 'border-secondary-im-orange';
+    case 'journey-6':
+      return 'border-primary-im-mid-blue';
+    default:
+      return null;
+  }
+};
+
 const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room'>) => {
   const { tourId } = use(params);
   const { client } = useMqtt();
   const { currentTour, data, setSummitRoomBeatId, summitRoomBeatId } = useDocent();
 
-  const summitRoomSlides = data?.slides ?? [];
+  const summitRoomSlidesInitial = data?.summitSlides ?? [];
+  const summitRoomSlides = summitRoomSlidesInitial.filter(slide => slide.handle !== 'journey-intro');
   const slideCount = summitRoomSlides.length;
 
   // State is either 'journey-intro' (not launched), or 'journey-1' through 'journey-5' carousel.
@@ -45,7 +66,7 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
         console.error('Invalid slide index:', newSlideIdx);
         return;
       }
-      const beatId = getBeatIdFromSlideIndex(newSlideIdx);
+      const beatId = getBeatIdFromSlideIndex(newSlideIdx, slideCount - 1);
       setSummitRoomBeatId(beatId);
       client?.gotoBeat('summit', beatId, {
         onError: (err: Error) => console.error('Summit: Failed to navigate:', err),
@@ -122,17 +143,22 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
           <div className="h-[361px] w-[605px] overflow-hidden" ref={emblaRef}>
             <div className="flex h-full">
               {summitRoomSlides.map(slide => (
-                <div className="ml-[15px] flex-[0_0_100%]" key={slide.id}>
+                <div className="ml-[15px] flex-[0_0_100%]" key={slide.handle}>
                   <div className="bg-primary-bg-grey relative flex h-[313px] w-[557px] flex-col items-center justify-center rounded-[16px] shadow-[16px_16px_16px_0px_rgba(94,94,94,0.25)]">
-                    {slide.id === 1 ? (
+                    {slide.handle === 'journey-1' ? (
                       <div className="flex h-full w-full flex-col items-center justify-center gap-8">
                         <h2 className="text-center text-2xl leading-[normal] tracking-[-1.2px] text-black">
                           {slide.title}
                         </h2>
                       </div>
                     ) : (
-                      <div className={cn('flex items-center gap-5 rounded-full border-2 px-8 py-5', slide.borderColor)}>
-                        <div className={cn('h-4.25 w-4.25 rotate-45 border', slide.borderColor)}></div>
+                      <div
+                        className={cn(
+                          'flex items-center gap-5 rounded-full border-2 px-8 py-5',
+                          getSlideBorderColor(slide.handle)
+                        )}
+                      >
+                        <div className={cn('h-4.25 w-4.25 rotate-45 border', getSlideBorderColor(slide.handle))}></div>
                         <h2 className="text-xl leading-[normal] tracking-[-1.2px] text-black">{slide.title}</h2>
                       </div>
                     )}

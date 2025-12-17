@@ -17,8 +17,10 @@ const useMomentsNavigation = (
   const publishNavigation = (momentId: Section, beatIdx: number) => {
     if (!client) return;
 
-    // Format: ${moment}-${beatNumber} (1-indexed)
-    const beatId = `${momentId}-${beatIdx + 1}`;
+    const moment = content.find(m => m.id === momentId);
+    if (!moment || !moment.beats[beatIdx]) return;
+
+    const beatId = moment.beats[beatIdx].handle;
 
     // Send goto-beat command to exhibit
     client.gotoBeat(exhibit, beatId as ExhibitBeatId, {
@@ -37,13 +39,13 @@ const useMomentsNavigation = (
       goTo(momentId, currentBeatIdx - 1);
     } else if (currentMomentIdx > 0) {
       const prevMoment = content[currentMomentIdx - 1];
-      if (!prevMoment) return;
-      goTo(prevMoment.id, prevMoment.beatCount - 1);
+      if (!prevMoment || prevMoment.beats.length === 0) return;
+      goTo(prevMoment.id, prevMoment.beats.length - 1);
     }
   };
 
   const handleNext = () => {
-    if (currentMoment && currentBeatIdx < currentMoment.beatCount - 1) {
+    if (currentMoment && currentBeatIdx < currentMoment.beats.length - 1) {
       goTo(momentId, currentBeatIdx + 1);
     } else if (currentMomentIdx < content.length - 1) {
       const nextMoment = content[currentMomentIdx + 1];
@@ -54,7 +56,7 @@ const useMomentsNavigation = (
 
   const isPreviousDisabled = currentMomentIdx === 0 && currentBeatIdx === 0;
   const isNextDisabled = currentMoment
-    ? currentMomentIdx === content.length - 1 && currentBeatIdx === currentMoment.beatCount - 1
+    ? currentMomentIdx === content.length - 1 && currentBeatIdx === currentMoment.beats.length - 1
     : true;
 
   return {

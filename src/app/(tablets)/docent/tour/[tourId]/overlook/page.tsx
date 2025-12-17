@@ -8,7 +8,7 @@ import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/
 import MomentsAndBeats from '@/app/(tablets)/docent/_components/ui/MomentsAndBeats';
 import CastOff from '@/components/ui/icons/CastOff';
 import useMomentsNavigation from '@/hooks/use-moments-navigation';
-import type { Moment } from '@/lib/internal/types';
+import type { Section } from '@/lib/internal/types';
 
 const OverlookPage = ({ params }: PageProps<'/docent/tour/[tourId]/overlook'>) => {
   const { tourId } = use(params);
@@ -16,10 +16,15 @@ const OverlookPage = ({ params }: PageProps<'/docent/tour/[tourId]/overlook'>) =
   // TODO does this live in GEC state?
   const [isOverlookCastMode, setIsOverlookCastMode] = useState(false);
 
-  // Use moments directly from data (titles included)
-  const overlookContent: Readonly<Moment[]> = useMemo(() => {
-    return (data?.moments.overlook ?? []) as Readonly<Moment[]>;
-  }, [data?.moments.overlook]);
+  // Transform overlookMoments
+  const overlookContent = useMemo(() => {
+    if (!data?.overlookMoments) return [];
+    return data.overlookMoments.map(moment => ({
+      beats: moment.beats,
+      id: moment.handle as Section,
+      title: moment.title,
+    }));
+  }, [data]);
 
   // Should the bottom controls live here, or live in MomentaAndBeats
   const { handleNext, handlePrevious, isNextDisabled, isPreviousDisabled } = useMomentsNavigation(
