@@ -2,223 +2,191 @@
   {
     "locale": "en",
     "data": {
-      "hero": {
-        "advisorName": "Kelly Thompson",
-        "clientName": "Kinetiq Health",
-        "date": "October 12, 2025",
-        "location": "Summit Room · Boston, MA",
-        "logoAlt": "Iron Mountain",
-        "logoSrc": "",
-        "subtitle": "Prepared for your Iron Mountain visit"
-      },
-      "metrics": {
-        "description": "",
-        "items": [
-          {
-            "description": "Stat visualized during Basecamp exploration lorem ipsum",
-            "label": "Too much complexity",
-            "value": "34%"
-          },
-          {
-            "description": "Stat visualized during Basecamp exploration lorem ipsum",
-            "label": "Cost and uncertain ROI",
-            "value": "22%"
-          },
-          {
-            "description": "Stat visualized during Basecamp exploration lorem ipsum",
-            "label": "Security concerns",
-            "value": "87%"
-          }
-        ],
-        "title": "What’s standing in your way?"
-      },
-      "obstacles": {
-        "description": "",
-        "items": [
-          {
-            "body": "Content lives across silos and legacy systems, driving manual effort and duplicate work.",
-            "icon": "/images/summit/icons/icon-complexity.svg",
-            "title": "Too much complexity"
-          },
-          {
-            "body": "Modernization business cases stall because value capture is unclear or far from execution.",
-            "icon": "/images/summit/icons/icon-roi.svg",
-            "title": "Cost and uncertain ROI"
-          },
-          {
-            "body": "AI and regulatory pressure raise the stakes for every decision, slowing innovation cycles.",
-            "icon": "/images/summit/icons/icon-risk.svg",
-            "title": "Expanded risk surface"
-          },
-          {
-            "body": "Teams juggle day jobs with transformation initiatives and rely on a small bench of specialists.",
-            "icon": "/images/summit/icons/icon-talent.svg",
-            "title": "Limited bandwidth"
-          }
-        ],
-        "title": "What’s holding you back?"
-      },
-      "recaps": [
-        {
-          "body": "Iron Mountain pairs physical and digital expertise so you can modernize securely. We help you clarify value, consolidate repositories, and activate trusted data faster.",
-          "cta": "See how the next steps align with your priorities.",
-          "title": "Recap"
-        },
-        {
-          "body": "Unlock outcomes faster by aligning the right people, processes, and technology.",
-          "cta": "Define your go-forward roadmap.",
-          "title": "Recap"
-        },
-        {
-          "body": "Bridge program strategy with execution rigor by codifying charters, KPIs, and ownership across tracks.",
-          "cta": "Prioritize next-quarter initiatives with delivery leads.",
-          "title": "Recap"
-        },
-        {
-          "body": "Iron Mountain pairs physical and digital expertise so you can modernize securely. We help you clarify value, consolidate repositories, and activate trusted data faster.",
-          "cta": "See how the next steps align with your priorities.",
-          "title": "Recap"
-        },
-        {
-          "body": "Connect insight to action by aligning decision makers and integrating your data estate end-to-end.",
-          "cta": "Schedule workstream deep dives.",
-          "title": "Recap"
-        }
+      "meta": [
+        {"label": "Company", "value": "Boyer-Boyer"},
+        {"label": "Date of engagement", "value":"24/12/2025"},
+        {"label": "Location", "value":"São Paulo, BR"}
       ],
-      "stories": {
-        "description": "These are proof points from customers solving similar challenges.",
-        "items": [
+      "basecamp": {
+        "possibilities": {
+          "title": "Discover new possibilities"
+        },
+        "possibilitiesA": {
+          "body1": "Inventory and prioritize high-value content collections.",
+          "body2": "Retire redundant repositories to reduce cost and risk.",
+          "body3": "Establish metadata guardrails for AI readiness.",
+          "title": "Making data accessible"
+        },
+        "possibilitiesB": {
+          "body1": "Pair digitization with workflow automation pilots.",
+          "body2": "Co-develop business cases tied to KPIs.",
+          "body3": "Stage data for analytics and AI services.",
+          "title": "Unlocking new value streams"
+        },
+        "possibilitiesC": {
+          "body1": "Modernize storage tiers for performance and compliance.",
+          "body2": "Automate retention and defensible disposition.",
+          "body3": "Extend zero-trust controls across hybrid estates.",
+          "title": "Optimizing your assets"
+        },
+        "problem1": {
+          "title": "What's standing in your way?"
+        },
+        "problem2": [
           {
-            "category": "Life Sciences",
-            "description": "Digitized 12M research artifacts to unlock AI discovery and reduce cycle time by 18%.",
-            "title": "Global biotech leader"
+            "subtitle": "of data remains dark",
+            "title": "80%"
           },
           {
-            "category": "Financial Services",
-            "description": "Streamlined mortgage operations by aggregating 40+ content sources into a governed lakehouse.",
-            "title": "Top 5 mortgage servicer"
+            "subtitle": "of new data is unstructured",
+            "title": "80-90%"
           },
           {
-            "category": "Media & Entertainment",
-            "description": "Activated archive footage for new streaming revenue with secure, metadata-rich storage.",
-            "title": "Legacy studio"
+            "subtitle": "of enterprise data is leveraged for AI",
+            "title": "< 1%"
           }
         ],
-        "title": "Stories of impact"
-      },
-      "strategies": [
-        {
-          "eyebrow": "Considering possibilities",
-          "items": [
+        "problem3": {
+          "challenges": [
             {
-              "body": [
-                "Inventory and prioritize high-value content collections.",
-                "Retire redundant repositories to reduce cost and risk.",
-                "Establish metadata guardrails for AI readiness."
-              ],
-              "title": "Making data accessible"
+              "body": "1,300 exabytes of enterprise data created daily—scattered across systems and formats",
+              "icon": "/images/summit/icons/icon-complexity.svg",
+              "title": "Too much complexity"
             },
             {
-              "body": [
-                "Pair digitization with workflow automation pilots.",
-                "Co-develop business cases tied to KPIs.",
-                "Stage data for analytics and AI services."
-              ],
-              "title": "Unlocking new value streams"
+              "body": "Modernization business cases stall because value capture is unclear or far from execution.",
+              "icon": "/images/summit/icons/icon-roi.svg",
+              "title": "Cost, Uncertain ROI"
             },
             {
-              "body": [
-                "Modernize storage tiers for performance and compliance.",
-                "Automate retention and defensible disposition.",
-                "Extend zero-trust controls across hybrid estates."
-              ],
-              "title": "Optimizing your assets"
+              "body": "AI and regulatory pressure raise the stakes for every decision, slowing innovation cycles.",
+              "icon": "/images/summit/icons/icon-risk.svg",
+              "title": "Too many risks"
+            },
+            {
+              "body": "Teams juggle day jobs with transformation initiatives and rely on a small bench of specialists.",
+              "icon": "/images/summit/icons/icon-talent.svg",
+              "title": "Too few skills"
             }
           ],
-          "summary": "Each path can run independently, yet the greatest momentum happens when they progress together."
-        },
-        {
-          "eyebrow": "Modernize operations",
-          "items": [
-            {
-              "body": [
-                "Orchestrate digitization and automation for onboarding flows.",
-                "Stabilize hybrid infrastructure with unified monitoring.",
-                "Codify change management rhythms for program velocity."
-              ],
-              "title": "Stabilize foundations"
-            },
-            {
-              "body": [
-                "Extend intelligent capture into upstream workflows.",
-                "Connect data services to downstream analytics teams.",
-                "Implement service-level dashboards for transparency."
-              ],
-              "title": "Connect experiences"
-            },
-            {
-              "body": [
-                "Centralize governance tooling for multi-cloud estates.",
-                "Operationalize sustainability metrics across programs.",
-                "Scale squads with Iron Mountain managed services."
-              ],
-              "title": "Scale confidently"
-            }
-          ],
-          "summary": "Modernize operations while keeping compliance, velocity, and sustainability in balance."
-        },
-        {
-          "eyebrow": "Unlock your future",
-          "items": [
-            {
-              "body": [
-                "Pilot a governed data mesh for priority domains.",
-                "Embed sustainability reporting into data programs.",
-                "Co-create AI use cases with measurable ROI."
-              ],
-              "title": "Protect"
-            },
-            {
-              "body": [
-                "Connect Docent, Summit, and Basecamp journeys.",
-                "Enable Docent to push beats to slides in real time.",
-                "Log engagement data for continuous improvement."
-              ],
-              "title": "Connect"
-            },
-            {
-              "body": [
-                "Scale modern ingestion by region and business unit.",
-                "Broker data products to internal and partner teams.",
-                "Expand Iron Mountain managed services footprint."
-              ],
-              "title": "Grow"
-            }
-          ],
-          "summary": "You decide where to begin; we ensure the roadmap stays actionable."
-        },
-        {
-          "eyebrow": "Stories of impact",
-          "items": [
-            {
-              "body": [
-                "Unlock a path forward with those who have done it before.",
-                "See how others made the leap and found success.",
-                "Gain confidence with examples that mirror your challenges."
-              ],
-              "title": "Stories of impact"
-            }
-          ],
-          "summary": "Stories that reinforce your vision and de-risk your next steps."
+          "title": "What's holding you back?"
         }
+      },
+      "kiosk1": {
+        "ambient": {
+          "attribution": "- Michael Rohrabacher, Technical Director at the GRAMMY Museum",
+          "body": "\"It's been a pleasure working with Iron Mountain. We feel very confident that the GRAMMY Museum's physical artifacts and digital content are safely protected. Iron Mountain's digital preservation platform also provides significant reassurance that our iconic artist performances and interviews will remain preserved and accessible, which is a huge benefit to the GRAMMY Museum.\"",
+          "headline": "The GRAMMY Museum® preserves the soundtrack of history.",
+          "solutionTitle": "Large Global Bank",
+          "subheader": ""
+        }
+      },
+      "kiosk2": {
+        "ambient": {
+          "attribution": "",
+          "body": "Our digital solutions centralized this healthcare organization's unstructured \"dark data.\" This enterprise-wide visibility prevented erroneous pension payments, elevated records management, and created a searchable, compliant digital core for ongoing operational improvement.",
+          "headline": "A global healthcare company mitigates risk and saves millions by finding certainty and clarity in its pension administration.",
+          "solutionTitle": "Information & data lifecycle",
+          "subheader": ""
+        }
+      },
+      "kiosk3": {
+        "ambient": {
+          "attribution": "",
+          "body": "",
+          "headline": "A global healthcare company optimizes IT asset management, improves transparency, and boosts remarketing returns by partnering with Iron Mountain Asset Lifecycle Management.",
+          "solutionTitle": "Rich media & cultural heritage",
+          "subheader": ""
+        }
+      },
+      "overlook": {
+        "activate": {
+          "mapLocation1": {
+            "body": "Find new ways forward in document driven processes.",
+            "title": "Discover new efficiencies through Intelligent Business Process Management (iBPM)"
+          },
+          "mapLocation2": {
+            "body": "Innovative tokenization and blockchain technology to authenticate and verify access rights, while being able to monetize more content.",
+            "title": "Generate new revenue streams with Asset Monetization Platform (AMP)"
+          },
+          "mapLocation3": {
+            "body": "Uses primary and secondary resale paths for retired IT assets.",
+            "title": "Maximize value recovery and lower TCO"
+          }
+        },
+        "connect": {
+          "mapLocation1": {
+            "body": "Intelligent document processing has 97% accuracy.",
+            "title": "AI-powered document processing"
+          },
+          "mapLocation2": {
+            "body": "Incorporates asset receiving, tagging, tracking, and storage.",
+            "title": "Deploy IT assets at any moment"
+          },
+          "mapLocation3": {
+            "body": "Archival-quality imaging, digitization, and restoration transform media and connect with audiences of all types.",
+            "title": "Digitize, organize, and access assets"
+          }
+        },
+        "futurescaping1": {
+          "body": "How can you safeguard your most critical assets against emerging threats?",
+          "image": "/images/summit/futurescaping/protect.jpg",
+          "title": "Protect"
+        },
+        "futurescaping2": {
+          "body": "How can you prepare your data infrastructure to unlock new possibilities?",
+          "image": "/images/summit/futurescaping/connect.jpg",
+          "title": "Connect"
+        },
+        "futurescaping3": {
+          "body": "What if every archived asset could generate new value for your organization?",
+          "image": "/images/summit/futurescaping/activate.jpg",
+          "title": "Activate"
+        },
+        "protect": {
+          "mapLocation1": {
+            "body": "Enhanced with certifications, including GDPR, SOC 2 Type II, ISO, HIPAA, and FedRamp.",
+            "title": "Secure chain of custody"
+          },
+          "mapLocation2": {
+            "body": "Ensures your data is protected, along with onsite and offsite destruction for all media types.",
+            "title": "World-class data sanitization"
+          },
+          "mapLocation3": {
+            "body": "Secure content with a digital preservation platform purpose-built for rich media workflows.",
+            "title": "Museum-grade security"
+          }
+        }
+      },
+      "summitSlides": [
+          {
+            "handle": "journey-intro",
+            "title": "Launch your journey"
+          },
+          {
+            "handle": "journey-1",
+            "title": "Your personalized journey map"
+          },
+          {
+            "handle": "journey-3",
+            "title": "Considering possibilities"
+          },
+          {
+            "handle": "journey-4",
+            "title": "Relevant solutions"
+          },
+          {
+            "handle": "journey-5",
+            "title": "Unlock your future"
+          },
+          {
+            "handle": "journey-6",
+            "title": "Stories of impact"
+          }
       ],
-      "summary": {
-        "body": "This personalized roadmap is built for your needs. When you’re ready, we can prioritize next steps together and move forward with clarity.",
-        "cta": "Schedule your next session",
-        "title": "Summary"
-      }
+      "protectTitle": "Protect",
+      "connectTitle": "Connect",
+      "activateTitle": "Activate"
     }
   }
 ]
-
-

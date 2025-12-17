@@ -1,38 +1,17 @@
 import IronMountainLogoBlue from '@/components/ui/icons/IronMountainLogoBlue';
 import SummitRootDiamondsBg from '@/components/ui/icons/SummitRootDiamondsBg';
 import { cn } from '@/lib/tailwind/utils/cn';
-import type { SummitHero } from '@/app/(displays)/summit/_types';
+import type { SummitMeta } from '@/app/(displays)/summit/_types';
 import type { ReactNode } from 'react';
-
-export type HeroMetadataLabels = {
-  readonly company: string;
-  readonly dateOfEngagement: string;
-  readonly location: string;
-};
 
 type HeroSectionProps = {
   readonly actionSlot?: ReactNode;
-  readonly hero: SummitHero;
-  readonly labels?: HeroMetadataLabels;
-  readonly title?: string;
+  readonly meta: SummitMeta;
+  readonly title: string;
   readonly variant?: 'print' | 'web';
 };
 
-const DEFAULT_LABELS: HeroMetadataLabels = {
-  company: 'Company',
-  dateOfEngagement: 'Date of engagement',
-  location: 'Location',
-};
-
-const HeroSection = ({ actionSlot, hero, labels, title, variant = 'web' }: HeroSectionProps) => {
-  const resolvedLabels = labels ?? DEFAULT_LABELS;
-  const metadata: { readonly label: string; readonly value: string }[] = [
-    { label: resolvedLabels.company, value: hero.clientName },
-    { label: resolvedLabels.dateOfEngagement, value: hero.date },
-    { label: resolvedLabels.location, value: hero.location },
-  ];
-  const heading = title ?? hero.title ?? 'Your personalized journey map';
-
+const HeroSection = ({ actionSlot, meta, title, variant = 'web' }: HeroSectionProps) => {
   const containerGap = variant === 'print' ? 'gap-3 pb-3 pt-3' : 'gap-10 pb-10 pt-12';
   const headingSpacing = variant === 'print' ? 'mb-2 mt-4' : 'mb-8 mt-16';
   const containerClassName = cn('relative z-10 flex flex-col', containerGap);
@@ -65,7 +44,7 @@ const HeroSection = ({ actionSlot, hero, labels, title, variant = 'web' }: HeroS
       <div className={containerClassName}>
         <div className="flex w-full flex-wrap items-start justify-between gap-6">
           <IronMountainLogoBlue
-            aria-label={hero.logoAlt}
+            aria-label="Iron Mountain"
             className="h-auto w-[300px] max-w-full sm:w-[360px]"
             role="img"
           />
@@ -78,13 +57,13 @@ const HeroSection = ({ actionSlot, hero, labels, title, variant = 'web' }: HeroS
           )}
         >
           <h1 className={headingClassName} style={headingStyle}>
-            {heading}
+            {title}
           </h1>
           {variant === 'web' && actionSlot ? <div className="print:hidden">{actionSlot}</div> : null}
         </div>
 
         <dl className={metadataWrapperClassName}>
-          {metadata.map(item => (
+          {meta.map(item => (
             <div className="flex flex-col gap-1" key={item.label}>
               <dt className="text-muted-foreground">{item.label}</dt>
               <dd className={metadataValueClassName}>{item.value}</dd>
