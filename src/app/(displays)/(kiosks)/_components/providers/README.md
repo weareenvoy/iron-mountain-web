@@ -1,6 +1,7 @@
 # Kiosk Provider
 
-The `KioskProvider` follows the same context provider pattern used by Basecamp and Summit exhibits. It provides centralized data fetching and state management for kiosk displays.
+The `KioskProvider` follows the same context provider pattern used by Basecamp and Summit exhibits. It provides
+centralized data fetching and state management for kiosk displays.
 
 **Note**: Unlike Basecamp and Summit, kiosks are standalone displays and do **not** use MQTT or Docent control.
 
@@ -34,9 +35,7 @@ import { KioskProvider } from '@/app/(displays)/(kiosks)/_components/providers';
 const Kiosk3Layout = ({ children }: LayoutProps) => {
   return (
     <KioskProvider kioskId="kiosk-3">
-      <KioskControllerProvider kioskId="kiosk-3">
-        {children}
-      </KioskControllerProvider>
+      <KioskControllerProvider kioskId="kiosk-3">{children}</KioskControllerProvider>
     </KioskProvider>
   );
 };
@@ -80,13 +79,13 @@ interface KioskFullData {
 
 ## Comparison with other exhibits
 
-| Feature | Basecamp | Summit | Kiosks |
-|---------|----------|--------|--------|
-| Data source | `/api/basecamp.json` | `/api/summit.json` | `/api/kiosk-{1,2,3}.json` |
-| Navigation | `beatIdx`, `momentId` | `beatIdx`, `momentId` | `slideIndex` |
-| MQTT control | ✅ Yes (Docent) | | ❌ No (standalone) |
-| Hook | `useBasecamp()` | `useSummit()` | `useKiosk()` |
-| Provider | `BasecampProvider` | `SummitProvider` | `KioskProvider` |
+| Feature      | Basecamp              | Summit                | Kiosks                    |
+| ------------ | --------------------- | --------------------- | ------------------------- |
+| Data source  | `/api/basecamp.json`  | `/api/summit.json`    | `/api/kiosk-{1,2,3}.json` |
+| Navigation   | `beatIdx`, `momentId` | `beatIdx`, `momentId` | `slideIndex`              |
+| MQTT control | ✅ Yes (Docent)       |                       | ❌ No (standalone)        |
+| Hook         | `useBasecamp()`       | `useSummit()`         | `useKiosk()`              |
+| Provider     | `BasecampProvider`    | `SummitProvider`      | `KioskProvider`           |
 
 ## Benefits
 
@@ -96,4 +95,4 @@ interface KioskFullData {
 ✅ **Resilient** with API fallback  
 ✅ **No more direct JSON imports** in view components  
 ✅ **Standalone operation** - no MQTT/Docent dependencies  
-✅ **Simplified architecture** - just data + state management  
+✅ **Simplified architecture** - just data + state management

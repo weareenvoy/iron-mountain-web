@@ -34,7 +34,9 @@ const Kiosk1View = () => {
     kioskContent?.data?.challenge && kioskContent?.data?.ambient
       ? parseKioskChallenges(mapChallenges(kioskContent.data.challenge, kioskContent.data.ambient), 'kiosk-1')
       : null;
-  const solutions = kioskContent?.data?.solutions ? (mapSolutions(kioskContent.data.solutions) as SolutionScreens) : null;
+  const solutions = kioskContent?.data?.solutions
+    ? (mapSolutions(kioskContent.data.solutions) as SolutionScreens)
+    : null;
   const values = kioskContent?.data?.value ? (mapValue(kioskContent.data.value) as ValueScreens) : null;
   const hardCoded = (kioskContent?.data?.hardcoded as HardCodedScreens) ?? null;
 

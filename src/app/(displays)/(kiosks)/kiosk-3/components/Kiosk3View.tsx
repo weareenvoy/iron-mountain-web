@@ -27,9 +27,7 @@ const Kiosk3View = () => {
   const [topIndex, setTopIndex] = useState(0);
 
   // Prepare data (with safe defaults for loading state)
-  const challenges: KioskChallenges | null = kioskData
-    ? parseKioskChallenges(kioskData.challenges, 'kiosk-3')
-    : null;
+  const challenges: KioskChallenges | null = kioskData ? parseKioskChallenges(kioskData.challenges, 'kiosk-3') : null;
   const solutions = (kioskData?.solutions as SolutionScreens) ?? null;
   const values = (kioskData?.value as ValueScreens) ?? null;
   const hardCoded = (kioskData?.hardcoded as HardCodedScreens) ?? null;
@@ -46,12 +44,11 @@ const Kiosk3View = () => {
         ]
       : [];
 
-  const challengeCount =
-    challenges
-      ? buildChallengeSlides(challenges, 'kiosk-3', controller, {
-          initialScreen: { ...challenges.initialScreen, contentBoxBgColor: '#00A88E' },
-        }).length
-      : 0;
+  const challengeCount = challenges
+    ? buildChallengeSlides(challenges, 'kiosk-3', controller, {
+        initialScreen: { ...challenges.initialScreen, contentBoxBgColor: '#00A88E' },
+      }).length
+    : 0;
   const solutionCount = solutions ? buildSolutionSlides(solutions, 'kiosk-3', controller).length : 0;
   const valueCount = values ? buildValueSlides(values, 'kiosk-3', controller).length : 0;
 

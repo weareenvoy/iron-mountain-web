@@ -23,9 +23,7 @@ const Kiosk2View = () => {
   const [topIndex, setTopIndex] = useState(0);
 
   // Prepare data (with safe defaults for loading state)
-  const challenges: KioskChallenges | null = kioskData
-    ? parseKioskChallenges(kioskData.challenges, 'kiosk-2')
-    : null;
+  const challenges: KioskChallenges | null = kioskData ? parseKioskChallenges(kioskData.challenges, 'kiosk-2') : null;
   const solutions = (kioskData?.solutions as SolutionScreens) ?? null;
   const values = (kioskData?.value as ValueScreens) ?? null;
 
