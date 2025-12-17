@@ -22,7 +22,7 @@ const SLIDE_BG = 'bg-white text-[#12406A]';
 const SLIDE_CONTAINER = 'relative flex h-full w-full max-w-full flex-col overflow-hidden px-10 py-10';
 const SLIDE_SCALE = 2.2;
 const WELCOME_BG_VIDEO =
-  'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Welcome_01_part_1.webm';
+  'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/summit/IRM_Summit_MountainLoop_V1.webm';
 
 const PlaceholderSlide = ({ heading }: { readonly heading: string }) => {
   return (
