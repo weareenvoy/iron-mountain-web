@@ -18,7 +18,7 @@ type RecapSectionProps = {
   readonly tone?: RecapTone;
 };
 
-const DEFAULT_TONE: RecapTone = {
+export const RECAP_DEFAULT_TONE: RecapTone = {
   accentBg: '#6DCFF6',
   accentColor: '#14477D',
   bodyColor: '#4B4B4D',
@@ -30,9 +30,9 @@ const RecapSection = ({
   placeholder = '',
   storageKey,
   title = 'Recap',
-  tone = DEFAULT_TONE,
+  tone = RECAP_DEFAULT_TONE,
 }: RecapSectionProps) => {
-  const palette = { ...DEFAULT_TONE, ...tone };
+  const palette = { ...RECAP_DEFAULT_TONE, ...tone };
   const [note, setNote] = useLocalStorage<string>(storageKey, '');
   const rightTextColor = palette.rightTextColor ?? '#12406A';
 

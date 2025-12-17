@@ -14,7 +14,7 @@ import PrintIcon from '@/components/ui/icons/PrintIcon';
 const PAGE_CONTAINER_CLASS = 'flex flex-col gap-14 py-10';
 const PRINT_PAGE_STYLE =
   '@page { size: 8.5in 11in; margin: 0.25in; } body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }';
-const RECAP_TONES: readonly (RecapTone | undefined)[] = [
+const RECAP_TONES_BY_INDEX: readonly (RecapTone | undefined)[] = [
   undefined,
   {
     accentBg: '#8A0D71',
@@ -46,7 +46,7 @@ const RECAP_TONES: readonly (RecapTone | undefined)[] = [
   },
 ] as const;
 const SECTION_WRAPPER_CLASS = 'lg:px-12 max-w-[1200px] mx-auto px-4 sm:px-8 w-full';
-const STRATEGY_COLORS = ['#8A0D71', '#00A88E', '#F7931E', '#1B75BC'] as const;
+const STRATEGY_ACCENT_COLORS = ['#8A0D71', '#00A88E', '#F7931E', '#1B75BC'] as const;
 
 const SummitWebContent = () => {
   const { data, error, loading } = useSummit();
@@ -117,7 +117,7 @@ const SummitWebContent = () => {
 
   const renderPossibilities = () => (
     <StrategiesSection
-      accentColor={STRATEGY_COLORS[0]}
+      accentColor={STRATEGY_ACCENT_COLORS[0]}
       items={[basecamp.possibilitiesA, basecamp.possibilitiesB, basecamp.possibilitiesC]}
       title={journey3Title}
     />
@@ -125,7 +125,7 @@ const SummitWebContent = () => {
 
   const renderSolutions = () => (
     <StrategiesSection
-      accentColor={STRATEGY_COLORS[1]}
+      accentColor={STRATEGY_ACCENT_COLORS[1]}
       items={[
         { locations: overlook.protect, title: data.protectTitle },
         { locations: overlook.connect, title: data.connectTitle },
@@ -138,7 +138,7 @@ const SummitWebContent = () => {
 
   const renderFuturescaping = () => (
     <StrategiesSection
-      accentColor={STRATEGY_COLORS[2]}
+      accentColor={STRATEGY_ACCENT_COLORS[2]}
       items={[overlook.futurescaping1, overlook.futurescaping2, overlook.futurescaping3]}
       title={journey5Title}
       variant="futurescaping"
@@ -147,7 +147,7 @@ const SummitWebContent = () => {
 
   const renderStories = () => (
     <StrategiesSection
-      accentColor={STRATEGY_COLORS[3]}
+      accentColor={STRATEGY_ACCENT_COLORS[3]}
       items={[kiosk1.ambient, kiosk2.ambient, kiosk3.ambient]}
       title={journey6Title}
       variant="stories"
@@ -159,7 +159,7 @@ const SummitWebContent = () => {
       placeholder={recapPlaceholder}
       storageKey={`recap-${index}`}
       title="Recap"
-      tone={RECAP_TONES[index]}
+      tone={RECAP_TONES_BY_INDEX[index]}
     />
   );
 
@@ -168,7 +168,7 @@ const SummitWebContent = () => {
       placeholder={recapPlaceholder}
       storageKey={`recap-${index}`}
       title="Recap"
-      tone={RECAP_TONES[index]}
+      tone={RECAP_TONES_BY_INDEX[index]}
     />
   );
 
