@@ -31,13 +31,18 @@ export function useScrollNavigation({
 
   const scrollToPosition = useCallback(
     (targetY: number) => {
-      if (!containerRef.current || isScrolling.current) return;
+      if (!containerRef.current || isScrolling.current) {
+        console.log('Scroll blocked:', { hasContainer: !!containerRef.current, isScrolling: isScrolling.current });
+        return;
+      }
 
       isScrolling.current = true;
+      const container = containerRef.current;
+      console.log('Scrolling to:', targetY, 'Current scrollTop:', container.scrollTop, 'ScrollHeight:', container.scrollHeight);
 
       if (duration) {
         // Custom smooth scroll with controlled duration
-        const startY = window.scrollY;
+        const startY = container.scrollTop;
         const distance = targetY - startY;
         const startTime = performance.now();
 
@@ -50,19 +55,20 @@ export function useScrollNavigation({
           const progress = Math.min(elapsed / duration, 1);
           const easing = easeInOutQuad(progress);
           
-          window.scrollTo(0, startY + distance * easing);
+          container.scrollTop = startY + distance * easing;
 
           if (progress < 1) {
             requestAnimationFrame(animateScroll);
           } else {
             isScrolling.current = false;
+            console.log('Scroll complete. Final scrollTop:', container.scrollTop);
           }
         };
 
         requestAnimationFrame(animateScroll);
       } else {
         // Use native smooth scroll
-        window.scrollTo({
+        container.scrollTo({
           behavior,
           top: targetY,
         });
@@ -70,6 +76,7 @@ export function useScrollNavigation({
         // Reset scrolling flag after animation completes
         setTimeout(() => {
           isScrolling.current = false;
+          console.log('Scroll complete. Final scrollTop:', container.scrollTop);
         }, 1000);
       }
     },
@@ -77,32 +84,40 @@ export function useScrollNavigation({
   );
 
   const handleNavigateDown = useCallback(() => {
+    console.log('handleNavigateDown - currentIndex:', currentSectionIndex, 'totalSections:', sections.length);
+    
     if (currentSectionIndex < sections.length - 1) {
       // Scroll to next section within this template
       const nextIndex = currentSectionIndex + 1;
       const nextSection = sections[nextIndex];
       const targetY = nextSection.targetY + (nextSection.offset || 0);
       
+      console.log('Scrolling DOWN to section', nextIndex, ':', nextSection.id, 'targetY:', targetY);
       setCurrentSectionIndex(nextIndex);
       scrollToPosition(targetY);
     } else {
       // Move to next template
+      console.log('At end of sections, moving to next template');
       onNavigateDown?.();
       setCurrentSectionIndex(0); // Reset for when user returns
     }
   }, [currentSectionIndex, sections, onNavigateDown, scrollToPosition]);
 
   const handleNavigateUp = useCallback(() => {
+    console.log('handleNavigateUp - currentIndex:', currentSectionIndex, 'totalSections:', sections.length);
+    
     if (currentSectionIndex > 0) {
       // Scroll to previous section within this template
       const prevIndex = currentSectionIndex - 1;
       const prevSection = sections[prevIndex];
       const targetY = prevSection.targetY + (prevSection.offset || 0);
       
+      console.log('Scrolling UP to section', prevIndex, ':', prevSection.id, 'targetY:', targetY);
       setCurrentSectionIndex(prevIndex);
       scrollToPosition(targetY);
     } else {
       // Move to previous template
+      console.log('At start of sections, moving to previous template');
       onNavigateUp?.();
     }
   }, [currentSectionIndex, sections, onNavigateUp, scrollToPosition]);
@@ -122,3 +137,4 @@ export function useScrollNavigation({
     },
   };
 }
+

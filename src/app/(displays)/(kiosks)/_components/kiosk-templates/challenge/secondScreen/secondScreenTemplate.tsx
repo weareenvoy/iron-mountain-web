@@ -38,7 +38,6 @@ export const SecondScreenTemplate = ({
   subheadline = 'Rich media &\n cultural heritage',
   topImageSrc = imgHero,
 }: SecondScreenTemplateProps) => {
-  // Use scalable scroll navigation hook
   const { containerRef, handleNavigateDown, handleNavigateUp } = useScrollNavigation({
     behavior: 'smooth',
     duration: 800,
@@ -51,7 +50,7 @@ export const SecondScreenTemplate = ({
     <div
       ref={containerRef}
       // className={styles.container}
-      className="relative flex h-screen w-full flex-col overflow-hidden bg-black"
+      className="relative flex h-screen w-full flex-col overflow-y-auto bg-black"
       data-hero-image={topImageSrc}
       data-kiosk={kioskId}
       data-node-id="5168:9907"

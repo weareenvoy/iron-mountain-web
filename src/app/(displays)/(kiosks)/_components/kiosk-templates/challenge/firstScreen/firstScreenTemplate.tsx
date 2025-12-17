@@ -30,10 +30,9 @@ export const FirstScreenTemplate = ({
   subheadline = 'Rich media &\n cultural heritage',
   videoSrc = '/images/kiosks/kiosk1/01-challenge/Challenge-Header.mp4',
 }: FirstScreenTemplateProps) => {
-  // Use scalable scroll navigation hook
   const { containerRef, handleNavigateDown, handleNavigateUp } = useScrollNavigation({
     behavior: 'smooth',
-    duration: 800, // Custom scroll duration in ms
+    duration: 800,
     onNavigateDown,
     onNavigateUp,
     sections: firstScreenScrollSections,
@@ -43,10 +42,9 @@ export const FirstScreenTemplate = ({
     <div
       ref={containerRef}
       // className={styles.container}
-      className="group/kiosk relative flex h-screen w-full flex-col overflow-hidden bg-black"
+      className="group/kiosk relative flex h-screen w-full flex-col overflow-y-auto bg-black"
       data-kiosk={kioskId}
       data-node-id="5168:9882"
-      style={{ overflow: 'visible' }}
     >
       {/* Video Section */}
       <div

@@ -12,3 +12,4 @@ export const thirdScreenScrollSections: ScrollSection[] = [
     offset: -600,
   },
 ];
+

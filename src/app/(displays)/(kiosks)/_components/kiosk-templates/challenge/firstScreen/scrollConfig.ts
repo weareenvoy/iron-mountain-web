@@ -3,8 +3,8 @@ import { type ScrollSection } from '../../hooks/useScrollNavigation';
 export const firstScreenScrollSections: ScrollSection[] = [
   {
     id: 'problem-description',
-    targetY: 230,
-    offset: -900, // Adjust to center better in viewport
+    targetY: 1230,
+    offset: -300, // Adjust to center better in viewport
   },
   {
     id: 'savings-metrics',
@@ -12,3 +12,4 @@ export const firstScreenScrollSections: ScrollSection[] = [
     offset: -400,
   },
 ];
+

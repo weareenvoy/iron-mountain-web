@@ -17,3 +17,4 @@ export const secondScreenScrollSections: ScrollSection[] = [
     offset: -800,
   },
 ];
+

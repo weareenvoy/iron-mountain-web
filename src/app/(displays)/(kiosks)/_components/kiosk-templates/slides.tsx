@@ -12,7 +12,15 @@ export type SlideNavHandlers = Readonly<{
 }>;
 
 export const SectionSlide = ({ children, isActive }: Readonly<{ children: ReactNode; isActive: boolean }>) => (
-  <div className="flex h-full w-full flex-col items-center justify-center" data-active={isActive}>
+  <div
+    className="absolute inset-0 flex h-full w-full flex-col items-center justify-center transition-opacity duration-300"
+    data-active={isActive}
+    style={{
+      opacity: isActive ? 1 : 0,
+      pointerEvents: isActive ? 'auto' : 'none',
+      visibility: isActive ? 'visible' : 'hidden',
+    }}
+  >
     {children}
   </div>
 );

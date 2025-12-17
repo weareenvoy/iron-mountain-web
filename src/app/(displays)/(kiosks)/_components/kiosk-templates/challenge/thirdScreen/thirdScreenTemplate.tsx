@@ -44,7 +44,6 @@ export const ThirdScreenTemplate = ({
   subheadline = 'Rich media &\n cultural heritage',
   videoSrc = '/images/kiosks/kiosk1/03-value/Value-header.mp4',
 }: ThirdScreenTemplateProps) => {
-  // Use scalable scroll navigation hook
   const { containerRef, handleNavigateDown, handleNavigateUp } = useScrollNavigation({
     behavior: 'smooth',
     duration: 800,
@@ -57,7 +56,7 @@ export const ThirdScreenTemplate = ({
     <div
       ref={containerRef}
       // className={styles.container}
-      className="group/kiosk relative flex h-screen w-full flex-col overflow-hidden bg-black"
+      className="group/kiosk relative flex h-screen w-full flex-col overflow-y-auto bg-black"
       data-hero-image={heroImageSrc}
       data-kiosk={kioskId}
       data-large-icon-center={largeIconCenterSrc}
