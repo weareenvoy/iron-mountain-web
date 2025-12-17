@@ -4,7 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useRef, useState, ty
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getBasecampData } from '@/lib/internal/data/get-basecamp';
 import { isBasecampSection, type BasecampData, type ExhibitNavigationState, type Locale } from '@/lib/internal/types';
-import type { ExhibitMqttState } from '@/lib/mqtt/types';
+import type { ExhibitMqttStateSimple } from '@/lib/mqtt/types';
 
 interface BasecampContextType {
   data: BasecampData | null;
@@ -43,7 +43,8 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
   const [readyBeatId, setReadyBeatId] = useState<null | string>(null);
 
   // MQTT state (what we report to GEC)
-  const [mqttState, setMqttState] = useState<ExhibitMqttState>({
+  // Confirm with Lucas whether exhibit sends property available.
+  const [mqttState, setMqttState] = useState<ExhibitMqttStateSimple>({
     'beat-id': 'ambient-1',
     'tour-id': null,
     'volume-level': 1.0,
@@ -85,7 +86,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
 
   // Helper to report full exhibit state to MQTT
   const reportState = useCallback(
-    (newState: Partial<ExhibitMqttState>) => {
+    (newState: Partial<ExhibitMqttStateSimple>) => {
       if (!client) return;
 
       // Compute updated state first, update ref immediately for consistency
@@ -216,7 +217,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     const handleOwnState = (message: Buffer) => {
       try {
         const msg = JSON.parse(message.toString());
-        const state: ExhibitMqttState = msg.body;
+        const state: ExhibitMqttStateSimple = msg.body;
         console.info('Basecamp: Received own state on boot:', state);
 
         // Update internal MQTT state

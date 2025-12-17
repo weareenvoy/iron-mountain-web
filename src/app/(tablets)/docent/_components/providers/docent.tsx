@@ -7,18 +7,22 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useRef,
   useState,
   type PropsWithChildren,
 } from 'react';
-import { DocentAppState, type SyncState } from '@/app/(tablets)/docent/_types';
+import { type DocentAppState, type SyncState } from '@/app/(tablets)/docent/_types';
+import {
+  getExhibitAvailability,
+  getTourIdFromGecState,
+  parseBasecampBeatId,
+  parseOverlookBeatId,
+  parseSummitBeatId,
+  updateTourIdInPath,
+} from '@/app/(tablets)/docent/_utils';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getDocentData } from '@/lib/internal/data/get-docent';
 import type { DocentData, ExhibitNavigationState, Locale, SummitRoomBeatId, Tour } from '@/lib/internal/types';
-import type { Route } from 'next';
-
-const isDocentRoute = (path: string): path is Route => {
-  return /^\/docent\/tour\/[^/]+(?:\/(?:basecamp|overlook|summit-room))?$/.test(path);
-};
 
 export interface DocentContextType {
   readonly basecampExhibitState: ExhibitNavigationState;
@@ -42,14 +46,11 @@ export interface DocentContextType {
   readonly overlookExhibitState: ExhibitNavigationState;
   readonly refreshData: () => Promise<void>;
   readonly setBasecampExhibitState: (state: Partial<ExhibitNavigationState>) => void;
-
   readonly setCurrentTour: (tour: null | Tour) => void;
   readonly setIsSettingsOpen: (open: boolean) => void;
   readonly setLocale: (locale: Locale) => void;
   readonly setOverlookExhibitState: (state: Partial<ExhibitNavigationState>) => void;
-
   readonly setSummitRoomBeatId: (beatId: SummitRoomBeatId) => void;
-
   // Summit Room state - 'journey-intro' or 'journey-1' through 'journey-5'
   readonly summitRoomBeatId: SummitRoomBeatId;
 }
@@ -98,13 +99,11 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
   // Full state from GEC
   const [docentAppState, setDocentAppState] = useState<DocentAppState | null>(null);
 
+  // Use ref to track initialization synchronously (avoids race conditions with state updates)
+  const hasInitializedBeatsFromGecRef = useRef(false);
+
   // Derive exhibit availability from GEC state
-  const exhibitAvailability = {
-    basecamp: !!docentAppState?.exhibits?.basecamp,
-    overlook: !!docentAppState?.exhibits?.overlook,
-    overlookTablet: !!docentAppState?.exhibits?.summit,
-    summit: !!docentAppState?.exhibits?.summit,
-  };
+  const exhibitAvailability: DocentContextType['exhibitAvailability'] = getExhibitAvailability(docentAppState);
 
   const setBasecampExhibitState = (state: Partial<ExhibitNavigationState>) => {
     setBasecampExhibitStateRaw(prev => ({ ...prev, ...state }));
@@ -139,6 +138,33 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     fetchDocentData();
   }, [fetchDocentData]);
 
+  // Initialize currentTour from URL if we're on a tour page and tours are loaded
+  // This handles the case where user navigates directly to a tour page
+  useEffect(() => {
+    if (isTourDataLoading) return;
+
+    const tourMatch = pathname.match(/^\/docent\/tour\/([^/]+)/);
+    if (tourMatch) {
+      const urlTourId = tourMatch[1];
+      const localeData = dataByLocale[locale];
+      if (!localeData?.tours) return;
+      const tour = localeData.tours.find(t => t.id === urlTourId);
+
+      // Only set if different from current to avoid unnecessary updates
+      if (tour && tour.id !== currentTour?.id) {
+        console.info(`Initializing currentTour from URL: ${urlTourId}`);
+        setCurrentTour(tour);
+      } else if (!tour && currentTour) {
+        // Tour in URL doesn't exist in data, clear currentTour
+        console.warn(`Tour ${urlTourId} from URL not found in tours data`);
+        setCurrentTour(null);
+      }
+    } else if (currentTour && !pathname.includes('/tour/')) {
+      // Not on a tour page anymore, clear currentTour
+      setCurrentTour(null);
+    }
+  }, [pathname, dataByLocale, locale, isTourDataLoading, currentTour]);
+
   // Request sync from GEC when MQTT connects
   useEffect(() => {
     if (!client || !isConnected) return;
@@ -163,19 +189,39 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
         // Save the full state
         setDocentAppState(state);
 
-        // Update exhibit beat states from GEC
-        // const basecampBeatId = state.exhibits?.basecamp?.['beat-id'];
-        // const overlookBeatId = state.exhibits?.overlook?.['beat-id'];
-        // const summitBeatId = state.exhibits?.summit?.['beat-id'];
-        // validate beat IDS and set raw state
+        // Initialize beat states from GEC only once on app start
+        if (!hasInitializedBeatsFromGecRef.current) {
+          const basecampBeatId = state.exhibits?.basecamp?.['beat-id'];
+          if (basecampBeatId) {
+            const parsed = parseBasecampBeatId(basecampBeatId);
+            if (parsed) {
+              setBasecampExhibitStateRaw(parsed);
+              console.info(`Initialized basecamp from GEC: ${basecampBeatId} -> ${parsed.momentId}[${parsed.beatIdx}]`);
+            }
+          }
+          const overlookBeatId = state.exhibits?.overlook?.['beat-id'];
+          if (overlookBeatId) {
+            const parsed = parseOverlookBeatId(overlookBeatId);
+            if (parsed) {
+              setOverlookExhibitStateRaw(parsed);
+              console.info(`Initialized overlook from GEC: ${overlookBeatId} -> ${parsed.momentId}[${parsed.beatIdx}]`);
+            }
+          }
+          const summitBeatId = state.exhibits?.summit?.['beat-id'];
+          if (summitBeatId) {
+            const parsed = parseSummitBeatId(summitBeatId);
+            if (parsed) {
+              setSummitRoomBeatId(parsed);
+              console.info(`Initialized summit from GEC: ${parsed}`);
+            }
+          }
+
+          hasInitializedBeatsFromGecRef.current = true;
+        }
 
         // Update tour if provided and different from current
-        // Get tour-id from any exhibit (they should all match)
-        const tourId =
-          state.exhibits?.basecamp?.['tour-id'] ||
-          state.exhibits?.overlook?.['tour-id'] ||
-          state.exhibits?.summit?.['tour-id'];
-
+        // Note: currentTour can also be initialized from URL (see useEffect above)
+        const tourId = getTourIdFromGecState(state);
         const allTours = dataByLocale[locale]?.tours ?? [];
 
         if (tourId && allTours.length > 0) {
@@ -185,16 +231,12 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
             setCurrentTour(tour);
 
             // Update URL if we're on a tour page
-            // Example: /docent/tour/tour-002/basecamp → /docent/tour/tour-004/basecamp
-            if (pathname.includes('/tour/')) {
-              const tourPathRegex = /\/tour\/[^\/]+/;
-              const newPathname = pathname.replace(tourPathRegex, `/tour/${tourId}`);
-              if (newPathname !== pathname && isDocentRoute(newPathname)) {
-                console.info(`Updating URL from ${pathname} to ${newPathname}`);
-                startTransition(() => {
-                  router.replace(newPathname);
-                });
-              }
+            const newPathname = updateTourIdInPath(pathname, tourId);
+            if (newPathname && newPathname !== pathname) {
+              console.info(`Updating URL from ${pathname} to ${newPathname}`);
+              startTransition(() => {
+                router.replace(newPathname as Parameters<typeof router.replace>[0]);
+              });
             }
           }
         }
@@ -206,14 +248,14 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
       }
     };
 
-    client.subscribeToTopic('state/docent-app', handleDocentAppState);
+    client.subscribeToTopic('state/gec', handleDocentAppState);
 
     return () => {
-      client.unsubscribeFromTopic('state/docent-app', handleDocentAppState);
+      client.unsubscribeFromTopic('state/gec', handleDocentAppState);
     };
   }, [client, dataByLocale, locale, currentTour?.id, pathname, router]);
 
-  // TODO TBD Subscribe to which topic??
+  // Subscribe to sync state
   useEffect(() => {
     if (!client) return;
 
@@ -243,8 +285,9 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
   }, [client, fetchDocentData]);
 
   // Reset navigation states when currentTour changes
+  // But only if we've already initialized from GEC (to avoid resetting during initial sync)
   useEffect(() => {
-    if (currentTour) {
+    if (currentTour && hasInitializedBeatsFromGecRef.current) {
       setBasecampExhibitStateRaw({ beatIdx: 0, momentId: 'ambient' });
       setOverlookExhibitStateRaw({ beatIdx: 0, momentId: 'ambient' });
       setSummitRoomBeatId('journey-intro');
