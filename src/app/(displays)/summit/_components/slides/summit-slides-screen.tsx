@@ -27,12 +27,18 @@ const STRATEGY_ACCENT_COLORS = ['#8A0D71', '#00A88E', '#F7931E', '#1B75BC'] as c
 const WELCOME_BG_VIDEO =
   'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/summit/IRM_Summit_MountainLoop_V1.webm';
 
-const PlaceholderSlide = ({ heading }: { readonly heading: string }) => {
+const PlaceholderSlide = ({
+  description = 'Content will appear here during the session.',
+  heading,
+}: {
+  readonly description?: string;
+  readonly heading: string;
+}) => {
   return (
     <div className={cn('items-center justify-center', SLIDE_BG, SLIDE_CONTAINER)}>
       <div className="flex max-w-3xl flex-col items-center gap-4 text-center">
         <p className="text-4xl font-semibold sm:text-5xl">{heading}</p>
-        <p className="text-lg text-muted-foreground sm:text-xl">Content will appear here during the session.</p>
+        <p className="text-lg text-muted-foreground sm:text-xl">{description}</p>
       </div>
     </div>
   );
