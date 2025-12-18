@@ -7,14 +7,14 @@ const SummitSlidesSplitPage = async () => {
     <SummitSlideLayout>
       <div className="flex h-full w-full">
         <div className="flex h-full flex-1 items-center justify-center bg-background">
-          <div className="flex h-full w-full items-center justify-center" style={{ aspectRatio: '16 / 9' }}>
+          <div className="flex aspect-video h-full w-full items-center justify-center">
             <Suspense fallback={null}>
               <SummitSlidesScreen screen="primary" />
             </Suspense>
           </div>
         </div>
         <div className="flex h-full flex-1 items-center justify-center bg-background">
-          <div className="flex h-full w-full items-center justify-center" style={{ aspectRatio: '16 / 9' }}>
+          <div className="flex aspect-video h-full w-full items-center justify-center">
             <Suspense fallback={null}>
               <SummitSlidesScreen screen="secondary" />
             </Suspense>

@@ -36,6 +36,7 @@ export interface SummitFuturescaping {
 export interface SummitJourneySlide {
   readonly handle: string;
   readonly title: string;
+  readonly videoUrl?: string;
 }
 
 export interface SummitKiosk {

@@ -9,6 +9,7 @@ import StrategiesSection from '@/app/(displays)/summit/_components/sections/stra
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import IronMountainLogoBlue from '@/components/ui/icons/IronMountainLogoBlue';
 import SummitRootDiamondsBg from '@/components/ui/icons/SummitRootDiamondsBg';
+import { cn } from '@/lib/tailwind/utils/cn';
 import type { SummitFuturescaping, SummitKioskAmbient, SummitPossibility } from '@/app/(displays)/summit/_types';
 import type { SolutionItem } from '@/app/(displays)/summit/_utils';
 import type { SummitMqttState } from '@/lib/mqtt/types';
@@ -28,7 +29,7 @@ const WELCOME_BG_VIDEO =
 
 const PlaceholderSlide = ({ heading }: { readonly heading: string }) => {
   return (
-    <div className={`${SLIDE_BG} ${SLIDE_CONTAINER} items-center justify-center`}>
+    <div className={cn('items-center justify-center', SLIDE_BG, SLIDE_CONTAINER)}>
       <div className="flex max-w-3xl flex-col items-center gap-4 text-center">
         <p className="text-4xl font-semibold sm:text-5xl">{heading}</p>
         <p className="text-lg text-muted-foreground sm:text-xl">Content will appear here during the session.</p>
@@ -112,6 +113,7 @@ const StaticWelcomeSlide = ({
   location,
   site = 'Executive Innovation Center',
   title = 'Welcome to Iron Mountain',
+  videoUrl,
 }: {
   readonly company?: string;
   readonly dateOfEngagement?: string;
@@ -119,7 +121,10 @@ const StaticWelcomeSlide = ({
   readonly location?: string;
   readonly site?: string;
   readonly title?: string;
+  readonly videoUrl?: string;
 }) => {
+  const resolvedVideo = videoUrl || WELCOME_BG_VIDEO;
+
   return (
     <div className="relative h-full w-full overflow-hidden bg-[#F3F5F7] text-[#58595B]">
       <video
@@ -135,7 +140,7 @@ const StaticWelcomeSlide = ({
         }}
         playsInline
         preload="auto"
-        src={WELCOME_BG_VIDEO}
+        src={resolvedVideo}
       />
       <div className="absolute inset-0 z-10 bg-linear-to-b from-white/10 via-white/5 to-[#0A5E72]/15" />
       <div className="absolute top-[5%] right-[0.5%] z-30 flex justify-end">
@@ -143,7 +148,7 @@ const StaticWelcomeSlide = ({
       </div>
       <div className="relative z-20 flex h-full w-full flex-col justify-between px-[5%] py-[5%]">
         <div className="flex flex-1 items-center">
-          <h1 className="w-1/2 font-[Geometria,Inter,sans-serif] text-[7rem] leading-[110%] font-normal tracking-[-10.535px] sm:text-[8.14rem]">
+          <h1 className="w-1/2 font-geometria text-[7rem] leading-[110%] font-normal tracking-[-10.535px] sm:text-[8.14rem]">
             {title}
           </h1>
         </div>
@@ -383,6 +388,7 @@ const SummitSlidesScreen = ({
         elevation="Elevation 760 m (2,493.4 ft)"
         location={metaItems.find(item => item.label.toLowerCase() === 'location')?.value ?? ''}
         title={summitSlides.find(slide => slide.handle === 'journey-intro')?.title ?? 'Welcome to Iron Mountain'}
+        videoUrl={summitSlides.find(slide => slide.handle === 'journey-intro')?.videoUrl}
       />
     );
   }
