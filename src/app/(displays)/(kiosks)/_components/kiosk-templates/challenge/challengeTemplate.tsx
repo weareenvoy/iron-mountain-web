@@ -35,7 +35,7 @@ export const buildChallengeSlides = (
       id: 'challenge-initial',
       render: (isActive: boolean) => (
         <SectionSlide isActive={isActive}>
-          <InitialScreenTemplate {...initialScreen} kioskId={kioskId} />
+          <InitialScreenTemplate {...initialScreen} kioskId={kioskId} onButtonClick={() => controller.next()} />
         </SectionSlide>
       ),
       title: 'Challenge Intro',

@@ -29,6 +29,26 @@ export function useScrollNavigation({
   const containerRef = useRef<HTMLDivElement>(null);
   const isScrolling = useRef(false);
 
+  // Helper to find closest section based on current scroll position
+  const getCurrentSectionIndex = useCallback(() => {
+    if (!containerRef.current) return 0;
+    
+    const scrollTop = containerRef.current.scrollTop;
+    const threshold = 100; // pixels of tolerance
+    
+    // Find the section that we're closest to
+    for (let i = sections.length - 1; i >= 0; i--) {
+      const section = sections[i];
+      const sectionPosition = section.targetY + (section.offset || 0);
+      
+      if (scrollTop >= sectionPosition - threshold) {
+        return i;
+      }
+    }
+    
+    return 0;
+  }, [sections]);
+
   const scrollToPosition = useCallback(
     (targetY: number) => {
       if (!containerRef.current || isScrolling.current) {
@@ -84,11 +104,13 @@ export function useScrollNavigation({
   );
 
   const handleNavigateDown = useCallback(() => {
-    console.log('handleNavigateDown - currentIndex:', currentSectionIndex, 'totalSections:', sections.length);
+    // Get current position dynamically
+    const actualCurrentIndex = getCurrentSectionIndex();
+    console.log('handleNavigateDown - actualIndex:', actualCurrentIndex, 'stateIndex:', currentSectionIndex, 'totalSections:', sections.length);
     
-    if (currentSectionIndex < sections.length - 1) {
+    if (actualCurrentIndex < sections.length - 1) {
       // Scroll to next section within this template
-      const nextIndex = currentSectionIndex + 1;
+      const nextIndex = actualCurrentIndex + 1;
       const nextSection = sections[nextIndex];
       const targetY = nextSection.targetY + (nextSection.offset || 0);
       
@@ -101,14 +123,16 @@ export function useScrollNavigation({
       onNavigateDown?.();
       setCurrentSectionIndex(0); // Reset for when user returns
     }
-  }, [currentSectionIndex, sections, onNavigateDown, scrollToPosition]);
+  }, [currentSectionIndex, sections, onNavigateDown, scrollToPosition, getCurrentSectionIndex]);
 
   const handleNavigateUp = useCallback(() => {
-    console.log('handleNavigateUp - currentIndex:', currentSectionIndex, 'totalSections:', sections.length);
+    // Get current position dynamically
+    const actualCurrentIndex = getCurrentSectionIndex();
+    console.log('handleNavigateUp - actualIndex:', actualCurrentIndex, 'stateIndex:', currentSectionIndex, 'totalSections:', sections.length);
     
-    if (currentSectionIndex > 0) {
+    if (actualCurrentIndex > 0) {
       // Scroll to previous section within this template
-      const prevIndex = currentSectionIndex - 1;
+      const prevIndex = actualCurrentIndex - 1;
       const prevSection = sections[prevIndex];
       const targetY = prevSection.targetY + (prevSection.offset || 0);
       
@@ -120,7 +144,7 @@ export function useScrollNavigation({
       console.log('At start of sections, moving to previous template');
       onNavigateUp?.();
     }
-  }, [currentSectionIndex, sections, onNavigateUp, scrollToPosition]);
+  }, [currentSectionIndex, sections, onNavigateUp, scrollToPosition, getCurrentSectionIndex]);
 
   return {
     containerRef,

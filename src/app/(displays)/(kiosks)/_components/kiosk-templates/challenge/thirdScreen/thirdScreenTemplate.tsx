@@ -3,8 +3,7 @@
 import { ArrowDown, ArrowUp, Diamond } from 'lucide-react';
 import Image from 'next/image';
 import { DEFAULT_KIOSK_ID, type KioskId } from '../../../../_types/kiosk-id';
-import { useScrollNavigation } from '../../hooks/useScrollNavigation';
-import { thirdScreenScrollSections } from './scrollConfig';
+import { useAutoScrollNavigation } from '../../hooks/useAutoScrollNavigation';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
 // import styles from './thirdScreenTemplate.module.css';
@@ -44,19 +43,17 @@ export const ThirdScreenTemplate = ({
   subheadline = 'Rich media &\n cultural heritage',
   videoSrc = '/images/kiosks/kiosk1/03-value/Value-header.mp4',
 }: ThirdScreenTemplateProps) => {
-  const { containerRef, handleNavigateDown, handleNavigateUp } = useScrollNavigation({
-    behavior: 'smooth',
+  const { containerRef, handleNavigateDown, handleNavigateUp } = useAutoScrollNavigation({
     duration: 800,
     onNavigateDown,
     onNavigateUp,
-    sections: thirdScreenScrollSections,
   });
 
   return (
     <div
       ref={containerRef}
       // className={styles.container}
-      className="group/kiosk relative flex h-screen w-full flex-col overflow-y-auto bg-black"
+      className="group/kiosk relative flex h-screen w-full flex-col overflow-x-hidden overflow-y-auto scroll-smooth bg-[#1b75bc]"
       data-hero-image={heroImageSrc}
       data-kiosk={kioskId}
       data-large-icon-center={largeIconCenterSrc}
@@ -64,129 +61,11 @@ export const ThirdScreenTemplate = ({
       data-node-id="5168:9928"
       data-video-src={videoSrc}
     >
-      {/* Subheadline */}
-      <div
-        // className={styles.subheadlineContainer}
-        className="absolute top-[368px] left-[120px] z-[10] -translate-y-full"
-        data-node-id="5168:9935"
-      >
-        <h2
-          // className={styles.subheadline}
-          className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]"
-        >
-          {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
-        </h2>
-      </div>
+      {/* Background gradient layer */}
+      <div className="pointer-events-none absolute inset-0 z-[0] bg-[linear-gradient(to_bottom,#1b75bc_0%,#14477d_100%)]" />
 
-      {/* Challenge Label */}
-      <div
-        // className={styles.challengeLabel}
-        className="absolute top-[750px] left-[135px] z-[10] flex items-center gap-[41px]"
-        data-node-id="5168:9942"
-      >
-        <div
-          // className={styles.challengeIcon}
-          className="relative mr-0 flex h-[110px] w-[110px] items-center justify-center"
-        >
-          <Diamond aria-hidden="true" className="h-full w-full text-[#ededed]" focusable="false" strokeWidth={1.25} />
-        </div>
-        <h1
-          // className={styles.challengeText}
-          className="text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]"
-        >
-          Challenge
-        </h1>
-      </div>
-
-      {/* Description */}
-      <div
-        // className={styles.descriptionContainer}
-        className="absolute top-[2115px] left-[120px] z-[5] w-[1010px]"
-        data-node-id="5168:9932"
-        data-scroll-section="description"
-      >
-        <p
-          // className={styles.description}
-          className="text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white"
-        >
-          {renderRegisteredMark(description)}
-        </p>
-      </div>
-
-      {/* Metrics Section */}
-      <div
-        // className={styles.metricsSection}
-        className="absolute top-[3315px] left-[-80px] z-[5] flex w-[1390px] flex-col gap-[100px] group-data-[kiosk=kiosk-2]/kiosk:top-[3395px] group-data-[kiosk=kiosk-2]/kiosk:left-[-180px]"
-        data-node-id="5168:9945"
-        data-scroll-section="metrics-section"
-      >
-        <div
-          // className={styles.metricAmount}
-          className="text-center text-[400px] leading-[1.3] font-[300] tracking-[-20px] whitespace-nowrap text-[#6dcff6]"
-        >
-          {renderRegisteredMark(metricAmount)}
-        </div>
-        <p
-          // className={styles.metricDescription}
-          className="relative top-[-142px] left-[200px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#6dcff6] group-data-[kiosk=kiosk-2]/kiosk:left-[300px]"
-        >
-          {renderRegisteredMark(metricDescription)}
-        </p>
-      </div>
-
-      {/* Navigation Arrows */}
-      <div
-        aria-label="Previous"
-        // className={styles.arrowUp}
-        className="absolute top-[1750px] right-[120px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
-        data-node-id="5168:9940"
-        onKeyDown={event => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            handleNavigateUp();
-          }
-        }}
-        onPointerDown={handleNavigateUp}
-        role="button"
-        tabIndex={0}
-      >
-        <ArrowUp aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
-      </div>
-      <div
-        aria-label="Next"
-        // className={styles.arrowDown}
-        className="absolute top-[1980px] right-[120px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
-        data-node-id="5168:9938"
-        onKeyDown={event => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            handleNavigateDown();
-          }
-        }}
-        onPointerDown={handleNavigateDown}
-        role="button"
-        tabIndex={0}
-      >
-        <ArrowDown aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
-      </div>
-
-      {/* Background Gradients */}
-      <div
-        // className={styles.gradientBg}
-        className="absolute top-[-224px] left-[0px] z-[2] h-[5549px] w-[2158px] rounded-[100px] bg-transparent"
-        data-node-id="5168:9930"
-      />
-      <div
-        // className={styles.topGradientOverlay}
-        className="pointer-events-none absolute top-0 left-0 z-[3] h-[1732px] w-full bg-transparent"
-        data-node-id="5168:9934"
-      />
-
-      <div
-        // className={styles.largeIconCenter}
-        className="pointer-events-none absolute top-[2415px] left-[920px] z-[4] flex h-[945px] w-[945px] scale-y-[-1] rotate-[225deg] items-center justify-center"
-        data-node-id="5168:9936"
-      >
+      {/* Decorative background diamond */}
+      <div className="pointer-events-none absolute top-[45%] left-[50%] z-[1] flex h-[945px] w-[945px] scale-y-[-1] rotate-[225deg] items-center justify-center opacity-30">
         <div className="relative h-full w-full">
           <Image
             alt={metricDescription ? `Graphic representing ${metricDescription}` : 'Metric highlight graphic'}
@@ -197,6 +76,76 @@ export const ThirdScreenTemplate = ({
             style={{ transform: 'rotate(45deg)' }}
             unoptimized
           />
+        </div>
+      </div>
+
+      {/* Header Section */}
+      <div className="relative z-[2] px-[120px] pt-[300px] pb-[150px]">
+        <h2 className="mb-[200px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
+          {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
+        </h2>
+
+        <div className="flex items-center gap-[41px]">
+          <div className="relative mr-0 flex h-[110px] w-[110px] items-center justify-center">
+            <Diamond aria-hidden="true" className="h-full w-full text-[#ededed]" focusable="false" strokeWidth={1.25} />
+          </div>
+          <h1 className="text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]">
+            Challenge
+          </h1>
+        </div>
+      </div>
+
+      {/* Description Section - SCROLLABLE */}
+      <div className="relative z-[2] px-[120px] py-[250px]" data-scroll-section="description">
+        <p className="max-w-[1010px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white">
+          {renderRegisteredMark(description)}
+        </p>
+      </div>
+
+      {/* Metrics Section - SCROLLABLE */}
+      <div
+        className="relative z-[2] flex w-full flex-col items-center px-[120px] py-[300px]"
+        data-scroll-section="metrics-section"
+      >
+        <div className="text-center text-[400px] leading-[1.3] font-[300] tracking-[-20px] whitespace-nowrap text-[#6dcff6]">
+          {renderRegisteredMark(metricAmount)}
+        </div>
+        <p className="mt-[-142px] max-w-[1200px] text-center text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#6dcff6]">
+          {renderRegisteredMark(metricDescription)}
+        </p>
+      </div>
+
+      {/* Fixed Navigation Arrows */}
+      <div className="fixed top-1/2 right-[120px] z-[50] flex -translate-y-1/2 flex-col gap-[100px]">
+        <div
+          aria-label="Previous"
+          className="flex h-[118px] w-[118px] cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95"
+          onKeyDown={event => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              handleNavigateUp();
+            }
+          }}
+          onPointerDown={handleNavigateUp}
+          role="button"
+          tabIndex={0}
+        >
+          <ArrowUp aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
+        </div>
+        <div
+          aria-label="Next"
+          className="flex h-[118px] w-[118px] cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95"
+          onKeyDown={event => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              handleNavigateDown();
+            }
+          }}
+          onPointerDown={handleNavigateDown}
+          role="button"
+          tabIndex={0}
+        >
+          <ArrowDown aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
         </div>
       </div>
     </div>
