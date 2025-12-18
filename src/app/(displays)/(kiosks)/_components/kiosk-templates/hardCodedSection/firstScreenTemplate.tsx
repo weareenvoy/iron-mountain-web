@@ -1,8 +1,8 @@
-'use client';
-
 import { SquarePlay } from 'lucide-react';
 import Image from 'next/image';
+import { useState } from 'react';
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
+import HardCodedDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/demoScreenTemplate';
 import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCFilledOrangeDiamond';
 import HCHollowBlueDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollowBlueDiamond';
 import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollowOrangeDiamond';
@@ -23,6 +23,8 @@ export interface HardCodedKiosk1FirstScreenTemplateProps {
   readonly kioskId?: 'kiosk-1' | 'kiosk-3';
   readonly onPrimaryCta?: () => void;
   readonly onSecondaryCta?: () => void;
+  readonly overlayCardLabel?: string | string[];
+  readonly overlayHeadline?: string | string[];
   readonly primaryCtaLabel?: string;
   readonly secondaryCtaLabel?: string;
 }
@@ -62,9 +64,12 @@ const HardCodedKiosk1FirstScreenTemplate = ({
   kioskId,
   onPrimaryCta,
   onSecondaryCta,
+  overlayCardLabel = 'Virtual walkthrough',
+  overlayHeadline = ['Section title lorem ipsum', 'dolor sit.'],
   primaryCtaLabel = defaultPrimaryCtaLabel,
   secondaryCtaLabel = defaultSecondaryCtaLabel,
 }: HardCodedKiosk1FirstScreenTemplateProps) => {
+  const [showOverlay, setShowOverlay] = useState(false);
   const isKiosk1 = kioskId === 'kiosk-1';
   const eyebrowText = Array.isArray(eyebrow) ? eyebrow.join('\n') : eyebrow;
   const headlineText = Array.isArray(headline) ? headline.join('\n') : headline;
@@ -72,6 +77,11 @@ const HardCodedKiosk1FirstScreenTemplate = ({
   const ctaWidthClass = isKiosk3 ? 'w-[1360px]' : 'w-[1020px]';
   const secondaryLabelPadding = isKiosk3 ? 'pl-[320px]' : 'pl-[80px]';
   const secondaryIconOffset = isKiosk3 ? 'left-[-330px]' : 'left-[-70px]';
+
+  const handleSecondaryClick = () => {
+    setShowOverlay(true);
+    onSecondaryCta?.();
+  };
 
   return (
     <div
@@ -113,7 +123,7 @@ const HardCodedKiosk1FirstScreenTemplate = ({
         </button>
         <button
           className="flex h-[200px] items-center justify-between rounded-[999px] px-[100px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-transform duration-150 hover:scale-[1.01]"
-          onClick={onSecondaryCta}
+          onClick={handleSecondaryClick}
           style={{
             background: 'linear-gradient(296deg, #A2115E 28.75%, #8A0D71 82.59%)',
           }}
@@ -140,6 +150,23 @@ const HardCodedKiosk1FirstScreenTemplate = ({
       <HCHollowBlueDiamond className="pointer-events-none absolute bottom-[1400px] left-[510px] h-[520px] w-[520px] overflow-visible" />
       <HCFilledOrangeDiamond className="pointer-events-none absolute bottom-[640px] left-[280px] h-[420px] w-[800px]" />
       <HCHollowOrangeDiamond className="pointer-events-none absolute bottom-[410px] left-[500px] h-[340px] w-[340px] overflow-visible" />
+
+      {/* Overlay - Demo Screen */}
+      <div
+        className="absolute inset-0 transition-opacity duration-700"
+        style={{
+          opacity: showOverlay ? 1 : 0,
+          pointerEvents: showOverlay ? 'auto' : 'none',
+        }}
+      >
+        <HardCodedDemoScreenTemplate
+          cardLabel={overlayCardLabel}
+          headline={overlayHeadline}
+          heroImageAlt={heroImageAlt}
+          heroImageSrc={heroImageSrc}
+          onEndTour={() => setShowOverlay(false)}
+        />
+      </div>
     </div>
   );
 };

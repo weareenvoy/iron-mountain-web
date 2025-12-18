@@ -1,28 +1,26 @@
 import HardCodedFirstScreenTemplate, {
   type HardCodedKiosk1FirstScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/firstScreenTemplate';
-import HardCodedKiosk3FourthScreenTemplate, {
-  type HardCodedKiosk3FourthScreenTemplateProps,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk3/fourthScreenTemplate';
+import HardCodedDemoScreenTemplate, {
+  type HardCodedDemoScreenTemplateProps,
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/demoScreenTemplate';
 import HardCodedKiosk1SecondScreenTemplate, {
   type HardCodedKiosk1SecondScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk1/secondScreenTemplate';
 import HardCodedKiosk3SecondScreenTemplate, {
   type HardCodedKiosk3SecondScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk3/secondScreenTemplate';
-import HardCodedKiosk1ThirdScreenTemplate, {
-  type HardCodedKiosk1ThirdScreenTemplateProps,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk1/thirdScreenTemplate';
 import HardCodedKiosk3ThirdScreenTemplate, {
   type HardCodedKiosk3ThirdScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk3/thirdScreenTemplate';
 import { SectionSlide, type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
 
 export type HardCodedScreens = Readonly<{
+  demoScreen?: HardCodedDemoScreenTemplateProps;
   firstScreen?: HardCodedKiosk1FirstScreenTemplateProps;
-  fourthScreen?: HardCodedKiosk3FourthScreenTemplateProps;
+  fourthScreen?: HardCodedDemoScreenTemplateProps;
   secondScreen?: HardCodedKiosk1SecondScreenTemplateProps & HardCodedKiosk3SecondScreenTemplateProps;
-  thirdScreen?: HardCodedKiosk1ThirdScreenTemplateProps & HardCodedKiosk3ThirdScreenTemplateProps;
+  thirdScreen?: HardCodedDemoScreenTemplateProps & HardCodedKiosk3ThirdScreenTemplateProps;
 }>;
 
 export const buildHardcodedSlides = (
@@ -35,6 +33,9 @@ export const buildHardcodedSlides = (
   const slides: Slide[] = [];
 
   if (hardCoded.firstScreen) {
+    // Kiosk 1 uses thirdScreen for overlay, Kiosk 3 uses fourthScreen
+    const overlayData = kioskId === 'kiosk-1' ? hardCoded.thirdScreen : hardCoded.fourthScreen;
+
     slides.push({
       id: 'hardcoded-first',
       render: (isActive: boolean) => (
@@ -42,6 +43,8 @@ export const buildHardcodedSlides = (
           <HardCodedFirstScreenTemplate
             kioskId={kioskId}
             {...hardCoded.firstScreen}
+            overlayCardLabel={overlayData?.cardLabel}
+            overlayHeadline={overlayData?.headline}
             onPrimaryCta={() => scrollToSection?.('hardcoded-second-screen')}
           />
         </SectionSlide>
@@ -65,31 +68,21 @@ export const buildHardcodedSlides = (
     });
   }
 
-  if (hardCoded.thirdScreen) {
-    const KioskThird = kioskId === 'kiosk-3' ? HardCodedKiosk3ThirdScreenTemplate : HardCodedKiosk1ThirdScreenTemplate;
-
+  // Kiosk 3: thirdScreen is the carousel (render as standalone)
+  // Kiosk 1: thirdScreen is the demo (used for overlay only, don't render standalone)
+  if (kioskId === 'kiosk-3' && hardCoded.thirdScreen) {
     slides.push({
       id: 'hardcoded-third',
       render: (isActive: boolean) => (
         <SectionSlide isActive={isActive}>
-          <KioskThird {...hardCoded.thirdScreen} />
+          <HardCodedKiosk3ThirdScreenTemplate {...hardCoded.thirdScreen} />
         </SectionSlide>
       ),
       title: 'Hardcoded Third',
     });
   }
 
-  if (kioskId === 'kiosk-3' && hardCoded.fourthScreen) {
-    slides.push({
-      id: 'hardcoded-fourth',
-      render: (isActive: boolean) => (
-        <SectionSlide isActive={isActive}>
-          <HardCodedKiosk3FourthScreenTemplate {...hardCoded.fourthScreen} />
-        </SectionSlide>
-      ),
-      title: 'Hardcoded Fourth',
-    });
-  }
+  // Demo screens (thirdScreen for Kiosk 1, fourthScreen for Kiosk 3) are now overlay-only
 
   // Keep navigation external: handled by slide order in view
   return slides;

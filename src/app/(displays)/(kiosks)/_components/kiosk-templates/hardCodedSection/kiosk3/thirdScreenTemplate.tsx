@@ -190,7 +190,7 @@ const HardCodedKiosk3ThirdScreenTemplate = ({
       </button>
 
       {/* Circle carousel control */}
-      <div className="absolute top-[1670px] right-[120px] h-[520px] w-[520px]">
+      <div className="absolute top-[10420px] right-[120px] h-[520px] w-[520px]">
         <div className="relative h-full w-full">
           <div className="absolute inset-0 rounded-full border-[8px] border-[#6dcff6]/70" />
           <div className="absolute inset-[18px] rounded-full border-[12px] border-transparent" />

@@ -1,6 +1,10 @@
 'use client';
 
+import Image from 'next/image';
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
+import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCFilledOrangeDiamond';
+import HCHollowBlueDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollowBlueDiamond';
+import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollowOrangeDiamond';
 
 export interface HardCodedKiosk3FourthScreenTemplateProps {
   readonly backgroundEndColor?: string;
@@ -11,6 +15,8 @@ export interface HardCodedKiosk3FourthScreenTemplateProps {
   readonly cardTextColor?: string;
   readonly cardWidth?: number;
   readonly headline?: string | string[];
+  readonly heroImageAlt?: string;
+  readonly heroImageSrc?: string;
   readonly onCta?: () => void;
 }
 
@@ -23,6 +29,8 @@ const defaults = {
   cardTextColor: '#4a4a4a',
   cardWidth: 1920,
   headline: ['Section title lorem ipsum', 'dolor sit.'],
+  heroImageAlt: 'Visitors smiling while viewing content',
+  heroImageSrc: '/images/kiosks/kiosk1/04-custom-interactive/CU-Image1-Diamond.png',
 };
 
 const HardCodedKiosk3FourthScreenTemplate = ({
@@ -34,6 +42,8 @@ const HardCodedKiosk3FourthScreenTemplate = ({
   cardTextColor = defaults.cardTextColor,
   cardWidth = defaults.cardWidth,
   headline = defaults.headline,
+  heroImageAlt = defaults.heroImageAlt,
+  heroImageSrc = defaults.heroImageSrc,
   onCta,
 }: HardCodedKiosk3FourthScreenTemplateProps) => {
   const headlineText = Array.isArray(headline) ? headline.join('\n') : headline;
@@ -66,6 +76,16 @@ const HardCodedKiosk3FourthScreenTemplate = ({
           {renderRegisteredMark(cardText)}
         </button>
       </div>
+
+      {/* Hero diamond image */}
+      <div className="pointer-events-none absolute bottom-[160px] left-[1100px] h-[1380px] w-[1380px] rotate-[45deg] overflow-hidden rounded-[140px]">
+        <Image alt={heroImageAlt} className="-rotate-[45deg] object-cover" fill sizes="680px" src={heroImageSrc} />
+      </div>
+
+      {/* Decorative diamonds */}
+      <HCHollowBlueDiamond className="pointer-events-none absolute bottom-[1400px] left-[510px] h-[520px] w-[520px] overflow-visible" />
+      <HCFilledOrangeDiamond className="pointer-events-none absolute bottom-[640px] left-[280px] h-[420px] w-[800px]" />
+      <HCHollowOrangeDiamond className="pointer-events-none absolute bottom-[410px] left-[500px] h-[340px] w-[340px] overflow-visible" />
     </div>
   );
 };
