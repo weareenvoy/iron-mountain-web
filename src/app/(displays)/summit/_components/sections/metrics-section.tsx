@@ -1,14 +1,20 @@
 import Image from 'next/image';
-import type { SummitMetrics, SummitObstacles } from '@/app/(displays)/summit/_types';
+import type { SummitProblem2Item, SummitProblem3 } from '@/app/(displays)/summit/_types';
 
 type MetricsSectionProps = {
-  readonly metrics: SummitMetrics;
-  readonly obstacles: SummitObstacles;
+  readonly challenges?: null | SummitProblem3 | SummitProblem3['challenges'] | undefined;
+  readonly stats: readonly SummitProblem2Item[];
+  readonly title: string;
   readonly variant?: 'default' | 'slide';
 };
 
-const MetricsSection = ({ metrics, obstacles, variant = 'default' }: MetricsSectionProps) => {
+const MetricsSection = ({ challenges, stats, title, variant = 'default' }: MetricsSectionProps) => {
   const isSlide = variant === 'slide';
+  const challengeItems = Array.isArray((challenges as SummitProblem3 | undefined)?.challenges)
+    ? (challenges as SummitProblem3).challenges
+    : Array.isArray(challenges)
+      ? challenges
+      : [];
 
   return (
     <section className={`flex flex-col ${isSlide ? 'gap-5' : 'gap-12'}`}>
@@ -17,22 +23,22 @@ const MetricsSection = ({ metrics, obstacles, variant = 'default' }: MetricsSect
           className={`flex items-center font-semibold text-[#58595B] ${isSlide ? 'gap-2 text-2xl' : 'gap-3 text-2xl sm:text-3xl'}`}
         >
           <span aria-hidden className="h-4 w-4 rotate-45 rounded-xs border-2 border-[#6DCFF6]" />
-          <span>{metrics.title}</span>
+          <span>{title}</span>
         </div>
       </header>
 
       <div className={`grid ${isSlide ? 'gap-6' : 'gap-8'} sm:grid-cols-3 print:grid-cols-3 print:gap-6`}>
-        {metrics.items.map(item => (
-          <div className="flex flex-col gap-1 text-left" key={item.label}>
+        {stats.map(item => (
+          <div className="flex flex-col gap-1 text-left" key={item.title}>
             <p
               className={`font-semibold text-[#44A6E6] print:text-[2.5rem] print:leading-[1.1] ${
                 isSlide ? 'text-4xl sm:text-5xl' : 'text-5xl sm:text-6xl'
               }`}
             >
-              {item.value}
+              {item.title}
             </p>
             <p className={`text-[#58595B] print:text-xs print:leading-snug ${isSlide ? 'text-sm' : 'text-sm'}`}>
-              {item.description}
+              {item.subtitle}
             </p>
           </div>
         ))}
@@ -46,7 +52,7 @@ const MetricsSection = ({ metrics, obstacles, variant = 'default' }: MetricsSect
         <div
           className={`grid print:grid-cols-4 print:gap-4 ${isSlide ? 'gap-5 sm:grid-cols-2 lg:grid-cols-4' : 'gap-8 sm:grid-cols-2 lg:grid-cols-4'}`}
         >
-          {obstacles.items.map(item => (
+          {challengeItems.map(item => (
             <article className="flex flex-col items-center gap-4 text-center" key={item.title}>
               <span
                 className={`rounded-full bg-[#0D3C69] font-semibold text-white ${

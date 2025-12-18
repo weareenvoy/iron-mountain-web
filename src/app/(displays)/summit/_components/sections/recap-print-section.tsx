@@ -1,29 +1,28 @@
 'use client';
 
+import { RECAP_DEFAULT_TONE, type RecapTone } from '@/app/(displays)/summit/_components/sections/recap-section';
 import NotificationTextIcon from '@/components/ui/icons/NotificationTextIcon';
 import useLocalStorage from '@/hooks/use-local-storage';
-import type { RecapTone } from '@/app/(displays)/summit/_components/sections/recap-section';
-import type { SummitRecap } from '@/app/(displays)/summit/_types';
 import type { ReactNode } from 'react';
 
 type RecapPrintSectionProps = {
   readonly actionSlot?: ReactNode;
   readonly placeholder?: string;
-  readonly recap: SummitRecap;
-  readonly storageKey?: string;
+  readonly storageKey: string;
+  readonly title?: string;
   readonly tone?: RecapTone;
 };
 
-const RecapPrintSection = ({ actionSlot, placeholder = '', recap, storageKey, tone }: RecapPrintSectionProps) => {
-  const palette = tone ?? {
-    accentBg: '#6DCFF6',
-    accentColor: '#14477D',
-    bodyColor: '#4B4B4D',
-    iconColor: '#0D3C69',
-    rightTextColor: '#12406A',
-  };
-  const key = storageKey ?? `summit-recap:${recap.title}`;
-  const [note] = useLocalStorage<string>(key, '');
+const RecapPrintSection = ({
+  actionSlot,
+  placeholder = '',
+  storageKey,
+  title = 'Recap',
+  tone,
+}: RecapPrintSectionProps) => {
+  const palette = tone ?? { ...RECAP_DEFAULT_TONE, rightTextColor: '#12406A' };
+
+  const [note] = useLocalStorage<string>(storageKey, '');
   const noteValue = note.trim().length > 0 ? note : placeholder;
   const rightTextColor = palette.rightTextColor ?? '#12406A';
 
@@ -39,7 +38,7 @@ const RecapPrintSection = ({ actionSlot, placeholder = '', recap, storageKey, to
             className="h-7 w-7"
             style={{ color: palette.iconColor || palette.accentColor }}
           />
-          <span className="text-[1.75rem] font-normal">{recap.title}</span>
+          <span className="text-[1.75rem] font-normal">{title}</span>
         </div>
         {actionSlot}
       </div>

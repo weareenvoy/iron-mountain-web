@@ -9,7 +9,8 @@ import StrategiesSection from '@/app/(displays)/summit/_components/sections/stra
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import IronMountainLogoBlue from '@/components/ui/icons/IronMountainLogoBlue';
 import SummitRootDiamondsBg from '@/components/ui/icons/SummitRootDiamondsBg';
-import type { SummitStrategy } from '@/app/(displays)/summit/_types';
+import type { SummitFuturescaping, SummitKioskAmbient, SummitPossibility } from '@/app/(displays)/summit/_types';
+import type { SolutionItem } from '@/app/(displays)/summit/_utils';
 import type { SummitMqttState } from '@/lib/mqtt/types';
 
 type SlideDefinition = {
@@ -21,6 +22,7 @@ type SlideDefinition = {
 const SLIDE_BG = 'bg-white text-[#12406A]';
 const SLIDE_CONTAINER = 'relative flex h-full w-full max-w-full flex-col overflow-hidden px-10 py-10';
 const SLIDE_SCALE = 2.2;
+const STRATEGY_ACCENT_COLORS = ['#8A0D71', '#00A88E', '#F7931E', '#1B75BC'] as const;
 const WELCOME_BG_VIDEO =
   'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/summit/IRM_Summit_MountainLoop_V1.webm';
 
@@ -164,43 +166,59 @@ const StaticWelcomeSlide = ({
   );
 };
 
-const buildStrategySlides = (strategies: readonly SummitStrategy[]) => {
-  const accentPalette = ['#8A0D71', '#00A88E', '#F7931E', '#1B75BC'] as const;
-  return strategies.map<SlideDefinition>((strategy, index) => ({
-    id: `strategy-${index + 1}`,
-    render: () => (
-      <SlideFrame showDiamonds>
-        <StrategiesSection accentColor={accentPalette[index] ?? '#8A0D71'} strategy={strategy} />
-      </SlideFrame>
-    ),
-    title: strategy.title ?? strategy.eyebrow,
-  }));
-};
-
 const useSlideRegistry = () => {
   const { data, error, loading } = useSummit();
 
   const slides = useMemo<SlideDefinition[]>(() => {
     if (!data) return [];
 
-    const strategiesWithFallback = data.strategies.map((strategy, strategyIndex) => {
-      if (strategyIndex !== 3) return strategy;
+    const basecamp = data.basecamp as typeof data.basecamp | undefined;
+    const kiosk1 = data.kiosk1 as typeof data.kiosk1 | undefined;
+    const kiosk2 = data.kiosk2 as typeof data.kiosk2 | undefined;
+    const kiosk3 = data.kiosk3 as typeof data.kiosk3 | undefined;
+    const meta = (data.meta as typeof data.meta | undefined) ?? [];
+    const overlook = data.overlook as typeof data.overlook | undefined;
+    const summitSlides = (data.summitSlides as typeof data.summitSlides | undefined) ?? [];
+    if (!basecamp || !overlook || !kiosk1 || !kiosk2 || !kiosk3) return [];
 
-      const hasThreeBoxes = strategy.items.length >= 3;
-      if (hasThreeBoxes) return strategy;
+    const challenges = basecamp.problem3;
+    const problem1 = basecamp.problem1 as typeof basecamp.problem1 | undefined;
+    const stats = basecamp.problem2;
 
-      const stories = data.stories.items;
-      if (stories.length === 0) return strategy;
+    const getMetaValue = (label: string) => meta.find(item => item.label.toLowerCase() === label.toLowerCase())?.value;
 
-      return {
-        eyebrow: strategy.eyebrow,
-        items: stories.map(story => ({
-          body: [story.description],
-          title: story.title,
-        })),
-        summary: strategy.summary,
-        title: strategy.title ?? data.stories.title,
-      };
+    const company = getMetaValue('Company') ?? 'Company';
+    const dateOfEngagement = getMetaValue('Date of engagement') ?? '';
+    const location = getMetaValue('Location') ?? '';
+
+    const journey1Title =
+      summitSlides.find(slide => slide.handle === 'journey-1')?.title ?? 'Your personalized journey map';
+    const journey3Title =
+      summitSlides.find(slide => slide.handle === 'journey-3')?.title ?? 'Considering possibilities';
+    const journey4Title = summitSlides.find(slide => slide.handle === 'journey-4')?.title ?? 'Relevant solutions';
+    const journey5Title = summitSlides.find(slide => slide.handle === 'journey-5')?.title ?? 'Unlock your future';
+    const journey6Title = summitSlides.find(slide => slide.handle === 'journey-6')?.title ?? 'Stories of impact';
+
+    const possibilitiesItems = [basecamp.possibilitiesA, basecamp.possibilitiesB, basecamp.possibilitiesC].filter(
+      (item): item is SummitPossibility => Boolean(item)
+    );
+
+    const activateTitle = data.activateTitle as string | undefined;
+    const connectTitle = data.connectTitle as string | undefined;
+    const protectTitle = data.protectTitle as string | undefined;
+
+    const solutionItems = [
+      protectTitle ? { locations: overlook.protect, title: protectTitle } : null,
+      connectTitle ? { locations: overlook.connect, title: connectTitle } : null,
+      activateTitle ? { locations: overlook.activate, title: activateTitle } : null,
+    ].filter((item): item is SolutionItem => Boolean(item));
+
+    const futurescapingItems = [overlook.futurescaping1, overlook.futurescaping2, overlook.futurescaping3].filter(
+      (item): item is SummitFuturescaping => Boolean(item)
+    );
+
+    const storyItems = [kiosk1.ambient, kiosk2.ambient, kiosk3.ambient].filter((item): item is SummitKioskAmbient => {
+      return Boolean(item);
     });
 
     const registry: SlideDefinition[] = [
@@ -208,10 +226,10 @@ const useSlideRegistry = () => {
         id: 'welcome',
         render: () => (
           <WelcomeSlide
-            company={data.hero.clientName}
-            dateOfEngagement={data.hero.date}
-            location={data.hero.location}
-            title={data.hero.title ?? 'Your personalized journey map'}
+            company={company}
+            dateOfEngagement={dateOfEngagement}
+            location={location}
+            title={journey1Title}
           />
         ),
         title: 'Welcome',
@@ -220,14 +238,72 @@ const useSlideRegistry = () => {
         id: 'metrics',
         render: () => (
           <SlideFrame showDiamonds>
-            <MetricsSection metrics={data.metrics} obstacles={data.obstacles} variant="slide" />
+            <MetricsSection
+              challenges={challenges}
+              stats={stats}
+              title={problem1?.title ?? 'What is standing in your way?'}
+              variant="slide"
+            />
           </SlideFrame>
         ),
-        title: 'Metrics & Obstacles',
+        title: problem1?.title ?? 'What is standing in your way?',
+      },
+      {
+        id: 'possibilities',
+        render: () => (
+          <SlideFrame showDiamonds>
+            <StrategiesSection
+              accentColor={STRATEGY_ACCENT_COLORS[0]}
+              items={possibilitiesItems}
+              title={journey3Title}
+            />
+          </SlideFrame>
+        ),
+        title: journey3Title,
+      },
+      {
+        id: 'solutions',
+        render: () => (
+          <SlideFrame showDiamonds>
+            <StrategiesSection
+              accentColor={STRATEGY_ACCENT_COLORS[1]}
+              items={solutionItems}
+              title={journey4Title}
+              variant="solutions"
+            />
+          </SlideFrame>
+        ),
+        title: journey4Title,
+      },
+      {
+        id: 'futurescaping',
+        render: () => (
+          <SlideFrame showDiamonds>
+            <StrategiesSection
+              accentColor={STRATEGY_ACCENT_COLORS[2]}
+              items={futurescapingItems}
+              title={journey5Title}
+              variant="futurescaping"
+            />
+          </SlideFrame>
+        ),
+        title: journey5Title,
+      },
+      {
+        id: 'stories',
+        render: () => (
+          <SlideFrame showDiamonds>
+            <StrategiesSection
+              accentColor={STRATEGY_ACCENT_COLORS[3]}
+              items={storyItems}
+              title={journey6Title}
+              variant="stories"
+            />
+          </SlideFrame>
+        ),
+        title: journey6Title,
       },
     ];
-
-    registry.push(...buildStrategySlides(strategiesWithFallback));
 
     return registry;
   }, [data]);
@@ -248,6 +324,8 @@ const SummitSlidesScreen = ({
 
   const devControls = searchParams.get('dev') === '1' || searchParams.get('dev') === 'true';
   const requestedSlideParam = searchParams.get('slide') ?? undefined;
+  const metaItems = data?.meta ?? [];
+  const summitSlides = data?.summitSlides ?? [];
 
   const preferredSlideId = useMemo(() => {
     if (!requestedSlideParam || slides.length === 0) return undefined;
@@ -297,10 +375,10 @@ const SummitSlidesScreen = ({
   if (screen === 'primary') {
     return (
       <StaticWelcomeSlide
-        company={data.hero.clientName}
-        dateOfEngagement={data.hero.date}
-        location={data.hero.location}
-        title={data.hero.title ?? 'Welcome to Iron Mountain'}
+        company={metaItems.find(item => item.label.toLowerCase() === 'company')?.value ?? 'Company'}
+        elevation="Elevation 760 m (2,493.4 ft)"
+        location={metaItems.find(item => item.label.toLowerCase() === 'location')?.value ?? ''}
+        title={summitSlides.find(slide => slide.handle === 'journey-intro')?.title ?? 'Welcome to Iron Mountain'}
       />
     );
   }
