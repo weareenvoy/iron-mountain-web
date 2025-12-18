@@ -1,8 +1,7 @@
 'use client';
 
-import { ArrowDown, ArrowUp, Diamond } from 'lucide-react';
+import { Diamond } from 'lucide-react';
 import Image from 'next/image';
-import { useAutoScrollNavigation } from '../../hooks/useAutoScrollNavigation';
 import { DEFAULT_KIOSK_ID, type KioskId } from '../../../../_types/kiosk-id';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
@@ -43,12 +42,6 @@ export const ThirdScreenTemplate = ({
   subheadline = 'Rich media &\n cultural heritage',
   videoSrc = '/images/kiosks/kiosk1/03-value/Value-header.mp4',
 }: ThirdScreenTemplateProps) => {
-  const { containerRef, handleNavigateDown, handleNavigateUp } = useAutoScrollNavigation({
-    duration: 800,
-    onNavigateDown,
-    onNavigateUp,
-  });
-
   return (
     <div
       // className={styles.container}
@@ -59,7 +52,6 @@ export const ThirdScreenTemplate = ({
       data-large-icon-top={largeIconTopSrc}
       data-node-id="5168:9928"
       data-video-src={videoSrc}
-      ref={containerRef}
     >
       {/* Background gradient layer */}
       <div className="pointer-events-none absolute inset-0 z-[0] bg-[linear-gradient(to_bottom,#1b75bc_0%,#14477d_100%)]" />
@@ -107,49 +99,15 @@ export const ThirdScreenTemplate = ({
 
       {/* Metrics Section - SCROLLABLE */}
       <div className="relative z-[2] flex w-full flex-col items-center px-[120px] py-[300px]">
-        <div
-          className="text-center text-[400px] leading-[1.3] font-[300] tracking-[-20px] whitespace-nowrap text-[#6dcff6]"
-          data-scroll-section="metrics-section"
-        >
+        <span className="text-center text-[400px] leading-[1.3] font-[300] tracking-[-20px] whitespace-nowrap text-[#6dcff6]">
           {renderRegisteredMark(metricAmount)}
-        </div>
-        <p className="mt-[-142px] max-w-[1200px] text-center text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#6dcff6]">
+        </span>
+        <p
+          className="mt-[-142px] max-w-[1200px] text-center text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#6dcff6]"
+          data-scroll-section="metrics-description"
+        >
           {renderRegisteredMark(metricDescription)}
         </p>
-      </div>
-
-      {/* Fixed Navigation Arrows */}
-      <div className="fixed top-1/2 right-[120px] z-[50] flex -translate-y-1/2 flex-col gap-[100px]">
-        <div
-          aria-label="Previous"
-          className="flex h-[118px] w-[118px] cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95"
-          onKeyDown={event => {
-            if (event.key === 'Enter' || event.key === ' ') {
-              event.preventDefault();
-              handleNavigateUp();
-            }
-          }}
-          onPointerDown={handleNavigateUp}
-          role="button"
-          tabIndex={0}
-        >
-          <ArrowUp aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
-        </div>
-        <div
-          aria-label="Next"
-          className="flex h-[118px] w-[118px] cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95"
-          onKeyDown={event => {
-            if (event.key === 'Enter' || event.key === ' ') {
-              event.preventDefault();
-              handleNavigateDown();
-            }
-          }}
-          onPointerDown={handleNavigateDown}
-          role="button"
-          tabIndex={0}
-        >
-          <ArrowDown aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
-        </div>
       </div>
     </div>
   );

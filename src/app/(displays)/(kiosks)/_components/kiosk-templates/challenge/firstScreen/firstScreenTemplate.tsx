@@ -1,9 +1,7 @@
 'use client';
 
-import { ArrowDown, ArrowUp, Diamond } from 'lucide-react';
+import { Diamond } from 'lucide-react';
 import { DEFAULT_KIOSK_ID, type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
-// import styles from './firstScreenTemplate.module.css';
-import { useAutoScrollNavigation } from '../../hooks/useAutoScrollNavigation';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
 export type FirstScreenTemplateProps = Readonly<{
@@ -29,19 +27,12 @@ export const FirstScreenTemplate = ({
   subheadline = 'Rich media &\n cultural heritage',
   videoSrc = '/images/kiosks/kiosk1/01-challenge/Challenge-Header.mp4',
 }: FirstScreenTemplateProps) => {
-  const { containerRef, handleNavigateDown, handleNavigateUp } = useAutoScrollNavigation({
-    duration: 800,
-    onNavigateDown,
-    onNavigateUp,
-  });
-
   return (
     <div
       // className={styles.container}
       className="group/kiosk relative flex h-screen w-full flex-col overflow-x-hidden overflow-y-auto scroll-smooth bg-black"
       data-kiosk={kioskId}
       data-node-id="5168:9882"
-      ref={containerRef}
     >
       {/* Background gradient - stays behind all content */}
       <div className="pointer-events-none absolute inset-0 z-[0] bg-[linear-gradient(to_bottom,#000_0%,#1b75bc_20%,#14477d_80%,#154c83_100%)]" />
@@ -90,49 +81,15 @@ export const FirstScreenTemplate = ({
 
       {/* Savings Metrics Section - SCROLLABLE */}
       <div className="relative z-[2] flex w-full flex-col items-center px-[120px] py-[300px]">
-        <div
-          className="text-center text-[400px] leading-[1.3] font-[300] tracking-[-20px] whitespace-nowrap text-[#6dcff6]"
-          data-scroll-section="savings-metrics"
-        >
+        <span className="text-center text-[400px] leading-[1.3] font-[300] tracking-[-20px] whitespace-nowrap text-[#6dcff6]">
           {renderRegisteredMark(savingsAmount)}
-        </div>
-        <p className="mt-[-40px] text-center text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#6dcff6] group-data-[kiosk=kiosk-2]/kiosk:leading-[1.3] group-data-[kiosk=kiosk-3]/kiosk:leading-[1.3]">
+        </span>
+        <p
+          className="mt-[-40px] text-center text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#6dcff6] group-data-[kiosk=kiosk-2]/kiosk:leading-[1.3] group-data-[kiosk=kiosk-3]/kiosk:leading-[1.3]"
+          data-scroll-section="savings-description"
+        >
           {renderRegisteredMark(savingsDescription)}
         </p>
-      </div>
-
-      {/* Fixed Navigation Arrows */}
-      <div className="fixed top-1/2 right-[110px] z-[50] flex -translate-y-1/2 flex-col gap-[100px] group-data-[kiosk=kiosk-2]/kiosk:right-[120px] group-data-[kiosk=kiosk-3]/kiosk:right-[130px]">
-        <div
-          aria-label="Previous"
-          className="flex h-[118px] w-[118px] cursor-pointer items-center justify-center transition-transform group-data-[kiosk=kiosk-2]/kiosk:h-[140px] group-data-[kiosk=kiosk-2]/kiosk:w-[120px] hover:scale-110 active:scale-95"
-          onKeyDown={event => {
-            if (event.key === 'Enter' || event.key === ' ') {
-              event.preventDefault();
-              handleNavigateUp();
-            }
-          }}
-          onPointerDown={handleNavigateUp}
-          role="button"
-          tabIndex={0}
-        >
-          <ArrowUp aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
-        </div>
-        <div
-          aria-label="Next"
-          className="flex h-[118px] w-[118px] cursor-pointer items-center justify-center transition-transform group-data-[kiosk=kiosk-2]/kiosk:h-[140px] group-data-[kiosk=kiosk-2]/kiosk:w-[120px] hover:scale-110 active:scale-95"
-          onKeyDown={event => {
-            if (event.key === 'Enter' || event.key === ' ') {
-              event.preventDefault();
-              handleNavigateDown();
-            }
-          }}
-          onPointerDown={handleNavigateDown}
-          role="button"
-          tabIndex={0}
-        >
-          <ArrowDown aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
-        </div>
       </div>
     </div>
   );

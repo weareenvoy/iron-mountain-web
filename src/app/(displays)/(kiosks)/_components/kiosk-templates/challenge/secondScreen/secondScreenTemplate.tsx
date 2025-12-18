@@ -1,9 +1,8 @@
 'use client';
 
-import { ArrowDown, ArrowUp, Diamond } from 'lucide-react';
+import { Diamond } from 'lucide-react';
 import Image from 'next/image';
 import { DEFAULT_KIOSK_ID, type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
-import { useAutoScrollNavigation } from '../../hooks/useAutoScrollNavigation';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
 // import styles from './secondScreenTemplate.module.css';
@@ -37,12 +36,6 @@ export const SecondScreenTemplate = ({
   subheadline = 'Rich media &\n cultural heritage',
   topImageSrc = imgHero,
 }: SecondScreenTemplateProps) => {
-  const { containerRef, handleNavigateDown, handleNavigateUp } = useAutoScrollNavigation({
-    duration: 800,
-    onNavigateDown,
-    onNavigateUp,
-  });
-
   return (
     <div
       // className={styles.container}
@@ -50,7 +43,6 @@ export const SecondScreenTemplate = ({
       data-hero-image={topImageSrc}
       data-kiosk={kioskId}
       data-node-id="5168:9907"
-      ref={containerRef}
     >
       {/* Background gradient layer */}
       <div className="pointer-events-none absolute inset-0 z-[0] bg-[linear-gradient(to_bottom,#1b75bc_0%,#14477d_100%)]" />
@@ -88,11 +80,14 @@ export const SecondScreenTemplate = ({
 
       {/* Stat Section - SCROLLABLE */}
       <div className="relative z-[2] px-[120px] py-[200px]">
-        <div className="flex w-[940px] flex-col gap-[60px]" data-scroll-section="stat-section">
-          <p className="text-[300px] leading-[1.3] font-[300] tracking-[-15px] whitespace-nowrap text-[#6dcff6]">
+        <div className="flex w-[940px] flex-col gap-[60px]">
+          <span className="text-[300px] leading-[1.3] font-[300] tracking-[-15px] whitespace-nowrap text-[#6dcff6]">
             {renderRegisteredMark(statAmount)}
-          </p>
-          <p className="text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#a8d4f6]">
+          </span>
+          <p
+            className="text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#a8d4f6]"
+            data-scroll-section="stat-description"
+          >
             {renderRegisteredMark(statDescription)}
           </p>
         </div>
@@ -116,40 +111,6 @@ export const SecondScreenTemplate = ({
         >
           {renderRegisteredMark(bottomDescription)}
         </p>
-      </div>
-
-      {/* Fixed Navigation Arrows */}
-      <div className="fixed top-1/2 right-[130px] z-[50] flex -translate-y-1/2 flex-col gap-[100px]">
-        <div
-          aria-label="Previous"
-          className="flex h-[118px] w-[118px] cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95"
-          onKeyDown={event => {
-            if (event.key === 'Enter' || event.key === ' ') {
-              event.preventDefault();
-              handleNavigateUp();
-            }
-          }}
-          onPointerDown={handleNavigateUp}
-          role="button"
-          tabIndex={0}
-        >
-          <ArrowUp aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
-        </div>
-        <div
-          aria-label="Next"
-          className="flex h-[118px] w-[118px] cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95"
-          onKeyDown={event => {
-            if (event.key === 'Enter' || event.key === ' ') {
-              event.preventDefault();
-              handleNavigateDown();
-            }
-          }}
-          onPointerDown={handleNavigateDown}
-          role="button"
-          tabIndex={0}
-        >
-          <ArrowDown aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
-        </div>
       </div>
     </div>
   );
