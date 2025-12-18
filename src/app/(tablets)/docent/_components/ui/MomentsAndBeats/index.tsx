@@ -1,7 +1,7 @@
 'use client';
 
 import { CirclePause, CirclePlay } from 'lucide-react';
-import { useEffect, useState, type MouseEvent } from 'react';
+import { MouseEvent } from 'react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { cn } from '@/lib/tailwind/utils/cn';
@@ -18,17 +18,7 @@ const MomentsAndBeats = ({ content, exhibit, exhibitState, setExhibitState }: Mo
   const { client } = useMqtt();
   const { data } = useDocent();
 
-  const { beatIdx: currentBeatIdx, momentId } = exhibitState;
-
-  // Track whether the currently active video beat is playing or paused
-  // Starts as true (playing) whenever we select a new beat
-  const [videoPlaying, setVideoPlaying] = useState(true);
-
-  // Reset to playing whenever the active beat changes (any navigation)
-  useEffect(() => {
-    // TODO how to not use setState inside of this useEffect?
-    setVideoPlaying(true);
-  }, [exhibitState.momentId, exhibitState.beatIdx]);
+  const { beatIdx: currentBeatIdx, momentId, shouldPlay = true } = exhibitState;
 
   const publishNavigation = (momentId: Section, beatIdx: number) => {
     if (!client) return;
@@ -38,7 +28,7 @@ const MomentsAndBeats = ({ content, exhibit, exhibitState, setExhibitState }: Mo
 
     const beatId = moment.beats[beatIdx].handle;
 
-    // Send goto-beat command to exhibit
+    // Send goto-beat command to exhibit (no play/pause info needed for normal navigation)
     client.gotoBeat(exhibit, beatId as ExhibitBeatId, {
       onError: (err: Error) => console.error(`Failed to send goto-beat to ${exhibit}:`, err),
       onSuccess: () => console.info(`Sent goto-beat: ${beatId} to ${exhibit}`),
@@ -46,7 +36,8 @@ const MomentsAndBeats = ({ content, exhibit, exhibitState, setExhibitState }: Mo
   };
 
   const goTo = (momentId: Section, beatIdx: number) => {
-    setExhibitState({ beatIdx, momentId });
+    // Always start playing when navigating to any beat
+    setExhibitState({ beatIdx, momentId, shouldPlay: true });
     publishNavigation(momentId, beatIdx);
   };
 
@@ -55,14 +46,15 @@ const MomentsAndBeats = ({ content, exhibit, exhibitState, setExhibitState }: Mo
 
     const isCurrentlyActive = momentId === exhibitState.momentId && beatIdx === exhibitState.beatIdx;
 
-    // If we're selecting this video beat (new or re-select), always play
-    // If it's already active, toggle the current play/pause state
-    const playPause = isCurrentlyActive ? !videoPlaying : true;
+    // If clicking a different beat → start playing
+    // If clicking the active video beat → toggle play/pause
+    const newShouldPlay = isCurrentlyActive ? !shouldPlay : true;
 
-    // Update navigation state
-    setExhibitState({ beatIdx, momentId });
-    // Update local video playing state for correct toggling and UI
-    setVideoPlaying(playPause);
+    setExhibitState({
+      beatIdx,
+      momentId,
+      shouldPlay: newShouldPlay,
+    });
 
     if (!client) return;
 
@@ -71,9 +63,9 @@ const MomentsAndBeats = ({ content, exhibit, exhibitState, setExhibitState }: Mo
 
     const beatId = moment.beats[beatIdx].handle;
 
-    client.gotoBeatWithPlayPause(exhibit, beatId as ExhibitBeatId, playPause, {
+    client.gotoBeatWithPlayPause(exhibit, beatId as ExhibitBeatId, newShouldPlay, {
       onError: (err: Error) => console.error(`Failed to send goto-beat with play/pause to ${exhibit}:`, err),
-      onSuccess: () => console.info(`Sent goto-beat with play/pause: ${beatId} (${playPause}) to ${exhibit}`),
+      onSuccess: () => console.info(`Sent goto-beat with play/pause: ${beatId} (${newShouldPlay}) to ${exhibit}`),
     });
   };
 
@@ -86,10 +78,10 @@ const MomentsAndBeats = ({ content, exhibit, exhibitState, setExhibitState }: Mo
     goTo(momentId, beatIdx);
   };
 
-  // Helper to know if the current active beat is a video beat and its playing state
+  // Helper to determine if the current active beat is a video and should show as playing
   const currentMomentObj = content.find(m => m.id === momentId);
   const currentBeatObj = currentMomentObj?.beats[currentBeatIdx];
-  const isCurrentVideoPlaying = currentBeatObj?.type === 'video' && videoPlaying;
+  const isCurrentVideoPlaying = currentBeatObj?.type === 'video' && shouldPlay;
 
   return (
     <div className="flex flex-col gap-6 px-11.5">
@@ -118,7 +110,7 @@ const MomentsAndBeats = ({ content, exhibit, exhibitState, setExhibitState }: Mo
                 const isActiveBeat = isActiveMoment && beatIdx === currentBeatIdx;
                 const isVideoBeat = beat.type === 'video';
 
-                // Determine what text/icon to show on this video beat button
+                // Show pause only on the active video beat when it is playing
                 const showPause = isActiveBeat && isCurrentVideoPlaying;
 
                 return (

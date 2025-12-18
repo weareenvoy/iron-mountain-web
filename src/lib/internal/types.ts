@@ -145,6 +145,8 @@ export const getBeatIdFromSlideIndex = (slideIndex: number, maxSlideIndex: numbe
 export interface ExhibitNavigationState {
   beatIdx: number;
   momentId: Section; // e.g., "welcome", "ascend", "possibilities", "problem"
+  // A single flag for video beats. Only 1 video beat will ever be playing. When navigating away and back to a video beat, we always want to start it playing
+  shouldPlay?: boolean;
 }
 
 // Used in MomentsAndBeats component.

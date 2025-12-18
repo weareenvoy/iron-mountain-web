@@ -4,7 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useRef, useState, ty
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getBasecampData } from '@/lib/internal/data/get-basecamp';
 import { isBasecampSection, type BasecampData, type ExhibitNavigationState, type Locale } from '@/lib/internal/types';
-import type { ExhibitMqttStateSimple } from '@/lib/mqtt/types';
+import type { ExhibitMqttStateBase } from '@/lib/mqtt/types';
 
 interface BasecampContextType {
   data: BasecampData | null;
@@ -44,7 +44,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
 
   // MQTT state (what we report to GEC)
   // Confirm with Lucas whether exhibit sends property available.
-  const [mqttState, setMqttState] = useState<ExhibitMqttStateSimple>({
+  const [mqttState, setMqttState] = useState<ExhibitMqttStateBase>({
     'beat-id': 'ambient-1',
     'tour-id': null,
     'volume-level': 1.0,
@@ -86,7 +86,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
 
   // Helper to report full exhibit state to MQTT
   const reportState = useCallback(
-    (newState: Partial<ExhibitMqttStateSimple>) => {
+    (newState: Partial<ExhibitMqttStateBase>) => {
       if (!client) return;
 
       // Compute updated state first, update ref immediately for consistency
@@ -196,7 +196,6 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     };
 
     // Subscribe to broadcast commands (all exhibits listen to same topics)
-    // TODO Confirm with Lucas. Currently not receiving anything from these topics.
     client.subscribeToTopic('cmd/dev/all/load-tour', handleLoadTour);
     client.subscribeToTopic('cmd/dev/all/end-tour', handleEndTour);
     // Also subscribe to basecamp-specific goto-beat (direct from Docent)
@@ -217,7 +216,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     const handleOwnState = (message: Buffer) => {
       try {
         const msg = JSON.parse(message.toString());
-        const state: ExhibitMqttStateSimple = msg.body;
+        const state: ExhibitMqttStateBase = msg.body;
         console.info('Basecamp: Received own state on boot:', state);
 
         // Update internal MQTT state

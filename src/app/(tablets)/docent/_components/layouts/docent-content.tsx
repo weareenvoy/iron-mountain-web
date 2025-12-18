@@ -32,7 +32,6 @@ const DocentContent = ({ children }: PropsWithChildren) => {
     >
       {children}
 
-      {/* TODO when we click Settings button, ask GEC, GEC will send back latest data */}
       {/* Global Settings Button - Show on all pages except home */}
       {isConnected && !isHomePage && (
         <div className="absolute top-39 right-5 z-50">

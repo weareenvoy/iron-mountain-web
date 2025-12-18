@@ -6,32 +6,13 @@ import { use, useCallback, useEffect, useMemo } from 'react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
+import { getSlideBorderColor } from '@/app/(tablets)/docent/_utils';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import SummitRoomDiamonds from '@/components/ui/icons/SummitRoomDiamonds';
 import { getBeatIdFromSlideIndex, getSlideIndexFromBeatId, type SummitRoomBeatId } from '@/lib/internal/types';
 import { cn } from '@/lib/tailwind/utils/cn';
 
 const INITIAL_BEAT_ID: SummitRoomBeatId = 'journey-intro';
-
-// Confirmed with design that the colors will be hardcoded.
-const getSlideBorderColor = (handle: string): null | string => {
-  switch (handle) {
-    case 'journey-1':
-      return null; // First slide has no border
-    case 'journey-2':
-      return 'border-primary-im-light-blue';
-    case 'journey-3':
-      return 'border-secondary-im-purple';
-    case 'journey-4':
-      return 'border-secondary-im-teal';
-    case 'journey-5':
-      return 'border-secondary-im-orange';
-    case 'journey-6':
-      return 'border-primary-im-mid-blue';
-    default:
-      return null;
-  }
-};
 
 const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room'>) => {
   const { tourId } = use(params);

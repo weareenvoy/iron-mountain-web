@@ -15,10 +15,10 @@ import { type DocentAppState, type SyncState } from '@/app/(tablets)/docent/_typ
 import {
   getExhibitAvailability,
   getTourIdFromGecState,
+  isDocentRoute,
   parseBasecampBeatId,
   parseOverlookBeatId,
   parseSummitBeatId,
-  updateTourIdInPath,
 } from '@/app/(tablets)/docent/_utils';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getDocentData } from '@/lib/internal/data/get-docent';
@@ -138,33 +138,6 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     fetchDocentData();
   }, [fetchDocentData]);
 
-  // Initialize currentTour from URL if we're on a tour page and tours are loaded
-  // This handles the case where user navigates directly to a tour page
-  useEffect(() => {
-    if (isTourDataLoading) return;
-
-    const tourMatch = pathname.match(/^\/docent\/tour\/([^/]+)/);
-    if (tourMatch) {
-      const urlTourId = tourMatch[1];
-      const localeData = dataByLocale[locale];
-      if (!localeData?.tours) return;
-      const tour = localeData.tours.find(t => t.id === urlTourId);
-
-      // Only set if different from current to avoid unnecessary updates
-      if (tour && tour.id !== currentTour?.id) {
-        console.info(`Initializing currentTour from URL: ${urlTourId}`);
-        setCurrentTour(tour);
-      } else if (!tour && currentTour) {
-        // Tour in URL doesn't exist in data, clear currentTour
-        console.warn(`Tour ${urlTourId} from URL not found in tours data`);
-        setCurrentTour(null);
-      }
-    } else if (currentTour && !pathname.includes('/tour/')) {
-      // Not on a tour page anymore, clear currentTour
-      setCurrentTour(null);
-    }
-  }, [pathname, dataByLocale, locale, isTourDataLoading, currentTour]);
-
   // Request sync from GEC when MQTT connects
   useEffect(() => {
     if (!client || !isConnected) return;
@@ -220,7 +193,7 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
         }
 
         // Update tour if provided and different from current
-        // Note: currentTour can also be initialized from URL (see useEffect above)
+        // Get tour-id from any exhibit (they should all match)
         const tourId = getTourIdFromGecState(state);
         const allTours = dataByLocale[locale]?.tours ?? [];
 
@@ -231,12 +204,16 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
             setCurrentTour(tour);
 
             // Update URL if we're on a tour page
-            const newPathname = updateTourIdInPath(pathname, tourId);
-            if (newPathname && newPathname !== pathname) {
-              console.info(`Updating URL from ${pathname} to ${newPathname}`);
-              startTransition(() => {
-                router.replace(newPathname as Parameters<typeof router.replace>[0]);
-              });
+            // Example: /docent/tour/tour-002/basecamp → /docent/tour/tour-004/basecamp
+            if (pathname.includes('/tour/')) {
+              const tourPathRegex = /\/tour\/[^\/]+/;
+              const newPathname = pathname.replace(tourPathRegex, `/tour/${tourId}`);
+              if (newPathname !== pathname && isDocentRoute(newPathname)) {
+                console.info(`Updating URL from ${pathname} to ${newPathname}`);
+                startTransition(() => {
+                  router.replace(newPathname);
+                });
+              }
             }
           }
         }
