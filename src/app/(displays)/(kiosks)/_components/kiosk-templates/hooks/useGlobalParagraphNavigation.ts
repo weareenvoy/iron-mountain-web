@@ -32,8 +32,13 @@ export function useGlobalParagraphNavigation({
 
     const detectAllParagraphs = () => {
       const paragraphElements = Array.from(container.querySelectorAll<HTMLElement>('[data-scroll-section]'));
-      // Filter out paragraphs with no text content
+      // Filter out elements with no text content, BUT keep video/media elements
       const nonEmptyParagraphs = paragraphElements.filter(el => {
+        // Always include video, audio, img, or other media elements
+        if (el.tagName === 'VIDEO' || el.tagName === 'AUDIO' || el.tagName === 'IMG') {
+          return true;
+        }
+        // For text elements, check if they have content
         const textContent = el.textContent?.trim() || '';
         return textContent.length > 0;
       });
@@ -90,8 +95,9 @@ export function useGlobalParagraphNavigation({
       const paragraphTop = targetParagraph.getBoundingClientRect().top;
       const containerRect = container.getBoundingClientRect().top;
 
-      // Add offset to position paragraph near top of screen (e.g., 200px from top)
-      const topOffset = 800;
+      // Use 0 offset for videos (scroll to exact position), 800 for text elements
+      const isVideo = targetParagraph.tagName === 'VIDEO';
+      const topOffset = isVideo ? 0 : 800;
       const targetScroll = containerTop + (paragraphTop - containerRect) - topOffset;
 
       const start = performance.now();

@@ -43,6 +43,7 @@ export const FirstScreenTemplate = ({
           autoPlay
           className="absolute inset-0 h-full w-full object-cover object-center"
           controlsList="nodownload"
+          data-scroll-section="challenge-first-video"
           loop
           muted
           playsInline
@@ -69,25 +70,19 @@ export const FirstScreenTemplate = ({
         </h1>
       </div>
 
-      {/* Problem Description Section - SCROLLABLE */}
+      {/* Problem Description Section */}
       <div className="relative z-[2] px-[120px] py-[150px]">
-        <p
-          className="max-w-[1390px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white group-data-[kiosk=kiosk-2]/kiosk:leading-[1.3] group-data-[kiosk=kiosk-3]/kiosk:text-[80px] group-data-[kiosk=kiosk-3]/kiosk:tracking-[-4px]"
-          data-scroll-section="problem-description"
-        >
+        <p className="max-w-[1390px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white group-data-[kiosk=kiosk-2]/kiosk:leading-[1.3] group-data-[kiosk=kiosk-3]/kiosk:text-[80px] group-data-[kiosk=kiosk-3]/kiosk:tracking-[-4px]">
           {renderRegisteredMark(problemDescription)}
         </p>
       </div>
 
-      {/* Savings Metrics Section - SCROLLABLE */}
+      {/* Savings Metrics Section */}
       <div className="relative z-[2] flex w-full flex-col items-center px-[120px] py-[300px]">
         <span className="text-center text-[400px] leading-[1.3] font-[300] tracking-[-20px] whitespace-nowrap text-[#6dcff6]">
           {renderRegisteredMark(savingsAmount)}
         </span>
-        <p
-          className="mt-[-40px] text-center text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#6dcff6] group-data-[kiosk=kiosk-2]/kiosk:leading-[1.3] group-data-[kiosk=kiosk-3]/kiosk:leading-[1.3]"
-          data-scroll-section="savings-description"
-        >
+        <p className="mt-[-40px] text-center text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#6dcff6] group-data-[kiosk=kiosk-2]/kiosk:leading-[1.3] group-data-[kiosk=kiosk-3]/kiosk:leading-[1.3]">
           {renderRegisteredMark(savingsDescription)}
         </p>
       </div>

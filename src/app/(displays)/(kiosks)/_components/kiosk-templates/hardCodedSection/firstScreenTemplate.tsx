@@ -93,7 +93,10 @@ const HardCodedKiosk1FirstScreenTemplate = ({
       </h2>
 
       {/* Headline */}
-      <h1 className="absolute top-[1250px] left-[250px] w-full text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]">
+      <h1
+        className="absolute top-[1250px] left-[250px] w-full text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]"
+        data-scroll-section="hardcoded-headline"
+      >
         {renderRegisteredMark(headlineText)}
       </h1>
 

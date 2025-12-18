@@ -241,6 +241,7 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
             autoPlay
             className="absolute h-full w-full bg-black object-cover object-center"
             controlsList="nodownload"
+            {...(isOverview ? { 'data-scroll-section': 'value-video' } : {})}
             loop
             muted
             playsInline

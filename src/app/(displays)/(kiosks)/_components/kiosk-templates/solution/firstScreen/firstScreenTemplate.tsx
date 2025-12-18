@@ -50,6 +50,7 @@ const SolutionFirstScreenTemplate = ({
             autoPlay
             className="absolute h-full w-full bg-black object-cover"
             controlsList="nodownload"
+            data-scroll-section="solution-first-video"
             loop
             muted
             playsInline

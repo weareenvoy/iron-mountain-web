@@ -109,7 +109,10 @@ const SolutionFourthScreenTemplate = ({
 
       {/* Title */}
       <div className="absolute top-[1260px] left-[240px] w-[1300px]" style={{ top: '1260px', width: '1300px' }}>
-        <p className="text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]">
+        <p
+          className="text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]"
+          data-scroll-section="solution-fourth-title"
+        >
           {renderRegisteredMark(title)}
         </p>
       </div>

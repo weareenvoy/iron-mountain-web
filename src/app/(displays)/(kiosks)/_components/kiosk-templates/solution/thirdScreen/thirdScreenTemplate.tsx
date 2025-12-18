@@ -144,7 +144,10 @@ const SolutionThirdScreenTemplate = ({
 
       {/* Title */}
       <div className="absolute top-[1210px] left-[240px] w-[1300px] text-white group-data-[kiosk=kiosk-3]/kiosk:top-[1260px]">
-        <p className="text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line">
+        <p
+          className="text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line"
+          data-scroll-section="solution-third-title"
+        >
           {renderRegisteredMark(title)}
         </p>
       </div>

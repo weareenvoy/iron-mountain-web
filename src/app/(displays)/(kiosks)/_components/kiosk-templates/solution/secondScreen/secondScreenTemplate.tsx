@@ -129,7 +129,10 @@ const SolutionSecondScreenTemplate = ({
       </div>
 
       {/* Title */}
-      <p className="absolute top-[1600px] left-[240px] z-[1] text-[100px] leading-[1.3] font-normal tracking-[-5px] text-white">
+      <p
+        className="absolute top-[1600px] left-[240px] z-[1] text-[100px] leading-[1.3] font-normal tracking-[-5px] text-white"
+        data-scroll-section="solution-second-title"
+      >
         {renderRegisteredMark(title)}
       </p>
 
