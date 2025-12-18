@@ -40,7 +40,7 @@ const defaultSteps: readonly Step[] = [
       ],
       imageAlt: 'Intake and assessment illustration',
       imageSrc:
-        'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/intake-and-assessment.webp',
+        'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Intake+and+assessment.webp',
     },
   },
   {
@@ -51,7 +51,7 @@ const defaultSteps: readonly Step[] = [
       ],
       imageAlt: 'Digitization and remediation illustration',
       imageSrc:
-        'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/digitization-and-remediation.webp',
+        'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Digitization+and+remediation.webp',
     },
   },
   {
@@ -62,7 +62,7 @@ const defaultSteps: readonly Step[] = [
       ],
       imageAlt: 'Digital preservation illustration',
       imageSrc:
-        'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/digital-preservation.webp',
+        'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Digital+preservation.webp',
     },
   },
   {
@@ -73,7 +73,7 @@ const defaultSteps: readonly Step[] = [
       ],
       imageAlt: 'Search and discover illustration',
       imageSrc:
-        'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/search-and-discover.webp',
+        'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Search+and+discover.webp',
     },
   },
   {
@@ -84,7 +84,7 @@ const defaultSteps: readonly Step[] = [
       ],
       imageAlt: 'Share, stream and monetize illustration',
       imageSrc:
-        'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/share-stream-and-monetize.webp',
+        'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Share%2C+stream+and+monetize.webp',
     },
   },
 ];
@@ -96,7 +96,7 @@ const defaultModal: ModalContent = {
   heading: 'Digital preservation',
   imageAlt: 'Digital preservation illustration',
   imageSrc:
-    'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/digital-preservation.webp',
+    'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Digital+preservation.webp',
 };
 
 const textDefaults = {
