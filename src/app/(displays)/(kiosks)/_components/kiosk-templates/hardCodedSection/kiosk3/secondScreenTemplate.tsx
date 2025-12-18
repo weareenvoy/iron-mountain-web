@@ -52,7 +52,11 @@ const HardCodedKiosk3SecondScreenTemplate = ({
   );
 
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-hidden" data-node-id="5896:13301">
+    <div
+      className="relative flex h-screen w-full flex-col overflow-hidden"
+      data-node-id="5896:13301"
+      data-scroll-section="hardcoded-second-screen"
+    >
       <div className="absolute inset-0 bg-transparent" style={{ background: 'transparent' }} />
 
       {/* Diamond video */}

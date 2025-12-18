@@ -27,7 +27,8 @@ export type HardCodedScreens = Readonly<{
 
 export const buildHardcodedSlides = (
   hardCoded: HardCodedScreens,
-  kioskId: 'kiosk-1' | 'kiosk-2' | 'kiosk-3'
+  kioskId: 'kiosk-1' | 'kiosk-2' | 'kiosk-3',
+  scrollToSection?: (sectionId: string) => void
 ): Slide[] => {
   if (kioskId === 'kiosk-2') return [];
 
@@ -38,7 +39,11 @@ export const buildHardcodedSlides = (
       id: 'hardcoded-first',
       render: (isActive: boolean) => (
         <SectionSlide isActive={isActive}>
-          <HardCodedFirstScreenTemplate kioskId={kioskId} {...hardCoded.firstScreen} />
+          <HardCodedFirstScreenTemplate
+            kioskId={kioskId}
+            {...hardCoded.firstScreen}
+            onPrimaryCta={() => scrollToSection?.('hardcoded-second-screen')}
+          />
         </SectionSlide>
       ),
       title: 'Hardcoded First',
@@ -53,7 +58,7 @@ export const buildHardcodedSlides = (
       id: 'hardcoded-second',
       render: (isActive: boolean) => (
         <SectionSlide isActive={isActive}>
-          <KioskSecond {...hardCoded.secondScreen} />
+          <KioskSecond {...hardCoded.secondScreen} onBack={() => scrollToSection?.('hardcoded-first-screen')} />
         </SectionSlide>
       ),
       title: 'Hardcoded Second',

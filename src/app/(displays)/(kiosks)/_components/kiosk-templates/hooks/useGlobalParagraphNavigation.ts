@@ -10,6 +10,7 @@ export interface UseGlobalParagraphNavigationOptions {
 export interface UseGlobalParagraphNavigationReturn {
   handleNavigateDown: () => void;
   handleNavigateUp: () => void;
+  scrollToSectionById: (sectionId: string) => void;
 }
 
 /**
@@ -89,15 +90,23 @@ export function useGlobalParagraphNavigation({
 
       isScrollingRef.current = true;
       const targetParagraph = allParagraphs[index];
+
+      // Guard against undefined element
+      if (!targetParagraph) {
+        isScrollingRef.current = false;
+        return;
+      }
+
       const containerTop = container.scrollTop;
 
       // Get the absolute position of the paragraph relative to the container
       const paragraphTop = targetParagraph.getBoundingClientRect().top;
       const containerRect = container.getBoundingClientRect().top;
 
-      // Use 0 offset for videos (scroll to exact position), 800 for text elements
+      // Use 0 offset for videos and root container divs (scroll to exact position), 800 for text elements
       const isVideo = targetParagraph.tagName === 'VIDEO';
-      const topOffset = isVideo ? 0 : 800;
+      const isRootDiv = targetParagraph.tagName === 'DIV' && targetParagraph.classList.contains('h-screen');
+      const topOffset = isVideo || isRootDiv ? 0 : 800;
       const targetScroll = containerTop + (paragraphTop - containerRect) - topOffset;
 
       const start = performance.now();
@@ -144,8 +153,20 @@ export function useGlobalParagraphNavigation({
     // If we're at the beginning, do nothing (or could loop to end)
   }, [currentIndex, scrollToParagraph]);
 
+  // Scroll to a specific section by its data-scroll-section ID
+  const scrollToSectionById = useCallback(
+    (sectionId: string) => {
+      const index = allParagraphs.findIndex(el => el.getAttribute('data-scroll-section') === sectionId);
+      if (index !== -1) {
+        scrollToParagraph(index);
+      }
+    },
+    [allParagraphs, scrollToParagraph]
+  );
+
   return {
     handleNavigateDown,
     handleNavigateUp,
+    scrollToSectionById,
   };
 }

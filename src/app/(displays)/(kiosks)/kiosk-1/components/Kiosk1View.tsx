@@ -29,7 +29,7 @@ const Kiosk1View = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Global paragraph navigation
-  const { handleNavigateDown, handleNavigateUp } = useGlobalParagraphNavigation({
+  const { handleNavigateDown, handleNavigateUp, scrollToSectionById } = useGlobalParagraphNavigation({
     containerRef,
     duration: 800,
   });
@@ -52,7 +52,7 @@ const Kiosk1View = () => {
     ...buildChallengeSlides(challenges, 'kiosk-1', { ...controller, ...globalHandlers }),
     ...buildSolutionSlides(solutions, 'kiosk-1', { ...controller, ...globalHandlers }),
     ...buildValueSlides(values, 'kiosk-1', { ...controller, ...globalHandlers }),
-    ...buildHardcodedSlides(hardCoded, 'kiosk-1'),
+    ...buildHardcodedSlides(hardCoded, 'kiosk-1', scrollToSectionById),
   ];
 
   const scrollToSlide = useCallback((index: number) => {

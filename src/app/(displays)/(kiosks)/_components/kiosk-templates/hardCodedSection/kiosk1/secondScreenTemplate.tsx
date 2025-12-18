@@ -260,6 +260,7 @@ const HardCodedKiosk1SecondScreenTemplate = ({
       <div
         className="relative flex h-screen w-full flex-col overflow-hidden"
         data-node-id="hardcoded-k1-second"
+        data-scroll-section="hardcoded-second-screen"
         ref={containerRef}
         style={{ background: 'transparent', overflow: 'visible' }}
       >

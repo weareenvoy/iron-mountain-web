@@ -77,6 +77,7 @@ const HardCodedKiosk1FirstScreenTemplate = ({
     <div
       className="relative flex h-screen w-full flex-col overflow-hidden"
       data-node-id="5893:7411"
+      data-scroll-section="hardcoded-first-screen"
       style={isKiosk1 || isKiosk3 ? { overflow: 'visible' } : undefined}
     >
       <div
