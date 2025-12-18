@@ -2,24 +2,6 @@ import summitStatic from '@public/api/summit.json';
 import { getLocaleForTesting, shouldUseStaticPlaceholderData } from '@/flags/flags';
 import type { SummitApiResponse, SummitDataResponse } from '@/lib/internal/types';
 
-const hasMinimumSummitFields = (data: null | Partial<SummitDataResponse['data']> | undefined) => {
-  if (!data?.basecamp || !data.overlook || !data.kiosk1 || !data.kiosk2 || !data.kiosk3) return false;
-
-  const basecamp = data.basecamp as Partial<SummitDataResponse['data']['basecamp']>;
-  const kiosk1 = data.kiosk1 as Partial<SummitDataResponse['data']['kiosk1']>;
-  const kiosk2 = data.kiosk2 as Partial<SummitDataResponse['data']['kiosk2']>;
-  const kiosk3 = data.kiosk3 as Partial<SummitDataResponse['data']['kiosk3']>;
-
-  const hasProblem1 = Boolean(basecamp.problem1?.title);
-  const hasProblem2 = Array.isArray(basecamp.problem2) && basecamp.problem2.length > 0;
-  const challenges = basecamp.problem3?.challenges;
-  const hasProblem3 = Array.isArray(challenges) && challenges.length > 0;
-  const hasKiosks = Boolean(kiosk1.ambient && kiosk2.ambient && kiosk3.ambient);
-  const hasSlides = Array.isArray(data.summitSlides) && data.summitSlides.length > 0;
-
-  return hasProblem1 && hasProblem2 && hasProblem3 && hasKiosks && hasSlides;
-};
-
 const pickSummitData = (
   rawData: SummitApiResponse | { readonly data: unknown; readonly locale?: string },
   locale: string,
@@ -46,10 +28,6 @@ const resolveSummitData = (
 
   if (!data) {
     throw new Error(`Missing data for locale: ${locale}`);
-  }
-
-  if (!hasMinimumSummitFields(data) && hasMinimumSummitFields(staticFallback)) {
-    return staticFallback!;
   }
 
   return data;
