@@ -146,7 +146,11 @@
         }
       },
       "summitSlides": [
-        { "handle": "journey-intro", "title": "Launch your journey" },
+        {
+          "backgroundVideoUrl": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/summit/IRM_Summit_MountainLoop_V1.webm",
+          "handle": "journey-intro",
+          "title": "Launch your journey"
+        },
         { "handle": "journey-1", "title": "Your personalized journey map" },
         { "handle": "journey-3", "title": "Considering possibilities" },
         { "handle": "journey-4", "title": "Relevant solutions" },

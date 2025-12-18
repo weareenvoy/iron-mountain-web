@@ -382,13 +382,16 @@ const SummitSlidesScreen = ({
   }
 
   if (screen === 'primary') {
+    const journeyIntroSlide = summitSlides.find(slide => slide.handle === 'journey-intro');
+    const journeyIntroVideo = journeyIntroSlide?.backgroundVideoUrl ?? journeyIntroSlide?.videoUrl ?? WELCOME_BG_VIDEO;
+
     return (
       <StaticWelcomeSlide
         company={metaItems.find(item => item.label.toLowerCase() === 'company')?.value ?? 'Company'}
         elevation="Elevation 760 m (2,493.4 ft)"
         location={metaItems.find(item => item.label.toLowerCase() === 'location')?.value ?? ''}
-        title={summitSlides.find(slide => slide.handle === 'journey-intro')?.title ?? 'Welcome to Iron Mountain'}
-        videoUrl={summitSlides.find(slide => slide.handle === 'journey-intro')?.videoUrl}
+        title={journeyIntroSlide?.title ?? 'Welcome to Iron Mountain'}
+        videoUrl={journeyIntroVideo}
       />
     );
   }
