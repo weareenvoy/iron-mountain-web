@@ -1,9 +1,8 @@
 'use client';
 
 import useEmblaCarousel from 'embla-carousel-react';
-import { ArrowDown, ArrowUp } from 'lucide-react';
 import Image from 'next/image';
-import { useId, type ComponentType, type CSSProperties, type SVGProps } from 'react';
+import { useEffect, useId, type ComponentType, type CSSProperties, type SVGProps } from 'react';
 import BlueFilledDiamond from '@/components/ui/icons/Kiosks/Solutions/BlueFilledDiamond';
 import OrangeFilledDiamond from '@/components/ui/icons/Kiosks/Solutions/OrangeFilledDiamond';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
@@ -111,6 +110,12 @@ export type ValueCarouselTemplateProps = Readonly<{
   labelText?: string;
   onNavigateDown?: () => void;
   onNavigateUp?: () => void;
+  onRegisterCarouselHandlers?: (handlers: {
+    canScrollNext: () => boolean;
+    canScrollPrev: () => boolean;
+    scrollNext: () => void;
+    scrollPrev: () => void;
+  }) => void;
   slides?: readonly ValueCarouselSlide[];
 }>;
 
@@ -188,6 +193,7 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
     labelText = defaultLabelText,
     onNavigateDown,
     onNavigateUp,
+    onRegisterCarouselHandlers,
     slides,
   } = props;
   const generatedId = useId();
@@ -211,6 +217,18 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
   const carouselColumnStyle: CSSProperties | undefined = hasCarouselSlides
     ? { alignSelf: 'baseline', left: -330, position: 'relative' }
     : undefined;
+
+  // Register carousel handlers with parent when emblaApi is ready
+  useEffect(() => {
+    if (emblaApi && onRegisterCarouselHandlers) {
+      onRegisterCarouselHandlers({
+        canScrollNext: () => emblaApi.canScrollNext(),
+        canScrollPrev: () => emblaApi.canScrollPrev(),
+        scrollNext: () => emblaApi.scrollNext(),
+        scrollPrev: () => emblaApi.scrollPrev(),
+      });
+    }
+  }, [emblaApi, onRegisterCarouselHandlers]);
 
   const handleArrowUp = () => {
     if (emblaApi?.canScrollPrev()) {
@@ -287,7 +305,11 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
         <div className="flex flex-col gap-[360px] text-[#8a0d71]" style={{ position: 'relative', top: -10 }}>
           <div>
             <p className="text-[100px] leading-[1.3] font-normal tracking-[-5px]">{renderRegisteredMark(headline)}</p>
-            <p className="mt-[80px] text-[60px] leading-[1.4] font-normal tracking-[-3px]" style={{ width: '1480px' }}>
+            <p
+              className="mt-[80px] text-[60px] leading-[1.4] font-normal tracking-[-3px]"
+              {...(!isOverview ? { 'data-scroll-section': 'value-description' } : {})}
+              style={{ width: '1480px' }}
+            >
               {renderRegisteredMark(normalizeMultiline(description))}
             </p>
           </div>
@@ -324,38 +346,6 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
             </div>
           </div>
         </div>
-      </div>
-
-      <div
-        aria-label="Previous"
-        className="absolute top-[1755px] right-[120px] z-[10] flex h-[118px] w-[118px] items-center justify-center text-[#58595B]"
-        data-node-id="5688:12459"
-        onKeyDown={event => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            handleArrowUp();
-          }
-        }}
-        onPointerDown={handleArrowUp}
-        role="button"
-        tabIndex={0}
-      >
-        <ArrowUp aria-hidden="true" className="h-full w-full" focusable="false" strokeWidth={1.5} />
-      </div>
-      <div
-        aria-label="Next"
-        className="absolute top-[1980px] right-[120px] z-[10] flex h-[118px] w-[118px] items-center justify-center text-[#58595B]"
-        onKeyDown={event => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            handleArrowDown();
-          }
-        }}
-        onPointerDown={handleArrowDown}
-        role="button"
-        tabIndex={0}
-      >
-        <ArrowDown aria-hidden="true" className="h-full w-full" focusable="false" strokeWidth={1.5} />
       </div>
     </div>
   );

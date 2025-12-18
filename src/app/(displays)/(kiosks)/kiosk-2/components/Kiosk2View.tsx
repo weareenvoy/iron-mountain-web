@@ -27,11 +27,45 @@ const Kiosk2View = () => {
   const [allowArrowsToShow, setAllowArrowsToShow] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Store carousel handlers for value section
+  const carouselHandlersRef = useRef<{
+    canScrollNext: () => boolean;
+    canScrollPrev: () => boolean;
+    scrollNext: () => void;
+    scrollPrev: () => void;
+  } | null>(null);
+
   // Global paragraph navigation
-  const { handleNavigateDown, handleNavigateUp, isScrolling, currentScrollTarget } = useGlobalParagraphNavigation({
+  const {
+    handleNavigateDown: baseHandleNavigateDown,
+    handleNavigateUp: baseHandleNavigateUp,
+    isScrolling,
+    currentScrollTarget,
+  } = useGlobalParagraphNavigation({
     containerRef,
     duration: 800,
   });
+
+  // Wrap navigation handlers to check carousel first
+  const handleNavigateDown = useCallback(() => {
+    // If we're at value-description and carousel can scroll, let carousel handle it
+    if (currentScrollTarget === 'value-description' && carouselHandlersRef.current?.canScrollNext()) {
+      carouselHandlersRef.current.scrollNext();
+      return;
+    }
+
+    baseHandleNavigateDown();
+  }, [baseHandleNavigateDown, currentScrollTarget]);
+
+  const handleNavigateUp = useCallback(() => {
+    // If carousel can scroll back, let it handle the navigation
+    if (currentScrollTarget === 'value-description' && carouselHandlersRef.current?.canScrollPrev()) {
+      carouselHandlersRef.current.scrollPrev();
+      return;
+    }
+
+    baseHandleNavigateUp();
+  }, [baseHandleNavigateUp, currentScrollTarget]);
 
   const challenges: KioskChallenges = parseKioskChallenges(kioskContent.challenges, 'kiosk-2');
   const solutions = kioskContent.solutions as SolutionScreens;
@@ -57,7 +91,16 @@ const Kiosk2View = () => {
       }
     ),
     ...buildSolutionSlides(solutions, 'kiosk-2', { ...controller, ...globalHandlers }),
-    ...buildValueSlides(values, 'kiosk-2', { ...controller, ...globalHandlers }),
+    ...buildValueSlides(
+      values,
+      'kiosk-2',
+      { ...controller, ...globalHandlers },
+      {
+        onRegisterCarouselHandlers: handlers => {
+          carouselHandlersRef.current = handlers;
+        },
+      }
+    ),
   ];
 
   // Show arrows only after scroll completes (INITIAL APPEARANCE from button click)
@@ -74,31 +117,32 @@ const Kiosk2View = () => {
   // Handle arrows reappearing after scrolling to videos in other sections (solution, value)
   const [wasScrollingToVideo, setWasScrollingToVideo] = useState(false);
   const [previousScrollTarget, setPreviousScrollTarget] = useState<string | null>(null);
-  const [wasAtVideoBeforeInitial, setWasAtVideoBeforeInitial] = useState(false);
+  const [shouldResetOnInitial, setShouldResetOnInitial] = useState(false);
 
-  // Track previous scroll target
+  // Track previous scroll target and detect leaving video for initial screen
   useEffect(() => {
     if (currentScrollTarget !== previousScrollTarget) {
-      // Track if we're leaving the video
-      if (previousScrollTarget === 'challenge-first-video' && currentScrollTarget !== 'challenge-first-video') {
-        setWasAtVideoBeforeInitial(true);
+      // If we're leaving the video and going to "nothing" (initial screen), AND we're at initial screen, set reset flag
+      if (previousScrollTarget === 'challenge-first-video' && !currentScrollTarget && isInitialScreen) {
+        setShouldResetOnInitial(true);
       }
-      // Reset if we move to any other scroll section (not the initial screen)
-      if (currentScrollTarget && currentScrollTarget !== 'challenge-first-video') {
-        setWasAtVideoBeforeInitial(false);
+      // Clear the flag if we go to any other scroll section
+      else if (currentScrollTarget) {
+        setShouldResetOnInitial(false);
       }
+
       setPreviousScrollTarget(currentScrollTarget);
     }
-  }, [currentScrollTarget, previousScrollTarget]);
+  }, [currentScrollTarget, previousScrollTarget, isInitialScreen]);
 
-  // Reset arrow state when navigating back to initial screen - BUT ONLY if we came directly from the video
+  // Reset arrow state when we arrive at initial screen AND the flag is set
   useEffect(() => {
-    if (isInitialScreen && wasAtVideoBeforeInitial) {
+    if (isInitialScreen && shouldResetOnInitial && showArrows) {
       setShowArrows(false);
       setAllowArrowsToShow(false);
-      setWasAtVideoBeforeInitial(false); // Reset the flag
+      setShouldResetOnInitial(false);
     }
-  }, [isInitialScreen, wasAtVideoBeforeInitial]);
+  }, [isInitialScreen, shouldResetOnInitial, showArrows]);
 
   useEffect(() => {
     const isScrollingToVideo =

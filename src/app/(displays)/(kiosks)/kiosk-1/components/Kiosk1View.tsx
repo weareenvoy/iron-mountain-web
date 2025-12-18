@@ -31,12 +31,46 @@ const Kiosk1View = () => {
   const [allowArrowsToShow, setAllowArrowsToShow] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Store carousel handlers for value section
+  const carouselHandlersRef = useRef<{
+    canScrollNext: () => boolean;
+    canScrollPrev: () => boolean;
+    scrollNext: () => void;
+    scrollPrev: () => void;
+  } | null>(null);
+
   // Global paragraph navigation
-  const { handleNavigateDown, handleNavigateUp, scrollToSectionById, isScrolling, currentScrollTarget } =
-    useGlobalParagraphNavigation({
-      containerRef,
-      duration: 800,
-    });
+  const {
+    handleNavigateDown: baseHandleNavigateDown,
+    handleNavigateUp: baseHandleNavigateUp,
+    scrollToSectionById,
+    isScrolling,
+    currentScrollTarget,
+  } = useGlobalParagraphNavigation({
+    containerRef,
+    duration: 800,
+  });
+
+  // Wrap navigation handlers to check carousel first
+  const handleNavigateDown = useCallback(() => {
+    // If we're at value-description and carousel can scroll, let carousel handle it
+    if (currentScrollTarget === 'value-description' && carouselHandlersRef.current?.canScrollNext()) {
+      carouselHandlersRef.current.scrollNext();
+      return;
+    }
+
+    baseHandleNavigateDown();
+  }, [baseHandleNavigateDown, currentScrollTarget]);
+
+  const handleNavigateUp = useCallback(() => {
+    // If carousel can scroll back, let it handle the navigation
+    if (currentScrollTarget === 'value-description' && carouselHandlersRef.current?.canScrollPrev()) {
+      carouselHandlersRef.current.scrollPrev();
+      return;
+    }
+
+    baseHandleNavigateUp();
+  }, [baseHandleNavigateUp, currentScrollTarget]);
 
   const challenges: KioskChallenges = parseKioskChallenges(
     mapChallenges(kioskContent.data.challenge, kioskContent.data.ambient),
@@ -65,7 +99,16 @@ const Kiosk1View = () => {
       }
     ),
     ...buildSolutionSlides(solutions, 'kiosk-1', { ...controller, ...globalHandlers }),
-    ...buildValueSlides(values, 'kiosk-1', { ...controller, ...globalHandlers }),
+    ...buildValueSlides(
+      values,
+      'kiosk-1',
+      { ...controller, ...globalHandlers },
+      {
+        onRegisterCarouselHandlers: handlers => {
+          carouselHandlersRef.current = handlers;
+        },
+      }
+    ),
     ...buildHardcodedSlides(hardCoded, 'kiosk-1', scrollToSectionById),
   ];
 
@@ -81,13 +124,30 @@ const Kiosk1View = () => {
 
   // Track arrow color and persist it during fade transitions
   const [arrowColor, setArrowColor] = useState('#6DCFF6');
+  const [wasInValueSection, setWasInValueSection] = useState(false);
 
   useEffect(() => {
-    // Only update color when arrows are visible (not during fade out)
-    if (showArrows) {
-      setArrowColor(isValueSection ? '#58595B' : '#6DCFF6');
+    // Track if we were in value section
+    if (isValueSection) {
+      setWasInValueSection(true);
+    } else if (!currentScrollTarget || !currentScrollTarget.includes('hardcoded-')) {
+      // Only clear the flag if we're not transitioning to hardcoded
+      setWasInValueSection(false);
     }
-  }, [isValueSection, showArrows]);
+  }, [isValueSection, currentScrollTarget]);
+
+  useEffect(() => {
+    // Only update color when arrows are visible AND not scrolling to hardcoded
+    const isScrollingToHardcoded = currentScrollTarget && currentScrollTarget.includes('hardcoded-');
+    
+    if (showArrows && !isScrollingToHardcoded) {
+      // Use current value section status
+      setArrowColor(isValueSection ? '#58595B' : '#6DCFF6');
+    } else if (showArrows && isScrollingToHardcoded && wasInValueSection) {
+      // Preserve gray color when transitioning from value to hardcoded
+      setArrowColor('#58595B');
+    }
+  }, [isValueSection, showArrows, currentScrollTarget, wasInValueSection]);
 
   // Show arrows only after scroll completes (INITIAL APPEARANCE from button click)
   useEffect(() => {
@@ -103,31 +163,32 @@ const Kiosk1View = () => {
   // Handle arrows reappearing after scrolling to videos in other sections (solution, value)
   const [wasScrollingToVideo, setWasScrollingToVideo] = useState(false);
   const [previousScrollTarget, setPreviousScrollTarget] = useState<string | null>(null);
-  const [wasAtVideoBeforeInitial, setWasAtVideoBeforeInitial] = useState(false);
+  const [shouldResetOnInitial, setShouldResetOnInitial] = useState(false);
 
-  // Track previous scroll target
+  // Track previous scroll target and detect leaving video for initial screen
   useEffect(() => {
     if (currentScrollTarget !== previousScrollTarget) {
-      // Track if we're leaving the video
-      if (previousScrollTarget === 'challenge-first-video' && currentScrollTarget !== 'challenge-first-video') {
-        setWasAtVideoBeforeInitial(true);
+      // If we're leaving the video and going to "nothing" (initial screen), AND we're at initial screen, set reset flag
+      if (previousScrollTarget === 'challenge-first-video' && !currentScrollTarget && isInitialScreen) {
+        setShouldResetOnInitial(true);
       }
-      // Reset if we move to any other scroll section (not the initial screen)
-      if (currentScrollTarget && currentScrollTarget !== 'challenge-first-video') {
-        setWasAtVideoBeforeInitial(false);
+      // Clear the flag if we go to any other scroll section
+      else if (currentScrollTarget) {
+        setShouldResetOnInitial(false);
       }
+
       setPreviousScrollTarget(currentScrollTarget);
     }
-  }, [currentScrollTarget, previousScrollTarget]);
+  }, [currentScrollTarget, previousScrollTarget, isInitialScreen]);
 
-  // Reset arrow state when navigating back to initial screen - BUT ONLY if we came directly from the video
+  // Reset arrow state when we arrive at initial screen AND the flag is set
   useEffect(() => {
-    if (isInitialScreen && wasAtVideoBeforeInitial) {
+    if (isInitialScreen && shouldResetOnInitial && showArrows) {
       setShowArrows(false);
       setAllowArrowsToShow(false);
-      setWasAtVideoBeforeInitial(false); // Reset the flag
+      setShouldResetOnInitial(false);
     }
-  }, [isInitialScreen, wasAtVideoBeforeInitial]);
+  }, [isInitialScreen, shouldResetOnInitial, showArrows]);
 
   useEffect(() => {
     const isScrollingToVideo =
@@ -262,7 +323,7 @@ const Kiosk1View = () => {
                 className="h-full w-full"
                 focusable="false"
                 strokeWidth={1.5}
-                style={{ color: isValueSection ? '#58595b' : '#6DCFF6' }}
+                style={{ color: arrowColor }}
               />
             </div>
             <div

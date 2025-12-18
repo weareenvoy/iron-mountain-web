@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowDown, ArrowUp, Minus, Plus } from 'lucide-react';
+import { Minus, Plus } from 'lucide-react';
 import Image from 'next/image';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/shadcn/accordion';
 import GreenDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondFourth';
@@ -262,38 +262,6 @@ const SolutionFourthScreenTemplate = ({
         <div className="pointer-events-none absolute top-[4680px] left-[240px] h-[880px] w-[880px]">
           <OrangeDiamondFourth aria-hidden="true" className="h-full w-full" focusable="false" />
         </div>
-      </div>
-
-      {/* Navigation arrows */}
-      <div
-        aria-label="Previous"
-        className="absolute top-[1755px] right-[120px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
-        onKeyDown={event => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            onNavigateUp?.();
-          }
-        }}
-        onPointerDown={() => onNavigateUp?.()}
-        role="button"
-        tabIndex={0}
-      >
-        <ArrowUp aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
-      </div>
-      <div
-        aria-label="Next"
-        className="absolute top-[1980px] right-[120px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
-        onKeyDown={event => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            onNavigateDown?.();
-          }
-        }}
-        onPointerDown={() => onNavigateDown?.()}
-        role="button"
-        tabIndex={0}
-      >
-        <ArrowDown aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
       </div>
     </div>
   );
