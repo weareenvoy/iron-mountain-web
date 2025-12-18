@@ -3,14 +3,12 @@
     "locale": "en",
     "data": {
       "meta": [
-        {"label": "Company", "value": "Boyer-Boyer"},
-        {"label": "Date of engagement", "value":"24/12/2025"},
-        {"label": "Location", "value":"São Paulo, BR"}
+        { "label": "Company", "value": "Boyer-Boyer" },
+        { "label": "Date of engagement", "value": "24/12/2025" },
+        { "label": "Location", "value": "São Paulo, BR" }
       ],
       "basecamp": {
-        "possibilities": {
-          "title": "Discover new possibilities"
-        },
+        "possibilities": { "title": "Discover new possibilities" },
         "possibilitiesA": {
           "body1": "Inventory and prioritize high-value content collections.",
           "body2": "Retire redundant repositories to reduce cost and risk.",
@@ -29,22 +27,11 @@
           "body3": "Extend zero-trust controls across hybrid estates.",
           "title": "Optimizing your assets"
         },
-        "problem1": {
-          "title": "What's standing in your way?"
-        },
+        "problem1": { "title": "What's standing in your way?" },
         "problem2": [
-          {
-            "subtitle": "of data remains dark",
-            "title": "80%"
-          },
-          {
-            "subtitle": "of new data is unstructured",
-            "title": "80-90%"
-          },
-          {
-            "subtitle": "of enterprise data is leveraged for AI",
-            "title": "< 1%"
-          }
+          { "subtitle": "of data remains dark", "title": "80%" },
+          { "subtitle": "of new data is unstructured", "title": "80-90%" },
+          { "subtitle": "of enterprise data is leveraged for AI", "title": "< 1%" }
         ],
         "problem3": {
           "challenges": [
@@ -159,30 +146,16 @@
         }
       },
       "summitSlides": [
-          {
-            "handle": "journey-intro",
-            "title": "Launch your journey"
-          },
-          {
-            "handle": "journey-1",
-            "title": "Your personalized journey map"
-          },
-          {
-            "handle": "journey-3",
-            "title": "Considering possibilities"
-          },
-          {
-            "handle": "journey-4",
-            "title": "Relevant solutions"
-          },
-          {
-            "handle": "journey-5",
-            "title": "Unlock your future"
-          },
-          {
-            "handle": "journey-6",
-            "title": "Stories of impact"
-          }
+        {
+          "backgroundVideoUrl": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/summit/IRM_Summit_MountainLoop_V1.webm",
+          "handle": "journey-intro",
+          "title": "Launch your journey"
+        },
+        { "handle": "journey-1", "title": "Your personalized journey map" },
+        { "handle": "journey-3", "title": "Considering possibilities" },
+        { "handle": "journey-4", "title": "Relevant solutions" },
+        { "handle": "journey-5", "title": "Unlock your future" },
+        { "handle": "journey-6", "title": "Stories of impact" }
       ],
       "protectTitle": "Protect",
       "connectTitle": "Connect",
