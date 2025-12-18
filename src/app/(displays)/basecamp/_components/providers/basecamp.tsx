@@ -46,7 +46,6 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
   // Confirm with Lucas whether exhibit sends property available.
   const [mqttState, setMqttState] = useState<ExhibitMqttStateBase>({
     'beat-id': 'ambient-1',
-    'tour-id': null,
     'volume-level': 1.0,
     'volume-muted': false,
   });
@@ -125,7 +124,6 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
             setExhibitState({ beatIdx: 0, momentId: 'ambient' });
             reportState({
               'beat-id': 'ambient-1',
-              'tour-id': tourId,
               'volume-level': 1.0,
               'volume-muted': false,
             });
@@ -146,7 +144,6 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
       setExhibitState({ beatIdx: 0, momentId: 'ambient' });
       reportState({
         'beat-id': 'ambient-1',
-        'tour-id': null,
         'volume-level': 0.0,
         'volume-muted': false,
       });
@@ -239,9 +236,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
         }
 
         // Fetch content if we have a tour loaded
-        if (state['tour-id']) {
-          fetchData();
-        }
+        fetchData();
         // We just need to get retained state once, so unsubscribe after we got the state
         client.unsubscribeFromTopic('state/basecamp', handleOwnState);
       } catch (error) {

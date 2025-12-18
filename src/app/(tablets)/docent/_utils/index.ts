@@ -46,22 +46,8 @@ export const parseSummitBeatId = (beatId: string): null | SummitRoomBeatId => {
   return isValidSummitRoomBeatId(beatId) ? beatId : null;
 };
 
-export const getExhibitAvailability = (docentAppState: DocentAppState | null) => {
-  return {
-    basecamp: !!docentAppState?.exhibits?.basecamp,
-    overlook: !!docentAppState?.exhibits?.overlook,
-    overlookTablet: !!docentAppState?.exhibits?.summit,
-    summit: !!docentAppState?.exhibits?.summit,
-  } as const;
-};
-
 export const getTourIdFromGecState = (state: DocentAppState): null | string => {
-  return (
-    state.exhibits?.basecamp?.['tour-id'] ||
-    state.exhibits?.overlook?.['tour-id'] ||
-    state.exhibits?.summit?.['tour-id'] ||
-    null
-  );
+  return state['tour-id'] || null;
 };
 
 // Check if a path is a valid docent route

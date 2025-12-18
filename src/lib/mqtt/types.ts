@@ -30,10 +30,15 @@ export interface MqttMessage<T = unknown> {
 export interface ExhibitMqttStateBase {
   'beat-id': string; // e.g., "ambient-1", "welcome-3", "loading", "error"
   'playpause'?: boolean; // Only matters to overlook, but every exhibit has this property.
-  'tour-id'?: null | string;
+  'presentation-mode'?: boolean; // Only matters to overlook.
   'volume-level': number; // 0.0 to 1.0
   'volume-muted': boolean;
 }
+
+// Exhibits do not report this property back to GEC.
 export interface ExhibitMqttState extends ExhibitMqttStateBase {
   available: boolean;
+}
+export interface ExhibitMqttStateSummit extends ExhibitMqttStateBase {
+  'tour-id'?: null | string; // Only summit website needs it to fetch the correct data.
 }

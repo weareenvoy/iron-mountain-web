@@ -7,13 +7,12 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useRef,
+  useMemo,
   useState,
   type PropsWithChildren,
 } from 'react';
 import { type DocentAppState, type SyncState } from '@/app/(tablets)/docent/_types';
 import {
-  getExhibitAvailability,
   getTourIdFromGecState,
   isDocentRoute,
   parseBasecampBeatId,
@@ -22,7 +21,14 @@ import {
 } from '@/app/(tablets)/docent/_utils';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getDocentData } from '@/lib/internal/data/get-docent';
-import type { DocentData, ExhibitNavigationState, Locale, SummitRoomBeatId, Tour } from '@/lib/internal/types';
+import type {
+  DocentData,
+  ExhibitBeatId,
+  ExhibitNavigationState,
+  Locale,
+  SummitRoomBeatId,
+  Tour,
+} from '@/lib/internal/types';
 
 export interface DocentContextType {
   readonly basecampExhibitState: ExhibitNavigationState;
@@ -30,13 +36,6 @@ export interface DocentContextType {
   readonly data: DocentData | null;
   // Full state from GEC (combines tour, UI mode, exhibit settings)
   readonly docentAppState: DocentAppState | null;
-  // Exhibit availability status
-  readonly exhibitAvailability: {
-    readonly basecamp: boolean;
-    readonly overlook: boolean;
-    readonly overlookTablet: boolean;
-    readonly summit: boolean;
-  };
   readonly isConnected: boolean;
   readonly isGecStateLoading: boolean;
   readonly isSettingsOpen: boolean;
@@ -50,6 +49,7 @@ export interface DocentContextType {
   readonly setIsSettingsOpen: (open: boolean) => void;
   readonly setLocale: (locale: Locale) => void;
   readonly setOverlookExhibitState: (state: Partial<ExhibitNavigationState>) => void;
+  readonly setOverlookPresentationMode: (presentationMode: boolean) => void;
   readonly setSummitRoomBeatId: (beatId: SummitRoomBeatId) => void;
   // Summit Room state - 'journey-intro' or 'journey-1' through 'journey-5'
   readonly summitRoomBeatId: SummitRoomBeatId;
@@ -84,33 +84,112 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
-  // Beats for basecamp overlook, and slides for summit room.
-  const [basecampExhibitState, setBasecampExhibitStateRaw] = useState<ExhibitNavigationState>({
-    beatIdx: 0,
-    momentId: 'ambient',
-  });
-  const [overlookExhibitState, setOverlookExhibitStateRaw] = useState<ExhibitNavigationState>({
-    beatIdx: 0,
-    momentId: 'ambient',
-  });
-  // Summit Room: 'journey-intro' or 'journey-1' through 'journey-5'
-  const [summitRoomBeatId, setSummitRoomBeatId] = useState<SummitRoomBeatId>('journey-intro');
-
   // Full state from GEC
   const [docentAppState, setDocentAppState] = useState<DocentAppState | null>(null);
 
-  // Use ref to track initialization synchronously (avoids race conditions with state updates)
-  const hasInitializedBeatsFromGecRef = useRef(false);
+  // Derive beat states from GEC state (always listen to state/gec updates)
+  const basecampBeatId = docentAppState?.exhibits?.basecamp['beat-id'];
+  const basecampExhibitState: ExhibitNavigationState = useMemo(() => {
+    if (basecampBeatId) {
+      const parsed = parseBasecampBeatId(basecampBeatId);
+      if (parsed) return parsed;
+    }
+    return { beatIdx: 0, momentId: 'ambient' };
+  }, [basecampBeatId]);
 
-  // Derive exhibit availability from GEC state
-  const exhibitAvailability: DocentContextType['exhibitAvailability'] = getExhibitAvailability(docentAppState);
+  const overlookBeatId = docentAppState?.exhibits?.['overlook-wall']?.['beat-id'];
+  const overlookExhibitState: ExhibitNavigationState = useMemo(() => {
+    if (overlookBeatId) {
+      const parsed = parseOverlookBeatId(overlookBeatId);
+      if (parsed) return parsed;
+    }
+    return { beatIdx: 0, momentId: 'ambient' };
+  }, [overlookBeatId]);
 
-  const setBasecampExhibitState = (state: Partial<ExhibitNavigationState>) => {
-    setBasecampExhibitStateRaw(prev => ({ ...prev, ...state }));
-  };
-  const setOverlookExhibitState = (state: Partial<ExhibitNavigationState>) => {
-    setOverlookExhibitStateRaw(prev => ({ ...prev, ...state }));
-  };
+  const summitBeatId = docentAppState?.exhibits?.summit?.['beat-id'];
+  const summitRoomBeatId: SummitRoomBeatId = useMemo(() => {
+    if (summitBeatId) {
+      const parsed = parseSummitBeatId(summitBeatId);
+      if (parsed) return parsed;
+    }
+    return 'journey-intro';
+  }, [summitBeatId]);
+
+  // Setters only send MQTT commands - state will be updated via state/gec
+  const setBasecampExhibitState = useCallback(
+    (state: Partial<ExhibitNavigationState>) => {
+      // Find the beat handle from the state
+      const data = dataByLocale[locale];
+      if (!data?.basecampMoments || !client) return;
+
+      const moment = data.basecampMoments.find(m => m.handle === state.momentId);
+      if (!moment || state.beatIdx === undefined) return;
+
+      const beat = moment.beats[state.beatIdx];
+      if (!beat) return;
+
+      // Send MQTT command - GEC will update state/gec which will update our derived state
+      client.gotoBeat('basecamp', beat.handle as ExhibitBeatId, {
+        onError: (err: Error) => console.error('Failed to send goto-beat to basecamp:', err),
+        onSuccess: () => console.info(`Sent goto-beat: ${beat.handle} to basecamp`),
+      });
+    },
+    [client, dataByLocale, locale]
+  );
+
+  const setOverlookExhibitState = useCallback(
+    (state: Partial<ExhibitNavigationState>) => {
+      // Find the beat handle from the state
+      const data = dataByLocale[locale];
+      if (!data?.overlookMoments || !client) return;
+
+      const moment = data.overlookMoments.find(m => m.handle === state.momentId);
+      if (!moment || state.beatIdx === undefined) return;
+
+      const beat = moment.beats[state.beatIdx];
+      if (!beat) return;
+
+      // Send MQTT command with presentation-mode: false when clicking a real beat
+      // GEC will update state/gec which will update our derived state
+      client.gotoBeat(
+        'overlook-wall',
+        beat.handle as ExhibitBeatId,
+        {
+          onError: (err: Error) => console.error('Failed to send goto-beat to overlook:', err),
+          onSuccess: () => console.info(`Sent goto-beat: ${beat.handle} to overlook`),
+        },
+        false
+      );
+    },
+    [client, dataByLocale, locale]
+  );
+
+  const setOverlookPresentationMode = useCallback(
+    (presentationMode: boolean) => {
+      if (!client) return;
+
+      // Send MQTT command with only presentation-mode (no beat-id)
+      // GEC will update state/gec which will update our derived state
+      client.setPresentationMode('overlook-wall', presentationMode, {
+        onError: (err: Error) => console.error('Failed to send presentation-mode to overlook:', err),
+        onSuccess: () => console.info(`Sent presentation-mode: ${presentationMode} to overlook`),
+      });
+    },
+    [client]
+  );
+
+  const setSummitRoomBeatId = useCallback(
+    (beatId: SummitRoomBeatId) => {
+      if (!client) return;
+
+      // Send MQTT command - GEC will update state/gec which will update our derived state
+      client.gotoBeat('summit', beatId, {
+        onError: (err: Error) => console.error('Failed to send goto-beat to summit:', err),
+        onSuccess: () => console.info(`Sent goto-beat: ${beatId} to summit`),
+      });
+    },
+    [client]
+  );
 
   // Fetch all docent data (includes tours and slides)
   const fetchDocentData = useCallback(async () => {
@@ -159,38 +238,8 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
         console.info('Docent: Received GEC state:', state);
 
         // TODO TBD still under discussion what topic to use to get the data. Or do we even use a topic.
-        // Save the full state
+        // Save the full state - beat states are derived from this via useMemo
         setDocentAppState(state);
-
-        // Initialize beat states from GEC only once on app start
-        if (!hasInitializedBeatsFromGecRef.current) {
-          const basecampBeatId = state.exhibits?.basecamp?.['beat-id'];
-          if (basecampBeatId) {
-            const parsed = parseBasecampBeatId(basecampBeatId);
-            if (parsed) {
-              setBasecampExhibitStateRaw(parsed);
-              console.info(`Initialized basecamp from GEC: ${basecampBeatId} -> ${parsed.momentId}[${parsed.beatIdx}]`);
-            }
-          }
-          const overlookBeatId = state.exhibits?.overlook?.['beat-id'];
-          if (overlookBeatId) {
-            const parsed = parseOverlookBeatId(overlookBeatId);
-            if (parsed) {
-              setOverlookExhibitStateRaw(parsed);
-              console.info(`Initialized overlook from GEC: ${overlookBeatId} -> ${parsed.momentId}[${parsed.beatIdx}]`);
-            }
-          }
-          const summitBeatId = state.exhibits?.summit?.['beat-id'];
-          if (summitBeatId) {
-            const parsed = parseSummitBeatId(summitBeatId);
-            if (parsed) {
-              setSummitRoomBeatId(parsed);
-              console.info(`Initialized summit from GEC: ${parsed}`);
-            }
-          }
-
-          hasInitializedBeatsFromGecRef.current = true;
-        }
 
         // Update tour if provided and different from current
         // Get tour-id from any exhibit (they should all match)
@@ -261,15 +310,8 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     };
   }, [client, fetchDocentData]);
 
-  // Reset navigation states when currentTour changes
-  // But only if we've already initialized from GEC (to avoid resetting during initial sync)
-  useEffect(() => {
-    if (currentTour && hasInitializedBeatsFromGecRef.current) {
-      setBasecampExhibitStateRaw({ beatIdx: 0, momentId: 'ambient' });
-      setOverlookExhibitStateRaw({ beatIdx: 0, momentId: 'ambient' });
-      setSummitRoomBeatId('journey-intro');
-    }
-  }, [currentTour]);
+  // Note: Beat states are now derived from GEC state, so they will automatically
+  // update when GEC publishes new state. No need to reset on tour changes.
 
   // Get current locale's data
   const data = dataByLocale[locale];
@@ -279,7 +321,6 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     currentTour,
     data,
     docentAppState,
-    exhibitAvailability,
     isConnected,
     isGecStateLoading,
     isSettingsOpen,
@@ -293,6 +334,7 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     setIsSettingsOpen,
     setLocale,
     setOverlookExhibitState,
+    setOverlookPresentationMode,
     setSummitRoomBeatId,
     summitRoomBeatId,
   };

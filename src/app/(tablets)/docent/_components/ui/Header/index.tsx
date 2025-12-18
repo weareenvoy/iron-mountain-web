@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import LogoDark from '@/components/ui/icons/LogoDark';
@@ -11,8 +10,8 @@ import type { ReactNode } from 'react';
 
 export interface HeaderProps {
   readonly leftButton?: {
-    readonly href: '/docent' | `/docent/tour/${string}`;
     readonly icon?: ReactNode;
+    readonly onClick: () => void;
     readonly text: string;
   };
   readonly useDarkLogo?: boolean;
@@ -25,17 +24,28 @@ const Header = ({ leftButton, useDarkLogo }: HeaderProps) => {
     setLocale(newLocale);
   };
 
+  const handleLeftButtonClick = () => {
+    if (!leftButton) return;
+
+    // onClick handler is responsible for all logic including navigation
+    // This ensures proper execution order (e.g., MQTT commands before navigation)
+    leftButton.onClick();
+  };
+
   return (
     <div className="absolute top-0 left-0 flex h-30 w-full items-center px-5">
       {/* Left Button */}
       <div className="flex flex-1">
         {leftButton && (
-          <Link href={leftButton.href}>
-            <Button className="flex h-13 items-center gap-3.5 px-6" size="sm" variant="outline-light-grey">
-              {leftButton.icon}
-              <span className="h-6.25 text-[20px]">{leftButton.text}</span>
-            </Button>
-          </Link>
+          <Button
+            className="flex h-13 items-center gap-3.5 px-6"
+            onClick={handleLeftButtonClick}
+            size="sm"
+            variant="outline-light-grey"
+          >
+            {leftButton.icon}
+            <span className="h-6.25 text-[20px] tracking-[-1px]">{leftButton.text}</span>
+          </Button>
         )}
 
         {!leftButton && <div />}

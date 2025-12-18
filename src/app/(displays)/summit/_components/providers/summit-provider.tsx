@@ -6,7 +6,7 @@ import { getLocaleForTesting } from '@/flags/flags';
 import { getSummitData } from '@/lib/internal/data/get-summit';
 import { isSection, type ExhibitNavigationState, type Locale } from '@/lib/internal/types';
 import type { SummitData } from '@/app/(displays)/summit/_types';
-import type { ExhibitMqttStateBase } from '@/lib/mqtt/types';
+import type { ExhibitMqttStateSummit } from '@/lib/mqtt/types';
 
 interface SummitContextValue {
   readonly data: null | SummitData;
@@ -39,7 +39,7 @@ export const SummitProvider = ({ children }: PropsWithChildren) => {
   const [exhibitState, setExhibitState] = useState<ExhibitNavigationState>(DEFAULT_EXHIBIT_STATE);
   const [loading, setLoading] = useState(true);
   const [locale, setLocale] = useState<Locale>(getLocaleForTesting());
-  const [mqttState, setMqttState] = useState<ExhibitMqttStateBase>({
+  const [mqttState, setMqttState] = useState<ExhibitMqttStateSummit>({
     'beat-id': 'idle',
     'tour-id': null,
     'volume-level': 1.0,
@@ -69,10 +69,10 @@ export const SummitProvider = ({ children }: PropsWithChildren) => {
   }, [fetchData]);
 
   const reportState = useCallback(
-    (newState: Partial<ExhibitMqttStateBase>) => {
+    (newState: Partial<ExhibitMqttStateSummit>) => {
       if (!client) return;
 
-      const updatedState: ExhibitMqttStateBase = {
+      const updatedState: ExhibitMqttStateSummit = {
         ...mqttState,
         ...newState,
       };
@@ -195,7 +195,7 @@ export const SummitProvider = ({ children }: PropsWithChildren) => {
     const handleOwnState = (message: Buffer) => {
       try {
         const parsedMessage = JSON.parse(message.toString());
-        const state: ExhibitMqttStateBase = parsedMessage.body;
+        const state: ExhibitMqttStateSummit = parsedMessage.body;
         console.info('Summit: received own state:', state);
 
         setMqttState(state);

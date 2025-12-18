@@ -34,9 +34,9 @@ const DocentContent = ({ children }: PropsWithChildren) => {
 
       {/* Global Settings Button - Show on all pages except home */}
       {isConnected && !isHomePage && (
-        <div className="absolute top-39 right-5 z-50">
+        <div className="absolute top-39 right-0 z-50">
           <Button
-            className="h-13 gap-2 border-none p-0"
+            className="h-13 gap-2 border-none"
             onClick={openSettingsDrawer}
             size="sm"
             variant="outline-light-grey"

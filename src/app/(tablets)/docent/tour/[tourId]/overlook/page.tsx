@@ -1,7 +1,8 @@
 'use client';
 
 import { ArrowLeft, ArrowRight, Cast } from 'lucide-react';
-import { use, useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { use, useCallback, useMemo, useState } from 'react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
@@ -12,6 +13,7 @@ import type { Section } from '@/lib/internal/types';
 
 const OverlookPage = ({ params }: PageProps<'/docent/tour/[tourId]/overlook'>) => {
   const { tourId } = use(params);
+  const router = useRouter();
   const { currentTour, data, overlookExhibitState, setOverlookExhibitState } = useDocent();
   // TODO does this live in GEC state?
   const [isOverlookCastMode, setIsOverlookCastMode] = useState(false);
@@ -30,21 +32,24 @@ const OverlookPage = ({ params }: PageProps<'/docent/tour/[tourId]/overlook'>) =
   const { handleNext, handlePrevious, isNextDisabled, isPreviousDisabled } = useMomentsNavigation(
     overlookContent,
     overlookExhibitState,
-    setOverlookExhibitState,
-    'overlook'
+    setOverlookExhibitState
   );
 
   const toggleOverlookCastMode = () => {
     setIsOverlookCastMode(castMode => !castMode);
   };
 
+  const handleBackToMenu = useCallback(() => {
+    router.push(`/docent/tour/${tourId}`);
+  }, [router, tourId]);
+
   const leftButton = useMemo(
     (): HeaderProps['leftButton'] => ({
-      href: `/docent/tour/${tourId}`,
       icon: <ArrowLeft />,
+      onClick: handleBackToMenu,
       text: data?.docent.navigation.backToMenu ?? 'Back to menu',
     }),
-    [tourId, data]
+    [handleBackToMenu, data]
   );
 
   return (
@@ -80,7 +85,7 @@ const OverlookPage = ({ params }: PageProps<'/docent/tour/[tourId]/overlook'>) =
 
         <MomentsAndBeats
           content={overlookContent}
-          exhibit="overlook"
+          exhibit="overlook-wall"
           exhibitState={overlookExhibitState}
           setExhibitState={setOverlookExhibitState}
         />

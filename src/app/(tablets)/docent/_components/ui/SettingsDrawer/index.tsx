@@ -48,10 +48,10 @@ const EXHIBIT_NAME_MAP = {
 const GEC_EXHIBIT_KEY_MAP = {
   'basecamp': 'basecamp',
   'entry-way': null,
-  'overlook': 'overlook',
+  'overlook': 'overlook-wall',
   'solution-pathways': null,
   'summit': 'summit',
-} as const satisfies Record<(typeof EXHIBIT_IDS)[number], 'basecamp' | 'overlook' | 'summit' | null>;
+} as const satisfies Record<(typeof EXHIBIT_IDS)[number], 'basecamp' | 'overlook-wall' | 'summit' | null>;
 
 const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
   const { client } = useMqtt();
@@ -91,7 +91,7 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
     if (!exhibit) return;
 
     // Send setVolume command to GEC
-    client.setVolume(exhibitId as 'basecamp' | 'overlook' | 'summit', !exhibit.isMuted, {
+    client.setVolume(exhibitId as 'basecamp' | 'overlook-wall' | 'summit', !exhibit.isMuted, {
       onError: (err: Error) => console.error(`Failed to toggle mute for ${exhibitId}:`, err),
       onSuccess: () => console.info(`Successfully toggled mute for ${exhibitId}`),
     });
@@ -186,8 +186,13 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
             <span className="text-primary-im-light-blue text-2xl">{data?.settings.ebcLights ?? 'EBC Lights'}</span>
           </div>
 
-          {/* Switch to toggle EBC Lights. TODO Is the value from GEC state? */}
-          <Switch id="ebc-lights" onCheckedChange={handleToggleEBCLights} useIcon />
+          {/* Switch to toggle EBC Lights - read from GEC state */}
+          <Switch
+            checked={docentAppState?.['ebc-lights'] ?? false}
+            id="ebc-lights"
+            onCheckedChange={handleToggleEBCLights}
+            useIcon
+          />
         </div>
 
         {/* End Tour Button */}

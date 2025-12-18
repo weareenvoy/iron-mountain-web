@@ -1,16 +1,20 @@
 'use client';
 
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { use, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
+import { use, useCallback, useMemo } from 'react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
 import MomentsAndBeats from '@/app/(tablets)/docent/_components/ui/MomentsAndBeats';
+import { useMqtt } from '@/components/providers/mqtt-provider';
 import useMomentsNavigation from '@/hooks/use-moments-navigation';
 import type { Section } from '@/lib/internal/types';
 
 const BasecampPage = ({ params }: PageProps<'/docent/tour/[tourId]/basecamp'>) => {
   const { tourId } = use(params);
+  const router = useRouter();
+  const { client } = useMqtt();
   const { basecampExhibitState, currentTour, data, setBasecampExhibitState } = useDocent();
 
   // Transform basecampMoments
@@ -27,17 +31,41 @@ const BasecampPage = ({ params }: PageProps<'/docent/tour/[tourId]/basecamp'>) =
   const { handleNext, handlePrevious, isNextDisabled, isPreviousDisabled } = useMomentsNavigation(
     basecampContent,
     basecampExhibitState,
-    setBasecampExhibitState,
-    'basecamp'
+    setBasecampExhibitState
   );
+
+  const handleBackToMenu = useCallback(() => {
+    if (!client) {
+      // Navigate even if client is not available
+      router.push(`/docent/tour/${tourId}`);
+      return;
+    }
+
+    // Send ambient-1 to all exhibits when going back to menu
+    client.gotoBeat('basecamp', 'ambient-1', {
+      onError: (err: Error) => console.error('Failed to send ambient-1 to basecamp:', err),
+      onSuccess: () => console.info('Sent ambient-1 to basecamp'),
+    });
+    client.gotoBeat('overlook-wall', 'ambient-1', {
+      onError: (err: Error) => console.error('Failed to send ambient-1 to overlook:', err),
+      onSuccess: () => console.info('Sent ambient-1 to overlook'),
+    });
+    client.gotoBeat('summit', 'journey-intro', {
+      onError: (err: Error) => console.error('Failed to send journey-intro to summit:', err),
+      onSuccess: () => console.info('Sent journey-intro to summit'),
+    });
+
+    // Navigate after sending MQTT commands
+    router.push(`/docent/tour/${tourId}`);
+  }, [client, router, tourId]);
 
   const leftButton = useMemo(
     (): HeaderProps['leftButton'] => ({
-      href: `/docent/tour/${tourId}`,
       icon: <ArrowLeft />,
+      onClick: handleBackToMenu,
       text: data?.docent.navigation.backToMenu ?? 'Back to menu',
     }),
-    [tourId, data]
+    [handleBackToMenu, data]
   );
 
   return (

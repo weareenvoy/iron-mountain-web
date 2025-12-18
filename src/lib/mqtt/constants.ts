@@ -42,7 +42,7 @@ export const mqttCommands = {
     sync: 'cmd/dev/gec/sync',
   },
   overlook: {
-    gotoBeat: 'cmd/dev/overlook/goto-beat',
+    gotoBeat: 'cmd/dev/overlook-wall/goto-beat',
   },
   summit: {
     gotoBeat: 'cmd/dev/summit/goto-beat',

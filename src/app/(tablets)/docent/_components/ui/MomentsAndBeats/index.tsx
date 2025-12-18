@@ -9,7 +9,7 @@ import type { ExhibitBeatId, ExhibitNavigationState, Moment, Section } from '@/l
 
 interface MomentsAndBeatsProps {
   readonly content: Readonly<Moment[]>; // hardcoded data
-  readonly exhibit: 'basecamp' | 'overlook';
+  readonly exhibit: 'basecamp' | 'overlook-wall';
   readonly exhibitState: ExhibitNavigationState;
   readonly setExhibitState: (state: Partial<ExhibitNavigationState>) => void;
 }
@@ -20,25 +20,10 @@ const MomentsAndBeats = ({ content, exhibit, exhibitState, setExhibitState }: Mo
 
   const { beatIdx: currentBeatIdx, momentId, shouldPlay = true } = exhibitState;
 
-  const publishNavigation = (momentId: Section, beatIdx: number) => {
-    if (!client) return;
-
-    const moment = content.find(m => m.id === momentId);
-    if (!moment || !moment.beats[beatIdx]) return;
-
-    const beatId = moment.beats[beatIdx].handle;
-
-    // Send goto-beat command to exhibit (no play/pause info needed for normal navigation)
-    client.gotoBeat(exhibit, beatId as ExhibitBeatId, {
-      onError: (err: Error) => console.error(`Failed to send goto-beat to ${exhibit}:`, err),
-      onSuccess: () => console.info(`Sent goto-beat: ${beatId} to ${exhibit}`),
-    });
-  };
-
   const goTo = (momentId: Section, beatIdx: number) => {
     // Always start playing when navigating to any beat
+    // setExhibitState now sends MQTT command, so no need to call publishNavigation separately
     setExhibitState({ beatIdx, momentId, shouldPlay: true });
-    publishNavigation(momentId, beatIdx);
   };
 
   const handleVideoBeatClick = (momentId: Section, beatIdx: number) => (event: MouseEvent<HTMLButtonElement>) => {
@@ -63,10 +48,17 @@ const MomentsAndBeats = ({ content, exhibit, exhibitState, setExhibitState }: Mo
 
     const beatId = moment.beats[beatIdx].handle;
 
-    client.gotoBeatWithPlayPause(exhibit, beatId as ExhibitBeatId, newShouldPlay, {
-      onError: (err: Error) => console.error(`Failed to send goto-beat with play/pause to ${exhibit}:`, err),
-      onSuccess: () => console.info(`Sent goto-beat with play/pause: ${beatId} (${newShouldPlay}) to ${exhibit}`),
-    });
+    // When clicking a real beat, send presentation-mode: false
+    client.gotoBeatWithPlayPause(
+      exhibit,
+      beatId as ExhibitBeatId,
+      newShouldPlay,
+      {
+        onError: (err: Error) => console.error(`Failed to send goto-beat with play/pause to ${exhibit}:`, err),
+        onSuccess: () => console.info(`Sent goto-beat with play/pause: ${beatId} (${newShouldPlay}) to ${exhibit}`),
+      },
+      exhibit === 'overlook-wall' ? false : undefined
+    );
   };
 
   const handleBulletPointClick = (momentId: Section) => () => {
@@ -98,7 +90,7 @@ const MomentsAndBeats = ({ content, exhibit, exhibitState, setExhibitState }: Mo
             >
               {isActiveMoment && <div className="border-primary-bg-grey h-4 w-4 rotate-45 rounded-[2px] border-2" />}
               <button
-                className="text-primary-bg-grey text-left text-[26px] leading-[1.3]"
+                className="text-primary-bg-grey text-left text-[26px] leading-[1.3] tracking-normal"
                 onClick={handleBulletPointClick(moment.id)}
               >
                 {moment.title}
