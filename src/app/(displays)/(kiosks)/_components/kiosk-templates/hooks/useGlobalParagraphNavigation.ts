@@ -8,8 +8,10 @@ export interface UseGlobalParagraphNavigationOptions {
 }
 
 export interface UseGlobalParagraphNavigationReturn {
+  currentScrollTarget: string | null;
   handleNavigateDown: () => void;
   handleNavigateUp: () => void;
+  isScrolling: boolean;
   scrollToSectionById: (sectionId: string) => void;
 }
 
@@ -24,6 +26,8 @@ export function useGlobalParagraphNavigation({
 }: UseGlobalParagraphNavigationOptions): UseGlobalParagraphNavigationReturn {
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [allParagraphs, setAllParagraphs] = useState<HTMLElement[]>([]);
+  const [isScrolling, setIsScrolling] = useState(false);
+  const [currentScrollTarget, setCurrentScrollTarget] = useState<string | null>(null);
   const isScrollingRef = useRef(false);
 
   // Detect ALL paragraph sections in the entire container
@@ -66,6 +70,8 @@ export function useGlobalParagraphNavigation({
       // If scrolling to -1, scroll to top
       if (index === -1) {
         isScrollingRef.current = true;
+        setIsScrolling(true);
+        setCurrentScrollTarget(null);
         const containerTop = container.scrollTop;
         const start = performance.now();
 
@@ -80,6 +86,8 @@ export function useGlobalParagraphNavigation({
             requestAnimationFrame(animateScroll);
           } else {
             isScrollingRef.current = false;
+            setIsScrolling(false);
+            setCurrentScrollTarget(null);
             setCurrentIndex(-1);
           }
         };
@@ -89,13 +97,19 @@ export function useGlobalParagraphNavigation({
       }
 
       isScrollingRef.current = true;
+      setIsScrolling(true);
       const targetParagraph = allParagraphs[index];
 
       // Guard against undefined element
       if (!targetParagraph) {
         isScrollingRef.current = false;
+        setIsScrolling(false);
         return;
       }
+
+      // Set the target section ID
+      const targetId = targetParagraph.getAttribute('data-scroll-section');
+      setCurrentScrollTarget(targetId);
 
       const containerTop = container.scrollTop;
 
@@ -122,6 +136,7 @@ export function useGlobalParagraphNavigation({
           requestAnimationFrame(animateScroll);
         } else {
           isScrollingRef.current = false;
+          setIsScrolling(false);
           setCurrentIndex(index);
         }
       };
@@ -165,8 +180,10 @@ export function useGlobalParagraphNavigation({
   );
 
   return {
+    currentScrollTarget,
     handleNavigateDown,
     handleNavigateUp,
+    isScrolling,
     scrollToSectionById,
   };
 }

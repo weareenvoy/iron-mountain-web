@@ -45,7 +45,7 @@ export const ThirdScreenTemplate = ({
   return (
     <div
       // className={styles.container}
-      className="group/kiosk relative flex h-screen w-full flex-col overflow-x-hidden overflow-y-auto scroll-smooth bg-[#1b75bc]"
+      className="group/kiosk relative flex h-screen w-full flex-col overflow-x-hidden overflow-y-auto scroll-smooth bg-transparent"
       data-hero-image={heroImageSrc}
       data-kiosk={kioskId}
       data-large-icon-center={largeIconCenterSrc}
@@ -54,7 +54,7 @@ export const ThirdScreenTemplate = ({
       data-video-src={videoSrc}
     >
       {/* Background gradient layer */}
-      <div className="pointer-events-none absolute inset-0 z-[0] bg-[linear-gradient(to_bottom,#1b75bc_0%,#14477d_100%)]" />
+      <div className="pointer-events-none absolute inset-0 z-[0] bg-transparent" />
 
       {/* Decorative background diamond */}
       <div className="pointer-events-none absolute top-[45%] left-[50%] z-[1] flex h-[945px] w-[945px] scale-y-[-1] rotate-[225deg] items-center justify-center opacity-30">

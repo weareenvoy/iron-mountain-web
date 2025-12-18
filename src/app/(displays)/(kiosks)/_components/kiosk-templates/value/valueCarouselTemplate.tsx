@@ -232,16 +232,16 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
     <div
       className="relative flex h-screen w-full flex-col overflow-hidden bg-black"
       data-carousel-id={resolvedCarouselId}
+      {...(isOverview ? { 'data-scroll-section': 'value-carousel' } : {})}
       data-node-id="5688:14628"
       style={{ background: 'transparent', overflow: 'visible' }}
     >
-      <div className="absolute top-0 left-0 z-[1] h-[1284px] w-full overflow-hidden">
+      <div className="absolute top-0 left-0 z-[0] h-[1284px] w-full overflow-hidden">
         {heroVideo ? (
           <video
             autoPlay
             className="absolute h-full w-full bg-black object-cover object-center"
             controlsList="nodownload"
-            {...(isOverview ? { 'data-scroll-section': 'value-video' } : {})}
             loop
             muted
             playsInline

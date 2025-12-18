@@ -1,6 +1,7 @@
 'use client';
 
 import kioskContent from '@public/api/kiosk-2.json';
+import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
@@ -22,10 +23,12 @@ import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-con
 const Kiosk2View = () => {
   const controller: Controller = useKioskController();
   const [topIndex, setTopIndex] = useState(0);
+  const [showArrows, setShowArrows] = useState(false);
+  const [allowArrowsToShow, setAllowArrowsToShow] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Global paragraph navigation
-  const { handleNavigateDown, handleNavigateUp } = useGlobalParagraphNavigation({
+  const { handleNavigateDown, handleNavigateUp, isScrolling, currentScrollTarget } = useGlobalParagraphNavigation({
     containerRef,
     duration: 800,
   });
@@ -46,12 +49,125 @@ const Kiosk2View = () => {
       'kiosk-2',
       { ...controller, ...globalHandlers },
       {
-      initialScreen: { ...challenges.initialScreen, contentBoxBgColor: '#8DC13F' },
+        initialScreen: { ...challenges.initialScreen, contentBoxBgColor: '#8DC13F' },
+        onInitialButtonClick: () => {
+          // Start the scroll, arrows will appear after scroll completes
+          setAllowArrowsToShow(true);
+        },
       }
     ),
     ...buildSolutionSlides(solutions, 'kiosk-2', { ...controller, ...globalHandlers }),
     ...buildValueSlides(values, 'kiosk-2', { ...controller, ...globalHandlers }),
   ];
+
+  // Show arrows only after scroll completes (INITIAL APPEARANCE from button click)
+  useEffect(() => {
+    if (allowArrowsToShow && !isScrolling && currentScrollTarget === 'challenge-first-video') {
+      // Delay before arrows first appear (after initial button click and scroll to challenge video)
+      const timer = setTimeout(() => {
+        setShowArrows(true);
+      }, 1500); // INITIAL DELAY: Adjust this to control first appearance after button click
+      return () => clearTimeout(timer);
+    }
+  }, [allowArrowsToShow, isScrolling, currentScrollTarget]);
+
+  // Handle arrows reappearing after scrolling to videos in other sections (solution, value)
+  const [wasScrollingToVideo, setWasScrollingToVideo] = useState(false);
+  const [previousScrollTarget, setPreviousScrollTarget] = useState<string | null>(null);
+  const [wasAtVideoBeforeInitial, setWasAtVideoBeforeInitial] = useState(false);
+
+  // Track previous scroll target
+  useEffect(() => {
+    if (currentScrollTarget !== previousScrollTarget) {
+      // Track if we're leaving the video
+      if (previousScrollTarget === 'challenge-first-video' && currentScrollTarget !== 'challenge-first-video') {
+        setWasAtVideoBeforeInitial(true);
+      }
+      // Reset if we move to any other scroll section (not the initial screen)
+      if (currentScrollTarget && currentScrollTarget !== 'challenge-first-video') {
+        setWasAtVideoBeforeInitial(false);
+      }
+      setPreviousScrollTarget(currentScrollTarget);
+    }
+  }, [currentScrollTarget, previousScrollTarget]);
+
+  // Reset arrow state when navigating back to initial screen - BUT ONLY if we came directly from the video
+  useEffect(() => {
+    if (isInitialScreen && wasAtVideoBeforeInitial) {
+      setShowArrows(false);
+      setAllowArrowsToShow(false);
+      setWasAtVideoBeforeInitial(false); // Reset the flag
+    }
+  }, [isInitialScreen, wasAtVideoBeforeInitial]);
+
+  useEffect(() => {
+    const isScrollingToVideo =
+      isScrolling &&
+      currentScrollTarget &&
+      (currentScrollTarget.includes('-video') ||
+        currentScrollTarget.includes('-first-video') ||
+        currentScrollTarget === 'value-carousel');
+
+    const shouldHideArrows = isScrollingToVideo;
+
+    // Track when we START scrolling to a video
+    if (shouldHideArrows && !wasScrollingToVideo) {
+      setWasScrollingToVideo(true);
+      setShowArrows(false); // Hide arrows immediately when scrolling to video starts
+    }
+
+    // When scroll completes and we were scrolling to a video, reappear after delay
+    if (
+      wasScrollingToVideo &&
+      !isScrolling &&
+      currentScrollTarget &&
+      (currentScrollTarget.includes('-video') ||
+        currentScrollTarget.includes('-first-video') ||
+        currentScrollTarget === 'value-carousel') &&
+      allowArrowsToShow
+    ) {
+      // Delay before arrows reappear after scrolling to a new section video
+      const timer = setTimeout(() => {
+        setShowArrows(true);
+        setWasScrollingToVideo(false);
+      }, 1000); // SECTION TRANSITION DELAY: Adjust this to control reappearance between sections (Challenge → Solution → Value)
+      return () => clearTimeout(timer);
+    }
+  }, [isScrolling, currentScrollTarget, wasScrollingToVideo, allowArrowsToShow]);
+
+  // Determine current section based on slide ID
+  const currentSlide = slides[topIndex];
+  const currentSection = currentSlide?.id.split('-')[0] || 'challenge';
+  const isInitialScreen = currentSlide?.id === 'challenge-initial';
+  const isValueSection =
+    currentSection === 'value' || (currentScrollTarget && currentScrollTarget.startsWith('value-'));
+
+  // Track arrow color and persist it during fade transitions
+  const [arrowColor, setArrowColor] = useState('#6DCFF6');
+
+  useEffect(() => {
+    // Only update color when arrows are visible (not during fade out)
+    if (showArrows) {
+      setArrowColor(isValueSection ? '#58595B' : '#6DCFF6');
+    }
+  }, [isValueSection, showArrows]);
+
+  // Reset arrow state when navigating back to initial screen
+  useEffect(() => {
+    if (isInitialScreen) {
+      setShowArrows(false);
+      setAllowArrowsToShow(false);
+    }
+  }, [isInitialScreen]);
+
+  // Check if we're scrolling to or at a video
+  const isScrollingToVideo =
+    isScrolling &&
+    currentScrollTarget &&
+    (currentScrollTarget.includes('-video') || currentScrollTarget.includes('-first-video'));
+
+  // Arrows should be visible when showArrows is true (controlled by the effects above)
+  const shouldShowArrows = showArrows;
 
   const scrollToSlide = useCallback((index: number) => {
     if (!containerRef.current) return;
@@ -94,7 +210,7 @@ const Kiosk2View = () => {
           <div className="h-screen w-full flex-shrink-0" data-slide-index={idx} key={slide.id}>
             {slide.render(idx === topIndex)}
           </div>
-          ))}
+        ))}
       </div>
       <div
         // className={styles.debugControls}
@@ -105,38 +221,60 @@ const Kiosk2View = () => {
       </div>
 
       {/* Global Navigation Arrows */}
-      <div className="fixed top-1/2 right-[120px] z-[50] flex -translate-y-1/2 flex-col gap-[100px]">
-        <div
-          aria-label="Previous"
-          className="flex h-[140px] w-[120px] cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95"
-          onKeyDown={event => {
-            if (event.key === 'Enter' || event.key === ' ') {
-              event.preventDefault();
-              handleNavigateUp();
-            }
-          }}
-          onPointerDown={handleNavigateUp}
-          role="button"
-          tabIndex={0}
-        >
-          <ArrowUp aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
-        </div>
-        <div
-          aria-label="Next"
-          className="flex h-[140px] w-[120px] cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95"
-          onKeyDown={event => {
-            if (event.key === 'Enter' || event.key === ' ') {
-              event.preventDefault();
-              handleNavigateDown();
-            }
-          }}
-          onPointerDown={handleNavigateDown}
-          role="button"
-          tabIndex={0}
-        >
-          <ArrowDown aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
-        </div>
-      </div>
+      <AnimatePresence>
+        {shouldShowArrows && (
+          <motion.div
+            animate={{ opacity: 1, scale: 1 }}
+            className="fixed top-[37.5%] right-[120px] z-[50] flex -translate-y-1/2 flex-col gap-[100px]"
+            exit={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.4, ease: 'easeOut' }}
+          >
+            <div
+              aria-label="Previous"
+              className="flex h-[140px] w-[120px] cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95"
+              onKeyDown={event => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  handleNavigateUp();
+                }
+              }}
+              onPointerDown={handleNavigateUp}
+              role="button"
+              tabIndex={0}
+            >
+              <ArrowUp
+                aria-hidden="true"
+                className="h-full w-full"
+                focusable="false"
+                strokeWidth={1.5}
+                style={{ color: arrowColor }}
+              />
+            </div>
+            <div
+              aria-label="Next"
+              className="flex h-[140px] w-[120px] cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95"
+              onKeyDown={event => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  handleNavigateDown();
+                }
+              }}
+              onPointerDown={handleNavigateDown}
+              role="button"
+              tabIndex={0}
+            >
+              <ArrowDown
+                aria-hidden="true"
+                className="h-full w-full"
+                focusable="false"
+                strokeWidth={1.5}
+                style={{ color: isValueSection ? '#58595B' : '#6DCFF6' }}
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

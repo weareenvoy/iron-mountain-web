@@ -30,27 +30,27 @@ export const FirstScreenTemplate = ({
   return (
     <div
       // className={styles.container}
-      className="group/kiosk relative flex h-screen w-full flex-col overflow-x-hidden overflow-y-auto scroll-smooth bg-black"
+      className="group/kiosk relative flex h-screen w-full flex-col overflow-visible bg-black"
       data-kiosk={kioskId}
       data-node-id="5168:9882"
     >
       {/* Background gradient - stays behind all content */}
-      <div className="pointer-events-none absolute inset-0 z-[0] bg-[linear-gradient(to_bottom,#000_0%,#1b75bc_20%,#14477d_80%,#154c83_100%)]" />
+      <div className="pointer-events-none absolute inset-0 z-[0] h-[15630px] bg-[linear-gradient(180deg,#1B75BC_0.01%,#14477D_98%)]" />
 
       {/* Video Header Section */}
-      <div className="relative z-[1] flex h-[1291px] w-full flex-col items-center justify-center overflow-hidden">
-          <video
-            autoPlay
+      <div className="relative z-[100] flex h-[1291px] w-full flex-col items-center justify-center overflow-hidden">
+        <video
+          autoPlay
           className="absolute inset-0 h-full w-full object-cover object-center"
-            controlsList="nodownload"
+          controlsList="nodownload"
           data-scroll-section="challenge-first-video"
-            loop
-            muted
-            playsInline
-          >
-            <source src={videoSrc} type="video/mp4" />
-          </video>
-          <div className="pointer-events-none absolute inset-0 bg-black/20" />
+          loop
+          muted
+          playsInline
+        >
+          <source src={videoSrc} type="video/mp4" />
+        </video>
+        <div className="pointer-events-none absolute inset-0 bg-black/20" />
 
         {/* Subheadline */}
         <div className="relative z-[2] px-[120px] pb-[400px]">
@@ -58,16 +58,16 @@ export const FirstScreenTemplate = ({
             {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
           </h2>
         </div>
-          </div>
+      </div>
 
-          {/* Challenge Label Section */}
+      {/* Challenge Label Section */}
       <div className="relative z-[2] flex items-center gap-[41px] px-[128px] pt-[80px] pb-[200px]">
-            <div className="relative mr-[5px] flex h-[110px] w-[110px] items-center justify-center">
+        <div className="relative mr-[5px] flex h-[110px] w-[110px] items-center justify-center">
           <Diamond aria-hidden="true" className="h-full w-full text-[#ededed]" focusable="false" strokeWidth={1.25} />
-            </div>
-            <h1 className="text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]">
-              {renderRegisteredMark(challengeLabel)}
-            </h1>
+        </div>
+        <h1 className="text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]">
+          {renderRegisteredMark(challengeLabel)}
+        </h1>
       </div>
 
       {/* Problem Description Section */}

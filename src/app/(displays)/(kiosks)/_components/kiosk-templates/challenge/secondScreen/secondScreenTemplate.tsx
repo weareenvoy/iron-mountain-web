@@ -39,13 +39,13 @@ export const SecondScreenTemplate = ({
   return (
     <div
       // className={styles.container}
-      className="relative flex h-screen w-full flex-col overflow-x-hidden overflow-y-auto scroll-smooth bg-[#1b75bc]"
+      className="relative flex h-screen w-full flex-col overflow-x-hidden overflow-y-auto scroll-smooth bg-transparent"
       data-hero-image={topImageSrc}
       data-kiosk={kioskId}
       data-node-id="5168:9907"
     >
       {/* Background gradient layer */}
-      <div className="pointer-events-none absolute inset-0 z-[0] bg-[linear-gradient(to_bottom,#1b75bc_0%,#14477d_100%)]" />
+      <div className="pointer-events-none absolute inset-0 z-[0] bg-transparent" />
 
       {/* Decorative background diamond */}
       <div className="pointer-events-none absolute top-[40%] left-[-20%] z-[1] flex size-[1506px] -scale-y-100 rotate-[180deg] items-center justify-center opacity-50">

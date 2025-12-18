@@ -26,7 +26,7 @@ export const buildChallengeSlides = (
   challenges: KioskChallenges,
   kioskId: KioskId,
   controller: Controller,
-  overrides?: Partial<ChallengeScreens>
+  overrides?: Partial<ChallengeScreens> & { onInitialButtonClick?: () => void }
 ): Slide[] => {
   const initialScreen = { ...challenges.initialScreen, ...overrides?.initialScreen };
 
@@ -35,7 +35,14 @@ export const buildChallengeSlides = (
       id: 'challenge-initial',
       render: (isActive: boolean) => (
         <SectionSlide isActive={isActive}>
-          <InitialScreenTemplate {...initialScreen} kioskId={kioskId} onButtonClick={() => controller.next()} />
+          <InitialScreenTemplate
+            {...initialScreen}
+            kioskId={kioskId}
+            onButtonClick={() => {
+              overrides?.onInitialButtonClick?.();
+              controller.next();
+            }}
+          />
         </SectionSlide>
       ),
       title: 'Challenge Intro',
