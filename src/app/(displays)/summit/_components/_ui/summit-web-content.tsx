@@ -10,6 +10,8 @@ import RecapSection, { type RecapTone } from '@/app/(displays)/summit/_component
 import StrategiesSection from '@/app/(displays)/summit/_components/sections/strategies-section';
 import SummitPrintableDocument from '@/app/(displays)/summit/_components/summit-printable-document';
 import PrintIcon from '@/components/ui/icons/PrintIcon';
+import type { SummitFuturescaping, SummitKioskAmbient, SummitPossibility } from '@/app/(displays)/summit/_types';
+import type { SolutionItem } from '@/app/(displays)/summit/_utils';
 
 const PAGE_CONTAINER_CLASS = 'flex flex-col gap-14 py-10';
 const PRINT_PAGE_STYLE =
@@ -91,7 +93,7 @@ const SummitWebContent = () => {
     );
   }
 
-  const { basecamp, kiosk1, kiosk2, kiosk3, meta, overlook, summitSlides } = data;
+  const { basecamp, kiosk1, kiosk2, kiosk3, meta = [], overlook, summitSlides = [] } = data;
 
   const handlePrintClick = async () => {
     setPrintError(null);
@@ -111,27 +113,37 @@ const SummitWebContent = () => {
   const journey5Title = summitSlides.find(slide => slide.handle === 'journey-5')?.title || 'Unlock your future';
   const journey6Title = summitSlides.find(slide => slide.handle === 'journey-6')?.title || 'Stories of impact';
 
+  const possibilitiesItems = [basecamp.possibilitiesA, basecamp.possibilitiesB, basecamp.possibilitiesC].filter(
+    (item): item is SummitPossibility => Boolean(item)
+  );
+
+  const solutionItems = [
+    { locations: overlook.protect, title: data.protectTitle },
+    { locations: overlook.connect, title: data.connectTitle },
+    { locations: overlook.activate, title: data.activateTitle },
+  ].filter((item): item is SolutionItem => Boolean(item));
+
+  const futurescapingItems = [overlook.futurescaping1, overlook.futurescaping2, overlook.futurescaping3].filter(
+    (item): item is SummitFuturescaping => Boolean(item)
+  );
+
+  const storiesItems = [kiosk1.ambient, kiosk2.ambient, kiosk3.ambient].filter((item): item is SummitKioskAmbient => {
+    return Boolean(item);
+  });
+
   // Render sections
   const renderMetrics = () => (
     <MetricsSection challenges={basecamp.problem3} stats={basecamp.problem2} title={basecamp.problem1.title} />
   );
 
   const renderPossibilities = () => (
-    <StrategiesSection
-      accentColor={STRATEGY_ACCENT_COLORS[0]}
-      items={[basecamp.possibilitiesA, basecamp.possibilitiesB, basecamp.possibilitiesC]}
-      title={journey3Title}
-    />
+    <StrategiesSection accentColor={STRATEGY_ACCENT_COLORS[0]} items={possibilitiesItems} title={journey3Title} />
   );
 
   const renderSolutions = () => (
     <StrategiesSection
       accentColor={STRATEGY_ACCENT_COLORS[1]}
-      items={[
-        { locations: overlook.protect, title: data.protectTitle },
-        { locations: overlook.connect, title: data.connectTitle },
-        { locations: overlook.activate, title: data.activateTitle },
-      ]}
+      items={solutionItems}
       title={journey4Title}
       variant="solutions"
     />
@@ -140,7 +152,7 @@ const SummitWebContent = () => {
   const renderFuturescaping = () => (
     <StrategiesSection
       accentColor={STRATEGY_ACCENT_COLORS[2]}
-      items={[overlook.futurescaping1, overlook.futurescaping2, overlook.futurescaping3]}
+      items={futurescapingItems}
       title={journey5Title}
       variant="futurescaping"
     />
@@ -149,7 +161,7 @@ const SummitWebContent = () => {
   const renderStories = () => (
     <StrategiesSection
       accentColor={STRATEGY_ACCENT_COLORS[3]}
-      items={[kiosk1.ambient, kiosk2.ambient, kiosk3.ambient]}
+      items={storiesItems}
       title={journey6Title}
       variant="stories"
     />
@@ -166,6 +178,7 @@ const SummitWebContent = () => {
 
   const renderRecapPrint = (index: number) => (
     <RecapPrintSection
+      hideWhenEmpty
       placeholder={recapPlaceholder}
       storageKey={`recap-${index}`}
       title="Recap"
