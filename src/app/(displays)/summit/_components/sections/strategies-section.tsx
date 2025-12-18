@@ -10,24 +10,28 @@ import type { SummitFuturescaping, SummitKioskAmbient, SummitPossibility } from 
 type StrategiesSectionProps =
   | {
       readonly accentColor?: string;
+      readonly density?: 'compact' | 'default';
       readonly items: readonly SolutionItem[];
       readonly title: string;
       readonly variant: 'solutions';
     }
   | {
       readonly accentColor?: string;
+      readonly density?: 'compact' | 'default';
       readonly items: readonly SummitFuturescaping[];
       readonly title: string;
       readonly variant: 'futurescaping';
     }
   | {
       readonly accentColor?: string;
+      readonly density?: 'compact' | 'default';
       readonly items: readonly SummitKioskAmbient[];
       readonly title: string;
       readonly variant: 'stories';
     }
   | {
       readonly accentColor?: string;
+      readonly density?: 'compact' | 'default';
       readonly items: readonly SummitPossibility[];
       readonly title: string;
       readonly variant?: 'possibilities';
@@ -81,28 +85,60 @@ const processItem = (
 
 const StrategiesSection = ({
   accentColor = '#8A0D71',
+  density = 'default',
   items,
   title,
   variant = 'possibilities',
 }: StrategiesSectionProps) => {
+  const isCompact = density === 'compact';
+
   return (
-    <section className="flex flex-col gap-8">
-      <div className="flex items-center gap-3 text-2xl font-semibold text-[#58595B] sm:text-3xl">
-        <span aria-hidden className="h-4 w-4 rotate-45 rounded-xs border-2" style={{ borderColor: accentColor }} />
+    <section className={`flex flex-col ${isCompact ? 'gap-6 print:gap-5' : 'gap-8 print:gap-6'}`}>
+      <div
+        className={`flex items-center text-[#58595B] ${
+          isCompact
+            ? 'gap-2 text-xl font-semibold sm:text-2xl print:gap-2 print:text-xl'
+            : 'gap-3 text-2xl font-semibold sm:text-3xl print:text-2xl'
+        }`}
+      >
+        <span
+          aria-hidden
+          className={`${isCompact ? 'h-3.5 w-3.5' : 'h-4 w-4'} rotate-45 rounded-xs border-2`}
+          style={{ borderColor: accentColor }}
+        />
         <span>{title}</span>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-3">
+      <div className={`grid ${isCompact ? 'gap-4 print:gap-4' : 'gap-6 print:gap-5'} sm:grid-cols-3`}>
         {items.map((item, index) => {
           const { content, itemKey, itemTitle } = processItem(item, variant);
 
           return (
-            <article className="rounded-xl border p-6 shadow-sm" key={itemKey} style={{ borderColor: accentColor }}>
-              <p className="text-sm font-semibold" style={{ color: accentColor }}>
+            <article
+              className={`${isCompact ? 'p-4 print:p-4' : 'p-6 print:p-4'} rounded-xl border shadow-sm`}
+              key={itemKey}
+              style={{ borderColor: accentColor }}
+            >
+              <p
+                className={`${isCompact ? 'text-xs' : 'text-sm'} font-semibold print:text-xs`}
+                style={{ color: accentColor }}
+              >
                 {String(index + 1).padStart(2, '0')}
               </p>
-              <h3 className="mt-4 text-lg font-semibold text-[#4B4B4D]">{itemTitle}</h3>
-              <div className="mt-4 text-sm whitespace-pre-line text-[#4B4B4D]">{content}</div>
+              <h3
+                className={`mt-3 font-semibold text-[#4B4B4D] ${
+                  isCompact ? 'text-base leading-tight' : 'text-lg'
+                } print:text-base print:leading-tight`}
+              >
+                {itemTitle}
+              </h3>
+              <div
+                className={`mt-3 whitespace-pre-line text-[#4B4B4D] ${
+                  isCompact ? 'text-xs leading-snug' : 'text-sm'
+                } print:text-xs print:leading-snug`}
+              >
+                {content}
+              </div>
             </article>
           );
         })}

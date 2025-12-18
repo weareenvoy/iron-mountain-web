@@ -7,6 +7,7 @@ import type { ReactNode } from 'react';
 
 type RecapPrintSectionProps = {
   readonly actionSlot?: ReactNode;
+  readonly hideWhenEmpty?: boolean;
   readonly placeholder?: string;
   readonly storageKey: string;
   readonly title?: string;
@@ -15,6 +16,7 @@ type RecapPrintSectionProps = {
 
 const RecapPrintSection = ({
   actionSlot,
+  hideWhenEmpty = false,
   placeholder = '',
   storageKey,
   title = 'Recap',
@@ -23,7 +25,10 @@ const RecapPrintSection = ({
   const palette = tone ?? { ...RECAP_DEFAULT_TONE, rightTextColor: '#12406A' };
 
   const [note] = useLocalStorage<string>(storageKey, '');
-  const noteValue = note.trim().length > 0 ? note : placeholder;
+  const trimmed = note.trim();
+  if (hideWhenEmpty && trimmed.length === 0) return null;
+
+  const noteValue = trimmed.length > 0 ? trimmed : placeholder;
   const rightTextColor = palette.rightTextColor ?? '#12406A';
 
   return (

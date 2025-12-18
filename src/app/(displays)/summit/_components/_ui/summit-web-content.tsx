@@ -178,6 +178,7 @@ const SummitWebContent = () => {
 
   const renderRecapPrint = (index: number) => (
     <RecapPrintSection
+      hideWhenEmpty
       placeholder={recapPlaceholder}
       storageKey={`recap-${index}`}
       title="Recap"

@@ -254,6 +254,7 @@ const useSlideRegistry = () => {
           <SlideFrame showDiamonds>
             <StrategiesSection
               accentColor={STRATEGY_ACCENT_COLORS[0]}
+              density="compact"
               items={possibilitiesItems}
               title={journey3Title}
             />
@@ -267,6 +268,7 @@ const useSlideRegistry = () => {
           <SlideFrame showDiamonds>
             <StrategiesSection
               accentColor={STRATEGY_ACCENT_COLORS[1]}
+              density="compact"
               items={solutionItems}
               title={journey4Title}
               variant="solutions"
@@ -281,6 +283,7 @@ const useSlideRegistry = () => {
           <SlideFrame showDiamonds>
             <StrategiesSection
               accentColor={STRATEGY_ACCENT_COLORS[2]}
+              density="compact"
               items={futurescapingItems}
               title={journey5Title}
               variant="futurescaping"
@@ -295,6 +298,7 @@ const useSlideRegistry = () => {
           <SlideFrame showDiamonds>
             <StrategiesSection
               accentColor={STRATEGY_ACCENT_COLORS[3]}
+              density="compact"
               items={storyItems}
               title={journey6Title}
               variant="stories"
