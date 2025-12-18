@@ -71,9 +71,9 @@ const HardCodedKiosk3SecondScreenTemplate = ({
         </div>
       </div>
 
-      <div className="absolute top-[240px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-white">
+      <h2 className="absolute top-[240px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-white">
         {renderRegisteredMark(eyebrowText)}
-      </div>
+      </h2>
 
       <div className="absolute top-[820px] left-[240px] max-w-[1200px] text-white">
         <h1 className="mb-[40px] text-[100px] leading-[1.3] font-bold tracking-[-5px] whitespace-pre-line">

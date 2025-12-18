@@ -2,8 +2,8 @@
 
 import { ArrowDown, ArrowUp, Diamond } from 'lucide-react';
 import Image from 'next/image';
-import { DEFAULT_KIOSK_ID, type KioskId } from '../../../../_types/kiosk-id';
 import { useAutoScrollNavigation } from '../../hooks/useAutoScrollNavigation';
+import { DEFAULT_KIOSK_ID, type KioskId } from '../../../../_types/kiosk-id';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
 // import styles from './thirdScreenTemplate.module.css';
@@ -51,7 +51,6 @@ export const ThirdScreenTemplate = ({
 
   return (
     <div
-      ref={containerRef}
       // className={styles.container}
       className="group/kiosk relative flex h-screen w-full flex-col overflow-x-hidden overflow-y-auto scroll-smooth bg-[#1b75bc]"
       data-hero-image={heroImageSrc}
@@ -60,6 +59,7 @@ export const ThirdScreenTemplate = ({
       data-large-icon-top={largeIconTopSrc}
       data-node-id="5168:9928"
       data-video-src={videoSrc}
+      ref={containerRef}
     >
       {/* Background gradient layer */}
       <div className="pointer-events-none absolute inset-0 z-[0] bg-[linear-gradient(to_bottom,#1b75bc_0%,#14477d_100%)]" />
@@ -96,18 +96,21 @@ export const ThirdScreenTemplate = ({
       </div>
 
       {/* Description Section - SCROLLABLE */}
-      <div className="relative z-[2] px-[120px] py-[250px]" data-scroll-section="description">
-        <p className="max-w-[1010px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white">
+      <div className="relative z-[2] px-[120px] py-[250px]">
+        <p
+          className="max-w-[1010px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white"
+          data-scroll-section="description"
+        >
           {renderRegisteredMark(description)}
         </p>
       </div>
 
       {/* Metrics Section - SCROLLABLE */}
-      <div
-        className="relative z-[2] flex w-full flex-col items-center px-[120px] py-[300px]"
-        data-scroll-section="metrics-section"
-      >
-        <div className="text-center text-[400px] leading-[1.3] font-[300] tracking-[-20px] whitespace-nowrap text-[#6dcff6]">
+      <div className="relative z-[2] flex w-full flex-col items-center px-[120px] py-[300px]">
+        <div
+          className="text-center text-[400px] leading-[1.3] font-[300] tracking-[-20px] whitespace-nowrap text-[#6dcff6]"
+          data-scroll-section="metrics-section"
+        >
           {renderRegisteredMark(metricAmount)}
         </div>
         <p className="mt-[-142px] max-w-[1200px] text-center text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#6dcff6]">

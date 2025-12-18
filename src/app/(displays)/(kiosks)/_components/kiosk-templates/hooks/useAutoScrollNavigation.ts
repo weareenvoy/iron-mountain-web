@@ -25,7 +25,7 @@ export function useAutoScrollNavigation({
   onNavigateUp,
 }: UseAutoScrollNavigationOptions): UseAutoScrollNavigationReturn {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
+  const [currentSectionIndex, setCurrentSectionIndex] = useState(-1);
   const [sections, setSections] = useState<HTMLElement[]>([]);
   const isScrollingRef = useRef(false);
 
@@ -53,7 +53,32 @@ export function useAutoScrollNavigation({
   const scrollToSection = useCallback(
     (index: number) => {
       const container = containerRef.current;
-      if (!container || index < 0 || index >= sections.length) return;
+      if (!container || index < -1 || index >= sections.length) return;
+
+      // If scrolling to -1, scroll to top
+      if (index === -1) {
+        isScrollingRef.current = true;
+        const containerTop = container.scrollTop;
+        const start = performance.now();
+
+        const animateScroll = (currentTime: number) => {
+          const elapsed = currentTime - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const easeProgress = progress < 0.5 ? 2 * progress * progress : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+          container.scrollTop = containerTop - containerTop * easeProgress;
+
+          if (progress < 1) {
+            requestAnimationFrame(animateScroll);
+          } else {
+            isScrollingRef.current = false;
+            setCurrentSectionIndex(-1);
+          }
+        };
+
+        requestAnimationFrame(animateScroll);
+        return;
+      }
 
       isScrollingRef.current = true;
       const targetSection = sections[index];
@@ -99,7 +124,7 @@ export function useAutoScrollNavigation({
     if (isScrollingRef.current) return;
 
     const prevIndex = currentSectionIndex - 1;
-    if (prevIndex >= 0) {
+    if (prevIndex >= -1) {
       scrollToSection(prevIndex);
     } else {
       // No more sections, delegate to parent

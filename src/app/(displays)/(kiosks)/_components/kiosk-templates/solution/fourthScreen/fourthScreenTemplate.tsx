@@ -84,12 +84,12 @@ const SolutionFourthScreenTemplate = ({
       <div className="absolute top-0 left-0 h-[5120px] w-full" style={{ background: 'transparent' }} />
 
       {/* Subheadline */}
-      <div
+      <h2
         className="absolute top-[368px] left-[120px] -translate-y-full text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed]"
         style={{ top: '400px', width: '390px' }}
       >
         {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
-      </div>
+      </h2>
 
       {/* Solution label */}
       <div

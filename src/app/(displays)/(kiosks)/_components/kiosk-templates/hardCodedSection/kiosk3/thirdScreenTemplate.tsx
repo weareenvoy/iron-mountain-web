@@ -151,14 +151,14 @@ const HardCodedKiosk3ThirdScreenTemplate = ({
       <div className="absolute inset-0 bg-black/15 backdrop-blur-[12px]" />
 
       {/* Eyebrow */}
-      <div className="absolute top-[240px] left-[120px] text-[57px] leading-[1.5] font-normal tracking-[-1.8px] whitespace-pre-line text-[#ededed]">
+      <h2 className="absolute top-[240px] left-[120px] text-[57px] leading-[1.5] font-normal tracking-[-1.8px] whitespace-pre-line text-[#ededed]">
         {renderRegisteredMark(eyebrowText)}
-      </div>
+      </h2>
 
       {/* Main headline */}
-      <div className="absolute top-[830px] left-[240px] max-w-[1200px] text-[100px] leading-[1.2] font-semibold tracking-[-5px] whitespace-pre-line text-white">
+      <h1 className="absolute top-[830px] left-[240px] max-w-[1200px] text-[100px] leading-[1.2] font-semibold tracking-[-5px] whitespace-pre-line text-white">
         {renderRegisteredMark(headlineText)}
-      </div>
+      </h1>
 
       {/* Data configuration + bullets */}
       <div className="absolute top-[1650px] left-[240px] max-w-[920px] space-y-[36px] text-white">

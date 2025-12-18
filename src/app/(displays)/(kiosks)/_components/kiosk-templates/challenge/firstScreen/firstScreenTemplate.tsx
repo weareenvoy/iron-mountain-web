@@ -37,11 +37,11 @@ export const FirstScreenTemplate = ({
 
   return (
     <div
-      ref={containerRef}
       // className={styles.container}
       className="group/kiosk relative flex h-screen w-full flex-col overflow-x-hidden overflow-y-auto scroll-smooth bg-black"
       data-kiosk={kioskId}
       data-node-id="5168:9882"
+      ref={containerRef}
     >
       {/* Background gradient - stays behind all content */}
       <div className="pointer-events-none absolute inset-0 z-[0] bg-[linear-gradient(to_bottom,#000_0%,#1b75bc_20%,#14477d_80%,#154c83_100%)]" />
@@ -79,18 +79,21 @@ export const FirstScreenTemplate = ({
       </div>
 
       {/* Problem Description Section - SCROLLABLE */}
-      <div className="relative z-[2] px-[120px] py-[150px]" data-scroll-section="problem-description">
-        <p className="max-w-[1390px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white group-data-[kiosk=kiosk-2]/kiosk:leading-[1.3] group-data-[kiosk=kiosk-3]/kiosk:text-[80px] group-data-[kiosk=kiosk-3]/kiosk:tracking-[-4px]">
+      <div className="relative z-[2] px-[120px] py-[150px]">
+        <p
+          className="max-w-[1390px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white group-data-[kiosk=kiosk-2]/kiosk:leading-[1.3] group-data-[kiosk=kiosk-3]/kiosk:text-[80px] group-data-[kiosk=kiosk-3]/kiosk:tracking-[-4px]"
+          data-scroll-section="problem-description"
+        >
           {renderRegisteredMark(problemDescription)}
         </p>
       </div>
 
       {/* Savings Metrics Section - SCROLLABLE */}
-      <div
-        className="relative z-[2] flex w-full flex-col items-center px-[120px] py-[300px]"
-        data-scroll-section="savings-metrics"
-      >
-        <div className="text-center text-[400px] leading-[1.3] font-[300] tracking-[-20px] whitespace-nowrap text-[#6dcff6]">
+      <div className="relative z-[2] flex w-full flex-col items-center px-[120px] py-[300px]">
+        <div
+          className="text-center text-[400px] leading-[1.3] font-[300] tracking-[-20px] whitespace-nowrap text-[#6dcff6]"
+          data-scroll-section="savings-metrics"
+        >
           {renderRegisteredMark(savingsAmount)}
         </div>
         <p className="mt-[-40px] text-center text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#6dcff6] group-data-[kiosk=kiosk-2]/kiosk:leading-[1.3] group-data-[kiosk=kiosk-3]/kiosk:leading-[1.3]">

@@ -88,14 +88,14 @@ const HardCodedKiosk1FirstScreenTemplate = ({
       />
 
       {/* Eyebrow */}
-      <div className="absolute top-[200px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
+      <h2 className="absolute top-[200px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
         {renderRegisteredMark(eyebrowText)}
-      </div>
+      </h2>
 
       {/* Headline */}
-      <div className="absolute top-[1250px] left-[250px] w-full text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]">
+      <h1 className="absolute top-[1250px] left-[250px] w-full text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]">
         {renderRegisteredMark(headlineText)}
-      </div>
+      </h1>
 
       {/* CTA buttons */}
       <div className={`absolute top-[2220px] left-[245px] flex flex-col gap-[90px] ${ctaWidthClass}`}>

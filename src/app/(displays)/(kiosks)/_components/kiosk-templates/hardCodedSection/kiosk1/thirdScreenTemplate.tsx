@@ -49,9 +49,9 @@ const HardCodedKiosk1ThirdScreenTemplate = ({
       />
       <div className="absolute inset-0 bg-black/30 backdrop-blur-[50px]" />
 
-      <div className="absolute top-[780px] left-[240px] w-[1680px] text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-white">
+      <h1 className="absolute top-[780px] left-[240px] w-[1680px] text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-white">
         {renderRegisteredMark(headlineText)}
-      </div>
+      </h1>
 
       <div
         className="absolute top-[1290px] left-[120px] rounded-[20px] shadow-[0_40px_120px_rgba(0,0,0,0.45)]"

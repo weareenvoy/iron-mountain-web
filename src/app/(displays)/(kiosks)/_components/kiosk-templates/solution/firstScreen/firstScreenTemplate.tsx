@@ -71,9 +71,9 @@ const SolutionFirstScreenTemplate = ({
       />
 
       {/* Subheadline */}
-      <div className="absolute top-[240px] left-[120px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed]">
+      <h2 className="absolute top-[240px] left-[120px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed]">
         {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
-      </div>
+      </h2>
 
       {/* Solution label */}
       <div className="absolute top-[790px] left-[140px] flex items-center gap-[41px]" data-node-id="5168:9697">

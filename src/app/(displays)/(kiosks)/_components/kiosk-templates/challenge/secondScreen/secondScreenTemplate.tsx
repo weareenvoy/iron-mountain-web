@@ -45,12 +45,12 @@ export const SecondScreenTemplate = ({
 
   return (
     <div
-      ref={containerRef}
       // className={styles.container}
       className="relative flex h-screen w-full flex-col overflow-x-hidden overflow-y-auto scroll-smooth bg-[#1b75bc]"
       data-hero-image={topImageSrc}
       data-kiosk={kioskId}
       data-node-id="5168:9907"
+      ref={containerRef}
     >
       {/* Background gradient layer */}
       <div className="pointer-events-none absolute inset-0 z-[0] bg-[linear-gradient(to_bottom,#1b75bc_0%,#14477d_100%)]" />
@@ -87,11 +87,11 @@ export const SecondScreenTemplate = ({
       </div>
 
       {/* Stat Section - SCROLLABLE */}
-      <div className="relative z-[2] px-[120px] py-[200px]" data-scroll-section="stat-section">
-        <div className="flex w-[940px] flex-col gap-[60px]">
-          <div className="text-[300px] leading-[1.3] font-[300] tracking-[-15px] whitespace-nowrap text-[#6dcff6]">
+      <div className="relative z-[2] px-[120px] py-[200px]">
+        <div className="flex w-[940px] flex-col gap-[60px]" data-scroll-section="stat-section">
+          <p className="text-[300px] leading-[1.3] font-[300] tracking-[-15px] whitespace-nowrap text-[#6dcff6]">
             {renderRegisteredMark(statAmount)}
-          </div>
+          </p>
           <p className="text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#a8d4f6]">
             {renderRegisteredMark(statDescription)}
           </p>
@@ -99,15 +99,21 @@ export const SecondScreenTemplate = ({
       </div>
 
       {/* Main Description - SCROLLABLE */}
-      <div className="relative z-[2] px-[120px] py-[250px]" data-scroll-section="main-description">
-        <p className="max-w-[980px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white">
+      <div className="relative z-[2] px-[120px] py-[250px]">
+        <p
+          className="max-w-[980px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white"
+          data-scroll-section="main-description"
+        >
           {renderRegisteredMark(mainDescription)}
         </p>
       </div>
 
       {/* Bottom Description - SCROLLABLE */}
-      <div className="relative z-[2] px-[120px] py-[300px]" data-scroll-section="bottom-description">
-        <p className="max-w-[971px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white">
+      <div className="relative z-[2] px-[120px] py-[300px]">
+        <p
+          className="max-w-[971px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white"
+          data-scroll-section="bottom-description"
+        >
           {renderRegisteredMark(bottomDescription)}
         </p>
       </div>

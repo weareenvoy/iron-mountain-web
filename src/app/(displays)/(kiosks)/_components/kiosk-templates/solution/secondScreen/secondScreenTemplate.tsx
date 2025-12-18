@@ -111,9 +111,9 @@ const SolutionSecondScreenTemplate = ({
       </div>
 
       {/* Subheadline */}
-      <div className="absolute top-[245px] left-[120px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
+      <h2 className="absolute top-[245px] left-[120px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
         {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
-      </div>
+      </h2>
 
       {/* Solution label */}
       <div className="absolute top-[745px] left-[128px] flex items-center gap-[41px]">

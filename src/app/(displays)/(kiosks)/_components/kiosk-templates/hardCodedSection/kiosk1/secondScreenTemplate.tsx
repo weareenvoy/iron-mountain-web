@@ -270,16 +270,16 @@ const HardCodedKiosk1SecondScreenTemplate = ({
           }}
         />
 
-        <div className="absolute top-[240px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
+        <h2 className="absolute top-[240px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
           {renderRegisteredMark(eyebrowText)}
-        </div>
+        </h2>
 
-        <div
+        <h1
           className="absolute w-full text-[100px] leading-[1.2] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]"
           style={{ left: '240px', top: '830px', width: '100%' }}
         >
           {renderRegisteredMark(headlineWithForcedBreak)}
-        </div>
+        </h1>
 
         <p
           className="absolute text-[52px] font-normal text-[#ededed]/90"
