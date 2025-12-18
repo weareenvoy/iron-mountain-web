@@ -13,6 +13,7 @@ export interface AudioSettings {
 
 export interface LoopOptions {
   readonly fadeMs?: number;
+  readonly restart?: boolean;
   readonly volume?: number; // 0..1 multiplier for that loop
 }
 

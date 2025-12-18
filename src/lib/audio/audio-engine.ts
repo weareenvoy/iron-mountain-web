@@ -25,7 +25,9 @@ const defaultSettings: AudioSettings = {
 
 type LoopSlot = null | {
   gain: GainNode;
+  isStopping: boolean;
   source: AudioBufferSourceNode;
+  url: string;
 };
 
 export class AudioEngine implements AudioController {
@@ -266,6 +268,9 @@ export class AudioEngine implements AudioController {
 
   private setLoop(slot: 'ambience' | 'music', idOrUrl: null | string, options?: LoopOptions): void {
     const fadeMs = options?.fadeMs ?? 250;
+    const restart = options?.restart ?? false;
+    const volume = options?.volume === undefined ? null : clamp01(options.volume);
+    const volumeOrDefault = volume ?? 1;
 
     const start = async () => {
       const ctx = this.ensureContext();
@@ -273,21 +278,30 @@ export class AudioEngine implements AudioController {
 
       const stopExisting = (existing: LoopSlot) => {
         if (!existing) return;
+        if (existing.isStopping) return;
+        existing.isStopping = true;
 
         const now = ctx.currentTime;
+        const stopAt = now + fadeMs / 1000;
         existing.gain.gain.cancelScheduledValues(now);
         existing.gain.gain.setValueAtTime(existing.gain.gain.value, now);
-        existing.gain.gain.linearRampToValueAtTime(0, now + fadeMs / 1000);
+        existing.gain.gain.linearRampToValueAtTime(0, stopAt);
 
-        window.setTimeout(() => {
+        const cleanup = () => {
           try {
-            existing.source.stop();
             existing.source.disconnect();
             existing.gain.disconnect();
           } catch {
             // ignore
           }
-        }, fadeMs + 50);
+        };
+
+        existing.source.onended = cleanup;
+        try {
+          existing.source.stop(stopAt);
+        } catch {
+          cleanup();
+        }
       };
 
       const existing = this.loopSlots[slot];
@@ -295,6 +309,17 @@ export class AudioEngine implements AudioController {
       if (!idOrUrl) {
         stopExisting(existing);
         this.loopSlots[slot] = null;
+        return;
+      }
+
+      // If the requested loop is already playing, keep it running by default.
+      // Optionally update its per-loop gain (volume) and/or restart it explicitly.
+      if (existing && existing.url === idOrUrl && !restart) {
+        if (volume === null) return;
+        const now = ctx.currentTime;
+        existing.gain.gain.cancelScheduledValues(now);
+        existing.gain.gain.setValueAtTime(existing.gain.gain.value, now);
+        existing.gain.gain.linearRampToValueAtTime(volume, now + fadeMs / 1000);
         return;
       }
 
@@ -315,10 +340,10 @@ export class AudioEngine implements AudioController {
       const now = ctx.currentTime;
       loopGain.gain.cancelScheduledValues(now);
       loopGain.gain.setValueAtTime(0, now);
-      loopGain.gain.linearRampToValueAtTime(clamp01(options?.volume ?? 1), now + fadeMs / 1000);
+      loopGain.gain.linearRampToValueAtTime(volumeOrDefault, now + fadeMs / 1000);
 
       stopExisting(existing);
-      this.loopSlots[slot] = { gain: loopGain, source };
+      this.loopSlots[slot] = { gain: loopGain, isStopping: false, source, url: idOrUrl };
     };
 
     this.runOrQueue(start);

@@ -153,6 +153,15 @@ export function MusicBed() {
 }
 ```
 
+Notes:
+
+- Calling `setMusic()` with the **same URL** defaults to **no-op** (keeps playing seamlessly).
+- To force a restart from the beginning, pass `restart: true`:
+
+```tsx
+setMusic('/audio/music/bgm-1.mp3', { restart: true });
+```
+
 ### 4) Start/stop ambience loop
 
 ```tsx
