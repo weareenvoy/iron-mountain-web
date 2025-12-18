@@ -14,6 +14,12 @@ import type { SummitFuturescaping, SummitKioskAmbient, SummitPossibility } from 
 import type { SolutionItem } from '@/app/(displays)/summit/_utils';
 import type { SummitMqttState } from '@/lib/mqtt/types';
 
+type MetaLabelMap = {
+  readonly company: string;
+  readonly dateOfEngagement: string;
+  readonly location: string;
+};
+
 type SlideDefinition = {
   readonly id: string;
   readonly render: () => ReactElement;
@@ -80,11 +86,17 @@ const SlideFrame = ({
 const WelcomeSlide = ({
   company,
   dateOfEngagement,
+  labels,
   location,
   title,
 }: {
   readonly company: string;
   readonly dateOfEngagement: string;
+  readonly labels: {
+    readonly company: string;
+    readonly dateOfEngagement: string;
+    readonly location: string;
+  };
   readonly location: string;
   readonly title: string;
 }) => {
@@ -96,15 +108,15 @@ const WelcomeSlide = ({
         </div>
         <div className="grid grid-cols-3 gap-8 text-lg sm:text-xl">
           <div className="flex flex-col gap-2">
-            <span className="text-sm font-semibold text-[#EDEDED]/80">Company</span>
+            <span className="text-sm font-semibold text-[#EDEDED]/80">{labels.company}</span>
             <span className="text-2xl text-[#EDEDED] sm:text-lg">{company}</span>
           </div>
           <div className="flex flex-col gap-2">
-            <span className="text-sm font-semibold text-[#EDEDED]/80">Date of engagement</span>
+            <span className="text-sm font-semibold text-[#EDEDED]/80">{labels.dateOfEngagement}</span>
             <span className="text-2xl text-[#EDEDED] sm:text-lg">{dateOfEngagement}</span>
           </div>
           <div className="flex flex-col gap-2">
-            <span className="text-sm font-semibold text-[#EDEDED]/80">Location</span>
+            <span className="text-sm font-semibold text-[#EDEDED]/80">{labels.location}</span>
             <span className="text-2xl text-[#EDEDED] sm:text-lg">{location}</span>
           </div>
         </div>
@@ -124,6 +136,11 @@ const StaticWelcomeSlide = ({
   readonly company?: string;
   readonly dateOfEngagement?: string;
   readonly elevation?: string;
+  readonly labels?: {
+    readonly company: string;
+    readonly dateOfEngagement: string;
+    readonly location: string;
+  };
   readonly location?: string;
   readonly site?: string;
   readonly title?: string;
@@ -197,6 +214,12 @@ const useSlideRegistry = () => {
     const stats = basecamp.problem2;
 
     const getMetaValue = (label: string) => meta.find(item => item.label.toLowerCase() === label.toLowerCase())?.value;
+    const metaLabels: MetaLabelMap = {
+      company: meta.find(item => item.label.toLowerCase() === 'company')?.label ?? 'Company',
+      dateOfEngagement:
+        meta.find(item => item.label.toLowerCase() === 'date of engagement')?.label ?? 'Date of engagement',
+      location: meta.find(item => item.label.toLowerCase() === 'location')?.label ?? 'Location',
+    };
 
     const company = getMetaValue('Company') ?? 'Company';
     const dateOfEngagement = getMetaValue('Date of engagement') ?? '';
@@ -239,6 +262,7 @@ const useSlideRegistry = () => {
           <WelcomeSlide
             company={company}
             dateOfEngagement={dateOfEngagement}
+            labels={metaLabels}
             location={location}
             title={journey1Title}
           />
@@ -336,6 +360,12 @@ const SummitSlidesScreen = ({
   const { client } = useMqtt();
   const { data, error, loading, slides } = useSlideRegistry();
   const searchParams = useSearchParams();
+  const metaLabels: MetaLabelMap = {
+    company: data?.meta.find(item => item.label.toLowerCase() === 'company')?.label ?? 'Company',
+    dateOfEngagement:
+      data?.meta.find(item => item.label.toLowerCase() === 'date of engagement')?.label ?? 'Date of engagement',
+    location: data?.meta.find(item => item.label.toLowerCase() === 'location')?.label ?? 'Location',
+  };
 
   const devControls = searchParams.get('dev') === '1' || searchParams.get('dev') === 'true';
   const requestedSlideParam = searchParams.get('slide') ?? undefined;
@@ -395,6 +425,7 @@ const SummitSlidesScreen = ({
       <StaticWelcomeSlide
         company={metaItems.find(item => item.label.toLowerCase() === 'company')?.value ?? 'Company'}
         elevation="Elevation 760 m (2,493.4 ft)"
+        labels={metaLabels}
         location={metaItems.find(item => item.label.toLowerCase() === 'location')?.value ?? ''}
         title={journeyIntroSlide?.title ?? 'Welcome to Iron Mountain'}
         videoUrl={journeyIntroVideo}
