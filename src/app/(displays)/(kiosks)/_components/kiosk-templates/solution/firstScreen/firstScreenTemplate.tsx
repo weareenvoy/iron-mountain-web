@@ -43,7 +43,7 @@ const SolutionFirstScreenTemplate = ({
       style={{ overflow: 'visible' }}
     >
       {/* Background video */}
-      <div className="absolute top-[-5px] left-0 z-[100] h-[1545px] w-full">
+      <div className="absolute top-[-5px] left-0 h-[1545px] w-full">
         <div className="relative h-full w-full">
           <video
             autoPlay

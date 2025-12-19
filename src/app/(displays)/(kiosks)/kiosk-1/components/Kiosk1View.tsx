@@ -285,7 +285,7 @@ const Kiosk1View = () => {
           <div className="h-screen w-full flex-shrink-0" data-slide-index={idx} key={slide.id}>
             {slide.render(idx === topIndex)}
           </div>
-        ))}
+          ))}
       </div>
       <div
         // className={styles.debugControls}

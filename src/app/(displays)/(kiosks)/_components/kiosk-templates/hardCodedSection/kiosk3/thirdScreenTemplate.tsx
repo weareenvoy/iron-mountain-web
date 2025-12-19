@@ -160,7 +160,11 @@ const HardCodedKiosk3ThirdScreenTemplate = ({
   const goPrev = () => setIndex(i => (i - 1 + total) % total);
 
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-hidden" data-node-id="5896:13360">
+    <div
+      className="relative flex h-screen w-full flex-col overflow-hidden"
+      data-node-id="5896:13360"
+      data-scroll-section="hardcoded-third-screen"
+    >
       <div className="absolute inset-0" style={{ background: 'transparent' }} />
       <div className="absolute inset-0 bg-black/15 backdrop-blur-[12px]" />
 

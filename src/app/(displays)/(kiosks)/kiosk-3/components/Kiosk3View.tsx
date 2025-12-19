@@ -89,7 +89,7 @@ const Kiosk3View = () => {
       'kiosk-3',
       { ...controller, ...globalHandlers },
       {
-        initialScreen: { ...challenges.initialScreen, contentBoxBgColor: '#00A88E' },
+      initialScreen: { ...challenges.initialScreen, contentBoxBgColor: '#00A88E' },
         onInitialButtonClick: () => {
           // Start the scroll, arrows will appear after scroll completes
           setAllowArrowsToShow(true);
@@ -291,7 +291,7 @@ const Kiosk3View = () => {
           <div className="h-screen w-full flex-shrink-0" data-slide-index={idx} key={slide.id}>
             {slide.render(idx === topIndex)}
           </div>
-        ))}
+          ))}
       </div>
       <div
         // className={styles.debugControls}

@@ -35,10 +35,10 @@ export const FirstScreenTemplate = ({
       data-node-id="5168:9882"
     >
       {/* Background gradient - stays behind all content */}
-      <div className="pointer-events-none absolute inset-0 z-[0] h-[15630px] bg-[linear-gradient(180deg,#1B75BC_0.01%,#14477D_98%)]" />
+      <div className="pointer-events-none absolute inset-0 z-[0] h-[15630px] bg-[linear-gradient(180deg,#1B75BC_0.01%,#14477D_98%)] rounded-t-[100px] top-[1290px]" />
 
       {/* Video Header Section */}
-      <div className="relative z-[100] flex h-[1291px] w-full flex-col items-center justify-center overflow-hidden">
+      <div className="relative flex h-[1291px] w-full flex-col items-center justify-center overflow-hidden">
         <video
           autoPlay
           className="absolute inset-0 h-full w-full object-cover object-center"

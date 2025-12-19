@@ -61,7 +61,11 @@ export const buildHardcodedSlides = (
       id: 'hardcoded-second',
       render: (isActive: boolean) => (
         <SectionSlide isActive={isActive}>
-          <KioskSecond {...hardCoded.secondScreen} onBack={() => scrollToSection?.('hardcoded-first-screen')} />
+          <KioskSecond
+            {...hardCoded.secondScreen}
+            onBack={() => scrollToSection?.('hardcoded-first-screen')}
+            onTapToBegin={() => scrollToSection?.('hardcoded-third-screen')}
+          />
         </SectionSlide>
       ),
       title: 'Hardcoded Second',
