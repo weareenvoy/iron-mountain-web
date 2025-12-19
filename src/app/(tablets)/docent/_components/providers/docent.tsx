@@ -7,25 +7,17 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useMemo,
   useRef,
   useState,
   type PropsWithChildren,
 } from 'react';
 import { type DocentAppState, type SyncState } from '@/app/(tablets)/docent/_types';
-import {
-  getTourIdFromGecState,
-  isDocentRoute,
-  parseBasecampBeatId,
-  parseOverlookBeatId,
-  parseSummitBeatId,
-} from '@/app/(tablets)/docent/_utils';
+import { getTourIdFromGecState, isDocentRoute } from '@/app/(tablets)/docent/_utils';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getDocentData } from '@/lib/internal/data/get-docent';
-import type { DocentData, ExhibitNavigationState, Locale, SummitRoomBeatId, Tour } from '@/lib/internal/types';
+import type { DocentData, Locale, Tour } from '@/lib/internal/types';
 
 export interface DocentContextType {
-  readonly basecampExhibitState: ExhibitNavigationState;
   readonly currentTour: null | Tour;
   readonly data: DocentData | null;
   // Full state from GEC (combines tour, UI mode, exhibit settings)
@@ -36,13 +28,10 @@ export interface DocentContextType {
   readonly isTourDataLoading: boolean;
   readonly lastUpdated: Date | null;
   readonly locale: Locale;
-  readonly overlookExhibitState: ExhibitNavigationState;
   readonly refreshData: () => Promise<void>;
   readonly setCurrentTour: (tour: null | Tour) => void;
   readonly setIsSettingsOpen: (open: boolean) => void;
   readonly setLocale: (locale: Locale) => void;
-  // Summit Room state - 'journey-intro' or 'journey-1' through 'journey-5'
-  readonly summitRoomBeatId: SummitRoomBeatId;
 }
 
 export const DocentContext = createContext<DocentContextType | undefined>(undefined);
@@ -78,41 +67,12 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
   const [docentAppState, setDocentAppState] = useState<DocentAppState | null>(null);
 
   // Ref to keep latest pathname without triggering re-subscriptions
-  // pathname changes on every navigation, so we use a ref to avoid re-subscribing
   const pathnameRef = useRef(pathname);
 
   // Keep ref in sync with latest pathname
   useEffect(() => {
     pathnameRef.current = pathname;
   }, [pathname]);
-
-  // Derive beat states from GEC state. Always listen to state/gec updates.
-  const basecampBeatId = docentAppState?.exhibits?.basecamp['beat-id'];
-  const basecampExhibitState: ExhibitNavigationState = useMemo(() => {
-    if (basecampBeatId) {
-      const parsed = parseBasecampBeatId(basecampBeatId);
-      if (parsed) return parsed;
-    }
-    return { beatIdx: 0, momentId: 'ambient' };
-  }, [basecampBeatId]);
-
-  const overlookBeatId = docentAppState?.exhibits?.['overlook-wall']?.['beat-id'];
-  const overlookExhibitState: ExhibitNavigationState = useMemo(() => {
-    if (overlookBeatId) {
-      const parsed = parseOverlookBeatId(overlookBeatId);
-      if (parsed) return parsed;
-    }
-    return { beatIdx: 0, momentId: 'ambient' };
-  }, [overlookBeatId]);
-
-  const summitBeatId = docentAppState?.exhibits?.summit?.['beat-id'];
-  const summitRoomBeatId: SummitRoomBeatId = useMemo(() => {
-    if (summitBeatId) {
-      const parsed = parseSummitBeatId(summitBeatId);
-      if (parsed) return parsed;
-    }
-    return 'journey-intro';
-  }, [summitBeatId]);
 
   // Fetch all docent data (includes tours and slides)
   const fetchDocentData = useCallback(async () => {
@@ -151,7 +111,6 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
   }, [client, isConnected]);
 
   // Subscribe to GEC full state
-  // Note: pathname changes on every navigation, so we use a ref to avoid re-subscribing.
   useEffect(() => {
     if (!client) return;
 
@@ -242,7 +201,6 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
   const data = dataByLocale[locale];
 
   const contextValue = {
-    basecampExhibitState,
     currentTour,
     data,
     docentAppState,
@@ -252,12 +210,10 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     isTourDataLoading,
     lastUpdated,
     locale,
-    overlookExhibitState,
     refreshData: fetchDocentData,
     setCurrentTour,
     setIsSettingsOpen,
     setLocale,
-    summitRoomBeatId,
   };
 
   return <DocentContext.Provider value={contextValue}>{children}</DocentContext.Provider>;

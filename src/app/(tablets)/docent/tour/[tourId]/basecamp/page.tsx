@@ -7,6 +7,7 @@ import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
 import MomentsAndBeats from '@/app/(tablets)/docent/_components/ui/MomentsAndBeats';
+import { parseBasecampBeatId } from '@/app/(tablets)/docent/_utils';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import useMomentsNavigation from '@/hooks/use-moments-navigation';
 import type { Section } from '@/lib/internal/types';
@@ -15,7 +16,19 @@ const BasecampPage = ({ params }: PageProps<'/docent/tour/[tourId]/basecamp'>) =
   const { tourId } = use(params);
   const router = useRouter();
   const { client } = useMqtt();
-  const { basecampExhibitState, currentTour, data } = useDocent();
+  const { currentTour, data, docentAppState } = useDocent();
+
+  // Extract beat-id
+  const basecampBeatId = docentAppState?.exhibits.basecamp['beat-id'];
+
+  // Derive exhibitState from GEC state
+  const basecampExhibitState = useMemo(() => {
+    if (basecampBeatId) {
+      const parsed = parseBasecampBeatId(basecampBeatId);
+      if (parsed) return parsed;
+    }
+    return { beatIdx: 0, momentId: 'ambient' as const };
+  }, [basecampBeatId]);
 
   // Transform basecampMoments
   const basecampContent = useMemo(() => {

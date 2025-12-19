@@ -7,6 +7,7 @@ import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
 import MomentsAndBeats from '@/app/(tablets)/docent/_components/ui/MomentsAndBeats';
+import { parseOverlookBeatId } from '@/app/(tablets)/docent/_utils';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import CastOff from '@/components/ui/icons/CastOff';
 import useMomentsNavigation from '@/hooks/use-moments-navigation';
@@ -16,7 +17,19 @@ const OverlookPage = ({ params }: PageProps<'/docent/tour/[tourId]/overlook'>) =
   const { tourId } = use(params);
   const router = useRouter();
   const { client } = useMqtt();
-  const { currentTour, data, docentAppState, overlookExhibitState } = useDocent();
+  const { currentTour, data, docentAppState } = useDocent();
+
+  // Extract beat-id
+  const overlookBeatId = docentAppState?.exhibits['overlook-wall']?.['beat-id'];
+
+  // Derive exhibitState from GEC state
+  const overlookExhibitState = useMemo(() => {
+    if (overlookBeatId) {
+      const parsed = parseOverlookBeatId(overlookBeatId);
+      if (parsed) return parsed;
+    }
+    return { beatIdx: 0, momentId: 'ambient' as const };
+  }, [overlookBeatId]);
 
   // Transform overlookMoments
   const overlookContent = useMemo(() => {
@@ -55,7 +68,7 @@ const OverlookPage = ({ params }: PageProps<'/docent/tour/[tourId]/overlook'>) =
   );
 
   // Get current presentation mode from GEC state
-  const currentPresentationMode = docentAppState?.exhibits?.['overlook-wall']?.['presentation-mode'] ?? false;
+  const currentPresentationMode = docentAppState?.exhibits['overlook-wall']?.['presentation-mode'] ?? false;
 
   const handleTogglePresentationMode = useCallback(() => {
     if (!client) return;

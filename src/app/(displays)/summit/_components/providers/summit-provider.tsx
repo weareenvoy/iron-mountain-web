@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { parseSummitBeatId } from '@/app/(tablets)/docent/_utils';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getLocaleForTesting } from '@/flags/flags';
@@ -42,6 +42,10 @@ export const SummitProvider = ({ children }: PropsWithChildren) => {
     'volume-level': 1.0,
     'volume-muted': false,
   });
+
+  // Ref to access latest mqttState without causing dependency changes. Avoids re-subscription.
+  const mqttStateRef = useRef(mqttState);
+  mqttStateRef.current = mqttState;
 
   // Extract beat-id for dependency tracking
   const beatId = mqttState['beat-id'];
@@ -86,18 +90,16 @@ export const SummitProvider = ({ children }: PropsWithChildren) => {
     (newState: Partial<ExhibitMqttStateBase>) => {
       if (!client) return;
 
-      const updatedState: ExhibitMqttStateBase = {
-        ...mqttState,
-        ...newState,
-      };
-      setMqttState(updatedState);
+      const updatedState = { ...mqttStateRef.current, ...newState };
+      mqttStateRef.current = updatedState;
+
+      setMqttState(prev => ({ ...prev, ...newState }));
 
       client.reportExhibitState('summit', updatedState, {
         onError: err => console.error('Summit: failed to report state:', err),
-        onSuccess: () => console.info('Summit: reported state:', updatedState),
       });
     },
-    [client, mqttState]
+    [client]
   );
 
   useEffect(() => {
@@ -175,8 +177,7 @@ export const SummitProvider = ({ children }: PropsWithChildren) => {
     };
   }, [client, fetchData, reportState]);
 
-  // Subscribe to own state (retained + live updates) for restart/recovery
-  // This allows exhibit to restore state after refresh, and stay in sync with GEC updates (e.g., volume/mute).
+  // Subscribe to own state for restart/recovery
   useEffect(() => {
     if (!client) return;
 
@@ -187,6 +188,7 @@ export const SummitProvider = ({ children }: PropsWithChildren) => {
         console.info('Summit: received own state on boot:', state);
 
         // Update internal MQTT state - summitBeatId will be derived from this
+        mqttStateRef.current = state;
         setMqttState(state);
 
         // Fetch content if we have a tour loaded

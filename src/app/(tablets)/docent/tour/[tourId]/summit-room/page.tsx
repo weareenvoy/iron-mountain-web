@@ -7,7 +7,7 @@ import { use, useCallback, useEffect, useMemo } from 'react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
-import { getSlideBorderColor } from '@/app/(tablets)/docent/_utils';
+import { getSlideBorderColor, parseSummitBeatId } from '@/app/(tablets)/docent/_utils';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import SummitRoomDiamonds from '@/components/ui/icons/SummitRoomDiamonds';
 import { getBeatIdFromSlideIndex, getSlideIndexFromBeatId, type SummitRoomBeatId } from '@/lib/internal/types';
@@ -19,7 +19,19 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
   const { tourId } = use(params);
   const router = useRouter();
   const { client } = useMqtt();
-  const { currentTour, data, summitRoomBeatId } = useDocent();
+  const { currentTour, data, docentAppState } = useDocent();
+
+  // Extract beat-id
+  const summitBeatId = docentAppState?.exhibits.summit?.['beat-id'];
+
+  // Derive summitRoomBeatId from GEC state
+  const summitRoomBeatId = useMemo(() => {
+    if (summitBeatId) {
+      const parsed = parseSummitBeatId(summitBeatId);
+      if (parsed) return parsed;
+    }
+    return 'journey-intro';
+  }, [summitBeatId]);
 
   const summitRoomSlidesInitial = data?.summitSlides ?? [];
   const summitRoomSlides = summitRoomSlidesInitial.filter(slide => slide.handle !== 'journey-intro');

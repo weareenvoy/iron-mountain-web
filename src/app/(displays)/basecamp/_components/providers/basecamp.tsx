@@ -46,7 +46,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
   // Which beat's video is ready. Foreground compares its beatId to this.
   const [readyBeatId, setReadyBeatId] = useState<null | string>(null);
 
-  // MQTT state (what we report to GEC) - also tracks current beat being displayed
+  // MQTT state. What we report to GEC + tracks current beat being displayed.
   const [mqttState, setMqttState] = useState<ExhibitMqttStateBase>({
     'beat-id': 'ambient-1',
     'volume-level': 1.0,
@@ -178,8 +178,6 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
             return;
           }
 
-          console.info(`Parsed beat: moment=${parsed.momentId}, beatIdx=${parsed.beatIdx}`);
-
           // Report updated state with new beat-id - exhibitState will be derived from this
           reportState({ 'beat-id': beatId });
         }
@@ -201,8 +199,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     };
   }, [client, fetchData, reportState]);
 
-  // Subscribe to own state (retained + live updates) for restart/recovery
-  // This allows exhibit to restore state after refresh, and stay in sync with GEC updates (e.g., volume/mute).
+  // Subscribe to own state for restart/recovery
   useEffect(() => {
     if (!client) return;
 

@@ -24,14 +24,6 @@ const Header = ({ leftButton, useDarkLogo }: HeaderProps) => {
     setLocale(newLocale);
   };
 
-  const handleLeftButtonClick = () => {
-    if (!leftButton) return;
-
-    // onClick handler is responsible for all logic including navigation
-    // This ensures proper execution order (e.g., MQTT commands before navigation)
-    leftButton.onClick();
-  };
-
   return (
     <div className="absolute top-0 left-0 flex h-30 w-full items-center px-5">
       {/* Left Button */}
@@ -39,7 +31,7 @@ const Header = ({ leftButton, useDarkLogo }: HeaderProps) => {
         {leftButton && (
           <Button
             className="flex h-13 items-center gap-3.5 px-6"
-            onClick={handleLeftButtonClick}
+            onClick={leftButton.onClick}
             size="sm"
             variant="outline-light-grey"
           >
