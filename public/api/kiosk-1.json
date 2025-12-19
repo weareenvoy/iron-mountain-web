@@ -121,11 +121,56 @@
           "to access"
         ],
         "steps": [
-          { "label": "Intake and assessment" },
-          { "label": "Digitization and remediation" },
-          { "label": "Digital preservation" },
-          { "label": "Search and discover" },
-          { "label": "Share, stream and monetize" }
+          {
+            "label": "Intake and assessment",
+            "modal": {
+              "body": [
+                "Assets, whether film, audio, digital, or physical, are logged, evaluated for condition and risk, and prioritized based on preservation and activation potential."
+              ],
+              "imageAlt": "Intake and assessment illustration",
+              "imageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Intake+and+assessment.webp"
+            }
+          },
+          {
+            "label": "Digitization and remediation",
+            "modal": {
+              "body": [
+                "Physical media is digitized to archival standards, with restoration applied as needed and metadata extracted to ensure assets are searchable, playable, and accessible."
+              ],
+              "imageAlt": "Digitization and remediation illustration",
+              "imageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Digitization+and+remediation.webp"
+            }
+          },
+          {
+            "label": "Digital preservation",
+            "modal": {
+              "body": [
+                "Iron Mountain's digital preservation platform provides a fully managed digital repository with triple-redundant geo-distributed storage, secure access, and intuitive navigation."
+              ],
+              "imageAlt": "Digital preservation illustration",
+              "imageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Digital+preservation.webp"
+            }
+          },
+          {
+            "label": "Search and discover",
+            "modal": {
+              "body": [
+                "The entire archive becomes searchable through AI-powered metadata, custom filters, and integrated preview tools, enabling fast discovery from any location."
+              ],
+              "imageAlt": "Search and discover illustration",
+              "imageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Search+and+discover.webp"
+            }
+          },
+          {
+            "label": "Share, stream and monetize",
+            "modal": {
+              "body": [
+                "Digitized content is ready for licensing, streaming, and storytelling, unlocking new value across platforms while maintaining archival integrity."
+              ],
+              "imageAlt": "Share, stream and monetize illustration",
+              "imageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Share%2C+stream+and+monetize.webp"
+            }
+          }
         ]
       },
       "thirdScreen": {

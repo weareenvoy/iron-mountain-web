@@ -1,9 +1,8 @@
 'use client';
 
-import kioskContent from '@public/api/kiosk-1.json';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowDown, ArrowUp } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
 import { buildChallengeSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeTemplate';
 import {
@@ -20,12 +19,13 @@ import {
   buildValueSlides,
   type ValueScreens,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueTemplate';
+import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers';
 import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
 import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
-// import styles from './kiosk-1.module.css';
 
 const Kiosk1View = () => {
   const controller: Controller = useKioskController();
+  const { data: kioskData, error, loading } = useKiosk();
   const [topIndex, setTopIndex] = useState(0);
   const [showArrows, setShowArrows] = useState(false);
   const [allowArrowsToShow, setAllowArrowsToShow] = useState(false);
@@ -72,13 +72,29 @@ const Kiosk1View = () => {
     baseHandleNavigateUp();
   }, [baseHandleNavigateUp, currentScrollTarget]);
 
-  const challenges: KioskChallenges = parseKioskChallenges(
-    mapChallenges(kioskContent.data.challenge, kioskContent.data.ambient),
-    'kiosk-1'
-  );
-  const solutions = mapSolutions(kioskContent.data.solutions) as SolutionScreens;
-  const values = mapValue(kioskContent.data.value) as ValueScreens;
-  const hardCoded = kioskContent.data.hardcoded as HardCodedScreens;
+  // Prepare data (with safe defaults for loading state)
+  const kioskContent = kioskData as
+    | null
+    | undefined
+    | {
+        data?: {
+          ambient?: unknown;
+          challenge?: unknown;
+          hardcoded?: unknown;
+          solutions?: unknown;
+          value?: unknown;
+        };
+      };
+
+  const challenges: KioskChallenges | null =
+    kioskContent?.data?.challenge && kioskContent.data.ambient
+      ? parseKioskChallenges(mapChallenges(kioskContent.data.challenge, kioskContent.data.ambient), 'kiosk-1')
+      : null;
+  const solutions = kioskContent?.data?.solutions
+    ? (mapSolutions(kioskContent.data.solutions) as SolutionScreens)
+    : null;
+  const values = kioskContent?.data?.value ? (mapValue(kioskContent.data.value) as ValueScreens) : null;
+  const hardCoded = (kioskContent?.data?.hardcoded as HardCodedScreens | undefined) || null;
 
   // Pass the global handlers to all templates
   const globalHandlers = {
@@ -86,31 +102,38 @@ const Kiosk1View = () => {
     onNavigateUp: handleNavigateUp,
   };
 
-  const slides: Slide[] = [
-    ...buildChallengeSlides(
-      challenges,
-      'kiosk-1',
-      { ...controller, ...globalHandlers },
-      {
-        onInitialButtonClick: () => {
-          // Start the scroll, arrows will appear after scroll completes
-          setAllowArrowsToShow(true);
-        },
-      }
-    ),
-    ...buildSolutionSlides(solutions, 'kiosk-1', { ...controller, ...globalHandlers }),
-    ...buildValueSlides(
-      values,
-      'kiosk-1',
-      { ...controller, ...globalHandlers },
-      {
-        onRegisterCarouselHandlers: handlers => {
-          carouselHandlersRef.current = handlers;
-        },
-      }
-    ),
-    ...buildHardcodedSlides(hardCoded, 'kiosk-1', scrollToSectionById),
-  ];
+  const slides: Slide[] =
+    challenges && solutions && values && hardCoded
+      ? [
+          ...buildChallengeSlides(
+            challenges,
+            'kiosk-1',
+            { ...controller, ...globalHandlers },
+            {
+              onInitialButtonClick: () => {
+                // Start the scroll, arrows will appear after scroll completes
+                setAllowArrowsToShow(true);
+              },
+            }
+          ),
+          ...buildSolutionSlides(solutions, 'kiosk-1', { ...controller, ...globalHandlers }),
+          ...buildValueSlides(
+            values,
+            'kiosk-1',
+            { ...controller, ...globalHandlers },
+            {
+              onRegisterCarouselHandlers: handlers => {
+                carouselHandlersRef.current = handlers;
+              },
+            }
+          ),
+          ...buildHardcodedSlides(hardCoded, 'kiosk-1', scrollToSectionById),
+        ]
+      : [];
+
+  const challengeCount = challenges ? buildChallengeSlides(challenges, 'kiosk-1', controller).length : 0;
+  const solutionCount = solutions ? buildSolutionSlides(solutions, 'kiosk-1', controller).length : 0;
+  const valueCount = values ? buildValueSlides(values, 'kiosk-1', controller).length : 0;
 
   // Determine current section based on scroll target (more accurate than topIndex)
   const currentSlide = slides[topIndex];
@@ -126,6 +149,7 @@ const Kiosk1View = () => {
   const [arrowColor, setArrowColor] = useState('#6DCFF6');
   const [wasInValueSection, setWasInValueSection] = useState(false);
 
+  // All hooks must be called before any conditional returns
   useEffect(() => {
     // Track if we were in value section
     if (isValueSection) {
@@ -260,6 +284,8 @@ const Kiosk1View = () => {
 
   useEffect(() => {
     // Override controller navigation with paragraph navigation
+    if (slides.length === 0) return;
+
     controller.setRootHandlers({
       goTo: (i: number) => {
         const targetIndex = Math.max(0, Math.min(i, slides.length - 1));
@@ -272,6 +298,23 @@ const Kiosk1View = () => {
 
     return () => controller.setRootHandlers(null);
   }, [controller, handleNavigateDown, handleNavigateUp, scrollToSlide, slides.length]);
+
+  // Now safe to do conditional rendering after all hooks are called
+  if (loading) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-black">
+        <div className="text-white">Loading kiosk data...</div>
+      </div>
+    );
+  }
+
+  if (error || !kioskData) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-black">
+        <div className="text-red-500">Error loading kiosk data: {error}</div>
+      </div>
+    );
+  }
 
   return (
     <div

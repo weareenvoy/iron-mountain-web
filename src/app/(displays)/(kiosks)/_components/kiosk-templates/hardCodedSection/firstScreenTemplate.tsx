@@ -7,7 +7,8 @@ import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCFill
 import HCHollowBlueDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollowBlueDiamond';
 import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollowOrangeDiamond';
 
-const defaultHeroImageSrc = '/images/kiosks/kiosk1/04-custom-interactive/CU-Image1-Diamond.png';
+const defaultHeroImageSrc =
+  'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image1-Diamond.webp';
 const defaultEyebrow = ['Rich media &', 'cultural heritage'];
 const defaultHeadline = ['Learn more about how we', 'unlocked new possibilities', 'for our partners'];
 const defaultPrimaryCtaLabel = 'From archive to access';

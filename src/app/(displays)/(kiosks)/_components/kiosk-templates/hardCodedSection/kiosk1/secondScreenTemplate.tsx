@@ -39,7 +39,8 @@ const defaultSteps: readonly Step[] = [
         'Assets, whether film, audio, digital, or physical, are logged, evaluated for condition and risk, and prioritized based on preservation and activation potential.',
       ],
       imageAlt: 'Intake and assessment illustration',
-      imageSrc: '/images/kiosks/kiosk1/04-custom-interactive/Illustrations/intake-and-assessment.webp',
+      imageSrc:
+        'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Intake+and+assessment.webp',
     },
   },
   {
@@ -49,7 +50,8 @@ const defaultSteps: readonly Step[] = [
         'Physical media is digitized to archival standards, with restoration applied as needed and metadata extracted to ensure assets are searchable, playable, and accessible.',
       ],
       imageAlt: 'Digitization and remediation illustration',
-      imageSrc: '/images/kiosks/kiosk1/04-custom-interactive/Illustrations/digitization-and-remediation.webp',
+      imageSrc:
+        'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Digitization+and+remediation.webp',
     },
   },
   {
@@ -59,7 +61,8 @@ const defaultSteps: readonly Step[] = [
         'Iron Mountain’s digital preservation platform provides a fully managed digital repository with triple-redundant geo-distributed storage, secure access, and intuitive navigation.',
       ],
       imageAlt: 'Digital preservation illustration',
-      imageSrc: '/images/kiosks/kiosk1/04-custom-interactive/Illustrations/digital-preservation.webp',
+      imageSrc:
+        'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Digital+preservation.webp',
     },
   },
   {
@@ -69,7 +72,8 @@ const defaultSteps: readonly Step[] = [
         'The entire archive becomes searchable through AI-powered metadata, custom filters, and integrated preview tools, enabling fast discovery from any location.',
       ],
       imageAlt: 'Search and discover illustration',
-      imageSrc: '/images/kiosks/kiosk1/04-custom-interactive/Illustrations/search-and-discover.webp',
+      imageSrc:
+        'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Search+and+discover.webp',
     },
   },
   {
@@ -79,7 +83,8 @@ const defaultSteps: readonly Step[] = [
         'Digitized content is ready for licensing, streaming, and storytelling, unlocking new value across platforms while maintaining archival integrity.',
       ],
       imageAlt: 'Share, stream and monetize illustration',
-      imageSrc: '/images/kiosks/kiosk1/04-custom-interactive/Illustrations/share-stream-and-monetize.webp',
+      imageSrc:
+        'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Share%2C+stream+and+monetize.webp',
     },
   },
 ];
@@ -90,7 +95,8 @@ const defaultModal: ModalContent = {
   ],
   heading: 'Digital preservation',
   imageAlt: 'Digital preservation illustration',
-  imageSrc: '/images/kiosks/kiosk1/04-custom-interactive/Illustrations/digital-preservation.webp',
+  imageSrc:
+    'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Digital+preservation.webp',
 };
 
 const textDefaults = {
