@@ -115,13 +115,6 @@ const Kiosk3View = () => {
         ]
       : [];
 
-  const challengeCount = challenges
-    ? buildChallengeSlides(challenges, 'kiosk-3', controller, {
-        initialScreen: { ...challenges.initialScreen, contentBoxBgColor: '#00A88E' },
-      }).length
-    : 0;
-  const solutionCount = solutions ? buildSolutionSlides(solutions, 'kiosk-3', controller).length : 0;
-  const valueCount = values ? buildValueSlides(values, 'kiosk-3', controller).length : 0;
 
   // Determine current section based on scroll target (more accurate than topIndex)
   const currentSlide = slides[topIndex];
@@ -136,8 +129,6 @@ const Kiosk3View = () => {
   // Track arrow color and persist it during fade transitions
   const [arrowColor, setArrowColor] = useState('#6DCFF6');
   const [wasInValueSection, setWasInValueSection] = useState(false);
-  const solutionCount = solutions ? buildSolutionSlides(solutions, 'kiosk-3', controller).length : 0;
-  const valueCount = values ? buildValueSlides(values, 'kiosk-3', controller).length : 0;
 
   // All hooks must be called before any conditional returns
   useEffect(() => {
@@ -257,11 +248,6 @@ const Kiosk3View = () => {
     }
   }, [isScrolling, currentScrollTarget, wasScrollingToVideo, allowArrowsToShow, isHardcodedSection]);
 
-  // Check if we're scrolling to or at a video
-  const isScrollingToVideo =
-    isScrolling &&
-    currentScrollTarget &&
-    (currentScrollTarget.includes('-video') || currentScrollTarget.includes('-first-video'));
 
   // Arrows should be visible when showArrows is true (controlled by the effects above)
   const shouldShowArrows = showArrows && !isHardcodedSection;
