@@ -115,13 +115,13 @@ const SolutionSecondScreenTemplate = ({
       </h2>
 
       {/* Solution label */}
-      <div className="absolute top-[745px] left-[128px]   relative top-[180px]">
+      <div className="absolute top-[745px] left-[128px] relative top-[180px] flex">
         <div className="relative flex h-[200px] w-[200px] items-center justify-center" style={{ left: -55, top: 25 }}>
           <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
         </div>
         <h1
           className="text-[126px] leading-[1.3] font-normal tracking-[-6.3px] whitespace-nowrap text-[#ededed]"
-          style={{ left: -90, position: 'relative', top: 30 }}
+          style={{ left: -50, position: 'relative', top: 55 }}
         >
           {renderRegisteredMark(solutionLabel)}
         </h1>

@@ -61,10 +61,11 @@
           "AI-powered search"
         ],
         "groupedAssets": [
-          "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Image3-Diamond.webp",
-          "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Image2-Diamond.webp"
+
+          "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Image2-Diamond.webp",
+          "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Image3-Diamond.webp"
         ],
-        "headline": "How Iron Mountain Smart Vault works:",
+        "headline": "How Iron Mountain's digital preservation platform works:",
         "slideTitle": "Rich media & \ncultural heritage"
       }
     },

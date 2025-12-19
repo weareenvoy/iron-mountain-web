@@ -83,7 +83,7 @@ const SolutionThirdScreenTemplate = ({
       outline: GreenDiamondThird,
       sizeClass: 'size-[910px]',
       textWrapperClassName: 'w-[660px] group-data-[kiosk=kiosk-1]/kiosk:w-[500px]',
-      textWrapperStyles: { left: '500px' },
+      textWrapperStyles: { left: '460px' },
     },
     {
       className: 'left-[-270px] top-[880px]',
@@ -132,7 +132,7 @@ const SolutionThirdScreenTemplate = ({
       </h2>
 
       {/* Solution label */}
-      <div className="absolute top-[745.23px] left-[128.17px] flex items-center gap-[41px]">
+      <div className="absolute top-[570px] left-[120px] flex items-center gap-[45px]">
         <div className="relative flex h-[200px] w-[200px] items-center justify-center" style={{ left: -45, top: 15 }}>
           <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
         </div>
@@ -142,7 +142,7 @@ const SolutionThirdScreenTemplate = ({
       </div>
 
       {/* Title */}
-      <div className="absolute top-[1210px] left-[240px] w-[1300px] text-white group-data-[kiosk=kiosk-3]/kiosk:top-[1260px]">
+      <div className="absolute top-[1010px] left-[240px] w-[1300px] text-white group-data-[kiosk=kiosk-3]/kiosk:top-[1260px]">
         <p
           className="text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line"
           data-scroll-section="solution-third-title"
@@ -152,7 +152,7 @@ const SolutionThirdScreenTemplate = ({
       </div>
 
       {/* Diamond cluster */}
-      <div className="absolute top-[1400px] left-[240px] h-[2800px] w-[1680px]">
+      <div className="absolute top-[1220px] left-[240px] h-[2800px] w-[1680px]">
         {textDiamonds.map(({ className, label, outline, sizeClass, textWrapperClassName, textWrapperStyles }) =>
           label ? (
             <Diamond
@@ -183,7 +183,7 @@ const SolutionThirdScreenTemplate = ({
           sizeClass="size-[900px]"
         />
         <FilledDiamond
-          className="top-[605px] left-[1285px] rotate-0 group-data-[kiosk=kiosk-1]/kiosk:top-[650px] group-data-[kiosk=kiosk-1]/kiosk:left-[1330px]"
+          className="top-[610px] left-[1280px] rotate-0"
           imageAlt="Accent gradient diamond"
           imageSrc={accentDiamondImageSrc}
         />
@@ -255,7 +255,7 @@ const FilledDiamond = ({
 }) => {
   return (
     <div className={`absolute ${className}`}>
-      <div className="relative size-[390px] rotate-[45deg] group-data-[kiosk=kiosk-1]/kiosk:size-[290px]">
+      <div className="relative size-[390px] rotate-[45deg]">
         {imageSrc ? (
           <Image alt={imageAlt} className="-rotate-[45deg] object-cover" fill sizes="390px" src={imageSrc} />
         ) : (
