@@ -30,9 +30,7 @@ export class MqttService {
       ...MQTT_BASE_OPTIONS,
       clientId: generateClientId(this.deviceId),
       will: {
-        payload: Buffer.from(
-          JSON.stringify(createAvailabilityMessage(this.deviceId, 'offline'))
-        ),
+        payload: Buffer.from(JSON.stringify(createAvailabilityMessage(this.deviceId, 'offline'))),
         qos: 1,
         retain: true,
         topic: this.availabilityTopic,
