@@ -11,9 +11,10 @@ interface MomentsAndBeatsProps {
   readonly content: Readonly<Moment[]>; // hardcoded data
   readonly exhibit: 'basecamp' | 'overlook-wall';
   readonly exhibitState: ExhibitNavigationState;
+  readonly goTo: (momentId: Section, beatIdx: number) => void;
 }
 
-const MomentsAndBeats = ({ content, exhibit, exhibitState }: MomentsAndBeatsProps) => {
+const MomentsAndBeats = ({ content, exhibit, exhibitState, goTo }: MomentsAndBeatsProps) => {
   const { client } = useMqtt();
   const { data, docentAppState } = useDocent();
 
@@ -22,58 +23,6 @@ const MomentsAndBeats = ({ content, exhibit, exhibitState }: MomentsAndBeatsProp
   // Read playpause from GEC state for overlook
   const currentPlaypause =
     exhibit === 'overlook-wall' ? (docentAppState?.exhibits?.['overlook-wall']?.['playpause'] ?? true) : true;
-
-  const goTo = (momentId: Section, beatIdx: number) => {
-    if (!client) return;
-
-    const moment = content.find(m => m.id === momentId);
-    if (!moment || !moment.beats[beatIdx]) return;
-
-    const beatId = moment.beats[beatIdx].handle;
-    const isVideoBeat = moment.beats[beatIdx].type === 'video';
-    const currentBeatIsVideo =
-      content.find(m => m.id === exhibitState.momentId)?.beats[exhibitState.beatIdx]?.type === 'video';
-
-    // Send MQTT command - GEC will update state/gec which will update our derived state
-    if (isVideoBeat) {
-      // For video beats, always start playing when navigating
-      client.gotoBeatWithPlayPause(
-        exhibit,
-        beatId as ExhibitBeatId,
-        true,
-        {
-          onError: (err: Error) => console.error(`Failed to send goto-beat with play/pause to ${exhibit}:`, err),
-          onSuccess: () => console.info(`Sent goto-beat with play/pause: ${beatId} (true) to ${exhibit}`),
-        },
-        exhibit === 'overlook-wall' ? false : undefined
-      );
-    } else {
-      // For normal beats, if we're clicking away from a video beat, send playpause: false
-      if (currentBeatIsVideo && exhibit === 'overlook-wall') {
-        client.gotoBeatWithPlayPause(
-          exhibit,
-          beatId as ExhibitBeatId,
-          false,
-          {
-            onError: (err: Error) => console.error(`Failed to send goto-beat with play/pause to ${exhibit}:`, err),
-            onSuccess: () => console.info(`Sent goto-beat with play/pause: ${beatId} (false) to ${exhibit}`),
-          },
-          false
-        );
-      } else {
-        // For normal beats, use gotoBeat
-        client.gotoBeat(
-          exhibit,
-          beatId as ExhibitBeatId,
-          {
-            onError: (err: Error) => console.error(`Failed to send goto-beat to ${exhibit}:`, err),
-            onSuccess: () => console.info(`Sent goto-beat: ${beatId} to ${exhibit}`),
-          },
-          exhibit === 'overlook-wall' ? false : undefined
-        );
-      }
-    }
-  };
 
   const handleVideoBeatClick = (momentId: Section, beatIdx: number) => (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();

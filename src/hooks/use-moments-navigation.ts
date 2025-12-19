@@ -1,20 +1,58 @@
-import type { ExhibitNavigationState, Moment, Section } from '@/lib/internal/types';
+import { useCallback } from 'react';
+import { useMqtt } from '@/components/providers/mqtt-provider';
+import type { ExhibitBeatId, ExhibitNavigationState, Moment, Section } from '@/lib/internal/types';
 
 // moments/beats navigation hook
 const useMomentsNavigation = (
   content: Readonly<Moment[]>,
   exhibitState: ExhibitNavigationState,
-  setExhibitState: (state: Partial<ExhibitNavigationState>) => void,
+  exhibit: 'basecamp' | 'overlook-wall'
 ) => {
+  const { client } = useMqtt();
   const { beatIdx: currentBeatIdx, momentId } = exhibitState;
 
   const currentMomentIdx = content.findIndex(m => m.id === momentId);
   const currentMoment = content[currentMomentIdx];
 
-  const goTo = (momentId: Section, beatIdx: number) => {
-    // setExhibitState now sends MQTT command, so no need to call publishNavigation separately
-    setExhibitState({ beatIdx, momentId });
-  };
+  const goTo = useCallback(
+    (momentId: Section, beatIdx: number) => {
+      if (!client) return;
+
+      const moment = content.find(m => m.id === momentId);
+      if (!moment || !moment.beats[beatIdx]) return;
+
+      const beatId = moment.beats[beatIdx].handle;
+      const isVideoBeat = moment.beats[beatIdx].type === 'video';
+
+      // Send MQTT command - GEC will update state/gec which will update our derived state
+      if (isVideoBeat) {
+        // For video beats, always start playing when navigating
+        client.gotoBeatWithPlayPause(
+          exhibit,
+          beatId as ExhibitBeatId,
+          true,
+          {
+            onError: (err: Error) => console.error(`Failed to send goto-beat with play/pause to ${exhibit}:`, err),
+            onSuccess: () => console.info(`Sent goto-beat with play/pause: ${beatId} (true) to ${exhibit}`),
+          },
+          exhibit === 'overlook-wall' ? false : undefined
+        );
+      } else {
+        // For normal beats, always send playpause: false
+        client.gotoBeatWithPlayPause(
+          exhibit,
+          beatId as ExhibitBeatId,
+          false,
+          {
+            onError: (err: Error) => console.error(`Failed to send goto-beat with play/pause to ${exhibit}:`, err),
+            onSuccess: () => console.info(`Sent goto-beat with play/pause: ${beatId} (false) to ${exhibit}`),
+          },
+          exhibit === 'overlook-wall' ? false : undefined
+        );
+      }
+    },
+    [client, content, exhibit]
+  );
 
   const handlePrevious = () => {
     if (currentBeatIdx > 0) {
@@ -44,6 +82,7 @@ const useMomentsNavigation = (
   return {
     currentBeatIdx,
     currentMomentIdx,
+    goTo,
     handleNext,
     handlePrevious,
     isNextDisabled,

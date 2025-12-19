@@ -28,9 +28,10 @@ const BasecampPage = ({ params }: PageProps<'/docent/tour/[tourId]/basecamp'>) =
   }, [data]);
 
   // MomentsAndBeats navigation.
-  const { handleNext, handlePrevious, isNextDisabled, isPreviousDisabled } = useMomentsNavigation(
+  const { goTo, handleNext, handlePrevious, isNextDisabled, isPreviousDisabled } = useMomentsNavigation(
     basecampContent,
-    basecampExhibitState
+    basecampExhibitState,
+    'basecamp'
   );
 
   const handleBackToMenu = useCallback(() => {
@@ -67,7 +68,7 @@ const BasecampPage = ({ params }: PageProps<'/docent/tour/[tourId]/basecamp'>) =
           </p>
         </div>
 
-        <MomentsAndBeats content={basecampContent} exhibit="basecamp" exhibitState={basecampExhibitState} />
+        <MomentsAndBeats content={basecampContent} exhibit="basecamp" exhibitState={basecampExhibitState} goTo={goTo} />
       </div>
 
       {/* Bottom Controls */}

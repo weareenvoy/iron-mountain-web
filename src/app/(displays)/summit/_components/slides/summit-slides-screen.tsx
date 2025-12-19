@@ -9,10 +9,11 @@ import StrategiesSection from '@/app/(displays)/summit/_components/sections/stra
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import IronMountainLogoBlue from '@/components/ui/icons/IronMountainLogoBlue';
 import SummitRootDiamondsBg from '@/components/ui/icons/SummitRootDiamondsBg';
+import { getSlideIndexFromBeatId, SummitRoomBeatId } from '@/lib/internal/types';
 import { cn } from '@/lib/tailwind/utils/cn';
 import type { SummitFuturescaping, SummitKioskAmbient, SummitPossibility } from '@/app/(displays)/summit/_types';
 import type { SolutionItem } from '@/app/(displays)/summit/_utils';
-import type { SummitMqttState } from '@/lib/mqtt/types';
+import type { ExhibitMqttStateSummit } from '@/lib/mqtt/types';
 
 type MetaLabelMap = {
   readonly company: string;
@@ -392,8 +393,9 @@ const SummitSlidesScreen = ({
     const topic = 'state/summit';
     const handleSlideMessage = (message: Buffer) => {
       try {
-        const parsed = JSON.parse(message.toString()) as { body?: SummitMqttState };
-        const slideIdx = parsed.body?.['slide-idx'];
+        const parsed = JSON.parse(message.toString()) as { body?: ExhibitMqttStateSummit };
+        const beatId = parsed.body?.['beat-id'];
+        const slideIdx = beatId ? getSlideIndexFromBeatId(beatId as SummitRoomBeatId) : undefined;
         if (typeof slideIdx !== 'number') return;
 
         const next = slides[slideIdx]?.id ?? 'welcome';

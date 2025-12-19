@@ -29,9 +29,10 @@ const OverlookPage = ({ params }: PageProps<'/docent/tour/[tourId]/overlook'>) =
   }, [data]);
 
   // Should the bottom controls live here, or live in MomentaAndBeats
-  const { handleNext, handlePrevious, isNextDisabled, isPreviousDisabled } = useMomentsNavigation(
+  const { goTo, handleNext, handlePrevious, isNextDisabled, isPreviousDisabled } = useMomentsNavigation(
     overlookContent,
-    overlookExhibitState
+    overlookExhibitState,
+    'overlook-wall'
   );
 
   const handleBackToMenu = useCallback(() => {
@@ -96,7 +97,12 @@ const OverlookPage = ({ params }: PageProps<'/docent/tour/[tourId]/overlook'>) =
           </p>
         </div>
 
-        <MomentsAndBeats content={overlookContent} exhibit="overlook-wall" exhibitState={overlookExhibitState} />
+        <MomentsAndBeats
+          content={overlookContent}
+          exhibit="overlook-wall"
+          exhibitState={overlookExhibitState}
+          goTo={goTo}
+        />
       </div>
 
       {/* Bottom Controls */}
