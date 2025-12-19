@@ -15,6 +15,7 @@ export interface HardCodedDemoScreenTemplateProps {
   readonly cardLabel?: string | string[];
   readonly cardTextColor?: string;
   readonly cardWidth?: number;
+  readonly demoIframeSrc?: string;
   readonly endTourLabel?: string;
   readonly headline?: string | string[];
   readonly heroImageAlt?: string;
@@ -31,6 +32,7 @@ const defaults = {
   cardLabel: 'Virtual walkthrough',
   cardTextColor: '#4a4a4a',
   cardWidth: 1920,
+  demoIframeSrc: '',
   endTourLabel: 'End tour',
   headline: ['Section title lorem ipsum', 'dolor sit.'],
   heroImageAlt: 'Visitors smiling while viewing content',
@@ -45,6 +47,7 @@ const HardCodedDemoScreenTemplate = ({
   cardLabel = defaults.cardLabel,
   cardTextColor = defaults.cardTextColor,
   cardWidth = defaults.cardWidth,
+  demoIframeSrc = defaults.demoIframeSrc,
   endTourLabel = defaults.endTourLabel,
   headline = defaults.headline,
   heroImageAlt = defaults.heroImageAlt,
@@ -85,14 +88,24 @@ const HardCodedDemoScreenTemplate = ({
         className="absolute top-[1290px] left-[120px] rounded-[20px] shadow-[0_40px_120px_rgba(0,0,0,0.45)]"
         style={{ backgroundColor: cardBackgroundColor, height: `${cardHeight}px`, width: `${cardWidth}px` }}
       >
-        <button
-          className="flex h-full w-full items-center justify-center rounded-[20px] text-[80px] leading-[1.3] font-normal tracking-[-4px]"
-          onClick={onCta}
-          style={{ color: cardTextColor }}
-          type="button"
-        >
-          {renderRegisteredMark(cardText)}
-        </button>
+        {demoIframeSrc ? (
+          <iframe
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="h-full w-full rounded-[20px]"
+            src={demoIframeSrc}
+            title={cardText}
+          />
+        ) : (
+          <button
+            className="flex h-full w-full items-center justify-center rounded-[20px] text-[80px] leading-[1.3] font-normal tracking-[-4px]"
+            onClick={onCta}
+            style={{ color: cardTextColor }}
+            type="button"
+          >
+            {renderRegisteredMark(cardText)}
+          </button>
+        )}
       </div>
 
       {/* Hero diamond image */}
@@ -109,4 +122,3 @@ const HardCodedDemoScreenTemplate = ({
 };
 
 export default HardCodedDemoScreenTemplate;
-

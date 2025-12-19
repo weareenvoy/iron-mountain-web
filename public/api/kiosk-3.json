@@ -402,9 +402,11 @@
     },
     "fourthScreen": {
       "cardLabel": "Demo",
+      "demoIframeSrc": "https://example.com/api-demo",
+      "endTourLabel": "End tour",
       "headline": [
-        "Section title lorem ipsum",
-        "dolor sit."
+        "See how our API",
+        "transforms your workflow"
       ]
     }
   }

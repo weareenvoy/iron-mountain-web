@@ -130,9 +130,11 @@
       },
       "thirdScreen": {
         "cardLabel": "Virtual walkthrough",
+        "demoIframeSrc": "https://example.com/demo-walkthrough",
+        "endTourLabel": "End tour",
         "headline": [
-          "Section title lorem ipsum",
-          "dolor sit."
+          "Experience our solution",
+          "in action"
         ]
       },
       "fourthScreen": {}
