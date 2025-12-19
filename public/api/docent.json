@@ -22,13 +22,6 @@
           "subtitle": "EBC Controls",
           "title": "Iron Mountain"
         },
-        "moments": {
-          "ambientState": "Ambient state",
-          "ascend": "Ascend",
-          "possibilities": "Possibilities",
-          "problem": "Problem",
-          "welcome": "Welcome"
-        },
         "navigation": {
           "backToHome": "Back to home",
           "backToMenu": "Back to menu",
@@ -457,13 +450,6 @@
           "subtitle": "Controles EBC",
           "title": "Iron Mountain"
         },
-        "moments": {
-          "ambientState": "Estado ambiente",
-          "ascend": "Ascender",
-          "possibilities": "Possibilidades",
-          "problem": "Problema",
-          "welcome": "Bem-vindo"
-        },
         "navigation": {
           "backToHome": "Voltar ao início",
           "backToMenu": "Voltar ao menu",
@@ -495,10 +481,10 @@
         "endTourDescription": "Toque para encerrar a experiência e voltar todas as telas ao modo idle.",
         "exhibits": {
           "basecamp": "Basecamp",
-          "entryWay": "Entrada",
-          "overlook": "Visão geral",
-          "solutionPathways": "Caminhos de solução",
-          "summitRoom": "Sala do cume"
+          "entryWay": "Entry Way",
+          "overlook": "Overlook",
+          "solutionPathways": "Solution Pathways",
+          "summitRoom": "Summit Room"
         },
         "openManual": "Abrir Manual EBC",
         "status": {

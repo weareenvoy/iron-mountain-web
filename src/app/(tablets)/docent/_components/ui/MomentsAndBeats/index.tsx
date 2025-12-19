@@ -22,7 +22,7 @@ const MomentsAndBeats = ({ content, exhibit, exhibitState, goTo }: MomentsAndBea
 
   // Read playpause from GEC state for overlook
   const currentPlaypause =
-    exhibit === 'overlook-wall' ? (docentAppState?.exhibits?.['overlook-wall']?.['playpause'] ?? true) : true;
+    exhibit === 'overlook-wall' ? (docentAppState?.exhibits['overlook-wall']?.['playpause'] ?? true) : true;
 
   const handleVideoBeatClick = (momentId: Section, beatIdx: number) => (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();

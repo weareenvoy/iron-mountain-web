@@ -67,7 +67,7 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
       const gecExhibitKey = GEC_EXHIBIT_KEY_MAP[id];
 
       // Get state from GEC if available
-      const exhibitState = gecExhibitKey ? docentAppState?.exhibits?.[gecExhibitKey] : null;
+      const exhibitState = gecExhibitKey ? docentAppState?.exhibits[gecExhibitKey] : null;
       const isOn = exhibitState?.available ?? false;
       const isMuted = exhibitState?.['volume-muted'] ?? false;
       const hasError = !isOn;

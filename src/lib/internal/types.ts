@@ -276,13 +276,6 @@ export interface DocentData {
       readonly subtitle: string;
       readonly title: string;
     };
-    readonly moments: {
-      readonly ambientState: string;
-      readonly ascend: string;
-      readonly possibilities: string;
-      readonly problem: string;
-      readonly welcome: string;
-    };
     readonly navigation: {
       readonly backToHome: string;
       readonly backToMenu: string;
