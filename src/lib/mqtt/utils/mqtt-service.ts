@@ -258,15 +258,16 @@ export class MqttService {
     this.publish(`cmd/dev/${exhibit}/goto-beat`, JSON.stringify(message), { qos: 1, retain: false }, config);
   }
 
-  // Docent App → GEC: Set volume (mute/unmute) for an exhibit
+  // Docent App → Exhibit: Set mute unmute for an exhibit
   public setVolume(subject: 'basecamp' | 'overlook-wall' | 'summit', muted: boolean, config?: PublishArgsConfig): void {
+    const volumeLevel = muted ? 0 : 1.0;
+
     const message = createMqttMessage('docent-app', {
-      muted,
-      subject,
+      'volume-level': volumeLevel,
     });
 
-    console.info(`Setting volume for ${subject}: ${muted ? 'muted' : 'unmuted'}`);
-    this.publish(mqttCommands.docent.setVolume, JSON.stringify(message), { qos: 1, retain: false }, config);
+    console.info(`Setting volume for ${subject}: ${muted ? 'muted' : 'unmuted'} (volume-level: ${volumeLevel})`);
+    this.publish(`cmd/dev/${subject}/set-volume`, JSON.stringify(message), { qos: 1, retain: false }, config);
   }
 
   // Custom subscription methods for route-specific topics
