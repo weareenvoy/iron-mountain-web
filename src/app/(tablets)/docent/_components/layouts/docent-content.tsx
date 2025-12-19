@@ -36,7 +36,7 @@ const DocentContent = ({ children }: PropsWithChildren) => {
       {isConnected && !isHomePage && (
         <div className="absolute top-42 right-2 z-50">
           <Button
-            className="h-7 gap-2 border-none px-4"
+            className="h-7 gap-2 border-none px-3"
             onClick={openSettingsDrawer}
             size="sm"
             variant="outline-light-grey"

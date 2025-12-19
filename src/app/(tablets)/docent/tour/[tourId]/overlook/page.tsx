@@ -86,7 +86,7 @@ const OverlookPage = ({ params }: PageProps<'/docent/tour/[tourId]/overlook'>) =
       {/* Presentation Mode Button */}
       <div className="text-primary-bg-grey absolute top-51.5 right-2 z-50">
         <Button
-          className="h-7 gap-2 border-none px-4"
+          className="h-7 gap-2 border-none px-3"
           onClick={handleTogglePresentationMode}
           size="sm"
           variant="outline-light-grey"
