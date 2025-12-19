@@ -1,9 +1,19 @@
 'use client';
 
-import { createContext, useCallback, useContext, useEffect, useRef, useState, type PropsWithChildren } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type PropsWithChildren,
+} from 'react';
+import { parseBasecampBeatId } from '@/app/(tablets)/docent/_utils';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getBasecampData } from '@/lib/internal/data/get-basecamp';
-import { isBasecampSection, type BasecampData, type ExhibitNavigationState, type Locale } from '@/lib/internal/types';
+import { type BasecampData, type ExhibitNavigationState, type Locale } from '@/lib/internal/types';
 import type { ExhibitMqttStateBase } from '@/lib/mqtt/types';
 
 interface BasecampContextType {
@@ -33,16 +43,10 @@ export const useBasecamp = () => {
 export const BasecampProvider = ({ children }: BasecampProviderProps) => {
   const { client } = useMqtt();
 
-  // UI navigation state (local)
-  const [exhibitState, setExhibitState] = useState<ExhibitNavigationState>({
-    beatIdx: 0,
-    momentId: 'ambient',
-  });
-
   // Which beat's video is ready. Foreground compares its beatId to this.
   const [readyBeatId, setReadyBeatId] = useState<null | string>(null);
 
-  // MQTT state (what we report to GEC)
+  // MQTT state (what we report to GEC) - also tracks current beat being displayed
   const [mqttState, setMqttState] = useState<ExhibitMqttStateBase>({
     'beat-id': 'ambient-1',
     'volume-level': 1.0,
@@ -52,6 +56,19 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
   // Ref to access latest mqttState without causing dependency changes. Avoids re-subscription.
   const mqttStateRef = useRef(mqttState);
   mqttStateRef.current = mqttState;
+
+  // Extract beat-id for dependency tracking
+  const beatId = mqttState['beat-id'];
+
+  // Derive exhibitState from mqttState
+  const exhibitState: ExhibitNavigationState = useMemo(() => {
+    if (beatId) {
+      const parsed = parseBasecampBeatId(beatId);
+      if (parsed) return parsed;
+    }
+    // Fallback to default
+    return { beatIdx: 0, momentId: 'ambient' };
+  }, [beatId]);
 
   const [data, setData] = useState<BasecampData | null>(null);
   const [locale, setLocale] = useState<Locale>('en');
@@ -120,7 +137,6 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
 
           if (success) {
             // Only report loaded state after data is fetched
-            setExhibitState({ beatIdx: 0, momentId: 'ambient' });
             reportState({
               'beat-id': 'ambient-1',
               'volume-level': 1.0,
@@ -140,7 +156,6 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
       console.info('Basecamp received end-tour command');
 
       // Reset to ambient state with no tour
-      setExhibitState({ beatIdx: 0, momentId: 'ambient' });
       reportState({
         'beat-id': 'ambient-1',
         'volume-level': 0.0,
@@ -156,34 +171,16 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
         console.info('Basecamp received goto-beat command:', beatId);
 
         if (beatId) {
-          // Parse beat-id format: ${moment}-${beatNumber} (e.g., "ambient-1", "welcome-3", "protect-2")
-          const lastDashIndex = beatId.lastIndexOf('-');
-          if (lastDashIndex === -1) {
+          // Validate beat-id format
+          const parsed = parseBasecampBeatId(beatId);
+          if (!parsed) {
             console.error('Invalid beat-id format:', beatId);
             return;
           }
 
-          const momentId = beatId.substring(0, lastDashIndex);
-          const beatNumber = parseInt(beatId.substring(lastDashIndex + 1), 10);
+          console.info(`Parsed beat: moment=${parsed.momentId}, beatIdx=${parsed.beatIdx}`);
 
-          if (isNaN(beatNumber) || beatNumber < 1) {
-            console.error('Invalid beat number in beat-id:', beatId);
-            return;
-          }
-
-          // Validate that momentId is a valid BasecampSection
-          if (!isBasecampSection(momentId)) {
-            console.error('Invalid moment ID for Basecamp:', momentId);
-            return;
-          }
-
-          // Convert 1-indexed beat number to 0-indexed
-          const beatIdx = beatNumber - 1;
-
-          console.info(`Parsed beat: moment=${momentId}, beatIdx=${beatIdx}`);
-          setExhibitState({ beatIdx, momentId });
-
-          // Report updated state with new beat-id
+          // Report updated state with new beat-id - exhibitState will be derived from this
           reportState({ 'beat-id': beatId });
         }
       } catch (error) {
@@ -204,8 +201,8 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     };
   }, [client, fetchData, reportState]);
 
-  // Subscribe to own state on boot (for restart/recovery)
-  // This allows exhibit to restore state after refresh
+  // Subscribe to own state (retained + live updates) for restart/recovery
+  // This allows exhibit to restore state after refresh, and stay in sync with GEC updates (e.g., volume/mute).
   useEffect(() => {
     if (!client) return;
 
@@ -215,24 +212,9 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
         const state: ExhibitMqttStateBase = msg.body;
         console.info('Basecamp: Received own state on boot:', state);
 
-        // Update internal MQTT state
+        // Update internal MQTT state - exhibitState will be derived from this
+        mqttStateRef.current = state;
         setMqttState(state);
-
-        // Parse beat-id to update UI navigation state
-        if (state['beat-id']) {
-          const lastDashIndex = state['beat-id'].lastIndexOf('-');
-          if (lastDashIndex !== -1) {
-            const momentId = state['beat-id'].substring(0, lastDashIndex);
-            const beatNumber = parseInt(state['beat-id'].substring(lastDashIndex + 1), 10);
-
-            // Validate that momentId is a valid BasecampSection before using it
-            if (!isNaN(beatNumber) && beatNumber >= 1 && isBasecampSection(momentId)) {
-              setExhibitState({ beatIdx: beatNumber - 1, momentId });
-            } else {
-              console.warn('Invalid beat-id format or moment ID:', state['beat-id']);
-            }
-          }
-        }
 
         // Fetch content if we have a tour loaded
         fetchData();
@@ -243,7 +225,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
       }
     };
 
-    // Subscribe once on mount to get retained state
+    // Subscribe on mount to get retained state + future updates
     client.subscribeToTopic('state/basecamp', handleOwnState);
 
     return () => {

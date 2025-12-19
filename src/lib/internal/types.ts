@@ -364,63 +364,7 @@ export interface DocentData {
   };
 }
 
-export interface SummitData {
-  readonly hero: {
-    readonly advisorName: string;
-    readonly clientName: string;
-    readonly date: string;
-    readonly location: string;
-    readonly logoAlt: string;
-    readonly logoSrc: string;
-    readonly subtitle: string;
-    readonly title?: string;
-  };
-  readonly metrics: {
-    readonly description: string;
-    readonly items: readonly {
-      readonly description: string;
-      readonly label: string;
-      readonly value: string;
-    }[];
-    readonly title: string;
-  };
-  readonly obstacles: {
-    readonly description: string;
-    readonly items: readonly {
-      readonly body: string;
-      readonly icon: string;
-      readonly title: string;
-    }[];
-    readonly title: string;
-  };
-  readonly recaps: readonly {
-    readonly body: string;
-    readonly cta: string;
-    readonly title: string;
-  }[];
-  readonly stories: {
-    readonly description: string;
-    readonly items: readonly {
-      readonly category: string;
-      readonly description: string;
-      readonly title: string;
-    }[];
-    readonly title: string;
-  };
-  readonly strategies: readonly {
-    readonly eyebrow: string;
-    readonly items: readonly {
-      readonly body: readonly string[];
-      readonly title: string;
-    }[];
-    readonly summary: string;
-  }[];
-  readonly summary: {
-    readonly body: string;
-    readonly cta: string;
-    readonly title: string;
-  };
-}
+import type { SummitData } from '@/app/(displays)/summit/_types';
 
 export type Locale = 'en' | 'pt';
 
