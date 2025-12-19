@@ -15,7 +15,7 @@ const BasecampPage = ({ params }: PageProps<'/docent/tour/[tourId]/basecamp'>) =
   const { tourId } = use(params);
   const router = useRouter();
   const { client } = useMqtt();
-  const { basecampExhibitState, currentTour, data, setBasecampExhibitState } = useDocent();
+  const { basecampExhibitState, currentTour, data } = useDocent();
 
   // Transform basecampMoments
   const basecampContent = useMemo(() => {
@@ -30,29 +30,13 @@ const BasecampPage = ({ params }: PageProps<'/docent/tour/[tourId]/basecamp'>) =
   // MomentsAndBeats navigation.
   const { handleNext, handlePrevious, isNextDisabled, isPreviousDisabled } = useMomentsNavigation(
     basecampContent,
-    basecampExhibitState,
-    setBasecampExhibitState
+    basecampExhibitState
   );
 
   const handleBackToMenu = useCallback(() => {
-    if (!client) {
-      // Navigate even if client is not available
-      router.push(`/docent/tour/${tourId}`);
-      return;
-    }
-
-    // Send ambient-1 to all exhibits when going back to menu
-    client.gotoBeat('basecamp', 'ambient-1', {
+    client?.gotoBeat('basecamp', 'ambient-1', {
       onError: (err: Error) => console.error('Failed to send ambient-1 to basecamp:', err),
       onSuccess: () => console.info('Sent ambient-1 to basecamp'),
-    });
-    client.gotoBeat('overlook-wall', 'ambient-1', {
-      onError: (err: Error) => console.error('Failed to send ambient-1 to overlook:', err),
-      onSuccess: () => console.info('Sent ambient-1 to overlook'),
-    });
-    client.gotoBeat('summit', 'journey-intro', {
-      onError: (err: Error) => console.error('Failed to send journey-intro to summit:', err),
-      onSuccess: () => console.info('Sent journey-intro to summit'),
     });
 
     // Navigate after sending MQTT commands
@@ -83,12 +67,7 @@ const BasecampPage = ({ params }: PageProps<'/docent/tour/[tourId]/basecamp'>) =
           </p>
         </div>
 
-        <MomentsAndBeats
-          content={basecampContent}
-          exhibit="basecamp"
-          exhibitState={basecampExhibitState}
-          setExhibitState={setBasecampExhibitState}
-        />
+        <MomentsAndBeats content={basecampContent} exhibit="basecamp" exhibitState={basecampExhibitState} />
       </div>
 
       {/* Bottom Controls */}

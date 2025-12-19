@@ -19,7 +19,7 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
   const { tourId } = use(params);
   const router = useRouter();
   const { client } = useMqtt();
-  const { currentTour, data, setSummitRoomBeatId, summitRoomBeatId } = useDocent();
+  const { currentTour, data, summitRoomBeatId } = useDocent();
 
   const summitRoomSlidesInitial = data?.summitSlides ?? [];
   const summitRoomSlides = summitRoomSlidesInitial.filter(slide => slide.handle !== 'journey-intro');
@@ -41,7 +41,7 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
     }
   }, [emblaApi, isJourneyMapLaunched, slideIdx]);
 
-  // Helper to update beatId - setSummitRoomBeatId now sends MQTT command
+  // Helper to update beatId - sends MQTT command directly
   const goToSlide = useCallback(
     (newSlideIdx: number) => {
       // Bounds checking
@@ -50,10 +50,13 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
         return;
       }
       const beatId = getBeatIdFromSlideIndex(newSlideIdx, slideCount - 1);
-      // setSummitRoomBeatId now sends MQTT command, so no need to call client.gotoBeat separately
-      setSummitRoomBeatId(beatId);
+      if (!client) return;
+      client.gotoBeat('summit', beatId, {
+        onError: (err: Error) => console.error('Failed to send goto-beat to summit:', err),
+        onSuccess: () => console.info(`Sent goto-beat: ${beatId} to summit`),
+      });
     },
-    [setSummitRoomBeatId, slideCount]
+    [client, slideCount]
   );
 
   // Embla onSelect handler
@@ -98,22 +101,7 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
   };
 
   const handleBackToMenu = useCallback(() => {
-    if (!client) {
-      // Navigate even if client is not available
-      router.push(`/docent/tour/${tourId}`);
-      return;
-    }
-
-    // Send ambient-1 to all exhibits when going back to menu
-    client.gotoBeat('basecamp', 'ambient-1', {
-      onError: (err: Error) => console.error('Failed to send ambient-1 to basecamp:', err),
-      onSuccess: () => console.info('Sent ambient-1 to basecamp'),
-    });
-    client.gotoBeat('overlook-wall', 'ambient-1', {
-      onError: (err: Error) => console.error('Failed to send ambient-1 to overlook:', err),
-      onSuccess: () => console.info('Sent ambient-1 to overlook'),
-    });
-    client.gotoBeat('summit', 'journey-intro', {
+    client?.gotoBeat('summit', 'journey-intro', {
       onError: (err: Error) => console.error('Failed to send journey-intro to summit:', err),
       onSuccess: () => console.info('Sent journey-intro to summit'),
     });

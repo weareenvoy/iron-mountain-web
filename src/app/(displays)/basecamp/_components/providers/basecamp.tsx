@@ -43,7 +43,6 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
   const [readyBeatId, setReadyBeatId] = useState<null | string>(null);
 
   // MQTT state (what we report to GEC)
-  // Confirm with Lucas whether exhibit sends property available.
   const [mqttState, setMqttState] = useState<ExhibitMqttStateBase>({
     'beat-id': 'ambient-1',
     'volume-level': 1.0,

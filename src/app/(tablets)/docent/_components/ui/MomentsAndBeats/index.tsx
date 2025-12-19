@@ -11,35 +11,72 @@ interface MomentsAndBeatsProps {
   readonly content: Readonly<Moment[]>; // hardcoded data
   readonly exhibit: 'basecamp' | 'overlook-wall';
   readonly exhibitState: ExhibitNavigationState;
-  readonly setExhibitState: (state: Partial<ExhibitNavigationState>) => void;
 }
 
-const MomentsAndBeats = ({ content, exhibit, exhibitState, setExhibitState }: MomentsAndBeatsProps) => {
+const MomentsAndBeats = ({ content, exhibit, exhibitState }: MomentsAndBeatsProps) => {
   const { client } = useMqtt();
-  const { data } = useDocent();
+  const { data, docentAppState } = useDocent();
 
-  const { beatIdx: currentBeatIdx, momentId, shouldPlay = true } = exhibitState;
+  const { beatIdx: currentBeatIdx, momentId } = exhibitState;
+
+  // Read playpause from GEC state for overlook
+  const currentPlaypause =
+    exhibit === 'overlook-wall' ? (docentAppState?.exhibits?.['overlook-wall']?.['playpause'] ?? true) : true;
 
   const goTo = (momentId: Section, beatIdx: number) => {
-    // Always start playing when navigating to any beat
-    // setExhibitState now sends MQTT command, so no need to call publishNavigation separately
-    setExhibitState({ beatIdx, momentId, shouldPlay: true });
+    if (!client) return;
+
+    const moment = content.find(m => m.id === momentId);
+    if (!moment || !moment.beats[beatIdx]) return;
+
+    const beatId = moment.beats[beatIdx].handle;
+    const isVideoBeat = moment.beats[beatIdx].type === 'video';
+    const currentBeatIsVideo =
+      content.find(m => m.id === exhibitState.momentId)?.beats[exhibitState.beatIdx]?.type === 'video';
+
+    // Send MQTT command - GEC will update state/gec which will update our derived state
+    if (isVideoBeat) {
+      // For video beats, always start playing when navigating
+      client.gotoBeatWithPlayPause(
+        exhibit,
+        beatId as ExhibitBeatId,
+        true,
+        {
+          onError: (err: Error) => console.error(`Failed to send goto-beat with play/pause to ${exhibit}:`, err),
+          onSuccess: () => console.info(`Sent goto-beat with play/pause: ${beatId} (true) to ${exhibit}`),
+        },
+        exhibit === 'overlook-wall' ? false : undefined
+      );
+    } else {
+      // For normal beats, if we're clicking away from a video beat, send playpause: false
+      if (currentBeatIsVideo && exhibit === 'overlook-wall') {
+        client.gotoBeatWithPlayPause(
+          exhibit,
+          beatId as ExhibitBeatId,
+          false,
+          {
+            onError: (err: Error) => console.error(`Failed to send goto-beat with play/pause to ${exhibit}:`, err),
+            onSuccess: () => console.info(`Sent goto-beat with play/pause: ${beatId} (false) to ${exhibit}`),
+          },
+          false
+        );
+      } else {
+        // For normal beats, use gotoBeat
+        client.gotoBeat(
+          exhibit,
+          beatId as ExhibitBeatId,
+          {
+            onError: (err: Error) => console.error(`Failed to send goto-beat to ${exhibit}:`, err),
+            onSuccess: () => console.info(`Sent goto-beat: ${beatId} to ${exhibit}`),
+          },
+          exhibit === 'overlook-wall' ? false : undefined
+        );
+      }
+    }
   };
 
   const handleVideoBeatClick = (momentId: Section, beatIdx: number) => (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
-
-    const isCurrentlyActive = momentId === exhibitState.momentId && beatIdx === exhibitState.beatIdx;
-
-    // If clicking a different beat → start playing
-    // If clicking the active video beat → toggle play/pause
-    const newShouldPlay = isCurrentlyActive ? !shouldPlay : true;
-
-    setExhibitState({
-      beatIdx,
-      momentId,
-      shouldPlay: newShouldPlay,
-    });
 
     if (!client) return;
 
@@ -47,15 +84,20 @@ const MomentsAndBeats = ({ content, exhibit, exhibitState, setExhibitState }: Mo
     if (!moment || !moment.beats[beatIdx]) return;
 
     const beatId = moment.beats[beatIdx].handle;
+    const isCurrentlyActive = momentId === exhibitState.momentId && beatIdx === exhibitState.beatIdx;
 
-    // When clicking a real beat, send presentation-mode: false
+    // If clicking a different beat → start playing
+    // If clicking the active video beat → toggle play/pause based on current GEC state
+    const newPlaypause = isCurrentlyActive ? !currentPlaypause : true;
+
+    // Send MQTT command with play/pause - GEC will update state/gec which will update our derived state
     client.gotoBeatWithPlayPause(
       exhibit,
       beatId as ExhibitBeatId,
-      newShouldPlay,
+      newPlaypause,
       {
         onError: (err: Error) => console.error(`Failed to send goto-beat with play/pause to ${exhibit}:`, err),
-        onSuccess: () => console.info(`Sent goto-beat with play/pause: ${beatId} (${newShouldPlay}) to ${exhibit}`),
+        onSuccess: () => console.info(`Sent goto-beat with play/pause: ${beatId} (${newPlaypause}) to ${exhibit}`),
       },
       exhibit === 'overlook-wall' ? false : undefined
     );
@@ -73,7 +115,7 @@ const MomentsAndBeats = ({ content, exhibit, exhibitState, setExhibitState }: Mo
   // Helper to determine if the current active beat is a video and should show as playing
   const currentMomentObj = content.find(m => m.id === momentId);
   const currentBeatObj = currentMomentObj?.beats[currentBeatIdx];
-  const isCurrentVideoPlaying = currentBeatObj?.type === 'video' && shouldPlay;
+  const isCurrentVideoPlaying = currentBeatObj?.type === 'video' && currentPlaypause;
 
   return (
     <div className="flex flex-col gap-6 px-11.5">

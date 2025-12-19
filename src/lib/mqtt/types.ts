@@ -29,8 +29,6 @@ export interface MqttMessage<T = unknown> {
 // Full MQTT state for an exhibit (published to state/<exhibit>)
 export interface ExhibitMqttStateBase {
   'beat-id': string; // e.g., "ambient-1", "welcome-3", "loading", "error"
-  'playpause'?: boolean; // Only matters to overlook, but every exhibit has this property.
-  'presentation-mode'?: boolean; // Only matters to overlook.
   'volume-level': number; // 0.0 to 1.0
   'volume-muted': boolean;
 }
@@ -39,6 +37,10 @@ export interface ExhibitMqttStateBase {
 export interface ExhibitMqttState extends ExhibitMqttStateBase {
   available: boolean;
 }
-export interface ExhibitMqttStateSummit extends ExhibitMqttStateBase {
+export interface ExhibitMqttStateSummit extends ExhibitMqttState {
   'tour-id'?: null | string; // Only summit website needs it to fetch the correct data.
+}
+export interface ExhibitMqttStateOverlook extends ExhibitMqttState {
+  'playpause'?: boolean;
+  'presentation-mode'?: boolean;
 }
