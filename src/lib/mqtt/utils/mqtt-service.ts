@@ -1,5 +1,6 @@
 import mqtt, { MqttClient, type IClientOptions } from 'mqtt';
 import { getMqttBrokerUrl, MQTT_BASE_OPTIONS, mqttCommands } from '../constants';
+import { createAvailabilityMessage } from './create-avaiability-message';
 import { createMqttMessage } from './create-mqtt-message';
 import { generateClientId } from './generate-client-id';
 import { getAvailabilityTopic } from './get-availability-topic';
@@ -29,7 +30,9 @@ export class MqttService {
       ...MQTT_BASE_OPTIONS,
       clientId: generateClientId(this.deviceId),
       will: {
-        payload: Buffer.from('offline'),
+        payload: Buffer.from(
+          JSON.stringify(createAvailabilityMessage(this.deviceId, 'offline'))
+        ),
         qos: 1,
         retain: true,
         topic: this.availabilityTopic,
@@ -45,7 +48,7 @@ export class MqttService {
       // Birth message
       this.publish(
         this.availabilityTopic,
-        'online',
+        JSON.stringify(createAvailabilityMessage(this.deviceId, 'online')),
         { qos: 1, retain: true },
         {
           onError: (err: MqttError) => console.error('Failed to publish availability:', err),
@@ -87,7 +90,7 @@ export class MqttService {
       // Publish offline before we go offline
       this.publish(
         this.availabilityTopic,
-        'offline',
+        JSON.stringify(createAvailabilityMessage(this.deviceId, 'offline')),
         { qos: 1, retain: true },
         {
           onError: (err: MqttError) => {
