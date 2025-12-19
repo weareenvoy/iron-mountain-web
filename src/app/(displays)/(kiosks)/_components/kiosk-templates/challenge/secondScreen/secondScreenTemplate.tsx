@@ -18,8 +18,6 @@ export type SecondScreenTemplateProps = Readonly<{
   mainDescription?: string;
   onNavigateDown?: () => void;
   onNavigateUp?: () => void;
-  statAmount?: string;
-  statDescription?: string;
   subheadline?: string | string[];
   topImageSrc?: string;
 }>;
@@ -31,8 +29,6 @@ export const SecondScreenTemplate = ({
   mainDescription = 'The Museum also needed assistance with physical storage for a collection of historical music artifacts.',
   onNavigateDown,
   onNavigateUp,
-  statAmount = '',
-  statDescription = 'The Museum needed a secure, off-site, cloud-accessible, and easily managed solution to protect its one-of-a-kind, irreplaceable footage. Storing the only master copy locally presented a high risk of losing all assets in the event of a data failure or system crash.',
   subheadline = 'Rich media &\n cultural heritage',
   topImageSrc = imgHero,
 }: SecondScreenTemplateProps) => {
@@ -48,7 +44,7 @@ export const SecondScreenTemplate = ({
       <div className="pointer-events-none absolute inset-0 z-[0] bg-transparent" />
 
       {/* Decorative background diamond */}
-      <div className="pointer-events-none absolute top-[40%] left-[-20%] z-[1] flex size-[1506px] -scale-y-100 rotate-[180deg] items-center justify-center opacity-50">
+      <div className="pointer-events-none absolute top-[1600px] left-[-365px] z-[1] flex size-[1365px] -scale-y-100 rotate-[180deg] items-center justify-center opacity-50">
         <div className="relative h-full w-full">
           <Image
             alt="Large decorative background diamond"
@@ -68,7 +64,7 @@ export const SecondScreenTemplate = ({
           {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
         </h2>
 
-        <div className="flex items-center gap-[41px]">
+        <div className="flex items-center gap-[41px] relative top-[180px]">
           <div className="relative mr-[5px] flex h-[120px] w-[120px] items-center justify-center">
             <Diamond aria-hidden="true" className="h-full w-full text-[#ededed]" focusable="false" strokeWidth={1.25} />
           </div>
@@ -78,25 +74,10 @@ export const SecondScreenTemplate = ({
         </div>
       </div>
 
-      {/* Stat Section - SCROLLABLE */}
-      <div className="relative z-[2] px-[120px] py-[200px]">
-        <div className="flex w-[940px] flex-col gap-[60px]">
-          <span className="text-[300px] leading-[1.3] font-[300] tracking-[-15px] whitespace-nowrap text-[#6dcff6]">
-            {renderRegisteredMark(statAmount)}
-          </span>
-          <p
-            className="text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#a8d4f6]"
-            data-scroll-section="stat-description"
-          >
-            {renderRegisteredMark(statDescription)}
-          </p>
-        </div>
-      </div>
-
       {/* Main Description - SCROLLABLE */}
-      <div className="relative z-[2] px-[120px] py-[250px]">
+      <div className="relative z-[2] px-[120px] py-[250px] top-[290px] left-[650px]">
         <p
-          className="max-w-[980px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white"
+          className="max-w-[1040px] text-[60px] leading-[1.3] font-normal tracking-[-3px] text-white"
           data-scroll-section="main-description"
         >
           {renderRegisteredMark(mainDescription)}

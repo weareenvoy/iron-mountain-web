@@ -53,7 +53,7 @@ export const FirstScreenTemplate = ({
         <div className="pointer-events-none absolute inset-0 bg-black/20" />
 
         {/* Subheadline */}
-        <div className="relative z-[2] px-[120px] pb-[400px]">
+        <div className="relative top-[110px] left-[-755px] z-[2] px-[120px] pb-[400px]">
           <h2 className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
             {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
           </h2>
@@ -61,7 +61,7 @@ export const FirstScreenTemplate = ({
       </div>
 
       {/* Challenge Label Section */}
-      <div className="relative z-[2] flex items-center gap-[41px] px-[128px] pt-[80px] pb-[200px]">
+      <div className="relative z-[2] top-[-270px] flex items-center gap-[41px] px-[128px] pb-[200px]">
         <div className="relative mr-[5px] flex h-[110px] w-[110px] items-center justify-center">
           <Diamond aria-hidden="true" className="h-full w-full text-[#ededed]" focusable="false" strokeWidth={1.25} />
         </div>
@@ -71,18 +71,18 @@ export const FirstScreenTemplate = ({
       </div>
 
       {/* Problem Description Section */}
-      <div className="relative z-[2] px-[120px] py-[150px]">
-        <p className="max-w-[1390px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white group-data-[kiosk=kiosk-2]/kiosk:leading-[1.3] group-data-[kiosk=kiosk-3]/kiosk:text-[80px] group-data-[kiosk=kiosk-3]/kiosk:tracking-[-4px]">
+      <div className="relative z-[2] px-[120px] top-[-160px] left-[5px]">
+        <p className="max-w-[1390px] leading-[1.4] font-normal text-white group-data-[kiosk=kiosk-2]/kiosk:leading-[1.3] text-[80px] tracking-[-4px]">
           {renderRegisteredMark(problemDescription)}
         </p>
       </div>
 
       {/* Savings Metrics Section */}
-      <div className="relative z-[2] flex w-full flex-col items-center px-[120px] py-[300px]">
+      <div className="relative z-[2] flex w-full flex-col items-center py-[490px] left-[-420px]">
         <span className="text-center text-[400px] leading-[1.3] font-[300] tracking-[-20px] whitespace-nowrap text-[#6dcff6]">
           {renderRegisteredMark(savingsAmount)}
         </span>
-        <p className="mt-[-40px] text-center text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#6dcff6] group-data-[kiosk=kiosk-2]/kiosk:leading-[1.3] group-data-[kiosk=kiosk-3]/kiosk:leading-[1.3]">
+        <p className="mt-[-40px] text-[60px] leading-[1.3] font-normal tracking-[-3px] whitespace-pre-line text-[#6dcff6] relative top-[30px] left-[-5px] w-[1060px]">
           {renderRegisteredMark(savingsDescription)}
         </p>
       </div>
