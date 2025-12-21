@@ -1,8 +1,9 @@
 'use client';
 
+/* eslint-disable react-hooks/refs */
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowDown, ArrowUp } from 'lucide-react';
-import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
 import { buildChallengeSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeTemplate';
 import {
@@ -32,20 +33,20 @@ const Kiosk1View = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Store carousel handlers for value section
-  const carouselHandlersRef = useRef<{
+  const carouselHandlersRef = useRef<null | {
     canScrollNext: () => boolean;
     canScrollPrev: () => boolean;
     scrollNext: () => void;
     scrollPrev: () => void;
-  } | null>(null);
+  }>(null);
 
   // Global paragraph navigation
   const {
+    currentScrollTarget,
     handleNavigateDown: baseHandleNavigateDown,
     handleNavigateUp: baseHandleNavigateUp,
-    scrollToSectionById,
     isScrolling,
-    currentScrollTarget,
+    scrollToSectionById,
   } = useGlobalParagraphNavigation({
     containerRef,
     duration: 800,
@@ -159,7 +160,7 @@ const Kiosk1View = () => {
   useEffect(() => {
     // Only update color when arrows are visible AND not scrolling to hardcoded
     const isScrollingToHardcoded = currentScrollTarget && currentScrollTarget.includes('hardcoded-');
-    
+
     if (showArrows && !isScrollingToHardcoded) {
       // Use current value section status
       setArrowColor(isValueSection ? '#58595B' : '#6DCFF6');
@@ -178,11 +179,12 @@ const Kiosk1View = () => {
       }, 1500); // INITIAL DELAY: Adjust this to control first appearance after button click
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [allowArrowsToShow, isScrolling, currentScrollTarget]);
 
   // Handle arrows reappearing after scrolling to videos in other sections (solution, value)
   const [wasScrollingToVideo, setWasScrollingToVideo] = useState(false);
-  const [previousScrollTarget, setPreviousScrollTarget] = useState<string | null>(null);
+  const [previousScrollTarget, setPreviousScrollTarget] = useState<null | string>(null);
   const [shouldResetOnInitial, setShouldResetOnInitial] = useState(false);
 
   // Track previous scroll target and detect leaving video for initial screen
@@ -253,13 +255,8 @@ const Kiosk1View = () => {
     if (wasScrollingToVideo && !isScrolling && currentScrollTarget?.includes('hardcoded-')) {
       setWasScrollingToVideo(false);
     }
+    return undefined;
   }, [isScrolling, currentScrollTarget, wasScrollingToVideo, allowArrowsToShow, isHardcodedSection]);
-
-  // Check if we're scrolling to or at a video
-  const isScrollingToVideo =
-    isScrolling &&
-    currentScrollTarget &&
-    (currentScrollTarget.includes('-video') || currentScrollTarget.includes('-first-video'));
 
   // Arrows should be visible when showArrows is true (controlled by the effects above)
   const shouldShowArrows = showArrows && !isHardcodedSection;
@@ -305,7 +302,7 @@ const Kiosk1View = () => {
           <div className="h-screen w-full flex-shrink-0" data-slide-index={idx} key={slide.id}>
             {slide.render(idx === topIndex)}
           </div>
-          ))}
+        ))}
       </div>
       <div
         // className={styles.debugControls}

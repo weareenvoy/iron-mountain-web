@@ -1,29 +1,30 @@
+/* eslint-disable no-console */
 import { useCallback, useRef, useState } from 'react';
 
 export interface ScrollSection {
   id: string;
-  /** Y position in pixels */
-  targetY: number;
   /** Optional: scroll offset adjustment */
   offset?: number;
+  /** Y position in pixels */
+  targetY: number;
 }
 
 export interface UseScrollNavigationProps {
-  sections: ScrollSection[];
-  onNavigateUp?: () => void;
-  onNavigateDown?: () => void;
   /** Scroll behavior - default 'smooth' */
   behavior?: ScrollBehavior;
   /** Custom scroll duration in ms - for manual control */
   duration?: number;
+  onNavigateDown?: () => void;
+  onNavigateUp?: () => void;
+  sections: ScrollSection[];
 }
 
 export function useScrollNavigation({
-  sections,
-  onNavigateUp,
-  onNavigateDown,
   behavior = 'smooth',
   duration,
+  onNavigateDown,
+  onNavigateUp,
+  sections,
 }: UseScrollNavigationProps) {
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -32,20 +33,21 @@ export function useScrollNavigation({
   // Helper to find closest section based on current scroll position
   const getCurrentSectionIndex = useCallback(() => {
     if (!containerRef.current) return 0;
-    
+
     const scrollTop = containerRef.current.scrollTop;
     const threshold = 100; // pixels of tolerance
-    
+
     // Find the section that we're closest to
     for (let i = sections.length - 1; i >= 0; i--) {
       const section = sections[i];
+      if (!section) continue;
       const sectionPosition = section.targetY + (section.offset || 0);
-      
+
       if (scrollTop >= sectionPosition - threshold) {
         return i;
       }
     }
-    
+
     return 0;
   }, [sections]);
 
@@ -58,7 +60,14 @@ export function useScrollNavigation({
 
       isScrolling.current = true;
       const container = containerRef.current;
-      console.log('Scrolling to:', targetY, 'Current scrollTop:', container.scrollTop, 'ScrollHeight:', container.scrollHeight);
+      console.log(
+        'Scrolling to:',
+        targetY,
+        'Current scrollTop:',
+        container.scrollTop,
+        'ScrollHeight:',
+        container.scrollHeight
+      );
 
       if (duration) {
         // Custom smooth scroll with controlled duration
@@ -74,7 +83,7 @@ export function useScrollNavigation({
           const elapsed = currentTime - startTime;
           const progress = Math.min(elapsed / duration, 1);
           const easing = easeInOutQuad(progress);
-          
+
           container.scrollTop = startY + distance * easing;
 
           if (progress < 1) {
@@ -92,7 +101,7 @@ export function useScrollNavigation({
           behavior,
           top: targetY,
         });
-        
+
         // Reset scrolling flag after animation completes
         setTimeout(() => {
           isScrolling.current = false;
@@ -106,14 +115,22 @@ export function useScrollNavigation({
   const handleNavigateDown = useCallback(() => {
     // Get current position dynamically
     const actualCurrentIndex = getCurrentSectionIndex();
-    console.log('handleNavigateDown - actualIndex:', actualCurrentIndex, 'stateIndex:', currentSectionIndex, 'totalSections:', sections.length);
-    
+    console.log(
+      'handleNavigateDown - actualIndex:',
+      actualCurrentIndex,
+      'stateIndex:',
+      currentSectionIndex,
+      'totalSections:',
+      sections.length
+    );
+
     if (actualCurrentIndex < sections.length - 1) {
       // Scroll to next section within this template
       const nextIndex = actualCurrentIndex + 1;
       const nextSection = sections[nextIndex];
+      if (!nextSection) return;
       const targetY = nextSection.targetY + (nextSection.offset || 0);
-      
+
       console.log('Scrolling DOWN to section', nextIndex, ':', nextSection.id, 'targetY:', targetY);
       setCurrentSectionIndex(nextIndex);
       scrollToPosition(targetY);
@@ -128,14 +145,22 @@ export function useScrollNavigation({
   const handleNavigateUp = useCallback(() => {
     // Get current position dynamically
     const actualCurrentIndex = getCurrentSectionIndex();
-    console.log('handleNavigateUp - actualIndex:', actualCurrentIndex, 'stateIndex:', currentSectionIndex, 'totalSections:', sections.length);
-    
+    console.log(
+      'handleNavigateUp - actualIndex:',
+      actualCurrentIndex,
+      'stateIndex:',
+      currentSectionIndex,
+      'totalSections:',
+      sections.length
+    );
+
     if (actualCurrentIndex > 0) {
       // Scroll to previous section within this template
       const prevIndex = actualCurrentIndex - 1;
       const prevSection = sections[prevIndex];
+      if (!prevSection) return;
       const targetY = prevSection.targetY + (prevSection.offset || 0);
-      
+
       console.log('Scrolling UP to section', prevIndex, ':', prevSection.id, 'targetY:', targetY);
       setCurrentSectionIndex(prevIndex);
       scrollToPosition(targetY);
@@ -154,6 +179,7 @@ export function useScrollNavigation({
     scrollToSection: (index: number) => {
       if (index >= 0 && index < sections.length) {
         const section = sections[index];
+        if (!section) return;
         const targetY = section.targetY + (section.offset || 0);
         setCurrentSectionIndex(index);
         scrollToPosition(targetY);
@@ -161,4 +187,3 @@ export function useScrollNavigation({
     },
   };
 }
-

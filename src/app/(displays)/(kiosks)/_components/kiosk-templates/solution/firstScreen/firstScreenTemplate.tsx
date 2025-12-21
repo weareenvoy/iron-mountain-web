@@ -32,8 +32,10 @@ const SolutionFirstScreenTemplate = ({
   kioskId,
   largeDiamondSrc,
   mediumDiamondSrc,
-  onNavigateDown,
-  onNavigateUp,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onNavigateDown: _onNavigateDown,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onNavigateUp: _onNavigateUp,
   solutionLabel = 'Solution',
   subheadline = 'Rich media &\n cultural heritage',
   title = 'A partnership with Iron Mountain',
@@ -65,7 +67,7 @@ const SolutionFirstScreenTemplate = ({
 
       {/* Gradient body */}
       <div
-        className="absolute left-0 top-[1058px] h-[4085px] w-full rounded-[100px] group-data-[kiosk=kiosk-2]/kiosk:top-[1110px] group-data-[kiosk=kiosk-3]/kiosk:top-[1060px]"
+        className="absolute top-[1058px] left-0 h-[4085px] w-full rounded-[100px] group-data-[kiosk=kiosk-2]/kiosk:top-[1110px] group-data-[kiosk=kiosk-3]/kiosk:top-[1060px]"
         data-node-id="5168:9671"
         style={{
           background: `linear-gradient(to bottom, ${gradientStartColor} 0%, ${gradientEndColor} 99%)`,
@@ -79,7 +81,10 @@ const SolutionFirstScreenTemplate = ({
       </h2>
 
       {/* Solution label */}
-      <div className="absolute top-[790px] left-[140px] flex items-center gap-[41px] group-data-[kiosk=kiosk-3]/kiosk:top-[860px] group-data-[kiosk=kiosk-3]/kiosk:left-[260px]" data-node-id="5168:9697">
+      <div
+        className="absolute top-[790px] left-[140px] flex items-center gap-[41px] group-data-[kiosk=kiosk-3]/kiosk:top-[860px] group-data-[kiosk=kiosk-3]/kiosk:left-[260px]"
+        data-node-id="5168:9697"
+      >
         <div className="relative flex h-[200px] w-[200px] items-center justify-center" style={{ left: -55, top: -25 }}>
           <OutlinedDiamond aria-hidden="true" focusable="false" />
         </div>

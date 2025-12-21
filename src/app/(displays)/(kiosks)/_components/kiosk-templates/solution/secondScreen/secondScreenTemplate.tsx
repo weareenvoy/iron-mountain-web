@@ -44,8 +44,10 @@ const SolutionSecondScreenTemplate = ({
   heroImageAlt = 'Solution highlight',
   heroImageSrc = imgHeroDiamond,
   kioskId = DEFAULT_KIOSK_ID,
-  onNavigateDown,
-  onNavigateUp,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onNavigateDown: _onNavigateDown,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onNavigateUp: _onNavigateUp,
   solutionLabel = 'Solution',
   stepFourDescription,
   stepFourLabel,
@@ -90,8 +92,8 @@ const SolutionSecondScreenTemplate = ({
       className="group/kiosk relative flex h-screen w-full flex-col overflow-hidden bg-black"
       data-kiosk={kioskId}
       data-node-id="5168:9473"
-      style={{ background: 'transparent', overflow: 'visible' }}
       data-scroll-section="solution-second-group"
+      style={{ background: 'transparent', overflow: 'visible' }}
     >
       {/* Gradient backdrop */}
       <div
@@ -116,7 +118,7 @@ const SolutionSecondScreenTemplate = ({
       </h2>
 
       {/* Solution label */}
-      <div className="absolute top-[710px] left-[150px] relative top-[180px] flex group-data-[kiosk=kiosk-3]/kiosk:top-[720px] group-data-[kiosk=kiosk-3]/kiosk:left-[140px]">
+      <div className="absolute relative top-[180px] top-[710px] left-[150px] flex group-data-[kiosk=kiosk-3]/kiosk:top-[720px] group-data-[kiosk=kiosk-3]/kiosk:left-[140px]">
         <div className="relative flex h-[200px] w-[200px] items-center justify-center" style={{ left: -55, top: 25 }}>
           <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
         </div>
@@ -129,9 +131,7 @@ const SolutionSecondScreenTemplate = ({
       </div>
 
       {/* Title */}
-      <p
-        className="absolute top-[1600px] left-[240px] z-[1] text-[100px] leading-[1.3] font-normal tracking-[-5px] text-white"
-      >
+      <p className="absolute top-[1600px] left-[240px] z-[1] text-[100px] leading-[1.3] font-normal tracking-[-5px] text-white">
         {renderRegisteredMark(title)}
       </p>
 

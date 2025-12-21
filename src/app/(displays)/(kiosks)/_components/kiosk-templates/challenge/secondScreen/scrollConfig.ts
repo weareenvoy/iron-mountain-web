@@ -3,23 +3,22 @@ import { type ScrollSection } from '../../hooks/useScrollNavigation';
 export const secondScreenScrollSections: ScrollSection[] = [
   {
     id: 'top',
-    targetY: 0,
     offset: 0,
+    targetY: 0,
   },
   {
     id: 'stat-section',
-    targetY: 1058,
     offset: -200,
+    targetY: 1058,
   },
   {
     id: 'main-description',
-    targetY: 2340,
     offset: -600,
+    targetY: 2340,
   },
   {
     id: 'bottom-description',
-    targetY: 4065,
     offset: -800,
+    targetY: 4065,
   },
 ];
-

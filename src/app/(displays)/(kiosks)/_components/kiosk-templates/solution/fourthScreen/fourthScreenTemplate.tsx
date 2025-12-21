@@ -70,8 +70,10 @@ const SolutionFourthScreenTemplate = ({
   accordionItems = defaultAccordionItems,
   mediaDiamondOutlineSrc,
   mediaDiamondSolidSrc = DEFAULT_PHOTO_DIAMOND_SRC,
-  onNavigateDown,
-  onNavigateUp,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onNavigateDown: _onNavigateDown,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onNavigateUp: _onNavigateUp,
   solutionLabel = 'Solution',
   subheadline = 'IT assets &\n data centers',
   title = "Iron Mountain's Asset Lifecycle Management",

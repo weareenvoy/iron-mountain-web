@@ -21,7 +21,7 @@ export interface HardCodedKiosk1FirstScreenTemplateProps {
   readonly headline?: string | string[];
   readonly heroImageAlt?: string;
   readonly heroImageSrc?: string;
-  readonly kioskId?: 'kiosk-1' | 'kiosk-3';
+  readonly kioskId?: 'kiosk-1' | 'kiosk-2' | 'kiosk-3';
   readonly onPrimaryCta?: () => void;
   readonly onSecondaryCta?: () => void;
   readonly overlayCardLabel?: string | string[];
@@ -116,7 +116,7 @@ const HardCodedKiosk1FirstScreenTemplate = ({
       {/* CTA buttons */}
       <div className={`absolute top-[2220px] left-[245px] flex flex-col gap-[90px] ${ctaWidthClass}`}>
         <button
-          className="flex h-[200px] items-center justify-between rounded-[999px] bg-[#ededed] px-[100px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-[#14477d] shadow-[0_20px_60px_rgba(0,0,0,0.25)] transition-transform duration-150 hover:scale-[1.01] group-data-[kiosk=kiosk-2]/kiosk:hidden"
+          className="flex h-[200px] items-center justify-between rounded-[999px] bg-[#ededed] px-[100px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-[#14477d] shadow-[0_20px_60px_rgba(0,0,0,0.25)] transition-transform duration-150 group-data-[kiosk=kiosk-2]/kiosk:hidden hover:scale-[1.01]"
           onClick={onPrimaryCta}
           type="button"
         >

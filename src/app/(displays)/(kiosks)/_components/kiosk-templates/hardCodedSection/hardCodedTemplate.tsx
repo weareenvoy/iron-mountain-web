@@ -1,9 +1,6 @@
 import HardCodedFirstScreenTemplate, {
   type HardCodedKiosk1FirstScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/firstScreenTemplate';
-import HardCodedDemoScreenTemplate, {
-  type HardCodedDemoScreenTemplateProps,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/demoScreenTemplate';
 import HardCodedKiosk1SecondScreenTemplate, {
   type HardCodedKiosk1SecondScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk1/secondScreenTemplate';
@@ -14,6 +11,7 @@ import HardCodedKiosk3ThirdScreenTemplate, {
   type HardCodedKiosk3ThirdScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk3/thirdScreenTemplate';
 import { SectionSlide, type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
+import type { HardCodedDemoScreenTemplateProps } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/demoScreenTemplate';
 
 export type HardCodedScreens = Readonly<{
   demoScreen?: HardCodedDemoScreenTemplateProps;
@@ -41,9 +39,9 @@ export const buildHardcodedSlides = (
           <HardCodedFirstScreenTemplate
             kioskId={kioskId}
             {...hardCoded.firstScreen}
+            onPrimaryCta={() => scrollToSection?.('hardcoded-second-screen')}
             overlayCardLabel={overlayData?.cardLabel}
             overlayHeadline={overlayData?.headline}
-            onPrimaryCta={() => scrollToSection?.('hardcoded-second-screen')}
           />
         </SectionSlide>
       ),

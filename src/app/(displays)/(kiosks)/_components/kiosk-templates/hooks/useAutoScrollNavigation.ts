@@ -9,7 +9,7 @@ export interface UseAutoScrollNavigationOptions {
 }
 
 export interface UseAutoScrollNavigationReturn {
-  containerRef: React.RefObject<HTMLDivElement>;
+  containerRef: React.RefObject<HTMLDivElement | null>;
   handleNavigateDown: () => void;
   handleNavigateUp: () => void;
 }
@@ -82,6 +82,7 @@ export function useAutoScrollNavigation({
 
       isScrollingRef.current = true;
       const targetSection = sections[index];
+      if (!targetSection) return;
       const containerTop = container.scrollTop;
       const sectionTop = targetSection.offsetTop;
       const start = performance.now();
