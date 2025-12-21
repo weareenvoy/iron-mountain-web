@@ -26,7 +26,7 @@ import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-con
 
 const Kiosk3View = () => {
   const controller: Controller = useKioskController();
-  const { data: kioskData, error, loading } = useKiosk();
+  const { data: kioskData } = useKiosk();
   const [topIndex, setTopIndex] = useState(0);
   const [showArrows, setShowArrows] = useState(false);
   const [allowArrowsToShow, setAllowArrowsToShow] = useState(false);
@@ -73,11 +73,13 @@ const Kiosk3View = () => {
     baseHandleNavigateUp();
   }, [baseHandleNavigateUp, currentScrollTarget]);
 
-  // Prepare data (with safe defaults for loading state)
-  const challenges: KioskChallenges | null = kioskData ? parseKioskChallenges(kioskData.challenges, 'kiosk-3') : null;
-  const solutions = (kioskData?.solutions as SolutionScreens | undefined) || null;
-  const values = (kioskData?.value as undefined | ValueScreens) || null;
-  const hardCoded = (kioskData?.hardcoded as HardCodedScreens | undefined) || null;
+  // Parse data from provider (kiosk-3 has flat structure with 'challenges' at root)
+  const challenges: KioskChallenges | null = kioskData
+    ? parseKioskChallenges((kioskData as any).challenges, 'kiosk-3')
+    : null;
+  const solutions = kioskData ? ((kioskData as any).solutions as SolutionScreens) : null;
+  const values = kioskData ? ((kioskData as any).value as ValueScreens) : null;
+  const hardCoded = kioskData ? ((kioskData as any).hardcoded as HardCodedScreens) : null;
 
   // Pass the global handlers to all templates
   const globalHandlers = {
@@ -282,23 +284,6 @@ const Kiosk3View = () => {
 
     return () => controller.setRootHandlers(null);
   }, [controller, handleNavigateDown, handleNavigateUp, scrollToSlide, slides.length]);
-
-  // Now safe to do conditional rendering after all hooks are called
-  if (loading) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center bg-black">
-        <div className="text-white">Loading kiosk data...</div>
-      </div>
-    );
-  }
-
-  if (error || !kioskData) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center bg-black">
-        <div className="text-red-500">Error loading kiosk data: {error}</div>
-      </div>
-    );
-  }
 
   return (
     <div

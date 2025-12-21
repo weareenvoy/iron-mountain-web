@@ -25,7 +25,7 @@ import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-con
 
 const Kiosk1View = () => {
   const controller: Controller = useKioskController();
-  const { data: kioskData, error, loading } = useKiosk();
+  const { data: kioskData } = useKiosk();
   const [topIndex, setTopIndex] = useState(0);
   const [showArrows, setShowArrows] = useState(false);
   const [allowArrowsToShow, setAllowArrowsToShow] = useState(false);
@@ -130,10 +130,6 @@ const Kiosk1View = () => {
           ...buildHardcodedSlides(hardCoded, 'kiosk-1', scrollToSectionById),
         ]
       : [];
-
-  const challengeCount = challenges ? buildChallengeSlides(challenges, 'kiosk-1', controller).length : 0;
-  const solutionCount = solutions ? buildSolutionSlides(solutions, 'kiosk-1', controller).length : 0;
-  const valueCount = values ? buildValueSlides(values, 'kiosk-1', controller).length : 0;
 
   // Determine current section based on scroll target (more accurate than topIndex)
   const currentSlide = slides[topIndex];
@@ -284,8 +280,6 @@ const Kiosk1View = () => {
 
   useEffect(() => {
     // Override controller navigation with paragraph navigation
-    if (slides.length === 0) return;
-
     controller.setRootHandlers({
       goTo: (i: number) => {
         const targetIndex = Math.max(0, Math.min(i, slides.length - 1));
@@ -298,23 +292,6 @@ const Kiosk1View = () => {
 
     return () => controller.setRootHandlers(null);
   }, [controller, handleNavigateDown, handleNavigateUp, scrollToSlide, slides.length]);
-
-  // Now safe to do conditional rendering after all hooks are called
-  if (loading) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center bg-black">
-        <div className="text-white">Loading kiosk data...</div>
-      </div>
-    );
-  }
-
-  if (error || !kioskData) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center bg-black">
-        <div className="text-red-500">Error loading kiosk data: {error}</div>
-      </div>
-    );
-  }
 
   return (
     <div

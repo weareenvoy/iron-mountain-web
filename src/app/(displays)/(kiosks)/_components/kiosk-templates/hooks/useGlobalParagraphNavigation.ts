@@ -22,7 +22,7 @@ export interface UseGlobalParagraphNavigationReturn {
  */
 export function useGlobalParagraphNavigation({
   containerRef,
-  duration = 800,
+  duration = 800, // how long the scroll is in ms
 }: UseGlobalParagraphNavigationOptions): UseGlobalParagraphNavigationReturn {
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [allParagraphs, setAllParagraphs] = useState<HTMLElement[]>([]);
@@ -47,6 +47,12 @@ export function useGlobalParagraphNavigation({
         const textContent = el.textContent?.trim() || '';
         return textContent.length > 0;
       });
+      console.log('Detected scroll sections:', nonEmptyParagraphs.map(el => ({
+        id: el.getAttribute('data-scroll-section'),
+        tag: el.tagName,
+        hasContent: el.textContent?.trim().length || 0,
+        offsetTop: el.offsetTop
+      })));
       setAllParagraphs(nonEmptyParagraphs);
     };
 
@@ -66,6 +72,22 @@ export function useGlobalParagraphNavigation({
     (index: number) => {
       const container = containerRef.current;
       if (!container || index < -1 || index >= allParagraphs.length) return;
+
+      // Log navigation context
+      const currentSection = allParagraphs[currentIndex]?.getAttribute('data-scroll-section');
+      const targetSection = index >= 0 ? allParagraphs[index]?.getAttribute('data-scroll-section') : 'INITIAL_SCREEN';
+      const prevSection = index > 0 ? allParagraphs[index - 1]?.getAttribute('data-scroll-section') : 'INITIAL_SCREEN';
+      const nextSection = index < allParagraphs.length - 1 ? allParagraphs[index + 1]?.getAttribute('data-scroll-section') : 'END';
+      
+      console.log('📍 NAVIGATION:', {
+        from: currentSection || 'INITIAL_SCREEN',
+        to: targetSection,
+        prev: prevSection,
+        next: nextSection,
+        currentIndex,
+        targetIndex: index,
+        totalSections: allParagraphs.length
+      });
 
       // If scrolling to -1, scroll to top
       if (index === -1) {
@@ -107,21 +129,44 @@ export function useGlobalParagraphNavigation({
         return;
       }
 
+      const containerTop = container.scrollTop;
+
       // Set the target section ID
       const targetId = targetParagraph.getAttribute('data-scroll-section');
       setCurrentScrollTarget(targetId);
 
-      const containerTop = container.scrollTop;
+      // Get element's position in the scrollable content (not viewport)
+      // We need to calculate the offset from the container's scrollable area
+      let elementOffsetTop = 0;
+      let currentElement: HTMLElement | null = targetParagraph;
+      
+      // Walk up the tree to calculate total offset relative to container
+      while (currentElement && currentElement !== container) {
+        elementOffsetTop += currentElement.offsetTop;
+        currentElement = currentElement.offsetParent as HTMLElement;
+      }
 
-      // Get the absolute position of the paragraph relative to the container
-      const paragraphTop = targetParagraph.getBoundingClientRect().top;
-      const containerRect = container.getBoundingClientRect().top;
-
-      // Use 0 offset for videos and root container divs (scroll to exact position), 800 for text elements
+      // Use 0 offset for videos and root container divs (scroll to exact position)
       const isVideo = targetParagraph.tagName === 'VIDEO';
       const isRootDiv = targetParagraph.tagName === 'DIV' && targetParagraph.classList.contains('h-screen');
-      const topOffset = isVideo || isRootDiv ? 0 : 800;
-      const targetScroll = containerTop + (paragraphTop - containerRect) - topOffset;
+      const topOffset = isVideo || isRootDiv ? 0 : 0;
+      
+      // Target scroll position = element's position in content - desired offset from top
+      const targetScroll = elementOffsetTop - topOffset;
+
+      console.log('🎯 SCROLL CALCULATION:', {
+        section: targetId,
+        tag: targetParagraph.tagName,
+        isVideo,
+        isRootDiv,
+        '---POSITIONS---': '---',
+        elementOffsetTop,
+        topOffset,
+        currentScrollTop: containerTop,
+        '---RESULT---': '---',
+        targetScroll,
+        willScrollBy: targetScroll - containerTop
+      });
 
       const start = performance.now();
 
@@ -138,12 +183,17 @@ export function useGlobalParagraphNavigation({
           isScrollingRef.current = false;
           setIsScrolling(false);
           setCurrentIndex(index);
+          console.log('✅ SCROLL COMPLETE:', {
+            section: targetId,
+            newIndex: index,
+            finalScrollTop: container.scrollTop
+          });
         }
       };
 
       requestAnimationFrame(animateScroll);
     },
-    [allParagraphs, containerRef, duration]
+    [allParagraphs, containerRef, currentIndex, duration]
   );
 
   // Handle navigate down

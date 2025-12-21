@@ -22,7 +22,7 @@ import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-con
 
 const Kiosk2View = () => {
   const controller: Controller = useKioskController();
-  const { data: kioskData, error, loading } = useKiosk();
+  const { data: kioskData } = useKiosk();
   const [topIndex, setTopIndex] = useState(0);
   const [showArrows, setShowArrows] = useState(false);
   const [allowArrowsToShow, setAllowArrowsToShow] = useState(false);
@@ -68,10 +68,12 @@ const Kiosk2View = () => {
     baseHandleNavigateUp();
   }, [baseHandleNavigateUp, currentScrollTarget]);
 
-  // Prepare data (with safe defaults for loading state)
-  const challenges: KioskChallenges | null = kioskData ? parseKioskChallenges(kioskData.challenges, 'kiosk-2') : null;
-  const solutions = (kioskData?.solutions as SolutionScreens | undefined) || null;
-  const values = (kioskData?.value as undefined | ValueScreens) || null;
+  // Parse data from provider (kiosk-2 has flat structure with 'challenges' at root)
+  const challenges: KioskChallenges | null = kioskData 
+    ? parseKioskChallenges((kioskData as any).challenges, 'kiosk-2') 
+    : null;
+  const solutions = kioskData ? ((kioskData as any).solutions as SolutionScreens) : null;
+  const values = kioskData ? ((kioskData as any).value as ValueScreens) : null;
 
   // Pass the global handlers to all templates
   const globalHandlers = {
@@ -107,13 +109,6 @@ const Kiosk2View = () => {
           ),
         ]
       : [];
-
-  const challengeCount = challenges
-    ? buildChallengeSlides(challenges, 'kiosk-2', controller, {
-        initialScreen: { ...challenges.initialScreen, contentBoxBgColor: '#8DC13F' },
-      }).length
-    : 0;
-  const solutionCount = solutions ? buildSolutionSlides(solutions, 'kiosk-2', controller).length : 0;
 
   // Determine current section based on slide ID
   const currentSlide = slides[topIndex];
@@ -234,8 +229,6 @@ const Kiosk2View = () => {
 
   useEffect(() => {
     // Override controller navigation with paragraph navigation
-    if (slides.length === 0) return;
-
     controller.setRootHandlers({
       goTo: (i: number) => {
         const targetIndex = Math.max(0, Math.min(i, slides.length - 1));
@@ -248,23 +241,6 @@ const Kiosk2View = () => {
 
     return () => controller.setRootHandlers(null);
   }, [controller, handleNavigateDown, handleNavigateUp, scrollToSlide, slides.length]);
-
-  // Now safe to do conditional rendering after all hooks are called
-  if (loading) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center bg-black">
-        <div className="text-white">Loading kiosk data...</div>
-      </div>
-    );
-  }
-
-  if (error || !kioskData) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center bg-black">
-        <div className="text-red-500">Error loading kiosk data: {error}</div>
-      </div>
-    );
-  }
 
   return (
     <div
