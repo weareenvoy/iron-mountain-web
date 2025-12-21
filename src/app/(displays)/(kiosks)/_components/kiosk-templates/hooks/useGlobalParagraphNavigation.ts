@@ -147,9 +147,10 @@ export function useGlobalParagraphNavigation({
       }
 
       // Use 0 offset for videos and root container divs (scroll to exact position)
+      // Use 800px offset for text elements (paragraphs, headings, etc.) so they appear lower on screen
       const isVideo = targetParagraph.tagName === 'VIDEO';
       const isRootDiv = targetParagraph.tagName === 'DIV' && targetParagraph.classList.contains('h-screen');
-      const topOffset = isVideo || isRootDiv ? 0 : 0;
+      const topOffset = isVideo || isRootDiv ? 0 : 800;
       
       // Target scroll position = element's position in content - desired offset from top
       const targetScroll = elementOffsetTop - topOffset;
