@@ -40,7 +40,8 @@ const SolutionFirstScreenTemplate = ({
 }: SolutionFirstScreenTemplateProps) => {
   return (
     <div
-      className="relative flex h-screen w-full flex-col overflow-hidden bg-black"
+      className="group/kiosk relative flex h-screen w-full flex-col overflow-hidden bg-black"
+      data-kiosk={kioskId}
       data-node-id="5168:9669"
       style={{ overflow: 'visible' }}
     >
@@ -64,7 +65,7 @@ const SolutionFirstScreenTemplate = ({
 
       {/* Gradient body */}
       <div
-        className={`absolute left-0 h-[4085px] w-full rounded-[100px] ${kioskId === 'kiosk-2' ? 'top-[1110px]' : 'top-[1058px]'}`}
+        className="absolute left-0 top-[1058px] h-[4085px] w-full rounded-[100px] group-data-[kiosk=kiosk-2]/kiosk:top-[1110px] group-data-[kiosk=kiosk-3]/kiosk:top-[1060px]"
         data-node-id="5168:9671"
         style={{
           background: `linear-gradient(to bottom, ${gradientStartColor} 0%, ${gradientEndColor} 99%)`,
@@ -73,12 +74,12 @@ const SolutionFirstScreenTemplate = ({
       />
 
       {/* Subheadline */}
-      <h2 className="absolute top-[240px] left-[120px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed]">
+      <h2 className="absolute top-[240px] left-[120px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-3]/kiosk:top-[300px] group-data-[kiosk=kiosk-3]/kiosk:left-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[330px]">
         {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
       </h2>
 
       {/* Solution label */}
-      <div className="absolute top-[790px] left-[140px] flex items-center gap-[41px]" data-node-id="5168:9697">
+      <div className="absolute top-[790px] left-[140px] flex items-center gap-[41px] group-data-[kiosk=kiosk-3]/kiosk:top-[860px] group-data-[kiosk=kiosk-3]/kiosk:left-[260px]" data-node-id="5168:9697">
         <div className="relative flex h-[200px] w-[200px] items-center justify-center" style={{ left: -55, top: -25 }}>
           <OutlinedDiamond aria-hidden="true" focusable="false" />
         </div>
@@ -91,7 +92,7 @@ const SolutionFirstScreenTemplate = ({
       </div>
 
       {/* Body copy */}
-      <div className="absolute top-[1600px] left-[230px] flex w-auto max-w-[1271px] flex-col gap-[80px] text-white">
+      <div className="absolute top-[1600px] left-[230px] flex w-auto max-w-[1271px] flex-col gap-[80px] text-white group-data-[kiosk=kiosk-3]/kiosk:top-[1260px] group-data-[kiosk=kiosk-3]/kiosk:left-[120px]">
         <p className="w-[900px] text-[100px] leading-[1.3] font-normal tracking-[-5px]">
           {renderRegisteredMark(title)}
         </p>
@@ -99,7 +100,7 @@ const SolutionFirstScreenTemplate = ({
       </div>
 
       {/* Decorative diamonds */}
-      <div className="pointer-events-none absolute top-[2400px] left-[-180px] z-[3] h-[1770px] w-[1770px] opacity-60">
+      <div className="pointer-events-none absolute top-[2400px] left-[-180px] z-[3] h-[1770px] w-[1770px] opacity-60 group-data-[kiosk=kiosk-3]/kiosk:top-[2420px] group-data-[kiosk=kiosk-3]/kiosk:left-[-180px] group-data-[kiosk=kiosk-3]/kiosk:size-[1780px]">
         {largeDiamondSrc ? (
           <div className="relative h-full w-full">
             <Image
@@ -114,7 +115,7 @@ const SolutionFirstScreenTemplate = ({
           <BlueDiamondMain aria-hidden="true" className="h-full w-full" focusable="false" />
         )}
       </div>
-      <div className="pointer-events-none absolute top-[2370px] left-[1240px] z-[3] h-[800px] w-[800px] opacity-70">
+      <div className="pointer-events-none absolute top-[2370px] left-[1240px] z-[3] h-[800px] w-[800px] opacity-70 group-data-[kiosk=kiosk-3]/kiosk:top-[2390px] group-data-[kiosk=kiosk-3]/kiosk:left-[1250px] group-data-[kiosk=kiosk-3]/kiosk:size-[810px]">
         {mediumDiamondSrc ? (
           <div className="relative h-full w-full">
             <Image
@@ -129,7 +130,7 @@ const SolutionFirstScreenTemplate = ({
           <GreenDiamondMain aria-hidden="true" className="h-full w-full" focusable="false" />
         )}
       </div>
-      <div className="pointer-events-none absolute top-[3394px] left-[1235px] z-[3] h-[795px] w-[795px] opacity-70">
+      <div className="pointer-events-none absolute top-[3394px] left-[1235px] z-[3] h-[795px] w-[795px] opacity-70 group-data-[kiosk=kiosk-3]/kiosk:top-[3420px] group-data-[kiosk=kiosk-3]/kiosk:left-[1250px] group-data-[kiosk=kiosk-3]/kiosk:size-[810px]">
         {accentDiamondSrc ? (
           <div className="relative h-full w-full">
             <Image

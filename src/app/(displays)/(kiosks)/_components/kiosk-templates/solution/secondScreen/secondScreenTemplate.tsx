@@ -106,7 +106,7 @@ const SolutionSecondScreenTemplate = ({
       <div className="pointer-events-none absolute top-[1080px] left-[-100px] z-[1] h-[1790px] w-[1790px]">
         <BlueDiamondSecond aria-hidden="true" className="h-full w-full" focusable="false" />
       </div>
-      <div className="pointer-events-none absolute top-[970px] left-[1270px] z-[1] h-[890px] w-[890px]">
+      <div className="pointer-events-none absolute top-[970px] left-[1270px] z-[1] h-[890px] w-[890px] group-data-[kiosk=kiosk-3]/kiosk:top-[1050px] group-data-[kiosk=kiosk-3]/kiosk:left-[1330px] group-data-[kiosk=kiosk-3]/kiosk:size-[810px]">
         <GreenDiamondSecond aria-hidden="true" className="h-full w-full" focusable="false" />
       </div>
 
@@ -116,7 +116,7 @@ const SolutionSecondScreenTemplate = ({
       </h2>
 
       {/* Solution label */}
-      <div className="absolute top-[710px] left-[150px] relative top-[180px] flex">
+      <div className="absolute top-[710px] left-[150px] relative top-[180px] flex group-data-[kiosk=kiosk-3]/kiosk:top-[720px] group-data-[kiosk=kiosk-3]/kiosk:left-[140px]">
         <div className="relative flex h-[200px] w-[200px] items-center justify-center" style={{ left: -55, top: 25 }}>
           <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
         </div>
@@ -139,7 +139,7 @@ const SolutionSecondScreenTemplate = ({
       <div className="absolute top-[1890px] left-[240px] z-[2] flex w-[1010px] flex-col gap-[60px] text-[60px] leading-[1.4] tracking-[-3px] text-[#ededed]">
         {timelineSteps.map((step, index) => (
           <div key={`${step.label}-${index}`}>
-            <div className={`flex gap-[120px] ${getOpacityClass(index)}`}>
+            <div className={`flex gap-[120px] ${getOpacityClass(index)} group-data-[kiosk=kiosk-3]/kiosk:gap-[70px]`}>
               <p className="w-[120px]">{renderRegisteredMark(step.label)}</p>
               <p className="w-[1620px] tracking-[-2.7px]">{renderRegisteredMark(step.description)}</p>
             </div>
@@ -157,7 +157,7 @@ const SolutionSecondScreenTemplate = ({
 
       {/* Hero media diamond */}
       <div className="absolute top-[2210px] left-[1500px] z-[2]">
-        <div className="relative top-[-140px] left-[-230px] h-[900px] w-[900px] rotate-[45deg] overflow-hidden rounded-[80px]">
+        <div className="relative top-[-140px] left-[-230px] h-[900px] w-[900px] rotate-[45deg] overflow-hidden rounded-[80px] group-data-[kiosk=kiosk-3]/kiosk:top-[-130px] group-data-[kiosk=kiosk-3]/kiosk:left-[-160px] group-data-[kiosk=kiosk-3]/kiosk:size-[800px]">
           <Image alt={heroImageAlt} className="-rotate-[45deg] object-cover" fill sizes="800px" src={heroImageSrc} />
         </div>
       </div>

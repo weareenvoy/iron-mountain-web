@@ -35,7 +35,7 @@ export const FirstScreenTemplate = ({
       data-node-id="5168:9882"
     >
       {/* Background gradient - stays behind all content */}
-      <div className="pointer-events-none absolute inset-0 z-[1] h-[14120px] bg-[linear-gradient(180deg,#1B75BC_0.01%,#14477D_98%)] rounded-[100px] top-[1290px] group-data-[kiosk=kiosk-2]/kiosk:h-[14400px]" />
+      <div className="pointer-events-none absolute inset-0 z-[1] bg-[linear-gradient(180deg,#1B75BC_0.01%,#14477D_98%)] rounded-[100px] top-[1290px] h-[14400px]" />
 
       {/* Video Header Section */}
       <div className="relative flex h-[1380px] w-full flex-col items-center justify-center overflow-hidden">
@@ -53,7 +53,7 @@ export const FirstScreenTemplate = ({
           <div className="pointer-events-none absolute inset-0 bg-black/20" />
 
         {/* Subheadline */}
-        <div className="relative top-[30px] left-[-785px] z-[2] px-[120px] pb-[400px]">
+        <div className="relative top-[30px] left-[-785px] z-[2] px-[120px] pb-[400px] group-data-[kiosk=kiosk-3]/kiosk:left-[-800px] group-data-[kiosk=kiosk-3]/kiosk:top-[50px]">
           <h2 className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
             {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
           </h2>
@@ -61,7 +61,7 @@ export const FirstScreenTemplate = ({
           </div>
 
           {/* Challenge Label Section */}
-      <div className="relative z-[2] top-[-400px] flex items-center gap-[41px] px-[128px] pb-[200px]">
+      <div className="relative z-[2] top-[-400px] flex items-center gap-[41px] px-[128px] pb-[200px] group-data-[kiosk=kiosk-3]/kiosk:top-[-370px]">
             <div className="relative mr-[5px] flex h-[110px] w-[110px] items-center justify-center">
           <Diamond aria-hidden="true" className="h-full w-full text-[#ededed]" focusable="false" strokeWidth={1.25} />
             </div>
@@ -71,18 +71,18 @@ export const FirstScreenTemplate = ({
       </div>
 
       {/* Problem Description Section */}
-      <div className="relative z-[2] px-[120px] top-[-70px] left-[-10px]">
-        <p className="max-w-[1380px] leading-[1.3] font-normal text-white text-[60px] tracking-[-3px]">
+      <div className="relative z-[2] px-[120px] top-[-70px] left-[-10px] group-data-[kiosk=kiosk-3]/kiosk:top-[-260px] group-data-[kiosk=kiosk-3]/kiosk:left-[0]">
+        <p className="max-w-[1380px] leading-[1.3] font-normal text-white text-[80px] tracking-[-3px]">
           {renderRegisteredMark(problemDescription)}
         </p>
       </div>
 
       {/* Savings Metrics Section */}
-      <div className="relative z-[2] flex w-full flex-col items-center py-[490px] left-[-505px] top-[-85px]">
+      <div className="relative z-[2] flex w-full flex-col items-center py-[490px] left-[-505px] top-[-85px] group-data-[kiosk=kiosk-3]/kiosk:left-[-400px] group-data-[kiosk=kiosk-3]/kiosk:top-[10px]">
         <span className="text-center text-[400px] leading-[1.3] font-[300] tracking-[-20px] whitespace-nowrap text-[#6dcff6]">
           {renderRegisteredMark(savingsAmount)}
         </span>
-        <p className="mt-[-40px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#6dcff6] relative top-[10px] left-[415px] w-[1760px]">
+        <p className="mt-[-40px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#6dcff6] relative top-[10px] left-[415px] w-[1760px] group-data-[kiosk=kiosk-3]/kiosk:left-[-20px] group-data-[kiosk=kiosk-3]/kiosk:top-[30px] groups-data-[kiosk=kiosk-3]/kiosk:w-[1070px] group-data-[kiosk=kiosk-3]/kiosk:leading-[1.3]">
           {renderRegisteredMark(savingsDescription)}
         </p>
       </div>

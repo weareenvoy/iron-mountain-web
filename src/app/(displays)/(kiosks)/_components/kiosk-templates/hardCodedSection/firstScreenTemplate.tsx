@@ -96,7 +96,7 @@ const HardCodedKiosk1FirstScreenTemplate = ({
         className="absolute inset-0"
         style={{
           background: `linear-gradient(180deg, ${backgroundStartColor} 0%, ${backgroundEndColor} 100%)`,
-          height: isKiosk1 || isKiosk3 ? '10530px' : undefined,
+          height: isKiosk1 ? '10530px' : isKiosk3 ? '15630px' : undefined,
         }}
       />
 

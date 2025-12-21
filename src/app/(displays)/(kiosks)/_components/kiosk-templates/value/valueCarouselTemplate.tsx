@@ -48,8 +48,8 @@ const defaultSlides = [
 ];
 
 const fallbackDiamondCards: readonly ValueDiamondCard[] = defaultSlides[0]?.diamondCards ?? [];
-const paletteColors = ['#f26522', '#8a0d71', '#1b75bc'] as const;
-const paletteTextColors = ['#4a154b', undefined, undefined] as const;
+const paletteColors = ['#8a0d71', '#1b75bc', '#f26522'] as const;
+const paletteTextColors = [undefined, undefined, undefined] as const;
 
 const normalizeDiamondCards = (cards?: readonly ValueDiamondCard[]) => {
   const base = cards && cards.length > 0 ? cards : fallbackDiamondCards;

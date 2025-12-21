@@ -120,13 +120,13 @@
             "badgeLabel": "Operational · Economic · Strategic",
             "diamondCards": [
               {
-                "label": "Strategic benefits"
-              },
-              {
                 "label": "Operational benefits"
               },
               {
                 "label": "Economic benefits"
+              },
+              {
+                "label": "Strategic benefits"
               }
             ],
             "id": "value-trio-overview"
