@@ -5,9 +5,6 @@ import Image from 'next/image';
 import { DEFAULT_KIOSK_ID, type KioskId } from '../../../../_types/kiosk-id';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
-// import styles from './thirdScreenTemplate.module.css';
-
-// Asset constants from Figma MCP
 const imgHeroDiamond = '/images/kiosks/kiosk1/04-custom-interactive/CU-Image1-Diamond.png';
 const imgMetricDiamond = '/images/kiosks/kiosk1/04-custom-interactive/CU-Image1-Diamond.png';
 const imgVector = '/images/kiosks/kiosk1/04-custom-interactive/CU-Image1-Full.png';
