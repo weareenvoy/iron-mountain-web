@@ -72,7 +72,7 @@ export const FirstScreenTemplate = ({
 
       {/* Problem Description Section */}
       <div className="relative z-[2] px-[120px] top-[-70px] left-[-10px] group-data-[kiosk=kiosk-3]/kiosk:top-[-260px] group-data-[kiosk=kiosk-3]/kiosk:left-[0]">
-        <p className="max-w-[1380px] leading-[1.3] font-normal text-white text-[80px] tracking-[-3px]">
+        <p className="max-w-[1380px] leading-[1.3] font-normal text-white text-[80px] tracking-[-3px] group-data-[kiosk=kiosk-3]/kiosk:tracking-[-4px] group-data-[kiosk=kiosk-3]/kiosk:leading-[1.4]">
           {renderRegisteredMark(problemDescription)}
         </p>
       </div>
@@ -82,7 +82,7 @@ export const FirstScreenTemplate = ({
         <span className="text-center text-[400px] leading-[1.3] font-[300] tracking-[-20px] whitespace-nowrap text-[#6dcff6]">
           {renderRegisteredMark(savingsAmount)}
         </span>
-        <p className="mt-[-40px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#6dcff6] relative top-[10px] left-[415px] w-[1760px] group-data-[kiosk=kiosk-3]/kiosk:left-[-20px] group-data-[kiosk=kiosk-3]/kiosk:top-[30px] groups-data-[kiosk=kiosk-3]/kiosk:w-[1070px] group-data-[kiosk=kiosk-3]/kiosk:leading-[1.3]">
+        <p className="mt-[-40px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#6dcff6] relative top-[10px] left-[415px] w-[1760px] group-data-[kiosk=kiosk-3]/kiosk:left-[-20px] group-data-[kiosk=kiosk-3]/kiosk:top-[50px] group-data-[kiosk=kiosk-3]/kiosk:w-[1070px] group-data-[kiosk=kiosk-3]/kiosk:leading-[1.3]">
           {renderRegisteredMark(savingsDescription)}
         </p>
       </div>
