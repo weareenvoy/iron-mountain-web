@@ -10,14 +10,11 @@ type Props = {
 const INITIAL_DELAY_MS = 500 as const;
 const CHAR_STAGGER_MS = 40 as const;
 
-// Title shows up char by char with small jump, holds visible, then fades out
-
 const PossibilitiesTitle = ({ data }: Props) => {
   const chars = data.title.split('');
 
   return (
     <div className="absolute inset-0 flex items-center justify-center">
-      {/* Wrapper handles the hold + fade-out sequence */}
       <div className="animate-possibilities-title text-center font-geometria text-[80px] text-black">
         {/* Each char animates in with jump */}
         {chars.map((char, i) => (

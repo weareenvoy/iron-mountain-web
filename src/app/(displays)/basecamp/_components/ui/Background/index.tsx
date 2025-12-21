@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useBasecamp } from '@/app/(displays)/basecamp/_components/providers/basecamp';
-import { BASECAMP_BEAT_ORDER, isValidBasecampBeatId } from '@/lib/internal/types';
+import { getNextBeatId, isSeamlessVideoTransition } from '@/app/(displays)/basecamp/_utils';
+import { BasecampBeatId, isValidBasecampBeatId } from '@/lib/internal/types';
 
 const CROSSFADE_DURATION_MS = 800 as const;
 
@@ -65,36 +66,41 @@ const Background = () => {
 
       a.current!.addEventListener('canplaythrough', () => startPlaybackAndSignalReady(a.current!), { once: true });
     } else {
-      // Subsequent: use hidden video
+      // Subsequent beats
       setupIncomingVideo(hidden);
 
-      const Goal = () => {
+      const seamless = isSeamlessVideoTransition(lastBeat.current as BasecampBeatId | null, beatId);
+
+      const performSwitch = () => {
         if (lastBeat.current !== beatId) return;
 
-        // Crossfade
-        visible.style.transition = hidden.style.transition = `opacity ${CROSSFADE_DURATION_MS}ms ease`;
-        visible.style.opacity = '0';
-        hidden.style.opacity = '1';
+        if (seamless) {
+          // Instant switch. No fade, perfect continuity
+          visible.style.transition = hidden.style.transition = 'opacity 0ms';
+          visible.style.opacity = '0';
+          hidden.style.opacity = '1';
+        } else {
+          // Normal crossfade on moment change
+          visible.style.transition = hidden.style.transition = `opacity ${CROSSFADE_DURATION_MS}ms ease`;
+          visible.style.opacity = '0';
+          hidden.style.opacity = '1';
+        }
 
         startPlaybackAndSignalReady(hidden);
-
-        // Switch active
         active.current = active.current === 'a' ? 'b' : 'a';
         setActiveDisplay(active.current);
       };
 
-      // If already buffered enough, start immediately
       if (hidden.readyState >= 3) {
-        Goal();
+        // HAVE_ENOUGH_DATA
+        performSwitch();
       } else {
-        hidden.addEventListener('canplaythrough', Goal, { once: true });
+        hidden.addEventListener('canplaythrough', performSwitch, { once: true });
       }
     }
 
     // Preload next beat into the now-visible (soon-to-be-hidden) video
-    const currentIndex = BASECAMP_BEAT_ORDER.indexOf(beatId);
-    const nextIndex = isAmbient ? currentIndex : (currentIndex + 1) % BASECAMP_BEAT_ORDER.length;
-    const nextBeatId = BASECAMP_BEAT_ORDER[nextIndex];
+    const nextBeatId = getNextBeatId(beatId, isAmbient);
 
     if (nextBeatId && data.beats[nextBeatId].url) {
       // For first load: preload into B immediately

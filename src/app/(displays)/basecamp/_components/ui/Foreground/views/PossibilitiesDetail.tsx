@@ -13,8 +13,8 @@ const WORD_STAGGER_MS = 80 as const;
 const PossibilitiesDetail = ({ data }: Props) => {
   const bodyItems = [data.body1, data.body2, data.body3];
 
-  // Use title as key to force remount when data changes (resets animations)
   return (
+    // Use key to force remount when data changes
     <div className="absolute inset-0 text-black" key={data.title}>
       {/* Title: slide up from below */}
       <div className="animate-slide-up absolute top-24 right-0 left-56 font-geometria text-[55px] font-bold">

@@ -8,14 +8,32 @@ type Props = {
 };
 
 // Animation timing constants
-const BLOCK_DURATION_MS = 2000 as const; // Time budget per block
-const BLOCKS_START_DELAY_MS = 500 as const; // When first block starts
-const MAIN_TITLE_WORD_STAGGER_MS = 100 as const;
-const CARD_TITLE_DELAY_MS = 300 as const; // After block start
-const CARD_TITLE_WORD_STAGGER_MS = 80 as const;
-const CARD_ICON_DELAY_MS = 600 as const; // After block start
-const CARD_BODY_DELAY_MS = 900 as const; // After block start
-const CARD_BODY_WORD_STAGGER_MS = 60 as const;
+const TIMING = {
+  blocks: {
+    duration: 2000,
+    phases: {
+      body: { delay: 900, wordStagger: 60 },
+      icon: { delay: 600 },
+      title: { delay: 300, wordStagger: 80 },
+    },
+    startDelay: 500,
+  },
+  mainTitle: {
+    wordStagger: 100,
+  },
+} as const;
+
+// Helper functions for calculating delays
+const getBlockStartDelay = (blockIndex: number): number =>
+  TIMING.blocks.startDelay + blockIndex * TIMING.blocks.duration;
+
+const getCardTitleDelay = (blockStart: number, wordIndex: number): number =>
+  blockStart + TIMING.blocks.phases.title.delay + wordIndex * TIMING.blocks.phases.title.wordStagger;
+
+const getCardIconDelay = (blockStart: number): number => blockStart + TIMING.blocks.phases.icon.delay;
+
+const getCardBodyDelay = (blockStart: number, wordIndex: number): number =>
+  blockStart + TIMING.blocks.phases.body.delay + wordIndex * TIMING.blocks.phases.body.wordStagger;
 
 const Problem4 = ({ data }: Props) => {
   const challenges = [data.challenge1, data.challenge2, data.challenge3, data.challenge4];
@@ -29,7 +47,7 @@ const Problem4 = ({ data }: Props) => {
           <span
             className="animate-char-in inline-block"
             key={i}
-            style={{ animationDelay: `${i * MAIN_TITLE_WORD_STAGGER_MS}ms` }}
+            style={{ animationDelay: `${i * TIMING.mainTitle.wordStagger}ms` }}
           >
             {word}
             {i < mainTitleWords.length - 1 && '\u00A0'}
@@ -39,8 +57,7 @@ const Problem4 = ({ data }: Props) => {
 
       <div className="flex flex-row gap-4">
         {challenges.map((challenge, index) => {
-          // Each block starts after the previous one completes
-          const blockStart = BLOCKS_START_DELAY_MS + index * BLOCK_DURATION_MS;
+          const blockStart = getBlockStartDelay(index);
           const cardTitleWords = challenge.title.split(' ');
           const bodyWords = challenge.body.split(' ');
 
@@ -53,26 +70,23 @@ const Problem4 = ({ data }: Props) => {
               >
                 {/* Title text: show up word by word */}
                 <p className="text-2xl font-semibold whitespace-nowrap text-white">
-                  {cardTitleWords.map((word, i) => {
-                    const titleWordDelay = blockStart + CARD_TITLE_DELAY_MS + i * CARD_TITLE_WORD_STAGGER_MS;
-                    return (
-                      <span
-                        className="animate-char-in inline-block"
-                        key={i}
-                        style={{ animationDelay: `${titleWordDelay}ms` }}
-                      >
-                        {word}
-                        {i < cardTitleWords.length - 1 && '\u00A0'}
-                      </span>
-                    );
-                  })}
+                  {cardTitleWords.map((word, i) => (
+                    <span
+                      className="animate-char-in inline-block"
+                      key={i}
+                      style={{ animationDelay: `${getCardTitleDelay(blockStart, i)}ms` }}
+                    >
+                      {word}
+                      {i < cardTitleWords.length - 1 && '\u00A0'}
+                    </span>
+                  ))}
                 </p>
               </div>
 
               {/* Icon scales up */}
               <div
                 className="animate-scale-fade-in flex items-center justify-center"
-                style={{ animationDelay: `${blockStart + CARD_ICON_DELAY_MS}ms` }}
+                style={{ animationDelay: `${getCardIconDelay(blockStart)}ms` }}
               >
                 <Image alt={challenge.title} height={300} src={challenge.icon} width={300} />
               </div>
@@ -83,7 +97,7 @@ const Problem4 = ({ data }: Props) => {
                   <span
                     className="animate-char-in inline-block"
                     key={i}
-                    style={{ animationDelay: `${blockStart + CARD_BODY_DELAY_MS + i * CARD_BODY_WORD_STAGGER_MS}ms` }}
+                    style={{ animationDelay: `${getCardBodyDelay(blockStart, i)}ms` }}
                   >
                     {word}
                     {i < bodyWords.length - 1 && '\u00A0'}
