@@ -22,7 +22,7 @@ export interface UseGlobalParagraphNavigationReturn {
  */
 export function useGlobalParagraphNavigation({
   containerRef,
-  duration = 200, // how long the scroll is in ms
+  duration = 150, // how long the scroll is in ms
 }: UseGlobalParagraphNavigationOptions): UseGlobalParagraphNavigationReturn {
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [allParagraphs, setAllParagraphs] = useState<HTMLElement[]>([]);

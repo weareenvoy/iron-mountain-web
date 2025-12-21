@@ -53,6 +53,45 @@ const paletteTextColors = [undefined, undefined, undefined] as const;
 
 const normalizeDiamondCards = (cards?: readonly ValueDiamondCard[]) => {
   const base = cards && cards.length > 0 ? cards : fallbackDiamondCards;
+  
+  // Check if this is a carousel slide (has a labeled card at the end with empty labels before it)
+  const lastCard = base[base.length - 1];
+  const hasCarouselPattern = 
+    base.length === 3 && 
+    lastCard?.label && 
+    base.slice(0, -1).every(card => !card.label || card.label === '');
+  
+  if (hasCarouselPattern) {
+    // Apply Kiosk 1's carousel color logic based on the labeled benefit
+    const labelNormalized = (lastCard.label ?? '').toLowerCase();
+    
+    if (labelNormalized.includes('operational')) {
+      // Operational: [Orange, Blue, Purple (labeled)]
+      return [
+        { ...base[0], color: '#f26522', textColor: '#4a154b' },
+        { ...base[1], color: '#1b75bc' },
+        { ...base[2], color: '#8a0d71', label: lastCard.label },
+      ];
+    }
+    
+    if (labelNormalized.includes('economic')) {
+      // Economic: [Purple, Orange, Blue (labeled)]
+      return [
+        { ...base[0], color: '#8a0d71' },
+        { ...base[1], color: '#f26522', textColor: '#4a154b' },
+        { ...base[2], color: '#1b75bc', label: lastCard.label },
+      ];
+    }
+    
+    // Strategic (default): [Blue, Purple, Orange (labeled)]
+    return [
+      { ...base[0], color: '#1b75bc' },
+      { ...base[1], color: '#8a0d71' },
+      { ...base[2], color: '#f26522', label: lastCard.label, textColor: '#4a154b' },
+    ];
+  }
+  
+  // For overview slides or other patterns, use the palette
   return base.map((card, idx) => ({
     ...card,
     color: card.color ?? paletteColors[idx % paletteColors.length],

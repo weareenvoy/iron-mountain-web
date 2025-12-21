@@ -59,7 +59,7 @@ export const ThirdScreenTemplate = ({
       <div className="pointer-events-none absolute inset-0 z-[0] bg-transparent" />
 
       {/* Decorative background diamond */}
-      <div className="pointer-events-none absolute top-[2530px] left-[940px] z-[1] flex h-[940px] w-[940px] scale-y-[-1] rotate-[225deg] items-center justify-center group-data-[kiosk=kiosk-3]/kiosk:top-[1740px] group-data-[kiosk=kiosk-3]/kiosk:left-[1080px] group-data-[kiosk=kiosk-3]/kiosk:size-[800px]">
+      <div className="pointer-events-none absolute top-[2490px] left-[920px] z-[1] flex h-[940px] w-[940px] scale-y-[-1] rotate-[225deg] items-center justify-center group-data-[kiosk=kiosk-3]/kiosk:top-[1740px] group-data-[kiosk=kiosk-3]/kiosk:left-[1080px] group-data-[kiosk=kiosk-3]/kiosk:size-[800px]">
         <div className="relative h-full w-full">
           <Image
             alt={metricDescription ? `Graphic representing ${metricDescription}` : 'Metric highlight graphic'}
@@ -90,9 +90,9 @@ export const ThirdScreenTemplate = ({
       </div>
 
       {/* Description Section - SCROLLABLE */}
-      <div className="relative z-[2] px-[120px] py-[250px] top-[1000px] group-data-[kiosk=kiosk-3]/kiosk:top-[290px]">
+      <div className="relative z-[2] px-[120px] py-[250px] top-[970px] group-data-[kiosk=kiosk-3]/kiosk:top-[290px]">
         <p
-          className="max-w-[880px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white group-data-[kiosk=kiosk-3]/kiosk:max-w-[1070px] group-data-[kiosk=kiosk-3[/kiosk:leading-[1.3]"
+          className="max-w-[980px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white group-data-[kiosk=kiosk-3]/kiosk:max-w-[1070px] group-data-[kiosk=kiosk-3[/kiosk:leading-[1.3]"
           data-scroll-section="description"
         >
           {renderRegisteredMark(description)}
@@ -100,12 +100,12 @@ export const ThirdScreenTemplate = ({
       </div>
 
       {/* Metrics Section - SCROLLABLE */}
-      <div className="relative z-[2] flex w-full flex-col items-center px-[120px] py-[300px] top-[1330px] left-[-560px] group-data-[kiosk=kiosk-3]/kiosk:top-[790px] group-data-[kiosk=kiosk-3]/kiosk:left-[-640px]">
+      <div className="relative z-[2] flex w-full flex-col items-center px-[120px] py-[300px] top-[1180px] left-[-460px]  group-data-[kiosk=kiosk-2]/kiosk:left-[-560px] group-data-[kiosk=kiosk-2]/kiosk:top-[1270px] group-data-[kiosk=kiosk-3]/kiosk:top-[790px] group-data-[kiosk=kiosk-3]/kiosk:left-[-640px]">
         <span className="text-center text-[400px] leading-[1.3] font-[300] tracking-[-20px] whitespace-nowrap text-[#6dcff6]">
           {renderRegisteredMark(metricAmount)}
         </span>
         <p
-          className="mt-[-142px] max-w-[1040px] text-left text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#6dcff6] top-[100px] left-[5px] relative group-data-[kiosk=kiosk-3]/kiosk:top-[140px] group-data-[kiosk=kiosk-3]/kiosk:left-[130px] group-data-[kiosk=kiosk-3]/kiosk:max-w-[900px] group-data-[kiosk=kiosk-3]/kiosk:leading-[1.3]"
+          className="mt-[-142px] max-w-[1280px] text-left text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#6dcff6] top-[100px] left-[135px] relative  group-data-[kiosk=kiosk-2]/kiosk:left-[15px] group-data-[kiosk=kiosk-3]/kiosk:top-[140px] group-data-[kiosk=kiosk-3]/kiosk:left-[130px] group-data-[kiosk=kiosk-3]/kiosk:max-w-[900px] group-data-[kiosk=kiosk-3]/kiosk:leading-[1.3]"
           data-scroll-section="metrics-description"
         >
           {renderRegisteredMark(metricDescription)}
