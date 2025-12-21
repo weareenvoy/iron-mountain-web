@@ -13,6 +13,7 @@ export type SolutionFirstScreenTemplateProps = Readonly<{
   description?: string;
   gradientEndColor?: string;
   gradientStartColor?: string;
+  kioskId?: string;
   largeDiamondSrc?: string;
   mediumDiamondSrc?: string;
   onNavigateDown?: () => void;
@@ -28,6 +29,7 @@ const SolutionFirstScreenTemplate = ({
   description = 'With a focus on physical storage and a secure digital archive, Iron Mountain provided climate-controlled, private vaults for physical artifacts and implemented Smart Vault for digital preservation.',
   gradientEndColor = '#8a0d71',
   gradientStartColor = '#a2115e',
+  kioskId,
   largeDiamondSrc,
   mediumDiamondSrc,
   onNavigateDown,
@@ -62,7 +64,7 @@ const SolutionFirstScreenTemplate = ({
 
       {/* Gradient body */}
       <div
-        className="absolute top-[1058px] left-0 h-[4085px] w-full rounded-t-[100px]"
+        className={`absolute left-0 h-[4085px] w-full rounded-[100px] ${kioskId === 'kiosk-2' ? 'top-[1110px]' : 'top-[1058px]'}`}
         data-node-id="5168:9671"
         style={{
           background: `linear-gradient(to bottom, ${gradientStartColor} 0%, ${gradientEndColor} 99%)`,
@@ -89,7 +91,7 @@ const SolutionFirstScreenTemplate = ({
       </div>
 
       {/* Body copy */}
-      <div className="absolute top-[1260px] left-[120px] flex w-auto max-w-[1271px] flex-col gap-[80px] text-white">
+      <div className="absolute top-[1600px] left-[230px] flex w-auto max-w-[1271px] flex-col gap-[80px] text-white">
         <p className="w-[900px] text-[100px] leading-[1.3] font-normal tracking-[-5px]">
           {renderRegisteredMark(title)}
         </p>

@@ -32,6 +32,7 @@ export const buildSolutionSlides = (solutions: SolutionScreens, kioskId: KioskId
         <SectionSlide isActive={isActive}>
           <SolutionFirstScreenTemplate
             {...solutions.firstScreen}
+            kioskId={kioskId}
             onNavigateDown={() => controller.next()}
             onNavigateUp={() => controller.prev()}
           />

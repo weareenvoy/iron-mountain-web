@@ -23,7 +23,7 @@
       ]
     },
     "secondScreen": {
-      "bottomDescription": "The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.",
+      "bottomDescription": "",
       "bottomVideoSrc": "",
       "largeIconSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/01+-+Challenge/Challenge-Image1-Diamond.webp",
       "mainDescription": "Disparate, unstructured records across various locations and legacy systems—including paper, microfilm, CD, and digital formats—created costly, risk-laden pension administration.",
@@ -89,8 +89,8 @@
       "bottomLeftLabel": "Automated workflows",
       "bottomRightLabel": "Searchable repository of pension information",
       "centerLabel": "Document digitization",
-      "mediaDiamondLeftSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image1-Diamond.webp",
-      "mediaDiamondRightSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image2-Diamond.webp",
+      "mediaDiamondLeftSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Image2-Diamond.webp",
+      "mediaDiamondRightSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Image3-Diamond.webp",
       "solutionIconSrc": "",
       "solutionLabel": "Solution",
       "subheadline": [
@@ -209,6 +209,89 @@
       }
     ]
   },
-  "hardcoded": {}
+  "hardcoded": {
+    "firstScreen": {
+      "eyebrow": [
+        "Rich media &",
+        "cultural heritage"
+      ],
+      "heroImageAlt": "Visitors smiling while viewing content",
+      "heroImageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/CU-Image1-Diamond.webp",
+      "primaryCtaLabel": "From archive to access",
+      "secondaryCtaLabel": "Launch demo"
+    },
+    "secondScreen": {
+      "eyebrow": [
+        "Rich media &",
+        "cultural heritage"
+      ],
+      "headline": [
+        "From archive",
+        "to access"
+      ],
+      "steps": [
+        {
+          "label": "Intake and assessment",
+          "modal": {
+            "body": [
+              "Assets, whether film, audio, digital, or physical, are logged, evaluated for condition and risk, and prioritized based on preservation and activation potential."
+            ],
+            "imageAlt": "Intake and assessment illustration",
+            "imageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Intake+and+assessment.webp"
+          }
+        },
+        {
+          "label": "Digitization and remediation",
+          "modal": {
+            "body": [
+              "Physical media is digitized to archival standards, with restoration applied as needed and metadata extracted to ensure assets are searchable, playable, and accessible."
+            ],
+            "imageAlt": "Digitization and remediation illustration",
+            "imageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Digitization+and+remediation.webp"
+          }
+        },
+        {
+          "label": "Digital preservation",
+          "modal": {
+            "body": [
+              "Iron Mountain's digital preservation platform provides a fully managed digital repository with triple-redundant geo-distributed storage, secure access, and intuitive navigation."
+            ],
+            "imageAlt": "Digital preservation illustration",
+            "imageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Digital+preservation.webp"
+          }
+        },
+        {
+          "label": "Search and discover",
+          "modal": {
+            "body": [
+              "The entire archive becomes searchable through AI-powered metadata, custom filters, and integrated preview tools, enabling fast discovery from any location."
+            ],
+            "imageAlt": "Search and discover illustration",
+            "imageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Search+and+discover.webp"
+          }
+        },
+        {
+          "label": "Share, stream and monetize",
+          "modal": {
+            "body": [
+              "Digitized content is ready for licensing, streaming, and storytelling, unlocking new value across platforms while maintaining archival integrity."
+            ],
+            "imageAlt": "Share, stream and monetize illustration",
+            "imageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Share%2C+stream+and+monetize.webp"
+          }
+        }
+      ]
+    },
+    "thirdScreen": {
+      "cardLabel": "Virtual walkthrough",
+      "demoIframeSrc": "https://example.com/demo-walkthrough",
+      "endTourLabel": "End tour",
+      "headline": [
+        "Experience our solution",
+        "in action"
+      ]
+    },
+    "fourthScreen": {}
+  }
 }
 

@@ -86,7 +86,8 @@ const HardCodedKiosk1FirstScreenTemplate = ({
 
   return (
     <div
-      className="relative flex h-screen w-full flex-col overflow-hidden"
+      className="group/kiosk relative flex h-screen w-full flex-col overflow-hidden"
+      data-kiosk={kioskId}
       data-node-id="5893:7411"
       data-scroll-section="hardcoded-first-screen"
       style={isKiosk1 || isKiosk3 ? { overflow: 'visible' } : undefined}
@@ -115,7 +116,7 @@ const HardCodedKiosk1FirstScreenTemplate = ({
       {/* CTA buttons */}
       <div className={`absolute top-[2220px] left-[245px] flex flex-col gap-[90px] ${ctaWidthClass}`}>
         <button
-          className="flex h-[200px] items-center justify-between rounded-[999px] bg-[#ededed] px-[100px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-[#14477d] shadow-[0_20px_60px_rgba(0,0,0,0.25)] transition-transform duration-150 hover:scale-[1.01]"
+          className="flex h-[200px] items-center justify-between rounded-[999px] bg-[#ededed] px-[100px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-[#14477d] shadow-[0_20px_60px_rgba(0,0,0,0.25)] transition-transform duration-150 hover:scale-[1.01] group-data-[kiosk=kiosk-2]/kiosk:hidden"
           onClick={onPrimaryCta}
           type="button"
         >

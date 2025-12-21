@@ -42,6 +42,8 @@ export const ThirdScreenTemplate = ({
   subheadline = 'Rich media &\n cultural heritage',
   videoSrc = '/images/kiosks/kiosk1/03-value/Value-header.mp4',
 }: ThirdScreenTemplateProps) => {
+  console.log('🔍 ThirdScreenTemplate received description:', description);
+  
   return (
     <div
       // className={styles.container}
@@ -57,7 +59,7 @@ export const ThirdScreenTemplate = ({
       <div className="pointer-events-none absolute inset-0 z-[0] bg-transparent" />
 
       {/* Decorative background diamond */}
-      <div className="pointer-events-none absolute top-[1750px] left-[1080px] z-[1] flex h-[800px] w-[800px] scale-y-[-1] rotate-[225deg] items-center justify-center opacity-30">
+      <div className="pointer-events-none absolute top-[2530px] left-[940px] z-[1] flex h-[940px] w-[940px] scale-y-[-1] rotate-[225deg] items-center justify-center">
         <div className="relative h-full w-full">
           <Image
             alt={metricDescription ? `Graphic representing ${metricDescription}` : 'Metric highlight graphic'}
@@ -88,9 +90,9 @@ export const ThirdScreenTemplate = ({
       </div>
 
       {/* Description Section - SCROLLABLE */}
-      <div className="relative z-[2] px-[120px] py-[250px] top-[290px]">
+      <div className="relative z-[2] px-[120px] py-[250px] top-[1000px]">
         <p
-          className="max-w-[1080px] text-[60px] leading-[1.3] font-normal tracking-[-3px] text-white"
+          className="max-w-[880px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white"
           data-scroll-section="description"
         >
           {renderRegisteredMark(description)}
@@ -98,12 +100,12 @@ export const ThirdScreenTemplate = ({
       </div>
 
       {/* Metrics Section - SCROLLABLE */}
-      <div className="relative z-[2] flex w-full flex-col items-center px-[120px] py-[300px] top-[800px] left-[-450px]">
+      <div className="relative z-[2] flex w-full flex-col items-center px-[120px] py-[300px] top-[1330px] left-[-560px]">
         <span className="text-center text-[400px] leading-[1.3] font-[300] tracking-[-20px] whitespace-nowrap text-[#6dcff6]">
           {renderRegisteredMark(metricAmount)}
         </span>
         <p
-          className="mt-[-142px] max-w-[1040px] text-left text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#6dcff6] top-[140px] left-[10px] relative"
+          className="mt-[-142px] max-w-[1040px] text-left text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#6dcff6] top-[100px] left-[5px] relative"
           data-scroll-section="metrics-description"
         >
           {renderRegisteredMark(metricDescription)}

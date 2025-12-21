@@ -82,7 +82,7 @@ const SolutionThirdScreenTemplate = ({
       label: centerLabel,
       outline: GreenDiamondThird,
       sizeClass: 'size-[910px]',
-      textWrapperClassName: 'w-[660px] group-data-[kiosk=kiosk-1]/kiosk:w-[500px]',
+      textWrapperClassName: 'w-[500px]',
       textWrapperStyles: { left: '460px' },
     },
     {
@@ -142,7 +142,7 @@ const SolutionThirdScreenTemplate = ({
       </div>
 
       {/* Title */}
-      <div className="absolute top-[1010px] left-[240px] w-[1300px] text-white group-data-[kiosk=kiosk-3]/kiosk:top-[1260px]">
+      <div className="absolute top-[1010px] left-[240px] w-[1300px] text-white group-data-[kiosk=kiosk-2]/kiosk:w-[1400px] group-data-[kiosk=kiosk-3]/kiosk:top-[1260px]">
         <p
           className="text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line"
           data-scroll-section="solution-third-title"
@@ -211,7 +211,7 @@ const Diamond = ({
         ) : null}
         <div
           className={`absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center text-center ${
-            textWrapperClassName ?? 'w-[460px]'
+            textWrapperClassName ?? 'w-[600px]'
           }`}
           style={textWrapperStyles}
         >

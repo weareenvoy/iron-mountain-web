@@ -23,7 +23,7 @@ export type SecondScreenTemplateProps = Readonly<{
 }>;
 
 export const SecondScreenTemplate = ({
-  bottomDescription = 'The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.',
+  bottomDescription = '',
   kioskId = DEFAULT_KIOSK_ID,
   largeIconSrc = imgVector,
   mainDescription = 'The Museum also needed assistance with physical storage for a collection of historical music artifacts.',
@@ -44,7 +44,7 @@ export const SecondScreenTemplate = ({
       <div className="pointer-events-none absolute inset-0 z-[0] bg-transparent" />
 
       {/* Decorative background diamond */}
-      <div className="pointer-events-none absolute top-[1600px] left-[-365px] z-[1] flex size-[1365px] -scale-y-100 rotate-[180deg] items-center justify-center opacity-50">
+      <div className="pointer-events-none absolute top-[2320px] left-[-460px] z-[1] flex size-[1500px] -scale-y-100 rotate-[180deg] items-center justify-center">
         <div className="relative h-full w-full">
           <Image
             alt="Large decorative background diamond"
@@ -75,9 +75,9 @@ export const SecondScreenTemplate = ({
       </div>
 
       {/* Main Description - SCROLLABLE */}
-      <div className="relative z-[2] px-[120px] py-[250px] top-[290px] left-[650px]">
+      <div className="relative z-[2] px-[120px] py-[250px] top-[955px] left-[650px]">
         <p
-          className="max-w-[1040px] text-[60px] leading-[1.3] font-normal tracking-[-3px] text-white"
+          className="max-w-[1000px] text-[60px] leading-[1.4] font-normal tracking-[-2.6px] text-white"
           data-scroll-section="main-description"
         >
           {renderRegisteredMark(mainDescription)}
@@ -85,14 +85,16 @@ export const SecondScreenTemplate = ({
       </div>
 
       {/* Bottom Description - SCROLLABLE */}
-      <div className="relative z-[2] px-[120px] py-[300px]">
-        <p
-          className="max-w-[971px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white"
-          data-scroll-section="bottom-description"
-        >
-          {renderRegisteredMark(bottomDescription)}
-        </p>
-      </div>
+      {bottomDescription && (
+        <div className="relative z-[2] px-[120px] py-[300px]">
+          <p
+            className="max-w-[971px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white"
+            data-scroll-section="bottom-description"
+          >
+            {renderRegisteredMark(bottomDescription)}
+          </p>
+        </div>
+      )}
     </div>
   );
 };

@@ -28,8 +28,6 @@ export const buildHardcodedSlides = (
   kioskId: 'kiosk-1' | 'kiosk-2' | 'kiosk-3',
   scrollToSection?: (sectionId: string) => void
 ): Slide[] => {
-  if (kioskId === 'kiosk-2') return [];
-
   const slides: Slide[] = [];
 
   if (hardCoded.firstScreen) {
@@ -53,7 +51,8 @@ export const buildHardcodedSlides = (
     });
   }
 
-  if (hardCoded.secondScreen) {
+  // Second screen: only for kiosk-1 and kiosk-3
+  if (hardCoded.secondScreen && kioskId !== 'kiosk-2') {
     const KioskSecond =
       kioskId === 'kiosk-3' ? HardCodedKiosk3SecondScreenTemplate : HardCodedKiosk1SecondScreenTemplate;
 

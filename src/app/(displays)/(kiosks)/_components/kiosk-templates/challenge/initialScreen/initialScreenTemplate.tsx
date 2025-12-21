@@ -70,7 +70,7 @@ export const InitialScreenTemplate = ({
         data-name="Challenge Initial Screen Content Box"
         style={{ backgroundColor: contentBoxBgColor }}
       >
-        <div className="absolute top-[2910px] left-[120px] z-[3] flex h-[180px] w-[710px] items-center group-data-[kiosk=kiosk-2]/kiosk:top-[2870px] group-data-[kiosk=kiosk-3]/kiosk:hidden">
+        <div className="absolute top-[2910px] left-[120px] z-[3] flex h-[180px] w-[710px] items-center group-data-[kiosk=kiosk-2]/kiosk:top-[2890px] group-data-[kiosk=kiosk-3]/kiosk:hidden">
           <div className="relative h-full w-full">
             {logoCombinedSrc ? (
               <Image

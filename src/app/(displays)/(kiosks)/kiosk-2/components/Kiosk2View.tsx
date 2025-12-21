@@ -5,6 +5,10 @@ import { ArrowDown, ArrowUp } from 'lucide-react';
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
 import { buildChallengeSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeTemplate';
+import {
+  buildHardcodedSlides,
+  type HardCodedScreens,
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/hardCodedTemplate';
 import { useGlobalParagraphNavigation } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useGlobalParagraphNavigation';
 import { type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
 import {
@@ -18,7 +22,7 @@ import {
 import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers';
 import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
 import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
-// import styles from './kiosk-2.module.css';
+
 
 const Kiosk2View = () => {
   const controller: Controller = useKioskController();
@@ -40,6 +44,7 @@ const Kiosk2View = () => {
   const {
     handleNavigateDown: baseHandleNavigateDown,
     handleNavigateUp: baseHandleNavigateUp,
+    scrollToSectionById,
     isScrolling,
     currentScrollTarget,
   } = useGlobalParagraphNavigation({
@@ -74,6 +79,15 @@ const Kiosk2View = () => {
     : null;
   const solutions = kioskData ? ((kioskData as any).solutions as SolutionScreens) : null;
   const values = kioskData ? ((kioskData as any).value as ValueScreens) : null;
+  const hardCoded = kioskData ? ((kioskData as any).hardcoded as HardCodedScreens) : null;
+  
+  console.log('🔍 Kiosk 2 Data Check:', {
+    hasChallenges: !!challenges,
+    hasSolutions: !!solutions,
+    hasValues: !!values,
+    hasHardCoded: !!hardCoded,
+    hardCodedData: hardCoded
+  });
 
   // Pass the global handlers to all templates
   const globalHandlers = {
@@ -82,14 +96,14 @@ const Kiosk2View = () => {
   };
 
   const slides: Slide[] =
-    challenges && solutions && values
+    challenges && solutions && values && hardCoded
       ? [
           ...buildChallengeSlides(
             challenges,
             'kiosk-2',
             { ...controller, ...globalHandlers },
             {
-              initialScreen: { ...challenges.initialScreen, contentBoxBgColor: '#8DC13F' },
+      initialScreen: { ...challenges.initialScreen, contentBoxBgColor: '#8DC13F' },
               onInitialButtonClick: () => {
                 // Start the scroll, arrows will appear after scroll completes
                 setAllowArrowsToShow(true);
@@ -107,6 +121,7 @@ const Kiosk2View = () => {
               },
             }
           ),
+          ...buildHardcodedSlides(hardCoded, 'kiosk-2', scrollToSectionById),
         ]
       : [];
 
@@ -116,6 +131,8 @@ const Kiosk2View = () => {
   const isInitialScreen = currentSlide?.id === 'challenge-initial';
   const isValueSection =
     currentSection === 'value' || (currentScrollTarget && currentScrollTarget.startsWith('value-'));
+  const isHardcodedSection =
+    currentSection === 'hardcoded' || (currentScrollTarget && currentScrollTarget.startsWith('hardcoded-'));
 
   // Show arrows only after scroll completes (INITIAL APPEARANCE from button click)
   useEffect(() => {
@@ -189,7 +206,7 @@ const Kiosk2View = () => {
       const timer = setTimeout(() => {
         setShowArrows(true);
         setWasScrollingToVideo(false);
-      }, 1000); // SECTION TRANSITION DELAY: Adjust this to control reappearance between sections (Challenge → Solution → Value)
+      }, 1000); // SECTION TRANSITION DELAY: Adjust this to control reappearance between sections (Challenge ? Solution ? Value)
       return () => clearTimeout(timer);
     }
   }, [isScrolling, currentScrollTarget, wasScrollingToVideo, allowArrowsToShow]);
@@ -211,7 +228,7 @@ const Kiosk2View = () => {
     (currentScrollTarget.includes('-video') || currentScrollTarget.includes('-first-video'));
 
   // Arrows should be visible when showArrows is true (controlled by the effects above)
-  const shouldShowArrows = showArrows;
+  const shouldShowArrows = showArrows && !isHardcodedSection;
 
   const scrollToSlide = useCallback((index: number) => {
     if (!containerRef.current) return;
@@ -254,7 +271,7 @@ const Kiosk2View = () => {
           <div className="h-screen w-full flex-shrink-0" data-slide-index={idx} key={slide.id}>
             {slide.render(idx === topIndex)}
           </div>
-        ))}
+          ))}
       </div>
       <div
         // className={styles.debugControls}
@@ -269,7 +286,7 @@ const Kiosk2View = () => {
         {shouldShowArrows && (
           <motion.div
             animate={{ opacity: 1, scale: 1 }}
-            className="fixed top-[37.5%] right-[120px] z-[50] flex -translate-y-1/2 flex-col gap-[100px]"
+            className="fixed top-[30%] right-[120px] z-[50] flex -translate-y-1/2 flex-col gap-[100px]"
             exit={{ opacity: 0, scale: 0.9 }}
             initial={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.4, ease: 'easeOut' }}

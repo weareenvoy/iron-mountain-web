@@ -312,7 +312,7 @@ const Kiosk3View = () => {
         {shouldShowArrows && (
           <motion.div
             animate={{ opacity: 1, scale: 1 }}
-            className="fixed top-[37.5%] right-[120px] z-[50] flex -translate-y-1/2 flex-col gap-[100px]"
+            className="fixed top-[48%] right-[120px] z-[50] flex -translate-y-1/2 flex-col gap-[100px]"
             exit={{ opacity: 0, scale: 0.9 }}
             initial={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.4, ease: 'easeOut' }}
