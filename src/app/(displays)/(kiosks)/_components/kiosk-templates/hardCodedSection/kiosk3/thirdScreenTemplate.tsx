@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, SquarePlay } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
+import HardCodedDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/demoScreenTemplate';
 import HCBlueFilledDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCBlueFilledDiamond';
 import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCFilledOrangeDiamond';
 import HCFilledOrangeDiamond2 from '@/components/ui/icons/Kiosks/HardCoded/HCFilledOrangeDiamond2';
@@ -13,7 +14,13 @@ import HCHollowGreenDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollo
 import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollowOrangeDiamond';
 
 export interface HardCodedKiosk3ThirdScreenTemplateProps {
+  readonly demoIframeSrc?: string;
+  readonly endTourLabel?: string;
   readonly headline?: string | string[];
+  readonly heroImageAlt?: string;
+  readonly heroImageSrc?: string;
+  readonly overlayCardLabel?: string | string[];
+  readonly overlayHeadline?: string | string[];
   readonly slides?: CarouselSlide[];
 }
 
@@ -130,10 +137,17 @@ const defaultSlides: CarouselSlide[] = [
 ];
 
 const HardCodedKiosk3ThirdScreenTemplate = ({
+  demoIframeSrc,
+  endTourLabel = 'End tour',
   headline = defaultHeadline,
+  heroImageAlt = 'Visitors smiling while viewing content',
+  heroImageSrc = 'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image1-Diamond.webp',
+  overlayCardLabel = 'Demo',
+  overlayHeadline = ['Section title lorem ipsum', 'dolor sit.'],
   slides = defaultSlides,
 }: HardCodedKiosk3ThirdScreenTemplateProps) => {
   const [index, setIndex] = useState(0);
+  const [showOverlay, setShowOverlay] = useState(false);
 
   const safeSlides = slides.length > 0 ? slides : defaultSlides;
   const total = safeSlides.length || defaultSlides.length;
@@ -162,26 +176,28 @@ const HardCodedKiosk3ThirdScreenTemplate = ({
   const goPrev = () => setIndex(i => (i - 1 + total) % total);
 
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-hidden" data-node-id="5896:13360">
+    <div
+      className="relative flex h-screen w-full flex-col overflow-hidden"
+      data-node-id="5896:13360"
+      data-scroll-section="hardcoded-third-screen"
+    >
       <div className="absolute inset-0" style={{ background: 'transparent' }} />
       <div className="absolute inset-0 bg-black/15 backdrop-blur-[12px]" />
 
       {/* Eyebrow */}
-      <div className="absolute top-[240px] left-[120px] text-[57px] leading-[1.5] font-normal tracking-[-1.8px] whitespace-pre-line text-[#ededed]">
+      <h2 className="absolute top-[240px] left-[120px] text-[57px] leading-[1.5] font-normal tracking-[-1.8px] whitespace-pre-line text-[#ededed]">
         {renderRegisteredMark(eyebrowText)}
-      </div>
+      </h2>
 
       {/* Main headline */}
-      <div className="absolute top-[830px] left-[240px] max-w-[1200px] text-[100px] leading-[1.2] font-semibold tracking-[-5px] whitespace-pre-line text-white">
+      <h1 className="absolute top-[830px] left-[240px] max-w-[1200px] text-[100px] leading-[1.3] tracking-[-5px] whitespace-pre-line text-white">
         {renderRegisteredMark(headlineText)}
-      </div>
+      </h1>
 
       {/* Data configuration + bullets */}
       <div className="absolute top-[1650px] left-[240px] max-w-[920px] space-y-[36px] text-white">
-        <h2 className="text-[78px] leading-[1.2] font-semibold tracking-[-2.7px]">
-          {renderRegisteredMark(sectionTitle)}
-        </h2>
-        <ul className="mt-[110px] ml-[60px] space-y-[22px] text-[38px] leading-[1.3] font-normal tracking-[-2px] tracking-[-4.3px] text-white">
+        <h2 className="text-[80px] leading-[1.3] tracking-[-4px]">{renderRegisteredMark(sectionTitle)}</h2>
+        <ul className="mt-[110px] ml-[60px] space-y-[22px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white">
           {current.bullets.map((item, i) => (
             <li
               className="flex items-start gap-[16px] text-[64px]"
@@ -198,6 +214,7 @@ const HardCodedKiosk3ThirdScreenTemplate = ({
       {/* CTA */}
       <button
         className="absolute top-[2630px] left-[240px] flex h-[200px] items-center gap-[18px] rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[110px] text-[55px] leading-[1.1] font-semibold text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)]"
+        onClick={() => setShowOverlay(true)}
         style={{ letterSpacing: '2px' }}
         type="button"
       >
@@ -319,6 +336,25 @@ const HardCodedKiosk3ThirdScreenTemplate = ({
             <HCHollowOrangeDiamond className="pointer-events-none absolute bottom-[-1755px] left-[650px] h-[2400px] w-[2400px] overflow-visible" />
           </>
         )}
+      </div>
+
+      {/* Overlay */}
+      <div
+        className="absolute inset-0 z-[999] transition-opacity duration-700"
+        style={{
+          opacity: showOverlay ? 1 : 0,
+          pointerEvents: showOverlay ? 'auto' : 'none',
+        }}
+      >
+        <HardCodedDemoScreenTemplate
+          cardLabel={overlayCardLabel}
+          demoIframeSrc={demoIframeSrc}
+          endTourLabel={endTourLabel}
+          headline={overlayHeadline}
+          heroImageAlt={heroImageAlt}
+          heroImageSrc={heroImageSrc}
+          onEndTour={() => setShowOverlay(false)}
+        />
       </div>
     </div>
   );

@@ -12,7 +12,7 @@ export type SlideNavHandlers = Readonly<{
 }>;
 
 export const SectionSlide = ({ children, isActive }: Readonly<{ children: ReactNode; isActive: boolean }>) => (
-  <div className="flex h-full w-full flex-col items-center justify-center" data-active={isActive}>
+  <div className="h-screen w-full flex-shrink-0" data-active={isActive}>
     {children}
   </div>
 );

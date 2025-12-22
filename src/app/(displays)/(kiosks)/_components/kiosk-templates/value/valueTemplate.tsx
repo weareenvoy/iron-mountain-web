@@ -6,10 +6,22 @@ import ValueCarouselTemplate, {
 import { type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 export type ValueScreens = Readonly<{
-  valueScreens?: Omit<ValueCarouselTemplateProps, 'onNavigateDown' | 'onNavigateUp'>[];
+  valueScreens?: Omit<ValueCarouselTemplateProps, 'onNavigateDown' | 'onNavigateUp' | 'onRegisterCarouselHandlers'>[];
 }>;
 
-export const buildValueSlides = (values: ValueScreens, kioskId: KioskId, controller: Controller): Slide[] => {
+export const buildValueSlides = (
+  values: ValueScreens,
+  kioskId: KioskId,
+  controller: Controller,
+  options?: {
+    onRegisterCarouselHandlers?: (handlers: {
+      canScrollNext: () => boolean;
+      canScrollPrev: () => boolean;
+      scrollNext: () => void;
+      scrollPrev: () => void;
+    }) => void;
+  }
+): Slide[] => {
   const valueScreens = values.valueScreens ?? [];
 
   return valueScreens.map((config, idx) => ({
@@ -21,6 +33,7 @@ export const buildValueSlides = (values: ValueScreens, kioskId: KioskId, control
           carouselId={config.carouselId ?? `${kioskId}-value-${idx}`}
           onNavigateDown={() => controller.next()}
           onNavigateUp={() => controller.prev()}
+          onRegisterCarouselHandlers={options?.onRegisterCarouselHandlers}
         />
       </SectionSlide>
     ),

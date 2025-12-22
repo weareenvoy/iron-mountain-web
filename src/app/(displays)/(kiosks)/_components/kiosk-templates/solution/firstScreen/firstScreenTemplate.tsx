@@ -1,6 +1,5 @@
 'use client';
 
-import { ArrowDown, ArrowUp } from 'lucide-react';
 import Image from 'next/image';
 import BlueDiamondMain from '@/components/ui/icons/Kiosks/Solutions/BlueDiamondMain';
 import GreenDiamondMain from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondMain';
@@ -14,6 +13,7 @@ export type SolutionFirstScreenTemplateProps = Readonly<{
   description?: string;
   gradientEndColor?: string;
   gradientStartColor?: string;
+  kioskId?: string;
   largeDiamondSrc?: string;
   mediumDiamondSrc?: string;
   onNavigateDown?: () => void;
@@ -29,17 +29,21 @@ const SolutionFirstScreenTemplate = ({
   description = 'With a focus on physical storage and a secure digital archive, Iron Mountain provided climate-controlled, private vaults for physical artifacts and implemented Smart Vault for digital preservation.',
   gradientEndColor = '#8a0d71',
   gradientStartColor = '#a2115e',
+  kioskId,
   largeDiamondSrc,
   mediumDiamondSrc,
-  onNavigateDown,
-  onNavigateUp,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onNavigateDown: _onNavigateDown,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onNavigateUp: _onNavigateUp,
   solutionLabel = 'Solution',
   subheadline = 'Rich media &\n cultural heritage',
   title = 'A partnership with Iron Mountain',
 }: SolutionFirstScreenTemplateProps) => {
   return (
     <div
-      className="relative flex h-screen w-full flex-col overflow-hidden bg-black"
+      className="group/kiosk relative flex h-screen w-full flex-col overflow-hidden bg-black"
+      data-kiosk={kioskId}
       data-node-id="5168:9669"
       style={{ overflow: 'visible' }}
     >
@@ -50,6 +54,7 @@ const SolutionFirstScreenTemplate = ({
             autoPlay
             className="absolute h-full w-full bg-black object-cover"
             controlsList="nodownload"
+            data-scroll-section="solution-first-video"
             loop
             muted
             playsInline
@@ -62,7 +67,7 @@ const SolutionFirstScreenTemplate = ({
 
       {/* Gradient body */}
       <div
-        className="absolute top-[1058px] left-0 h-[4085px] w-full rounded-t-[100px]"
+        className="absolute top-[1058px] left-0 z-[1] h-[4085px] w-full rounded-[100px] group-data-[kiosk=kiosk-2]/kiosk:top-[1110px] group-data-[kiosk=kiosk-3]/kiosk:top-[1060px]"
         data-node-id="5168:9671"
         style={{
           background: `linear-gradient(to bottom, ${gradientStartColor} 0%, ${gradientEndColor} 99%)`,
@@ -71,12 +76,18 @@ const SolutionFirstScreenTemplate = ({
       />
 
       {/* Subheadline */}
-      <div className="absolute top-[240px] left-[120px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed]">
+      <h2
+        className="absolute top-[240px] left-[120px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:top-[290px] group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-2]/kiosk:w-[450px] group-data-[kiosk=kiosk-3]/kiosk:top-[300px] group-data-[kiosk=kiosk-3]/kiosk:left-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[330px]"
+        style={{ zIndex: 1 }}
+      >
         {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
-      </div>
+      </h2>
 
       {/* Solution label */}
-      <div className="absolute top-[790px] left-[140px] flex items-center gap-[41px]" data-node-id="5168:9697">
+      <div
+        className="absolute top-[790px] left-[140px] flex items-center gap-[41px] group-data-[kiosk=kiosk-2]/kiosk:top-[830px] group-data-[kiosk=kiosk-3]/kiosk:top-[860px] group-data-[kiosk=kiosk-3]/kiosk:left-[260px]"
+        data-node-id="5168:9697"
+      >
         <div className="relative flex h-[200px] w-[200px] items-center justify-center" style={{ left: -55, top: -25 }}>
           <OutlinedDiamond aria-hidden="true" focusable="false" />
         </div>
@@ -89,7 +100,7 @@ const SolutionFirstScreenTemplate = ({
       </div>
 
       {/* Body copy */}
-      <div className="absolute top-[1260px] left-[120px] flex w-auto max-w-[1271px] flex-col gap-[80px] text-white">
+      <div className="absolute top-[1270px] left-[120px] z-[1] flex w-auto max-w-[1271px] flex-col gap-[80px] text-white group-data-[kiosk=kiosk-2]/kiosk:top-[1300px] group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-3]/kiosk:top-[1260px] group-data-[kiosk=kiosk-3]/kiosk:left-[120px]">
         <p className="w-[900px] text-[100px] leading-[1.3] font-normal tracking-[-5px]">
           {renderRegisteredMark(title)}
         </p>
@@ -97,7 +108,7 @@ const SolutionFirstScreenTemplate = ({
       </div>
 
       {/* Decorative diamonds */}
-      <div className="pointer-events-none absolute top-[2400px] left-[-180px] z-[3] h-[1770px] w-[1770px] opacity-60">
+      <div className="pointer-events-none absolute top-[2420px] left-[-170px] z-[3] h-[1770px] w-[1770px] opacity-60 group-data-[kiosk=kiosk-2]/kiosk:top-[2420px] group-data-[kiosk=kiosk-2]/kiosk:top-[2450px] group-data-[kiosk=kiosk-3]/kiosk:top-[2420px] group-data-[kiosk=kiosk-3]/kiosk:left-[-180px] group-data-[kiosk=kiosk-3]/kiosk:size-[1780px]">
         {largeDiamondSrc ? (
           <div className="relative h-full w-full">
             <Image
@@ -112,7 +123,7 @@ const SolutionFirstScreenTemplate = ({
           <BlueDiamondMain aria-hidden="true" className="h-full w-full" focusable="false" />
         )}
       </div>
-      <div className="pointer-events-none absolute top-[2370px] left-[1240px] z-[3] h-[800px] w-[800px] opacity-70">
+      <div className="pointer-events-none absolute top-[2400px] left-[1250px] z-[3] h-[800px] w-[800px] opacity-70 group-data-[kiosk=kiosk-2]/kiosk:top-[2420px] group-data-[kiosk=kiosk-2]/kiosk:left-[1240px] group-data-[kiosk=kiosk-2]/kiosk:size-[805px] group-data-[kiosk=kiosk-3]/kiosk:top-[2390px] group-data-[kiosk=kiosk-3]/kiosk:left-[1250px] group-data-[kiosk=kiosk-3]/kiosk:size-[810px]">
         {mediumDiamondSrc ? (
           <div className="relative h-full w-full">
             <Image
@@ -127,7 +138,7 @@ const SolutionFirstScreenTemplate = ({
           <GreenDiamondMain aria-hidden="true" className="h-full w-full" focusable="false" />
         )}
       </div>
-      <div className="pointer-events-none absolute top-[3394px] left-[1235px] z-[3] h-[795px] w-[795px] opacity-70">
+      <div className="pointer-events-none absolute top-[3440px] left-[1250px] z-[3] h-[795px] w-[795px] opacity-70 group-data-[kiosk=kiosk-3]/kiosk:top-[3420px] group-data-[kiosk=kiosk-3]/kiosk:left-[1250px] group-data-[kiosk=kiosk-3]/kiosk:size-[810px]">
         {accentDiamondSrc ? (
           <div className="relative h-full w-full">
             <Image
@@ -141,40 +152,6 @@ const SolutionFirstScreenTemplate = ({
         ) : (
           <OrangeDiamondMain aria-hidden="true" className="h-full w-full" focusable="false" />
         )}
-      </div>
-
-      {/* Navigation arrows */}
-      <div
-        aria-label="Previous"
-        className="absolute top-[1755px] right-[120px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
-        data-node-id="5168:9695"
-        onKeyDown={event => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            onNavigateUp?.();
-          }
-        }}
-        onPointerDown={() => onNavigateUp?.()}
-        role="button"
-        tabIndex={0}
-      >
-        <ArrowUp aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
-      </div>
-      <div
-        aria-label="Next"
-        className="absolute top-[1980px] right-[120px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
-        data-node-id="5168:9693"
-        onKeyDown={event => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            onNavigateDown?.();
-          }
-        }}
-        onPointerDown={() => onNavigateDown?.()}
-        role="button"
-        tabIndex={0}
-      >
-        <ArrowDown aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
       </div>
     </div>
   );

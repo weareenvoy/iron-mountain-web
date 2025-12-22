@@ -1,6 +1,5 @@
 'use client';
 
-import { ArrowDown, ArrowUp } from 'lucide-react';
 import Image from 'next/image';
 import { type ComponentType, type ReactNode, type SVGProps } from 'react';
 import BlueDiamondThird from '@/components/ui/icons/Kiosks/Solutions/BlueDiamondThird';
@@ -58,8 +57,10 @@ const SolutionThirdScreenTemplate = ({
   kioskId,
   mediaDiamondLeftSrc = imgDiamondMediaLeft,
   mediaDiamondRightSrc = imgDiamondMediaRight,
-  onNavigateDown,
-  onNavigateUp,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onNavigateDown: _onNavigateDown,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onNavigateUp: _onNavigateUp,
   solutionLabel,
   subheadline,
   title,
@@ -83,8 +84,8 @@ const SolutionThirdScreenTemplate = ({
       label: centerLabel,
       outline: GreenDiamondThird,
       sizeClass: 'size-[910px]',
-      textWrapperClassName: 'w-[660px] group-data-[kiosk=kiosk-1]/kiosk:w-[500px]',
-      textWrapperStyles: { left: '500px' },
+      textWrapperClassName: 'w-[500px]',
+      textWrapperStyles: { left: '460px' },
     },
     {
       className: 'left-[-270px] top-[880px]',
@@ -115,7 +116,7 @@ const SolutionThirdScreenTemplate = ({
 
   return (
     <div
-      className="group/kiosk relative flex h-screen w-full flex-col overflow-hidden bg-black"
+      className="group/kiosk relative z-[1] flex h-screen w-full flex-col overflow-hidden bg-black"
       data-kiosk={kioskId}
       data-node-id="5168:9626"
       style={{ background: 'transparent' }}
@@ -128,12 +129,15 @@ const SolutionThirdScreenTemplate = ({
       />
 
       {/* Subheadline */}
-      <div className="absolute top-[230px] left-[120px] w-[500px] -translate-y-full text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:top-[250px] group-data-[kiosk=kiosk-2]/kiosk:translate-y-0 group-data-[kiosk=kiosk-3]/kiosk:relative group-data-[kiosk=kiosk-3]/kiosk:top-[410px] group-data-[kiosk=kiosk-3]/kiosk:left-auto group-data-[kiosk=kiosk-3]/kiosk:w-[380px] group-data-[kiosk=kiosk-3]/kiosk:translate-y-0">
+      <h2
+        className="absolute top-[230px] left-[120px] w-[500px] -translate-y-full text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:top-[250px] group-data-[kiosk=kiosk-2]/kiosk:translate-y-0 group-data-[kiosk=kiosk-3]/kiosk:relative group-data-[kiosk=kiosk-3]/kiosk:top-[410px] group-data-[kiosk=kiosk-3]/kiosk:left-auto group-data-[kiosk=kiosk-3]/kiosk:w-[380px] group-data-[kiosk=kiosk-3]/kiosk:translate-y-0"
+        style={{ zIndex: 1 }}
+      >
         {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
-      </div>
+      </h2>
 
       {/* Solution label */}
-      <div className="absolute top-[745.23px] left-[128.17px] flex items-center gap-[41px]">
+      <div className="absolute top-[570px] left-[120px] flex items-center gap-[45px]">
         <div className="relative flex h-[200px] w-[200px] items-center justify-center" style={{ left: -45, top: 15 }}>
           <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
         </div>
@@ -143,14 +147,17 @@ const SolutionThirdScreenTemplate = ({
       </div>
 
       {/* Title */}
-      <div className="absolute top-[1210px] left-[240px] w-[1300px] text-white group-data-[kiosk=kiosk-3]/kiosk:top-[1260px]">
-        <p className="text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line">
+      <div className="absolute top-[1010px] left-[240px] w-[1300px] text-white group-data-[kiosk=kiosk-2]/kiosk:w-[1400px] group-data-[kiosk=kiosk-3]/kiosk:top-[1260px]">
+        <p
+          className="text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line"
+          data-scroll-section="solution-third-title"
+        >
           {renderRegisteredMark(title)}
         </p>
       </div>
 
       {/* Diamond cluster */}
-      <div className="absolute top-[1400px] left-[240px] h-[2800px] w-[1680px]">
+      <div className="absolute top-[1220px] left-[240px] h-[2800px] w-[1680px]">
         {textDiamonds.map(({ className, label, outline, sizeClass, textWrapperClassName, textWrapperStyles }) =>
           label ? (
             <Diamond
@@ -181,42 +188,10 @@ const SolutionThirdScreenTemplate = ({
           sizeClass="size-[900px]"
         />
         <FilledDiamond
-          className="top-[605px] left-[1285px] rotate-0 group-data-[kiosk=kiosk-1]/kiosk:top-[650px] group-data-[kiosk=kiosk-1]/kiosk:left-[1330px]"
+          className="top-[610px] left-[1280px] rotate-0"
           imageAlt="Accent gradient diamond"
           imageSrc={accentDiamondImageSrc}
         />
-      </div>
-
-      {/* Navigation arrows */}
-      <div
-        aria-label="Previous"
-        className="absolute top-[1755px] right-[120px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
-        onKeyDown={event => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            onNavigateUp?.();
-          }
-        }}
-        onPointerDown={() => onNavigateUp?.()}
-        role="button"
-        tabIndex={0}
-      >
-        <ArrowUp aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
-      </div>
-      <div
-        aria-label="Next"
-        className="absolute top-[1980px] right-[120px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
-        onKeyDown={event => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            onNavigateDown?.();
-          }
-        }}
-        onPointerDown={() => onNavigateDown?.()}
-        role="button"
-        tabIndex={0}
-      >
-        <ArrowDown aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
       </div>
     </div>
   );
@@ -241,13 +216,13 @@ const Diamond = ({
         ) : null}
         <div
           className={`absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center text-center ${
-            textWrapperClassName ?? 'w-[460px]'
+            textWrapperClassName ?? 'w-[600px]'
           }`}
           style={textWrapperStyles}
         >
-          <p className="text-[67px] leading-[1.4] font-normal tracking-[-3.3px]" style={{ color: textColor }}>
+          <span className="text-[67px] leading-[1.4] font-normal tracking-[-3.3px]" style={{ color: textColor }}>
             {renderRegisteredMark(label)}
-          </p>
+          </span>
         </div>
       </div>
     </div>
@@ -285,7 +260,7 @@ const FilledDiamond = ({
 }) => {
   return (
     <div className={`absolute ${className}`}>
-      <div className="relative size-[390px] rotate-[45deg] group-data-[kiosk=kiosk-1]/kiosk:size-[290px]">
+      <div className="relative size-[390px] rotate-[45deg]">
         {imageSrc ? (
           <Image alt={imageAlt} className="-rotate-[45deg] object-cover" fill sizes="390px" src={imageSrc} />
         ) : (

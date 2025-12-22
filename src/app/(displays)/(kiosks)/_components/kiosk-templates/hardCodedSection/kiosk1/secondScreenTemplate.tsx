@@ -1,10 +1,11 @@
 'use client';
 
-import { ArrowLeft, ChevronLeft, ChevronRight, CirclePlus } from 'lucide-react';
+import { ArrowLeft, ChevronLeft, ChevronRight, CirclePlus, SquarePlay } from 'lucide-react';
 import NextImage from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
+import HardCodedDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/demoScreenTemplate';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/shadcn/carousel';
 import HCBlueDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCBlueDiamond';
 import HCWhiteDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCWhiteDiamond';
@@ -13,7 +14,14 @@ import type { UseEmblaCarouselType } from 'embla-carousel-react';
 export type HardCodedKiosk1SecondScreenTemplateProps = Readonly<{
   eyebrow?: readonly string[] | string;
   headline?: readonly string[] | string;
+  heroImageAlt?: string;
+  heroImageSrc?: string;
+  kioskId?: 'kiosk-1' | 'kiosk-2' | 'kiosk-3';
   onBack?: () => void;
+  onSecondaryCta?: () => void;
+  overlayCardLabel?: string | string[];
+  overlayHeadline?: string | string[];
+  secondaryCtaLabel?: string;
   steps?: readonly Step[];
 }>;
 
@@ -102,6 +110,12 @@ const defaultModal: ModalContent = {
 const textDefaults = {
   eyebrow: ['Rich media &', 'cultural heritage'],
   headline: ['From archive', 'to access'],
+  heroImageAlt: 'Visitors smiling while viewing content',
+  heroImageSrc:
+    'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image1-Diamond.webp',
+  overlayCardLabel: 'Virtual walkthrough',
+  overlayHeadline: ['Section title lorem ipsum', 'dolor sit.'],
+  secondaryCtaLabel: 'Virtual walkthrough',
 };
 
 const normalizeText = (value?: readonly string[] | string): string => {
@@ -113,18 +127,27 @@ const normalizeText = (value?: readonly string[] | string): string => {
 const HardCodedKiosk1SecondScreenTemplate = ({
   eyebrow = textDefaults.eyebrow,
   headline = textDefaults.headline,
-  onBack,
+  heroImageAlt = textDefaults.heroImageAlt,
+  heroImageSrc = textDefaults.heroImageSrc,
+  kioskId,
+  onSecondaryCta,
+  overlayCardLabel = textDefaults.overlayCardLabel,
+  overlayHeadline = textDefaults.overlayHeadline,
+  secondaryCtaLabel = textDefaults.secondaryCtaLabel,
   steps = defaultSteps,
 }: HardCodedKiosk1SecondScreenTemplateProps) => {
   const eyebrowText: string = normalizeText(eyebrow);
   const headlineText: string = normalizeText(headline);
   const headlineWithForcedBreak = headlineText.replace(/archive\s+/i, 'archive\n');
   const normalizedSteps = steps.length > 0 ? steps : defaultSteps;
+  const isKiosk3 = kioskId === 'kiosk-3';
+  const secondaryIconOffset = isKiosk3 ? 'left-[-330px]' : 'left-[-70px]';
 
   const [emblaApi, setEmblaApi] = useState<EmblaApi | undefined>(undefined);
   const hasAppliedInitialAlignment = useRef(false);
   const [openModalIndex, setOpenModalIndex] = useState<null | number>(null);
   const [selectedIndex, setSelectedIndex] = useState(2);
+  const [showOverlay, setShowOverlay] = useState(false);
   const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
   const totalSlides = normalizedSteps.length;
 
@@ -257,6 +280,11 @@ const HardCodedKiosk1SecondScreenTemplate = ({
     emblaApi.scrollTo(target);
   };
 
+  const handleSecondaryClick = () => {
+    setShowOverlay(true);
+    onSecondaryCta?.();
+  };
+
   useEffect(() => {
     setPortalTarget(containerRef.current);
   }, []);
@@ -266,6 +294,7 @@ const HardCodedKiosk1SecondScreenTemplate = ({
       <div
         className="relative flex h-screen w-full flex-col overflow-hidden"
         data-node-id="hardcoded-k1-second"
+        data-scroll-section="hardcoded-second-screen"
         ref={containerRef}
         style={{ background: 'transparent', overflow: 'visible' }}
       >
@@ -276,34 +305,64 @@ const HardCodedKiosk1SecondScreenTemplate = ({
           }}
         />
 
-        <div className="absolute top-[240px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
+        <h2 className="absolute top-[240px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
           {renderRegisteredMark(eyebrowText)}
-        </div>
+        </h2>
 
-        <div
-          className="absolute w-full text-[100px] leading-[1.2] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]"
+        <h1
+          className="absolute w-full text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]"
           style={{ left: '240px', top: '830px', width: '100%' }}
         >
           {renderRegisteredMark(headlineWithForcedBreak)}
-        </div>
+        </h1>
 
         <p
-          className="absolute text-[52px] font-normal text-[#ededed]/90"
+          className="absolute text-[52px] font-normal text-[#ededed]"
           style={{ left: '250px', letterSpacing: '-2.6px', lineHeight: '1.4', top: '1320px', width: '640px' }}
         >
           {renderRegisteredMark('Explore each section to learn how Iron Mountain can transform your enterprise')}
         </p>
 
         <button
-          className="absolute top-[1320px] right-[310px] flex h-[190px] items-center gap-[12px] rounded-full bg-white px-[140px] text-[40px] leading-[1.2] font-normal tracking-[-2px] text-[#14477d] shadow-[0_16px_40px_rgba(0,0,0,0.25)] transition-transform duration-150 hover:scale-[1.02]"
-          onClick={onBack}
+          className="absolute top-[1330px] left-[1245px] flex h-[200px] items-center justify-between rounded-[999px] px-[70px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-transform duration-150 hover:scale-[1.01]"
+          onClick={handleSecondaryClick}
+          style={{
+            background: 'linear-gradient(296deg, #A2115E 28.75%, #8A0D71 82.59%)',
+          }}
           type="button"
         >
-          <ArrowLeft className="h-[36px] w-[36px]" />
-          Back
+          <span className="mr-[50px]">{renderRegisteredMark(secondaryCtaLabel)}</span>
+          <div className="flex items-center justify-center pl-[80px]">
+            <SquarePlay
+              aria-hidden
+              className={`relative h-[90px] w-[90px] ${secondaryIconOffset}`}
+              color="#ededed"
+              strokeWidth={2}
+            />
+          </div>
         </button>
 
-        <div className="absolute left-1/2 w-full max-w-[2200px] -translate-x-1/2" style={{ top: '1990px' }}>
+        {/* Overlay - Demo Screen */}
+        <div
+          className="absolute inset-0 z-[999] transition-opacity duration-700"
+          style={{
+            opacity: showOverlay ? 1 : 0,
+            pointerEvents: showOverlay ? 'auto' : 'none',
+          }}
+        >
+          <HardCodedDemoScreenTemplate
+            cardLabel={overlayCardLabel}
+            headline={overlayHeadline}
+            heroImageAlt={heroImageAlt}
+            heroImageSrc={heroImageSrc}
+            onEndTour={() => setShowOverlay(false)}
+          />
+        </div>
+
+        <div
+          className="absolute top-[1750px] left-[50%] w-full max-w-[2200px] -translate-x-1/2"
+          style={{ top: '1750px' }}
+        >
           <Carousel
             className="w-full"
             opts={{
@@ -365,10 +424,10 @@ const HardCodedKiosk1SecondScreenTemplate = ({
                           <span
                             className={
                               isActive
-                                ? 'text-[44px] leading-[1.2] font-semibold tracking-[-2.2px] text-[#14477d]'
-                                : 'text-[30px] leading-[1.2] font-semibold tracking-[-1.5px] text-[#ededed]'
+                                ? 'text-[61px] leading-[1.3] tracking-[-3px] text-[#14477d]'
+                                : 'text-[43px] leading-[1.3] tracking-[-2.1px] text-[#ededed]'
                             }
-                            style={{ width: isActive ? '240px' : '200px' }}
+                            style={{ width: isActive ? '340px' : '300px' }}
                           >
                             {renderRegisteredMark(step.label)}
                           </span>
@@ -435,7 +494,7 @@ const HardCodedKiosk1SecondScreenTemplate = ({
               style={{ pointerEvents: 'auto' }}
             >
               <div
-                className="absolute inset-0 bg-black/60 backdrop-blur-[30px]"
+                className="absolute inset-0 bg-black/60 backdrop-blur-[50px]"
                 onClick={() => setOpenModalIndex(null)}
               />
               <div
@@ -444,7 +503,7 @@ const HardCodedKiosk1SecondScreenTemplate = ({
               >
                 <div className="flex items-center justify-between">
                   <button
-                    className="relative flex h-[200px] items-center gap-[24px] rounded-[1000px] bg-[#ededed] px-[75px] text-[55px] leading-[1.4] font-normal tracking-[-2.7px] text-[#14477d] transition hover:scale-[1.02]"
+                    className="relative flex h-[200px] items-center gap-[24px] rounded-[1000px] bg-[#ededed] px-[90px] py-[60] text-[55px] leading-[1.4] font-normal tracking-[-2.7px] text-[#14477d] transition hover:scale-[1.02]"
                     onClick={() => setOpenModalIndex(null)}
                     style={{ left: '60px', paddingRight: '100px', top: '45px' }}
                     type="button"
@@ -458,16 +517,10 @@ const HardCodedKiosk1SecondScreenTemplate = ({
 
                 <div className="mt-[80px] grid gap-[80px] text-[#14477d]">
                   <div className="space-y-[60px]" style={{ left: '45px', position: 'relative', top: '150px' }}>
-                    <h2
-                      className="text-[72px] leading-[1.25] font-normal tracking-[-3.6px]"
-                      style={{ fontSize: '100px', letterSpacing: '-5px', lineHeight: '1.3', marginBottom: '105px' }}
-                    >
+                    <h2 className="mb-[105px] text-[100px] leading-[1.3] font-normal tracking-[-5px]">
                       {activeModalContent.heading}
                     </h2>
-                    <div
-                      className="space-y-[32px] text-[36px] leading-[1.4] font-normal tracking-[-1.8px]"
-                      style={{ fontSize: '60px', letterSpacing: '-3px', lineHeight: '1.4', width: '1170px' }}
-                    >
+                    <div className="w-[1170px] space-y-[32px] text-[60px] leading-[1.4] font-normal tracking-[-3px]">
                       {activeModalBody.map(line => (
                         <p className="whitespace-pre-line" key={line}>
                           {line}

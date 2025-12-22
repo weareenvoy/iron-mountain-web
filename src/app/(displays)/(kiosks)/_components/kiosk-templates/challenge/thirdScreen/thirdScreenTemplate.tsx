@@ -1,13 +1,10 @@
 'use client';
 
-import { ArrowDown, ArrowUp, Diamond } from 'lucide-react';
+import { Diamond } from 'lucide-react';
 import Image from 'next/image';
 import { DEFAULT_KIOSK_ID, type KioskId } from '../../../../_types/kiosk-id';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
-// import styles from './thirdScreenTemplate.module.css';
-
-// Asset constants from Figma MCP
 const imgHeroDiamond = '/images/kiosks/kiosk1/04-custom-interactive/CU-Image1-Diamond.png';
 const imgMetricDiamond = '/images/kiosks/kiosk1/04-custom-interactive/CU-Image1-Diamond.png';
 const imgVector = '/images/kiosks/kiosk1/04-custom-interactive/CU-Image1-Full.png';
@@ -37,15 +34,17 @@ export const ThirdScreenTemplate = ({
   metricAmount = '40 TB',
   metricDescription = 'of existing footage of data migration from physical drives into Iron Mountain’s digital preservation platform.',
   metricImageSrc = imgMetricDiamond,
-  onNavigateDown,
-  onNavigateUp,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onNavigateDown: _onNavigateDown,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onNavigateUp: _onNavigateUp,
   subheadline = 'Rich media &\n cultural heritage',
   videoSrc = '/images/kiosks/kiosk1/03-value/Value-header.mp4',
 }: ThirdScreenTemplateProps) => {
   return (
     <div
       // className={styles.container}
-      className="group/kiosk relative flex h-screen w-full flex-col overflow-hidden bg-black"
+      className="group/kiosk relative flex h-screen w-full flex-col overflow-x-hidden overflow-y-auto scroll-smooth bg-transparent"
       data-hero-image={heroImageSrc}
       data-kiosk={kioskId}
       data-large-icon-center={largeIconCenterSrc}
@@ -53,127 +52,11 @@ export const ThirdScreenTemplate = ({
       data-node-id="5168:9928"
       data-video-src={videoSrc}
     >
-      {/* Subheadline */}
-      <div
-        // className={styles.subheadlineContainer}
-        className="absolute top-[368px] left-[120px] z-[10] -translate-y-full"
-        data-node-id="5168:9935"
-      >
-        <h2
-          // className={styles.subheadline}
-          className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]"
-        >
-          {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
-        </h2>
-      </div>
+      {/* Background gradient layer */}
+      <div className="pointer-events-none absolute inset-0 z-[0] bg-transparent" />
 
-      {/* Challenge Label */}
-      <div
-        // className={styles.challengeLabel}
-        className="absolute top-[750px] left-[135px] z-[10] flex items-center gap-[41px]"
-        data-node-id="5168:9942"
-      >
-        <div
-          // className={styles.challengeIcon}
-          className="relative mr-0 flex h-[110px] w-[110px] items-center justify-center"
-        >
-          <Diamond aria-hidden="true" className="h-full w-full text-[#ededed]" focusable="false" strokeWidth={1.25} />
-        </div>
-        <h1
-          // className={styles.challengeText}
-          className="text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]"
-        >
-          Challenge
-        </h1>
-      </div>
-
-      {/* Description */}
-      <div
-        // className={styles.descriptionContainer}
-        className="absolute top-[2115px] left-[120px] z-[5] w-[1010px]"
-        data-node-id="5168:9932"
-      >
-        <p
-          // className={styles.description}
-          className="text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white"
-        >
-          {renderRegisteredMark(description)}
-        </p>
-      </div>
-
-      {/* Metrics Section */}
-      <div
-        // className={styles.metricsSection}
-        className="absolute top-[3315px] left-[-80px] z-[5] flex w-[1390px] flex-col gap-[100px] group-data-[kiosk=kiosk-2]/kiosk:top-[3395px] group-data-[kiosk=kiosk-2]/kiosk:left-[-180px]"
-        data-node-id="5168:9945"
-      >
-        <div
-          // className={styles.metricAmount}
-          className="text-center text-[400px] leading-[1.3] font-[300] tracking-[-20px] whitespace-nowrap text-[#6dcff6]"
-        >
-          {renderRegisteredMark(metricAmount)}
-        </div>
-        <p
-          // className={styles.metricDescription}
-          className="relative top-[-142px] left-[200px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#6dcff6] group-data-[kiosk=kiosk-2]/kiosk:left-[300px]"
-        >
-          {renderRegisteredMark(metricDescription)}
-        </p>
-      </div>
-
-      {/* Navigation Arrows */}
-      <div
-        aria-label="Previous"
-        // className={styles.arrowUp}
-        className="absolute top-[1750px] right-[120px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
-        data-node-id="5168:9940"
-        onKeyDown={event => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            onNavigateUp?.();
-          }
-        }}
-        onPointerDown={() => onNavigateUp?.()}
-        role="button"
-        tabIndex={0}
-      >
-        <ArrowUp aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
-      </div>
-      <div
-        aria-label="Next"
-        // className={styles.arrowDown}
-        className="absolute top-[1980px] right-[120px] z-[10] flex h-[118px] w-[118px] items-center justify-center"
-        data-node-id="5168:9938"
-        onKeyDown={event => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            onNavigateDown?.();
-          }
-        }}
-        onPointerDown={() => onNavigateDown?.()}
-        role="button"
-        tabIndex={0}
-      >
-        <ArrowDown aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
-      </div>
-
-      {/* Background Gradients */}
-      <div
-        // className={styles.gradientBg}
-        className="absolute top-[-224px] left-[0px] z-[2] h-[5549px] w-[2158px] rounded-[100px] bg-transparent"
-        data-node-id="5168:9930"
-      />
-      <div
-        // className={styles.topGradientOverlay}
-        className="pointer-events-none absolute top-0 left-0 z-[3] h-[1732px] w-full bg-transparent"
-        data-node-id="5168:9934"
-      />
-
-      <div
-        // className={styles.largeIconCenter}
-        className="pointer-events-none absolute top-[2415px] left-[920px] z-[4] flex h-[945px] w-[945px] scale-y-[-1] rotate-[225deg] items-center justify-center"
-        data-node-id="5168:9936"
-      >
+      {/* Decorative background diamond */}
+      <div className="pointer-events-none absolute top-[2490px] left-[920px] z-[1] flex h-[940px] w-[940px] scale-y-[-1] rotate-[225deg] items-center justify-center group-data-[kiosk=kiosk-2]/kiosk:top-[2430px] group-data-[kiosk=kiosk-2]/kiosk:left-[1070px] group-data-[kiosk=kiosk-2]/kiosk:size-[800px] group-data-[kiosk=kiosk-3]/kiosk:top-[1740px] group-data-[kiosk=kiosk-3]/kiosk:left-[1080px] group-data-[kiosk=kiosk-3]/kiosk:size-[800px]">
         <div className="relative h-full w-full">
           <Image
             alt={metricDescription ? `Graphic representing ${metricDescription}` : 'Metric highlight graphic'}
@@ -185,6 +68,45 @@ export const ThirdScreenTemplate = ({
             unoptimized
           />
         </div>
+      </div>
+
+      {/* Header Section */}
+      <div className="relative z-[2] px-[120px] pt-[300px] pb-[150px]">
+        <h2 className="mb-[200px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
+          {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
+        </h2>
+
+        <div className="relative top-[180px] left-[20px] flex items-center gap-[41px]">
+          <div className="relative mr-0 flex h-[110px] w-[110px] items-center justify-center">
+            <Diamond aria-hidden="true" className="h-full w-full text-[#ededed]" focusable="false" strokeWidth={1.25} />
+          </div>
+          <h1 className="text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]">
+            Challenge
+          </h1>
+        </div>
+      </div>
+
+      {/* Description Section - SCROLLABLE */}
+      <div className="relative top-[970px] z-[2] px-[120px] py-[250px] group-data-[kiosk=kiosk-3]/kiosk:top-[290px]">
+        <p
+          className="group-data-[kiosk=kiosk-3[/kiosk:leading-[1.3] max-w-[980px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white group-data-[kiosk=kiosk-2]/kiosk:w-[1070px] group-data-[kiosk=kiosk-3]/kiosk:max-w-[1070px]"
+          data-scroll-section="description"
+        >
+          {renderRegisteredMark(description)}
+        </p>
+      </div>
+
+      {/* Metrics Section - SCROLLABLE */}
+      <div className="relative top-[1180px] left-[-460px] z-[2] flex w-full flex-col items-center px-[120px] py-[300px]  group-data-[kiosk=kiosk-2]/kiosk:top-[1450px] group-data-[kiosk=kiosk-2]/kiosk:left-[-560px] group-data-[kiosk=kiosk-3]/kiosk:top-[790px] group-data-[kiosk=kiosk-3]/kiosk:left-[-640px]">
+        <span className="text-center text-[400px] leading-[1.3] font-[300] tracking-[-20px] whitespace-nowrap text-[#6dcff6]">
+          {renderRegisteredMark(metricAmount)}
+        </span>
+        <p
+          className="relative top-[100px] left-[135px] mt-[-142px] max-w-[1280px] text-left text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#6dcff6]  group-data-[kiosk=kiosk-2]/kiosk:top-[140px] group-data-[kiosk=kiosk-2]/kiosk:left-[10px] group-data-[kiosk=kiosk-3]/kiosk:top-[140px] group-data-[kiosk=kiosk-3]/kiosk:left-[130px] group-data-[kiosk=kiosk-3]/kiosk:max-w-[900px] group-data-[kiosk=kiosk-3]/kiosk:leading-[1.3]"
+          data-scroll-section="metrics-description"
+        >
+          {renderRegisteredMark(metricDescription)}
+        </p>
       </div>
     </div>
   );

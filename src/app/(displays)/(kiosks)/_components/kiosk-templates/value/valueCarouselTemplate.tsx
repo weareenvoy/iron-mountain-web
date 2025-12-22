@@ -1,9 +1,8 @@
 'use client';
 
 import useEmblaCarousel from 'embla-carousel-react';
-import { ArrowDown, ArrowUp } from 'lucide-react';
 import Image from 'next/image';
-import { useId, type ComponentType, type CSSProperties, type SVGProps } from 'react';
+import { useEffect, useId, type ComponentType, type CSSProperties, type SVGProps } from 'react';
 import BlueFilledDiamond from '@/components/ui/icons/Kiosks/Solutions/BlueFilledDiamond';
 import OrangeFilledDiamond from '@/components/ui/icons/Kiosks/Solutions/OrangeFilledDiamond';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
@@ -49,11 +48,48 @@ const defaultSlides = [
 ];
 
 const fallbackDiamondCards: readonly ValueDiamondCard[] = defaultSlides[0]?.diamondCards ?? [];
-const paletteColors = ['#f26522', '#8a0d71', '#1b75bc'] as const;
-const paletteTextColors = ['#4a154b', undefined, undefined] as const;
+const paletteColors = ['#8a0d71', '#1b75bc', '#f26522'] as const;
+const paletteTextColors = [undefined, undefined, undefined] as const;
 
 const normalizeDiamondCards = (cards?: readonly ValueDiamondCard[]) => {
   const base = cards && cards.length > 0 ? cards : fallbackDiamondCards;
+
+  // Check if this is a carousel slide (has a labeled card at the end with empty labels before it)
+  const lastCard = base[base.length - 1];
+  const hasCarouselPattern =
+    base.length === 3 && lastCard?.label && base.slice(0, -1).every(card => !card.label || card.label === '');
+
+  if (hasCarouselPattern) {
+    // Apply Kiosk 1's carousel color logic based on the labeled benefit
+    const labelNormalized = (lastCard.label ?? '').toLowerCase();
+
+    if (labelNormalized.includes('operational')) {
+      // Operational: [Orange, Blue, Purple (labeled)]
+      return [
+        { ...base[0], color: '#f26522', textColor: '#4a154b' },
+        { ...base[1], color: '#1b75bc' },
+        { ...base[2], color: '#8a0d71', label: lastCard.label },
+      ];
+    }
+
+    if (labelNormalized.includes('economic')) {
+      // Economic: [Purple, Orange, Blue (labeled)]
+      return [
+        { ...base[0], color: '#8a0d71' },
+        { ...base[1], color: '#f26522', textColor: '#4a154b' },
+        { ...base[2], color: '#1b75bc', label: lastCard.label },
+      ];
+    }
+
+    // Strategic (default): [Blue, Purple, Orange (labeled)]
+    return [
+      { ...base[0], color: '#1b75bc' },
+      { ...base[1], color: '#8a0d71' },
+      { ...base[2], color: '#f26522', label: lastCard.label, textColor: '#4a154b' },
+    ];
+  }
+
+  // For overview slides or other patterns, use the palette
   return base.map((card, idx) => ({
     ...card,
     color: card.color ?? paletteColors[idx % paletteColors.length],
@@ -111,6 +147,12 @@ export type ValueCarouselTemplateProps = Readonly<{
   labelText?: string;
   onNavigateDown?: () => void;
   onNavigateUp?: () => void;
+  onRegisterCarouselHandlers?: (handlers: {
+    canScrollNext: () => boolean;
+    canScrollPrev: () => boolean;
+    scrollNext: () => void;
+    scrollPrev: () => void;
+  }) => void;
   slides?: readonly ValueCarouselSlide[];
 }>;
 
@@ -161,7 +203,7 @@ const DiamondStack = ({
             {card.label ? (
               <div className="absolute inset-0 flex items-center justify-center">
                 <div
-                  className="flex h-[320px] w-[320px] -rotate-[45deg] items-center justify-center px-10 text-center text-[48px] leading-[1.2] font-normal tracking-[-2.4px]"
+                  className="flex h-[320px] w-[320px] -rotate-[45deg] items-center justify-center px-10 text-center text-[48px] leading-[1.4] font-normal tracking-[-2.4px]"
                   style={{ color: '#ededed' }}
                 >
                   {renderRegisteredMark(card.label)}
@@ -186,8 +228,11 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
     heroVideoPosterSrc,
     heroVideoSrc,
     labelText = defaultLabelText,
-    onNavigateDown,
-    onNavigateUp,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onNavigateDown: _onNavigateDown,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onNavigateUp: _onNavigateUp,
+    onRegisterCarouselHandlers,
     slides,
   } = props;
   const generatedId = useId();
@@ -212,30 +257,27 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
     ? { alignSelf: 'baseline', left: -330, position: 'relative' }
     : undefined;
 
-  const handleArrowUp = () => {
-    if (emblaApi?.canScrollPrev()) {
-      emblaApi.scrollPrev();
-      return;
+  // Register carousel handlers with parent when emblaApi is ready
+  useEffect(() => {
+    if (emblaApi && onRegisterCarouselHandlers) {
+      onRegisterCarouselHandlers({
+        canScrollNext: () => emblaApi.canScrollNext(),
+        canScrollPrev: () => emblaApi.canScrollPrev(),
+        scrollNext: () => emblaApi.scrollNext(),
+        scrollPrev: () => emblaApi.scrollPrev(),
+      });
     }
-    onNavigateUp?.();
-  };
-
-  const handleArrowDown = () => {
-    if (emblaApi?.canScrollNext()) {
-      emblaApi.scrollNext();
-      return;
-    }
-    onNavigateDown?.();
-  };
+  }, [emblaApi, onRegisterCarouselHandlers]);
 
   return (
     <div
       className="relative flex h-screen w-full flex-col overflow-hidden bg-black"
       data-carousel-id={resolvedCarouselId}
+      {...(isOverview ? { 'data-scroll-section': 'value-carousel' } : {})}
       data-node-id="5688:14628"
       style={{ background: 'transparent', overflow: 'visible' }}
     >
-      <div className="absolute top-0 left-0 z-[1] h-[1284px] w-full overflow-hidden">
+      <div className="absolute top-0 left-0 z-[0] h-[1284px] w-full overflow-hidden">
         {heroVideo ? (
           <video
             autoPlay
@@ -286,7 +328,11 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
         <div className="flex flex-col gap-[360px] text-[#8a0d71]" style={{ position: 'relative', top: -10 }}>
           <div>
             <p className="text-[100px] leading-[1.3] font-normal tracking-[-5px]">{renderRegisteredMark(headline)}</p>
-            <p className="mt-[80px] text-[60px] leading-[1.4] font-normal tracking-[-3px]" style={{ width: '1480px' }}>
+            <p
+              className="mt-[80px] text-[60px] leading-[1.4] font-normal tracking-[-3px]"
+              {...(!isOverview ? { 'data-scroll-section': 'value-description' } : {})}
+              style={{ width: '1480px' }}
+            >
               {renderRegisteredMark(normalizeMultiline(description))}
             </p>
           </div>
@@ -323,38 +369,6 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
             </div>
           </div>
         </div>
-      </div>
-
-      <div
-        aria-label="Previous"
-        className="absolute top-[1755px] right-[120px] z-[10] flex h-[118px] w-[118px] items-center justify-center text-[#58595B]"
-        data-node-id="5688:12459"
-        onKeyDown={event => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            handleArrowUp();
-          }
-        }}
-        onPointerDown={handleArrowUp}
-        role="button"
-        tabIndex={0}
-      >
-        <ArrowUp aria-hidden="true" className="h-full w-full" focusable="false" strokeWidth={1.5} />
-      </div>
-      <div
-        aria-label="Next"
-        className="absolute top-[1980px] right-[120px] z-[10] flex h-[118px] w-[118px] items-center justify-center text-[#58595B]"
-        onKeyDown={event => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            handleArrowDown();
-          }
-        }}
-        onPointerDown={handleArrowDown}
-        role="button"
-        tabIndex={0}
-      >
-        <ArrowDown aria-hidden="true" className="h-full w-full" focusable="false" strokeWidth={1.5} />
       </div>
     </div>
   );

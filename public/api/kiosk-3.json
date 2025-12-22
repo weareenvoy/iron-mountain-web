@@ -1,412 +1,178 @@
 {
-  "challenges": {
-    "firstScreen": {
-      "challengeLabel": "Challenge",
-      "problemDescription": "When seeking a new partner to help manage their extensive IT hardware fleet of assets, the customer’s primary pain points were logistical costs and a lack of granularity in reporting, reducing overall transparency.",
-      "savingsAmount": "200K+",
-      "savingsDescription": "assets collected and processed each year, with retrieval and redeployment of more than 50k remote workforce devices annually.",
-      "subheadline": [
-        "IT assets &",
-        "data centers"
-      ],
-      "videoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/01+-+Challenge/Challenge-header.webm"
-    },
-    "initialScreen": {
-      "attribution": "",
+  "locale": "en",
+  "data": {
+    "ambient": {
       "backgroundImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/Cover.webp",
-      "buttonText": "Touch to explore",
+      "body": "A global healthcare company optimizes IT asset management, improves transparency, and boosts remarketing returns by partnering with Iron Mountain Asset Lifecycle Management.",
       "headline": "",
-      "quote": "A global healthcare company optimizes IT asset management, improves transparency, and boosts remarketing returns by partnering with Iron Mountain Asset Lifecycle Management.",
-      "subheadline": [
-        "IT assets &",
-        "data centers"
-      ]
+      "quoteSource": "",
+      "title": "IT assets &\n data centers",
+      "mainCTA": "Touch to explore"
     },
-    "secondScreen": {
-      "bottomDescription": "",
-      "bottomVideoSrc": "",
-      "largeIconSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/01+-+Challenge/Challenge-Image1-Diamond.webp",
-      "mainDescription": "A large bank acquired a competitor, which resulted in redundant and costly data center operations.",
-      "statAmount": "",
-      "statDescription": "",
-      "subheadline": [
-        "IT assets &",
-        "data centers"
-      ],
-      "topImageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/01+-+Challenge/Challenge-Image1-Diamond.webp"
+
+    "challengeMain": {
+      "mainVideo": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/01+-+Challenge/Challenge-header.webm",
+
+      "body": "When seeking a new partner to help manage their extensive IT hardware fleet of assets, the customer's primary pain points were logistical costs and a lack of granularity in reporting, reducing overall transparency.",
+
+      "featuredStat1": "200K+",
+      "featuredStat1Body": "",
+
+      "item1Body": "A large bank acquired a competitor, which resulted in redundant and costly data center operations.",
+      "item1Image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/01+-+Challenge/Challenge-Image1-Diamond.webp",
+
+      "item2Body": "Prior to partnering with Iron Mountain, the enterprise also faced challenges in optimizing remarketing potential across end-user devices and data center assets.",
+      "item2Image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/01+-+Challenge/Challenge-Image2-Diamond.webp",
+
+      "featuredStat2": "20+",
+      "featuredStat2Body": "data centers requiring expert support for asset refresh and decommissioning projects."
     },
-    "thirdScreen": {
-      "description": "Prior to partnering with Iron Mountain, the enterprise also faced challenges in optimizing remarketing potential across end-user devices and data center assets.",
-      "heroImageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/01+-+Challenge/Challenge-Image2-Diamond.webp",
-      "largeIconCenterSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/02+-+Solution/Solution-Image3-Diamond.webp",
-      "largeIconTopSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/02+-+Solution/Solution-Image2-Diamond.webp",
-      "metricAmount": "20+",
-      "metricDescription": "data centers requiring expert support for asset refresh and decommissioning projects.",
-      "metricImageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/01+-+Challenge/Challenge-Image2-Diamond.webp",
-      "subheadline": [
-        "IT assets &",
-        "data centers"
+
+    "solutionMain": {
+      "mainVideo": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/02+-+Solution/Solution-header.webm",
+      "headline": "A partnership with Iron Mountain",
+      "body": "Iron Mountain's expansive operating footprint, comprehensive reporting, and technology integration capabilities solved the customer's core challenges. Implementing a streamlined device retrieval and redeployment solution, in addition to a data center decommissioning solution, allowed for improvements across the board.",
+
+      "numberedListHeadline": "Together, we:",
+      "numberedList": [
+        "Improved logistical costs due to extensive global footprint and in-house logistics",
+        "Optimized delivery and transparency with end-to-end chain of custody, visibility through technology integration, and comprehensive reporting",
+        "Helped maintain consistency and compliance across locations in North America, Europe, and APAC",
+        "Stored 1,000 cubic feet total of physical, historic assets in climate-controlled, private vaults"
       ],
-      "videoSrc": ""
-    }
-  },
-  "solutions": {
-    "firstScreen": {
-      "backgroundVideoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/02+-+Solution/Solution-header.webm",
-      "description": "Global IT teams rely on Iron Mountain to consolidate decommissioning, ITAD, and Smart Vault services into a single, auditable workflow.",
-      "subheadline": [
-        "IT assets &",
-        "data centers"
-      ],
-      "title": "Confidence across every disposition project"
+
+      "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/02+-+Solution/Solution-Image1-Diamond.webp"
     },
-    "fourthScreen": {
-      "accordionItems": [
+
+    "solutionAccordion": {
+      "headline": "Iron Mountain's Asset Lifecycle Management",
+      "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/02+-+Solution/Solution-Image2-Diamond.webp",
+      "accordion": [
         {
-          "contentList": [
+          "title": "Device retrieval and redeployment services",
+          "bullets": [
             "Automated and scalable",
             "Custom packaging",
             "Real-time tracking",
             "Redeployment of devices and peripherals"
-          ],
-          "expanded": true,
-          "id": "item-1",
-          "number": "01.",
-          "title": "Device retrieval and redeployment services"
+          ]
         },
         {
-          "contentList": [
+          "title": "IT asset disposition (ITAD) for end-user devices",
+          "bullets": [
             "Secure chain of custody",
             "Guaranteed data sanitization",
             "Maximized value recovery",
             "Clear sustainability reporting"
-          ],
-          "id": "item-2",
-          "number": "02.",
-          "title": "IT asset disposition (ITAD) for end-user devices"
+          ]
         },
         {
-          "contentList": [
+          "title": "Data center decommissioning & ITAD",
+          "bullets": [
             "Data destruction",
             "Flexible data sanitization",
             "Secure media destruction"
-          ],
-          "id": "item-3",
-          "number": "03.",
-          "title": "Data center decommissioning & ITAD"
+          ]
         },
         {
-          "contentList": [
+          "title": "Decommissioning and logistics",
+          "bullets": [
             "Onsite inventory and removal",
             "Secure logistics"
-          ],
-          "id": "item-4",
-          "number": "04.",
-          "title": "Decommissioning and logistics"
-        }
-      ],
-      "accentDiamondSrc": "",
-      "backgroundVideoSrc": "",
-      "mediaDiamondOutlineSrc": "",
-      "mediaDiamondSolidSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/02+-+Solution/Solution-Image2-Diamond.webp",
-      "solutionLabel": "Solution",
-      "subheadline": [
-        "IT assets &",
-        "data centers"
-      ],
-      "title": "Iron Mountain’s Asset Lifecycle Management"
-    },
-    "secondScreen": {
-      "heroImageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/02+-+Solution/Solution-Image1-Diamond.webp",
-      "stepFourDescription": "Improved total cost of ownership (TCO) on IT assets due to maximized remarketing returns",
-      "stepFourLabel": "04.",
-      "stepOneDescription": "Improved logistical costs due to extensive global footprint and in-house logistics",
-      "stepOneLabel": "01.",
-      "stepThreeDescription": "Helped maintain consistency and compliance across locations in North America, Europe, and APAC",
-      "stepThreeLabel": "03.",
-      "stepTwoDescription": "Optimized delivery and transparency with end-to-end chain of custody, visibility through technology integration, and comprehensive reporting",
-      "stepTwoLabel": "02.",
-      "subheadline": [
-        "IT assets &",
-        "data centers"
-      ],
-      "title": "Together, we:"
-    }
-  },
-  "value": {
-    "valueScreens": [
-      {
-        "carouselId": "kiosk-3-value-overview",
-        "description": "Through its collaboration with Iron Mountain, a global healthcare customer improved compliance, visibility, and consistency in IT asset disposition across worldwide locations, while maximizing value recovery from retired end-user devices and data center components.",
-        "eyebrow": [
-          "Information",
-          "& data lifecycle"
-        ],
-        "headline": "Expanding possibilities",
-        "heroVideoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/03+-+Value/Value-header.webm",
-        "labelIconSrc": "",
-        "labelText": "Value",
-        "slides": [
-          {
-            "badgeLabel": "Operational · Economic · Strategic",
-            "diamondCards": [
-              {
-            "label": "Strategic benefits"
-              },
-              {
-            "label": "Operational benefits"
-              },
-              {
-            "label": "Economic benefits"
-              }
-            ],
-            "id": "value-trio-overview"
-          }
-        ]
-      },
-      {
-        "carouselId": "kiosk-3-value-carousel",
-        "description": "Through its collaboration with Iron Mountain, a global healthcare customer improved compliance, visibility, and consistency in IT asset disposition across worldwide locations, while maximizing value recovery from retired end-user devices and data center components.",
-        "eyebrow": [
-          "Information",
-          "& data lifecycle"
-        ],
-        "headline": "Expanding possibilities",
-        "heroVideoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/03+-+Value/Value-header.webm",
-        "labelIconSrc": "",
-        "labelText": "Value",
-        "slides": [
-          {
-            "badgeLabel": "Operational benefits",
-            "bullets": [
-              "Improved accessibility and security of the museum’s assets.",
-              "Simplified, modern media access with digitized workflows available instantly from anywhere.",
-              "Post-production workflows include automation and annotation support for a digital preservation platform."
-            ],
-            "diamondCards": [
-              {
-                "label": ""
-              },
-              {
-                "label": "Economic benefits"
-              },
-              {
-                "label": "Operational benefits"
-              }
-            ],
-            "id": "value-operational"
-          },
-          {
-            "badgeLabel": "Economic benefits",
-            "bullets": [
-              "Enabled new licensing opportunities for archived performances.",
-              "Enhanced licensing potential with multi-angle, high-resolution capture ready for partners.",
-              "Created repeatable revenue streams through curated content packages."
-            ],
-            "diamondCards": [
-              {
-                "label": ""
-              },
-              {
-                "label": ""
-              },
-              {
-                "label": "Economic benefits"
-              }
-            ],
-            "id": "value-economic"
-          },
-          {
-            "badgeLabel": "Strategic benefits",
-            "bullets": [
-              "Safely archived and protected while enhancements are applied to the collection.",
-              "Positioned the museum for future innovation through trusted digital preservation pipelines.",
-              "Equipped administrators with advanced discovery tools to craft new storytelling moments."
-            ],
-            "diamondCards": [
-              {
-                "label": ""
-              },
-              {
-                "label": ""
-              },
-              {
-                "label": "Strategic benefits"
-              }
-            ],
-            "id": "value-strategic"
-          }
-        ]
-      }
-    ]
-  },
-  "hardcoded": {
-    "firstScreen": {
-      "eyebrow": [
-        "IT assets &",
-        "data centers"
-      ],
-      "heroImageAlt": "Visitors smiling while viewing content",
-      "heroImageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image1-Diamond.webp",
-      "primaryCtaLabel": "Centralized management of services",
-      "secondaryCtaLabel": "Launch demo"
-    },
-    "secondScreen": {
-      "backgroundImageSrc": "",
-      "backLabel": "Back",
-      "description": "Explore each section to learn how Iron Mountain can transform your enterprise",
-      "eyebrow": [
-        "IT assets &",
-        "data centers"
-      ],
-      "headline": "Centralized management of services via API",
-      "tapToBeginLabel": "Tap to begin",
-      "videoAsset": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video1-Full.webm"
-    },
-    "thirdScreen": {
-      "headline": [
-        "Centralized management",
-        "of services via API"
-      ],
-      "slides": [
-        {
-          "bullets": [
-            "Decommissioning services",
-            "Packaging / logistics / transportation",
-            "Data sanitization",
-            "Lease returns",
-            "ITAD"
-          ],
-          "eyebrow": [
-            "IT assets &",
-            "data centers"
-          ],
-          "headline": [
-            "Centralized management",
-            "of services via API"
-          ],
-          "id": "slide-1",
-          "primaryImageAlt": "",
-          "primaryImageSrc": "",
-          "primaryVideoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video1-Full.webm",
-          "secondaryImageAlt": "Hand touching button on a data driven touch screen device.",
-          "secondaryImageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image2-Diamond.webp",
-          "sectionTitle": "Data configuration"
-        },
-        {
-          "bullets": [
-            "Asset tagging",
-            "Asset tracking",
-            "Inventory management",
-            "Audits",
-            "Legal holds"
-          ],
-          "eyebrow": [
-            "IT assets &",
-            "data centers"
-          ],
-          "headline": [
-            "Centralized management",
-            "of services via API"
-          ],
-          "id": "slide-2",
-          "primaryImageAlt": "",
-          "primaryImageSrc": "",
-          "primaryVideoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video2-Full.webm",
-          "secondaryImageAlt": "",
-          "secondaryImageSrc": null,
-          "sectionTitle": "Device storage"
-        },
-        {
-          "bullets": [
-            "Kitting",
-            "Cleaning",
-            "Planning/scheduling",
-            "Imaging",
-            "Required upgrades"
-          ],
-          "eyebrow": [
-            "IT assets &",
-            "data centers"
-          ],
-          "headline": [
-            "Device configuration"
-          ],
-          "id": "slide-3",
-          "primaryImageAlt": "",
-          "primaryImageSrc": "",
-          "primaryVideoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video3-Full.webm",
-          "secondaryImageAlt": "Hand touching smart interface",
-          "secondaryImageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image3-Diamond.webp",
-          "sectionTitle": "Device configuration"
-        },
-        {
-          "bullets": [
-            "Shipment of PC and peripherals",
-            "Advanced exchange for repair or refresh"
-          ],
-          "eyebrow": [
-            "IT assets &",
-            "data centers"
-          ],
-          "headline": [
-            "Device deployment"
-          ],
-          "id": "slide-4",
-          "primaryImageAlt": "",
-          "primaryImageSrc": "",
-          "primaryVideoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video4-Full.webm",
-          "secondaryImageAlt": "Surveyor taking notes on inventory.",
-          "secondaryImageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image4-Diamond.webp",
-          "sectionTitle": "Device deployment"
-        },
-        {
-          "bullets": [
-            "Management of warranty and support extension, including break/fix"
-          ],
-          "eyebrow": [
-            "IT assets &",
-            "data centers"
-          ],
-          "headline": [
-            "Device maintenance"
-          ],
-          "id": "slide-5",
-          "primaryImageAlt": "",
-          "primaryImageSrc": "",
-          "primaryVideoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video5-Full.webm",
-          "secondaryImageAlt": "",
-          "secondaryImageSrc": null,
-          "sectionTitle": "Device maintenance"
-        },
-        {
-          "bullets": [
-            "Retrieval of PC and peripherals"
-          ],
-          "eyebrow": [
-            "IT assets &",
-            "data centers"
-          ],
-          "headline": [
-            "Device reverse logistics"
-          ],
-          "id": "slide-6",
-          "primaryImageAlt": "",
-          "primaryImageSrc": "",
-          "primaryVideoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video6-Full.webm",
-          "secondaryImageAlt": "Pair pointing towards computer with data in data center.",
-          "secondaryImageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image5-Diamond.webp",
-          "sectionTitle": "Device reverse logistics"
+          ]
         }
       ]
     },
-    "fourthScreen": {
-      "cardLabel": "Demo",
-      "headline": [
-        "Section title lorem ipsum",
-        "dolor sit."
+
+    "valueMain": {
+      "headline": "Expanding possibilities",
+      "mainVideo": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/03+-+Value/Value-header.webm",
+
+      "body": "Through its collaboration with Iron Mountain, a global healthcare customer improved compliance, visibility, and consistency in IT asset disposition across worldwide locations, while maximizing value recovery from retired end-user devices and data center components.",
+
+      "diamondBenefits": [
+        {
+          "label": "Operational benefits",
+          "bullets": [
+            "Improved service delivery and transparency with an end-to-end chain of custody, visibility through technology integration, and comprehensive reporting",
+            "Streamlined the returns of remote employee devices, improving retrieval rates and enabling further use through redeployment"
+          ]
+        },
+        {
+          "label": "Economical benefits",
+          "bullets": [
+            "Maximized remarketing returns, improving ROI and lowering TCO",
+            "Reduced logistical costs due to Iron Mountain's extensive global footprint"
+          ]
+        },
+        {
+          "label": "Strategic benefits",
+          "bullets": [
+            "Drove consistency and compliance across locations in North America, Europe, and APAC, with a secure and scalable solution"
+          ]
+        }
+      ]
+    },
+
+    "demoMain": {
+      "headline": "Lorem ipsum dolor sit amet consectetur",
+      "iframeLink": "https://www.Google.com",
+      "mainCTA": "End Tour"
+    },
+
+    "customInteractive3": {
+      "headline": "Learn more about how we unlocked new possibilities for our partners",
+      "mainCTA": "Centralized management of services",
+      "secondaryCTA": "Launch demo",
+      "headline2": "Centralized management of services via API",
+      "body": "Explore each section to learn how Iron Mountain can transform your enterprise",
+      "tapCTA": "Tap to begin",
+      "backCTA": "Back",
+      "video": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video1-Full.webm",
+      "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image1-Diamond.webp",
+      "tapCarousel": [
+        {
+          "title": "Data configuration",
+          "bullets": ["Decommissioning services", "Packaging / logistics / transportation", "Data sanitization", "Lease returns", "ITAD"],
+          "video": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video1-Full.webm",
+          "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image2-Diamond.webp"
+        },
+
+        {
+          "title": "Device storage",
+          "bullets": ["Asset tagging", "Asset tracking", "Inventory management", "Audits", "Legal holds"],
+          "video": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video2-Full.webm"
+        },
+
+        {
+          "title": "Device configuration",
+          "bullets": ["Kitting", "Cleaning", "Planning/scheduling", "Imaging", "Required upgrades"],
+          "video": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video3-Full.webm",
+          "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image3-Diamond.webp"
+        },
+
+        {
+          "title": "Device deployment",
+          "bullets": ["Shipment of PC and peripherals", "Advanced exchange for repair or refresh"],
+          "video": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video4-Full.webm",
+          "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image4-Diamond.webp"
+        },
+
+        {
+          "title": "Device maintenance",
+          "bullets": ["Management of warranty and support extension, including break/fix"],
+          "video": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video5-Full.webm"
+        },
+
+
+        {
+          "title": "Device reverse logistics",
+          "bullets": ["Retrieval of PC and peripherals"],
+          "video": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video6-Full.webm",
+          "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image5-Diamond.webp"
+        }
+
       ]
     }
   }
 }
-

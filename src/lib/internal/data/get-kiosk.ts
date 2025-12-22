@@ -1,12 +1,25 @@
 import { shouldUseStaticPlaceholderData } from '@/flags/flags';
-import type { KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
 
 export interface KioskFullData {
-  readonly challenges: KioskChallenges;
+  // Kiosk 2/3 flat structure
+  readonly ambient?: unknown;
+  readonly challenge?: unknown;
+  readonly challenges?: unknown;
+  // Kiosk 1 nested structure
+  readonly data?: {
+    readonly ambient?: unknown;
+    readonly challenge?: unknown;
+    readonly hardcoded?: unknown;
+    readonly solutions?: unknown;
+    readonly value?: unknown;
+  };
   readonly hardcoded?: unknown;
+  readonly locale?: string;
+  // Allow any other properties
+  readonly [key: string]: unknown;
   readonly solutions?: unknown;
   readonly value?: unknown;
 }

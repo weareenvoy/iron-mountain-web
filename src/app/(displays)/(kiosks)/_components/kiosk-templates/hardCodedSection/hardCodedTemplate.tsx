@@ -1,51 +1,56 @@
 import HardCodedFirstScreenTemplate, {
   type HardCodedKiosk1FirstScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/firstScreenTemplate';
-import HardCodedKiosk3FourthScreenTemplate, {
-  type HardCodedKiosk3FourthScreenTemplateProps,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk3/fourthScreenTemplate';
 import HardCodedKiosk1SecondScreenTemplate, {
   type HardCodedKiosk1SecondScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk1/secondScreenTemplate';
 import HardCodedKiosk3SecondScreenTemplate, {
   type HardCodedKiosk3SecondScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk3/secondScreenTemplate';
-import HardCodedKiosk1ThirdScreenTemplate, {
-  type HardCodedKiosk1ThirdScreenTemplateProps,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk1/thirdScreenTemplate';
 import HardCodedKiosk3ThirdScreenTemplate, {
   type HardCodedKiosk3ThirdScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/kiosk3/thirdScreenTemplate';
 import { SectionSlide, type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
+import type { HardCodedDemoScreenTemplateProps } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/demoScreenTemplate';
 
 export type HardCodedScreens = Readonly<{
+  demoScreen?: HardCodedDemoScreenTemplateProps;
   firstScreen?: HardCodedKiosk1FirstScreenTemplateProps;
-  fourthScreen?: HardCodedKiosk3FourthScreenTemplateProps;
+  fourthScreen?: HardCodedDemoScreenTemplateProps;
   secondScreen?: HardCodedKiosk1SecondScreenTemplateProps & HardCodedKiosk3SecondScreenTemplateProps;
-  thirdScreen?: HardCodedKiosk1ThirdScreenTemplateProps & HardCodedKiosk3ThirdScreenTemplateProps;
+  thirdScreen?: HardCodedDemoScreenTemplateProps & HardCodedKiosk3ThirdScreenTemplateProps;
 }>;
 
 export const buildHardcodedSlides = (
   hardCoded: HardCodedScreens,
-  kioskId: 'kiosk-1' | 'kiosk-2' | 'kiosk-3'
+  kioskId: 'kiosk-1' | 'kiosk-2' | 'kiosk-3',
+  scrollToSection?: (sectionId: string) => void
 ): Slide[] => {
-  if (kioskId === 'kiosk-2') return [];
-
   const slides: Slide[] = [];
 
   if (hardCoded.firstScreen) {
+    // Kiosk 1 uses thirdScreen for overlay, Kiosk 3 uses fourthScreen
+    const overlayData = kioskId === 'kiosk-1' ? hardCoded.thirdScreen : hardCoded.fourthScreen;
+
     slides.push({
       id: 'hardcoded-first',
       render: (isActive: boolean) => (
         <SectionSlide isActive={isActive}>
-          <HardCodedFirstScreenTemplate kioskId={kioskId} {...hardCoded.firstScreen} />
+          <HardCodedFirstScreenTemplate
+            kioskId={kioskId}
+            {...hardCoded.firstScreen}
+            onPrimaryCta={() => scrollToSection?.('hardcoded-second-screen')}
+            overlayCardLabel={overlayData?.cardLabel}
+            overlayHeadline={overlayData?.headline}
+          />
         </SectionSlide>
       ),
       title: 'Hardcoded First',
     });
   }
 
-  if (hardCoded.secondScreen) {
+  // Second screen: only for kiosk-1 and kiosk-3
+  if (hardCoded.secondScreen && kioskId !== 'kiosk-2') {
     const KioskSecond =
       kioskId === 'kiosk-3' ? HardCodedKiosk3SecondScreenTemplate : HardCodedKiosk1SecondScreenTemplate;
 
@@ -53,38 +58,32 @@ export const buildHardcodedSlides = (
       id: 'hardcoded-second',
       render: (isActive: boolean) => (
         <SectionSlide isActive={isActive}>
-          <KioskSecond {...hardCoded.secondScreen} />
+          <KioskSecond
+            {...hardCoded.secondScreen}
+            onBack={() => scrollToSection?.('hardcoded-first-screen')}
+            onTapToBegin={() => scrollToSection?.('hardcoded-third-screen')}
+          />
         </SectionSlide>
       ),
       title: 'Hardcoded Second',
     });
   }
 
-  if (hardCoded.thirdScreen) {
-    const KioskThird = kioskId === 'kiosk-3' ? HardCodedKiosk3ThirdScreenTemplate : HardCodedKiosk1ThirdScreenTemplate;
-
+  // Kiosk 3: thirdScreen is the carousel (render as standalone)
+  // Kiosk 1: thirdScreen is the demo (used for overlay only, don't render standalone)
+  if (kioskId === 'kiosk-3' && hardCoded.thirdScreen) {
     slides.push({
       id: 'hardcoded-third',
       render: (isActive: boolean) => (
         <SectionSlide isActive={isActive}>
-          <KioskThird {...hardCoded.thirdScreen} />
+          <HardCodedKiosk3ThirdScreenTemplate {...hardCoded.thirdScreen} />
         </SectionSlide>
       ),
       title: 'Hardcoded Third',
     });
   }
 
-  if (kioskId === 'kiosk-3' && hardCoded.fourthScreen) {
-    slides.push({
-      id: 'hardcoded-fourth',
-      render: (isActive: boolean) => (
-        <SectionSlide isActive={isActive}>
-          <HardCodedKiosk3FourthScreenTemplate {...hardCoded.fourthScreen} />
-        </SectionSlide>
-      ),
-      title: 'Hardcoded Fourth',
-    });
-  }
+  // Demo screens (thirdScreen for Kiosk 1, fourthScreen for Kiosk 3) are now overlay-only
 
   // Keep navigation external: handled by slide order in view
   return slides;
