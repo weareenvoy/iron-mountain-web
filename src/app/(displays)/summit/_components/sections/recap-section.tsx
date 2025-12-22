@@ -1,6 +1,5 @@
 import NotificationTextIcon from '@/components/ui/icons/NotificationTextIcon';
 import useLocalStorage from '@/hooks/use-local-storage';
-import type { SummitRecap } from '@/app/(displays)/summit/_types';
 import type { ChangeEvent, ReactNode } from 'react';
 
 export type RecapTone = {
@@ -14,8 +13,8 @@ export type RecapTone = {
 type RecapSectionProps = {
   readonly actionSlot?: ReactNode;
   readonly placeholder?: string;
-  readonly recap: SummitRecap;
-  readonly storageKey?: string;
+  readonly storageKey: string;
+  readonly title?: string;
   readonly tone?: RecapTone;
 };
 
@@ -24,18 +23,17 @@ export const RECAP_DEFAULT_TONE: RecapTone = {
   accentColor: '#14477D',
   bodyColor: '#4B4B4D',
   iconColor: '#0D3C69',
-};
+} as const;
 
 const RecapSection = ({
   actionSlot,
   placeholder = '',
-  recap,
   storageKey,
+  title = 'Recap',
   tone = RECAP_DEFAULT_TONE,
 }: RecapSectionProps) => {
   const palette = { ...RECAP_DEFAULT_TONE, ...tone };
-  const key = storageKey ?? `summit-recap:${recap.title}`;
-  const [note, setNote] = useLocalStorage<string>(key, '');
+  const [note, setNote] = useLocalStorage<string>(storageKey, '');
   const rightTextColor = palette.rightTextColor ?? '#12406A';
 
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -50,7 +48,7 @@ const RecapSection = ({
       >
         <div className="flex items-center gap-3" style={{ color: palette.accentColor }}>
           <NotificationTextIcon aria-hidden className="h-8 w-8" style={{ color: palette.iconColor }} />
-          <span className="text-3xl font-normal">{recap.title}</span>
+          <span className="text-3xl font-normal">{title}</span>
         </div>
         {actionSlot}
       </div>
