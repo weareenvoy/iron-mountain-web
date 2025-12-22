@@ -1,10 +1,11 @@
 'use client';
 import React from 'react';
 import { DEFAULT_KIOSK_ID, type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
-import { getKioskData, type KioskFullData } from '@/lib/internal/data/get-kiosk';
+import { getKioskData } from '@/lib/internal/data/get-kiosk';
+import type { KioskData } from '@/lib/internal/types';
 
 export type Controller = {
-  fetchKioskChallenges: () => Promise<KioskFullData>;
+  fetchKioskChallenges: () => Promise<KioskData>;
   getRegistry: () => RegistryEntry[];
   goTo: (i: number) => void;
   kioskId: KioskId;

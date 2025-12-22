@@ -1,47 +1,28 @@
-import { shouldUseStaticPlaceholderData } from '@/flags/flags';
+import { getLocaleForTesting, shouldUseStaticPlaceholderData } from '@/flags/flags';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
+import type { KioskApiResponse, KioskDataResponse } from '@/lib/internal/types';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
-
-export interface KioskFullData {
-  // Kiosk 2/3 flat structure
-  readonly ambient?: unknown;
-  readonly challenge?: unknown;
-  readonly challenges?: unknown;
-  // Kiosk 1 nested structure
-  readonly data?: {
-    readonly ambient?: unknown;
-    readonly challenge?: unknown;
-    readonly hardcoded?: unknown;
-    readonly solutions?: unknown;
-    readonly value?: unknown;
-  };
-  readonly hardcoded?: unknown;
-  readonly locale?: string;
-  // Allow any other properties
-  readonly [key: string]: unknown;
-  readonly solutions?: unknown;
-  readonly value?: unknown;
-}
-
-const fetchStaticKioskData = async (kioskId: KioskId): Promise<KioskFullData> => {
-  const res = await fetch(`/api/${kioskId}.json`, { cache: 'force-cache' });
-  return (await res.json()) as KioskFullData;
-};
-
-export async function getKioskData(kioskId: KioskId): Promise<{ data: KioskFullData; kioskId: KioskId }> {
+export async function getKioskData(kioskId: KioskId): Promise<KioskDataResponse> {
+  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 3500);
 
   try {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (shouldUseStaticPlaceholderData()) {
-      const data = await fetchStaticKioskData(kioskId);
+      const res = await fetch(`/api/${kioskId}.json`, { cache: 'force-cache' });
       clearTimeout(timeout);
+      const rawData = (await res.json()) as KioskApiResponse;
+      const locale = getLocaleForTesting();
+      const data = rawData.find(item => item.locale === locale)?.data;
+
+      if (!data) {
+        throw new Error(`Missing data for locale: ${locale}`);
+      }
 
       return {
         data,
-        kioskId,
+        locale,
       };
     }
 
@@ -51,19 +32,33 @@ export async function getKioskData(kioskId: KioskId): Promise<{ data: KioskFullD
     });
     clearTimeout(timeout);
     if (!res.ok) throw new Error(`Bad status: ${res.status}`);
-    const data = (await res.json()) as KioskFullData;
+    const rawData = (await res.json()) as KioskApiResponse;
+    const locale = getLocaleForTesting();
+    const data = rawData.find(item => item.locale === locale)?.data;
+
+    if (!data) {
+      throw new Error(`Missing data for locale: ${locale}`);
+    }
 
     return {
       data,
-      kioskId,
+      locale,
     };
   } catch {
     clearTimeout(timeout);
-    const data = await fetchStaticKioskData(kioskId);
+    // Offline/static fallback
+    const res = await fetch(`/api/${kioskId}.json`, { cache: 'force-cache' });
+    const rawData = (await res.json()) as KioskApiResponse;
+    const locale = getLocaleForTesting();
+    const data = rawData.find(item => item.locale === locale)?.data;
+
+    if (!data) {
+      throw new Error(`Missing data for locale: ${locale}`);
+    }
 
     return {
       data,
-      kioskId,
+      locale,
     };
   }
 }

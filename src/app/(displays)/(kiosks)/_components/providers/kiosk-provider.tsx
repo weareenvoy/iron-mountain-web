@@ -1,11 +1,12 @@
 'use client';
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type PropsWithChildren } from 'react';
-import { getKioskData, type KioskFullData } from '@/lib/internal/data/get-kiosk';
+import { getKioskData } from '@/lib/internal/data/get-kiosk';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
+import type { KioskData } from '@/lib/internal/types';
 
 interface KioskContextType {
-  data: KioskFullData | null;
+  data: KioskData | null;
   error: null | string;
   kioskId: KioskId;
   loading: boolean;
@@ -27,7 +28,7 @@ type KioskProviderProps = PropsWithChildren<{
 }>;
 
 export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
-  const [data, setData] = useState<KioskFullData | null>(null);
+  const [data, setData] = useState<KioskData | null>(null);
   const [error, setError] = useState<null | string>(null);
   const [loading, setLoading] = useState(true);
 

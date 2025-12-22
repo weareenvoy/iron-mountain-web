@@ -19,10 +19,11 @@ View Component (renders slides)
 
 ## Features
 
-- **Data Fetching**: Loads kiosk JSON data from `/api/kiosk-{1,2,3}.json`
-- **State Management**: Provides `data`, `loading`, `error`, `slideIndex`
-- **Resilience**: Online API fallback with static JSON backup
-- **Standalone**: No MQTT or Docent integration (kiosks operate independently)
+- **Data fetching**: Loads kiosk JSON data from `/api/<kioskId>.json` (ex: `/api/kiosk-2.json`) with online API
+  fallback.
+- **Resilience**: Times out quickly and falls back to static JSON if the API is unavailable/offline.
+- **Standalone**: No MQTT or Docent integration (kiosks operate independently).
+- **State management**: Provides `data`, `error`, `kioskId`, `loading`, `refetch`.
 
 ## Usage
 
@@ -31,6 +32,7 @@ View Component (renders slides)
 ```tsx
 // layout.tsx
 import { KioskProvider } from '@/app/(displays)/(kiosks)/_components/providers';
+import { KioskControllerProvider } from '@/app/(displays)/(kiosks)/_components/kiosk-controller';
 
 const Kiosk3Layout = ({ children }: LayoutProps) => {
   return (
@@ -48,29 +50,48 @@ const Kiosk3Layout = ({ children }: LayoutProps) => {
 import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers';
 
 const Kiosk3View = () => {
-  const { data, loading, error, slideIndex, setSlideIndex } = useKiosk();
+  const { data, error, loading, refetch } = useKiosk();
 
   if (loading) return <LoadingState />;
   if (error || !data) return <ErrorState error={error} />;
 
   // Access kiosk data
-  const challenges = data.challenges;
+  // Note: `KioskData` is intentionally flexible (kiosk-1 nested vs kiosk-2/3 flat).
+  // Your view/template layer is responsible for mapping/parsing the sections it needs.
+  const challenges = data.challenges ?? data.challenge;
+  const hardcoded = data.hardcoded;
   const solutions = data.solutions;
   const value = data.value;
-  const hardcoded = data.hardcoded;
 
-  // Use slideIndex for navigation
-  return <div data-slide-index={slideIndex}>...</div>;
+  return <div>{/* render slides */}</div>;
 };
 ```
 
 ## Data Structure
 
-The `KioskFullData` type provides the complete kiosk content:
+`getKioskData(kioskId)` follows the same convention as the other `get-*` utilities and returns:
+
+- `data`: the locale-selected kiosk payload
+- `locale`: the locale used (selected via `getLocaleForTesting()` today)
+
+The `KioskData` type is intentionally flexible to support multiple kiosk schemas:
 
 ```typescript
-interface KioskFullData {
-  readonly challenges: KioskChallenges;
+interface KioskData {
+  // Kiosk 2/3 flat structure (varies by kiosk)
+  readonly ambient?: unknown;
+  readonly challenge?: unknown;
+  readonly challenges?: unknown;
+
+  // Kiosk 1 nested structure
+  readonly data?: {
+    readonly ambient?: unknown;
+    readonly challenge?: unknown;
+    readonly hardcoded?: unknown;
+    readonly solutions?: unknown;
+    readonly value?: unknown;
+  };
+
   readonly hardcoded?: unknown;
   readonly solutions?: unknown;
   readonly value?: unknown;
@@ -79,20 +100,17 @@ interface KioskFullData {
 
 ## Comparison with other exhibits
 
-| Feature      | Basecamp              | Summit                | Kiosks                    |
-| ------------ | --------------------- | --------------------- | ------------------------- |
-| Data source  | `/api/basecamp.json`  | `/api/summit.json`    | `/api/kiosk-{1,2,3}.json` |
-| Navigation   | `beatIdx`, `momentId` | `beatIdx`, `momentId` | `slideIndex`              |
-| MQTT control | ✅ Yes (Docent)       |                       | ❌ No (standalone)        |
-| Hook         | `useBasecamp()`       | `useSummit()`         | `useKiosk()`              |
-| Provider     | `BasecampProvider`    | `SummitProvider`      | `KioskProvider`           |
+| Feature      | Basecamp              | Summit                | Kiosks                |
+| ------------ | --------------------- | --------------------- | --------------------- |
+| Data source  | `/api/basecamp.json`  | `/api/summit.json`    | `/api/<kioskId>.json` |
+| Navigation   | `beatIdx`, `momentId` | `beatIdx`, `momentId` | `slideIndex`          |
+| MQTT control | ✅ Yes (Docent)       |                       | ❌ No (standalone)    |
+| Hook         | `useBasecamp()`       | `useSummit()`         | `useKiosk()`          |
+| Provider     | `BasecampProvider`    | `SummitProvider`      | `KioskProvider`       |
 
 ## Benefits
 
-✅ **Consistent pattern** across all exhibits (Basecamp, Summit, Kiosks)  
-✅ **Centralized data loading** with loading/error states  
-✅ **Type-safe** data access  
-✅ **Resilient** with API fallback  
-✅ **No more direct JSON imports** in view components  
-✅ **Standalone operation** - no MQTT/Docent dependencies  
-✅ **Simplified architecture** - just data + state management
+✅ **Consistent pattern** across all exhibits (Basecamp, Summit, Kiosks) ✅ **Centralized data loading** with
+loading/error states ✅ **Type-safe** data access ✅ **Resilient** with API fallback ✅ **No more direct JSON imports**
+in view components ✅ **Standalone operation** - no MQTT/Docent dependencies ✅ **Simplified architecture** - just
+data + state management
