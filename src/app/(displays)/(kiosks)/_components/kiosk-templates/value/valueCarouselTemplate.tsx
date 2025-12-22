@@ -49,6 +49,17 @@ const defaultSlides = [
 ];
 
 const fallbackDiamondCards: readonly ValueDiamondCard[] = defaultSlides[0]?.diamondCards ?? [];
+const paletteColors = ['#f26522', '#8a0d71', '#1b75bc'] as const;
+const paletteTextColors = ['#4a154b', undefined, undefined] as const;
+
+const normalizeDiamondCards = (cards?: readonly ValueDiamondCard[]) => {
+  const base = cards && cards.length > 0 ? cards : fallbackDiamondCards;
+  return base.map((card, idx) => ({
+    ...card,
+    color: card.color ?? paletteColors[idx % paletteColors.length],
+    textColor: card.textColor ?? paletteTextColors[idx % paletteTextColors.length],
+  }));
+};
 
 const diamondIconMap: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
   '#1b75bc': BlueFilledDiamond,
@@ -173,7 +184,7 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
     heroImageAlt = 'Value hero',
     heroImageSrc,
     heroVideoPosterSrc,
-    heroVideoSrc = defaultHeroVideoSrc,
+    heroVideoSrc,
     labelText = defaultLabelText,
     onNavigateDown,
     onNavigateUp,
@@ -182,13 +193,21 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
   const generatedId = useId();
   const resolvedCarouselId = carouselId ?? `value-carousel-${generatedId}`;
   const [emblaRef, emblaApi] = useEmblaCarousel({ align: 'start', loop: false });
+  const isOverview = resolvedCarouselId.includes('overview');
+  const contentHeight = isOverview ? '9360px' : '4150px';
+  const contentBackground = isOverview ? '#ededed' : 'transparent';
+  const heroVideo = isOverview ? (heroVideoSrc ?? defaultHeroVideoSrc) : undefined;
 
   const slidesToRender = slides?.length ? slides : defaultSlides;
+  const slidesWithDefaults = slidesToRender.map(slide => ({
+    ...slide,
+    diamondCards: normalizeDiamondCards(slide.diamondCards),
+  }));
 
   const getBulletItems = (slide: ValueCarouselSlide) =>
     slide.bullets?.filter(entry => entry && entry.trim().length > 0) ?? [];
 
-  const hasCarouselSlides = slidesToRender.some(slide => getBulletItems(slide).length > 0);
+  const hasCarouselSlides = slidesWithDefaults.some(slide => getBulletItems(slide).length > 0);
   const carouselColumnStyle: CSSProperties | undefined = hasCarouselSlides
     ? { alignSelf: 'baseline', left: -330, position: 'relative' }
     : undefined;
@@ -214,19 +233,20 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
       className="relative flex h-screen w-full flex-col overflow-hidden bg-black"
       data-carousel-id={resolvedCarouselId}
       data-node-id="5688:14628"
+      style={{ background: 'transparent', overflow: 'visible' }}
     >
       <div className="absolute top-0 left-0 z-[1] h-[1284px] w-full overflow-hidden">
-        {heroVideoSrc ? (
+        {heroVideo ? (
           <video
             autoPlay
-            className="h-full w-full bg-red-500 object-cover object-center"
+            className="absolute h-full w-full bg-black object-cover object-center"
             controlsList="nodownload"
             loop
             muted
             playsInline
             poster={heroVideoPosterSrc}
           >
-            <source src={heroVideoSrc} type="video/mp4" />
+            <source src={heroVideo} type="video/mp4" />
           </video>
         ) : heroImageSrc ? (
           <div className="relative h-full w-full">
@@ -259,8 +279,9 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
       </div>
 
       <div
-        className="absolute top-[1060px] left-0 z-[3] h-[4093px] w-full rounded-t-[100px] bg-[#ededed] px-[240px] pt-[200px] pb-[1166px]"
+        className="absolute top-[1060px] left-0 z-[3] h-[4093px] w-full rounded-t-[100px] px-[240px] pt-[200px] pb-[1166px]"
         data-node-id="5688:14631"
+        style={{ background: contentBackground, height: contentHeight }}
       >
         <div className="flex flex-col gap-[360px] text-[#8a0d71]" style={{ position: 'relative', top: -10 }}>
           <div>
@@ -272,17 +293,13 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
           <div className="flex flex-col items-end gap-[80px]" style={carouselColumnStyle}>
             <div className="w-full overflow-hidden" ref={emblaRef}>
               <div className="flex w-full">
-                {slidesToRender.map(slide => {
-                  const cards: readonly ValueDiamondCard[] =
-                    slide.diamondCards && slide.diamondCards.length > 0 ? slide.diamondCards : fallbackDiamondCards;
+                {slidesWithDefaults.map(slide => {
+                  const cards: readonly ValueDiamondCard[] = slide.diamondCards;
                   const bulletItems = getBulletItems(slide);
                   const hasBullets = bulletItems.length > 0;
                   const stackVariant: DiamondStackVariant = hasBullets ? 'carousel' : 'overview';
                   return (
-                    <div
-                      className="flex min-h-[1600px] w-full min-w-full flex-row gap-[53px] pr-[80px]"
-                      key={slide.id ?? slide.badgeLabel}
-                    >
+                    <div className="flex min-h-[1600px] w-full min-w-full flex-row gap-[53px] pr-[80px]" key={slide.id}>
                       <div className="flex w-[920px] flex-col items-center gap-[71px]">
                         <DiamondStack cards={cards} variant={stackVariant} />
                       </div>
@@ -291,7 +308,7 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
                           {bulletItems.map((bullet, idx) => (
                             <li
                               className="relative mb-[80px] w-[840px] pl-[40px] last:mb-0"
-                              key={`${slide.id ?? slide.badgeLabel ?? 'bullet'}-${idx}`}
+                              key={`${slide.id}-bullet-${idx}`}
                             >
                               <span className="absolute top-[30px] left-0 size-[16px] -translate-y-1/2 rounded-full bg-[#8a0d71]" />
                               <span>{renderRegisteredMark(bullet)}</span>

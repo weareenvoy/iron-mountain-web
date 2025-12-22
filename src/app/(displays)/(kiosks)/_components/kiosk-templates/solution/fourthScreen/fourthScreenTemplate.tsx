@@ -56,8 +56,6 @@ const defaultAccordionItems: AccordionEntry[] = [];
 export type SolutionFourthScreenTemplateProps = Readonly<{
   accentDiamondSrc?: string;
   accordionItems?: AccordionEntry[];
-  gradientEndColor?: string;
-  gradientStartColor?: string;
   mediaDiamondOutlineSrc?: string;
   mediaDiamondSolidSrc?: string;
   onNavigateDown?: () => void;
@@ -70,8 +68,6 @@ export type SolutionFourthScreenTemplateProps = Readonly<{
 const SolutionFourthScreenTemplate = ({
   accentDiamondSrc,
   accordionItems = defaultAccordionItems,
-  gradientEndColor = '#8a0d71',
-  gradientStartColor = '#a2115e',
   mediaDiamondOutlineSrc,
   mediaDiamondSolidSrc = DEFAULT_PHOTO_DIAMOND_SRC,
   onNavigateDown,
@@ -83,12 +79,9 @@ const SolutionFourthScreenTemplate = ({
   const entries = accordionItems.length ? accordionItems : defaultAccordionItems;
 
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-hidden bg-black" data-node-id="5168:10496">
-      {/* Background gradient */}
-      <div
-        className="absolute top-0 left-0 h-[5120px] w-full"
-        style={{ background: `linear-gradient(to bottom, ${gradientStartColor} 0%, ${gradientEndColor} 99%)` }}
-      />
+    <div className="relative flex h-screen w-full flex-col overflow-hidden bg-transparent" data-node-id="5168:10496">
+      {/* Background gradient (now transparent) */}
+      <div className="absolute top-0 left-0 h-[5120px] w-full" style={{ background: 'transparent' }} />
 
       {/* Subheadline */}
       <div
@@ -131,19 +124,39 @@ const SolutionFourthScreenTemplate = ({
           type="single"
         >
           {entries.map((item, index) => {
-            const palette = palettes[item.color ?? 'white'];
+            const overridePalette =
+              index === 1
+                ? { body: '#6DCFF6', header: '#6DCFF6', text: '#14477d' }
+                : index === 2
+                  ? { body: '#1B75BC', header: '#1B75BC', text: '#ededed' }
+                  : index === 3
+                    ? { body: '#14477D', header: '#14477D', text: '#ededed' }
+                    : undefined;
+            const palette = overridePalette ?? palettes[item.color ?? 'white'];
             const hasContent = Boolean(item.contentList?.length);
             const roundedClass =
               index === 0 ? 'rounded-t-[80px]' : index === entries.length - 1 ? 'rounded-b-[80px]' : 'rounded-none';
             const triggerRoundedClass =
               index === 0 ? 'rounded-t-[50px]' : index === entries.length - 1 ? 'rounded-b-[50px]' : 'rounded-none';
 
-            const prevPalette = index > 0 ? palettes[entries[index - 1]?.color ?? 'white'] : undefined;
+            const prevOverride =
+              index > 0
+                ? index - 1 === 1
+                  ? { body: '#6DCFF6', header: '#6DCFF6', text: '#14477d' }
+                  : index - 1 === 2
+                    ? { body: '#1B75BC', header: '#1B75BC', text: '#ededed' }
+                    : index - 1 === 3
+                      ? { body: '#14477D', header: '#14477D', text: '#ededed' }
+                      : undefined
+                : undefined;
+            const prevPalette =
+              prevOverride ?? (index > 0 ? palettes[entries[index - 1]?.color ?? 'white'] : undefined);
 
             return (
               <AccordionItem
                 className={`relative overflow-hidden border-none ${roundedClass}`}
                 key={item.id}
+                style={index === entries.length - 1 ? { backgroundColor: palette.header } : undefined}
                 value={item.id}
               >
                 {index > 0 ? (
@@ -211,7 +224,7 @@ const SolutionFourthScreenTemplate = ({
           maskImage:
             'linear-gradient(#fff 0%, #fff calc(100% - 140px), transparent calc(100% - 75px), transparent 100%)',
           WebkitMaskImage:
-            'linear-gradient(#fff 0%, #fff calc(100% - 140px), transparent calc(100% - 75px), transparent 100%)',
+            'linear-gradient(#fff 0%, #fff calc(100% - 10px), transparent calc(100% - 75px), transparent 100%)',
         }}
       >
         <div className="pointer-events-none absolute top-[3610px] left-[240px] h-[880px] w-[880px]">
@@ -262,7 +275,7 @@ const SolutionFourthScreenTemplate = ({
         role="button"
         tabIndex={0}
       >
-        <ArrowUp aria-hidden="true" className="h-full w-full text-[#ffffff66]" focusable="false" strokeWidth={1.5} />
+        <ArrowUp aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
       </div>
       <div
         aria-label="Next"
@@ -277,7 +290,7 @@ const SolutionFourthScreenTemplate = ({
         role="button"
         tabIndex={0}
       >
-        <ArrowDown aria-hidden="true" className="h-full w-full text-[#ffffff66]" focusable="false" strokeWidth={1.5} />
+        <ArrowDown aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
       </div>
     </div>
   );
