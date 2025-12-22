@@ -324,7 +324,7 @@ const HardCodedKiosk1SecondScreenTemplate = ({
         </p>
 
         <button
-          className="absolute left-[1245px] top-[1330px] flex h-[200px] items-center justify-between rounded-[999px] py-[70px] px-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-transform duration-150 hover:scale-[1.01]"
+          className="absolute top-[1330px] left-[1245px] flex h-[200px] items-center justify-between rounded-[999px] px-[70px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-transform duration-150 hover:scale-[1.01]"
           onClick={handleSecondaryClick}
           style={{
             background: 'linear-gradient(296deg, #A2115E 28.75%, #8A0D71 82.59%)',
@@ -344,7 +344,7 @@ const HardCodedKiosk1SecondScreenTemplate = ({
 
         {/* Overlay - Demo Screen */}
         <div
-          className="absolute inset-0 transition-opacity duration-700 z-[999]"
+          className="absolute inset-0 z-[999] transition-opacity duration-700"
           style={{
             opacity: showOverlay ? 1 : 0,
             pointerEvents: showOverlay ? 'auto' : 'none',
@@ -359,7 +359,10 @@ const HardCodedKiosk1SecondScreenTemplate = ({
           />
         </div>
 
-        <div className="absolute left-[50%] w-full max-w-[2200px] -translate-x-1/2 top-[1750px]" style={{ top: '1750px' }}>
+        <div
+          className="absolute top-[1750px] left-[50%] w-full max-w-[2200px] -translate-x-1/2"
+          style={{ top: '1750px' }}
+        >
           <Carousel
             className="w-full"
             opts={{
@@ -514,14 +517,10 @@ const HardCodedKiosk1SecondScreenTemplate = ({
 
                 <div className="mt-[80px] grid gap-[80px] text-[#14477d]">
                   <div className="space-y-[60px]" style={{ left: '45px', position: 'relative', top: '150px' }}>
-                    <h2
-                      className="text-[100px] leading-[1.3] font-normal tracking-[-5px] mb-[105px]"
-                    >
+                    <h2 className="mb-[105px] text-[100px] leading-[1.3] font-normal tracking-[-5px]">
                       {activeModalContent.heading}
                     </h2>
-                    <div
-                      className="space-y-[32px] text-[60px] leading-[1.4] font-normal tracking-[-3px] w-[1170px]"
-                    >
+                    <div className="w-[1170px] space-y-[32px] text-[60px] leading-[1.4] font-normal tracking-[-3px]">
                       {activeModalBody.map(line => (
                         <p className="whitespace-pre-line" key={line}>
                           {line}

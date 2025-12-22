@@ -196,9 +196,7 @@ const HardCodedKiosk3ThirdScreenTemplate = ({
 
       {/* Data configuration + bullets */}
       <div className="absolute top-[1650px] left-[240px] max-w-[920px] space-y-[36px] text-white">
-        <h2 className="text-[80px] leading-[1.3] tracking-[-4px]">
-          {renderRegisteredMark(sectionTitle)}
-        </h2>
+        <h2 className="text-[80px] leading-[1.3] tracking-[-4px]">{renderRegisteredMark(sectionTitle)}</h2>
         <ul className="mt-[110px] ml-[60px] space-y-[22px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white">
           {current.bullets.map((item, i) => (
             <li
@@ -342,7 +340,7 @@ const HardCodedKiosk3ThirdScreenTemplate = ({
 
       {/* Overlay */}
       <div
-        className="absolute inset-0 transition-opacity duration-700 z-[999]"
+        className="absolute inset-0 z-[999] transition-opacity duration-700"
         style={{
           opacity: showOverlay ? 1 : 0,
           pointerEvents: showOverlay ? 'auto' : 'none',
