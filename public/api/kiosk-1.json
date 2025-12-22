@@ -1,0 +1,187 @@
+{
+  "locale": "en",
+  "data": {
+    "ambient": {
+      "backgroundImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/Cover.webp",
+      "body": "\"It's been a pleasure working with Iron Mountain. We feel very confident that the GRAMMY Museum's physical artifacts and digital content is safely protected. Smart Vault also provides significant reassurance that our iconic artist performances and interviews will remain preserved and accessible which is a huge benefit to the GRAMMY Museum.\"",
+      "headline": "The GRAMMY Museum (R) preserves the soundtrack of history.",
+      "quoteSource": "- Michael Rohrabacher, Technical Director at the GRAMMY Museum",
+      "subheader": "It's been a pleasure working with...",
+      "title": "Rich media & \ncultural heritage"
+    },
+    "challenge": {
+      "firstScreen": {
+        "body": "The Museum needed a secure, off-site, cloud-accessible, and easily managed solution to protect its one-of-a-kind, irreplaceable footage. Storing the only master copy locally presented a high risk of losing all assets in the event of a data failure or system crash.",
+        "slideTitle": "Rich media & \ncultural heritage",
+        "statBody": "of data is safely stored and accessible for the Museum.",
+        "statTitle": "120 TB",
+        "staticAsset": "",
+        "videoAsset": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/01+-+Challenge/Challenge-Header.webm"
+      },
+      "secondScreen": {
+        "body": "The Museum also needed assistance with physical storage for a collection of historical music artifacts.",
+        "slideTitle": "Rich media & \ncultural heritage",
+        "statBody": "of data is safely stored and accessible for the Museum.",
+        "statTitle": "",
+        "staticAsset": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/01+-+Challenge/Challenge-Image1-Diamond.webp",
+        "videoAsset": ""
+      },
+      "thirdScreen": {
+        "body": "The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.",
+        "slideTitle": "Rich media & \ncultural heritage",
+        "statBody": "of existing footage of data migration from physical drives into Smart Vault.",
+        "statTitle": "40 TB",
+        "staticAsset": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/01+-+Challenge/Challenge-Image2-Diamond.webp",
+        "videoAsset": ""
+      }
+    },
+    "solutions": {
+      "firstScreen": {
+        "body": "With a focus on physical storage and a secure digital archive, Iron Mountain provided climate-controlled, private vaults for physical artifacts and implemented Smart Vault for digital preservation.",
+        "headline": "A partnership with Iron Mountain",
+        "slideTitle": "Rich media & \ncultural heritage",
+        "videoAsset": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Header.webm"
+      },
+      "secondScreen": {
+        "headline": "Together, we:",
+        "numberedList": [
+          "Digitized 786 video tapes (various formats like DVC pro, Beta SP, Mini DV)",
+          "Restored six hard drives (~19 TB)",
+          "Restored 33 hard drives (67 TB) featuring GRAMMY Award shows",
+          "Stored 1,000 cubic feet total of physical, historic assets in climate-controlled, private vaults"
+        ],
+        "slideTitle": "Rich media & \ncultural heritage",
+        "staticAsset": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Image1-Diamond.webp"
+      },
+      "thirdScreen": {
+        "diamondText": [
+          "Secure physical storage",
+          "Digital transformation",
+          "Smart Vault archiving",
+          "AI-powered search"
+        ],
+        "groupedAssets": [
+          "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Image3-Diamond.webp",
+          "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Image2-Diamond.webp"
+        ],
+        "headline": "How Iron Mountain Smart Vault works:",
+        "slideTitle": "Rich media & \ncultural heritage"
+      }
+    },
+    "value": {
+      "main": {
+        "body": "The partnership with Iron Mountain secured the Museum's legacy, dramatically improving its preservation workflow and content accessibility for future generations.",
+        "diamondBenefits": [
+          {
+            "bullets": [
+              "Improved accessibility and security of the museum's assets",
+              "Simplified and made remote access efficient, allowing authorized users to access and distribute content quickly from anywhere",
+              "Post-production workflow includes automatic, immediate upload of footage to Smart Vault"
+            ],
+            "label": "Operational benefits"
+          },
+          {
+            "bullets": [
+              "Enabled new licensing opportunities",
+              "Enhanced licensing opportunities due to the ability to easily retrieve original, high-resolution content, including multiple camera angles"
+            ],
+            "label": "Economical benefits"
+          },
+          {
+            "bullets": [
+              "Safely archived and protected unique performances against on-site disasters",
+              "Positioned the museum for future innovation through upcoming Smart Vault enhancements, including generative AI for advanced search capabilities"
+            ],
+            "label": "Strategic benefits"
+          }
+        ],
+        "headline": "Expanding possibilities",
+        "slideTitle": "Rich media & \ncultural heritage",
+        "videoAsset": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/03+-+Value/Value-header.webm"
+      }
+    },
+    "hardcoded": {
+      "firstScreen": {
+        "eyebrow": [
+          "Rich media &",
+          "cultural heritage"
+        ],
+        "heroImageAlt": "Visitors smiling while viewing content",
+        "heroImageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/CU-Image1-Diamond.webp",
+        "primaryCtaLabel": "From archive to access",
+        "secondaryCtaLabel": "Virtual walkthrough"
+      },
+      "secondScreen": {
+        "eyebrow": [
+          "Rich media &",
+          "cultural heritage"
+        ],
+        "headline": [
+          "From archive",
+          "to access"
+        ],
+        "steps": [
+          {
+            "label": "Intake and assessment",
+            "modal": {
+              "body": [
+                "Assets, whether film, audio, digital, or physical, are logged, evaluated for condition and risk, and prioritized based on preservation and activation potential."
+              ],
+              "imageAlt": "Intake and assessment illustration",
+              "imageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Intake+and+assessment.webp"
+            }
+          },
+          {
+            "label": "Digitization and remediation",
+            "modal": {
+              "body": [
+                "Physical media is digitized to archival standards, with restoration applied as needed and metadata extracted to ensure assets are searchable, playable, and accessible."
+              ],
+              "imageAlt": "Digitization and remediation illustration",
+              "imageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Digitization+and+remediation.webp"
+            }
+          },
+          {
+            "label": "Digital preservation",
+            "modal": {
+              "body": [
+                "Iron Mountain's digital preservation platform provides a fully managed digital repository with triple-redundant geo-distributed storage, secure access, and intuitive navigation."
+              ],
+              "imageAlt": "Digital preservation illustration",
+              "imageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Digital+preservation.webp"
+            }
+          },
+          {
+            "label": "Search and discover",
+            "modal": {
+              "body": [
+                "The entire archive becomes searchable through AI-powered metadata, custom filters, and integrated preview tools, enabling fast discovery from any location."
+              ],
+              "imageAlt": "Search and discover illustration",
+              "imageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Search+and+discover.webp"
+            }
+          },
+          {
+            "label": "Share, stream and monetize",
+            "modal": {
+              "body": [
+                "Digitized content is ready for licensing, streaming, and storytelling, unlocking new value across platforms while maintaining archival integrity."
+              ],
+              "imageAlt": "Share, stream and monetize illustration",
+              "imageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Share%2C+stream+and+monetize.webp"
+            }
+          }
+        ]
+      },
+      "thirdScreen": {
+        "cardLabel": "Virtual walkthrough",
+        "headline": [
+          "Section title lorem ipsum",
+          "dolor sit."
+        ]
+      },
+      "fourthScreen": {}
+    }
+  }
+}
+

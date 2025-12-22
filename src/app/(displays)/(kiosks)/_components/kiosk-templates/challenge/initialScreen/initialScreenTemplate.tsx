@@ -7,7 +7,6 @@ import renderRegisteredMark from '../utils/renderRegisteredMark';
 
 // Asset constants from Figma MCP
 const imgBackground = '/images/kiosks/kiosk1/Cover.png';
-const imgGuides = 'http://localhost:3845/assets/bbb0c30a6c52c72ecfe10371a7001daf550a68d1.svg';
 
 export type InitialScreenTemplateProps = Readonly<{
   arrowIconSrc?: string;
@@ -15,7 +14,6 @@ export type InitialScreenTemplateProps = Readonly<{
   backgroundImage?: string;
   buttonText?: string;
   contentBoxBgColor?: string;
-  guidesImageSrc?: string;
   headline?: string;
   kioskId?: KioskVariant;
   logoCombinedSrc?: string;
@@ -32,7 +30,6 @@ export const InitialScreenTemplate = ({
   backgroundImage = imgBackground,
   buttonText = 'Touch to explore',
   contentBoxBgColor = '#f7931e',
-  guidesImageSrc = imgGuides,
   headline = 'The GRAMMY Museum® preserves the soundtrack of history.',
   kioskId = 'kiosk-1',
   logoCombinedSrc,
@@ -41,7 +38,6 @@ export const InitialScreenTemplate = ({
   subheadline = 'Rich media & cultural heritage',
 }: InitialScreenTemplateProps) => {
   const heroAlt = headline ? `${headline} background image` : 'Kiosk hero background image';
-  const guidesAlt = 'Decorative guide line background';
 
   return (
     <div
@@ -63,16 +59,6 @@ export const InitialScreenTemplate = ({
           <div className="absolute inset-0 bg-[rgba(0,0,0,0.2)]" />
         </div>
       </div>
-
-      <div
-        className="pointer-events-none absolute top-0 left-0 z-[1] h-[5120px] w-[2160px] overflow-hidden"
-        data-name="Solution Pathways - Master Guides"
-      >
-        <div className="absolute inset-0 h-full w-full">
-          <Image alt={guidesAlt} className="object-cover" fill sizes="100vw" src={guidesImageSrc} unoptimized />
-        </div>
-      </div>
-
       <div className="absolute top-[907px] left-[244px] z-[3] w-[980px] -translate-y-full">
         <h2 className="text-[120px] leading-[1.3] font-normal tracking-[-6px] whitespace-pre-line text-[#ededed]">
           {renderRegisteredMark(subheadline)}
