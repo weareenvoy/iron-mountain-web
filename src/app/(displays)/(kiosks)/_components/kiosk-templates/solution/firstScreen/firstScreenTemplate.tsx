@@ -38,7 +38,11 @@ const SolutionFirstScreenTemplate = ({
   title = 'A partnership with Iron Mountain',
 }: SolutionFirstScreenTemplateProps) => {
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-hidden bg-black" data-node-id="5168:9669">
+    <div
+      className="relative flex h-screen w-full flex-col overflow-hidden bg-black"
+      data-node-id="5168:9669"
+      style={{ overflow: 'visible' }}
+    >
       {/* Background video */}
       <div className="absolute top-[-5px] left-0 h-[1545px] w-full">
         <div className="relative h-full w-full">
@@ -60,7 +64,10 @@ const SolutionFirstScreenTemplate = ({
       <div
         className="absolute top-[1058px] left-0 h-[4085px] w-full rounded-t-[100px]"
         data-node-id="5168:9671"
-        style={{ background: `linear-gradient(to bottom, ${gradientStartColor} 0%, ${gradientEndColor} 99%)` }}
+        style={{
+          background: `linear-gradient(to bottom, ${gradientStartColor} 0%, ${gradientEndColor} 99%)`,
+          height: '14575px',
+        }}
       />
 
       {/* Subheadline */}
@@ -151,7 +158,7 @@ const SolutionFirstScreenTemplate = ({
         role="button"
         tabIndex={0}
       >
-        <ArrowUp aria-hidden="true" className="h-full w-full text-[#ffffff66]" focusable="false" strokeWidth={1.5} />
+        <ArrowUp aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
       </div>
       <div
         aria-label="Next"
@@ -167,7 +174,7 @@ const SolutionFirstScreenTemplate = ({
         role="button"
         tabIndex={0}
       >
-        <ArrowDown aria-hidden="true" className="h-full w-full text-[#ffffff66]" focusable="false" strokeWidth={1.5} />
+        <ArrowDown aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
       </div>
     </div>
   );

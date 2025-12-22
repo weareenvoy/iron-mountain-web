@@ -1,0 +1,214 @@
+{
+  "challenges": {
+    "firstScreen": {
+      "challengeLabel": "Challenge",
+      "problemDescription": "A large healthcare organization faced significant financial risk because it could not locate the appropriate documentation to confirm the eligibility of employee pension claims. The legal system ruled the organization liable to pay claims without evidence to disprove eligibility, resulting in millions of dollars paid in ineligible pension benefits.",
+      "savingsAmount": "$2M+",
+      "savingsDescription": "saved annually through the identification of “duplicate”\n pension payments",
+      "subheadline": [
+        "Information",
+        "& data lifecycle"
+      ],
+      "videoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/01+-+Challenge/Challenge-header.webm"
+    },
+    "initialScreen": {
+      "attribution": "",
+      "backgroundImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/Cover.webp",
+      "buttonText": "Touch to explore",
+      "headline": "A global healthcare company mitigates risk and saves millions by finding certainty and clarity in its pension administration.",
+      "quote": "Our digital solutions centralized this healthcare organization's unstructured \"dark data.\" This enterprise-wide visibility prevented erroneous pension payments, elevated records management, and created a searchable, compliant digital core for ongoing operational improvement.",
+      "subheadline": [
+        "Information",
+        "& data lifecycle"
+      ]
+    },
+    "secondScreen": {
+      "bottomDescription": "The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.",
+      "bottomVideoSrc": "",
+      "largeIconSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/01+-+Challenge/Challenge-Image1-Diamond.webp",
+      "mainDescription": "Disparate, unstructured records across various locations and legacy systems—including paper, microfilm, CD, and digital formats—created costly, risk-laden pension administration.",
+      "statAmount": "",
+      "statDescription": "",
+      "subheadline": [
+        "Information",
+        "& data lifecycle"
+      ],
+      "topImageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image1-Diamond.webp"
+    },
+    "thirdScreen": {
+      "description": "After multiple acquisitions with antiquated and disordered records, finding the required regulatory documentation was difficult to impossible.",
+      "heroImageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/01+-+Challenge/Challenge-Image2-Diamond.webp",
+      "largeIconCenterSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image3-Diamond.webp",
+      "largeIconTopSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image2-Diamond.webp",
+      "metricAmount": "2.5M",
+      "metricDescription": "paper images are being digitized.",
+      "metricImageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/01+-+Challenge/Challenge-Image2-Diamond.webp",
+      "subheadline": [
+        "Information",
+        "& data lifecycle"
+      ],
+      "videoSrc": ""
+    }
+  },
+  "solutions": {
+    "firstScreen": {
+      "backgroundVideoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-header.webm",
+      "description": "A dedicated Iron Mountain asset lifecycle team provides a single program to retrieve, redeploy, or retire every device across the healthcare enterprise.",
+      "subheadline": [
+        "Information",
+        "& data lifecycle"
+      ],
+      "title": "Lifecycle logistics built for global scale"
+    },
+    "secondScreen": {
+      "arrowIconSrc": "",
+      "backgroundGlyphSrc": "",
+      "heroImageSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image1-Diamond.webp",
+      "largeDiamondOutlineSrc": "",
+      "mediumDiamondOutlineSrc": "",
+      "solutionIconSrc": "",
+      "solutionLabel": "Solution",
+      "stepOneDescription": "Converted all document formats (including handwritten papers, microfilm, CD/DVD) into digital form, then identified and extracted key data to enrich the records with searchable metadata",
+      "stepOneLabel": "01.",
+      "stepThreeDescription": "Migrated legacy systems to InSight DXP to house all pension information",
+      "stepThreeLabel": "03.",
+      "stepTwoDescription": "Created a complete repository of digitized and searchable pension information",
+      "stepTwoLabel": "02.",
+      "subheadline": [
+        "Information",
+        "& data lifecycle"
+      ],
+      "timelineDividerLongSrc": "",
+      "timelineDividerShortSrc": "",
+      "title": "Together, we:"
+    },
+    "thirdScreen": {
+      "accentDiamondSrc": "",
+      "arrowIconSrc": "",
+      "backgroundVideoSrc": "",
+      "bottomLeftLabel": "Automated workflows",
+      "bottomRightLabel": "Searchable repository of pension information",
+      "centerLabel": "Document digitization",
+      "mediaDiamondLeftSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image1-Diamond.webp",
+      "mediaDiamondRightSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image2-Diamond.webp",
+      "solutionIconSrc": "",
+      "solutionLabel": "Solution",
+      "subheadline": [
+        "Information",
+        "& data lifecycle"
+      ],
+      "title": "How the organization employed \n digital solutions:",
+      "topLeftLabel": "Platform centralization",
+      "topRightLabel": "Metadata enrichment"
+    }
+  },
+  "value": {
+    "valueScreens": [
+      {
+        "carouselId": "kiosk-2-value-overview",
+        "description": "The partnership with Iron Mountain and implementation of InSight DXP transitioned the organization from unknown to certainty and clarity in pension administration.",
+        "eyebrow": [
+          "Information",
+          "& data lifecycle"
+        ],
+        "headline": "Expanding possibilities",
+        "heroVideoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/03+-+Value/Value-header.webm",
+        "labelIconSrc": "",
+        "labelText": "Value",
+        "slides": [
+          {
+            "badgeLabel": "Operational · Economic · Strategic",
+            "diamondCards": [
+              {
+                "label": "Strategic benefits"
+              },
+              {
+                "label": "Operational benefits"
+              },
+              {
+                "label": "Economic benefits"
+              }
+            ],
+            "id": "value-trio-overview"
+          }
+        ]
+      },
+      {
+        "carouselId": "kiosk-2-value-carousel",
+        "description": "The partnership with Iron Mountain and implementation of InSight DXP transitioned the organization from unknown to certainty and clarity in pension administration.",
+        "eyebrow": [
+          "Information",
+          "& data lifecycle"
+        ],
+        "headline": "Expanding possibilities",
+        "heroVideoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/03+-+Value/Value-header.webm",
+        "labelIconSrc": "",
+        "labelText": "Value",
+        "slides": [
+          {
+            "badgeLabel": "Operational benefits",
+            "bullets": [
+              "Improved accessibility and security of the museum’s assets.",
+              "Simplified, modern media access with digitized workflows available instantly from anywhere.",
+              "Post-production workflows include automation and annotation support for a digital preservation platform."
+            ],
+            "diamondCards": [
+              {
+                "label": ""
+              },
+              {
+                "label": ""
+              },
+              {
+                "label": "Operational benefits"
+              }
+            ],
+            "id": "value-operational"
+          },
+          {
+            "badgeLabel": "Economic benefits",
+            "bullets": [
+              "Enabled new licensing opportunities for archived performances.",
+              "Enhanced licensing potential with multi-angle, high-resolution capture ready for partners.",
+              "Created repeatable revenue streams through curated content packages."
+            ],
+            "diamondCards": [
+              {
+                "label": ""
+              },
+              {
+                "label": ""
+              },
+              {
+                "label": "Economic benefits"
+              }
+            ],
+            "id": "value-economic"
+          },
+          {
+            "badgeLabel": "Strategic benefits",
+            "bullets": [
+              "Safely archived and protected while enhancements are applied to the collection.",
+              "Positioned the museum for future innovation through trusted digital preservation pipelines.",
+              "Equipped administrators with advanced discovery tools to craft new storytelling moments."
+            ],
+            "diamondCards": [
+              {
+                "label": ""
+              },
+              {
+                "label": ""
+              },
+              {
+                "label": "Strategic benefits"
+              }
+            ],
+            "id": "value-strategic"
+          }
+        ]
+      }
+    ]
+  },
+  "hardcoded": {}
+}
+

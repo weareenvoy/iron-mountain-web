@@ -13,7 +13,6 @@ const imgVector = '/images/kiosks/kiosk1/01-challenge/Challenge-Image1-Diamond.p
 
 export type SecondScreenTemplateProps = Readonly<{
   bottomDescription?: string;
-  bottomVideoSrc?: string;
   kioskId?: KioskId;
   largeIconSrc?: string;
   mainDescription?: string;
@@ -27,7 +26,6 @@ export type SecondScreenTemplateProps = Readonly<{
 
 export const SecondScreenTemplate = ({
   bottomDescription = 'The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.',
-  bottomVideoSrc = '',
   kioskId = DEFAULT_KIOSK_ID,
   largeIconSrc = imgVector,
   mainDescription = 'The Museum also needed assistance with physical storage for a collection of historical music artifacts.',
@@ -38,8 +36,6 @@ export const SecondScreenTemplate = ({
   subheadline = 'Rich media &\n cultural heritage',
   topImageSrc = imgHero,
 }: SecondScreenTemplateProps) => {
-  const showBottomVideo = Boolean(bottomVideoSrc);
-
   return (
     <div
       // className={styles.container}
@@ -48,30 +44,6 @@ export const SecondScreenTemplate = ({
       data-kiosk={kioskId}
       data-node-id="5168:9907"
     >
-      {/* Bottom Video Section */}
-      {showBottomVideo ? (
-        <div
-          // className={styles.bottomVideoContainer}
-          className="absolute top-[4233px] left-0 z-[1] h-[1291px] w-full overflow-hidden"
-          data-node-id="5168:9908"
-        >
-          <div className="relative top-[-30.96%] left-[-30.42%] h-[172.5%] w-[181.73%]">
-            <video
-              autoPlay
-              className="h-full w-full object-cover object-center"
-              controlsList="nodownload"
-              loop
-              muted
-              playsInline
-              // className={styles.bottomVideo}
-            >
-              <source src={bottomVideoSrc} type="video/mp4" />
-            </video>
-            <div className="pointer-events-none absolute inset-0 bg-black/20" />
-          </div>
-        </div>
-      ) : null}
-
       {/* Subheadline */}
       <div
         // className={styles.subheadlineContainer}
@@ -170,7 +142,7 @@ export const SecondScreenTemplate = ({
         role="button"
         tabIndex={0}
       >
-        <ArrowUp aria-hidden="true" className="h-full w-full text-[#ffffff66]" focusable="false" strokeWidth={1.5} />
+        <ArrowUp aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
       </div>
       <div
         aria-label="Next"
@@ -187,7 +159,7 @@ export const SecondScreenTemplate = ({
         role="button"
         tabIndex={0}
       >
-        <ArrowDown aria-hidden="true" className="h-full w-full text-[#ffffff66]" focusable="false" strokeWidth={1.5} />
+        <ArrowDown aria-hidden="true" className="h-full w-full text-[#6DCFF6]" focusable="false" strokeWidth={1.5} />
       </div>
 
       {/* Background Gradients */}
@@ -195,16 +167,19 @@ export const SecondScreenTemplate = ({
         // className={styles.gradientBg}
         className="absolute top-[-223px] left-0 z-[2] h-[5504px] w-full rounded-[100px] bg-[linear-gradient(to_bottom,#1b75bc_0%,#14477d_98%)]"
         data-node-id="5168:9910"
+        style={{ background: 'transparent' }}
       />
       <div
         // className={styles.topGradientOverlay}
         className="pointer-events-none absolute top-0 left-0 z-[3] h-[1291px] w-full bg-[linear-gradient(to_bottom,#1968ab_66.076%,rgba(26,108,175,0)_99.322%)]"
         data-node-id="5168:9916"
+        style={{ background: 'transparent' }}
       />
       <div
         // className={styles.fadeOutGradient}
         className="pointer-events-none absolute top-[3696px] left-0 z-[3] h-[1423px] w-full -scale-y-100 bg-[linear-gradient(to_bottom,#154c83_42.41%,rgba(21,75,130,0)_98.852%)]"
         data-node-id="5168:9920"
+        style={{ background: 'transparent' }}
       />
 
       {/* Large Background Icon */}

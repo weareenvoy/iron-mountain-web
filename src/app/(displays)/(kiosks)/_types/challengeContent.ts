@@ -9,7 +9,6 @@ const initialScreenSchema = z.object({
   attribution: textString,
   backgroundImage: assetString,
   buttonText: textString,
-  guidesImageSrc: assetString,
   headline: textString,
   logoCombinedSrc: assetString.optional(),
   quote: textString,
@@ -48,7 +47,10 @@ const thirdScreenSchema = z.object({
   metricDescription: textString,
   metricImageSrc: assetString,
   subheadline: subheadlineSchema,
-  videoSrc: assetString,
+  videoSrc: z
+    .union([assetString, z.literal('')])
+    .optional()
+    .default(''),
 });
 
 export const kioskChallengesSchema = z.object({
