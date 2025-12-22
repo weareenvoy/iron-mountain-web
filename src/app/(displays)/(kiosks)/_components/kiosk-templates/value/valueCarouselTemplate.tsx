@@ -1,8 +1,8 @@
 'use client';
 
+import { useEffect, useId, type ComponentType, type CSSProperties, type SVGProps } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import Image from 'next/image';
-import { useEffect, useId, type ComponentType, type CSSProperties, type SVGProps } from 'react';
 import BlueFilledDiamond from '@/components/ui/icons/Kiosks/Solutions/BlueFilledDiamond';
 import OrangeFilledDiamond from '@/components/ui/icons/Kiosks/Solutions/OrangeFilledDiamond';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
@@ -76,47 +76,46 @@ const getDiamondIcon = (card: ValueDiamondCard) => {
   return normalizedColor ? diamondIconMap[normalizedColor] : undefined;
 };
 
-const normalizeMultiline = (value?: readonly string[] | string): string | undefined => {
+const normalizeMultiline = (value?: string): string | undefined => {
   if (value == null) return undefined;
-  if (Array.isArray(value)) return value.join('\n');
   if (typeof value === 'string') return value;
   return undefined;
 };
 
-export type ValueDiamondCard = Readonly<{
-  color?: string;
-  icon?: ComponentType<SVGProps<SVGSVGElement>>;
-  label?: string;
-  textColor?: string;
-}>;
+export type ValueDiamondCard = {
+  readonly color?: string;
+  readonly icon?: ComponentType<SVGProps<SVGSVGElement>>;
+  readonly label?: string;
+  readonly textColor?: string;
+};
 
-export type ValueCarouselSlide = Readonly<{
-  badgeLabel?: string;
-  bullets?: readonly string[];
-  diamondCards?: readonly ValueDiamondCard[];
-  id?: string;
-}>;
+export type ValueCarouselSlide = {
+  readonly badgeLabel?: string;
+  readonly bullets?: readonly string[];
+  readonly diamondCards?: readonly ValueDiamondCard[];
+  readonly id?: string;
+};
 
-export type ValueCarouselTemplateProps = Readonly<{
-  carouselId?: string;
-  description?: readonly string[] | string;
-  eyebrow?: readonly string[] | string;
-  headline?: string;
-  heroImageAlt?: string;
-  heroImageSrc?: string;
-  heroVideoPosterSrc?: string;
-  heroVideoSrc?: string;
-  labelText?: string;
-  onNavigateDown?: () => void;
-  onNavigateUp?: () => void;
-  onRegisterCarouselHandlers?: (handlers: {
+export type ValueCarouselTemplateProps = {
+  readonly carouselId?: string;
+  readonly description?: string;
+  readonly eyebrow?: string;
+  readonly headline?: string;
+  readonly heroImageAlt?: string;
+  readonly heroImageSrc?: string;
+  readonly heroVideoPosterSrc?: string;
+  readonly heroVideoSrc?: string;
+  readonly labelText?: string;
+  readonly onNavigateDown?: () => void;
+  readonly onNavigateUp?: () => void;
+  readonly onRegisterCarouselHandlers?: (handlers: {
     canScrollNext: () => boolean;
     canScrollPrev: () => boolean;
     scrollNext: () => void;
     scrollPrev: () => void;
   }) => void;
-  slides?: readonly ValueCarouselSlide[];
-}>;
+  readonly slides?: readonly ValueCarouselSlide[];
+};
 
 type DiamondStackVariant = 'carousel' | 'overview';
 
@@ -250,7 +249,7 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
           >
             <source src={heroVideo} type="video/mp4" />
           </video>
-        ) : heroImageSrc ? (
+        ) : heroImageSrc && heroImageAlt ? (
           <div className="relative h-full w-full">
             <Image alt={heroImageAlt} className="object-cover" fill sizes="1284px" src={heroImageSrc} />
           </div>

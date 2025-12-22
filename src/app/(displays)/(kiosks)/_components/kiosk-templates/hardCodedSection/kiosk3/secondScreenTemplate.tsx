@@ -1,5 +1,6 @@
 'use client';
 
+// React import removed - not needed with new JSX transform
 import { ArrowLeft } from 'lucide-react';
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
 import BlueDot from '@/components/ui/icons/Kiosks/HardCoded/BlueDot';
@@ -9,9 +10,9 @@ import OuterRing from '@/components/ui/icons/Kiosks/HardCoded/OuterRing';
 export interface HardCodedKiosk3SecondScreenTemplateProps {
   readonly backgroundImageSrc?: string;
   readonly backLabel?: string;
-  readonly description?: string | string[];
-  readonly eyebrow?: string | string[];
-  readonly headline?: string | string[];
+  readonly description?: string;
+  readonly eyebrow?: string;
+  readonly headline?: string;
   readonly onBack?: () => void;
   readonly onTapToBegin?: () => void;
   readonly tapToBeginLabel?: string;
@@ -29,19 +30,9 @@ const HardCodedKiosk3SecondScreenTemplate = ({
   tapToBeginLabel,
   videoAsset,
 }: HardCodedKiosk3SecondScreenTemplateProps) => {
-  const eyebrowText = Array.isArray(eyebrow) ? eyebrow.join('\n') : eyebrow;
-
-  const rawHeadline = Array.isArray(headline) ? headline.join('\n') : headline;
-  const headlineText = rawHeadline?.replace(
-    'Centralized management of services via API',
-    'Centralized management\nof services via API'
-  );
-
-  const rawDescription = Array.isArray(description) ? description.join('\n') : description;
-  const descriptionText = rawDescription?.replace(
-    'Explore each section to learn how Iron Mountain can transform your enterprise',
-    'Explore each section to learn\nhow Iron Mountain can\ntransform your enterprise'
-  );
+  const eyebrowText = eyebrow;
+  const headlineText = headline;
+  const descriptionText = description;
 
   return (
     <div

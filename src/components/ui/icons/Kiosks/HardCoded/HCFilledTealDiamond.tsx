@@ -1,4 +1,4 @@
-import * as React from 'react';
+
 
 const HCFilledTealDiamond = (props: React.SVGProps<SVGSVGElement>) => (
   <svg {...props} fill="none" height="449" width="409" xmlns="http://www.w3.org/2000/svg">

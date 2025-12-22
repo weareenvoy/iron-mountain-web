@@ -2,19 +2,10 @@ import type { ReactNode } from 'react';
 
 const REGISTERED_SYMBOL_REGEX = /(\(R\)|\(r\)|[Ⓡ®])/g;
 
-type TextValue = string | string[] | undefined;
-
-const toText = (value: TextValue) => {
-  if (Array.isArray(value)) {
-    return value.join('\n');
-  }
-  return value ?? '';
-};
-
 const normalizeNewlines = (input: string) => input.replace(/\\\\n/g, '\n').replace(/\r?\n/g, '\n');
 
-export const renderRegisteredMark = (text?: string | string[]): ReactNode => {
-  const stringValue = toText(text);
+export const renderRegisteredMark = (text?: string): ReactNode => {
+  const stringValue = text ?? '';
   if (!stringValue) {
     return '';
   }

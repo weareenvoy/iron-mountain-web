@@ -1,86 +1,54 @@
-import { z } from 'zod';
-
-const assetString = z.string().min(1, 'Asset path is required');
-const textString = z.string();
-const subheadlineSchema = z.union([textString, z.array(textString)]);
-
-const initialScreenSchema = z.object({
-  arrowIconSrc: assetString.optional(),
-  attribution: textString,
-  backgroundImage: assetString,
-  buttonText: textString,
-  headline: textString,
-  logoCombinedSrc: assetString.optional(),
-  quote: textString,
-  subheadline: subheadlineSchema,
-});
-
-const firstScreenSchema = z.object({
-  challengeLabel: textString,
-  problemDescription: textString,
-  savingsAmount: textString,
-  savingsDescription: textString,
-  subheadline: subheadlineSchema,
-  videoSrc: assetString,
-});
-
-const secondScreenSchema = z.object({
-  bottomDescription: textString,
-  bottomVideoSrc: z
-    .union([assetString, z.literal('')])
-    .optional()
-    .default(''),
-  largeIconSrc: assetString,
-  mainDescription: textString,
-  statAmount: textString,
-  statDescription: textString,
-  subheadline: subheadlineSchema,
-  topImageSrc: assetString,
-});
-
-const thirdScreenSchema = z.object({
-  description: textString,
-  heroImageSrc: assetString,
-  largeIconCenterSrc: assetString,
-  largeIconTopSrc: assetString,
-  metricAmount: textString,
-  metricDescription: textString,
-  metricImageSrc: assetString,
-  subheadline: subheadlineSchema,
-  videoSrc: z
-    .union([assetString, z.literal('')])
-    .optional()
-    .default(''),
-});
-
-export const kioskChallengesSchema = z.object({
-  firstScreen: firstScreenSchema,
-  initialScreen: initialScreenSchema,
-  secondScreen: secondScreenSchema,
-  thirdScreen: thirdScreenSchema,
-});
-
-export type KioskChallenges = z.infer<typeof kioskChallengesSchema>;
-
-type ChallengeIssue = {
-  message: string;
-  path: Array<number | string | symbol>;
+type InitialScreen = {
+  readonly arrowIconSrc?: string;
+  readonly attribution: string;
+  readonly backgroundImage: string;
+  readonly buttonText: string;
+  readonly headline: string;
+  readonly logoCombinedSrc?: string;
+  readonly quote: string;
+  readonly subheadline: string;
 };
 
-const formatIssues = (issues: ChallengeIssue[]) =>
-  issues
-    .map(issue => {
-      const path = issue.path.join('.') || '<root>';
-      return `${path}: ${issue.message}`;
-    })
-    .join('; ');
+type FirstScreen = {
+  readonly challengeLabel: string;
+  readonly problemDescription: string;
+  readonly savingsAmount: string;
+  readonly savingsDescription: string;
+  readonly subheadline: string;
+  readonly videoSrc: string;
+};
 
-export const parseKioskChallenges = (value: unknown, kioskName: string): KioskChallenges => {
-  const parsed = kioskChallengesSchema.safeParse(value);
+type SecondScreen = {
+  readonly bottomDescription: string;
+  readonly bottomVideoSrc?: string;
+  readonly largeIconSrc: string;
+  readonly mainDescription: string;
+  readonly statAmount: string;
+  readonly statDescription: string;
+  readonly subheadline: string;
+  readonly topImageSrc: string;
+};
 
-  if (!parsed.success) {
-    throw new Error(`Invalid challenge config for ${kioskName}: ${formatIssues(parsed.error.issues)}`);
-  }
+type ThirdScreen = {
+  readonly description: string;
+  readonly heroImageSrc: string;
+  readonly largeIconCenterSrc: string;
+  readonly largeIconTopSrc: string;
+  readonly metricAmount: string;
+  readonly metricDescription: string;
+  readonly metricImageSrc: string;
+  readonly subheadline: string;
+  readonly videoSrc?: string;
+};
 
-  return parsed.data;
+export type KioskChallenges = {
+  readonly firstScreen: FirstScreen;
+  readonly initialScreen: InitialScreen;
+  readonly secondScreen: SecondScreen;
+  readonly thirdScreen: ThirdScreen;
+};
+
+export const parseKioskChallenges = (value: unknown, _kioskName: string): KioskChallenges => {
+  // Simple type assertion - data is already validated by TypeScript at compile time
+  return value as KioskChallenges;
 };

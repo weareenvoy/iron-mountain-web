@@ -1,44 +1,41 @@
 'use client';
-import React from 'react';
+import { createContext, useCallback, useRef, type ReactNode } from 'react';
 import { DEFAULT_KIOSK_ID, type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
-import { getKioskData } from '@/lib/internal/data/get-kiosk';
-import type { KioskData } from '@/lib/internal/types';
 
 export type Controller = {
-  fetchKioskChallenges: () => Promise<KioskData>;
-  getRegistry: () => RegistryEntry[];
-  goTo: (i: number) => void;
-  kioskId: KioskId;
-  next: () => void;
-  prev: () => void;
-  register: (id: string, handlers: Handlers) => void;
+  readonly getRegistry: () => RegistryEntry[];
+  readonly goTo: (i: number) => void;
+  readonly kioskId: KioskId;
+  readonly next: () => void;
+  readonly prev: () => void;
+  readonly register: (id: string, handlers: Handlers) => void;
   // register a top-level/root handler (parallax slide navigation)
-  setRootHandlers: (handlers: Handlers | null) => void;
-  unregister: (id: string) => void;
+  readonly setRootHandlers: (handlers: Handlers | null) => void;
+  readonly unregister: (id: string) => void;
 };
 
 type Handlers = {
   // return true if this handler consumed the action and no further fallback should occur
-  goTo?: (index: number) => boolean | void;
-  next?: () => boolean | void;
-  prev?: () => boolean | void;
+  readonly goTo?: (index: number) => boolean | void;
+  readonly next?: () => boolean | void;
+  readonly prev?: () => boolean | void;
 };
 
-type RegistryEntry = { handlers: Handlers; id: string };
+type RegistryEntry = { readonly handlers: Handlers; readonly id: string };
 
-const ControllerContext = React.createContext<Controller | null>(null);
+const ControllerContext = createContext<Controller | null>(null);
 export { ControllerContext };
 
 export const KioskControllerProvider = ({
   children,
   kioskId = DEFAULT_KIOSK_ID,
-}: Readonly<{
-  children: React.ReactNode;
-  kioskId?: KioskId;
-}>) => {
-  const registryRef = React.useRef<RegistryEntry[]>([]);
+}: {
+  readonly children: ReactNode;
+  readonly kioskId?: KioskId;
+}) => {
+  const registryRef = useRef<RegistryEntry[]>([]);
 
-  const register = (id: string, handlers: Handlers) => {
+  const register = useCallback((id: string, handlers: Handlers) => {
     // replace if exists
     const idx = registryRef.current.findIndex(r => r.id === id);
     if (idx >= 0) {
@@ -47,25 +44,25 @@ export const KioskControllerProvider = ({
     }
 
     registryRef.current.push({ handlers, id });
-  };
+  }, []);
 
-  const unregister = (id: string) => {
+  const unregister = useCallback((id: string) => {
     registryRef.current = registryRef.current.filter(r => r.id !== id);
-  };
+  }, []);
 
-  const getActive = (): Handlers | null => {
+  const getActive = useCallback((): Handlers | null => {
     if (registryRef.current.length === 0) return null;
     const last = registryRef.current[registryRef.current.length - 1];
     return last ? last.handlers : null;
-  };
+  }, []);
 
-  const rootRef = React.useRef<Handlers | null>(null);
+  const rootRef = useRef<Handlers | null>(null);
 
-  const setRootHandlers = (h: Handlers | null) => {
+  const setRootHandlers = useCallback((h: Handlers | null) => {
     rootRef.current = h;
-  };
+  }, []);
 
-  const next = () => {
+  const next = useCallback(() => {
     const active = getActive();
     if (active?.next) {
       try {
@@ -80,9 +77,9 @@ export const KioskControllerProvider = ({
     if (rootRef.current?.next) {
       rootRef.current.next();
     }
-  };
+  }, [getActive]);
 
-  const prev = () => {
+  const prev = useCallback(() => {
     const active = getActive();
     if (active?.prev) {
       try {
@@ -96,31 +93,28 @@ export const KioskControllerProvider = ({
     if (rootRef.current?.prev) {
       rootRef.current.prev();
     }
-  };
+  }, [getActive]);
 
-  const goTo = (i: number) => {
-    const active = getActive();
-    if (active?.goTo) {
-      try {
-        const handled = active.goTo(i);
-        if (handled === true) return;
-      } catch {
-        // fallthrough
+  const goTo = useCallback(
+    (i: number) => {
+      const active = getActive();
+      if (active?.goTo) {
+        try {
+          const handled = active.goTo(i);
+          if (handled === true) return;
+        } catch {
+          // fallthrough
+        }
       }
-    }
 
-    if (rootRef.current?.goTo) {
-      rootRef.current.goTo(i);
-    }
-  };
-
-  const fetchKioskChallenges = React.useCallback(async () => {
-    const result = await getKioskData(kioskId);
-    return result.data;
-  }, [kioskId]);
+      if (rootRef.current?.goTo) {
+        rootRef.current.goTo(i);
+      }
+    },
+    [getActive]
+  );
 
   const value: Controller = {
-    fetchKioskChallenges,
     getRegistry: () => registryRef.current,
     goTo,
     kioskId,

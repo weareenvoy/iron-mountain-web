@@ -1,20 +1,21 @@
 'use client';
 
+// React import removed - not needed with new JSX transform
 import { Diamond } from 'lucide-react';
 import Image from 'next/image';
 import { DEFAULT_KIOSK_ID, type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
-export type SecondScreenTemplateProps = Readonly<{
-  bottomDescription?: string;
-  kioskId?: KioskId;
-  largeIconSrc?: string;
-  mainDescription?: string;
-  onNavigateDown?: () => void;
-  onNavigateUp?: () => void;
-  subheadline?: string | string[];
-  topImageSrc?: string;
-}>;
+export type SecondScreenTemplateProps = {
+  readonly bottomDescription?: string;
+  readonly kioskId?: KioskId;
+  readonly largeIconSrc?: string;
+  readonly mainDescription?: string;
+  readonly onNavigateDown?: () => void;
+  readonly onNavigateUp?: () => void;
+  readonly subheadline?: string;
+  readonly topImageSrc?: string;
+};
 
 export const SecondScreenTemplate = ({
   bottomDescription,
@@ -28,6 +29,10 @@ export const SecondScreenTemplate = ({
   subheadline,
   topImageSrc,
 }: SecondScreenTemplateProps) => {
+  if (!largeIconSrc || !subheadline || !mainDescription || !bottomDescription) {
+    return null;
+  }
+
   return (
     <div
       // className={styles.container}
@@ -56,7 +61,7 @@ export const SecondScreenTemplate = ({
       {/* Header Section */}
       <div className="relative z-[2] px-[120px] pt-[300px] pb-[150px]">
         <h2 className="mb-[200px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
-          {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
+          {renderRegisteredMark(subheadline)}
         </h2>
 
         <div className="relative top-[180px] flex items-center gap-[41px]">

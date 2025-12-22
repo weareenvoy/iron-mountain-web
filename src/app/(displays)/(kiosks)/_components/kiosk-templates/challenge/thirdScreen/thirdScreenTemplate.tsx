@@ -1,24 +1,25 @@
 'use client';
 
+// React import removed - not needed with new JSX transform
 import { Diamond } from 'lucide-react';
 import Image from 'next/image';
 import { DEFAULT_KIOSK_ID, type KioskId } from '../../../../_types/kiosk-id';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
-export type ThirdScreenTemplateProps = Readonly<{
-  description?: string;
-  heroImageSrc?: string;
-  kioskId?: KioskId;
-  largeIconCenterSrc?: string;
-  largeIconTopSrc?: string;
-  metricAmount?: string;
-  metricDescription?: string;
-  metricImageSrc?: string;
-  onNavigateDown?: () => void;
-  onNavigateUp?: () => void;
-  subheadline?: string | string[];
-  videoSrc?: string;
-}>;
+export type ThirdScreenTemplateProps = {
+  readonly description?: string;
+  readonly heroImageSrc?: string;
+  readonly kioskId?: KioskId;
+  readonly largeIconCenterSrc?: string;
+  readonly largeIconTopSrc?: string;
+  readonly metricAmount?: string;
+  readonly metricDescription?: string;
+  readonly metricImageSrc?: string;
+  readonly onNavigateDown?: () => void;
+  readonly onNavigateUp?: () => void;
+  readonly subheadline?: string;
+  readonly videoSrc?: string;
+};
 
 export const ThirdScreenTemplate = ({
   description,
@@ -36,6 +37,10 @@ export const ThirdScreenTemplate = ({
   subheadline,
   videoSrc,
 }: ThirdScreenTemplateProps) => {
+  if (!metricImageSrc || !subheadline || !description || !metricAmount || !metricDescription) {
+    return null;
+  }
+
   return (
     <div
       // className={styles.container}
@@ -54,7 +59,7 @@ export const ThirdScreenTemplate = ({
       <div className="pointer-events-none absolute top-[2490px] left-[920px] z-[1] flex h-[940px] w-[940px] scale-y-[-1] rotate-[225deg] items-center justify-center group-data-[kiosk=kiosk-2]/kiosk:top-[2430px] group-data-[kiosk=kiosk-2]/kiosk:left-[1070px] group-data-[kiosk=kiosk-2]/kiosk:size-[800px] group-data-[kiosk=kiosk-3]/kiosk:top-[1740px] group-data-[kiosk=kiosk-3]/kiosk:left-[1080px] group-data-[kiosk=kiosk-3]/kiosk:size-[800px]">
         <div className="relative h-full w-full">
           <Image
-            alt={metricDescription ? `Graphic representing ${metricDescription}` : 'Metric highlight graphic'}
+            alt={`Graphic representing ${metricDescription}`}
             className="rotate-45 object-contain"
             fill
             sizes="795px"
@@ -67,7 +72,7 @@ export const ThirdScreenTemplate = ({
       {/* Header Section */}
       <div className="relative z-[2] px-[120px] pt-[300px] pb-[150px]">
         <h2 className="mb-[200px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
-          {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
+          {renderRegisteredMark(subheadline)}
         </h2>
 
         <div className="relative top-[180px] left-[20px] flex items-center gap-[41px]">

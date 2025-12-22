@@ -5,9 +5,9 @@ import ValueCarouselTemplate, {
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueCarouselTemplate';
 import { type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
-export type ValueScreens = Readonly<{
-  valueScreens?: Omit<ValueCarouselTemplateProps, 'onNavigateDown' | 'onNavigateUp' | 'onRegisterCarouselHandlers'>[];
-}>;
+export type ValueScreens = {
+  readonly valueScreens?: Omit<ValueCarouselTemplateProps, 'onNavigateDown' | 'onNavigateUp' | 'onRegisterCarouselHandlers'>[];
+};
 
 export const buildValueSlides = (
   values: ValueScreens,

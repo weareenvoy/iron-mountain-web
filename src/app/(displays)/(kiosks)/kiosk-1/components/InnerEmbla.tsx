@@ -1,7 +1,7 @@
 'use client';
 
-import useEmblaCarousel from 'embla-carousel-react';
 import { useEffect, type ReactNode } from 'react';
+import useEmblaCarousel from 'embla-carousel-react';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
 
 type Props = { readonly id?: string; readonly slides?: ReactNode[] };

@@ -1,9 +1,9 @@
 'use client';
 
 /* eslint-disable react-hooks/refs */
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowDown, ArrowUp } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
 import { buildChallengeSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeTemplate';
 import {
@@ -20,7 +20,7 @@ import {
   buildValueSlides,
   type ValueScreens,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueTemplate';
-import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers';
+import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers/kiosk-provider';
 import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
 import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 
@@ -452,15 +452,13 @@ type HardcodedContent = {
   secondaryCTA?: string;
 };
 
-const splitLines = (value?: string) => (value ? value.split('\n') : undefined);
-
 const mapChallenges = (challenge: ChallengeContent, ambient: Ambient): KioskChallenges => ({
   firstScreen: {
     challengeLabel: 'Challenge',
     problemDescription: challenge.body ?? '',
     savingsAmount: challenge.featuredStat1 ?? '',
     savingsDescription: challenge.featuredStat1Body ?? '',
-    subheadline: splitLines(ambient.title) ?? 'Rich media & cultural heritage',
+    subheadline: ambient.title ?? 'Rich media & cultural heritage',
     videoSrc: challenge.mainVideo ?? '',
   },
   initialScreen: {
@@ -469,7 +467,7 @@ const mapChallenges = (challenge: ChallengeContent, ambient: Ambient): KioskChal
     buttonText: ambient.mainCTA ?? 'Touch to explore',
     headline: ambient.headline ?? '',
     quote: ambient.body ?? '',
-    subheadline: splitLines(ambient.title) ?? 'Rich media & cultural heritage',
+    subheadline: ambient.title ?? 'Rich media & cultural heritage',
   },
   secondScreen: {
     bottomDescription: '',
@@ -478,7 +476,7 @@ const mapChallenges = (challenge: ChallengeContent, ambient: Ambient): KioskChal
     mainDescription: challenge.item1Body ?? '',
     statAmount: '',
     statDescription: '',
-    subheadline: splitLines(ambient.title) ?? 'Rich media & cultural heritage',
+    subheadline: ambient.title ?? 'Rich media & cultural heritage',
     topImageSrc: challenge.item1Image ?? '',
   },
   thirdScreen: {
@@ -489,7 +487,7 @@ const mapChallenges = (challenge: ChallengeContent, ambient: Ambient): KioskChal
     metricAmount: challenge.featuredStat2 ?? '',
     metricDescription: challenge.featuredStat2Body ?? '',
     metricImageSrc: challenge.item2Image ?? '',
-    subheadline: splitLines(ambient.title) ?? 'Rich media & cultural heritage',
+    subheadline: ambient.title ?? 'Rich media & cultural heritage',
     videoSrc: '',
   },
 });
@@ -502,7 +500,7 @@ const mapSolutions = (
   firstScreen: {
     backgroundVideoSrc: solutionsMain.mainVideo ?? '',
     description: solutionsMain.body ?? '',
-    subheadline: splitLines(ambient.title),
+    subheadline: ambient.title,
     title: solutionsMain.headline ?? '',
   },
   secondScreen: {
@@ -516,7 +514,7 @@ const mapSolutions = (
     stepThreeLabel: '03.',
     stepTwoDescription: solutionsMain.numberedList?.[1] ?? '',
     stepTwoLabel: '02.',
-    subheadline: splitLines(ambient.title),
+    subheadline: ambient.title,
     title: solutionsMain.numberedListHeadline ?? 'Together, we:',
   },
   thirdScreen: {
@@ -526,7 +524,7 @@ const mapSolutions = (
     mediaDiamondLeftSrc: solutionsGrid.images?.[0] ?? '',
     mediaDiamondRightSrc: solutionsGrid.images?.[1] ?? '',
     solutionLabel: 'Solution',
-    subheadline: splitLines(ambient.title),
+    subheadline: ambient.title,
     title: solutionsGrid.headline ?? '',
     topLeftLabel: undefined,
     topRightLabel: solutionsGrid.diamondList?.[1] ?? '',
@@ -581,7 +579,7 @@ const mapValue = (value: ValueContent, ambient: Ambient): ValueScreens => {
       {
         carouselId: 'kiosk-1-value-overview',
         description,
-        eyebrow: splitLines(ambient.title),
+        eyebrow: ambient.title,
         headline,
         heroVideoSrc,
         labelText: 'Value',
@@ -596,7 +594,7 @@ const mapValue = (value: ValueContent, ambient: Ambient): ValueScreens => {
       {
         carouselId: 'kiosk-1-value-carousel',
         description,
-        eyebrow: splitLines(ambient.title),
+        eyebrow: ambient.title,
         headline,
         labelText: 'Value',
         slides: carouselSlides,
@@ -607,15 +605,15 @@ const mapValue = (value: ValueContent, ambient: Ambient): ValueScreens => {
 
 const mapHardcoded = (hardcoded: HardcodedContent, ambient: Ambient): HardCodedScreens => ({
   firstScreen: {
-    eyebrow: splitLines(ambient.title),
+    eyebrow: ambient.title,
     heroImageAlt: 'Visitors smiling while viewing content',
     heroImageSrc: hardcoded.image,
     primaryCtaLabel: hardcoded.mainCTA,
     secondaryCtaLabel: hardcoded.secondaryCTA,
   },
   secondScreen: {
-    eyebrow: splitLines(ambient.title),
-    headline: splitLines(hardcoded.headline2) ?? ['From archive', 'to access'],
+    eyebrow: ambient.title,
+    headline: hardcoded.headline2 ?? 'From archive\nto access',
     steps: hardcoded.diamondCarouselItems?.map((item, index) => {
       const modalBodyKey = `ModalBody${index + 1}` as keyof HardcodedContent;
       const modalHeadlineKey = `ModalHeadline${index + 1}` as keyof HardcodedContent;
@@ -624,7 +622,7 @@ const mapHardcoded = (hardcoded: HardcodedContent, ambient: Ambient): HardCodedS
       return {
         label: item,
         modal: {
-          body: [modalBody ?? 'Description not available.'],
+          body: modalBody ?? 'Description not available.',
           heading: modalHeadline ?? item,
           imageAlt: `${item} illustration`,
           imageSrc: `https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/${item.replace(/\s+/g, '+')}.webp`,
@@ -636,6 +634,6 @@ const mapHardcoded = (hardcoded: HardcodedContent, ambient: Ambient): HardCodedS
     cardLabel: 'Virtual walkthrough',
     demoIframeSrc: 'https://example.com/demo-walkthrough',
     endTourLabel: 'End tour',
-    headline: ['Experience our solution', 'in action'],
+    headline: 'Experience our solution\nin action',
   },
 });

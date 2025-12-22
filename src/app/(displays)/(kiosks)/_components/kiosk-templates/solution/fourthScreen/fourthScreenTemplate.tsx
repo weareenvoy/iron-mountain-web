@@ -1,5 +1,6 @@
 'use client';
 
+// React import removed - not needed with new JSX transform
 import { Minus, Plus } from 'lucide-react';
 import Image from 'next/image';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/shadcn/accordion';
@@ -12,18 +13,18 @@ import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
 type AccordionColor = 'blue' | 'lightBlue' | 'navy' | 'white';
 
 type AccordionEntry = {
-  color?: AccordionColor;
-  contentList?: string[];
-  expanded?: boolean;
-  id: string;
-  number: string;
-  title: string;
+  readonly color?: AccordionColor;
+  readonly contentList?: string[];
+  readonly expanded?: boolean;
+  readonly id: string;
+  readonly number: string;
+  readonly title: string;
 };
 
 type PaletteConfig = {
-  body: string;
-  header: string;
-  text: string;
+  readonly body: string;
+  readonly header: string;
+  readonly text: string;
 };
 
 const palettes: Record<AccordionColor, PaletteConfig> = {
@@ -49,17 +50,17 @@ const palettes: Record<AccordionColor, PaletteConfig> = {
   },
 } as const;
 
-export type SolutionFourthScreenTemplateProps = Readonly<{
-  accentDiamondSrc?: string;
-  accordionItems?: AccordionEntry[];
-  mediaDiamondOutlineSrc?: string;
-  mediaDiamondSolidSrc?: string;
-  onNavigateDown?: () => void;
-  onNavigateUp?: () => void;
-  solutionLabel?: string;
-  subheadline?: string | string[];
-  title?: string;
-}>;
+export type SolutionFourthScreenTemplateProps = {
+  readonly accentDiamondSrc?: string;
+  readonly accordionItems?: AccordionEntry[];
+  readonly mediaDiamondOutlineSrc?: string;
+  readonly mediaDiamondSolidSrc?: string;
+  readonly onNavigateDown?: () => void;
+  readonly onNavigateUp?: () => void;
+  readonly solutionLabel?: string;
+  readonly subheadline?: string;
+  readonly title?: string;
+};
 
 const SolutionFourthScreenTemplate = ({
   accentDiamondSrc,
@@ -85,7 +86,7 @@ const SolutionFourthScreenTemplate = ({
       <h2
         className="absolute top-[400px] left-[120px] z-[1] w-[390px] -translate-y-full text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed]"
       >
-        {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
+        {renderRegisteredMark(subheadline)}
       </h2>
 
       {/* Solution label */}

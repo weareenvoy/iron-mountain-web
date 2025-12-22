@@ -1,9 +1,9 @@
 'use client';
 
 /* eslint-disable react-hooks/refs */
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowDown, ArrowUp } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
 import { buildChallengeSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeTemplate';
 import {
@@ -20,7 +20,7 @@ import {
   buildValueSlides,
   type ValueScreens,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueTemplate';
-import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers';
+import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers/kiosk-provider';
 import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
 import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 // import styles from './kiosk-3.module.css';
@@ -464,15 +464,13 @@ type HardcodedContent = {
   video?: string;
 };
 
-const splitLines = (value?: string) => (value ? value.split('\n') : undefined);
-
 const mapChallenges = (challenge: ChallengeContent, ambient: Ambient): KioskChallenges => ({
   firstScreen: {
     challengeLabel: 'Challenge',
     problemDescription: challenge.body ?? '',
     savingsAmount: challenge.featuredStat1 ?? '',
     savingsDescription: challenge.featuredStat1Body ?? '',
-    subheadline: splitLines(ambient.title) ?? 'IT assets & data centers',
+    subheadline: ambient.title ?? 'IT assets & data centers',
     videoSrc: challenge.mainVideo ?? '',
   },
   initialScreen: {
@@ -481,7 +479,7 @@ const mapChallenges = (challenge: ChallengeContent, ambient: Ambient): KioskChal
     buttonText: ambient.mainCTA ?? 'Touch to explore',
     headline: ambient.headline ?? '',
     quote: ambient.body ?? '',
-    subheadline: splitLines(ambient.title) ?? 'IT assets & data centers',
+    subheadline: ambient.title ?? 'IT assets & data centers',
   },
   secondScreen: {
     bottomDescription: '',
@@ -490,7 +488,7 @@ const mapChallenges = (challenge: ChallengeContent, ambient: Ambient): KioskChal
     mainDescription: challenge.item1Body ?? '',
     statAmount: '',
     statDescription: '',
-    subheadline: splitLines(ambient.title) ?? 'IT assets & data centers',
+    subheadline: ambient.title ?? 'IT assets & data centers',
     topImageSrc: challenge.item1Image ?? '',
   },
   thirdScreen: {
@@ -501,7 +499,7 @@ const mapChallenges = (challenge: ChallengeContent, ambient: Ambient): KioskChal
     metricAmount: challenge.featuredStat2 ?? '',
     metricDescription: challenge.featuredStat2Body ?? '',
     metricImageSrc: challenge.item2Image ?? '',
-    subheadline: splitLines(ambient.title) ?? 'IT assets & data centers',
+    subheadline: ambient.title ?? 'IT assets & data centers',
     videoSrc: '',
   },
 });
@@ -515,7 +513,7 @@ const mapSolutions = (
     firstScreen: {
       backgroundVideoSrc: solutionsMain.mainVideo ?? '',
       description: solutionsMain.body ?? '',
-      subheadline: splitLines(ambient.title),
+      subheadline: ambient.title,
       title: solutionsMain.headline ?? '',
     },
     fourthScreen: {
@@ -536,7 +534,7 @@ const mapSolutions = (
       })),
       mediaDiamondSolidSrc: solutionAccordion.image,
       solutionLabel: 'Solution',
-      subheadline: splitLines(ambient.title),
+      subheadline: ambient.title,
       title: solutionAccordion.headline ?? '',
     },
     secondScreen: {
@@ -550,7 +548,7 @@ const mapSolutions = (
       stepThreeLabel: '03.',
       stepTwoDescription: solutionsMain.numberedList?.[1] ?? '',
       stepTwoLabel: '02.',
-      subheadline: splitLines(ambient.title),
+      subheadline: ambient.title,
       title: solutionsMain.numberedListHeadline ?? 'Together, we:',
     },
   };
@@ -604,7 +602,7 @@ const mapValue = (value: ValueContent, ambient: Ambient): ValueScreens => {
       {
         carouselId: 'kiosk-3-value-overview',
         description,
-        eyebrow: splitLines(ambient.title),
+        eyebrow: ambient.title,
         headline,
         heroVideoSrc,
         labelText: 'Value',
@@ -619,7 +617,7 @@ const mapValue = (value: ValueContent, ambient: Ambient): ValueScreens => {
       {
         carouselId: 'kiosk-3-value-carousel',
         description,
-        eyebrow: splitLines(ambient.title),
+        eyebrow: ambient.title,
         headline,
         labelText: 'Value',
         slides: carouselSlides,
@@ -630,7 +628,7 @@ const mapValue = (value: ValueContent, ambient: Ambient): ValueScreens => {
 
 const mapHardcoded = (hardcoded: HardcodedContent, ambient: Ambient): HardCodedScreens => ({
   firstScreen: {
-    eyebrow: splitLines(ambient.title),
+    eyebrow: ambient.title,
     heroImageAlt: 'Data center facility',
     heroImageSrc: hardcoded.image,
     primaryCtaLabel: hardcoded.mainCTA,
@@ -640,13 +638,13 @@ const mapHardcoded = (hardcoded: HardcodedContent, ambient: Ambient): HardCodedS
     cardLabel: hardcoded.secondaryCTA ?? 'Launch demo',
     demoIframeSrc: 'https://example.com/demo',
     endTourLabel: 'End tour',
-    headline: splitLines(hardcoded.headline2) ?? ['Centralized management', 'of services via API'],
+    headline: hardcoded.headline2 ?? 'Centralized management\nof services via API',
   },
   secondScreen: {
-    eyebrow: splitLines(ambient.title),
-    headline: splitLines(hardcoded.headline2) ?? ['Centralized management', 'of services via API'],
+    eyebrow: ambient.title,
+    headline: hardcoded.headline2 ?? 'Centralized management\nof services via API',
   },
   thirdScreen: {
-    headline: splitLines(hardcoded.headline) ?? ['Learn more about how we', 'unlocked new possibilities'],
+    headline: hardcoded.headline ?? 'Learn more about how we\nunlocked new possibilities',
   },
 });

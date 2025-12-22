@@ -1,5 +1,6 @@
 'use client';
 
+// React import removed - not needed with new JSX transform
 import Image from 'next/image';
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
 import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCFilledOrangeDiamond';
@@ -11,69 +12,61 @@ export interface HardCodedKiosk3FourthScreenTemplateProps {
   readonly backgroundStartColor?: string;
   readonly cardBackgroundColor?: string;
   readonly cardHeight?: number;
-  readonly cardLabel?: string | string[];
+  readonly cardLabel?: string;
   readonly cardTextColor?: string;
   readonly cardWidth?: number;
-  readonly headline?: string | string[];
+  readonly headline?: string;
   readonly heroImageAlt?: string;
   readonly heroImageSrc?: string;
   readonly onCta?: () => void;
 }
 
-const defaults = {
-  backgroundEndColor: '#05254b',
-  backgroundStartColor: '#1b75bc',
-  cardBackgroundColor: '#e0e0e0',
-  cardHeight: 1080,
-  cardLabel: 'Demo',
-  cardTextColor: '#4a4a4a',
-  cardWidth: 1920,
-  headline: ['Section title lorem ipsum', 'dolor sit.'],
-  heroImageAlt: 'Visitors smiling while viewing content',
-  heroImageSrc: '/images/kiosks/kiosk1/04-custom-interactive/CU-Image1-Diamond.png',
-};
-
 const HardCodedKiosk3FourthScreenTemplate = ({
-  backgroundEndColor = defaults.backgroundEndColor,
-  backgroundStartColor = defaults.backgroundStartColor,
-  cardBackgroundColor = defaults.cardBackgroundColor,
-  cardHeight = defaults.cardHeight,
-  cardLabel = defaults.cardLabel,
-  cardTextColor = defaults.cardTextColor,
-  cardWidth = defaults.cardWidth,
-  headline = defaults.headline,
-  heroImageAlt = defaults.heroImageAlt,
-  heroImageSrc = defaults.heroImageSrc,
+  backgroundEndColor,
+  backgroundStartColor,
+  cardBackgroundColor,
+  cardHeight,
+  cardLabel,
+  cardTextColor,
+  cardWidth,
+  headline,
+  heroImageAlt,
+  heroImageSrc,
   onCta,
 }: HardCodedKiosk3FourthScreenTemplateProps) => {
-  const headlineText = Array.isArray(headline) ? headline.join('\n') : headline;
-  const cardText = Array.isArray(cardLabel) ? cardLabel.join('\n') : cardLabel;
+  if (!headline || !cardLabel || !heroImageSrc || !heroImageAlt) {
+    return null;
+  }
 
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden" data-node-id="5896:13159">
       <div
         className="absolute inset-0"
         style={{
-          background: `linear-gradient(180deg, ${backgroundStartColor} 0%, ${backgroundEndColor} 100%)`,
+          background: `linear-gradient(180deg, ${backgroundStartColor ?? '#1b75bc'} 0%, ${backgroundEndColor ?? '#05254b'} 100%)`,
         }}
       />
       <div className="absolute inset-0 bg-black/30 backdrop-blur-[50px]" />
 
       <h1 className="absolute top-[780px] left-[240px] w-[1680px] text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-white">
-        {renderRegisteredMark(headlineText)}
+        {renderRegisteredMark(headline)}
       </h1>
 
       <div
         className="absolute top-[1290px] left-[120px] rounded-[20px] shadow-[0_40px_120px_rgba(0,0,0,0.45)]"
-        style={{ backgroundColor: cardBackgroundColor, height: `${cardHeight}px`, width: `${cardWidth}px` }}
+        style={{
+          backgroundColor: cardBackgroundColor ?? '#e0e0e0',
+          height: `${cardHeight ?? 1080}px`,
+          width: `${cardWidth ?? 1920}px`,
+        }}
       >
         <button
           className="flex h-full w-full items-center justify-center rounded-[20px] text-[80px] leading-[1.3] font-normal tracking-[-4px]"
           onClick={onCta}
-          style={{ color: cardTextColor }}
+          style={{ color: cardTextColor ?? '#4a4a4a' }}
           type="button"
         >
-          {renderRegisteredMark(cardText)}
+          {renderRegisteredMark(cardLabel)}
         </button>
       </div>
 

@@ -1,7 +1,7 @@
 'use client';
 
-import Image from 'next/image';
 import { type ComponentType, type ReactNode, type SVGProps } from 'react';
+import Image from 'next/image';
 import BlueDiamondThird from '@/components/ui/icons/Kiosks/Solutions/BlueDiamondThird';
 import GreenDiamondThird from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondThird';
 import GreenDiamondThird2 from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondThird2';
@@ -11,32 +11,32 @@ import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiam
 import TealGradientDiamondThird from '@/components/ui/icons/Kiosks/Solutions/TealGradientDiamondThird';
 import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
 
-export type SolutionThirdScreenTemplateProps = Readonly<{
-  accentDiamondSrc?: string;
-  bottomLeftLabel?: string;
-  bottomRightLabel?: string;
-  centerLabel?: string;
-  kioskId?: string;
-  mediaDiamondLeftSrc?: string;
-  mediaDiamondRightSrc?: string;
-  onNavigateDown?: () => void;
-  onNavigateUp?: () => void;
-  solutionLabel?: string;
-  subheadline?: string | string[];
-  title?: string;
-  topLeftLabel?: string;
-  topRightLabel?: string;
-}>;
+export type SolutionThirdScreenTemplateProps = {
+  readonly accentDiamondSrc?: string;
+  readonly bottomLeftLabel?: string;
+  readonly bottomRightLabel?: string;
+  readonly centerLabel?: string;
+  readonly kioskId?: string;
+  readonly mediaDiamondLeftSrc?: string;
+  readonly mediaDiamondRightSrc?: string;
+  readonly onNavigateDown?: () => void;
+  readonly onNavigateUp?: () => void;
+  readonly solutionLabel?: string;
+  readonly subheadline?: string;
+  readonly title?: string;
+  readonly topLeftLabel?: string;
+  readonly topRightLabel?: string;
+};
 
-type DiamondProps = Readonly<{
-  className: string;
-  label?: string;
-  outline?: ComponentType<SVGProps<SVGSVGElement>>;
-  sizeClass?: string;
-  textColor?: string;
-  textWrapperClassName?: string;
-  textWrapperStyles?: Record<string, string>;
-}>;
+type DiamondProps = {
+  readonly className: string;
+  readonly label?: string;
+  readonly outline?: ComponentType<SVGProps<SVGSVGElement>>;
+  readonly sizeClass?: string;
+  readonly textColor?: string;
+  readonly textWrapperClassName?: string;
+  readonly textWrapperStyles?: Record<string, string>;
+};
 
 type MediaDiamondProps = {
   readonly className: string;
@@ -127,7 +127,7 @@ const SolutionThirdScreenTemplate = ({
       <h2
         className="absolute top-[230px] left-[120px] z-[1] w-[500px] -translate-y-full text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:top-[250px] group-data-[kiosk=kiosk-2]/kiosk:translate-y-0 group-data-[kiosk=kiosk-3]/kiosk:relative group-data-[kiosk=kiosk-3]/kiosk:top-[410px] group-data-[kiosk=kiosk-3]/kiosk:left-auto group-data-[kiosk=kiosk-3]/kiosk:w-[380px] group-data-[kiosk=kiosk-3]/kiosk:translate-y-0"
       >
-        {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
+        {renderRegisteredMark(subheadline)}
       </h2>
 
       {/* Solution label */}

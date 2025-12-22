@@ -31,7 +31,7 @@ View Component (renders slides)
 
 ```tsx
 // layout.tsx
-import { KioskProvider } from '@/app/(displays)/(kiosks)/_components/providers';
+import { KioskProvider } from '@/app/(displays)/(kiosks)/_components/providers/kiosk-provider';
 import { KioskControllerProvider } from '@/app/(displays)/(kiosks)/_components/kiosk-controller';
 
 const Kiosk3Layout = ({ children }: LayoutProps) => {
@@ -47,7 +47,7 @@ const Kiosk3Layout = ({ children }: LayoutProps) => {
 
 ```tsx
 // Kiosk3View.tsx
-import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers';
+import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers/kiosk-provider';
 
 const Kiosk3View = () => {
   const { data, error, loading, refetch } = useKiosk();

@@ -1,20 +1,21 @@
 'use client';
 
+// React import removed - not needed with new JSX transform
 import { Diamond } from 'lucide-react';
 import { DEFAULT_KIOSK_ID, type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
-export type FirstScreenTemplateProps = Readonly<{
-  challengeLabel?: string;
-  kioskId?: KioskId;
-  onNavigateDown?: () => void;
-  onNavigateUp?: () => void;
-  problemDescription?: string;
-  savingsAmount?: string;
-  savingsDescription?: string;
-  subheadline?: string | string[];
-  videoSrc?: string;
-}>;
+export type FirstScreenTemplateProps = {
+  readonly challengeLabel?: string;
+  readonly kioskId?: KioskId;
+  readonly onNavigateDown?: () => void;
+  readonly onNavigateUp?: () => void;
+  readonly problemDescription?: string;
+  readonly savingsAmount?: string;
+  readonly savingsDescription?: string;
+  readonly subheadline?: string;
+  readonly videoSrc?: string;
+};
 
 export const FirstScreenTemplate = ({
   challengeLabel,
@@ -57,7 +58,7 @@ export const FirstScreenTemplate = ({
         {/* Subheadline */}
         <div className="relative top-[120px] left-[-760px] z-[2] px-[120px] pb-[400px] group-data-[kiosk=kiosk-3]/kiosk:top-[50px] group-data-[kiosk=kiosk-3]/kiosk:left-[-800px]">
           <h2 className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
-            {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
+            {renderRegisteredMark(subheadline)}
           </h2>
         </div>
       </div>

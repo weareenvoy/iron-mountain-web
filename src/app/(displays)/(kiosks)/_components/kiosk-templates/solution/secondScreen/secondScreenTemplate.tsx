@@ -6,36 +6,35 @@ import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiam
 import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
 
 type StepConfig = {
-  description?: string;
-  label?: string;
+  readonly description?: string;
+  readonly label?: string;
 };
 
-export type SolutionSecondScreenTemplateProps = Readonly<
-  SolutionSecondScreenCoreProps & SolutionSecondScreenStepsProps
->;
+export type SolutionSecondScreenTemplateProps =
+  SolutionSecondScreenCoreProps & SolutionSecondScreenStepsProps;
 
 type SolutionSecondScreenCoreProps = {
-  heroImageAlt?: string;
-  heroImageSrc?: string;
-  kioskId?: KioskId;
-  onNavigateDown?: () => void;
-  onNavigateUp?: () => void;
-  solutionLabel?: string;
-  stepFourDescription?: string;
-  stepFourLabel?: string;
-  stepOneDescription?: string;
-  stepOneLabel?: string;
-  stepThreeDescription?: string;
-  stepThreeLabel?: string;
-  stepTwoDescription?: string;
-  stepTwoLabel?: string;
-  subheadline?: string | string[];
-  title?: string | string[];
+  readonly heroImageAlt?: string;
+  readonly heroImageSrc?: string;
+  readonly kioskId?: KioskId;
+  readonly onNavigateDown?: () => void;
+  readonly onNavigateUp?: () => void;
+  readonly solutionLabel?: string;
+  readonly stepFourDescription?: string;
+  readonly stepFourLabel?: string;
+  readonly stepOneDescription?: string;
+  readonly stepOneLabel?: string;
+  readonly stepThreeDescription?: string;
+  readonly stepThreeLabel?: string;
+  readonly stepTwoDescription?: string;
+  readonly stepTwoLabel?: string;
+  readonly subheadline?: string;
+  readonly title?: string;
 };
 
 type SolutionSecondScreenStepsProps = {
-  steps?: StepConfig[];
-  stepsDividerHeights?: number[];
+  readonly steps?: StepConfig[];
+  readonly stepsDividerHeights?: number[];
 };
 
 const SolutionSecondScreenTemplate = ({
@@ -60,6 +59,10 @@ const SolutionSecondScreenTemplate = ({
   subheadline,
   title,
 }: SolutionSecondScreenTemplateProps) => {
+  if (!heroImageSrc || !heroImageAlt || !solutionLabel || !subheadline || !title) {
+    return null;
+  }
+
   const legacySteps: StepConfig[] = [
     { description: stepOneDescription, label: stepOneLabel },
     { description: stepTwoDescription, label: stepTwoLabel },
@@ -109,7 +112,7 @@ const SolutionSecondScreenTemplate = ({
       <h2
         className="absolute top-[230px] left-[120px] z-[1] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]"
       >
-        {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
+        {renderRegisteredMark(subheadline)}
       </h2>
 
       {/* Solution label */}

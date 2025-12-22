@@ -1,8 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import { ChevronLeft, ChevronRight, SquarePlay } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
 import HardCodedDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/demoScreenTemplate';
 import HCBlueFilledDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCBlueFilledDiamond';
@@ -16,25 +16,25 @@ import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHoll
 export interface HardCodedKiosk3ThirdScreenTemplateProps {
   readonly demoIframeSrc?: string;
   readonly endTourLabel?: string;
-  readonly headline?: string | string[];
+  readonly headline?: string;
   readonly heroImageAlt?: string;
   readonly heroImageSrc?: string;
-  readonly overlayCardLabel?: string | string[];
-  readonly overlayHeadline?: string | string[];
+  readonly overlayCardLabel?: string;
+  readonly overlayHeadline?: string;
   readonly slides?: CarouselSlide[];
 }
 
 type CarouselSlide = {
   bullets: string[];
-  eyebrow?: string | string[];
-  headline?: string | string[];
+  eyebrow?: string;
+  headline?: string;
   id: string;
   primaryImageAlt: string;
   primaryImageSrc: string;
   primaryVideoSrc?: string;
   secondaryImageAlt: string;
   secondaryImageSrc?: string;
-  sectionTitle: string | string[];
+  sectionTitle: string;
 };
 
 const HardCodedKiosk3ThirdScreenTemplate = ({
@@ -47,6 +47,7 @@ const HardCodedKiosk3ThirdScreenTemplate = ({
   overlayHeadline,
   slides,
 }: HardCodedKiosk3ThirdScreenTemplateProps) => {
+  // Hooks must be called unconditionally
   const [index, setIndex] = useState(0);
   const [showOverlay, setShowOverlay] = useState(false);
 
@@ -54,9 +55,18 @@ const HardCodedKiosk3ThirdScreenTemplate = ({
   const total = safeSlides.length;
   const currentIndex = total > 0 ? index % total : 0;
   const current = safeSlides[currentIndex];
-  const isSlide2 = current?.id === 'slide-2';
-  const isSlide5 = current?.id === 'slide-5';
-  const isSlide3 = current?.id === 'slide-3';
+
+  const goNext = () => setIndex(i => (i + 1) % total);
+  const goPrev = () => setIndex(i => (i - 1 + total) % total);
+  
+  // Early return after all hooks
+  if (!current || !headline) {
+    return null;
+  }
+
+  const isSlide2 = current.id === 'slide-2';
+  const isSlide5 = current.id === 'slide-5';
+  const isSlide3 = current.id === 'slide-3';
   const isSlide6 = current.id === 'slide-6';
   const primaryDiamondClass =
     isSlide2 || isSlide5
@@ -69,12 +79,9 @@ const HardCodedKiosk3ThirdScreenTemplate = ({
       ? 'absolute left-[1390px] bottom-[1150px] h-[800px] w-[800px] rotate-[45deg] overflow-hidden rounded-[80px] shadow-[0_24px_70px_rgba(0,0,0,0.32)]'
       : 'absolute left-[1380px] bottom-[400px] h-[880px] w-[880px] rotate-[45deg] overflow-hidden rounded-[80px] shadow-[0_24px_70px_rgba(0,0,0,0.32)]';
 
-  const headlineText = Array.isArray(headline) ? headline.join('\n') : headline;
-  const eyebrowText = Array.isArray(current.eyebrow) ? current.eyebrow.join('\n') : current.eyebrow;
-  const sectionTitle = Array.isArray(current.sectionTitle) ? current.sectionTitle.join('\n') : current.sectionTitle;
-
-  const goNext = () => setIndex(i => (i + 1) % total);
-  const goPrev = () => setIndex(i => (i - 1 + total) % total);
+  const headlineText = headline;
+  const eyebrowText = current.eyebrow;
+  const sectionTitle = current.sectionTitle;
 
   return (
     <div

@@ -14,13 +14,13 @@ import SolutionThirdScreenTemplate, {
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/thirdScreen/thirdScreenTemplate';
 import { type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
-export type SolutionScreens = Readonly<{
-  firstScreen?: SolutionFirstScreenTemplateProps;
-  fourthScreen?: SolutionFourthScreenTemplateProps;
-  secondScreen?: SolutionSecondScreenTemplateProps;
-  secondScreens?: SolutionSecondScreenTemplateProps[];
-  thirdScreen?: SolutionThirdScreenTemplateProps;
-}>;
+export type SolutionScreens = {
+  readonly firstScreen?: SolutionFirstScreenTemplateProps;
+  readonly fourthScreen?: SolutionFourthScreenTemplateProps;
+  readonly secondScreen?: SolutionSecondScreenTemplateProps;
+  readonly secondScreens?: SolutionSecondScreenTemplateProps[];
+  readonly thirdScreen?: SolutionThirdScreenTemplateProps;
+};
 
 export const buildSolutionSlides = (solutions: SolutionScreens, kioskId: KioskId, controller: Controller): Slide[] => {
   const slides: Slide[] = [];

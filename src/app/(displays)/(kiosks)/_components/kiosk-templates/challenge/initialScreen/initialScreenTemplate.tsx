@@ -1,23 +1,24 @@
 'use client';
 
+// React import removed - not needed with new JSX transform
 import Image from 'next/image';
 import ButtonArrow from '@/components/ui/icons/ButtonArrow';
 import WhiteLogoSimple from '@/components/ui/icons/WhiteLogoSimple';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
-export type InitialScreenTemplateProps = Readonly<{
-  arrowIconSrc?: string;
-  attribution?: string;
-  backgroundImage?: string;
-  buttonText?: string;
-  contentBoxBgColor?: string;
-  headline?: string;
-  kioskId?: KioskVariant;
-  logoCombinedSrc?: string;
-  onButtonClick?: () => void;
-  quote?: string;
-  subheadline?: string | string[];
-}>;
+export type InitialScreenTemplateProps = {
+  readonly arrowIconSrc?: string;
+  readonly attribution?: string;
+  readonly backgroundImage?: string;
+  readonly buttonText?: string;
+  readonly contentBoxBgColor?: string;
+  readonly headline?: string;
+  readonly kioskId?: KioskVariant;
+  readonly logoCombinedSrc?: string;
+  readonly onButtonClick?: () => void;
+  readonly quote?: string;
+  readonly subheadline?: string;
+};
 
 type KioskVariant = 'kiosk-1' | 'kiosk-2' | 'kiosk-3';
 
@@ -34,7 +35,11 @@ export const InitialScreenTemplate = ({
   quote,
   subheadline,
 }: InitialScreenTemplateProps) => {
-  const heroAlt = headline ? `${headline} background image` : 'Kiosk hero background image';
+  if (!backgroundImage || !headline || !quote || !subheadline || !buttonText || !attribution) {
+    return null;
+  }
+
+  const heroAlt = `${headline} background image`;
 
   return (
     <div

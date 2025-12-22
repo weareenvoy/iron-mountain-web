@@ -13,13 +13,13 @@ import HardCodedKiosk3ThirdScreenTemplate, {
 import { SectionSlide, type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
 import type { HardCodedDemoScreenTemplateProps } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/demoScreenTemplate';
 
-export type HardCodedScreens = Readonly<{
-  demoScreen?: HardCodedDemoScreenTemplateProps;
-  firstScreen?: HardCodedKiosk1FirstScreenTemplateProps;
-  fourthScreen?: HardCodedDemoScreenTemplateProps;
-  secondScreen?: HardCodedKiosk1SecondScreenTemplateProps & HardCodedKiosk3SecondScreenTemplateProps;
-  thirdScreen?: HardCodedDemoScreenTemplateProps & HardCodedKiosk3ThirdScreenTemplateProps;
-}>;
+export type HardCodedScreens = {
+  readonly demoScreen?: HardCodedDemoScreenTemplateProps;
+  readonly firstScreen?: HardCodedKiosk1FirstScreenTemplateProps;
+  readonly fourthScreen?: HardCodedDemoScreenTemplateProps;
+  readonly secondScreen?: HardCodedKiosk1SecondScreenTemplateProps & HardCodedKiosk3SecondScreenTemplateProps;
+  readonly thirdScreen?: HardCodedDemoScreenTemplateProps & HardCodedKiosk3ThirdScreenTemplateProps;
+};
 
 export const buildHardcodedSlides = (
   hardCoded: HardCodedScreens,

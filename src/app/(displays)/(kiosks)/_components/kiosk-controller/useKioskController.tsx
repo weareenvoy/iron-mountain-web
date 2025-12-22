@@ -4,9 +4,6 @@ import { DEFAULT_KIOSK_ID } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import { ControllerContext, type Controller } from './KioskController';
 
 const noopController: Controller = {
-  fetchKioskChallenges: async () => {
-    throw new Error('Kiosk controller is not available');
-  },
   getRegistry: () => [],
   goTo: () => {},
   kioskId: DEFAULT_KIOSK_ID,

@@ -15,12 +15,12 @@ import { SectionSlide, type Slide } from '@/app/(displays)/(kiosks)/_components/
 import { type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
 import { type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
-export type ChallengeScreens = Readonly<{
-  firstScreen?: FirstScreenTemplateProps;
-  initialScreen?: InitialScreenTemplateProps;
-  secondScreen?: SecondScreenTemplateProps;
-  thirdScreen?: ThirdScreenTemplateProps;
-}>;
+export type ChallengeScreens = {
+  readonly firstScreen?: FirstScreenTemplateProps;
+  readonly initialScreen?: InitialScreenTemplateProps;
+  readonly secondScreen?: SecondScreenTemplateProps;
+  readonly thirdScreen?: ThirdScreenTemplateProps;
+};
 
 export const buildChallengeSlides = (
   challenges: KioskChallenges,

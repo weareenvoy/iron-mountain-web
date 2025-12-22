@@ -1,4 +1,4 @@
-import * as React from 'react';
+
 
 const HCBlueDiamond = (props: React.SVGProps<SVGSVGElement>) => (
   <svg

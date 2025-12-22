@@ -1,5 +1,6 @@
 'use client';
 
+// React import removed - not needed with new JSX transform
 import { LogOut } from 'lucide-react';
 import Image from 'next/image';
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
@@ -12,12 +13,12 @@ export interface HardCodedDemoScreenTemplateProps {
   readonly backgroundStartColor?: string;
   readonly cardBackgroundColor?: string;
   readonly cardHeight?: number;
-  readonly cardLabel?: string | string[];
+  readonly cardLabel?: string;
   readonly cardTextColor?: string;
   readonly cardWidth?: number;
   readonly demoIframeSrc?: string;
   readonly endTourLabel?: string;
-  readonly headline?: string | string[];
+  readonly headline?: string;
   readonly heroImageAlt?: string;
   readonly heroImageSrc?: string;
   readonly onCta?: () => void;
@@ -40,15 +41,12 @@ const HardCodedDemoScreenTemplate = ({
   onCta,
   onEndTour,
 }: HardCodedDemoScreenTemplateProps) => {
-  endTourLabel = defaults.endTourLabel,
-  headline = defaults.headline,
-  heroImageAlt = defaults.heroImageAlt,
-  heroImageSrc = defaults.heroImageSrc,
-  onCta,
-  onEndTour,
-}: HardCodedDemoScreenTemplateProps) => {
-  const headlineText = Array.isArray(headline) ? headline.join('\n') : headline;
-  const cardText = Array.isArray(cardLabel) ? cardLabel.join('\n') : cardLabel;
+  if (!headline || !heroImageSrc || !heroImageAlt || !endTourLabel) {
+    return null;
+  }
+
+  const headlineText = headline;
+  const cardText = cardLabel;
 
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden" data-node-id="7189:7471">

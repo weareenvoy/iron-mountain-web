@@ -1,17 +1,17 @@
 import { type ReactElement, type ReactNode } from 'react';
 
-export type Slide = Readonly<{
-  id: string;
-  render: (isActive: boolean) => ReactElement;
-  title: string;
-}>;
+export type Slide = {
+  readonly id: string;
+  readonly render: (isActive: boolean) => ReactElement;
+  readonly title: string;
+};
 
-export type SlideNavHandlers = Readonly<{
-  onNavigateDown?: () => void;
-  onNavigateUp?: () => void;
-}>;
+export type SlideNavHandlers = {
+  readonly onNavigateDown?: () => void;
+  readonly onNavigateUp?: () => void;
+};
 
-export const SectionSlide = ({ children, isActive }: Readonly<{ children: ReactNode; isActive: boolean }>) => (
+export const SectionSlide = ({ children, isActive }: { readonly children: ReactNode; readonly isActive: boolean }) => (
   <div className="h-screen w-full flex-shrink-0" data-active={isActive}>
     {children}
   </div>

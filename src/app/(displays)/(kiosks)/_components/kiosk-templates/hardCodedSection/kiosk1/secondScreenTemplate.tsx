@@ -1,8 +1,8 @@
 'use client';
 
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowLeft, ChevronLeft, ChevronRight, CirclePlus, SquarePlay } from 'lucide-react';
 import NextImage from 'next/image';
-import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
 import HardCodedDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/demoScreenTemplate';
@@ -11,135 +11,58 @@ import HCBlueDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCBlueDiamond'
 import HCWhiteDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCWhiteDiamond';
 import type { UseEmblaCarouselType } from 'embla-carousel-react';
 
-export type HardCodedKiosk1SecondScreenTemplateProps = Readonly<{
-  eyebrow?: readonly string[] | string;
-  headline?: readonly string[] | string;
-  heroImageAlt?: string;
-  heroImageSrc?: string;
-  kioskId?: 'kiosk-1' | 'kiosk-2' | 'kiosk-3';
-  onBack?: () => void;
-  onSecondaryCta?: () => void;
-  overlayCardLabel?: string | string[];
-  overlayHeadline?: string | string[];
-  secondaryCtaLabel?: string;
-  steps?: readonly Step[];
-}>;
+export type HardCodedKiosk1SecondScreenTemplateProps = {
+  readonly eyebrow?: string;
+  readonly headline?: string;
+  readonly heroImageAlt?: string;
+  readonly heroImageSrc?: string;
+  readonly kioskId?: 'kiosk-1' | 'kiosk-2' | 'kiosk-3';
+  readonly onBack?: () => void;
+  readonly onSecondaryCta?: () => void;
+  readonly overlayCardLabel?: string;
+  readonly overlayHeadline?: string;
+  readonly secondaryCtaLabel?: string;
+  readonly steps?: readonly Step[];
+};
 
 type ModalContent = {
-  body: readonly string[] | string;
-  heading: string;
-  imageAlt?: string;
-  imageSrc?: string;
+  readonly body: string;
+  readonly heading: string;
+  readonly imageAlt?: string;
+  readonly imageSrc?: string;
 };
 
 type Step = {
-  label: string;
-  modal?: Partial<ModalContent>;
+  readonly label: string;
+  readonly modal?: Partial<ModalContent>;
 };
 
 type EmblaApi = UseEmblaCarouselType[1];
 
-const defaultSteps: readonly Step[] = [
-  {
-    label: 'Intake and assessment',
-    modal: {
-      body: [
-        'Assets, whether film, audio, digital, or physical, are logged, evaluated for condition and risk, and prioritized based on preservation and activation potential.',
-      ],
-      imageAlt: 'Intake and assessment illustration',
-      imageSrc:
-        'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Intake+and+assessment.webp',
-    },
-  },
-  {
-    label: 'Digitization and remediation',
-    modal: {
-      body: [
-        'Physical media is digitized to archival standards, with restoration applied as needed and metadata extracted to ensure assets are searchable, playable, and accessible.',
-      ],
-      imageAlt: 'Digitization and remediation illustration',
-      imageSrc:
-        'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Digitization+and+remediation.webp',
-    },
-  },
-  {
-    label: 'Digital preservation',
-    modal: {
-      body: [
-        'Iron Mountain’s digital preservation platform provides a fully managed digital repository with triple-redundant geo-distributed storage, secure access, and intuitive navigation.',
-      ],
-      imageAlt: 'Digital preservation illustration',
-      imageSrc:
-        'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Digital+preservation.webp',
-    },
-  },
-  {
-    label: 'Search and discover',
-    modal: {
-      body: [
-        'The entire archive becomes searchable through AI-powered metadata, custom filters, and integrated preview tools, enabling fast discovery from any location.',
-      ],
-      imageAlt: 'Search and discover illustration',
-      imageSrc:
-        'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Search+and+discover.webp',
-    },
-  },
-  {
-    label: 'Share, stream and monetize',
-    modal: {
-      body: [
-        'Digitized content is ready for licensing, streaming, and storytelling, unlocking new value across platforms while maintaining archival integrity.',
-      ],
-      imageAlt: 'Share, stream and monetize illustration',
-      imageSrc:
-        'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Share%2C+stream+and+monetize.webp',
-    },
-  },
-];
-
-const defaultModal: ModalContent = {
-  body: [
-    'Iron Mountain’s digital preservation platform provides a fully managed digital repository with triple-redundant geo-distributed storage, secure access, and intuitive navigation.',
-  ],
-  heading: 'Digital preservation',
-  imageAlt: 'Digital preservation illustration',
-  imageSrc:
-    'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Digital+preservation.webp',
-};
-
-const textDefaults = {
-  eyebrow: ['Rich media &', 'cultural heritage'],
-  headline: ['From archive', 'to access'],
-  heroImageAlt: 'Visitors smiling while viewing content',
-  heroImageSrc:
-    'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image1-Diamond.webp',
-  overlayCardLabel: 'Virtual walkthrough',
-  overlayHeadline: ['Section title lorem ipsum', 'dolor sit.'],
-  secondaryCtaLabel: 'Virtual walkthrough',
-};
-
-const normalizeText = (value?: readonly string[] | string): string => {
-  if (Array.isArray(value)) return value.join('\n');
+const normalizeText = (value?: string): string => {
   if (typeof value === 'string') return value;
   return '';
 };
 
 const HardCodedKiosk1SecondScreenTemplate = ({
-  eyebrow = textDefaults.eyebrow,
-  headline = textDefaults.headline,
-  heroImageAlt = textDefaults.heroImageAlt,
-  heroImageSrc = textDefaults.heroImageSrc,
+  eyebrow,
+  headline,
+  heroImageAlt,
+  heroImageSrc,
   kioskId,
   onSecondaryCta,
-  overlayCardLabel = textDefaults.overlayCardLabel,
-  overlayHeadline = textDefaults.overlayHeadline,
-  secondaryCtaLabel = textDefaults.secondaryCtaLabel,
-  steps = defaultSteps,
+  overlayCardLabel,
+  overlayHeadline,
+  secondaryCtaLabel,
+  steps,
 }: HardCodedKiosk1SecondScreenTemplateProps) => {
+  if (!eyebrow || !headline || !heroImageSrc || !heroImageAlt) {
+    return null;
+  }
+
   const eyebrowText: string = normalizeText(eyebrow);
   const headlineText: string = normalizeText(headline);
-  const headlineWithForcedBreak = headlineText.replace(/archive\s+/i, 'archive\n');
-  const normalizedSteps = steps.length > 0 ? steps : defaultSteps;
+  const normalizedSteps = steps ?? [];
   const isKiosk3 = kioskId === 'kiosk-3';
   const secondaryIconOffset = isKiosk3 ? 'left-[-330px]' : 'left-[-70px]';
 
@@ -154,18 +77,12 @@ const HardCodedKiosk1SecondScreenTemplate = ({
   const activeStep = openModalIndex !== null ? normalizedSteps[openModalIndex] : null;
   const activeModalContent: ModalContent | null = activeStep
     ? {
-        body: activeStep.modal?.body ?? defaultModal.body,
+        body: activeStep.modal?.body ?? '',
         heading: activeStep.modal?.heading ?? activeStep.label,
-        imageAlt: activeStep.modal?.imageAlt ?? defaultModal.imageAlt,
-        imageSrc: activeStep.modal?.imageSrc ?? defaultModal.imageSrc,
+        imageAlt: activeStep.modal?.imageAlt,
+        imageSrc: activeStep.modal?.imageSrc,
       }
     : null;
-  const activeModalBody =
-    activeModalContent?.body === undefined
-      ? []
-      : Array.isArray(activeModalContent.body)
-        ? [...activeModalContent.body]
-        : [activeModalContent.body];
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const applyEdgeTransforms = useCallback(
@@ -306,7 +223,7 @@ const HardCodedKiosk1SecondScreenTemplate = ({
         <h1
           className="absolute left-[240px] top-[830px] w-full text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]"
         >
-          {renderRegisteredMark(headlineWithForcedBreak)}
+          {renderRegisteredMark(headlineText)}
         </h1>
 
         <p
@@ -504,11 +421,7 @@ const HardCodedKiosk1SecondScreenTemplate = ({
                       {activeModalContent.heading}
                     </h2>
                     <div className="w-[1170px] space-y-[32px] text-[60px] leading-[1.4] font-normal tracking-[-3px]">
-                      {activeModalBody.map(line => (
-                        <p className="whitespace-pre-line" key={line}>
-                          {line}
-                        </p>
-                      ))}
+                      <p className="whitespace-pre-line">{activeModalContent.body}</p>
                     </div>
                   </div>
 

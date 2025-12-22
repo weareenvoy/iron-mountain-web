@@ -1,5 +1,6 @@
 'use client';
 
+// React import removed - not needed with new JSX transform
 import Image from 'next/image';
 import BlueDiamondMain from '@/components/ui/icons/Kiosks/Solutions/BlueDiamondMain';
 import GreenDiamondMain from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondMain';
@@ -7,21 +8,21 @@ import OrangeDiamondMain from '@/components/ui/icons/Kiosks/Solutions/OrangeDiam
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
 import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
 
-export type SolutionFirstScreenTemplateProps = Readonly<{
-  accentDiamondSrc?: string;
-  backgroundVideoSrc?: string;
-  description?: string;
-  gradientEndColor?: string;
-  gradientStartColor?: string;
-  kioskId?: string;
-  largeDiamondSrc?: string;
-  mediumDiamondSrc?: string;
-  onNavigateDown?: () => void;
-  onNavigateUp?: () => void;
-  solutionLabel?: string;
-  subheadline?: string | string[];
-  title?: string;
-}>;
+export type SolutionFirstScreenTemplateProps = {
+  readonly accentDiamondSrc?: string;
+  readonly backgroundVideoSrc?: string;
+  readonly description?: string;
+  readonly gradientEndColor?: string;
+  readonly gradientStartColor?: string;
+  readonly kioskId?: string;
+  readonly largeDiamondSrc?: string;
+  readonly mediumDiamondSrc?: string;
+  readonly onNavigateDown?: () => void;
+  readonly onNavigateUp?: () => void;
+  readonly solutionLabel?: string;
+  readonly subheadline?: string;
+  readonly title?: string;
+};
 
 const SolutionFirstScreenTemplate = ({
   accentDiamondSrc,
@@ -77,7 +78,7 @@ const SolutionFirstScreenTemplate = ({
       <h2
         className="absolute top-[240px] left-[120px] z-[1] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:top-[290px] group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-2]/kiosk:w-[450px] group-data-[kiosk=kiosk-3]/kiosk:top-[300px] group-data-[kiosk=kiosk-3]/kiosk:left-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[330px]"
       >
-        {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
+        {renderRegisteredMark(subheadline)}
       </h2>
 
       {/* Solution label */}

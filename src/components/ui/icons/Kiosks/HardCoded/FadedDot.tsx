@@ -1,4 +1,4 @@
-import * as React from 'react';
+
 
 const FadedDot = (props: React.SVGProps<SVGSVGElement>) => (
   <svg fill="none" height={33} viewBox="0 0 33 33" width={33} xmlns="http://www.w3.org/2000/svg" {...props}>

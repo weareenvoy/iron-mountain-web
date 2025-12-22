@@ -1,4 +1,4 @@
-import * as React from 'react';
+
 
 const BlueDot = (props: React.SVGProps<SVGSVGElement>) => (
   <svg fill="none" height="59" viewBox="0 0 59 59" width="59" xmlns="http://www.w3.org/2000/svg" {...props}>

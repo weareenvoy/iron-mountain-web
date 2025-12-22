@@ -10,15 +10,15 @@ import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHoll
 export interface HardCodedKiosk1FirstScreenTemplateProps {
   readonly backgroundEndColor?: string;
   readonly backgroundStartColor?: string;
-  readonly eyebrow?: string | string[];
-  readonly headline?: string | string[];
+  readonly eyebrow?: string;
+  readonly headline?: string;
   readonly heroImageAlt?: string;
   readonly heroImageSrc?: string;
   readonly kioskId?: 'kiosk-1' | 'kiosk-2' | 'kiosk-3';
   readonly onPrimaryCta?: () => void;
   readonly onSecondaryCta?: () => void;
-  readonly overlayCardLabel?: string | string[];
-  readonly overlayHeadline?: string | string[];
+  readonly overlayCardLabel?: string;
+  readonly overlayHeadline?: string;
   readonly primaryCtaLabel?: string;
   readonly secondaryCtaLabel?: string;
 }
@@ -58,10 +58,14 @@ const HardCodedKiosk1FirstScreenTemplate = ({
   primaryCtaLabel,
   secondaryCtaLabel,
 }: HardCodedKiosk1FirstScreenTemplateProps) => {
+  if (!eyebrow || !headline || !heroImageSrc || !heroImageAlt || !primaryCtaLabel || !secondaryCtaLabel) {
+    return null;
+  }
+
   const [showOverlay, setShowOverlay] = useState(false);
   const isKiosk1 = kioskId === 'kiosk-1';
-  const eyebrowText = Array.isArray(eyebrow) ? eyebrow.join('\n') : eyebrow;
-  const headlineText = Array.isArray(headline) ? headline.join('\n') : headline;
+  const eyebrowText = eyebrow;
+  const headlineText = headline;
   const isKiosk3 = kioskId === 'kiosk-3';
   const ctaWidthClass = isKiosk3 ? 'w-[1360px]' : 'w-[1020px]';
   const secondaryLabelPadding = isKiosk3 ? 'pl-[320px]' : 'pl-[80px]';
