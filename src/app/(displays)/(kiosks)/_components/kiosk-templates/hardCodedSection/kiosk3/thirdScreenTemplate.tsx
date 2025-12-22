@@ -190,16 +190,16 @@ const HardCodedKiosk3ThirdScreenTemplate = ({
       </h2>
 
       {/* Main headline */}
-      <h1 className="absolute top-[830px] left-[240px] max-w-[1200px] text-[100px] leading-[1.2] font-semibold tracking-[-5px] whitespace-pre-line text-white">
+      <h1 className="absolute top-[830px] left-[240px] max-w-[1200px] text-[100px] leading-[1.3] tracking-[-5px] whitespace-pre-line text-white">
         {renderRegisteredMark(headlineText)}
       </h1>
 
       {/* Data configuration + bullets */}
       <div className="absolute top-[1650px] left-[240px] max-w-[920px] space-y-[36px] text-white">
-        <h2 className="text-[78px] leading-[1.2] font-semibold tracking-[-2.7px]">
+        <h2 className="text-[80px] leading-[1.3] tracking-[-4px]">
           {renderRegisteredMark(sectionTitle)}
         </h2>
-        <ul className="mt-[110px] ml-[60px] space-y-[22px] text-[38px] leading-[1.3] font-normal tracking-[-2px] tracking-[-4.3px] text-white">
+        <ul className="mt-[110px] ml-[60px] space-y-[22px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white">
           {current.bullets.map((item, i) => (
             <li
               className="flex items-start gap-[16px] text-[64px]"

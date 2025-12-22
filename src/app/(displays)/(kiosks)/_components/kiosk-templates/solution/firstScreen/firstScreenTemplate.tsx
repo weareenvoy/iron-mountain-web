@@ -76,13 +76,13 @@ const SolutionFirstScreenTemplate = ({
       />
 
       {/* Subheadline */}
-      <h2 className="absolute top-[240px] left-[120px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-3]/kiosk:top-[300px] group-data-[kiosk=kiosk-3]/kiosk:left-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[330px]">
+      <h2 className="absolute top-[240px] left-[120px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:top-[290px] group-data-[kiosk=kiosk-2]/kiosk:w-[450px] group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-3]/kiosk:top-[300px] group-data-[kiosk=kiosk-3]/kiosk:left-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[330px]">
         {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
       </h2>
 
       {/* Solution label */}
       <div
-        className="absolute top-[790px] left-[140px] flex items-center gap-[41px] group-data-[kiosk=kiosk-3]/kiosk:top-[860px] group-data-[kiosk=kiosk-3]/kiosk:left-[260px]"
+        className="absolute top-[790px] left-[140px] flex items-center gap-[41px] group-data-[kiosk=kiosk-2]/kiosk:top-[830px] group-data-[kiosk=kiosk-3]/kiosk:top-[860px] group-data-[kiosk=kiosk-3]/kiosk:left-[260px]"
         data-node-id="5168:9697"
       >
         <div className="relative flex h-[200px] w-[200px] items-center justify-center" style={{ left: -55, top: -25 }}>
@@ -97,7 +97,7 @@ const SolutionFirstScreenTemplate = ({
       </div>
 
       {/* Body copy */}
-      <div className="absolute top-[1270px] left-[120px] flex w-auto max-w-[1271px] flex-col gap-[80px] text-white group-data-[kiosk=kiosk-3]/kiosk:top-[1260px] group-data-[kiosk=kiosk-3]/kiosk:left-[120px]">
+      <div className="absolute top-[1270px] left-[120px] flex w-auto max-w-[1271px] flex-col gap-[80px] text-white group-data-[kiosk=kiosk-2]/kiosk:top-[1300px] group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-3]/kiosk:top-[1260px] group-data-[kiosk=kiosk-3]/kiosk:left-[120px]">
         <p className="w-[900px] text-[100px] leading-[1.3] font-normal tracking-[-5px]">
           {renderRegisteredMark(title)}
         </p>
@@ -105,7 +105,7 @@ const SolutionFirstScreenTemplate = ({
       </div>
 
       {/* Decorative diamonds */}
-      <div className="pointer-events-none absolute top-[2420px] left-[-170px] z-[3] h-[1770px] w-[1770px] opacity-60 group-data-[kiosk=kiosk-3]/kiosk:top-[2420px] group-data-[kiosk=kiosk-3]/kiosk:left-[-180px] group-data-[kiosk=kiosk-3]/kiosk:size-[1780px]">
+      <div className="pointer-events-none absolute top-[2420px] left-[-170px] z-[3] h-[1770px] w-[1770px] opacity-60 group-data-[kiosk=kiosk-2]/kiosk:top-[2450px] group-data-[kiosk=kiosk-2]/kiosk:top-[2420px] group-data-[kiosk=kiosk-3]/kiosk:top-[2420px] group-data-[kiosk=kiosk-3]/kiosk:left-[-180px] group-data-[kiosk=kiosk-3]/kiosk:size-[1780px]">
         {largeDiamondSrc ? (
           <div className="relative h-full w-full">
             <Image
@@ -120,7 +120,7 @@ const SolutionFirstScreenTemplate = ({
           <BlueDiamondMain aria-hidden="true" className="h-full w-full" focusable="false" />
         )}
       </div>
-      <div className="pointer-events-none absolute top-[2400px] left-[1250px] z-[3] h-[800px] w-[800px] opacity-70 group-data-[kiosk=kiosk-3]/kiosk:top-[2390px] group-data-[kiosk=kiosk-3]/kiosk:left-[1250px] group-data-[kiosk=kiosk-3]/kiosk:size-[810px]">
+      <div className="pointer-events-none absolute top-[2400px] left-[1250px] z-[3] h-[800px] w-[800px] opacity-70 group-data-[kiosk=kiosk-2]/kiosk:top-[2420px] group-data-[kiosk=kiosk-2]/kiosk:left-[1240px] group-data-[kiosk=kiosk-2]/kiosk:size-[805px] group-data-[kiosk=kiosk-3]/kiosk:top-[2390px] group-data-[kiosk=kiosk-3]/kiosk:left-[1250px] group-data-[kiosk=kiosk-3]/kiosk:size-[810px]">
         {mediumDiamondSrc ? (
           <div className="relative h-full w-full">
             <Image

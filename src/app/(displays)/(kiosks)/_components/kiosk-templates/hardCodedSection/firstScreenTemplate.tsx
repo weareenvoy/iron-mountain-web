@@ -101,20 +101,20 @@ const HardCodedKiosk1FirstScreenTemplate = ({
       />
 
       {/* Eyebrow */}
-      <h2 className="absolute top-[200px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
+      <h2 className="absolute top-[200px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] group-data-[kiosk=kiosk-3]/kiosk:top-[240px] group-data-[kiosk=kiosk-2]/kiosk:left-[120px]">
         {renderRegisteredMark(eyebrowText)}
       </h2>
 
       {/* Headline */}
       <h1
-        className="absolute top-[1250px] left-[250px] w-full text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]"
+        className="absolute top-[1250px] left-[250px] w-full text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed] group-data-[kiosk=kiosk-3]/kiosk:top-[830px]"
         data-scroll-section="hardcoded-headline"
       >
         {renderRegisteredMark(headlineText)}
       </h1>
 
       {/* CTA buttons */}
-      <div className={`absolute top-[2220px] left-[245px] flex flex-col gap-[90px] ${ctaWidthClass}`}>
+      <div className={`absolute top-[2220px] group-data-[kiosk=kiosk-3]/kiosk:top-[2350px] left-[245px] flex flex-col gap-[90px] ${ctaWidthClass}`}>
         <button
           className="flex h-[200px] backdrop-blur-[19px] items-center justify-between rounded-[999px] bg-[#ededed] py-[70px] px-[100px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-[#14477d] shadow-[0_20px_60px_rgba(0,0,0,0.25)] transition-transform duration-150 group-data-[kiosk=kiosk-2]/kiosk:hidden hover:scale-[1.01]"
           onClick={onPrimaryCta}

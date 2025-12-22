@@ -80,7 +80,7 @@ const HardCodedKiosk3SecondScreenTemplate = ({
       </h2>
 
       <div className="absolute top-[820px] left-[240px] max-w-[1200px] text-white">
-        <h1 className="mb-[40px] text-[100px] leading-[1.3] font-bold tracking-[-5px] whitespace-pre-line">
+        <h1 className="mb-[40px] text-[100px] leading-[1.3] tracking-[-5px] whitespace-pre-line">
           {renderRegisteredMark(headlineText)}
         </h1>
         <p className="relative top-[190px] text-[52px] leading-[1.4] font-normal tracking-[-2.6px] whitespace-pre-line text-white/90">
@@ -109,7 +109,7 @@ const HardCodedKiosk3SecondScreenTemplate = ({
           <InnerRing className="absolute top-1/2 left-1/2 h-[730px] w-[730px] -translate-x-1/2 -translate-y-1/2" />
           <div className="absolute inset-0 rounded-full bg-transparent" />
           <div className="absolute inset-[20px] rounded-full bg-transparent" />
-          <span className="relative top-[5px] z-10 text-[80px] leading-[1.2] font-normal tracking-[-4px] text-white">
+          <span className="relative top-[5px] z-10 text-[80px] leading-[1.3] font-normal tracking-[-4px] text-white">
             {renderRegisteredMark(tapToBeginLabel)}
           </span>
           <div
