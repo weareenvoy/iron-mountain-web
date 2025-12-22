@@ -46,7 +46,12 @@ const SolutionSecondScreenTemplate = ({
   kioskId = DEFAULT_KIOSK_ID,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateDown: _onNavigateDown,
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onNavigateUp: _onNavigateUp,
+  solutionLabel = 'Solution',
+  stepFourDescription,
+  stepFourLabel,
+  stepOneDescription = 'Improved logistical costs due to extensive global footprint and in-house logistics',
   stepOneLabel = '01.',
   steps,
   stepsDividerHeights,
