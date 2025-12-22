@@ -13,13 +13,6 @@ const ScaleWrapper = ({ background = 'black', children, targetHeight, targetWidt
   const scale = 1;
   // For dev in chrome current value is 0.415. Remove for production.
 
-  const outerStyle: React.CSSProperties = {
-    background,
-    display: 'grid',
-    placeItems: 'center',
-    width: '100vw',
-  };
-
   const innerStyle: React.CSSProperties = {
     height: `${targetHeight}px`,
     transform: `scale(${scale})`,
@@ -29,7 +22,7 @@ const ScaleWrapper = ({ background = 'black', children, targetHeight, targetWidt
   };
 
   return (
-    <div style={outerStyle}>
+    <div className="grid w-screen place-items-center" style={{ background }}>
       <div style={innerStyle}>{children}</div>
     </div>
   );

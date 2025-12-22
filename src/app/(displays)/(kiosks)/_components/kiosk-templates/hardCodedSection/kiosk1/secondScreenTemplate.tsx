@@ -292,33 +292,25 @@ const HardCodedKiosk1SecondScreenTemplate = ({
   return (
     <>
       <div
-        className="relative flex h-screen w-full flex-col overflow-hidden"
+        className="relative flex h-screen w-full flex-col overflow-visible bg-transparent"
         data-node-id="hardcoded-k1-second"
         data-scroll-section="hardcoded-second-screen"
         ref={containerRef}
-        style={{ background: 'transparent', overflow: 'visible' }}
       >
-        <div
-          className="absolute inset-0"
-          style={{
-            background: 'transparent',
-          }}
-        />
+        <div className="absolute inset-0 bg-transparent" />
 
         <h2 className="absolute top-[240px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
           {renderRegisteredMark(eyebrowText)}
         </h2>
 
         <h1
-          className="absolute w-full text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]"
-          style={{ left: '240px', top: '830px', width: '100%' }}
+          className="absolute left-[240px] top-[830px] w-full text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]"
         >
           {renderRegisteredMark(headlineWithForcedBreak)}
         </h1>
 
         <p
-          className="absolute text-[52px] font-normal text-[#ededed]"
-          style={{ left: '250px', letterSpacing: '-2.6px', lineHeight: '1.4', top: '1320px', width: '640px' }}
+          className="absolute left-[250px] top-[1320px] w-[640px] text-[52px] leading-[1.4] font-normal tracking-[-2.6px] text-[#ededed]"
         >
           {renderRegisteredMark('Explore each section to learn how Iron Mountain can transform your enterprise')}
         </p>
@@ -360,8 +352,7 @@ const HardCodedKiosk1SecondScreenTemplate = ({
         </div>
 
         <div
-          className="absolute top-[1750px] left-[50%] w-full max-w-[2200px] -translate-x-1/2"
-          style={{ top: '1750px' }}
+          className="absolute top-[1750px] left-[1080px] w-full max-w-[2200px] -translate-x-1/2"
         >
           <Carousel
             className="w-full"
@@ -424,17 +415,16 @@ const HardCodedKiosk1SecondScreenTemplate = ({
                           <span
                             className={
                               isActive
-                                ? 'text-[61px] leading-[1.3] tracking-[-3px] text-[#14477d]'
-                                : 'text-[43px] leading-[1.3] tracking-[-2.1px] text-[#ededed]'
+                                ? 'w-[340px] text-[61px] leading-[1.3] tracking-[-3px] text-[#14477d]'
+                                : 'w-[300px] text-[43px] leading-[1.3] tracking-[-2.1px] text-[#ededed]'
                             }
-                            style={{ width: isActive ? '340px' : '300px' }}
                           >
                             {renderRegisteredMark(step.label)}
                           </span>
                           {isActive ? (
                             <div
                               aria-label="Open details"
-                              className="absolute inset-0 flex cursor-pointer items-center justify-center"
+                              className="absolute inset-0 flex cursor-pointer items-center justify-center pr-[5px] pt-[490px]"
                               onClick={event => {
                                 event.stopPropagation();
                                 setOpenModalIndex(idx);
@@ -447,7 +437,6 @@ const HardCodedKiosk1SecondScreenTemplate = ({
                                 }
                               }}
                               role="button"
-                              style={{ paddingRight: '5px', paddingTop: '490px' }}
                               tabIndex={0}
                             >
                               <CirclePlus className="h-[80px] w-[80px] text-[#14477d]" />
@@ -461,26 +450,23 @@ const HardCodedKiosk1SecondScreenTemplate = ({
               })}
             </CarouselContent>
             <div
-              className="pointer-events-none absolute inset-x-0 -bottom-[220px] flex items-center justify-center gap-[48px]"
-              style={{ bottom: '-290px' }}
+              className="pointer-events-none absolute inset-x-0 -bottom-[290px] flex items-center justify-center gap-[48px]"
             >
               <button
                 aria-label="Previous"
-                className="pointer-events-auto flex h-[64px] w-[64px] items-center justify-center text-white transition-transform duration-150 hover:scale-110"
+                className="pointer-events-auto mr-[25px] flex h-[102px] w-[102px] items-center justify-center text-white transition-transform duration-150 hover:scale-110"
                 onClick={handlePrev}
-                style={{ height: '102px', marginRight: '25px', width: '102px' }}
                 type="button"
               >
-                <ChevronLeft className="h-[36px] w-[36px]" style={{ height: '102px', width: '102px' }} />
+                <ChevronLeft className="h-[102px] w-[102px]" />
               </button>
               <button
                 aria-label="Next"
-                className="pointer-events-auto flex h-[64px] w-[64px] items-center justify-center text-white transition-transform duration-150 hover:scale-110"
+                className="pointer-events-auto ml-[25px] flex h-[102px] w-[102px] items-center justify-center text-white transition-transform duration-150 hover:scale-110"
                 onClick={handleNext}
-                style={{ height: '102px', marginLeft: '25px', width: '102px' }}
                 type="button"
               >
-                <ChevronRight className="h-[36px] w-[36px]" style={{ height: '102px', width: '102px' }} />
+                <ChevronRight className="h-[102px] w-[102px]" />
               </button>
             </div>
           </Carousel>
@@ -490,22 +476,19 @@ const HardCodedKiosk1SecondScreenTemplate = ({
       {activeModalContent
         ? createPortal(
             <div
-              className="absolute inset-0 z-[200] flex items-center justify-center"
-              style={{ pointerEvents: 'auto' }}
+              className="absolute inset-0 z-[200] flex items-center justify-center pointer-events-auto"
             >
               <div
                 className="absolute inset-0 bg-black/60 backdrop-blur-[50px]"
                 onClick={() => setOpenModalIndex(null)}
               />
               <div
-                className="relative z-[201] flex max-h-[90vh] w-[90vw] flex-col overflow-hidden rounded-[48px] bg-[#97e9ff] p-[80px] text-[#14477d] shadow-[0_40px_120px_rgba(0,0,0,0.45)]"
-                style={{ height: '2800px', width: '1920px' }}
+                className="relative z-[201] flex h-[2800px] w-[1920px] max-h-[90vh] flex-col overflow-hidden rounded-[48px] bg-[#97e9ff] p-[80px] text-[#14477d] shadow-[0_40px_120px_rgba(0,0,0,0.45)]"
               >
                 <div className="flex items-center justify-between">
                   <button
-                    className="relative flex h-[200px] items-center gap-[24px] rounded-[1000px] bg-[#ededed] px-[90px] py-[60] text-[55px] leading-[1.4] font-normal tracking-[-2.7px] text-[#14477d] transition hover:scale-[1.02]"
+                    className="relative left-[60px] top-[45px] flex h-[200px] items-center gap-[24px] rounded-[1000px] bg-[#ededed] px-[90px] py-[60] pr-[100px] text-[55px] leading-[1.4] font-normal tracking-[-2.7px] text-[#14477d] transition hover:scale-[1.02]"
                     onClick={() => setOpenModalIndex(null)}
-                    style={{ left: '60px', paddingRight: '100px', top: '45px' }}
                     type="button"
                   >
                     <span className="flex items-center justify-center">
@@ -516,7 +499,7 @@ const HardCodedKiosk1SecondScreenTemplate = ({
                 </div>
 
                 <div className="mt-[80px] grid gap-[80px] text-[#14477d]">
-                  <div className="space-y-[60px]" style={{ left: '45px', position: 'relative', top: '150px' }}>
+                  <div className="relative left-[45px] top-[150px] space-y-[60px]">
                     <h2 className="mb-[105px] text-[100px] leading-[1.3] font-normal tracking-[-5px]">
                       {activeModalContent.heading}
                     </h2>
@@ -532,18 +515,10 @@ const HardCodedKiosk1SecondScreenTemplate = ({
                   {activeModalContent.imageSrc ? (
                     <div className="flex items-center justify-center">
                       <div
-                        className="relative rotate-[45deg] rounded-[80px]"
-                        style={{
-                          background: 'transparent',
-                          border: 'none',
-                          height: '1680px',
-                          top: '130px',
-                          width: '1680px',
-                        }}
+                        className="relative top-[130px] h-[1680px] w-[1680px] rotate-[45deg] rounded-[80px] border-0 bg-transparent"
                       >
                         <div
-                          className="absolute inset-0 flex -rotate-[45deg] items-center justify-center rounded-[80px]"
-                          style={{ background: 'transparent' }}
+                          className="absolute inset-0 -rotate-[45deg] flex items-center justify-center rounded-[80px] bg-transparent"
                         >
                           <NextImage
                             alt={activeModalContent.imageAlt ?? 'Modal illustration'}

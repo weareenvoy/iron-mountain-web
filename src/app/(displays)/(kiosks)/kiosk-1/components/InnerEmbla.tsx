@@ -38,16 +38,16 @@ const InnerEmbla = ({ id = 'inner-embla', slides }: Props) => {
   }, [controller, emblaApi, id]);
 
   return (
-    <div className="embla" ref={emblaRef} style={{ overflow: 'hidden' }}>
-      <div className="embla__container" style={{ display: 'flex' }}>
+    <div className="embla overflow-hidden" ref={emblaRef}>
+      <div className="embla__container flex">
         {slides?.length
           ? slides.map((slide, index) => (
-              <div className="embla__slide" key={index} style={{ minWidth: '100%' }}>
+              <div className="embla__slide min-w-full" key={index}>
                 {slide}
               </div>
             ))
           : [1, 2, 3].map(slideNumber => (
-              <div className="embla__slide" key={slideNumber} style={{ minWidth: '100%', padding: 20 }}>
+              <div className="embla__slide min-w-full p-5" key={slideNumber}>
                 <div>Inner Embla slide {slideNumber}</div>
               </div>
             ))}

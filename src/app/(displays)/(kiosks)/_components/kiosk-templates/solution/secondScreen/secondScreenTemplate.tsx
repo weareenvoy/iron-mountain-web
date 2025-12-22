@@ -89,19 +89,14 @@ const SolutionSecondScreenTemplate = ({
 
   return (
     <div
-      className="group/kiosk relative flex h-screen w-full flex-col overflow-hidden bg-black"
+      className="group/kiosk relative flex h-screen w-full flex-col overflow-visible bg-transparent"
       data-kiosk={kioskId}
       data-node-id="5168:9473"
       data-scroll-section="solution-second-group"
-      style={{ background: 'transparent', overflow: 'visible' }}
     >
       {/* Gradient backdrop */}
       <div
-        className="absolute top-[-296px] left-0 h-[5416px] w-full rounded-t-[100px]"
-        style={{
-          background: 'transparent',
-          height: '14575px',
-        }}
+        className="absolute top-[-296px] left-0 h-[14575px] w-full rounded-t-[100px] bg-transparent"
       />
 
       {/* Decorative diamonds */}
@@ -114,20 +109,18 @@ const SolutionSecondScreenTemplate = ({
 
       {/* Subheadline */}
       <h2
-        className="absolute top-[230px] left-[120px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]"
-        style={{ zIndex: 1 }}
+        className="absolute top-[230px] left-[120px] z-[1] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]"
       >
         {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
       </h2>
 
       {/* Solution label */}
       <div className="absolute relative top-[180px] top-[710px] left-[150px] flex group-data-[kiosk=kiosk-3]/kiosk:top-[720px] group-data-[kiosk=kiosk-3]/kiosk:left-[140px]">
-        <div className="relative flex h-[200px] w-[200px] items-center justify-center" style={{ left: -55, top: 25 }}>
+        <div className="relative left-[-55px] top-[25px] flex h-[200px] w-[200px] items-center justify-center">
           <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
         </div>
         <h1
-          className="text-[126px] leading-[1.3] font-normal tracking-[-6.3px] whitespace-nowrap text-[#ededed]"
-          style={{ left: -50, position: 'relative', top: 55 }}
+          className="relative left-[-50px] top-[55px] text-[126px] leading-[1.3] font-normal tracking-[-6.3px] whitespace-nowrap text-[#ededed]"
         >
           {renderRegisteredMark(solutionLabel)}
         </h1>

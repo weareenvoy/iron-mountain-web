@@ -57,7 +57,7 @@ const HardCodedKiosk3SecondScreenTemplate = ({
       data-node-id="5896:13301"
       data-scroll-section="hardcoded-second-screen"
     >
-      <div className="absolute inset-0 bg-transparent" style={{ background: 'transparent' }} />
+      <div className="absolute inset-0 bg-transparent" />
 
       {/* Diamond video */}
       <div className="pointer-events-none absolute bottom-[-1000px] left-[50px] h-[2500px] w-[2500px] rotate-[45deg] overflow-hidden rounded-[200px] border border-white/10 shadow-[0_40px_120px_rgba(0,0,0,0.45)]">
@@ -99,7 +99,7 @@ const HardCodedKiosk3SecondScreenTemplate = ({
         </button>
       </div>
 
-      <div className="absolute top-[43.5%] left-1/2 h-[1000px] w-[1000px] -translate-x-1/2 -translate-y-1/2">
+      <div className="absolute top-[2266px] left-1/2 h-[1000px] w-[1000px] -translate-x-1/2 -translate-y-1/2">
         <button
           className="relative flex h-full w-full items-center justify-center rounded-full transition hover:scale-[1.05]"
           onClick={onTapToBegin}

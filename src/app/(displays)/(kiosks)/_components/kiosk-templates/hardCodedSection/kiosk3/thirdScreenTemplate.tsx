@@ -181,7 +181,7 @@ const HardCodedKiosk3ThirdScreenTemplate = ({
       data-node-id="5896:13360"
       data-scroll-section="hardcoded-third-screen"
     >
-      <div className="absolute inset-0" style={{ background: 'transparent' }} />
+      <div className="absolute inset-0 bg-transparent" />
       <div className="absolute inset-0 bg-black/15 backdrop-blur-[12px]" />
 
       {/* Eyebrow */}
@@ -200,9 +200,8 @@ const HardCodedKiosk3ThirdScreenTemplate = ({
         <ul className="mt-[110px] ml-[60px] space-y-[22px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white">
           {current.bullets.map((item, i) => (
             <li
-              className="flex items-start gap-[16px] text-[64px]"
+              className="flex w-[1100px] items-start gap-[16px] text-[64px]"
               key={`${current.id}-bullet-${i}`}
-              style={{ width: '1100px' }}
             >
               <span className="mt-[20px] mr-[40px] ml-[-50px] inline-block h-[35px] w-[35px] rotate-[45deg] rounded-[4px] border border-white/80" />
               <span>{renderRegisteredMark(item)}</span>
@@ -213,9 +212,8 @@ const HardCodedKiosk3ThirdScreenTemplate = ({
 
       {/* CTA */}
       <button
-        className="absolute top-[2630px] left-[240px] flex h-[200px] items-center gap-[18px] rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[110px] text-[55px] leading-[1.1] font-semibold text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)]"
+        className="absolute top-[2630px] left-[240px] flex h-[200px] items-center gap-[18px] rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[110px] text-[55px] leading-[1.1] font-semibold tracking-[2px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)]"
         onClick={() => setShowOverlay(true)}
-        style={{ letterSpacing: '2px' }}
         type="button"
       >
         Launch demo

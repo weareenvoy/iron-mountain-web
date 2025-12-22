@@ -35,7 +35,6 @@ export const FirstScreenTemplate = ({
       className="group/kiosk relative flex h-screen w-full flex-col overflow-visible bg-black"
       data-kiosk={kioskId}
       data-node-id="5168:9882"
-      style={{ overflow: 'visible' }}
     >
       {/* Background gradient - stays behind all content */}
       <div className="pointer-events-none absolute inset-0 top-[1290px] z-[1] h-[14400px] rounded-[100px] bg-[linear-gradient(180deg,#1B75BC_0.01%,#14477D_98%)] group-data-[kiosk=kiosk-2]/kiosk:top-[1240px] group-data-[kiosk=kiosk-2]/kiosk:h-[14450px]" />

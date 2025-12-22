@@ -60,11 +60,10 @@ export const ThirdScreenTemplate = ({
         <div className="relative h-full w-full">
           <Image
             alt={metricDescription ? `Graphic representing ${metricDescription}` : 'Metric highlight graphic'}
-            className="object-contain"
+            className="rotate-45 object-contain"
             fill
             sizes="795px"
             src={metricImageSrc}
-            style={{ transform: 'rotate(45deg)' }}
             unoptimized
           />
         </div>

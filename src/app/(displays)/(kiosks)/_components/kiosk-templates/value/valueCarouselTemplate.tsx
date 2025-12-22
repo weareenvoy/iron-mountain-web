@@ -203,8 +203,7 @@ const DiamondStack = ({
             {card.label ? (
               <div className="absolute inset-0 flex items-center justify-center">
                 <div
-                  className="flex h-[320px] w-[320px] -rotate-[45deg] items-center justify-center px-10 text-center text-[48px] leading-[1.4] font-normal tracking-[-2.4px]"
-                  style={{ color: '#ededed' }}
+                  className="flex h-[320px] w-[320px] -rotate-[45deg] items-center justify-center px-10 text-center text-[48px] leading-[1.4] font-normal tracking-[-2.4px] text-[#ededed]"
                 >
                   {renderRegisteredMark(card.label)}
                 </div>
@@ -271,11 +270,10 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
 
   return (
     <div
-      className="relative flex h-screen w-full flex-col overflow-hidden bg-black"
+      className="relative flex h-screen w-full flex-col overflow-visible bg-transparent"
       data-carousel-id={resolvedCarouselId}
       {...(isOverview ? { 'data-scroll-section': 'value-carousel' } : {})}
       data-node-id="5688:14628"
-      style={{ background: 'transparent', overflow: 'visible' }}
     >
       <div className="absolute top-0 left-0 z-[0] h-[1284px] w-full overflow-hidden">
         {heroVideo ? (
@@ -307,13 +305,12 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
         <p className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
           {renderRegisteredMark(normalizeMultiline(eyebrow))}
         </p>
-        <div className="flex items-center gap-[41px]" style={{ left: 10, position: 'relative', top: -100 }}>
-          <div className="relative flex h-[200px] w-[200px] items-center justify-center" style={{ left: -55, top: 25 }}>
+        <div className="relative left-[10px] top-[-100px] flex items-center gap-[41px]">
+          <div className="relative left-[-55px] top-[25px] flex h-[200px] w-[200px] items-center justify-center">
             <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
           </div>
           <h1
-            className="text-[126px] leading-[1.3] font-normal tracking-[-6.3px] whitespace-nowrap text-[#ededed]"
-            style={{ left: -90, position: 'relative', top: 30 }}
+            className="relative left-[-90px] top-[30px] text-[126px] leading-[1.3] font-normal tracking-[-6.3px] whitespace-nowrap text-[#ededed]"
           >
             {renderRegisteredMark(labelText)}
           </h1>
@@ -321,17 +318,16 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
       </div>
 
       <div
-        className="absolute top-[1060px] left-0 z-[3] h-[4093px] w-full rounded-t-[100px] px-[240px] pt-[200px] pb-[1166px]"
+        className="absolute top-[1060px] left-0 z-[3] w-full rounded-t-[100px] px-[240px] pt-[200px] pb-[1166px]"
         data-node-id="5688:14631"
         style={{ background: contentBackground, height: contentHeight }}
       >
-        <div className="flex flex-col gap-[360px] text-[#8a0d71]" style={{ position: 'relative', top: -10 }}>
+        <div className="relative top-[-10px] flex flex-col gap-[360px] text-[#8a0d71]">
           <div>
             <p className="text-[100px] leading-[1.3] font-normal tracking-[-5px]">{renderRegisteredMark(headline)}</p>
             <p
-              className="mt-[80px] text-[60px] leading-[1.4] font-normal tracking-[-3px]"
+              className="mt-[80px] w-[1480px] text-[60px] leading-[1.4] font-normal tracking-[-3px]"
               {...(!isOverview ? { 'data-scroll-section': 'value-description' } : {})}
-              style={{ width: '1480px' }}
             >
               {renderRegisteredMark(normalizeMultiline(description))}
             </p>

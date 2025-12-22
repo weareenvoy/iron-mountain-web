@@ -50,11 +50,10 @@ export const SecondScreenTemplate = ({
         <div className="relative h-full w-full">
           <Image
             alt="Large decorative background diamond"
-            className="object-contain"
+            className="object-contain -scale-x-100"
             fill
             sizes="1506px"
             src={largeIconSrc}
-            style={{ transform: 'scaleX(-1)' }}
             unoptimized
           />
         </div>

@@ -83,12 +83,11 @@ const SolutionFourthScreenTemplate = ({
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden bg-transparent" data-node-id="5168:10496">
       {/* Background gradient (now transparent) */}
-      <div className="absolute top-0 left-0 h-[5120px] w-full" style={{ background: 'transparent' }} />
+      <div className="absolute top-0 left-0 h-[5120px] w-full bg-transparent" />
 
       {/* Subheadline */}
       <h2
-        className="absolute top-[368px] left-[120px] -translate-y-full text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed]"
-        style={{ top: '400px', width: '390px', zIndex: 1 }}
+        className="absolute top-[400px] left-[120px] z-[1] w-[390px] -translate-y-full text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed]"
       >
         {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
       </h2>
@@ -96,14 +95,12 @@ const SolutionFourthScreenTemplate = ({
       {/* Solution label */}
       <div
         className="absolute top-[790px] left-[140px] flex items-center gap-[41px]"
-        style={{ left: '140px', top: '790px' }}
       >
-        <div className="relative flex h-[200px] w-[200px] items-center justify-center" style={{ left: -55, top: -25 }}>
+        <div className="relative left-[-55px] top-[-25px] flex h-[200px] w-[200px] items-center justify-center">
           <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
         </div>
         <h1
-          className="text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]"
-          style={{ left: '-100px', position: 'relative', top: '-20px' }}
+          className="relative left-[-100px] top-[-20px] text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]"
         >
           {solutionLabel}
         </h1>
@@ -111,25 +108,22 @@ const SolutionFourthScreenTemplate = ({
 
       {/* Title */}
       <div
-        className="absolute top-[1260px] left-[240px] w-[1300px]"
-        style={{ top: '1260px', width: '1300px', zIndex: 10 }}
+        className="absolute top-[1260px] left-[240px] z-10 w-[1300px]"
       >
         <p
           className="text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]"
           data-scroll-section="solution-fourth-title"
-          style={{ color: '#ededed' }}
         >
           {renderRegisteredMark(title)}
         </p>
       </div>
 
       {/* Solution cards */}
-      <div className="absolute top-[1770px] left-[240px] w-[1379px] rounded-[80px] shadow-[0_20px_80px_rgba(0,0,0,0.25)]">
+      <div className="absolute top-[1770px] left-[240px] w-[1379px] rounded-[80px] bg-[#ededed] shadow-[0_20px_80px_rgba(0,0,0,0.25)]">
         <Accordion
           className="space-y-0 overflow-hidden rounded-[80px]"
           collapsible
           defaultValue={entries.find(entry => entry.expanded)?.id ?? entries[0]?.id ?? 'item-1'}
-          style={{ backgroundColor: '#ededed' }}
           type="single"
         >
           {entries.map((item, index) => {
@@ -175,23 +169,20 @@ const SolutionFourthScreenTemplate = ({
                     <span className="text-left">{renderRegisteredMark(item.title)}</span>
                   </div>
                 </AccordionTrigger>
-                <AccordionContent className="[&>div]:pb-0" style={{ position: 'relative', zIndex: 1 }}>
+                <AccordionContent className="relative z-[1] [&>div]:pb-0">
                   {hasContent ? (
                     <div
-                      className="px-[80px] pt-[50px] pb-[120px] pl-[218px]"
+                      className="pl-[210px] pt-[35px] px-[80px] pb-[120px]"
                       style={{
                         backgroundColor: palette.body,
                         color: palette.text,
-                        paddingLeft: '210px',
-                        paddingTop: '35px',
                       }}
                     >
                       <ul className="space-y-[16px] text-[52px] leading-[1.4] tracking-[-2.6px]">
                         {item.contentList?.map(bullet => (
                           <li
-                            className="list-disc"
+                            className="list-disc ms-[70px] ps-[15px] mb-0"
                             key={bullet}
-                            style={{ marginBottom: '0px', marginInlineStart: '70px', paddingInlineStart: '15px' }}
                           >
                             {renderRegisteredMark(bullet)}
                           </li>
