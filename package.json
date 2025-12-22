@@ -58,7 +58,7 @@
   },
   "devDependencies": {
     "@cspell/eslint-plugin": "^9.4.0",
-    "@next/bundle-analyzer": "^16.0.7",
+    "@next/bundle-analyzer": "^16.1.0",
     "@tailwindcss/postcss": "^4.1.18",
     "@types/node": "^25.0.2",
     "@types/react": "^19.2.7",
