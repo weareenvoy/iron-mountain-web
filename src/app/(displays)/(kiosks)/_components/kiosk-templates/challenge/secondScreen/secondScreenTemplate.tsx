@@ -5,12 +5,6 @@ import Image from 'next/image';
 import { DEFAULT_KIOSK_ID, type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
-// import styles from './secondScreenTemplate.module.css';
-
-// Asset constants from Figma MCP
-const imgHero = '/images/kiosks/kiosk1/02-solution/Solution-Image1-Full.png';
-const imgVector = '/images/kiosks/kiosk1/01-challenge/Challenge-Image1-Diamond.png';
-
 export type SecondScreenTemplateProps = Readonly<{
   bottomDescription?: string;
   kioskId?: KioskId;
@@ -23,16 +17,16 @@ export type SecondScreenTemplateProps = Readonly<{
 }>;
 
 export const SecondScreenTemplate = ({
-  bottomDescription = '',
+  bottomDescription,
   kioskId = DEFAULT_KIOSK_ID,
-  largeIconSrc = imgVector,
-  mainDescription = 'The Museum also needed assistance with physical storage for a collection of historical music artifacts.',
+  largeIconSrc,
+  mainDescription,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateDown: _onNavigateDown,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateUp: _onNavigateUp,
-  subheadline = 'Rich media &\n cultural heritage',
-  topImageSrc = imgHero,
+  subheadline,
+  topImageSrc,
 }: SecondScreenTemplateProps) => {
   return (
     <div

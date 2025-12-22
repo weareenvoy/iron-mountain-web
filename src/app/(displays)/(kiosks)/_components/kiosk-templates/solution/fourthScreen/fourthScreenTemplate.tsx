@@ -49,10 +49,6 @@ const palettes: Record<AccordionColor, PaletteConfig> = {
   },
 } as const;
 
-const DEFAULT_PHOTO_DIAMOND_SRC = '/images/kiosks/kiosk3/02-solution/Solution-Image2-Diamond.png';
-
-const defaultAccordionItems: AccordionEntry[] = [];
-
 export type SolutionFourthScreenTemplateProps = Readonly<{
   accentDiamondSrc?: string;
   accordionItems?: AccordionEntry[];
@@ -67,18 +63,18 @@ export type SolutionFourthScreenTemplateProps = Readonly<{
 
 const SolutionFourthScreenTemplate = ({
   accentDiamondSrc,
-  accordionItems = defaultAccordionItems,
+  accordionItems,
   mediaDiamondOutlineSrc,
-  mediaDiamondSolidSrc = DEFAULT_PHOTO_DIAMOND_SRC,
+  mediaDiamondSolidSrc,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateDown: _onNavigateDown,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateUp: _onNavigateUp,
-  solutionLabel = 'Solution',
-  subheadline = 'IT assets &\n data centers',
-  title = "Iron Mountain's Asset Lifecycle Management",
+  solutionLabel,
+  subheadline,
+  title,
 }: SolutionFourthScreenTemplateProps) => {
-  const entries = accordionItems.length ? accordionItems : defaultAccordionItems;
+  const entries = accordionItems?.length ? accordionItems : [];
 
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden bg-transparent" data-node-id="5168:10496">
@@ -264,21 +260,18 @@ const PlusMinusIcon = ({ color }: { readonly color: string }) => {
 
 const PhotoDiamond = ({
   className,
-  imageAlt = 'Solution highlight diamond photo',
+  imageAlt,
   imageSrc,
 }: {
   readonly className: string;
   readonly imageAlt?: string;
   readonly imageSrc?: string;
 }) => {
-  const shouldOverride = !imageSrc || imageSrc.includes('2f62e81abe58763bf6bdbf710843b3c886f19583');
-  const resolvedSrc = shouldOverride ? DEFAULT_PHOTO_DIAMOND_SRC : imageSrc;
-
   return (
     <div className={className}>
       <div className="relative size-full rotate-[45deg] overflow-hidden rounded-[160px]">
-        {resolvedSrc ? (
-          <Image alt={imageAlt} className="-rotate-[45deg] object-cover" fill sizes="520px" src={resolvedSrc} />
+        {imageSrc ? (
+          <Image alt={imageAlt ?? ''} className="-rotate-[45deg] object-cover" fill sizes="520px" src={imageSrc} />
         ) : (
           <div className="h-full w-full -rotate-[45deg] bg-[#6dcff6]" />
         )}

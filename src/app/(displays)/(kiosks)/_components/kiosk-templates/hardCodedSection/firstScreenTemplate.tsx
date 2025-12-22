@@ -7,13 +7,6 @@ import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCFill
 import HCHollowBlueDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollowBlueDiamond';
 import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollowOrangeDiamond';
 
-const defaultHeroImageSrc =
-  'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image1-Diamond.webp';
-const defaultEyebrow = ['Rich media &', 'cultural heritage'];
-const defaultHeadline = ['Learn more about how we', 'unlocked new possibilities', 'for our partners'];
-const defaultPrimaryCtaLabel = 'From archive to access';
-const defaultSecondaryCtaLabel = 'Virtual walkthrough';
-
 export interface HardCodedKiosk1FirstScreenTemplateProps {
   readonly backgroundEndColor?: string;
   readonly backgroundStartColor?: string;
@@ -29,11 +22,6 @@ export interface HardCodedKiosk1FirstScreenTemplateProps {
   readonly primaryCtaLabel?: string;
   readonly secondaryCtaLabel?: string;
 }
-
-const gradientDefaults = {
-  backgroundEndColor: '#14477d',
-  backgroundStartColor: '#1b75bc',
-};
 
 const ArrowIcon = () => (
   <svg
@@ -56,19 +44,19 @@ const ArrowIcon = () => (
 );
 
 const HardCodedKiosk1FirstScreenTemplate = ({
-  backgroundEndColor = gradientDefaults.backgroundEndColor,
-  backgroundStartColor = gradientDefaults.backgroundStartColor,
-  eyebrow = defaultEyebrow,
-  headline = defaultHeadline,
-  heroImageAlt = 'Visitors smiling while viewing content',
-  heroImageSrc = defaultHeroImageSrc,
+  backgroundEndColor,
+  backgroundStartColor,
+  eyebrow,
+  headline,
+  heroImageAlt,
+  heroImageSrc,
   kioskId,
   onPrimaryCta,
   onSecondaryCta,
-  overlayCardLabel = 'Virtual walkthrough',
-  overlayHeadline = ['Section title lorem ipsum', 'dolor sit.'],
-  primaryCtaLabel = defaultPrimaryCtaLabel,
-  secondaryCtaLabel = defaultSecondaryCtaLabel,
+  overlayCardLabel,
+  overlayHeadline,
+  primaryCtaLabel,
+  secondaryCtaLabel,
 }: HardCodedKiosk1FirstScreenTemplateProps) => {
   const [showOverlay, setShowOverlay] = useState(false);
   const isKiosk1 = kioskId === 'kiosk-1';

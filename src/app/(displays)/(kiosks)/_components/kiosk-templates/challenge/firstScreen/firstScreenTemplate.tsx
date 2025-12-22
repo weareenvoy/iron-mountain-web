@@ -17,17 +17,17 @@ export type FirstScreenTemplateProps = Readonly<{
 }>;
 
 export const FirstScreenTemplate = ({
-  challengeLabel = 'Challenge',
+  challengeLabel,
   kioskId = DEFAULT_KIOSK_ID,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateDown: _onNavigateDown,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateUp: _onNavigateUp,
-  problemDescription = 'The Museum needed a secure, off-site, cloud-accessible, and easily managed solution to protect its one-of-a-kind, irreplaceable footage. Storing the only master copy locally presented a high risk of losing all assets in the event of a data failure or system crash.',
-  savingsAmount = '120 TB',
-  savingsDescription = 'of data is safely stored and accessible for the Museum.',
-  subheadline = 'Rich media &\n cultural heritage',
-  videoSrc = '/images/kiosks/kiosk1/01-challenge/Challenge-Header.mp4',
+  problemDescription,
+  savingsAmount,
+  savingsDescription,
+  subheadline,
+  videoSrc,
 }: FirstScreenTemplateProps) => {
   return (
     <div

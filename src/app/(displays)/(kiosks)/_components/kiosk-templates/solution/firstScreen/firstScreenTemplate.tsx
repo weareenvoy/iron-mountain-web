@@ -25,10 +25,10 @@ export type SolutionFirstScreenTemplateProps = Readonly<{
 
 const SolutionFirstScreenTemplate = ({
   accentDiamondSrc,
-  backgroundVideoSrc = '/_videos/v1/872a6328a0acba2e645646ef71d669f72bbd05db',
-  description = 'With a focus on physical storage and a secure digital archive, Iron Mountain provided climate-controlled, private vaults for physical artifacts and implemented Smart Vault for digital preservation.',
-  gradientEndColor = '#8a0d71',
-  gradientStartColor = '#a2115e',
+  backgroundVideoSrc,
+  description,
+  gradientEndColor,
+  gradientStartColor,
   kioskId,
   largeDiamondSrc,
   mediumDiamondSrc,
@@ -36,9 +36,9 @@ const SolutionFirstScreenTemplate = ({
   onNavigateDown: _onNavigateDown,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateUp: _onNavigateUp,
-  solutionLabel = 'Solution',
-  subheadline = 'Rich media &\n cultural heritage',
-  title = 'A partnership with Iron Mountain',
+  solutionLabel,
+  subheadline,
+  title,
 }: SolutionFirstScreenTemplateProps) => {
   return (
     <div

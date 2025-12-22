@@ -5,11 +5,6 @@ import Image from 'next/image';
 import { DEFAULT_KIOSK_ID, type KioskId } from '../../../../_types/kiosk-id';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
-const imgHeroDiamond = '/images/kiosks/kiosk1/04-custom-interactive/CU-Image1-Diamond.png';
-const imgMetricDiamond = '/images/kiosks/kiosk1/04-custom-interactive/CU-Image1-Diamond.png';
-const imgVector = '/images/kiosks/kiosk1/04-custom-interactive/CU-Image1-Full.png';
-const imgVector1 = imgMetricDiamond;
-
 export type ThirdScreenTemplateProps = Readonly<{
   description?: string;
   heroImageSrc?: string;
@@ -26,20 +21,20 @@ export type ThirdScreenTemplateProps = Readonly<{
 }>;
 
 export const ThirdScreenTemplate = ({
-  description = 'The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.',
-  heroImageSrc = imgHeroDiamond,
+  description,
+  heroImageSrc,
   kioskId = DEFAULT_KIOSK_ID,
-  largeIconCenterSrc = imgVector1,
-  largeIconTopSrc = imgVector,
-  metricAmount = '40 TB',
-  metricDescription = 'of existing footage of data migration from physical drives into Iron Mountain’s digital preservation platform.',
-  metricImageSrc = imgMetricDiamond,
+  largeIconCenterSrc,
+  largeIconTopSrc,
+  metricAmount,
+  metricDescription,
+  metricImageSrc,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateDown: _onNavigateDown,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateUp: _onNavigateUp,
-  subheadline = 'Rich media &\n cultural heritage',
-  videoSrc = '/images/kiosks/kiosk1/03-value/Value-header.mp4',
+  subheadline,
+  videoSrc,
 }: ThirdScreenTemplateProps) => {
   return (
     <div

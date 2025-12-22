@@ -9,45 +9,7 @@ import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiam
 import PurpleFilledDiamond from '@/components/ui/icons/Kiosks/Solutions/PurpleFilledDiamond';
 import renderRegisteredMark from '../challenge/utils/renderRegisteredMark';
 
-const defaultHeroVideoSrc = '/_videos/v1/7b46056515a038f40d95647dc31113a9e8ce2a8c';
-const defaultHeadline = 'Expanding possibilities';
-const defaultDescription =
-  'The partnership with Iron Mountain and implementation of InSight DXP transitioned the organization from unknown to certainty and clarity in pension administration.';
-const defaultEyebrow = ['Information', '& data lifecycle'];
-const defaultLabelText = 'Value';
-
-const defaultSlides = [
-  {
-    badgeLabel: 'Operational benefits',
-    bullets: [
-      'Rendered an accessible, searchable system for pension employees to quickly answer employee and regulatory queries',
-      'Provided scalability for future growth, including adding additional automated intelligent document processing (IDP) workflows',
-      'Enabled the organization to validate paid claims faster and more accurately upon deployment',
-    ],
-    diamondCards: [
-      { color: '#f26522', label: 'Strategic benefits' },
-      { color: '#8a0d71', label: 'Operational benefits' },
-      { color: '#1b75bc', label: 'Economic benefits' },
-    ],
-    id: 'operational-benefits',
-  },
-  {
-    badgeLabel: 'Customer outcomes',
-    bullets: [
-      'Accelerated response times with proactive insights surfaced from digitized archives',
-      'Created transparency for stakeholders through live dashboards and auditable workflows',
-      'Unlocked downstream automation opportunities across governance, risk, and compliance teams',
-    ],
-    diamondCards: [
-      { color: '#8a0d71', label: 'Operational benefits' },
-      { color: '#1b75bc', label: 'Economic benefits' },
-      { color: '#f26522', label: 'Strategic benefits' },
-    ],
-    id: 'customer-outcomes',
-  },
-];
-
-const fallbackDiamondCards: readonly ValueDiamondCard[] = defaultSlides[0]?.diamondCards ?? [];
+const fallbackDiamondCards: readonly ValueDiamondCard[] = [];
 const paletteColors = ['#8a0d71', '#1b75bc', '#f26522'] as const;
 const paletteTextColors = [undefined, undefined, undefined] as const;
 
@@ -219,14 +181,14 @@ const DiamondStack = ({
 const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
   const {
     carouselId,
-    description = defaultDescription,
-    eyebrow = defaultEyebrow,
-    headline = defaultHeadline,
-    heroImageAlt = 'Value hero',
+    description,
+    eyebrow,
+    headline,
+    heroImageAlt,
     heroImageSrc,
     heroVideoPosterSrc,
     heroVideoSrc,
-    labelText = defaultLabelText,
+    labelText,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     onNavigateDown: _onNavigateDown,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -240,9 +202,9 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
   const isOverview = resolvedCarouselId.includes('overview');
   const contentHeight = isOverview ? '9360px' : '4150px';
   const contentBackground = isOverview ? '#ededed' : 'transparent';
-  const heroVideo = isOverview ? (heroVideoSrc ?? defaultHeroVideoSrc) : undefined;
+  const heroVideo = isOverview ? heroVideoSrc : undefined;
 
-  const slidesToRender = slides?.length ? slides : defaultSlides;
+  const slidesToRender = slides?.length ? slides : [];
   const slidesWithDefaults = slidesToRender.map(slide => ({
     ...slide,
     diamondCards: normalizeDiamondCards(slide.diamondCards),

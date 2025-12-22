@@ -37,125 +37,26 @@ type CarouselSlide = {
   sectionTitle: string | string[];
 };
 
-const defaultHeadline = ['Centralized management', 'of services via API'];
-
-const defaultSlides: CarouselSlide[] = [
-  {
-    bullets: [
-      'Decommissioning services',
-      'Packaging / logistics / transportation',
-      'Data sanitization',
-      'Lease returns',
-      'ITAD',
-    ],
-    eyebrow: ['IT assets &', 'data centers'],
-    headline: ['Centralized management', 'of services via API'],
-    id: 'slide-1',
-    primaryImageAlt: 'Professional with tablet in data center',
-    primaryImageSrc:
-      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/01+-+Challenge/Challenge-Image1-Diamond.webp',
-    primaryVideoSrc:
-      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video1-Full.webm',
-    secondaryImageAlt: 'Hand touching smart interface',
-    secondaryImageSrc:
-      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image2-Diamond.webp',
-    sectionTitle: 'Data configuration',
-  },
-  {
-    bullets: ['Asset tagging', 'Asset tracking', 'Inventory management', 'Audits', 'Legal holds'],
-    eyebrow: ['IT assets &', 'data centers'],
-    headline: ['Centralized management', 'of services via API'],
-    id: 'slide-2',
-    primaryImageAlt: 'Professional with tablet in data center',
-    primaryImageSrc:
-      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/01+-+Challenge/Challenge-Image1-Diamond.webp',
-    primaryVideoSrc:
-      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video2-Full.webm',
-    secondaryImageAlt: 'Hand touching smart interface',
-    secondaryImageSrc: undefined,
-    sectionTitle: 'Device storage',
-  },
-  {
-    bullets: ['Kitting', 'Cleaning', 'Planning/scheduling', 'Imaging', 'Required upgrades'],
-    eyebrow: ['IT assets &', 'data centers'],
-    headline: ['Device configuration'],
-    id: 'slide-3',
-    primaryImageAlt: 'Professional with tablet in data center',
-    primaryImageSrc:
-      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/01+-+Challenge/Challenge-Image1-Diamond.webp',
-    primaryVideoSrc:
-      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video3-Full.webm',
-    secondaryImageAlt: 'Hand touching smart interface',
-    secondaryImageSrc:
-      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image3-Diamond.webp',
-    sectionTitle: 'Device configuration',
-  },
-  {
-    bullets: ['Shipment of PC and peripherals', 'Advanced exchange for repair or refresh'],
-    eyebrow: ['IT assets &', 'data centers'],
-    headline: ['Device deployment'],
-    id: 'slide-4',
-    primaryImageAlt: 'Professional with tablet in data center',
-    primaryImageSrc:
-      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/01+-+Challenge/Challenge-Image1-Diamond.webp',
-    primaryVideoSrc:
-      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video4-Full.webm',
-    secondaryImageAlt: 'Hand touching smart interface',
-    secondaryImageSrc:
-      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image4-Diamond.webp',
-    sectionTitle: 'Device deployment',
-  },
-  {
-    bullets: ['Management of warranty and support extension, including break/fix'],
-    eyebrow: ['IT assets &', 'data centers'],
-    headline: ['Device maintenance'],
-    id: 'slide-5',
-    primaryImageAlt: 'Professional with tablet in data center',
-    primaryImageSrc:
-      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/01+-+Challenge/Challenge-Image1-Diamond.webp',
-    primaryVideoSrc:
-      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video5-Full.webm',
-    secondaryImageAlt: 'Hand touching smart interface',
-    secondaryImageSrc: undefined,
-    sectionTitle: 'Device maintenance',
-  },
-  {
-    bullets: ['Retrieval of PC and peripherals'],
-    eyebrow: ['IT assets &', 'data centers'],
-    headline: ['Device reverse logistics'],
-    id: 'slide-6',
-    primaryImageAlt: 'Professional with tablet in data center',
-    primaryImageSrc:
-      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/01+-+Challenge/Challenge-Image1-Diamond.webp',
-    primaryVideoSrc:
-      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video6-Full.webm',
-    secondaryImageAlt: 'Hand touching smart interface',
-    secondaryImageSrc:
-      'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image5-Diamond.webp',
-    sectionTitle: 'Device reverse logistics',
-  },
-];
-
 const HardCodedKiosk3ThirdScreenTemplate = ({
   demoIframeSrc,
-  endTourLabel = 'End tour',
-  headline = defaultHeadline,
-  heroImageAlt = 'Visitors smiling while viewing content',
-  heroImageSrc = 'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image1-Diamond.webp',
-  overlayCardLabel = 'Demo',
-  overlayHeadline = ['Section title lorem ipsum', 'dolor sit.'],
-  slides = defaultSlides,
+  endTourLabel,
+  headline,
+  heroImageAlt,
+  heroImageSrc,
+  overlayCardLabel,
+  overlayHeadline,
+  slides,
 }: HardCodedKiosk3ThirdScreenTemplateProps) => {
   const [index, setIndex] = useState(0);
   const [showOverlay, setShowOverlay] = useState(false);
 
-  const safeSlides = slides.length > 0 ? slides : defaultSlides;
-  const total = safeSlides.length || defaultSlides.length;
+  const safeSlides = slides ?? [];
+  const total = safeSlides.length;
   const currentIndex = total > 0 ? index % total : 0;
-  const current = (safeSlides[currentIndex] ?? defaultSlides[0])!;
-  const isSlide2 = current.id === 'slide-2';
-  const isSlide5 = current.id === 'slide-5';
-  const isSlide3 = current.id === 'slide-3';
+  const current = safeSlides[currentIndex];
+  const isSlide2 = current?.id === 'slide-2';
+  const isSlide5 = current?.id === 'slide-5';
+  const isSlide3 = current?.id === 'slide-3';
   const isSlide6 = current.id === 'slide-6';
   const primaryDiamondClass =
     isSlide2 || isSlide5

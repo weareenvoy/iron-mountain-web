@@ -10,8 +10,6 @@ type StepConfig = {
   label?: string;
 };
 
-const imgHeroDiamond = '/images/kiosks/kiosk2/02-solution/Solution-Image2-Diamond.png';
-
 export type SolutionSecondScreenTemplateProps = Readonly<
   SolutionSecondScreenCoreProps & SolutionSecondScreenStepsProps
 >;
@@ -41,26 +39,26 @@ type SolutionSecondScreenStepsProps = {
 };
 
 const SolutionSecondScreenTemplate = ({
-  heroImageAlt = 'Solution highlight',
-  heroImageSrc = imgHeroDiamond,
+  heroImageAlt,
+  heroImageSrc,
   kioskId = DEFAULT_KIOSK_ID,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateDown: _onNavigateDown,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateUp: _onNavigateUp,
-  solutionLabel = 'Solution',
+  solutionLabel,
   stepFourDescription,
   stepFourLabel,
-  stepOneDescription = 'Improved logistical costs due to extensive global footprint and in-house logistics',
-  stepOneLabel = '01.',
+  stepOneDescription,
+  stepOneLabel,
   steps,
   stepsDividerHeights,
-  stepThreeDescription = 'Helped maintain consistency and compliance across locations in North America, Europe, and APAC',
-  stepThreeLabel = '03.',
-  stepTwoDescription = 'Optimized delivery and transparency with end-to-end chain of custody, visibility through technology integration, and comprehensive reporting',
-  stepTwoLabel = '02.',
-  subheadline = ['IT assets &', 'data centers'],
-  title = 'Together, we:',
+  stepThreeDescription,
+  stepThreeLabel,
+  stepTwoDescription,
+  stepTwoLabel,
+  subheadline,
+  title,
 }: SolutionSecondScreenTemplateProps) => {
   const legacySteps: StepConfig[] = [
     { description: stepOneDescription, label: stepOneLabel },
@@ -69,7 +67,7 @@ const SolutionSecondScreenTemplate = ({
   ];
 
   if (stepFourLabel || stepFourDescription) {
-    legacySteps.push({ description: stepFourDescription, label: stepFourLabel ?? '04.' });
+    legacySteps.push({ description: stepFourDescription, label: stepFourLabel });
   }
 
   const timelineSteps = (steps?.length ? steps : legacySteps).filter((entry): entry is Required<StepConfig> =>

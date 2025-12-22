@@ -11,9 +11,6 @@ import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiam
 import TealGradientDiamondThird from '@/components/ui/icons/Kiosks/Solutions/TealGradientDiamondThird';
 import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
 
-const imgDiamondMediaLeft = '/images/kiosks/kiosk2/02-solution/Solution-Image2-Diamond.png';
-const imgDiamondMediaRight = '/images/kiosks/kiosk2/02-solution/Solution-Image3-Diamond.png';
-
 export type SolutionThirdScreenTemplateProps = Readonly<{
   accentDiamondSrc?: string;
   bottomLeftLabel?: string;
@@ -55,8 +52,8 @@ const SolutionThirdScreenTemplate = ({
   bottomRightLabel,
   centerLabel,
   kioskId,
-  mediaDiamondLeftSrc = imgDiamondMediaLeft,
-  mediaDiamondRightSrc = imgDiamondMediaRight,
+  mediaDiamondLeftSrc,
+  mediaDiamondRightSrc,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateDown: _onNavigateDown,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -229,7 +226,7 @@ const Diamond = ({
 const MediaDiamond = ({
   className,
   fallback,
-  imageAlt = 'Solution media diamond image',
+  imageAlt,
   imageSrc,
   sizeClass = 'size-[666px]',
 }: MediaDiamondProps) => {
@@ -237,7 +234,7 @@ const MediaDiamond = ({
     <div className={`absolute ${className}`}>
       <div className={`relative ${sizeClass} rotate-[45deg] overflow-hidden rounded-[120px]`}>
         {imageSrc ? (
-          <Image alt={imageAlt} className="-rotate-[45deg] object-cover" fill sizes="900px" src={imageSrc} />
+          <Image alt={imageAlt ?? ''} className="-rotate-[45deg] object-cover" fill sizes="900px" src={imageSrc} />
         ) : (
           <div className="flex h-full w-full -rotate-[45deg] items-center justify-center">{fallback}</div>
         )}
@@ -248,7 +245,7 @@ const MediaDiamond = ({
 
 const FilledDiamond = ({
   className,
-  imageAlt = 'Accent gradient diamond',
+  imageAlt,
   imageSrc,
 }: {
   readonly className: string;
@@ -259,7 +256,7 @@ const FilledDiamond = ({
     <div className={`absolute ${className}`}>
       <div className="relative size-[390px] rotate-[45deg]">
         {imageSrc ? (
-          <Image alt={imageAlt} className="-rotate-[45deg] object-cover" fill sizes="390px" src={imageSrc} />
+          <Image alt={imageAlt ?? ''} className="-rotate-[45deg] object-cover" fill sizes="390px" src={imageSrc} />
         ) : (
           <TealGradientDiamondThird aria-hidden="true" className="h-full w-full -rotate-[45deg]" focusable="false" />
         )}

@@ -6,14 +6,6 @@ import BlueDot from '@/components/ui/icons/Kiosks/HardCoded/BlueDot';
 import InnerRing from '@/components/ui/icons/Kiosks/HardCoded/InnerRing';
 import OuterRing from '@/components/ui/icons/Kiosks/HardCoded/OuterRing';
 
-const defaultEyebrow = ['IT assets &', 'data centers'];
-const defaultHeadline = 'Centralized management of services via API';
-const defaultDescription = 'Explore each section to learn how Iron Mountain can transform your enterprise';
-const defaultBackLabel = 'Back';
-const defaultTapToBeginLabel = 'Tap to begin';
-const defaultVideoSrc =
-  'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video1-Full.webm';
-
 export interface HardCodedKiosk3SecondScreenTemplateProps {
   readonly backgroundImageSrc?: string;
   readonly backLabel?: string;
@@ -28,25 +20,25 @@ export interface HardCodedKiosk3SecondScreenTemplateProps {
 
 const HardCodedKiosk3SecondScreenTemplate = ({
   backgroundImageSrc,
-  backLabel = defaultBackLabel,
-  description = defaultDescription,
-  eyebrow = defaultEyebrow,
-  headline = defaultHeadline,
+  backLabel,
+  description,
+  eyebrow,
+  headline,
   onBack,
   onTapToBegin,
-  tapToBeginLabel = defaultTapToBeginLabel,
-  videoAsset = defaultVideoSrc,
+  tapToBeginLabel,
+  videoAsset,
 }: HardCodedKiosk3SecondScreenTemplateProps) => {
   const eyebrowText = Array.isArray(eyebrow) ? eyebrow.join('\n') : eyebrow;
 
   const rawHeadline = Array.isArray(headline) ? headline.join('\n') : headline;
-  const headlineText = rawHeadline.replace(
+  const headlineText = rawHeadline?.replace(
     'Centralized management of services via API',
     'Centralized management\nof services via API'
   );
 
   const rawDescription = Array.isArray(description) ? description.join('\n') : description;
-  const descriptionText = rawDescription.replace(
+  const descriptionText = rawDescription?.replace(
     'Explore each section to learn how Iron Mountain can transform your enterprise',
     'Explore each section to learn\nhow Iron Mountain can\ntransform your enterprise'
   );

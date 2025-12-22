@@ -5,9 +5,6 @@ import ButtonArrow from '@/components/ui/icons/ButtonArrow';
 import WhiteLogoSimple from '@/components/ui/icons/WhiteLogoSimple';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
-// Asset constants from Figma MCP
-const imgBackground = '/images/kiosks/kiosk1/Cover.png';
-
 export type InitialScreenTemplateProps = Readonly<{
   arrowIconSrc?: string;
   attribution?: string;
@@ -26,16 +23,16 @@ type KioskVariant = 'kiosk-1' | 'kiosk-2' | 'kiosk-3';
 
 export const InitialScreenTemplate = ({
   arrowIconSrc,
-  attribution = '- Michael Rohrabacher, Technical Director at the GRAMMY Museum',
-  backgroundImage = imgBackground,
-  buttonText = 'Touch to explore',
-  contentBoxBgColor = '#f7931e',
-  headline = 'The GRAMMY Museum® preserves the soundtrack of history.',
+  attribution,
+  backgroundImage,
+  buttonText,
+  contentBoxBgColor,
+  headline,
   kioskId = 'kiosk-1',
   logoCombinedSrc,
   onButtonClick,
-  quote = '"It\'s been a pleasure working with Iron Mountain. We feel very confident that the GRAMMY Museum\'s physical artifacts and digital content is safely protected. Smart Vault also provides significant reassurance that our iconic artist performances and interviews will remain preserved and accessible which is a huge benefit to the GRAMMY Museum."',
-  subheadline = 'Rich media & cultural heritage',
+  quote,
+  subheadline,
 }: InitialScreenTemplateProps) => {
   const heroAlt = headline ? `${headline} background image` : 'Kiosk hero background image';
 
@@ -68,7 +65,7 @@ export const InitialScreenTemplate = ({
       <div
         className="absolute top-[1130px] left-[120px] z-[2] flex w-[1920px] flex-col gap-[200px] rounded-[60px] px-[120px] py-[240px] pb-[330px] backdrop-blur-[30px] group-data-[kiosk=kiosk-2]/kiosk:py-[220px] group-data-[kiosk=kiosk-2]/kiosk:pb-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[1920px] group-data-[kiosk=kiosk-3]/kiosk:pb-0"
         data-name="Challenge Initial Screen Content Box"
-        style={contentBoxBgColor !== '#f7931e' ? { backgroundColor: contentBoxBgColor } : undefined}
+        style={contentBoxBgColor ? { backgroundColor: contentBoxBgColor } : undefined}
       >
         <div className="absolute top-[2910px] left-[120px] z-[3] flex h-[182px] w-[703px] items-center group-data-[kiosk=kiosk-2]/kiosk:top-[2890px] group-data-[kiosk=kiosk-3]/kiosk:hidden">
           <div className="relative h-full w-full">
