@@ -18,7 +18,7 @@ interface TourByDate {
 const SchedulePageClient = () => {
   const router = useRouter();
   const { client } = useMqtt();
-  const { data, isConnected, isTourDataLoading, refreshData, setCurrentTour } = useDocent();
+  const { data, isConnected, isTourDataLoading, refreshData } = useDocent();
 
   const [selectedTourId, setSelectedTourId] = useState<null | string>(null);
   const [currentMonthDate, setCurrentMonthDate] = useState(new Date());
@@ -83,25 +83,15 @@ const SchedulePageClient = () => {
   };
 
   const handleLoadTour = (tourId: string) => {
-    const tour = Object.values(toursByDate)
-      .flatMap(group => group.tours)
-      .find(t => t.id === tourId);
+    if (!client) return;
 
-    if (tour && client) {
-      setCurrentTour(tour); // Update context
-
-      // Send load-tour command to GEC
-      client.loadTour(tourId, {
-        onError: (err: Error) => {
-          console.error('Failed to send load-tour command:', err);
-          // Still navigate even if MQTT fails
-          router.push(`/docent/tour/${tourId}`);
-        },
-        onSuccess: () => {
-          router.push(`/docent/tour/${tourId}`);
-        },
-      });
-    }
+    // Send load-tour command to GEC
+    // Navigation is handled by the docent provider when GEC confirms the tour-id
+    client.loadTour(tourId, {
+      onError: (err: Error) => {
+        console.error('Failed to send load-tour command:', err);
+      },
+    });
   };
 
   const formatScheduleDate = (dateString: string): string => {

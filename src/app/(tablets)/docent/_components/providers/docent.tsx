@@ -7,6 +7,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
   type PropsWithChildren,
@@ -18,6 +19,7 @@ import { getDocentData } from '@/lib/internal/data/get-docent';
 import type { DocentData, Locale, Tour } from '@/lib/internal/types';
 
 export interface DocentContextType {
+  // Derived from tourId + data.tours
   readonly currentTour: null | Tour;
   readonly data: DocentData | null;
   // Full state from GEC (combines tour, UI mode, exhibit settings)
@@ -29,9 +31,10 @@ export interface DocentContextType {
   readonly lastUpdated: Date | null;
   readonly locale: Locale;
   readonly refreshData: () => Promise<void>;
-  readonly setCurrentTour: (tour: null | Tour) => void;
   readonly setIsSettingsOpen: (open: boolean) => void;
   readonly setLocale: (locale: Locale) => void;
+  // Tour ID from GEC - source of truth
+  readonly tourId: null | string;
 }
 
 export const DocentContext = createContext<DocentContextType | undefined>(undefined);
@@ -57,7 +60,8 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     pt: null,
   });
   const [locale, setLocale] = useState<Locale>('en');
-  const [currentTour, setCurrentTour] = useState<null | Tour>(null);
+  // Tour ID from GEC - source of truth
+  const [tourId, setTourId] = useState<null | string>(null);
   const [isTourDataLoading, setIsTourDataLoading] = useState(true);
   const [isGecStateLoading, setIsGecStateLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
@@ -85,16 +89,18 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
       });
       setLastUpdated(new Date());
 
+      // Clear tourId if the tour no longer exists in the data
       const currentData = docentData.data[locale];
-      if (currentTour && !currentData.tours.find(tour => tour.id === currentTour.id)) {
-        setCurrentTour(null);
+      if (tourId && !currentData.tours.find(tour => tour.id === tourId)) {
+        console.info(`Tour ${tourId} no longer exists in data, clearing...`);
+        setTourId(null);
       }
     } catch (error) {
       console.error('Failed to fetch docent data:', error);
     } finally {
       setIsTourDataLoading(false);
     }
-  }, [currentTour, locale]);
+  }, [locale, tourId]);
 
   useEffect(() => {
     fetchDocentData();
@@ -124,32 +130,9 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
         // Save the full state - beat states are derived from this via useMemo
         setDocentAppState(state);
 
-        // Update tour if provided and different from current
-        // Get tour-id from any exhibit (they should all match)
-        const tourId = getTourIdFromGecState(state);
-        const allTours = dataByLocale[locale]?.tours ?? [];
-
-        if (tourId && allTours.length > 0) {
-          const tour = allTours.find(t => t.id === tourId);
-          if (tour && tour.id !== currentTour?.id) {
-            console.info(`Tour sync: GEC tour (${tourId}) differs from current tour (${currentTour?.id}), updating...`);
-            setCurrentTour(tour);
-
-            // Update URL if we're on a tour page
-            // Example: /docent/tour/tour-002/basecamp → /docent/tour/tour-004/basecamp
-            const currentPathname = pathnameRef.current;
-            if (currentPathname.includes('/tour/')) {
-              const tourPathRegex = /\/tour\/[^\/]+/;
-              const newPathname = currentPathname.replace(tourPathRegex, `/tour/${tourId}`);
-              if (newPathname !== currentPathname && isDocentRoute(newPathname)) {
-                console.info(`Updating URL from ${currentPathname} to ${newPathname}`);
-                startTransition(() => {
-                  router.replace(newPathname);
-                });
-              }
-            }
-          }
-        }
+        // Get tour-id from GEC state - this is the source of truth
+        const gecTourId = getTourIdFromGecState(state);
+        setTourId(gecTourId);
 
         setIsGecStateLoading(false);
       } catch (error) {
@@ -163,7 +146,7 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     return () => {
       client.unsubscribeFromTopic('state/gec', handleDocentAppState);
     };
-  }, [client, dataByLocale, locale, currentTour?.id, router]);
+  }, [client]);
 
   // Subscribe to sync state
   useEffect(() => {
@@ -200,6 +183,53 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
   // Get current locale's data
   const data = dataByLocale[locale];
 
+  // Derive currentTour from tourId + data.tours
+  const currentTour = useMemo(() => {
+    if (!tourId || !data?.tours) return null;
+    return data.tours.find(t => t.id === tourId) ?? null;
+  }, [data?.tours, tourId]);
+
+  // Track previous tourId for navigation
+  const prevTourIdRef = useRef<null | string>(null);
+
+  // Navigate when tourId changes (GEC confirms a tour)
+  useEffect(() => {
+    // Skip if tourId hasn't changed or is null
+    if (tourId === prevTourIdRef.current || !tourId) {
+      prevTourIdRef.current = tourId;
+      return;
+    }
+
+    // Validate tour exists in data
+    if (!data?.tours.find(t => t.id === tourId)) {
+      console.warn(`Tour ${tourId} not found in data, skipping navigation`);
+      prevTourIdRef.current = tourId;
+      return;
+    }
+
+    const currentPathname = pathnameRef.current;
+    if (currentPathname.includes('/tour/')) {
+      // Update URL if we're on a tour page
+      // Example: /docent/tour/tour-002/basecamp → /docent/tour/tour-004/basecamp
+      const tourPathRegex = /\/tour\/[^\/]+/;
+      const newPathname = currentPathname.replace(tourPathRegex, `/tour/${tourId}`);
+      if (newPathname !== currentPathname && isDocentRoute(newPathname)) {
+        console.info(`Updating URL from ${currentPathname} to ${newPathname}`);
+        startTransition(() => {
+          router.replace(newPathname);
+        });
+      }
+    } else {
+      // Navigate to tour overview when GEC confirms a tour and we're not on a tour page
+      console.info(`Navigating to tour overview for tour ${tourId}`);
+      startTransition(() => {
+        router.push(`/docent/tour/${tourId}`);
+      });
+    }
+
+    prevTourIdRef.current = tourId;
+  }, [data?.tours, router, tourId]);
+
   const contextValue = {
     currentTour,
     data,
@@ -211,9 +241,9 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     lastUpdated,
     locale,
     refreshData: fetchDocentData,
-    setCurrentTour,
     setIsSettingsOpen,
     setLocale,
+    tourId,
   };
 
   return <DocentContext.Provider value={contextValue}>{children}</DocentContext.Provider>;
