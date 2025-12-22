@@ -2,10 +2,12 @@
 
 import useEmblaCarousel from 'embla-carousel-react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { use, useCallback, useEffect, useMemo } from 'react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
+import { getSlideBorderColor, parseSummitBeatId } from '@/app/(tablets)/docent/_utils';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import SummitRoomDiamonds from '@/components/ui/icons/SummitRoomDiamonds';
 import { getBeatIdFromSlideIndex, getSlideIndexFromBeatId, type SummitRoomBeatId } from '@/lib/internal/types';
@@ -15,10 +17,24 @@ const INITIAL_BEAT_ID: SummitRoomBeatId = 'journey-intro';
 
 const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room'>) => {
   const { tourId } = use(params);
+  const router = useRouter();
   const { client } = useMqtt();
-  const { currentTour, data, setSummitRoomBeatId, summitRoomBeatId } = useDocent();
+  const { currentTour, data, docentAppState } = useDocent();
 
-  const summitRoomSlides = data?.slides ?? [];
+  // Extract beat-id
+  const summitBeatId = docentAppState?.exhibits.summit?.['beat-id'];
+
+  // Derive summitRoomBeatId from GEC state
+  const summitRoomBeatId = useMemo(() => {
+    if (summitBeatId) {
+      const parsed = parseSummitBeatId(summitBeatId);
+      if (parsed) return parsed;
+    }
+    return 'journey-intro';
+  }, [summitBeatId]);
+
+  const summitRoomSlidesInitial = data?.summitSlides ?? [];
+  const summitRoomSlides = summitRoomSlidesInitial.filter(slide => slide.handle !== 'journey-intro');
   const slideCount = summitRoomSlides.length;
 
   // State is either 'journey-intro' (not launched), or 'journey-1' through 'journey-5' carousel.
@@ -37,7 +53,7 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
     }
   }, [emblaApi, isJourneyMapLaunched, slideIdx]);
 
-  // Helper to update beatId state and send MQTT command.
+  // Helper to update beatId - sends MQTT command directly
   const goToSlide = useCallback(
     (newSlideIdx: number) => {
       // Bounds checking
@@ -45,14 +61,14 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
         console.error('Invalid slide index:', newSlideIdx);
         return;
       }
-      const beatId = getBeatIdFromSlideIndex(newSlideIdx);
-      setSummitRoomBeatId(beatId);
-      client?.gotoBeat('summit', beatId, {
-        onError: (err: Error) => console.error('Summit: Failed to navigate:', err),
+      const beatId = getBeatIdFromSlideIndex(newSlideIdx, slideCount - 1);
+      if (!client) return;
+      client.gotoBeat('summit', beatId, {
+        onError: (err: Error) => console.error('Failed to send goto-beat to summit:', err),
         onSuccess: () => console.info(`Sent goto-beat: ${beatId} to summit`),
       });
     },
-    [client, setSummitRoomBeatId, slideCount]
+    [client, slideCount]
   );
 
   // Embla onSelect handler
@@ -96,13 +112,23 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
     goToSlide(0);
   };
 
+  const handleBackToMenu = useCallback(() => {
+    client?.gotoBeat('summit', 'journey-intro', {
+      onError: (err: Error) => console.error('Failed to send journey-intro to summit:', err),
+      onSuccess: () => console.info('Sent journey-intro to summit'),
+    });
+
+    // Navigate after sending MQTT commands
+    router.push(`/docent/tour/${tourId}`);
+  }, [client, router, tourId]);
+
   const leftButton = useMemo(
     (): HeaderProps['leftButton'] => ({
-      href: `/docent/tour/${tourId}`,
       icon: <ArrowLeft />,
+      onClick: handleBackToMenu,
       text: data?.docent.navigation.backToMenu ?? 'Back to menu',
     }),
-    [tourId, data]
+    [handleBackToMenu, data]
   );
 
   return (
@@ -122,17 +148,22 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
           <div className="h-[361px] w-[605px] overflow-hidden" ref={emblaRef}>
             <div className="flex h-full">
               {summitRoomSlides.map(slide => (
-                <div className="ml-[15px] flex-[0_0_100%]" key={slide.id}>
+                <div className="ml-[15px] flex-[0_0_100%]" key={slide.handle}>
                   <div className="bg-primary-bg-grey relative flex h-[313px] w-[557px] flex-col items-center justify-center rounded-[16px] shadow-[16px_16px_16px_0px_rgba(94,94,94,0.25)]">
-                    {slide.id === 1 ? (
+                    {slide.handle === 'journey-1' ? (
                       <div className="flex h-full w-full flex-col items-center justify-center gap-8">
                         <h2 className="text-center text-2xl leading-[normal] tracking-[-1.2px] text-black">
                           {slide.title}
                         </h2>
                       </div>
                     ) : (
-                      <div className={cn('flex items-center gap-5 rounded-full border-2 px-8 py-5', slide.borderColor)}>
-                        <div className={cn('h-4.25 w-4.25 rotate-45 border', slide.borderColor)}></div>
+                      <div
+                        className={cn(
+                          'flex items-center gap-5 rounded-full border-2 px-8 py-5',
+                          getSlideBorderColor(slide.handle)
+                        )}
+                      >
+                        <div className={cn('h-4.25 w-4.25 rotate-45 border', getSlideBorderColor(slide.handle))}></div>
                         <h2 className="text-xl leading-[normal] tracking-[-1.2px] text-black">{slide.title}</h2>
                       </div>
                     )}

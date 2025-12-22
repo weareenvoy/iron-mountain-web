@@ -34,49 +34,54 @@ const EXHIBIT_IDS: readonly ('basecamp' | 'entry-way' | 'overlook' | 'solution-p
   'summit',
 ] as const;
 
+// Map exhibit IDs to their display name keys in data
+const EXHIBIT_NAME_MAP = {
+  'basecamp': 'basecamp',
+  'entry-way': 'entryWay',
+  'overlook': 'overlook',
+  'solution-pathways': 'solutionPathways',
+  'summit': 'summitRoom',
+} as const satisfies Record<(typeof EXHIBIT_IDS)[number], string>;
+
+// Map exhibit IDs to GEC state keys
+// TODO: 1.Entry Way is not in GEC state yet. 2.Solution Pathways is 3 kiosks. If 1 kiosk is down, is Solution Pathways considered down?
+const GEC_EXHIBIT_KEY_MAP = {
+  'basecamp': 'basecamp',
+  'entry-way': null,
+  'overlook': 'overlook-wall',
+  'solution-pathways': null,
+  'summit': 'summit',
+} as const satisfies Record<(typeof EXHIBIT_IDS)[number], 'basecamp' | 'overlook-wall' | 'summit' | null>;
+
 const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
   const { client } = useMqtt();
-  const { currentTour, data } = useDocent();
+  const { data, docentAppState } = useDocent();
   const router = useRouter();
 
   // Build exhibit controls from dictionary
-  // TODO: State (isOn, isMuted, hasError) should come from GEC/MQTT in the future
   const exhibitControls: ExhibitControl[] = useMemo(() => {
     return EXHIBIT_IDS.map(id => {
-      const nameKey =
-        id === 'entry-way'
-          ? 'entryWay'
-          : id === 'solution-pathways'
-            ? 'solutionPathways'
-            : id === 'summit'
-              ? 'summitRoom'
-              : id;
+      const nameKey = EXHIBIT_NAME_MAP[id];
       const name = data?.settings.exhibits[nameKey as keyof typeof data.settings.exhibits] ?? id;
 
-      // Default state - will be replaced with real GEC state later
-      const defaultState: ExhibitControl = {
-        hasError: false,
+      const gecExhibitKey = GEC_EXHIBIT_KEY_MAP[id];
+
+      // Get state from GEC if available
+      const exhibitState = gecExhibitKey ? docentAppState?.exhibits[gecExhibitKey] : null;
+      const isOn = exhibitState?.available ?? false;
+      const isMuted = exhibitState?.['volume-muted'] ?? false;
+      const hasError = !isOn;
+
+      return {
+        errorMessage: hasError ? (data?.settings.status.offline ?? 'Offline') : undefined,
+        hasError,
         id,
-        isMuted: false,
-        isOn: true,
+        isMuted,
+        isOn,
         name,
       };
-
-      // Mock error state for summit (for testing)
-      if (id === 'summit') {
-        return {
-          errorMessage: data?.settings.status.offline ?? 'Offline',
-          hasError: true,
-          id,
-          isMuted: false,
-          isOn: false,
-          name,
-        };
-      }
-
-      return defaultState;
     });
-  }, [data]);
+  }, [data, docentAppState]);
 
   const handleToggleMute = (exhibitId: string) => () => {
     if (!client) return;
@@ -86,14 +91,14 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
     if (!exhibit) return;
 
     // Send setVolume command to GEC
-    client.setVolume(exhibitId as 'basecamp' | 'overlook' | 'summit', !exhibit.isMuted, {
+    client.setVolume(exhibitId as 'basecamp' | 'overlook-wall' | 'summit', !exhibit.isMuted, {
       onError: (err: Error) => console.error(`Failed to toggle mute for ${exhibitId}:`, err),
       onSuccess: () => console.info(`Successfully toggled mute for ${exhibitId}`),
     });
   };
 
   const handleEndTour = () => {
-    if (!client || !currentTour) return;
+    if (!client) return;
 
     // Send end-tour command to all exhibits (broadcast)
     client.endTour({
@@ -181,8 +186,13 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
             <span className="text-primary-im-light-blue text-2xl">{data?.settings.ebcLights ?? 'EBC Lights'}</span>
           </div>
 
-          {/* Switch to toggle EBC Lights. TODO Is the value from GEC state? */}
-          <Switch id="ebc-lights" onCheckedChange={handleToggleEBCLights} useIcon />
+          {/* Switch to toggle EBC Lights - read from GEC state */}
+          <Switch
+            checked={docentAppState?.['ebc-lights'] ?? false}
+            id="ebc-lights"
+            onCheckedChange={handleToggleEBCLights}
+            useIcon
+          />
         </div>
 
         {/* End Tour Button */}

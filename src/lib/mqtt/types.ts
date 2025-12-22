@@ -27,22 +27,20 @@ export interface MqttMessage<T = unknown> {
 }
 
 // Full MQTT state for an exhibit (published to state/<exhibit>)
-export interface ExhibitMqttState {
+export interface ExhibitMqttStateBase {
   'beat-id': string; // e.g., "ambient-1", "welcome-3", "loading", "error"
-  'tour-id'?: null | string;
   'volume-level': number; // 0.0 to 1.0
   'volume-muted': boolean;
 }
 
-// Overlook MQTT state includes video play/pause state
-export interface OverlookMqttState extends ExhibitMqttState {
-  'playpause'?: boolean; // Video play/pause state
-  'tour-id'?: null | string;
+// Exhibits do not report this property back to GEC.
+export interface ExhibitMqttState extends ExhibitMqttStateBase {
+  available: boolean;
 }
-
-// Full MQTT state for an exhibit (published to state/<exhibit>)
-export interface SummitMqttState {
-  'journey-map-launched': boolean;
-  'slide-idx': number;
-  'tour-id'?: null | string;
+export interface ExhibitMqttStateSummit extends ExhibitMqttState {
+  'tour-id'?: null | string; // Only summit website needs it to fetch the correct data.
+}
+export interface ExhibitMqttStateOverlook extends ExhibitMqttState {
+  'playpause'?: boolean;
+  'presentation-mode'?: boolean;
 }
