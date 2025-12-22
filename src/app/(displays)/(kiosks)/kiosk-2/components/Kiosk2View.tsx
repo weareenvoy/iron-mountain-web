@@ -1,6 +1,6 @@
 'use client';
 
-/* eslint-disable @typescript-eslint/no-explicit-any, react-hooks/refs */
+/* eslint-disable react-hooks/refs */
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -73,13 +73,41 @@ const Kiosk2View = () => {
     baseHandleNavigateUp();
   }, [baseHandleNavigateUp, currentScrollTarget]);
 
-  // Parse data from provider (kiosk-2 has flat structure with 'challenges' at root)
-  const challenges: KioskChallenges | null = kioskData
-    ? parseKioskChallenges((kioskData as any).challenges, 'kiosk-2')
-    : null;
-  const solutions = kioskData ? ((kioskData as any).solutions as SolutionScreens) : null;
-  const values = kioskData ? ((kioskData as any).value as ValueScreens) : null;
-  const hardCoded = kioskData ? ((kioskData as any).hardcoded as HardCodedScreens) : null;
+  // Parse data from provider (kiosk-2 now uses new flat structure)
+  const kioskContent = kioskData as
+    | null
+    | undefined
+    | {
+        data?: {
+          ambient?: unknown;
+          challengeMain?: unknown;
+          customInteractive2?: unknown;
+          solutionGrid?: unknown;
+          solutionMain?: unknown;
+          valueMain?: unknown;
+        };
+      };
+
+  const challenges: KioskChallenges | null =
+    kioskContent?.data?.challengeMain && kioskContent.data.ambient
+      ? parseKioskChallenges(mapChallenges(kioskContent.data.challengeMain, kioskContent.data.ambient), 'kiosk-2')
+      : null;
+  const solutions =
+    kioskContent?.data?.solutionMain && kioskContent.data.solutionGrid && kioskContent.data.ambient
+      ? (mapSolutions(
+          kioskContent.data.solutionMain,
+          kioskContent.data.solutionGrid,
+          kioskContent.data.ambient
+        ) as SolutionScreens)
+      : null;
+  const values =
+    kioskContent?.data?.valueMain && kioskContent.data.ambient
+      ? (mapValue(kioskContent.data.valueMain, kioskContent.data.ambient) as ValueScreens)
+      : null;
+  const hardCoded =
+    kioskContent?.data?.customInteractive2 && kioskContent.data.ambient
+      ? (mapHardcoded(kioskContent.data.customInteractive2, kioskContent.data.ambient) as HardCodedScreens)
+      : null;
 
   // Pass the global handlers to all templates
   const globalHandlers = {
@@ -331,3 +359,216 @@ const Kiosk2View = () => {
 Kiosk2View.displayName = 'Kiosk2View';
 
 export default Kiosk2View;
+
+type Ambient = {
+  backgroundImage?: string;
+  body?: string;
+  headline?: string;
+  mainCTA?: string;
+  quoteSource?: string;
+  title?: string;
+};
+
+type ChallengeContent = {
+  body?: string;
+  featuredStat1?: string;
+  featuredStat1Body?: string;
+  featuredStat2?: string;
+  featuredStat2Body?: string;
+  item1Body?: string;
+  item1Image?: string;
+  item2Body?: string;
+  item2Image?: string;
+  mainVideo?: string;
+};
+
+type SolutionsMain = {
+  body?: string;
+  headline?: string;
+  image?: string;
+  mainVideo?: string;
+  numberedList?: string[];
+  numberedListHeadline?: string;
+};
+
+type SolutionsGrid = {
+  diamondList?: string[];
+  headline?: string;
+  images?: string[];
+};
+
+type ValueContent = {
+  body?: string;
+  diamondBenefits?: { bullets?: string[]; label?: string; title?: string }[];
+  headline?: string;
+  mainVideo?: string;
+};
+
+type HardcodedContent = {
+  headline?: string;
+  image?: string;
+  secondaryCTA?: string;
+};
+
+const splitLines = (value?: string) => (value ? value.split('\n') : undefined);
+
+const mapChallenges = (challenge: ChallengeContent, ambient: Ambient): KioskChallenges => ({
+  firstScreen: {
+    challengeLabel: 'Challenge',
+    problemDescription: challenge.body ?? '',
+    savingsAmount: challenge.featuredStat1 ?? '',
+    savingsDescription: challenge.featuredStat1Body ?? '',
+    subheadline: splitLines(ambient.title) ?? 'Information & data lifecycle',
+    videoSrc: challenge.mainVideo ?? '',
+  },
+  initialScreen: {
+    attribution: ambient.quoteSource ?? '',
+    backgroundImage: ambient.backgroundImage ?? '',
+    buttonText: ambient.mainCTA ?? 'Touch to explore',
+    headline: ambient.headline ?? '',
+    quote: ambient.body ?? '',
+    subheadline: splitLines(ambient.title) ?? 'Information & data lifecycle',
+  },
+  secondScreen: {
+    bottomDescription: '',
+    bottomVideoSrc: '',
+    largeIconSrc: challenge.item1Image ?? '',
+    mainDescription: challenge.item1Body ?? '',
+    statAmount: '',
+    statDescription: '',
+    subheadline: splitLines(ambient.title) ?? 'Information & data lifecycle',
+    topImageSrc: challenge.item1Image ?? '',
+  },
+  thirdScreen: {
+    description: challenge.item2Body ?? '',
+    heroImageSrc: challenge.item2Image ?? '',
+    largeIconCenterSrc: challenge.item2Image ?? '',
+    largeIconTopSrc: challenge.item2Image ?? '',
+    metricAmount: challenge.featuredStat2 ?? '',
+    metricDescription: challenge.featuredStat2Body ?? '',
+    metricImageSrc: challenge.item2Image ?? '',
+    subheadline: splitLines(ambient.title) ?? 'Information & data lifecycle',
+    videoSrc: '',
+  },
+});
+
+const mapSolutions = (
+  solutionsMain: SolutionsMain,
+  solutionsGrid: SolutionsGrid,
+  ambient: Ambient
+): SolutionScreens => ({
+  firstScreen: {
+    backgroundVideoSrc: solutionsMain.mainVideo ?? '',
+    description: solutionsMain.body ?? '',
+    subheadline: splitLines(ambient.title),
+    title: solutionsMain.headline ?? '',
+  },
+  secondScreen: {
+    heroImageSrc: solutionsMain.image ?? '',
+    solutionLabel: 'Solution',
+    stepFourDescription: solutionsMain.numberedList?.[3] ?? '',
+    stepFourLabel: '04.',
+    stepOneDescription: solutionsMain.numberedList?.[0] ?? '',
+    stepOneLabel: '01.',
+    stepThreeDescription: solutionsMain.numberedList?.[2] ?? '',
+    stepThreeLabel: '03.',
+    stepTwoDescription: solutionsMain.numberedList?.[1] ?? '',
+    stepTwoLabel: '02.',
+    subheadline: splitLines(ambient.title),
+    title: solutionsMain.numberedListHeadline ?? 'Together, we:',
+  },
+  thirdScreen: {
+    bottomLeftLabel: solutionsGrid.diamondList?.[3] ?? '',
+    bottomRightLabel: solutionsGrid.diamondList?.[4] ?? '',
+    centerLabel: solutionsGrid.diamondList?.[0] ?? '',
+    mediaDiamondLeftSrc: solutionsGrid.images?.[0] ?? '',
+    mediaDiamondRightSrc: solutionsGrid.images?.[1] ?? '',
+    solutionLabel: 'Solution',
+    subheadline: splitLines(ambient.title),
+    title: solutionsGrid.headline ?? '',
+    topLeftLabel: solutionsGrid.diamondList?.[1] ?? '',
+    topRightLabel: solutionsGrid.diamondList?.[2] ?? '',
+  },
+});
+
+const mapValue = (value: ValueContent, ambient: Ambient): ValueScreens => {
+  const heroVideoSrc = value.mainVideo;
+  const description = value.body;
+  const headline = value.headline;
+
+  const benefits = value.diamondBenefits ?? [];
+  const overviewCards = [
+    { color: '#8a0d71', label: 'Operational benefits' },
+    { color: '#1b75bc', label: 'Economic benefits' },
+    { color: '#f26522', label: 'Strategic benefits', textColor: '#4a154b' },
+  ];
+
+  const buildDiamondCards = (label?: string) => {
+    const normalized = (label ?? '').toLowerCase();
+    if (normalized.includes('operational')) {
+      return [
+        { color: '#f26522', label: '', textColor: '#4a154b' },
+        { color: '#1b75bc', label: '' },
+        { color: '#8a0d71', label: 'Operational benefits' },
+      ];
+    }
+    if (normalized.includes('economic') || normalized.includes('economical')) {
+      return [
+        { color: '#8a0d71', label: '' },
+        { color: '#f26522', label: '', textColor: '#4a154b' },
+        { color: '#1b75bc', label: 'Economic benefits' },
+      ];
+    }
+    // Strategic fallback
+    return [
+      { color: '#1b75bc', label: '' },
+      { color: '#8a0d71', label: '' },
+      { color: '#f26522', label: 'Strategic benefits', textColor: '#4a154b' },
+    ];
+  };
+
+  const carouselSlides = benefits.map(benefit => ({
+    badgeLabel: benefit.label,
+    bullets: benefit.bullets,
+    diamondCards: buildDiamondCards(benefit.label),
+    id: `value-${(benefit.label ?? '').toLowerCase().replace(/\s+/g, '-')}`,
+  }));
+
+  return {
+    valueScreens: [
+      {
+        carouselId: 'kiosk-2-value-overview',
+        description,
+        eyebrow: splitLines(ambient.title),
+        headline,
+        heroVideoSrc,
+        labelText: 'Value',
+        slides: [
+          {
+            badgeLabel: 'Operational · Economic · Strategic',
+            diamondCards: overviewCards,
+            id: 'value-trio-overview',
+          },
+        ],
+      },
+      {
+        carouselId: 'kiosk-2-value-carousel',
+        description,
+        eyebrow: splitLines(ambient.title),
+        headline,
+        labelText: 'Value',
+        slides: carouselSlides,
+      },
+    ],
+  };
+};
+
+const mapHardcoded = (hardcoded: HardcodedContent, ambient: Ambient): HardCodedScreens => ({
+  firstScreen: {
+    eyebrow: splitLines(ambient.title),
+    heroImageAlt: 'Healthcare professional working',
+    heroImageSrc: hardcoded.image,
+    primaryCtaLabel: undefined,
+    secondaryCtaLabel: hardcoded.secondaryCTA,
+  },
+});

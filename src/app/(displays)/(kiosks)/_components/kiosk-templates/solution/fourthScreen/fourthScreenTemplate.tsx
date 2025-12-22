@@ -88,7 +88,7 @@ const SolutionFourthScreenTemplate = ({
       {/* Subheadline */}
       <h2
         className="absolute top-[368px] left-[120px] -translate-y-full text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed]"
-        style={{ top: '400px', width: '390px' }}
+        style={{ top: '400px', width: '390px', zIndex: 1 }}
       >
         {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
       </h2>
@@ -110,10 +110,14 @@ const SolutionFourthScreenTemplate = ({
       </div>
 
       {/* Title */}
-      <div className="absolute top-[1260px] left-[240px] w-[1300px]" style={{ top: '1260px', width: '1300px' }}>
+      <div
+        className="absolute top-[1260px] left-[240px] w-[1300px]"
+        style={{ top: '1260px', width: '1300px', zIndex: 10 }}
+      >
         <p
           className="text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]"
           data-scroll-section="solution-fourth-title"
+          style={{ color: '#ededed' }}
         >
           {renderRegisteredMark(title)}
         </p>
@@ -129,37 +133,18 @@ const SolutionFourthScreenTemplate = ({
           type="single"
         >
           {entries.map((item, index) => {
-            const overridePalette =
-              index === 1
-                ? { body: '#6DCFF6', header: '#6DCFF6', text: '#14477d' }
-                : index === 2
-                  ? { body: '#1B75BC', header: '#1B75BC', text: '#ededed' }
-                  : index === 3
-                    ? { body: '#14477D', header: '#14477D', text: '#ededed' }
-                    : undefined;
-            const palette = overridePalette ?? palettes[item.color ?? 'white'];
+            const palette = palettes[item.color ?? 'white'];
             const hasContent = Boolean(item.contentList?.length);
             const roundedClass =
               index === 0 ? 'rounded-t-[80px]' : index === entries.length - 1 ? 'rounded-b-[80px]' : 'rounded-none';
             const triggerRoundedClass =
               index === 0 ? 'rounded-t-[50px]' : index === entries.length - 1 ? 'rounded-b-[50px]' : 'rounded-none';
 
-            const prevOverride =
-              index > 0
-                ? index - 1 === 1
-                  ? { body: '#6DCFF6', header: '#6DCFF6', text: '#14477d' }
-                  : index - 1 === 2
-                    ? { body: '#1B75BC', header: '#1B75BC', text: '#ededed' }
-                    : index - 1 === 3
-                      ? { body: '#14477D', header: '#14477D', text: '#ededed' }
-                      : undefined
-                : undefined;
-            const prevPalette =
-              prevOverride ?? (index > 0 ? palettes[entries[index - 1]?.color ?? 'white'] : undefined);
+            const prevPalette = index > 0 ? palettes[entries[index - 1]?.color ?? 'white'] : undefined;
 
             return (
               <AccordionItem
-                className={`relative overflow-hidden border-none ${roundedClass}`}
+                className={`relative z-[1] overflow-hidden border-none ${roundedClass}`}
                 key={item.id}
                 style={index === entries.length - 1 ? { backgroundColor: palette.header } : undefined}
                 value={item.id}
@@ -190,7 +175,7 @@ const SolutionFourthScreenTemplate = ({
                     <span className="text-left">{renderRegisteredMark(item.title)}</span>
                   </div>
                 </AccordionTrigger>
-                <AccordionContent className="[&>div]:pb-0">
+                <AccordionContent className="[&>div]:pb-0" style={{ position: 'relative', zIndex: 1 }}>
                   {hasContent ? (
                     <div
                       className="px-[80px] pt-[50px] pb-[120px] pl-[218px]"

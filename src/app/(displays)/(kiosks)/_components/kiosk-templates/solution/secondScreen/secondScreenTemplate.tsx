@@ -113,7 +113,10 @@ const SolutionSecondScreenTemplate = ({
       </div>
 
       {/* Subheadline */}
-      <h2 className="absolute top-[230px] left-[120px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
+      <h2
+        className="absolute top-[230px] left-[120px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]"
+        style={{ zIndex: 1 }}
+      >
         {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
       </h2>
 

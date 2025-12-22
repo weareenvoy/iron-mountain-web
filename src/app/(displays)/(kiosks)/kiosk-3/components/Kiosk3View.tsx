@@ -1,6 +1,6 @@
 'use client';
 
-/* eslint-disable @typescript-eslint/no-explicit-any, react-hooks/refs */
+/* eslint-disable react-hooks/refs */
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -74,13 +74,41 @@ const Kiosk3View = () => {
     baseHandleNavigateUp();
   }, [baseHandleNavigateUp, currentScrollTarget]);
 
-  // Parse data from provider (kiosk-3 has flat structure with 'challenges' at root)
-  const challenges: KioskChallenges | null = kioskData
-    ? parseKioskChallenges((kioskData as any).challenges, 'kiosk-3')
-    : null;
-  const solutions = kioskData ? ((kioskData as any).solutions as SolutionScreens) : null;
-  const values = kioskData ? ((kioskData as any).value as ValueScreens) : null;
-  const hardCoded = kioskData ? ((kioskData as any).hardcoded as HardCodedScreens) : null;
+  // Parse data from provider (kiosk-3 now uses new flat structure)
+  const kioskContent = kioskData as
+    | null
+    | undefined
+    | {
+        data?: {
+          ambient?: unknown;
+          challengeMain?: unknown;
+          customInteractive3?: unknown;
+          solutionAccordion?: unknown;
+          solutionMain?: unknown;
+          valueMain?: unknown;
+        };
+      };
+
+  const challenges: KioskChallenges | null =
+    kioskContent?.data?.challengeMain && kioskContent.data.ambient
+      ? parseKioskChallenges(mapChallenges(kioskContent.data.challengeMain, kioskContent.data.ambient), 'kiosk-3')
+      : null;
+  const solutions =
+    kioskContent?.data?.solutionMain && kioskContent.data.solutionAccordion && kioskContent.data.ambient
+      ? (mapSolutions(
+          kioskContent.data.solutionMain,
+          kioskContent.data.solutionAccordion,
+          kioskContent.data.ambient
+        ) as SolutionScreens)
+      : null;
+  const values =
+    kioskContent?.data?.valueMain && kioskContent.data.ambient
+      ? (mapValue(kioskContent.data.valueMain, kioskContent.data.ambient) as ValueScreens)
+      : null;
+  const hardCoded =
+    kioskContent?.data?.customInteractive3 && kioskContent.data.ambient
+      ? (mapHardcoded(kioskContent.data.customInteractive3, kioskContent.data.ambient) as HardCodedScreens)
+      : null;
 
   // Pass the global handlers to all templates
   const globalHandlers = {
@@ -313,7 +341,7 @@ const Kiosk3View = () => {
         {shouldShowArrows && (
           <motion.div
             animate={{ opacity: 1, scale: 1 }}
-            className="fixed top-[48%] right-[120px] z-[50] flex -translate-y-1/2 flex-col gap-[100px]"
+            className="fixed top-[38%] right-[120px] z-[50] flex -translate-y-1/2 flex-col gap-[100px]"
             exit={{ opacity: 0, scale: 0.9 }}
             initial={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.4, ease: 'easeOut' }}
@@ -370,3 +398,255 @@ const Kiosk3View = () => {
 Kiosk3View.displayName = 'Kiosk3View';
 
 export default Kiosk3View;
+
+type Ambient = {
+  backgroundImage?: string;
+  body?: string;
+  headline?: string;
+  mainCTA?: string;
+  quoteSource?: string;
+  title?: string;
+};
+
+type ChallengeContent = {
+  body?: string;
+  featuredStat1?: string;
+  featuredStat1Body?: string;
+  featuredStat2?: string;
+  featuredStat2Body?: string;
+  item1Body?: string;
+  item1Image?: string;
+  item2Body?: string;
+  item2Image?: string;
+  mainVideo?: string;
+};
+
+type SolutionsMain = {
+  body?: string;
+  headline?: string;
+  image?: string;
+  mainVideo?: string;
+  numberedList?: string[];
+  numberedListHeadline?: string;
+};
+
+type SolutionsAccordion = {
+  accordion?: Array<{
+    bullets?: string[];
+    title?: string;
+  }>;
+  headline?: string;
+  image?: string;
+};
+
+type ValueContent = {
+  body?: string;
+  diamondBenefits?: { bullets?: string[]; label?: string; title?: string }[];
+  headline?: string;
+  mainVideo?: string;
+};
+
+type HardcodedContent = {
+  backCTA?: string;
+  body?: string;
+  headline?: string;
+  headline2?: string;
+  image?: string;
+  mainCTA?: string;
+  secondaryCTA?: string;
+  tapCarousel?: Array<{
+    bullets?: string[];
+    image?: string;
+    title?: string;
+    video?: string;
+  }>;
+  tapCTA?: string;
+  video?: string;
+};
+
+const splitLines = (value?: string) => (value ? value.split('\n') : undefined);
+
+const mapChallenges = (challenge: ChallengeContent, ambient: Ambient): KioskChallenges => ({
+  firstScreen: {
+    challengeLabel: 'Challenge',
+    problemDescription: challenge.body ?? '',
+    savingsAmount: challenge.featuredStat1 ?? '',
+    savingsDescription: challenge.featuredStat1Body ?? '',
+    subheadline: splitLines(ambient.title) ?? 'IT assets & data centers',
+    videoSrc: challenge.mainVideo ?? '',
+  },
+  initialScreen: {
+    attribution: ambient.quoteSource ?? '',
+    backgroundImage: ambient.backgroundImage ?? '',
+    buttonText: ambient.mainCTA ?? 'Touch to explore',
+    headline: ambient.headline ?? '',
+    quote: ambient.body ?? '',
+    subheadline: splitLines(ambient.title) ?? 'IT assets & data centers',
+  },
+  secondScreen: {
+    bottomDescription: '',
+    bottomVideoSrc: '',
+    largeIconSrc: challenge.item1Image ?? '',
+    mainDescription: challenge.item1Body ?? '',
+    statAmount: '',
+    statDescription: '',
+    subheadline: splitLines(ambient.title) ?? 'IT assets & data centers',
+    topImageSrc: challenge.item1Image ?? '',
+  },
+  thirdScreen: {
+    description: challenge.item2Body ?? '',
+    heroImageSrc: challenge.item2Image ?? '',
+    largeIconCenterSrc: challenge.item2Image ?? '',
+    largeIconTopSrc: challenge.item2Image ?? '',
+    metricAmount: challenge.featuredStat2 ?? '',
+    metricDescription: challenge.featuredStat2Body ?? '',
+    metricImageSrc: challenge.item2Image ?? '',
+    subheadline: splitLines(ambient.title) ?? 'IT assets & data centers',
+    videoSrc: '',
+  },
+});
+
+const mapSolutions = (
+  solutionsMain: SolutionsMain,
+  solutionAccordion: SolutionsAccordion,
+  ambient: Ambient
+): SolutionScreens => {
+  return {
+    firstScreen: {
+      backgroundVideoSrc: solutionsMain.mainVideo ?? '',
+      description: solutionsMain.body ?? '',
+      subheadline: splitLines(ambient.title),
+      title: solutionsMain.headline ?? '',
+    },
+    fourthScreen: {
+      accordionItems: solutionAccordion.accordion?.map((item, index) => ({
+        color:
+          index === 0
+            ? ('white' as const)
+            : index === 1
+              ? ('lightBlue' as const)
+              : index === 2
+                ? ('blue' as const)
+                : ('navy' as const),
+        contentList: item.bullets ?? [],
+        expanded: index === 0,
+        id: `accordion-${index}`,
+        number: `${String(index + 1).padStart(2, '0')}.`,
+        title: item.title ?? '',
+      })),
+      mediaDiamondSolidSrc: solutionAccordion.image,
+      solutionLabel: 'Solution',
+      subheadline: splitLines(ambient.title),
+      title: solutionAccordion.headline ?? '',
+    },
+    secondScreen: {
+      heroImageSrc: solutionsMain.image ?? '',
+      solutionLabel: 'Solution',
+      stepFourDescription: solutionsMain.numberedList?.[3] ?? '',
+      stepFourLabel: '04.',
+      stepOneDescription: solutionsMain.numberedList?.[0] ?? '',
+      stepOneLabel: '01.',
+      stepThreeDescription: solutionsMain.numberedList?.[2] ?? '',
+      stepThreeLabel: '03.',
+      stepTwoDescription: solutionsMain.numberedList?.[1] ?? '',
+      stepTwoLabel: '02.',
+      subheadline: splitLines(ambient.title),
+      title: solutionsMain.numberedListHeadline ?? 'Together, we:',
+    },
+  };
+};
+
+const mapValue = (value: ValueContent, ambient: Ambient): ValueScreens => {
+  const heroVideoSrc = value.mainVideo;
+  const description = value.body;
+  const headline = value.headline;
+
+  const benefits = value.diamondBenefits ?? [];
+  const overviewCards = [
+    { color: '#8a0d71', label: 'Operational benefits' },
+    { color: '#1b75bc', label: 'Economic benefits' },
+    { color: '#f26522', label: 'Strategic benefits', textColor: '#4a154b' },
+  ];
+
+  const buildDiamondCards = (label?: string) => {
+    const normalized = (label ?? '').toLowerCase();
+    if (normalized.includes('operational')) {
+      return [
+        { color: '#f26522', label: '', textColor: '#4a154b' },
+        { color: '#1b75bc', label: '' },
+        { color: '#8a0d71', label: 'Operational benefits' },
+      ];
+    }
+    if (normalized.includes('economic') || normalized.includes('economical')) {
+      return [
+        { color: '#8a0d71', label: '' },
+        { color: '#f26522', label: '', textColor: '#4a154b' },
+        { color: '#1b75bc', label: 'Economic benefits' },
+      ];
+    }
+    // Strategic fallback
+    return [
+      { color: '#1b75bc', label: '' },
+      { color: '#8a0d71', label: '' },
+      { color: '#f26522', label: 'Strategic benefits', textColor: '#4a154b' },
+    ];
+  };
+
+  const carouselSlides = benefits.map(benefit => ({
+    badgeLabel: benefit.label,
+    bullets: benefit.bullets,
+    diamondCards: buildDiamondCards(benefit.label),
+    id: `value-${(benefit.label ?? '').toLowerCase().replace(/\s+/g, '-')}`,
+  }));
+
+  return {
+    valueScreens: [
+      {
+        carouselId: 'kiosk-3-value-overview',
+        description,
+        eyebrow: splitLines(ambient.title),
+        headline,
+        heroVideoSrc,
+        labelText: 'Value',
+        slides: [
+          {
+            badgeLabel: 'Operational · Economic · Strategic',
+            diamondCards: overviewCards,
+            id: 'value-trio-overview',
+          },
+        ],
+      },
+      {
+        carouselId: 'kiosk-3-value-carousel',
+        description,
+        eyebrow: splitLines(ambient.title),
+        headline,
+        labelText: 'Value',
+        slides: carouselSlides,
+      },
+    ],
+  };
+};
+
+const mapHardcoded = (hardcoded: HardcodedContent, ambient: Ambient): HardCodedScreens => ({
+  firstScreen: {
+    eyebrow: splitLines(ambient.title),
+    heroImageAlt: 'Data center facility',
+    heroImageSrc: hardcoded.image,
+    primaryCtaLabel: hardcoded.mainCTA,
+    secondaryCtaLabel: hardcoded.secondaryCTA,
+  },
+  fourthScreen: {
+    cardLabel: hardcoded.secondaryCTA ?? 'Launch demo',
+    demoIframeSrc: 'https://example.com/demo',
+    endTourLabel: 'End tour',
+    headline: splitLines(hardcoded.headline2) ?? ['Centralized management', 'of services via API'],
+  },
+  secondScreen: {
+    eyebrow: splitLines(ambient.title),
+    headline: splitLines(hardcoded.headline2) ?? ['Centralized management', 'of services via API'],
+  },
+  thirdScreen: {
+    headline: splitLines(hardcoded.headline) ?? ['Learn more about how we', 'unlocked new possibilities'],
+  },
+});

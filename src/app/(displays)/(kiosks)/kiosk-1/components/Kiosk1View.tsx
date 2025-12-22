@@ -80,22 +80,34 @@ const Kiosk1View = () => {
     | {
         data?: {
           ambient?: unknown;
-          challenge?: unknown;
-          hardcoded?: unknown;
-          solutions?: unknown;
-          value?: unknown;
+          challengeMain?: unknown;
+          customInteractive1Main?: unknown;
+          solutionGrid?: unknown;
+          solutionMain?: unknown;
+          valueMain?: unknown;
         };
       };
 
   const challenges: KioskChallenges | null =
-    kioskContent?.data?.challenge && kioskContent.data.ambient
-      ? parseKioskChallenges(mapChallenges(kioskContent.data.challenge, kioskContent.data.ambient), 'kiosk-1')
+    kioskContent?.data?.challengeMain && kioskContent.data.ambient
+      ? parseKioskChallenges(mapChallenges(kioskContent.data.challengeMain, kioskContent.data.ambient), 'kiosk-1')
       : null;
-  const solutions = kioskContent?.data?.solutions
-    ? (mapSolutions(kioskContent.data.solutions) as SolutionScreens)
-    : null;
-  const values = kioskContent?.data?.value ? (mapValue(kioskContent.data.value) as ValueScreens) : null;
-  const hardCoded = (kioskContent?.data?.hardcoded as HardCodedScreens | undefined) || null;
+  const solutions =
+    kioskContent?.data?.solutionMain && kioskContent.data.solutionGrid && kioskContent.data.ambient
+      ? (mapSolutions(
+          kioskContent.data.solutionMain,
+          kioskContent.data.solutionGrid,
+          kioskContent.data.ambient
+        ) as SolutionScreens)
+      : null;
+  const values =
+    kioskContent?.data?.valueMain && kioskContent.data.ambient
+      ? (mapValue(kioskContent.data.valueMain, kioskContent.data.ambient) as ValueScreens)
+      : null;
+  const hardCoded =
+    kioskContent?.data?.customInteractive1Main && kioskContent.data.ambient
+      ? (mapHardcoded(kioskContent.data.customInteractive1Main, kioskContent.data.ambient) as HardCodedScreens)
+      : null;
 
   // Pass the global handlers to all templates
   const globalHandlers = {
@@ -317,7 +329,7 @@ const Kiosk1View = () => {
         {shouldShowArrows && (
           <motion.div
             animate={{ opacity: 1, scale: 1 }}
-            className="fixed top-[48%] right-[120px] z-[50] flex -translate-y-1/2 flex-col gap-[100px]"
+            className="fixed top-[38%] right-[120px] z-[50] flex -translate-y-1/2 flex-col gap-[100px]"
             exit={{ opacity: 0, scale: 0.9 }}
             initial={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.6, ease: 'easeOut' }}
@@ -379,54 +391,65 @@ type Ambient = {
   backgroundImage?: string;
   body?: string;
   headline?: string;
+  mainCTA?: string;
   quoteSource?: string;
   title?: string;
 };
 
-type ChallengeScreen = {
-  body?: string;
-  slideTitle?: string;
-  statBody?: string;
-  staticAsset?: string;
-  statTitle?: string;
-  videoAsset?: string;
-};
-
 type ChallengeContent = {
-  firstScreen?: ChallengeScreen;
-  secondScreen?: ChallengeScreen;
-  thirdScreen?: ChallengeScreen;
+  body?: string;
+  featuredStat1?: string;
+  featuredStat1Body?: string;
+  featuredStat2?: string;
+  featuredStat2Body?: string;
+  item1Body?: string;
+  item1Image?: string;
+  item2Body?: string;
+  item2Image?: string;
+  mainVideo?: string;
 };
 
-type SolutionsContent = {
-  firstScreen?: {
-    body?: string;
-    headline?: string;
-    slideTitle?: string;
-    videoAsset?: string;
-  };
-  secondScreen?: {
-    headline?: string;
-    numberedList?: string[];
-    slideTitle?: string;
-    staticAsset?: string;
-  };
-  thirdScreen?: {
-    diamondText?: string[];
-    groupedAssets?: string[];
-    headline?: string;
-    slideTitle?: string;
-  };
+type SolutionsMain = {
+  body?: string;
+  headline?: string;
+  image?: string;
+  mainVideo?: string;
+  numberedList?: string[];
+  numberedListHeadline?: string;
+};
+
+type SolutionsGrid = {
+  diamondList?: string[];
+  headline?: string;
+  images?: string[];
 };
 
 type ValueContent = {
-  main?: {
-    body?: string;
-    diamondBenefits?: { bullets?: string[]; label?: string }[];
-    headline?: string;
-    slideTitle?: string;
-    videoAsset?: string;
-  };
+  body?: string;
+  diamondBenefits?: { bullets?: string[]; label?: string }[];
+  headline?: string;
+  mainVideo?: string;
+};
+
+type HardcodedContent = {
+  backCTA?: string;
+  body2?: string;
+  diamondCarouselItems?: string[];
+  headline?: string;
+  headline2?: string;
+  image?: string;
+  mainCTA?: string;
+  ModalBody1?: string;
+  ModalBody2?: string;
+  ModalBody3?: string;
+  ModalBody4?: string;
+  ModalBody5?: string;
+  ModalHeadline1?: string;
+  ModalHeadline2?: string;
+  ModalHeadline3?: string;
+  ModalHeadline4?: string;
+  ModalHeadline5?: string;
+  secondaryCTA?: string;
 };
 
 const splitLines = (value?: string) => (value ? value.split('\n') : undefined);
@@ -434,94 +457,88 @@ const splitLines = (value?: string) => (value ? value.split('\n') : undefined);
 const mapChallenges = (challenge: ChallengeContent, ambient: Ambient): KioskChallenges => ({
   firstScreen: {
     challengeLabel: 'Challenge',
-    problemDescription: challenge.firstScreen?.body ?? '',
-    savingsAmount: challenge.firstScreen?.statTitle ?? '',
-    savingsDescription: challenge.firstScreen?.statBody ?? '',
-    subheadline: splitLines(challenge.firstScreen?.slideTitle) ?? 'Rich media & cultural heritage',
-    videoSrc: challenge.firstScreen?.videoAsset ?? '',
+    problemDescription: challenge.body ?? '',
+    savingsAmount: challenge.featuredStat1 ?? '',
+    savingsDescription: challenge.featuredStat1Body ?? '',
+    subheadline: splitLines(ambient.title) ?? 'Rich media & cultural heritage',
+    videoSrc: challenge.mainVideo ?? '',
   },
   initialScreen: {
     attribution: ambient.quoteSource ?? '- Michael Rohrabacher, Technical Director at the GRAMMY Museum',
     backgroundImage: ambient.backgroundImage ?? '',
-    buttonText: 'Touch to explore',
+    buttonText: ambient.mainCTA ?? 'Touch to explore',
     headline: ambient.headline ?? '',
     quote: ambient.body ?? '',
     subheadline: splitLines(ambient.title) ?? 'Rich media & cultural heritage',
   },
   secondScreen: {
     bottomDescription: '',
-    bottomVideoSrc: challenge.secondScreen?.videoAsset ?? '',
-    largeIconSrc: challenge.secondScreen?.staticAsset ?? '',
-    mainDescription: challenge.secondScreen?.body ?? '',
-    statAmount: challenge.secondScreen?.statTitle ?? '',
-    statDescription: challenge.secondScreen?.statBody ?? '',
-    subheadline: splitLines(challenge.secondScreen?.slideTitle) ?? 'Rich media & cultural heritage',
-    topImageSrc: challenge.secondScreen?.staticAsset ?? '',
+    bottomVideoSrc: '',
+    largeIconSrc: challenge.item1Image ?? '',
+    mainDescription: challenge.item1Body ?? '',
+    statAmount: '',
+    statDescription: '',
+    subheadline: splitLines(ambient.title) ?? 'Rich media & cultural heritage',
+    topImageSrc: challenge.item1Image ?? '',
   },
   thirdScreen: {
-    description: challenge.thirdScreen?.body ?? '',
-    heroImageSrc: challenge.thirdScreen?.staticAsset ?? '',
-    largeIconCenterSrc: challenge.thirdScreen?.staticAsset ?? '',
-    largeIconTopSrc: challenge.thirdScreen?.staticAsset ?? '',
-    metricAmount: challenge.thirdScreen?.statTitle ?? '',
-    metricDescription: challenge.thirdScreen?.statBody ?? '',
-    metricImageSrc: challenge.thirdScreen?.staticAsset ?? '',
-    subheadline: splitLines(challenge.thirdScreen?.slideTitle) ?? 'Rich media & cultural heritage',
-    videoSrc: challenge.thirdScreen?.videoAsset ?? '',
+    description: challenge.item2Body ?? '',
+    heroImageSrc: challenge.item2Image ?? '',
+    largeIconCenterSrc: challenge.item2Image ?? '',
+    largeIconTopSrc: challenge.item2Image ?? '',
+    metricAmount: challenge.featuredStat2 ?? '',
+    metricDescription: challenge.featuredStat2Body ?? '',
+    metricImageSrc: challenge.item2Image ?? '',
+    subheadline: splitLines(ambient.title) ?? 'Rich media & cultural heritage',
+    videoSrc: '',
   },
 });
 
-const mapSolutions = (solutions: SolutionsContent): SolutionScreens => ({
-  firstScreen: solutions.firstScreen
-    ? {
-        backgroundVideoSrc: solutions.firstScreen.videoAsset,
-        description: solutions.firstScreen.body,
-        subheadline: splitLines(solutions.firstScreen.slideTitle),
-        title: solutions.firstScreen.headline,
-      }
-    : undefined,
-  secondScreen: solutions.secondScreen
-    ? {
-        heroImageSrc: solutions.secondScreen.staticAsset,
-        solutionLabel: 'Solution',
-        stepFourDescription: solutions.secondScreen.numberedList?.[3],
-        stepFourLabel: '04.',
-        stepOneDescription: solutions.secondScreen.numberedList?.[0],
-        stepOneLabel: '01.',
-        stepThreeDescription: solutions.secondScreen.numberedList?.[2],
-        stepThreeLabel: '03.',
-        stepTwoDescription: solutions.secondScreen.numberedList?.[1],
-        stepTwoLabel: '02.',
-        subheadline: splitLines(solutions.secondScreen.slideTitle),
-        title: solutions.secondScreen.headline,
-      }
-    : undefined,
-  thirdScreen: solutions.thirdScreen
-    ? {
-        bottomLeftLabel: solutions.thirdScreen.diamondText?.[2],
-        bottomRightLabel: solutions.thirdScreen.diamondText?.[3],
-        centerLabel: solutions.thirdScreen.diamondText?.[0],
-        mediaDiamondLeftSrc: solutions.thirdScreen.groupedAssets?.[0],
-        mediaDiamondRightSrc: solutions.thirdScreen.groupedAssets?.[1],
-        solutionLabel: 'Solution',
-        subheadline: splitLines(solutions.thirdScreen.slideTitle),
-        title: solutions.thirdScreen.headline,
-        topLeftLabel: undefined,
-        topRightLabel: solutions.thirdScreen.diamondText?.[1],
-      }
-    : undefined,
+const mapSolutions = (
+  solutionsMain: SolutionsMain,
+  solutionsGrid: SolutionsGrid,
+  ambient: Ambient
+): SolutionScreens => ({
+  firstScreen: {
+    backgroundVideoSrc: solutionsMain.mainVideo ?? '',
+    description: solutionsMain.body ?? '',
+    subheadline: splitLines(ambient.title),
+    title: solutionsMain.headline ?? '',
+  },
+  secondScreen: {
+    heroImageSrc: solutionsMain.image ?? '',
+    solutionLabel: 'Solution',
+    stepFourDescription: solutionsMain.numberedList?.[3] ?? '',
+    stepFourLabel: '04.',
+    stepOneDescription: solutionsMain.numberedList?.[0] ?? '',
+    stepOneLabel: '01.',
+    stepThreeDescription: solutionsMain.numberedList?.[2] ?? '',
+    stepThreeLabel: '03.',
+    stepTwoDescription: solutionsMain.numberedList?.[1] ?? '',
+    stepTwoLabel: '02.',
+    subheadline: splitLines(ambient.title),
+    title: solutionsMain.numberedListHeadline ?? 'Together, we:',
+  },
+  thirdScreen: {
+    bottomLeftLabel: solutionsGrid.diamondList?.[2] ?? '',
+    bottomRightLabel: solutionsGrid.diamondList?.[3] ?? '',
+    centerLabel: solutionsGrid.diamondList?.[0] ?? '',
+    mediaDiamondLeftSrc: solutionsGrid.images?.[0] ?? '',
+    mediaDiamondRightSrc: solutionsGrid.images?.[1] ?? '',
+    solutionLabel: 'Solution',
+    subheadline: splitLines(ambient.title),
+    title: solutionsGrid.headline ?? '',
+    topLeftLabel: undefined,
+    topRightLabel: solutionsGrid.diamondList?.[1] ?? '',
+  },
 });
 
-const mapValue = (value: ValueContent): ValueScreens => {
-  const main = value.main;
-  if (!main) return { valueScreens: [] };
+const mapValue = (value: ValueContent, ambient: Ambient): ValueScreens => {
+  const heroVideoSrc = value.mainVideo;
+  const description = value.body;
+  const headline = value.headline;
 
-  const eyebrow = splitLines(main.slideTitle);
-  const heroVideoSrc = main.videoAsset;
-  const description = main.body;
-  const headline = main.headline;
-
-  const benefits = main.diamondBenefits ?? [];
+  const benefits = value.diamondBenefits ?? [];
   const overviewCards = [
     { color: '#8a0d71', label: 'Operational benefits' },
     { color: '#1b75bc', label: 'Economic benefits' },
@@ -564,7 +581,7 @@ const mapValue = (value: ValueContent): ValueScreens => {
       {
         carouselId: 'kiosk-1-value-overview',
         description,
-        eyebrow,
+        eyebrow: splitLines(ambient.title),
         headline,
         heroVideoSrc,
         labelText: 'Value',
@@ -579,7 +596,7 @@ const mapValue = (value: ValueContent): ValueScreens => {
       {
         carouselId: 'kiosk-1-value-carousel',
         description,
-        eyebrow,
+        eyebrow: splitLines(ambient.title),
         headline,
         labelText: 'Value',
         slides: carouselSlides,
@@ -587,3 +604,38 @@ const mapValue = (value: ValueContent): ValueScreens => {
     ],
   };
 };
+
+const mapHardcoded = (hardcoded: HardcodedContent, ambient: Ambient): HardCodedScreens => ({
+  firstScreen: {
+    eyebrow: splitLines(ambient.title),
+    heroImageAlt: 'Visitors smiling while viewing content',
+    heroImageSrc: hardcoded.image,
+    primaryCtaLabel: hardcoded.mainCTA,
+    secondaryCtaLabel: hardcoded.secondaryCTA,
+  },
+  secondScreen: {
+    eyebrow: splitLines(ambient.title),
+    headline: splitLines(hardcoded.headline2) ?? ['From archive', 'to access'],
+    steps: hardcoded.diamondCarouselItems?.map((item, index) => {
+      const modalBodyKey = `ModalBody${index + 1}` as keyof HardcodedContent;
+      const modalHeadlineKey = `ModalHeadline${index + 1}` as keyof HardcodedContent;
+      const modalBody = hardcoded[modalBodyKey] as string | undefined;
+      const modalHeadline = hardcoded[modalHeadlineKey] as string | undefined;
+      return {
+        label: item,
+        modal: {
+          body: [modalBody ?? 'Description not available.'],
+          heading: modalHeadline ?? item,
+          imageAlt: `${item} illustration`,
+          imageSrc: `https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/${item.replace(/\s+/g, '+')}.webp`,
+        },
+      };
+    }),
+  },
+  thirdScreen: {
+    cardLabel: 'Virtual walkthrough',
+    demoIframeSrc: 'https://example.com/demo-walkthrough',
+    endTourLabel: 'End tour',
+    headline: ['Experience our solution', 'in action'],
+  },
+});

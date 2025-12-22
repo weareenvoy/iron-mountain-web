@@ -116,7 +116,7 @@ const SolutionThirdScreenTemplate = ({
 
   return (
     <div
-      className="group/kiosk relative flex h-screen w-full flex-col overflow-hidden bg-black"
+      className="group/kiosk relative z-[1] flex h-screen w-full flex-col overflow-hidden bg-black"
       data-kiosk={kioskId}
       data-node-id="5168:9626"
       style={{ background: 'transparent' }}
@@ -129,7 +129,10 @@ const SolutionThirdScreenTemplate = ({
       />
 
       {/* Subheadline */}
-      <h2 className="absolute top-[230px] left-[120px] w-[500px] -translate-y-full text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:top-[250px] group-data-[kiosk=kiosk-2]/kiosk:translate-y-0 group-data-[kiosk=kiosk-3]/kiosk:relative group-data-[kiosk=kiosk-3]/kiosk:top-[410px] group-data-[kiosk=kiosk-3]/kiosk:left-auto group-data-[kiosk=kiosk-3]/kiosk:w-[380px] group-data-[kiosk=kiosk-3]/kiosk:translate-y-0">
+      <h2
+        className="absolute top-[230px] left-[120px] w-[500px] -translate-y-full text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:top-[250px] group-data-[kiosk=kiosk-2]/kiosk:translate-y-0 group-data-[kiosk=kiosk-3]/kiosk:relative group-data-[kiosk=kiosk-3]/kiosk:top-[410px] group-data-[kiosk=kiosk-3]/kiosk:left-auto group-data-[kiosk=kiosk-3]/kiosk:w-[380px] group-data-[kiosk=kiosk-3]/kiosk:translate-y-0"
+        style={{ zIndex: 1 }}
+      >
         {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
       </h2>
 
