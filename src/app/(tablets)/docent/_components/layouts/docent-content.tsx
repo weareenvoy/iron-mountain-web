@@ -35,7 +35,7 @@ const DocentContent = ({ children }: PropsWithChildren) => {
       {/* TODO when we click Settings button, ask GEC, GEC will send back latest data */}
       {/* Global Settings Button - Show on all pages except home */}
       {isConnected && !isHomePage && (
-        <div className="absolute top-38 right-5 z-50">
+        <div className="absolute top-39 right-5 z-50">
           <Button
             className="h-13 gap-2 border-none p-0"
             onClick={openSettingsDrawer}

@@ -45,7 +45,7 @@ export const isSection = (value: string): value is Section => {
 };
 
 // Beat IDs in presentation order
-export const BEAT_ORDER = [
+export const BASECAMP_BEAT_ORDER = [
   'ambient-1',
   'welcome-1',
   'welcome-2',
@@ -65,10 +65,78 @@ export const BEAT_ORDER = [
   'ascend-3',
 ] as const;
 
-export type BeatId = (typeof BEAT_ORDER)[number];
+export type BasecampBeatId = (typeof BASECAMP_BEAT_ORDER)[number];
 
-export const isValidBeatId = (id: string): id is BeatId => {
-  return BEAT_ORDER.includes(id as BeatId);
+export const isValidBasecampBeatId = (id: string): id is BasecampBeatId => {
+  return BASECAMP_BEAT_ORDER.includes(id as BasecampBeatId);
+};
+
+export const OVERLOOK_BEAT_IDS = [
+  'ambient-1',
+  'unlock-1',
+  'unlock-2',
+  'protect-1',
+  'protect-2',
+  'connect-1',
+  'connect-2',
+  'activate-1',
+  'activate-2',
+  'insightdxp-1',
+  'insightdxp-2',
+  'insightdxp-3',
+  'insightdxp-4',
+  'insightdxp-5',
+  'impact-1',
+  'impact-2',
+  'futurescaping-1',
+  'futurescaping-2',
+  'futurescaping-3',
+  'futurescaping-4',
+] as const;
+
+export type OverlookBeatId = (typeof OVERLOOK_BEAT_IDS)[number];
+
+export const isValidOverlookBeatId = (id: string): id is OverlookBeatId => {
+  return OVERLOOK_BEAT_IDS.includes(id as OverlookBeatId);
+};
+
+// Summit Room beat IDs
+export const SUMMIT_ROOM_BEAT_IDS = [
+  'journey-intro',
+  'journey-1',
+  'journey-2',
+  'journey-3',
+  'journey-4',
+  'journey-5',
+] as const;
+
+export type SummitRoomBeatId = (typeof SUMMIT_ROOM_BEAT_IDS)[number];
+
+export const isValidSummitRoomBeatId = (id: string): id is SummitRoomBeatId => {
+  return SUMMIT_ROOM_BEAT_IDS.includes(id as SummitRoomBeatId);
+};
+
+// Union type for all exhibit beat IDs
+export type ExhibitBeatId = BasecampBeatId | OverlookBeatId | SummitRoomBeatId;
+
+// Convert carousel beatId (journey-1 through journey-5) to slide index (0-4).
+// Note: journey-intro is NOT a slide - it's the pre-carousel state.
+export const getSlideIndexFromBeatId = (beatId: SummitRoomBeatId): number => {
+  if (beatId === 'journey-intro') {
+    return 0; // Fallback
+  }
+  const match = beatId.match(/^journey-(\d+)$/);
+  if (!match || !match[1]) return 0;
+  return parseInt(match[1], 10) - 1;
+};
+
+// Convert slide index (0-4) to carousel beatId (journey-1 through journey-5).
+export const getBeatIdFromSlideIndex = (slideIndex: number): SummitRoomBeatId => {
+  if (slideIndex < 0 || slideIndex > 4) {
+    console.warn('Invalid slide index:', slideIndex);
+    return 'journey-1';
+  }
+  return `journey-${slideIndex + 1}` as SummitRoomBeatId;
 };
 
 // UI Navigation state for exhibits (local to UI, not MQTT)
@@ -99,7 +167,7 @@ export interface Tour {
 
 export interface BasecampData {
   readonly 'beats': {
-    readonly [key in BeatId]: {
+    readonly [key in BasecampBeatId]: {
       readonly url: string;
     };
   };
@@ -290,61 +358,7 @@ export interface DocentData {
   };
 }
 
-export interface SummitData {
-  readonly hero: {
-    readonly advisorName: string;
-    readonly clientName: string;
-    readonly date: string;
-    readonly location: string;
-    readonly logoAlt: string;
-    readonly subtitle: string;
-  };
-  readonly metrics: {
-    readonly description: string;
-    readonly items: readonly {
-      readonly description: string;
-      readonly label: string;
-      readonly value: string;
-    }[];
-    readonly title: string;
-  };
-  readonly obstacles: {
-    readonly description: string;
-    readonly items: readonly {
-      readonly body: string;
-      readonly icon: string;
-      readonly title: string;
-    }[];
-    readonly title: string;
-  };
-  readonly recaps: readonly {
-    readonly body: string;
-    readonly cta: string;
-    readonly title: string;
-  }[];
-  readonly stories: {
-    readonly description: string;
-    readonly items: readonly {
-      readonly category: string;
-      readonly description: string;
-      readonly title: string;
-    }[];
-    readonly title: string;
-  };
-  readonly strategies: readonly {
-    readonly eyebrow: string;
-    readonly items: readonly {
-      readonly body: readonly string[];
-      readonly title: string;
-    }[];
-    readonly summary: string;
-  }[];
-  readonly summary: {
-    readonly body: string;
-    readonly cta: string;
-    readonly title: string;
-  };
-}
+import type { SummitData } from '@/app/(displays)/summit/_types';
 
 export type Locale = 'en' | 'pt';
 

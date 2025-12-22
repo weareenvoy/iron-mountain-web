@@ -1,4 +1,7 @@
 # PACKAGES
+embla
+GSAP
+insightdxp
 Mosquitto
 shadcn
 TTFB
@@ -10,3 +13,4 @@ Rohrabacher
 embla
 Embla
 ITAD
+insightdxp

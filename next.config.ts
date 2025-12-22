@@ -60,7 +60,7 @@ const nextConfig: NextConfig = {
   output: 'export',
   poweredByHeader: false,
   // productionBrowserSourceMaps: true,
-  reactCompiler: true,
+  reactCompiler: process.env.NODE_ENV === 'production',
   reactStrictMode: true,
   trailingSlash: false,
   turbopack: {
