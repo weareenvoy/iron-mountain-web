@@ -116,7 +116,7 @@ const HardCodedKiosk1FirstScreenTemplate = ({
       {/* CTA buttons */}
       <div className={`absolute top-[2220px] left-[245px] flex flex-col gap-[90px] ${ctaWidthClass}`}>
         <button
-          className="flex h-[200px] items-center justify-between rounded-[999px] bg-[#ededed] px-[100px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-[#14477d] shadow-[0_20px_60px_rgba(0,0,0,0.25)] transition-transform duration-150 group-data-[kiosk=kiosk-2]/kiosk:hidden hover:scale-[1.01]"
+          className="flex h-[200px] backdrop-blur-[19px] items-center justify-between rounded-[999px] bg-[#ededed] py-[70px] px-[100px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-[#14477d] shadow-[0_20px_60px_rgba(0,0,0,0.25)] transition-transform duration-150 group-data-[kiosk=kiosk-2]/kiosk:hidden hover:scale-[1.01]"
           onClick={onPrimaryCta}
           type="button"
         >
@@ -124,7 +124,7 @@ const HardCodedKiosk1FirstScreenTemplate = ({
           <ArrowIcon />
         </button>
         <button
-          className="flex h-[200px] items-center justify-between rounded-[999px] px-[100px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-transform duration-150 hover:scale-[1.01]"
+          className="flex h-[200px] items-center justify-between rounded-[999px] py-[70px] px-[100px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-transform duration-150 hover:scale-[1.01]"
           onClick={handleSecondaryClick}
           style={{
             background: 'linear-gradient(296deg, #A2115E 28.75%, #8A0D71 82.59%)',
@@ -155,7 +155,7 @@ const HardCodedKiosk1FirstScreenTemplate = ({
 
       {/* Overlay - Demo Screen */}
       <div
-        className="absolute inset-0 transition-opacity duration-700"
+        className="absolute inset-0 transition-opacity duration-700 z-[999]"
         style={{
           opacity: showOverlay ? 1 : 0,
           pointerEvents: showOverlay ? 'auto' : 'none',

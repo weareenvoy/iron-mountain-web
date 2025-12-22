@@ -342,7 +342,7 @@ const HardCodedKiosk3ThirdScreenTemplate = ({
 
       {/* Overlay */}
       <div
-        className="absolute inset-0 transition-opacity duration-700"
+        className="absolute inset-0 transition-opacity duration-700 z-[999]"
         style={{
           opacity: showOverlay ? 1 : 0,
           pointerEvents: showOverlay ? 'auto' : 'none',

@@ -97,7 +97,7 @@ const SolutionFirstScreenTemplate = ({
       </div>
 
       {/* Body copy */}
-      <div className="absolute top-[1600px] left-[230px] flex w-auto max-w-[1271px] flex-col gap-[80px] text-white group-data-[kiosk=kiosk-3]/kiosk:top-[1260px] group-data-[kiosk=kiosk-3]/kiosk:left-[120px]">
+      <div className="absolute top-[1270px] left-[120px] flex w-auto max-w-[1271px] flex-col gap-[80px] text-white group-data-[kiosk=kiosk-3]/kiosk:top-[1260px] group-data-[kiosk=kiosk-3]/kiosk:left-[120px]">
         <p className="w-[900px] text-[100px] leading-[1.3] font-normal tracking-[-5px]">
           {renderRegisteredMark(title)}
         </p>
@@ -105,7 +105,7 @@ const SolutionFirstScreenTemplate = ({
       </div>
 
       {/* Decorative diamonds */}
-      <div className="pointer-events-none absolute top-[2400px] left-[-180px] z-[3] h-[1770px] w-[1770px] opacity-60 group-data-[kiosk=kiosk-3]/kiosk:top-[2420px] group-data-[kiosk=kiosk-3]/kiosk:left-[-180px] group-data-[kiosk=kiosk-3]/kiosk:size-[1780px]">
+      <div className="pointer-events-none absolute top-[2420px] left-[-170px] z-[3] h-[1770px] w-[1770px] opacity-60 group-data-[kiosk=kiosk-3]/kiosk:top-[2420px] group-data-[kiosk=kiosk-3]/kiosk:left-[-180px] group-data-[kiosk=kiosk-3]/kiosk:size-[1780px]">
         {largeDiamondSrc ? (
           <div className="relative h-full w-full">
             <Image
@@ -120,7 +120,7 @@ const SolutionFirstScreenTemplate = ({
           <BlueDiamondMain aria-hidden="true" className="h-full w-full" focusable="false" />
         )}
       </div>
-      <div className="pointer-events-none absolute top-[2370px] left-[1240px] z-[3] h-[800px] w-[800px] opacity-70 group-data-[kiosk=kiosk-3]/kiosk:top-[2390px] group-data-[kiosk=kiosk-3]/kiosk:left-[1250px] group-data-[kiosk=kiosk-3]/kiosk:size-[810px]">
+      <div className="pointer-events-none absolute top-[2400px] left-[1250px] z-[3] h-[800px] w-[800px] opacity-70 group-data-[kiosk=kiosk-3]/kiosk:top-[2390px] group-data-[kiosk=kiosk-3]/kiosk:left-[1250px] group-data-[kiosk=kiosk-3]/kiosk:size-[810px]">
         {mediumDiamondSrc ? (
           <div className="relative h-full w-full">
             <Image
@@ -135,7 +135,7 @@ const SolutionFirstScreenTemplate = ({
           <GreenDiamondMain aria-hidden="true" className="h-full w-full" focusable="false" />
         )}
       </div>
-      <div className="pointer-events-none absolute top-[3394px] left-[1235px] z-[3] h-[795px] w-[795px] opacity-70 group-data-[kiosk=kiosk-3]/kiosk:top-[3420px] group-data-[kiosk=kiosk-3]/kiosk:left-[1250px] group-data-[kiosk=kiosk-3]/kiosk:size-[810px]">
+      <div className="pointer-events-none absolute top-[3440px] left-[1250px] z-[3] h-[795px] w-[795px] opacity-70 group-data-[kiosk=kiosk-3]/kiosk:top-[3420px] group-data-[kiosk=kiosk-3]/kiosk:left-[1250px] group-data-[kiosk=kiosk-3]/kiosk:size-[810px]">
         {accentDiamondSrc ? (
           <div className="relative h-full w-full">
             <Image

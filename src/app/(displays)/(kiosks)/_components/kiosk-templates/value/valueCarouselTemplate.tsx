@@ -203,7 +203,7 @@ const DiamondStack = ({
             {card.label ? (
               <div className="absolute inset-0 flex items-center justify-center">
                 <div
-                  className="flex h-[320px] w-[320px] -rotate-[45deg] items-center justify-center px-10 text-center text-[48px] leading-[1.2] font-normal tracking-[-2.4px]"
+                  className="flex h-[320px] w-[320px] -rotate-[45deg] items-center justify-center px-10 text-center text-[48px] leading-[1.4] font-normal tracking-[-2.4px]"
                   style={{ color: '#ededed' }}
                 >
                   {renderRegisteredMark(card.label)}

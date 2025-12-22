@@ -79,7 +79,7 @@ export const SecondScreenTemplate = ({
       {/* Main Description - SCROLLABLE */}
       <div className="relative top-[955px] left-[650px] z-[2] px-[120px] py-[250px] group-data-[kiosk=kiosk-3]/kiosk:top-[290px]">
         <p
-          className="max-w-[1000px] text-[60px] leading-[1.4] font-normal tracking-[-2.6px] text-white group-data-[kiosk=kiosk-3]/kiosk:max-w-[1100px] group-data-[kiosk=kiosk-3]/kiosk:tracking-[-2.9px]"
+          className="max-w-[1000px] text-[60px] leading-[1.3] font-normal tracking-[-3px] text-white group-data-[kiosk=kiosk-3]/kiosk:max-w-[1100px] group-data-[kiosk=kiosk-3]/kiosk:tracking-[-2.9px]"
           data-scroll-section="main-description"
         >
           {renderRegisteredMark(mainDescription)}

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-const REGISTERED_SYMBOL_REGEX = /[Ⓡ®]/g;
+const REGISTERED_SYMBOL_REGEX = /(\(R\)|\(r\)|[Ⓡ®])/g;
 
 type TextValue = string | string[] | undefined;
 
@@ -34,9 +34,10 @@ export const renderRegisteredMark = (text?: string | string[]): ReactNode => {
     if (matchIndex > lastIndex) {
       parts.push(normalized.slice(lastIndex, matchIndex));
     }
+    const symbol = match[0].toUpperCase() === '(R)' ? 'Ⓡ' : match[0];
     parts.push(
       <span className="registered-mark" key={`registered-mark-${matchIndex}-${index}`}>
-        {match[0]}
+        {symbol}
       </span>
     );
     lastIndex = matchIndex + match[0].length;

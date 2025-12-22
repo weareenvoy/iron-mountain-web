@@ -40,7 +40,7 @@ export const FirstScreenTemplate = ({
       <div className="pointer-events-none absolute inset-0 top-[1290px] z-[1] h-[14400px] rounded-[100px] bg-[linear-gradient(180deg,#1B75BC_0.01%,#14477D_98%)]" />
 
       {/* Video Header Section */}
-      <div className="relative flex h-[1380px] w-full flex-col items-center justify-center overflow-hidden">
+      <div className="relative flex h-[1284px] w-full flex-col items-center justify-center py-[200px] px-[120px]">
         <video
           autoPlay
           className="absolute inset-0 top-[230px] h-full w-full object-cover object-center"
@@ -52,10 +52,10 @@ export const FirstScreenTemplate = ({
         >
           <source src={videoSrc} type="video/mp4" />
         </video>
-        <div className="pointer-events-none absolute inset-0 bg-black/20" />
+        <div className="pointer-events-none absolute inset-0 bg-black/20 top-[230px]" />
 
         {/* Subheadline */}
-        <div className="relative top-[30px] left-[-785px] z-[2] px-[120px] pb-[400px] group-data-[kiosk=kiosk-3]/kiosk:top-[50px] group-data-[kiosk=kiosk-3]/kiosk:left-[-800px]">
+        <div className="relative top-[120px] left-[-760px] z-[2] px-[120px] pb-[400px] group-data-[kiosk=kiosk-3]/kiosk:top-[50px] group-data-[kiosk=kiosk-3]/kiosk:left-[-800px]">
           <h2 className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
             {renderRegisteredMark(Array.isArray(subheadline) ? subheadline.join('\n') : subheadline)}
           </h2>
@@ -74,7 +74,7 @@ export const FirstScreenTemplate = ({
 
       {/* Problem Description Section */}
       <div className="relative top-[-70px] left-[-10px] z-[2] px-[120px] group-data-[kiosk=kiosk-3]/kiosk:top-[-260px] group-data-[kiosk=kiosk-3]/kiosk:left-[0]">
-        <p className="max-w-[1380px] text-[80px] leading-[1.3] font-normal tracking-[-3px] text-white group-data-[kiosk=kiosk-3]/kiosk:leading-[1.4] group-data-[kiosk=kiosk-3]/kiosk:tracking-[-4px]">
+        <p className="max-w-[1380px] text-[80px] leading-[1.4] font-normal tracking-[-4px] text-white group-data-[kiosk=kiosk-3]/kiosk:leading-[1.4] group-data-[kiosk=kiosk-3]/kiosk:tracking-[-4px]">
           {renderRegisteredMark(problemDescription)}
         </p>
       </div>
@@ -84,7 +84,7 @@ export const FirstScreenTemplate = ({
         <span className="text-center text-[400px] leading-[1.3] font-[300] tracking-[-20px] whitespace-nowrap text-[#6dcff6]">
           {renderRegisteredMark(savingsAmount)}
         </span>
-        <p className="relative top-[10px] left-[415px] mt-[-40px] w-[1760px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#6dcff6] group-data-[kiosk=kiosk-3]/kiosk:top-[50px] group-data-[kiosk=kiosk-3]/kiosk:left-[-20px] group-data-[kiosk=kiosk-3]/kiosk:w-[1070px] group-data-[kiosk=kiosk-3]/kiosk:leading-[1.3]">
+        <p className="relative top-[40px] left-[-20px] mt-[-40px] w-[1030px] text-[60px] leading-[1.3] font-normal tracking-[-3px] whitespace-pre-line text-[#6dcff6] group-data-[kiosk=kiosk-3]/kiosk:top-[50px] group-data-[kiosk=kiosk-3]/kiosk:left-[-20px] group-data-[kiosk=kiosk-3]/kiosk:w-[1070px] group-data-[kiosk=kiosk-3]/kiosk:leading-[1.3]">
           {renderRegisteredMark(savingsDescription)}
         </p>
       </div>

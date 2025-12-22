@@ -136,12 +136,12 @@ const SolutionSecondScreenTemplate = ({
       </p>
 
       {/* Timeline with steps */}
-      <div className="absolute top-[1890px] left-[240px] z-[2] flex w-[1010px] flex-col gap-[60px] text-[60px] leading-[1.4] tracking-[-3px] text-[#ededed]">
+      <div className="absolute top-[1890px] left-[240px] z-[2] flex w-[1010px] flex-col gap-[60px] text-[60px] leading-[1.3] tracking-[-3px] text-[#ededed]">
         {timelineSteps.map((step, index) => (
           <div key={`${step.label}-${index}`}>
             <div className={`flex gap-[120px] ${getOpacityClass(index)} group-data-[kiosk=kiosk-3]/kiosk:gap-[70px]`}>
               <p className="w-[120px]">{renderRegisteredMark(step.label)}</p>
-              <p className="w-[1620px] tracking-[-2.7px]">{renderRegisteredMark(step.description)}</p>
+              <p className="w-[1620px]">{renderRegisteredMark(step.description)}</p>
             </div>
             {index < timelineSteps.length - 1 ? (
               <div className="mt-[30px] ml-[140px]">

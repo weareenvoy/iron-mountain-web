@@ -66,11 +66,11 @@ export const InitialScreenTemplate = ({
       </div>
 
       <div
-        className="absolute top-[1130px] left-[120px] z-[2] flex w-[1940px] flex-col gap-[200px] rounded-[60px] px-[120px] py-[240px] pb-[330px] backdrop-blur-[30px] group-data-[kiosk=kiosk-2]/kiosk:py-[220px] group-data-[kiosk=kiosk-2]/kiosk:pb-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[1920px] group-data-[kiosk=kiosk-3]/kiosk:pb-0"
+        className="absolute top-[1130px] left-[120px] z-[2] flex w-[1920px] flex-col gap-[200px] rounded-[60px] px-[120px] py-[240px] pb-[330px] backdrop-blur-[30px] group-data-[kiosk=kiosk-2]/kiosk:py-[220px] group-data-[kiosk=kiosk-2]/kiosk:pb-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[1920px] group-data-[kiosk=kiosk-3]/kiosk:pb-0"
         data-name="Challenge Initial Screen Content Box"
         style={{ backgroundColor: contentBoxBgColor }}
       >
-        <div className="absolute top-[2910px] left-[120px] z-[3] flex h-[180px] w-[710px] items-center group-data-[kiosk=kiosk-2]/kiosk:top-[2890px] group-data-[kiosk=kiosk-3]/kiosk:hidden">
+        <div className="absolute top-[2910px] left-[120px] z-[3] flex h-[182px] w-[703px] items-center group-data-[kiosk=kiosk-2]/kiosk:top-[2890px] group-data-[kiosk=kiosk-3]/kiosk:hidden">
           <div className="relative h-full w-full">
             {logoCombinedSrc ? (
               <Image
@@ -95,7 +95,7 @@ export const InitialScreenTemplate = ({
           <p className="text-[80px] leading-[1.3] font-normal tracking-[-4px] text-white group-data-[kiosk=kiosk-3]/kiosk:relative group-data-[kiosk=kiosk-3]/kiosk:top-[-230px] group-data-[kiosk=kiosk-3]/kiosk:text-[120px] group-data-[kiosk=kiosk-3]/kiosk:tracking-[-6px]">
             {renderRegisteredMark(quote)}
           </p>
-          <p className="relative top-[180px] text-[52px] leading-[1.6] font-semibold tracking-[-2.4px] whitespace-pre-wrap text-black">
+          <p className="relative top-[180px] text-[52px] leading-[1.4] font-semibold tracking-[-2.6px] whitespace-pre-wrap text-black">
             {renderRegisteredMark(attribution)}
           </p>
         </div>
