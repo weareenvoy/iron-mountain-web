@@ -13,6 +13,25 @@ const SwRegister = ({ apiBase, offlineFirst, type }: SwRegisterProps) => {
   useEffect(() => {
     if (!('serviceWorker' in navigator)) return;
 
+    // Service workers + Turbopack HMR in `next dev` can cause out-of-sync chunk/module errors
+    // when cached `/_next/static/chunks/*` JS is served. Never register SW in development.
+    if (process.env.NODE_ENV !== 'production') {
+      void (async () => {
+        try {
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(registrations.map(reg => reg.unregister()));
+          // Best-effort: clear caches created by SW so dev HMR isn't served stale chunks.
+          if ('caches' in window) {
+            const keys = await caches.keys();
+            await Promise.all(keys.map(key => caches.delete(key)));
+          }
+        } catch {
+          // ignore
+        }
+      })();
+      return;
+    }
+
     const register = async () => {
       let updateFoundHandler: (() => void) | undefined;
       let controllerChangeHandler: (() => void) | undefined;
