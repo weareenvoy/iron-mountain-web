@@ -1,4 +1,7 @@
 # PACKAGES
+embla
+GSAP
+insightdxp
 Mosquitto
 shadcn
 TTFB
