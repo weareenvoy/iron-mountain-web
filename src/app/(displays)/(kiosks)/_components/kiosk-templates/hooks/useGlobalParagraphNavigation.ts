@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, type RefObject } from 'react';
 
-// This controls the arrow navigation to paragraph tags and video elements as shown in the motion comp. (In some caes it scrolls to root divs as well which is intended and can be adjusted with data-scroll-)
+// This controls the arrow navigation to paragraph tags and video elements as shown in the motion comp. (In some cases it scrolls to root divs as well which is intended and can be adjusted with data-scroll-)
 
 export interface UseGlobalParagraphNavigationOptions {
   containerRef: RefObject<HTMLDivElement | null>;
