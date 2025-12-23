@@ -76,6 +76,7 @@ const Kiosk2View = () => {
         ambient?: unknown;
         challengeMain?: unknown;
         customInteractive2?: unknown;
+        demoMain?: unknown;
         solutionGrid?: unknown;
         solutionMain?: unknown;
         valueMain?: unknown;
@@ -96,7 +97,13 @@ const Kiosk2View = () => {
       : null;
   const customInteractive =
     kioskContent?.customInteractive2 && kioskContent.ambient
-      ? (mapCustomInteractive(kioskContent.customInteractive2, kioskContent.ambient) as CustomInteractiveScreens)
+      ? (mapCustomInteractive(
+          kioskContent.customInteractive2,
+          kioskContent.ambient,
+          kioskContent?.demoMain as
+            | { demoText?: string; headline?: string; iframeLink?: string; mainCTA?: string }
+            | undefined
+        ) as CustomInteractiveScreens)
       : null;
 
   // Pass the global handlers to all templates
@@ -568,13 +575,18 @@ const mapValue = (value: ValueContent, ambient: Ambient): ValueScreens => {
 
 const mapCustomInteractive = (
   customInteractive: CustomInteractiveContent,
-  ambient: Ambient
+  ambient: Ambient,
+  demo?: { demoText?: string; headline?: string; iframeLink?: string; mainCTA?: string }
 ): CustomInteractiveScreens => ({
   firstScreen: {
+    demoIframeSrc: demo?.iframeLink,
     eyebrow: ambient.title,
     headline: customInteractive.headline,
     heroImageAlt: 'Healthcare professional working',
     heroImageSrc: customInteractive.image,
+    overlayCardLabel: demo?.demoText,
+    overlayEndTourLabel: demo?.mainCTA,
+    overlayHeadline: demo?.headline,
     primaryCtaLabel: undefined,
     secondaryCtaLabel: customInteractive.secondaryCTA,
   },
