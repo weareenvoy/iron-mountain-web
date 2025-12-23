@@ -1,6 +1,5 @@
 'use client';
 
-// React import removed - not needed with new JSX transform
 import { Diamond } from 'lucide-react';
 import { DEFAULT_KIOSK_ID, type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
@@ -20,9 +19,7 @@ export type FirstScreenTemplateProps = {
 export const FirstScreenTemplate = ({
   labelText,
   kioskId = DEFAULT_KIOSK_ID,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateDown: _onNavigateDown,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateUp: _onNavigateUp,
   problemDescription,
   savingsAmount,
@@ -32,7 +29,6 @@ export const FirstScreenTemplate = ({
 }: FirstScreenTemplateProps) => {
   return (
     <div
-      // className={styles.container}
       className="group/kiosk relative flex h-screen w-full flex-col overflow-visible bg-black"
       data-kiosk={kioskId}
     >
@@ -92,6 +88,5 @@ export const FirstScreenTemplate = ({
   );
 };
 
-FirstScreenTemplate.displayName = 'FirstScreenTemplate';
 
 export default FirstScreenTemplate;

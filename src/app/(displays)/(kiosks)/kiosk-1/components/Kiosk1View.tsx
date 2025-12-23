@@ -1,11 +1,10 @@
 'use client';
 
-/* eslint-disable react-hooks/refs */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
-import { buildChallengeSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeTemplate';
+import { buildChallengeSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeSlides';
 import {
   buildHardcodedSlides,
   type HardCodedScreens,
@@ -15,11 +14,11 @@ import { type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-template
 import {
   buildSolutionSlides,
   type SolutionScreens,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/solutionTemplate';
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/solutionSlides';
 import {
   buildValueSlides,
   type ValueScreens,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueTemplate';
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueSlides';
 import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers/kiosk-provider';
 import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
 import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
@@ -91,7 +90,6 @@ const Kiosk1View = () => {
       ? parseKioskChallenges(mapChallenges(kioskContent.challengeMain, kioskContent.ambient), 'kiosk-1')
       : null;
   
-  // Debug logging
   if (kioskData && !challenges) {
     console.log('[Kiosk1] Data loaded but challenges is null:', { 
       hasData: !!kioskData, 
@@ -333,7 +331,6 @@ const Kiosk1View = () => {
 
   return (
     <div
-      // className={styles.root}
       className="relative h-screen w-full overflow-y-auto scroll-smooth"
       onKeyDown={event => {
         // Prevent default arrow key scrolling to avoid jump before smooth scroll
@@ -358,7 +355,6 @@ const Kiosk1View = () => {
         ))}
       </div>
       <div
-        // className={styles.debugControls}
         className="absolute right-[12px] bottom-[12px] z-[1000] flex gap-2"
       >
         <button onClick={() => controller.prev()}>Prev</button>
@@ -424,7 +420,6 @@ const Kiosk1View = () => {
   );
 };
 
-Kiosk1View.displayName = 'Kiosk1View';
 
 export default Kiosk1View;
 
@@ -606,7 +601,6 @@ const mapValue = (value: ValueContent, ambient: Ambient): ValueScreens => {
         { color: '#1b75bc', label: 'Economic benefits' },
       ];
     }
-    // Strategic fallback
     return [
       { color: '#1b75bc', label: '' },
       { color: '#8a0d71', label: '' },

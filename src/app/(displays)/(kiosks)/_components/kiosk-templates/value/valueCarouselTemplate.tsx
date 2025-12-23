@@ -188,9 +188,7 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
     heroVideoPosterSrc,
     heroVideoSrc,
     labelText,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     onNavigateDown: _onNavigateDown,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     onNavigateUp: _onNavigateUp,
     onRegisterCarouselHandlers,
     slides,
@@ -327,6 +325,5 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
   );
 };
 
-ValueCarouselTemplate.displayName = 'ValueCarouselTemplate';
 
 export default ValueCarouselTemplate;

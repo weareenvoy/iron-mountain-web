@@ -1,6 +1,5 @@
 'use client';
 
-// React import removed - not needed with new JSX transform
 import { ArrowLeft } from 'lucide-react';
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
 import BlueDot from '@/components/ui/icons/Kiosks/HardCoded/BlueDot';

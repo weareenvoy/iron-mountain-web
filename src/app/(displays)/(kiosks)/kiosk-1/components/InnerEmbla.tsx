@@ -56,6 +56,5 @@ const InnerEmbla = ({ id = 'inner-embla', slides }: Props) => {
   );
 };
 
-InnerEmbla.displayName = 'InnerEmbla';
 
 export default InnerEmbla;

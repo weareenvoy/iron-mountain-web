@@ -1,6 +1,5 @@
 'use client';
 
-// React import removed - not needed with new JSX transform
 import { LogOut } from 'lucide-react';
 import Image from 'next/image';
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';

@@ -51,6 +51,5 @@ export type KioskChallenges = {
 };
 
 export const parseKioskChallenges = (value: unknown, _kioskName: string): KioskChallenges => {
-  // Simple type assertion - data is already validated by TypeScript at compile time
   return value as KioskChallenges;
 };

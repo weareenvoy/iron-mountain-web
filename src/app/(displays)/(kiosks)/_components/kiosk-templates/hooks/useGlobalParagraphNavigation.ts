@@ -55,7 +55,6 @@ export function useGlobalParagraphNavigation({
             return true;
           }
           // For text elements, check if they have content
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
           const textContent = el.textContent?.trim() || '';
           return textContent.length > 0;
         });
@@ -88,10 +87,8 @@ export function useGlobalParagraphNavigation({
     return () => {
       if (cleanupObserver) cleanupObserver();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Smooth scroll to a specific paragraph
   const scrollToParagraph = useCallback(
     (index: number) => {
       const container = containerRef.current;
@@ -138,7 +135,6 @@ export function useGlobalParagraphNavigation({
       let currentElement: HTMLElement | null = targetParagraph;
 
       // Walk up the tree to calculate total offset relative to container
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       while (currentElement && currentElement !== container) {
         elementOffsetTop += currentElement.offsetTop;
         currentElement = currentElement.offsetParent as HTMLElement;
@@ -166,7 +162,6 @@ export function useGlobalParagraphNavigation({
         setCurrentIndex(index);
       }, duration);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [allParagraphs, containerRef, currentIndex, duration]
   );
 
@@ -205,7 +200,6 @@ export function useGlobalParagraphNavigation({
     // If we're at the beginning, do nothing (or could loop to end)
   }, [currentIndex, scrollToParagraph]);
 
-  // Scroll to a specific section by its data-scroll-section ID
   const scrollToSectionById = useCallback(
     (sectionId: string) => {
       const index = allParagraphs.findIndex(el => el.getAttribute('data-scroll-section') === sectionId);

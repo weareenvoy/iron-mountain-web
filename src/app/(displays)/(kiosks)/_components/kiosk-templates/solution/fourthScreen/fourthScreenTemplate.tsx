@@ -1,6 +1,5 @@
 'use client';
 
-// React import removed - not needed with new JSX transform
 import { Minus, Plus } from 'lucide-react';
 import Image from 'next/image';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/shadcn/accordion';
@@ -67,9 +66,7 @@ const SolutionFourthScreenTemplate = ({
   accordionItems,
   mediaDiamondOutlineSrc,
   mediaDiamondSolidSrc,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateDown: _onNavigateDown,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateUp: _onNavigateUp,
   labelText,
   subheadline,

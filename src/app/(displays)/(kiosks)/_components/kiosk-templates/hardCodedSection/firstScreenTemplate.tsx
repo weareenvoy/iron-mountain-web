@@ -76,12 +76,7 @@ const HardCodedKiosk1FirstScreenTemplate = ({
       data-kiosk={kioskId}
       data-scroll-section="hardcoded-first-screen"
     >
-      <div
-        className="absolute inset-0 bg-gradient-to-b from-[#1b75bc] to-[#05254b]"
-        style={{
-          height: isKiosk1 ? '10530px' : isKiosk3 ? '15630px' : undefined,
-        }}
-      />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#1b75bc] to-[#05254b] group-data-[kiosk=kiosk-1]/kiosk:h-[10530px] group-data-[kiosk=kiosk-3]/kiosk:h-[15630px]" />
 
       {/* Eyebrow */}
       <h2 className="absolute top-[200px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-3]/kiosk:top-[240px]">

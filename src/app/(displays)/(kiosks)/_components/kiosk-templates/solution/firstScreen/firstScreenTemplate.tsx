@@ -1,6 +1,5 @@
 'use client';
 
-// React import removed - not needed with new JSX transform
 import Image from 'next/image';
 import BlueDiamondMain from '@/components/ui/icons/Kiosks/Solutions/BlueDiamondMain';
 import GreenDiamondMain from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondMain';
@@ -29,9 +28,7 @@ const SolutionFirstScreenTemplate = ({
   kioskId,
   largeDiamondSrc,
   mediumDiamondSrc,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateDown: _onNavigateDown,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateUp: _onNavigateUp,
   labelText,
   subheadline,

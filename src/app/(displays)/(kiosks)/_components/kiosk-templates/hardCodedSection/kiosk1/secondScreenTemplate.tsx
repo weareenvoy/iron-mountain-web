@@ -228,11 +228,8 @@ const HardCodedKiosk1SecondScreenTemplate = ({
         </p>
 
         <button
-          className="absolute top-[1330px] left-[1245px] flex h-[200px] items-center justify-between rounded-[999px] px-[70px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-transform duration-150 hover:scale-[1.01]"
+          className="absolute top-[1330px] left-[1245px] flex h-[200px] items-center justify-between rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[70px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-transform duration-150 hover:scale-[1.01]"
           onClick={handleSecondaryClick}
-          style={{
-            background: 'linear-gradient(296deg, #A2115E 28.75%, #8A0D71 82.59%)',
-          }}
           type="button"
         >
           <span className="mr-[50px]">{renderRegisteredMark(secondaryCtaLabel)}</span>
@@ -248,11 +245,9 @@ const HardCodedKiosk1SecondScreenTemplate = ({
 
         {/* Overlay - Demo Screen */}
         <div
-          className="absolute inset-0 z-[999] transition-opacity duration-700"
-          style={{
-            opacity: showOverlay ? 1 : 0,
-            pointerEvents: showOverlay ? 'auto' : 'none',
-          }}
+          className={`absolute inset-0 z-[999] transition-opacity duration-700 ${
+            showOverlay ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
+          }`}
         >
           <HardCodedDemoScreenTemplate
             cardLabel={overlayCardLabel}

@@ -1,6 +1,5 @@
 'use client';
 
-// React import removed - not needed with new JSX transform
 import Image from 'next/image';
 import ButtonArrow from '@/components/ui/icons/ButtonArrow';
 import WhiteLogoSimple from '@/components/ui/icons/WhiteLogoSimple';
@@ -52,7 +51,6 @@ export const InitialScreenTemplate = ({
               priority
               sizes="100vw"
               src={backgroundImage}
-              unoptimized
             />
           )}
           <div className="absolute inset-0 bg-[rgba(0,0,0,0.2)]" />
@@ -78,7 +76,6 @@ export const InitialScreenTemplate = ({
                 fill
                 sizes="710px"
                 src={logoCombinedSrc}
-                unoptimized
               />
             ) : (
               <WhiteLogoSimple aria-hidden="true" className="h-full w-full" preserveAspectRatio="xMidYMid meet" />
@@ -119,7 +116,6 @@ export const InitialScreenTemplate = ({
                   role="presentation"
                   sizes="120px"
                   src={arrowIconSrc}
-                  unoptimized
                 />
               ) : (
                 <ButtonArrow
@@ -137,6 +133,5 @@ export const InitialScreenTemplate = ({
   );
 };
 
-InitialScreenTemplate.displayName = 'InitialScreenTemplate';
 
 export default InitialScreenTemplate;

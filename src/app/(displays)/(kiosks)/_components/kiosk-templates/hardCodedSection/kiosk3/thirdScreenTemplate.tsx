@@ -47,7 +47,6 @@ const HardCodedKiosk3ThirdScreenTemplate = ({
   overlayHeadline,
   slides,
 }: HardCodedKiosk3ThirdScreenTemplateProps) => {
-  // Hooks must be called unconditionally
   const [index, setIndex] = useState(0);
   const [showOverlay, setShowOverlay] = useState(false);
 

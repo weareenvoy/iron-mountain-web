@@ -54,9 +54,7 @@ const SolutionThirdScreenTemplate = ({
   kioskId,
   mediaDiamondLeftSrc,
   mediaDiamondRightSrc,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateDown: _onNavigateDown,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateUp: _onNavigateUp,
   labelText,
   subheadline,

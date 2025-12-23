@@ -1,6 +1,5 @@
 'use client';
 
-// React import removed - not needed with new JSX transform
 import { Diamond } from 'lucide-react';
 import Image from 'next/image';
 import { DEFAULT_KIOSK_ID, type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
@@ -24,16 +23,13 @@ export const SecondScreenTemplate = ({
   kioskId = DEFAULT_KIOSK_ID,
   largeIconSrc,
   mainDescription,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateDown: _onNavigateDown,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateUp: _onNavigateUp,
   subheadline,
   topImageSrc,
 }: SecondScreenTemplateProps) => {
   return (
     <div
-      // className={styles.container}
       className="group/kiosk relative flex h-screen w-full flex-col overflow-x-hidden overflow-y-auto scroll-smooth bg-transparent"
       data-hero-image={topImageSrc}
       data-kiosk={kioskId}
@@ -51,7 +47,6 @@ export const SecondScreenTemplate = ({
               fill
               sizes="1506px"
               src={largeIconSrc}
-              unoptimized
             />
           )}
         </div>
@@ -98,6 +93,5 @@ export const SecondScreenTemplate = ({
   );
 };
 
-SecondScreenTemplate.displayName = 'SecondScreenTemplate';
 
 export default SecondScreenTemplate;

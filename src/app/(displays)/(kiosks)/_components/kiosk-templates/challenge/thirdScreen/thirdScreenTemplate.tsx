@@ -1,6 +1,5 @@
 'use client';
 
-// React import removed - not needed with new JSX transform
 import { Diamond } from 'lucide-react';
 import Image from 'next/image';
 import { DEFAULT_KIOSK_ID, type KioskId } from '../../../../_types/kiosk-id';
@@ -32,16 +31,13 @@ export const ThirdScreenTemplate = ({
   metricAmount,
   metricDescription,
   metricImageSrc,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateDown: _onNavigateDown,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateUp: _onNavigateUp,
   subheadline,
   videoSrc,
 }: ThirdScreenTemplateProps) => {
   return (
     <div
-      // className={styles.container}
       className="group/kiosk relative flex h-screen w-full flex-col overflow-x-hidden overflow-y-auto scroll-smooth bg-transparent"
       data-hero-image={heroImageSrc}
       data-kiosk={kioskId}
@@ -62,7 +58,6 @@ export const ThirdScreenTemplate = ({
               fill
               sizes="795px"
               src={metricImageSrc}
-              unoptimized
             />
           )}
         </div>
@@ -110,6 +105,5 @@ export const ThirdScreenTemplate = ({
   );
 };
 
-ThirdScreenTemplate.displayName = 'ThirdScreenTemplate';
 
 export default ThirdScreenTemplate;
