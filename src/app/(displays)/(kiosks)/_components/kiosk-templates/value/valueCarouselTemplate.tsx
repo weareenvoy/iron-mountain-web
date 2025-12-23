@@ -1,14 +1,13 @@
 'use client';
 
-import { useEffect, useId, type ComponentType, type CSSProperties, type SVGProps } from 'react';
-import useEmblaCarousel from 'embla-carousel-react';
+import { useId, type ComponentType, type CSSProperties, type SVGProps } from 'react';
 import Image from 'next/image';
 import BlueFilledDiamond from '@/components/ui/icons/Kiosks/Solutions/BlueFilledDiamond';
 import OrangeFilledDiamond from '@/components/ui/icons/Kiosks/Solutions/OrangeFilledDiamond';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
 import PurpleFilledDiamond from '@/components/ui/icons/Kiosks/Solutions/PurpleFilledDiamond';
 import renderRegisteredMark from '../challenge/utils/renderRegisteredMark';
-import DiamondStack, { type DiamondStackVariant } from './DiamondStack';
+import ValueCarousel from './components/ValueCarousel';
 
 const fallbackDiamondCards: readonly ValueDiamondCard[] = [];
 const paletteColors = ['#8a0d71', '#1b75bc', '#f26522'] as const;
@@ -136,7 +135,6 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
   } = props;
   const generatedId = useId();
   const resolvedCarouselId = carouselId ?? `value-carousel-${generatedId}`;
-  const [emblaRef, emblaApi] = useEmblaCarousel({ align: 'start', loop: false });
   const isOverview = resolvedCarouselId.includes('overview');
   const heroVideo = isOverview ? heroVideoSrc : undefined;
 
@@ -153,18 +151,6 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
   const carouselColumnStyle: CSSProperties | undefined = hasCarouselSlides
     ? { alignSelf: 'baseline', left: -330, position: 'relative' }
     : undefined;
-
-  // Register carousel handlers with parent when emblaApi is ready
-  useEffect(() => {
-    if (emblaApi && onRegisterCarouselHandlers) {
-      onRegisterCarouselHandlers({
-        canScrollNext: () => emblaApi.canScrollNext(),
-        canScrollPrev: () => emblaApi.canScrollPrev(),
-        scrollNext: () => emblaApi.scrollNext(),
-        scrollPrev: () => emblaApi.scrollPrev(),
-      });
-    }
-  }, [emblaApi, onRegisterCarouselHandlers]);
 
   return (
     <div
@@ -228,38 +214,11 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
               {renderRegisteredMark(normalizeMultiline(description))}
             </p>
           </div>
-          <div className="flex flex-col items-end gap-[80px]" style={carouselColumnStyle}>
-            <div className="w-full overflow-hidden" ref={emblaRef}>
-              <div className="flex w-full">
-                {slidesWithDefaults.map(slide => {
-                  const cards: readonly ValueDiamondCard[] = slide.diamondCards;
-                  const bulletItems = getBulletItems(slide);
-                  const hasBullets = bulletItems.length > 0;
-                  const stackVariant: DiamondStackVariant = hasBullets ? 'carousel' : 'overview';
-                  return (
-                    <div className="flex min-h-[1600px] w-full min-w-full flex-row gap-[53px] pr-[80px]" key={slide.id}>
-                      <div className="flex w-[920px] flex-col items-center gap-[71px]">
-                        <DiamondStack cards={cards} variant={stackVariant} />
-                      </div>
-                      {hasBullets ? (
-                        <ul className="flex-1 text-[52px] leading-[1.4] font-normal tracking-[-2.6px] text-[#8a0d71]">
-                          {bulletItems.map((bullet, idx) => (
-                            <li
-                              className="relative mb-[80px] w-[840px] pl-[40px] last:mb-0"
-                              key={`${slide.id}-bullet-${idx}`}
-                            >
-                              <span className="absolute top-[30px] left-0 size-[16px] -translate-y-1/2 rounded-full bg-[#8a0d71]" />
-                              <span>{renderRegisteredMark(bullet)}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      ) : null}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
+          <ValueCarousel
+            carouselColumnStyle={carouselColumnStyle}
+            onRegisterCarouselHandlers={onRegisterCarouselHandlers}
+            slides={slidesWithDefaults}
+          />
         </div>
       </div>
     </div>
