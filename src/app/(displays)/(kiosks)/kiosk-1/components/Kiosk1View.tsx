@@ -28,7 +28,7 @@ const Kiosk1View = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Store carousel handlers for value section
-  const carouselHandlersRef = useRef<null | {
+  const [carouselHandlers, setCarouselHandlers] = useState<null | {
     canScrollNext: () => boolean;
     canScrollPrev: () => boolean;
     scrollNext: () => void;
@@ -49,24 +49,30 @@ const Kiosk1View = () => {
 
   // Wrap navigation handlers to check carousel first
   const handleNavigateDown = useCallback(() => {
-    // If we're at value-description and carousel can scroll, let carousel handle it
-    if (currentScrollTarget === 'value-description' && carouselHandlersRef.current?.canScrollNext()) {
-      carouselHandlersRef.current.scrollNext();
+    // Check if we should delegate to carousel
+    const shouldDelegateToCarousel =
+      currentScrollTarget === 'value-description' && carouselHandlers !== null && carouselHandlers.canScrollNext();
+
+    if (shouldDelegateToCarousel) {
+      carouselHandlers!.scrollNext();
       return;
     }
 
     baseHandleNavigateDown();
-  }, [baseHandleNavigateDown, currentScrollTarget]);
+  }, [baseHandleNavigateDown, carouselHandlers, currentScrollTarget]);
 
   const handleNavigateUp = useCallback(() => {
-    // If carousel can scroll back, let it handle the navigation
-    if (currentScrollTarget === 'value-description' && carouselHandlersRef.current?.canScrollPrev()) {
-      carouselHandlersRef.current.scrollPrev();
+    // Check if carousel can handle the navigation
+    const shouldDelegateToCarousel =
+      currentScrollTarget === 'value-description' && carouselHandlers !== null && carouselHandlers.canScrollPrev();
+
+    if (shouldDelegateToCarousel) {
+      carouselHandlers!.scrollPrev();
       return;
     }
 
     baseHandleNavigateUp();
-  }, [baseHandleNavigateUp, currentScrollTarget]);
+  }, [baseHandleNavigateUp, carouselHandlers, currentScrollTarget]);
 
   // Prepare data (with safe defaults for loading state)
   const kioskContent = kioskData as
@@ -100,7 +106,7 @@ const Kiosk1View = () => {
       ? (mapCustomInteractive(
           kioskContent.customInteractive1Main,
           kioskContent.ambient,
-          kioskContent.demoMain as { headline?: string; iframeLink?: string; mainCTA?: string } | undefined
+          kioskContent.demoMain as undefined | { headline?: string; iframeLink?: string; mainCTA?: string }
         ) as CustomInteractiveScreens)
       : null;
 
@@ -125,7 +131,7 @@ const Kiosk1View = () => {
       scrollNext: () => void;
       scrollPrev: () => void;
     }) => {
-      carouselHandlersRef.current = handlers;
+      setCarouselHandlers(handlers);
     },
     []
   );

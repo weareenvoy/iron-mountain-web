@@ -144,7 +144,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
   };
 
   return (
-    <div className="absolute left-0 top-[1980px] w-full">
+    <div className="absolute top-[1980px] left-0 w-full">
       <Carousel
         className="w-full"
         opts={{

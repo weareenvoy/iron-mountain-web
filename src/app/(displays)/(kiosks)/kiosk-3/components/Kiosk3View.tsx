@@ -28,7 +28,7 @@ const Kiosk3View = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Store carousel handlers for value section
-  const carouselHandlersRef = useRef<null | {
+  const [carouselHandlers, setCarouselHandlers] = useState<null | {
     canScrollNext: () => boolean;
     canScrollPrev: () => boolean;
     scrollNext: () => void;
@@ -50,23 +50,23 @@ const Kiosk3View = () => {
   // Wrap navigation handlers to check carousel first
   const handleNavigateDown = useCallback(() => {
     // If we're at value-description and carousel can scroll, let carousel handle it
-    if (currentScrollTarget === 'value-description' && carouselHandlersRef.current?.canScrollNext()) {
-      carouselHandlersRef.current.scrollNext();
+    if (currentScrollTarget === 'value-description' && carouselHandlers?.canScrollNext()) {
+      carouselHandlers.scrollNext();
       return;
     }
 
     baseHandleNavigateDown();
-  }, [baseHandleNavigateDown, currentScrollTarget]);
+  }, [baseHandleNavigateDown, carouselHandlers, currentScrollTarget]);
 
   const handleNavigateUp = useCallback(() => {
     // If carousel can scroll back, let it handle the navigation
-    if (currentScrollTarget === 'value-description' && carouselHandlersRef.current?.canScrollPrev()) {
-      carouselHandlersRef.current.scrollPrev();
+    if (currentScrollTarget === 'value-description' && carouselHandlers?.canScrollPrev()) {
+      carouselHandlers.scrollPrev();
       return;
     }
 
     baseHandleNavigateUp();
-  }, [baseHandleNavigateUp, currentScrollTarget]);
+  }, [baseHandleNavigateUp, carouselHandlers, currentScrollTarget]);
 
   // Parse data from provider (kiosk-3 now uses new flat structure)
   const kioskContent = kioskData as
@@ -103,7 +103,7 @@ const Kiosk3View = () => {
       ? (mapCustomInteractive(
           kioskContent.customInteractive3,
           kioskContent.ambient,
-          kioskContent.demoMain as { headline?: string; iframeLink?: string; mainCTA?: string } | undefined
+          kioskContent.demoMain as undefined | { headline?: string; iframeLink?: string; mainCTA?: string }
         ) as CustomInteractiveScreens)
       : null;
 
@@ -129,7 +129,7 @@ const Kiosk3View = () => {
       scrollNext: () => void;
       scrollPrev: () => void;
     }) => {
-      carouselHandlersRef.current = handlers;
+      setCarouselHandlers(handlers);
     },
     []
   );

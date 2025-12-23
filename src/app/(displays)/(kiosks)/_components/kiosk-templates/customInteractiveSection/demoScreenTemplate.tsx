@@ -63,7 +63,7 @@ const CustomInteractiveDemoScreenTemplate = ({
           />
         ) : (
           <button
-            className="flex h-full w-full items-center justify-center rounded-[20px] text-[#4a4a4a] text-[80px] leading-[1.3] font-normal tracking-[-4px]"
+            className="flex h-full w-full items-center justify-center rounded-[20px] text-[80px] leading-[1.3] font-normal tracking-[-4px] text-[#4a4a4a]"
             onClick={onCta}
             type="button"
           >

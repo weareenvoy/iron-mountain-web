@@ -35,41 +35,41 @@ export function useGlobalParagraphNavigation({
     let cleanupObserver: (() => void) | null = null;
 
     const setupObserver = () => {
-    const container = containerRef.current;
+      const container = containerRef.current;
 
       if (!container) {
         setTimeout(setupObserver, 50);
         return;
       }
 
-    const detectAllParagraphs = () => {
-      const paragraphElements = Array.from(container.querySelectorAll<HTMLElement>('[data-scroll-section]'));
-      // Filter out elements with no text content, BUT keep video/media elements
-      const nonEmptyParagraphs = paragraphElements.filter(el => {
-        // Always include video, audio, img, or other media elements
-        if (el.tagName === 'VIDEO' || el.tagName === 'AUDIO' || el.tagName === 'IMG') {
-          return true;
-        }
-        // For text elements, check if they have content
+      const detectAllParagraphs = () => {
+        const paragraphElements = Array.from(container.querySelectorAll<HTMLElement>('[data-scroll-section]'));
+        // Filter out elements with no text content, BUT keep video/media elements
+        const nonEmptyParagraphs = paragraphElements.filter(el => {
+          // Always include video, audio, img, or other media elements
+          if (el.tagName === 'VIDEO' || el.tagName === 'AUDIO' || el.tagName === 'IMG') {
+            return true;
+          }
+          // For text elements, check if they have content
           const textContent = (el.textContent || '').trim();
-        return textContent.length > 0;
-      });
-      setAllParagraphs(nonEmptyParagraphs);
+          return textContent.length > 0;
+        });
+        setAllParagraphs(nonEmptyParagraphs);
 
         // If no paragraphs found, retry after a short delay
         if (nonEmptyParagraphs.length === 0) {
           setTimeout(detectAllParagraphs, 100);
         }
-    };
+      };
 
-    // Initial detection
-    detectAllParagraphs();
+      // Initial detection
+      detectAllParagraphs();
 
-    // Re-detect on content changes
+      // Re-detect on content changes
       const observer = new MutationObserver(() => {
         detectAllParagraphs();
       });
-    observer.observe(container, { childList: true, subtree: true });
+      observer.observe(container, { childList: true, subtree: true });
 
       cleanupObserver = () => observer.disconnect();
     };
@@ -100,10 +100,10 @@ export function useGlobalParagraphNavigation({
 
         // Wait for scroll to complete
         setTimeout(() => {
-            isScrollingRef.current = false;
-            setIsScrolling(false);
-            setCurrentScrollTarget(null);
-            setCurrentIndex(-1);
+          isScrollingRef.current = false;
+          setIsScrolling(false);
+          setCurrentScrollTarget(null);
+          setCurrentIndex(-1);
         }, duration);
         return;
       }
@@ -149,9 +149,9 @@ export function useGlobalParagraphNavigation({
 
       // Wait for scroll to complete
       setTimeout(() => {
-          isScrollingRef.current = false;
-          setIsScrolling(false);
-          setCurrentIndex(index);
+        isScrollingRef.current = false;
+        setIsScrolling(false);
+        setCurrentIndex(index);
       }, duration);
     },
     [allParagraphs, containerRef, duration]

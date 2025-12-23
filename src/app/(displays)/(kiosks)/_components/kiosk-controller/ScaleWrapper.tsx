@@ -10,8 +10,8 @@ type Props = {
 };
 
 const ScaleWrapper = ({ background = 'black', children, targetHeight, targetWidth }: Props) => {
-  // const scale = 0.415;
-  const scale = 1;
+  const scale = 0.415;
+  // const scale = 1;
   // For dev in chrome current value is 0.415. Remove for production.
 
   const innerStyle: CSSProperties = {

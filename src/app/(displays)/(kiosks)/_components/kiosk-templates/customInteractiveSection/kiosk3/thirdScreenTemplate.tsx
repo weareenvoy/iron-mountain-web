@@ -117,7 +117,7 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
                 {current.primaryVideoSrc ? (
                   <video
                     autoPlay
-                    className="h-full w-full origin-center -rotate-[45deg] scale-[1.35] object-cover"
+                    className="h-full w-full origin-center scale-[1.35] -rotate-[45deg] object-cover"
                     loop
                     muted
                     playsInline
@@ -127,7 +127,7 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
                 ) : current.primaryImageSrc ? (
                   <Image
                     alt={current.primaryImageAlt}
-                    className="origin-center -rotate-[45deg] scale-[1.35] object-cover"
+                    className="origin-center scale-[1.35] -rotate-[45deg] object-cover"
                     fill
                     sizes="1200px"
                     src={current.primaryImageSrc}
@@ -140,7 +140,7 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
                 <div className={secondaryDiamondClass}>
                   <Image
                     alt={current.secondaryImageAlt}
-                    className="origin-center -rotate-[45deg] scale-[1.35] object-cover"
+                    className="origin-center scale-[1.35] -rotate-[45deg] object-cover"
                     fill
                     sizes="880px"
                     src={current.secondaryImageSrc}
@@ -161,9 +161,7 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
               {/* Decorative SVG Diamonds - Slide 3 & 6 (Orange, Blue, Green) */}
               {(isSlide3 || isSlide6) && (
                 <>
-                  <HCFilledOrangeDiamond
-                    className="pointer-events-none absolute bottom-[670px] left-[1880px] h-[450px] w-[450px]"
-                  />
+                  <HCFilledOrangeDiamond className="pointer-events-none absolute bottom-[670px] left-[1880px] h-[450px] w-[450px]" />
                   <HCHollowBlueDiamond2 className="pointer-events-none absolute bottom-[-1650px] left-[1290px] h-[2400px] w-[2400px] overflow-visible" />
                   <HCHollowGreenDiamond className="pointer-events-none absolute bottom-[-1240px] left-[0px] h-[1800px] w-[1800px] overflow-visible" />
                 </>
