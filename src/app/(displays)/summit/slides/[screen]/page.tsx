@@ -1,21 +1,11 @@
-import SummitSlideLayout from '@/app/(displays)/summit/_components/layouts/summit-slide-layout';
-import type { SummitSlideScreen } from '@/app/(displays)/summit/_types';
-
-const SLIDE_SCREENS: readonly SummitSlideScreen[] = ['primary', 'secondary'];
+import { redirect } from 'next/navigation';
 
 export const generateStaticParams = () => {
-  return SLIDE_SCREENS.map(screen => ({ screen }));
+  return [{ screen: 'primary' }, { screen: 'secondary' }];
 };
 
-const SummitSlidesPage = async ({ params }: PageProps<'/summit/slides/[screen]'>) => {
-  const { screen } = await params;
-  const slideScreen = screen as SummitSlideScreen;
-
-  return (
-    <SummitSlideLayout>
-      <div className="flex flex-1 items-center justify-center text-4xl capitalize">Slide: {slideScreen}</div>
-    </SummitSlideLayout>
-  );
+const LegacySummitSlideScreenRedirect = () => {
+  redirect('/summit/slides');
 };
 
-export default SummitSlidesPage;
+export default LegacySummitSlideScreenRedirect;

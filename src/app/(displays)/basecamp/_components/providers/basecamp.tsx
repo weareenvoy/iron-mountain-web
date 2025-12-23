@@ -53,6 +53,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
   // Ref to access latest mqttState without causing dependency changes. Avoids re-subscription.
   const mqttStateRef = useRef(mqttState);
   mqttStateRef.current = mqttState;
+  const tourIdRef = useRef<null | string>(null);
 
   const [data, setData] = useState<BasecampData | null>(null);
   const [locale, setLocale] = useState<Locale>('en');
@@ -207,8 +208,8 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     };
   }, [client, fetchData, reportState]);
 
-  // Subscribe to own state on boot (for restart/recovery)
-  // This allows exhibit to restore state after refresh
+  // Subscribe to own state (retained + live updates) for restart/recovery
+  // This allows exhibit to restore state after refresh, and stay in sync with GEC updates (e.g., volume/mute).
   useEffect(() => {
     if (!client) return;
 
@@ -219,6 +220,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
         console.info('Basecamp: Received own state on boot:', state);
 
         // Update internal MQTT state
+        mqttStateRef.current = state;
         setMqttState(state);
 
         // Parse beat-id to update UI navigation state
@@ -237,18 +239,20 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
           }
         }
 
-        // Fetch content if we have a tour loaded
-        if (state['tour-id']) {
-          fetchData();
+        // Fetch content if we have a tour loaded (only when it changes)
+        const nextTourId = state['tour-id'] ?? null;
+        if (tourIdRef.current !== nextTourId) {
+          tourIdRef.current = nextTourId;
+          if (nextTourId) {
+            fetchData(nextTourId);
+          }
         }
-        // We just need to get retained state once, so unsubscribe after we got the state
-        client.unsubscribeFromTopic('state/basecamp', handleOwnState);
       } catch (error) {
         console.error('Basecamp: Error parsing own state:', error);
       }
     };
 
-    // Subscribe once on mount to get retained state
+    // Subscribe on mount to get retained state + future updates
     client.subscribeToTopic('state/basecamp', handleOwnState);
 
     return () => {
