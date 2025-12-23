@@ -291,7 +291,7 @@ const Kiosk2View = () => {
       ref={containerRef}
       tabIndex={-1}
     >
-      <div className="flex w-full flex-col">
+      <div className="flex w-full flex-col overflow-x-hidden">
         {/* Render ALL slides, always visible, stacked vertically */}
         {slides.map((slide, idx) => (
           <div className="h-screen w-full flex-shrink-0" data-slide-index={idx} key={slide.id}>

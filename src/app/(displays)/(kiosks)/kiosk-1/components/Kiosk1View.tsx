@@ -76,6 +76,7 @@ const Kiosk1View = () => {
         ambient?: unknown;
         challengeMain?: unknown;
         customInteractive1Main?: unknown;
+        demoMain?: unknown;
         solutionGrid?: unknown;
         solutionMain?: unknown;
         valueMain?: unknown;
@@ -96,7 +97,11 @@ const Kiosk1View = () => {
       : null;
   const customInteractive =
     kioskContent?.customInteractive1Main && kioskContent.ambient
-      ? (mapCustomInteractive(kioskContent.customInteractive1Main, kioskContent.ambient) as CustomInteractiveScreens)
+      ? (mapCustomInteractive(
+          kioskContent.customInteractive1Main,
+          kioskContent.ambient,
+          kioskContent.demoMain as { headline?: string; iframeLink?: string; mainCTA?: string } | undefined
+        ) as CustomInteractiveScreens)
       : null;
 
   // Pass the global handlers to all templates
@@ -318,7 +323,7 @@ const Kiosk1View = () => {
       ref={containerRef}
       tabIndex={-1}
     >
-      <div className="flex w-full flex-col">
+      <div className="flex w-full flex-col overflow-x-hidden">
         {/* Render ALL slides, always visible, stacked vertically */}
         {slides.map((slide, idx) => (
           <div className="h-screen w-full flex-shrink-0" data-slide-index={idx} key={slide.id}>
@@ -611,22 +616,31 @@ const mapValue = (value: ValueContent, ambient: Ambient): ValueScreens => {
 
 const mapCustomInteractive = (
   customInteractive: CustomInteractiveContent,
-  ambient: Ambient
+  ambient: Ambient,
+  demo?: { demoText?: string; headline?: string; iframeLink?: string; mainCTA?: string }
 ): CustomInteractiveScreens => ({
   firstScreen: {
+    demoIframeSrc: demo?.iframeLink,
     eyebrow: ambient.title,
     headline: customInteractive.headline,
     heroImageAlt: 'Visitors smiling while viewing content',
     heroImageSrc: customInteractive.image,
+    overlayCardLabel: demo?.demoText,
+    overlayEndTourLabel: demo?.mainCTA,
+    overlayHeadline: demo?.headline,
     primaryCtaLabel: customInteractive.mainCTA,
     secondaryCtaLabel: customInteractive.secondaryCTA,
   },
   secondScreen: {
     backLabel: customInteractive.backCTA,
+    demoIframeSrc: demo?.iframeLink,
     eyebrow: ambient.title,
     headline: customInteractive.headline2 ?? 'From archive\nto access',
     heroImageAlt: 'Archive visualization',
     heroImageSrc: customInteractive.image,
+    overlayCardLabel: demo?.demoText,
+    overlayEndTourLabel: demo?.mainCTA,
+    overlayHeadline: demo?.headline,
     secondaryCtaLabel: customInteractive.secondaryCTA,
     steps: customInteractive.diamondCarouselItems?.map((item, index) => {
       const modalBodyKey = `ModalBody${index + 1}` as keyof CustomInteractiveContent;
@@ -645,8 +659,10 @@ const mapCustomInteractive = (
     }),
   },
   thirdScreen: {
-    cardLabel: customInteractive.secondaryCTA ?? 'Virtual walkthrough',
-    headline: customInteractive.body2 ?? 'Experience our solution\nin action',
+    cardLabel: demo?.demoText,
+    demoIframeSrc: demo?.iframeLink,
+    endTourLabel: demo?.mainCTA,
+    headline: demo?.headline,
     heroImageAlt: 'Digital transformation showcase',
     heroImageSrc: customInteractive.image,
   },

@@ -76,6 +76,7 @@ const Kiosk3View = () => {
         ambient?: unknown;
         challengeMain?: unknown;
         customInteractive3?: unknown;
+        demoMain?: unknown;
         solutionAccordion?: unknown;
         solutionMain?: unknown;
         valueMain?: unknown;
@@ -99,7 +100,11 @@ const Kiosk3View = () => {
       : null;
   const customInteractive =
     kioskContent?.customInteractive3 && kioskContent.ambient
-      ? (mapCustomInteractive(kioskContent.customInteractive3, kioskContent.ambient) as CustomInteractiveScreens)
+      ? (mapCustomInteractive(
+          kioskContent.customInteractive3,
+          kioskContent.ambient,
+          kioskContent.demoMain as { headline?: string; iframeLink?: string; mainCTA?: string } | undefined
+        ) as CustomInteractiveScreens)
       : null;
 
   // Pass the global handlers to all templates
@@ -331,7 +336,7 @@ const Kiosk3View = () => {
       ref={containerRef}
       tabIndex={-1}
     >
-      <div className="flex w-full flex-col">
+      <div className="flex w-full flex-col overflow-x-hidden">
         {/* Render ALL slides, always visible, stacked vertically */}
         {slides.map((slide, idx) => (
           <div className="h-screen w-full flex-shrink-0" data-slide-index={idx} key={slide.id}>
@@ -636,19 +641,26 @@ const mapValue = (value: ValueContent, ambient: Ambient): ValueScreens => {
 
 const mapCustomInteractive = (
   customInteractive: CustomInteractiveContent,
-  ambient: Ambient
+  ambient: Ambient,
+  demo?: { demoText?: string; headline?: string; iframeLink?: string; mainCTA?: string }
 ): CustomInteractiveScreens => ({
   firstScreen: {
+    demoIframeSrc: demo?.iframeLink,
     eyebrow: ambient.title,
     headline: customInteractive.headline,
     heroImageAlt: 'Data center facility',
     heroImageSrc: customInteractive.image,
+    overlayCardLabel: demo?.demoText,
+    overlayEndTourLabel: demo?.mainCTA,
+    overlayHeadline: demo?.headline,
     primaryCtaLabel: customInteractive.mainCTA,
     secondaryCtaLabel: customInteractive.secondaryCTA,
   },
   fourthScreen: {
-    cardLabel: customInteractive.secondaryCTA ?? 'Launch demo',
-    headline: customInteractive.body ?? 'Explore each section to learn how Iron Mountain can transform your enterprise',
+    cardLabel: demo?.demoText,
+    demoIframeSrc: demo?.iframeLink,
+    endTourLabel: demo?.mainCTA,
+    headline: demo?.headline,
     heroImageAlt: 'Interactive experience showcase',
     heroImageSrc: customInteractive.image,
   },
@@ -662,7 +674,13 @@ const mapCustomInteractive = (
     videoAsset: customInteractive.video,
   },
   thirdScreen: {
+    demoIframeSrc: demo?.iframeLink,
     headline: customInteractive.headline ?? 'Learn more about how we\nunlocked new possibilities',
+    heroImageAlt: 'Data center facility',
+    heroImageSrc: customInteractive.image,
+    overlayCardLabel: demo?.demoText,
+    overlayEndTourLabel: demo?.mainCTA,
+    overlayHeadline: demo?.headline,
     slides:
       customInteractive.tapCarousel?.map((item, index) => ({
         bullets: item.bullets ?? [],

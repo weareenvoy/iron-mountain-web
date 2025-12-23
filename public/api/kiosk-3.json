@@ -116,8 +116,9 @@
 
     "demoMain": {
       "headline": "Lorem ipsum dolor sit amet consectetur",
-      "iframeLink": "https://www.Google.com",
-      "mainCTA": "End Tour"
+      "iframeLink": "https://www.openstreetmap.org/export/embed.html",
+      "mainCTA": "End Tour",
+      "demoText": "Demo"
     },
 
     "customInteractive3": {

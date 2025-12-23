@@ -9,6 +9,7 @@ import HCHollowBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/
 import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowOrangeDiamond';
 
 export interface CustomInteractiveKiosk1FirstScreenTemplateProps {
+  readonly demoIframeSrc?: string;
   readonly eyebrow?: string;
   readonly headline?: string;
   readonly heroImageAlt?: string;
@@ -17,12 +18,14 @@ export interface CustomInteractiveKiosk1FirstScreenTemplateProps {
   readonly onPrimaryCta?: () => void;
   readonly onSecondaryCta?: () => void;
   readonly overlayCardLabel?: string;
+  readonly overlayEndTourLabel?: string;
   readonly overlayHeadline?: string;
   readonly primaryCtaLabel?: string;
   readonly secondaryCtaLabel?: string;
 }
 
 const CustomInteractiveKiosk1FirstScreenTemplate = ({
+  demoIframeSrc,
   eyebrow,
   headline,
   heroImageAlt,
@@ -31,6 +34,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   onPrimaryCta,
   onSecondaryCta,
   overlayCardLabel,
+  overlayEndTourLabel,
   overlayHeadline,
   primaryCtaLabel,
   secondaryCtaLabel,
@@ -127,6 +131,8 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       >
         <CustomInteractiveDemoScreenTemplate
           cardLabel={overlayCardLabel}
+          demoIframeSrc={demoIframeSrc}
+          endTourLabel={overlayEndTourLabel}
           headline={overlayHeadline}
           heroImageAlt={heroImageAlt}
           heroImageSrc={heroImageSrc}

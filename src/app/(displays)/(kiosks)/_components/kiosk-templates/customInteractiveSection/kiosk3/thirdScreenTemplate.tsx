@@ -15,6 +15,7 @@ import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractiv
 import CircularCarousel, { type CarouselSlide } from './components/CircularCarousel';
 
 export type CustomInteractiveKiosk3ThirdScreenTemplateProps = {
+  readonly demoIframeSrc?: string;
   readonly eyebrow?: string;
   readonly headline?: string;
   readonly heroImageAlt?: string;
@@ -22,15 +23,18 @@ export type CustomInteractiveKiosk3ThirdScreenTemplateProps = {
   readonly kioskId?: 'kiosk-1' | 'kiosk-2' | 'kiosk-3';
   readonly onBack?: () => void;
   readonly overlayCardLabel?: string;
+  readonly overlayEndTourLabel?: string;
   readonly overlayHeadline?: string;
   readonly slides?: CarouselSlide[];
 };
 
 const CustomInteractiveKiosk3ThirdScreenTemplate = ({
+  demoIframeSrc,
   headline,
   heroImageAlt,
   heroImageSrc,
   overlayCardLabel,
+  overlayEndTourLabel,
   overlayHeadline,
   slides,
 }: CustomInteractiveKiosk3ThirdScreenTemplateProps) => {
@@ -46,8 +50,8 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
       className="relative flex h-screen w-full flex-col overflow-hidden"
       data-scroll-section="customInteractive-third-screen"
     >
-      <div className="absolute inset-0 bg-transparent" />
-      <div className="absolute inset-0 bg-black/15 backdrop-blur-[12px]" />
+      <div className="pointer-events-none absolute inset-0 bg-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-black/15 backdrop-blur-[12px]" />
 
       <CircularCarousel slides={safeSlides}>
         {({ current }) => {
@@ -177,6 +181,19 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
         }}
       </CircularCarousel>
 
+      {/* Hero diamond image - always visible */}
+      {heroImageSrc ? (
+        <div className="pointer-events-none absolute bottom-[160px] left-[1100px] z-10 h-[1380px] w-[1380px] rotate-[45deg] overflow-hidden rounded-[140px]">
+          <Image
+            alt={heroImageAlt ?? 'Hero image'}
+            className="-rotate-[45deg] object-cover"
+            fill
+            sizes="680px"
+            src={heroImageSrc}
+          />
+        </div>
+      ) : null}
+
       {/* Overlay - Demo Screen */}
       <div
         className={`absolute inset-0 z-[999] transition-opacity duration-700 ${
@@ -185,6 +202,8 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
       >
         <CustomInteractiveDemoScreenTemplate
           cardLabel={overlayCardLabel}
+          demoIframeSrc={demoIframeSrc}
+          endTourLabel={overlayEndTourLabel}
           headline={overlayHeadline}
           heroImageAlt={heroImageAlt}
           heroImageSrc={heroImageSrc}

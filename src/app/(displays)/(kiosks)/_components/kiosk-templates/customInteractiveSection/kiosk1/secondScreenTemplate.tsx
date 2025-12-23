@@ -9,6 +9,7 @@ import StepCarousel, { type Step } from './components/StepCarousel';
 import StepModal, { type ModalContent } from './components/StepModal';
 
 export type CustomInteractiveKiosk1SecondScreenTemplateProps = {
+  readonly demoIframeSrc?: string;
   readonly eyebrow?: string;
   readonly headline?: string;
   readonly heroImageAlt?: string;
@@ -17,6 +18,7 @@ export type CustomInteractiveKiosk1SecondScreenTemplateProps = {
   readonly onBack?: () => void;
   readonly onSecondaryCta?: () => void;
   readonly overlayCardLabel?: string;
+  readonly overlayEndTourLabel?: string;
   readonly overlayHeadline?: string;
   readonly secondaryCtaLabel?: string;
   readonly steps?: readonly Step[];
@@ -28,6 +30,7 @@ const normalizeText = (value?: string): string => {
 };
 
 const CustomInteractiveKiosk1SecondScreenTemplate = ({
+  demoIframeSrc,
   eyebrow,
   headline,
   heroImageAlt,
@@ -35,6 +38,7 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
   kioskId,
   onSecondaryCta,
   overlayCardLabel,
+  overlayEndTourLabel,
   overlayHeadline,
   secondaryCtaLabel,
   steps,
@@ -114,6 +118,8 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
         >
           <CustomInteractiveDemoScreenTemplate
             cardLabel={overlayCardLabel}
+            demoIframeSrc={demoIframeSrc}
+            endTourLabel={overlayEndTourLabel}
             headline={overlayHeadline}
             heroImageAlt={heroImageAlt}
             heroImageSrc={heroImageSrc}
