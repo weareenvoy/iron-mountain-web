@@ -24,19 +24,34 @@ export interface CustomInteractiveDemoScreenTemplateProps {
   readonly onEndTour?: () => void;
 }
 
+const defaults = {
+  backgroundEndColor: '#05254b',
+  backgroundStartColor: '#1b75bc',
+  cardBackgroundColor: '#e0e0e0',
+  cardHeight: 1080,
+  cardLabel: 'Virtual walkthrough',
+  cardTextColor: '#4a4a4a',
+  cardWidth: 1920,
+  demoIframeSrc: '',
+  endTourLabel: 'End tour',
+  headline: 'Section title lorem ipsum\ndolor sit.',
+  heroImageAlt: 'Visitors smiling while viewing content',
+  heroImageSrc: '/images/kiosks/kiosk1/04-custom-interactive/CU-Image1-Diamond.png',
+};
+
 const CustomInteractiveDemoScreenTemplate = ({
-  backgroundEndColor,
-  backgroundStartColor,
-  cardBackgroundColor,
-  cardHeight,
-  cardLabel,
-  cardTextColor,
-  cardWidth,
-  demoIframeSrc,
-  endTourLabel,
-  headline,
-  heroImageAlt,
-  heroImageSrc,
+  backgroundEndColor = defaults.backgroundEndColor,
+  backgroundStartColor = defaults.backgroundStartColor,
+  cardBackgroundColor = defaults.cardBackgroundColor,
+  cardHeight = defaults.cardHeight,
+  cardLabel = defaults.cardLabel,
+  cardTextColor = defaults.cardTextColor,
+  cardWidth = defaults.cardWidth,
+  demoIframeSrc = defaults.demoIframeSrc,
+  endTourLabel = defaults.endTourLabel,
+  headline = defaults.headline,
+  heroImageAlt = defaults.heroImageAlt,
+  heroImageSrc = defaults.heroImageSrc,
   onCta,
   onEndTour,
 }: CustomInteractiveDemoScreenTemplateProps) => {
@@ -85,7 +100,7 @@ const CustomInteractiveDemoScreenTemplate = ({
           <button
             className="flex h-full w-full items-center justify-center rounded-[20px] text-[80px] leading-[1.3] font-normal tracking-[-4px]"
             onClick={onCta}
-            style={cardTextColor ? { color: cardTextColor } : undefined}
+            style={{ color: cardTextColor }}
             type="button"
           >
             {renderRegisteredMark(cardText)}
@@ -95,15 +110,7 @@ const CustomInteractiveDemoScreenTemplate = ({
 
       {/* Hero diamond image */}
       <div className="pointer-events-none absolute bottom-[160px] left-[1100px] h-[1380px] w-[1380px] rotate-[45deg] overflow-hidden rounded-[140px]">
-        {heroImageSrc && (
-          <Image
-            alt={heroImageAlt || ''}
-            className="-rotate-[45deg] object-cover"
-            fill
-            sizes="680px"
-            src={heroImageSrc}
-          />
-        )}
+        <Image alt={heroImageAlt} className="-rotate-[45deg] object-cover" fill sizes="680px" src={heroImageSrc} />
       </div>
 
       {/* Decorative diamonds */}

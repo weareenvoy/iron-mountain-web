@@ -2,6 +2,7 @@
 
 import { ChevronLeft, ChevronRight, CirclePlus } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/shadcn/carousel';
 import HCBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCBlueDiamond';
 import HCWhiteDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCWhiteDiamond';
@@ -143,7 +144,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
   };
 
   return (
-    <div className="absolute top-[1750px] left-[1080px] w-full max-w-[2200px] -translate-x-1/2">
+    <div className="absolute left-0 top-[1980px] w-full">
       <Carousel
         className="w-full"
         opts={{
@@ -183,63 +184,88 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                     : undefined
                 }
               >
-                <div className="relative flex h-[620px] w-[560px] items-center justify-center">
-                  <div
-                    className="relative cursor-pointer transition-transform duration-200 hover:scale-[1.02]"
-                    onClick={() => onStepClick(idx)}
-                    onKeyDown={e => {
-                      if (e.key === 'Enter' || e.key === ' ') onStepClick(idx);
+                <div className="flex flex-col items-center gap-[28px]">
+                  <button
+                    className="relative z-[1] flex items-center justify-center"
+                    onClick={() => {
+                      if (!emblaApi) return;
+                      emblaApi.scrollTo(idx);
                     }}
-                    role="button"
-                    style={{
-                      height: isActive ? '620px' : `${inactiveSize}px`,
-                      width: isActive ? '560px' : `${inactiveSize}px`,
-                    }}
-                    tabIndex={0}
+                    type="button"
                   >
                     {isActive ? (
-                      <HCBlueDiamond aria-hidden className="h-full w-full" focusable="false" />
+                      <HCWhiteDiamond aria-hidden="true" className="h-[880px] w-[880px]" focusable="false" />
                     ) : (
-                      <HCWhiteDiamond aria-hidden className="h-full w-full" focusable="false" />
+                      <HCBlueDiamond
+                        aria-hidden="true"
+                        className={inactiveSize === 440 ? 'h-[440px] w-[440px]' : 'h-[640px] w-[640px]'}
+                        focusable="false"
+                      />
                     )}
-                    <div className="absolute top-1/2 left-1/2 flex h-[160px] w-[160px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/70 shadow-[0_10px_30px_rgba(0,0,0,0.2)]">
-                      <CirclePlus aria-hidden className="h-[80px] w-[80px] text-[#14477d]" strokeWidth={2.4} />
+                    <div className="absolute inset-0 flex items-center justify-center px-8 text-center">
+                      <span
+                        className={
+                          isActive
+                            ? 'text-[61px] leading-[1.3] tracking-[-3px] text-[#14477d]'
+                            : 'text-[43px] leading-[1.3] tracking-[-2.1px] text-[#ededed]'
+                        }
+                        style={{ width: isActive ? '340px' : '300px' }}
+                      >
+                        {renderRegisteredMark(step.label)}
+                      </span>
+                      {isActive ? (
+                        <div
+                          aria-label="Open details"
+                          className="absolute inset-0 flex cursor-pointer items-center justify-center"
+                          onClick={event => {
+                            event.stopPropagation();
+                            onStepClick(idx);
+                          }}
+                          onKeyDown={event => {
+                            if (event.key === 'Enter' || event.key === ' ') {
+                              event.preventDefault();
+                              event.stopPropagation();
+                              onStepClick(idx);
+                            }
+                          }}
+                          role="button"
+                          style={{ paddingRight: '5px', paddingTop: '490px' }}
+                          tabIndex={0}
+                        >
+                          <CirclePlus className="h-[80px] w-[80px] text-[#14477d]" />
+                        </div>
+                      ) : null}
                     </div>
-                    <span
-                      className="absolute bottom-[60px] left-1/2 w-[80%] -translate-x-1/2 text-center text-[48px] leading-[1.3] font-normal tracking-[-2.4px] text-[#14477d]"
-                      style={{ fontSize: isActive ? '48px' : '38px' }}
-                    >
-                      {step.label}
-                    </span>
-                  </div>
+                  </button>
                 </div>
               </CarouselItem>
             );
           })}
         </CarouselContent>
+        <div
+          className="pointer-events-none absolute inset-x-0 -bottom-[220px] flex items-center justify-center gap-[48px]"
+          style={{ bottom: '-290px' }}
+        >
+          <button
+            aria-label="Previous"
+            className="pointer-events-auto flex h-[64px] w-[64px] items-center justify-center text-white transition-transform duration-150 hover:scale-110"
+            onClick={handlePrev}
+            style={{ height: '102px', marginRight: '25px', width: '102px' }}
+            type="button"
+          >
+            <ChevronLeft className="h-[36px] w-[36px]" style={{ height: '102px', width: '102px' }} />
+          </button>
+          <button
+            aria-label="Next"
+            className="pointer-events-auto flex h-[64px] w-[64px] items-center justify-center text-white transition-transform duration-150 hover:scale-110"
+            onClick={handleNext}
+            style={{ height: '102px', marginLeft: '25px', width: '102px' }}
+            type="button"
+          >
+            <ChevronRight className="h-[36px] w-[36px]" style={{ height: '102px', width: '102px' }} />
+          </button>
+        </div>
       </Carousel>
-
-      <div className="absolute top-1/2 left-[-240px] -translate-y-1/2">
-        <button
-          aria-label="Previous step"
-          className="flex h-[140px] w-[140px] items-center justify-center rounded-full bg-white/10 backdrop-blur-md transition hover:bg-white/20"
-          onClick={handlePrev}
-          type="button"
-        >
-          <ChevronLeft aria-hidden className="h-[80px] w-[80px] text-white" strokeWidth={2.5} />
-        </button>
-      </div>
-
-      <div className="absolute top-1/2 right-[-550px] -translate-y-1/2">
-        <button
-          aria-label="Next step"
-          className="flex h-[140px] w-[140px] items-center justify-center rounded-full bg-white/10 backdrop-blur-md transition hover:bg-white/20"
-          onClick={handleNext}
-          type="button"
-        >
-          <ChevronRight aria-hidden className="h-[80px] w-[80px] text-white" strokeWidth={2.5} />
-        </button>
-      </div>
     </div>
   );
 };
