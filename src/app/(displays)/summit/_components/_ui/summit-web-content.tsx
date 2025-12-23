@@ -72,6 +72,7 @@ const SummitWebContent = () => {
   const { data, error, loading } = useSummit();
   const printableRef = useRef<HTMLDivElement>(null);
   const [activeData, setActiveData] = useState<null | typeof data>(null);
+  const [activeTourId, setActiveTourId] = useState<string>('');
   const [isPrinting, setIsPrinting] = useState(false);
   const [printError, setPrintError] = useState<null | string>(null);
   const [tours, setTours] = useState<readonly SummitTourSummary[]>([]);
@@ -154,7 +155,8 @@ const SummitWebContent = () => {
   }, [selectedMonth, selectedYear, toursByYear]);
 
   const isMonthDisabled = !selectedYear || toursByYear.length === 0;
-  const isExperienceDisabled = !selectedYear || isMonthDisabled || toursByYearAndMonth.length === 0;
+  const isExperienceDisabled =
+    !selectedYear || isMonthDisabled || selectedMonth === '' || toursByYearAndMonth.length === 0;
   const isLoadDisabled = !selectedExperience || experienceLoading;
 
   const handleYearChange = (value: string) => {
@@ -181,6 +183,7 @@ const SummitWebContent = () => {
     try {
       const fetched = await getSummitData(selectedExperience);
       setActiveData(fetched.data);
+      setActiveTourId(selectedExperience);
     } catch (err) {
       console.error('Failed to load summit experience', err);
       setExperienceError('Unable to load experience. Please try again.');
@@ -229,7 +232,7 @@ const SummitWebContent = () => {
               <select
                 className={`w-full appearance-none rounded-lg bg-[#F2F2F2] px-4 py-3 pr-12 text-base transition outline-none ${
                   selectedYear === '' ? 'text-[#58595B]' : 'text-[#14477D]'
-                } disabled:cursor-not-allowed disabled:bg-muted disabled:text-[#58595B]`}
+                } disabled:cursor-not-allowed disabled:bg-[#A1A1A4] disabled:text-[#58595B]`}
                 onChange={event => handleYearChange(event.target.value)}
                 value={selectedYear}
               >
@@ -253,7 +256,7 @@ const SummitWebContent = () => {
               <select
                 className={`w-full appearance-none rounded-lg bg-[#F2F2F2] px-4 py-3 pr-12 text-base transition outline-none ${
                   selectedMonth === '' ? 'text-[#58595B]' : 'text-[#14477D]'
-                } disabled:cursor-not-allowed disabled:bg-muted disabled:text-[#58595B]`}
+                } disabled:cursor-not-allowed disabled:bg-[#A1A1A4] disabled:text-[#58595B]`}
                 disabled={isMonthDisabled}
                 onChange={event => handleMonthChange(event.target.value)}
                 value={selectedMonth}
@@ -282,7 +285,7 @@ const SummitWebContent = () => {
               <select
                 className={`w-full appearance-none rounded-lg bg-[#F2F2F2] px-4 py-3 pr-12 text-base transition outline-none ${
                   selectedExperience === '' ? 'text-[#58595B]' : 'text-[#14477D]'
-                } disabled:cursor-not-allowed disabled:bg-muted disabled:text-[#58595B]`}
+                } disabled:cursor-not-allowed disabled:bg-[#A1A1A4] disabled:text-[#58595B]`}
                 disabled={isExperienceDisabled}
                 onChange={event => handleExperienceChange(event.target.value)}
                 value={selectedExperience}
@@ -425,10 +428,12 @@ const SummitWebContent = () => {
     />
   );
 
+  const storageKeyPrefix = activeTourId ? `recap-${activeTourId}` : 'recap';
+
   const renderRecap = (index: number) => (
     <RecapSection
       placeholder={recapPlaceholder}
-      storageKey={`recap-${index}`}
+      storageKey={`${storageKeyPrefix}-${index}`}
       title="Recap"
       tone={RECAP_TONES_BY_INDEX[index]}
     />
@@ -438,7 +443,7 @@ const SummitWebContent = () => {
     <RecapPrintSection
       hideWhenEmpty
       placeholder={recapPlaceholder}
-      storageKey={`recap-${index}`}
+      storageKey={`${storageKeyPrefix}-${index}`}
       title="Recap"
       tone={RECAP_TONES_BY_INDEX[index]}
     />
