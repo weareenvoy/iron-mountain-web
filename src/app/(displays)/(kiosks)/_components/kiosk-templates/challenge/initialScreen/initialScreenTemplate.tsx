@@ -35,29 +35,26 @@ export const InitialScreenTemplate = ({
   quote,
   subheadline,
 }: InitialScreenTemplateProps) => {
-  if (!backgroundImage || !headline || !quote || !subheadline || !buttonText || !attribution) {
-    return null;
-  }
-
-  const heroAlt = `${headline} background image`;
+  const heroAlt = headline ? `${headline} background image` : 'Kiosk hero background image';
 
   return (
     <div
       className="group/kiosk relative flex h-screen w-full flex-col items-center justify-center overflow-hidden"
       data-kiosk={kioskId}
-      data-node-id="5168:9345"
     >
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="relative h-full w-full">
-          <Image
-            alt={heroAlt}
-            className="object-cover object-center"
-            fill
-            priority
-            sizes="100vw"
-            src={backgroundImage}
-            unoptimized
-          />
+          {backgroundImage && (
+            <Image
+              alt={heroAlt}
+              className="object-cover object-center"
+              fill
+              priority
+              sizes="100vw"
+              src={backgroundImage}
+              unoptimized
+            />
+          )}
           <div className="absolute inset-0 bg-[rgba(0,0,0,0.2)]" />
         </div>
       </div>
@@ -68,7 +65,7 @@ export const InitialScreenTemplate = ({
       </div>
 
       <div
-        className="absolute top-[1130px] left-[120px] z-[2] flex w-[1920px] flex-col gap-[200px] rounded-[60px] px-[120px] py-[240px] pb-[330px] backdrop-blur-[30px] group-data-[kiosk=kiosk-2]/kiosk:py-[220px] group-data-[kiosk=kiosk-2]/kiosk:pb-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[1920px] group-data-[kiosk=kiosk-3]/kiosk:pb-0"
+        className="absolute bg-[#F7931E] top-[1130px] left-[120px] z-[2] flex w-[1920px] flex-col gap-[200px] rounded-[60px] px-[120px] py-[240px] pb-[330px] backdrop-blur-[30px] group-data-[kiosk=kiosk-2]/kiosk:py-[220px] group-data-[kiosk=kiosk-2]/kiosk:pb-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[1920px] group-data-[kiosk=kiosk-3]/kiosk:pb-0"
         data-name="Challenge Initial Screen Content Box"
         style={contentBoxBgColor ? { backgroundColor: contentBoxBgColor } : undefined}
       >

@@ -56,10 +56,6 @@ const HardCodedKiosk1SecondScreenTemplate = ({
   secondaryCtaLabel,
   steps,
 }: HardCodedKiosk1SecondScreenTemplateProps) => {
-  if (!eyebrow || !headline || !heroImageSrc || !heroImageAlt) {
-    return null;
-  }
-
   const eyebrowText: string = normalizeText(eyebrow);
   const headlineText: string = normalizeText(headline);
   const normalizedSteps = steps ?? [];
@@ -210,7 +206,6 @@ const HardCodedKiosk1SecondScreenTemplate = ({
     <>
       <div
         className="relative flex h-screen w-full flex-col overflow-visible bg-transparent"
-        data-node-id="hardcoded-k1-second"
         data-scroll-section="hardcoded-second-screen"
         ref={containerRef}
       >

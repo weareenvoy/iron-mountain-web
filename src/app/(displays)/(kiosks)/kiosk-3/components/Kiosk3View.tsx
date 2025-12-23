@@ -55,12 +55,18 @@ const Kiosk3View = () => {
 
   // Wrap navigation handlers to check carousel first
   const handleNavigateDown = useCallback(() => {
+    console.log('[Kiosk3] handleNavigateDown called');
+    console.log('[Kiosk3] currentScrollTarget:', currentScrollTarget);
+    console.log('[Kiosk3] carouselHandlersRef.current:', carouselHandlersRef.current);
+    
     // If we're at value-description and carousel can scroll, let carousel handle it
     if (currentScrollTarget === 'value-description' && carouselHandlersRef.current?.canScrollNext()) {
+      console.log('[Kiosk3] Delegating to carousel scrollNext');
       carouselHandlersRef.current.scrollNext();
       return;
     }
 
+    console.log('[Kiosk3] Calling baseHandleNavigateDown');
     baseHandleNavigateDown();
   }, [baseHandleNavigateDown, currentScrollTarget]);
 
@@ -79,35 +85,33 @@ const Kiosk3View = () => {
     | null
     | undefined
     | {
-        data?: {
-          ambient?: unknown;
-          challengeMain?: unknown;
-          customInteractive3?: unknown;
-          solutionAccordion?: unknown;
-          solutionMain?: unknown;
-          valueMain?: unknown;
-        };
+        ambient?: unknown;
+        challengeMain?: unknown;
+        customInteractive3?: unknown;
+        solutionAccordion?: unknown;
+        solutionMain?: unknown;
+        valueMain?: unknown;
       };
 
   const challenges: KioskChallenges | null =
-    kioskContent?.data?.challengeMain && kioskContent.data.ambient
-      ? parseKioskChallenges(mapChallenges(kioskContent.data.challengeMain, kioskContent.data.ambient), 'kiosk-3')
+    kioskContent?.challengeMain && kioskContent.ambient
+      ? parseKioskChallenges(mapChallenges(kioskContent.challengeMain, kioskContent.ambient), 'kiosk-3')
       : null;
   const solutions =
-    kioskContent?.data?.solutionMain && kioskContent.data.solutionAccordion && kioskContent.data.ambient
+    kioskContent?.solutionMain && kioskContent.solutionAccordion && kioskContent.ambient
       ? (mapSolutions(
-          kioskContent.data.solutionMain,
-          kioskContent.data.solutionAccordion,
-          kioskContent.data.ambient
+          kioskContent.solutionMain,
+          kioskContent.solutionAccordion,
+          kioskContent.ambient
         ) as SolutionScreens)
       : null;
   const values =
-    kioskContent?.data?.valueMain && kioskContent.data.ambient
-      ? (mapValue(kioskContent.data.valueMain, kioskContent.data.ambient) as ValueScreens)
+    kioskContent?.valueMain && kioskContent.ambient
+      ? (mapValue(kioskContent.valueMain, kioskContent.ambient) as ValueScreens)
       : null;
   const hardCoded =
-    kioskContent?.data?.customInteractive3 && kioskContent.data.ambient
-      ? (mapHardcoded(kioskContent.data.customInteractive3, kioskContent.data.ambient) as HardCodedScreens)
+    kioskContent?.customInteractive3 && kioskContent.ambient
+      ? (mapHardcoded(kioskContent.customInteractive3, kioskContent.ambient) as HardCodedScreens)
       : null;
 
   // Pass the global handlers to all templates
@@ -314,6 +318,20 @@ const Kiosk3View = () => {
     return () => controller.setRootHandlers(null);
   }, [controller, handleNavigateDown, handleNavigateUp, scrollToSlide, slides.length]);
 
+  // Show loading state if no slides are available
+  if (slides.length === 0) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-black text-white">
+        <div className="text-center">
+          <p className="text-2xl">Loading kiosk data...</p>
+          <p className="mt-4 text-sm opacity-60">
+            {!kioskData ? 'Fetching data...' : 'Processing content...'}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       // className={styles.root}
@@ -418,6 +436,7 @@ type ChallengeContent = {
   item1Image?: string;
   item2Body?: string;
   item2Image?: string;
+  labelText?: string;
   mainVideo?: string;
 };
 
@@ -425,6 +444,7 @@ type SolutionsMain = {
   body?: string;
   headline?: string;
   image?: string;
+  labelText?: string;
   mainVideo?: string;
   numberedList?: string[];
   numberedListHeadline?: string;
@@ -437,12 +457,14 @@ type SolutionsAccordion = {
   }>;
   headline?: string;
   image?: string;
+  labelText?: string;
 };
 
 type ValueContent = {
   body?: string;
   diamondBenefits?: { bullets?: string[]; label?: string; title?: string }[];
   headline?: string;
+  labelText?: string;
   mainVideo?: string;
 };
 
@@ -466,7 +488,7 @@ type HardcodedContent = {
 
 const mapChallenges = (challenge: ChallengeContent, ambient: Ambient): KioskChallenges => ({
   firstScreen: {
-    challengeLabel: 'Challenge',
+    labelText: challenge.labelText ?? 'Challenge',
     problemDescription: challenge.body ?? '',
     savingsAmount: challenge.featuredStat1 ?? '',
     savingsDescription: challenge.featuredStat1Body ?? '',
@@ -484,6 +506,7 @@ const mapChallenges = (challenge: ChallengeContent, ambient: Ambient): KioskChal
   secondScreen: {
     bottomDescription: '',
     bottomVideoSrc: '',
+    labelText: challenge.labelText ?? 'Challenge',
     largeIconSrc: challenge.item1Image ?? '',
     mainDescription: challenge.item1Body ?? '',
     statAmount: '',
@@ -492,6 +515,7 @@ const mapChallenges = (challenge: ChallengeContent, ambient: Ambient): KioskChal
     topImageSrc: challenge.item1Image ?? '',
   },
   thirdScreen: {
+    labelText: challenge.labelText ?? 'Challenge',
     description: challenge.item2Body ?? '',
     heroImageSrc: challenge.item2Image ?? '',
     largeIconCenterSrc: challenge.item2Image ?? '',
@@ -513,6 +537,7 @@ const mapSolutions = (
     firstScreen: {
       backgroundVideoSrc: solutionsMain.mainVideo ?? '',
       description: solutionsMain.body ?? '',
+      labelText: solutionsMain.labelText ?? 'Solution',
       subheadline: ambient.title,
       title: solutionsMain.headline ?? '',
     },
@@ -533,13 +558,13 @@ const mapSolutions = (
         title: item.title ?? '',
       })),
       mediaDiamondSolidSrc: solutionAccordion.image,
-      solutionLabel: 'Solution',
+      labelText: solutionAccordion.labelText ?? 'Solution',
       subheadline: ambient.title,
       title: solutionAccordion.headline ?? '',
     },
     secondScreen: {
       heroImageSrc: solutionsMain.image ?? '',
-      solutionLabel: 'Solution',
+      labelText: solutionsMain.labelText ?? 'Solution',
       stepFourDescription: solutionsMain.numberedList?.[3] ?? '',
       stepFourLabel: '04.',
       stepOneDescription: solutionsMain.numberedList?.[0] ?? '',
@@ -549,7 +574,7 @@ const mapSolutions = (
       stepTwoDescription: solutionsMain.numberedList?.[1] ?? '',
       stepTwoLabel: '02.',
       subheadline: ambient.title,
-      title: solutionsMain.numberedListHeadline ?? 'Together, we:',
+      title: solutionsMain.numberedListHeadline,
     },
   };
 };
@@ -605,7 +630,7 @@ const mapValue = (value: ValueContent, ambient: Ambient): ValueScreens => {
         eyebrow: ambient.title,
         headline,
         heroVideoSrc,
-        labelText: 'Value',
+        labelText: value.labelText ?? 'Value',
         slides: [
           {
             badgeLabel: 'Operational · Economic · Strategic',
@@ -619,7 +644,7 @@ const mapValue = (value: ValueContent, ambient: Ambient): ValueScreens => {
         description,
         eyebrow: ambient.title,
         headline,
-        labelText: 'Value',
+        labelText: value.labelText ?? 'Value',
         slides: carouselSlides,
       },
     ],
@@ -629,6 +654,7 @@ const mapValue = (value: ValueContent, ambient: Ambient): ValueScreens => {
 const mapHardcoded = (hardcoded: HardcodedContent, ambient: Ambient): HardCodedScreens => ({
   firstScreen: {
     eyebrow: ambient.title,
+    headline: hardcoded.headline,
     heroImageAlt: 'Data center facility',
     heroImageSrc: hardcoded.image,
     primaryCtaLabel: hardcoded.mainCTA,
@@ -636,15 +662,32 @@ const mapHardcoded = (hardcoded: HardcodedContent, ambient: Ambient): HardCodedS
   },
   fourthScreen: {
     cardLabel: hardcoded.secondaryCTA ?? 'Launch demo',
-    demoIframeSrc: 'https://example.com/demo',
-    endTourLabel: 'End tour',
-    headline: hardcoded.headline2 ?? 'Centralized management\nof services via API',
+    headline: hardcoded.body ?? 'Explore each section to learn how Iron Mountain can transform your enterprise',
+    heroImageAlt: 'Interactive experience showcase',
+    heroImageSrc: hardcoded.image,
   },
   secondScreen: {
+    backLabel: hardcoded.backCTA,
+    backgroundImageSrc: hardcoded.image,
+    description: hardcoded.body,
     eyebrow: ambient.title,
     headline: hardcoded.headline2 ?? 'Centralized management\nof services via API',
+    tapToBeginLabel: hardcoded.tapCTA,
+    videoAsset: hardcoded.video,
   },
   thirdScreen: {
     headline: hardcoded.headline ?? 'Learn more about how we\nunlocked new possibilities',
+    slides: hardcoded.tapCarousel?.map((item, index) => ({
+      bullets: item.bullets ?? [],
+      eyebrow: ambient.title,
+      headline: item.title ?? '',
+      id: `slide-${index + 1}`,
+      primaryImageAlt: item.title ?? 'Service illustration',
+      primaryImageSrc: item.video && item.image ? '' : item.image ?? '', // If both video and image, image goes to secondary
+      primaryVideoSrc: item.video,
+      secondaryImageAlt: item.title ?? 'Service illustration',
+      secondaryImageSrc: item.video && item.image ? item.image : undefined, // Show image in secondary diamond when both exist
+      sectionTitle: item.title ?? '',
+    })) ?? [],
   },
 });

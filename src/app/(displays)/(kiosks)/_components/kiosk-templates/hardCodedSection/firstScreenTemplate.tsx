@@ -8,8 +8,6 @@ import HCHollowBlueDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollow
 import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollowOrangeDiamond';
 
 export interface HardCodedKiosk1FirstScreenTemplateProps {
-  readonly backgroundEndColor?: string;
-  readonly backgroundStartColor?: string;
   readonly eyebrow?: string;
   readonly headline?: string;
   readonly heroImageAlt?: string;
@@ -44,8 +42,6 @@ const ArrowIcon = () => (
 );
 
 const HardCodedKiosk1FirstScreenTemplate = ({
-  backgroundEndColor,
-  backgroundStartColor,
   eyebrow,
   headline,
   heroImageAlt,
@@ -58,10 +54,6 @@ const HardCodedKiosk1FirstScreenTemplate = ({
   primaryCtaLabel,
   secondaryCtaLabel,
 }: HardCodedKiosk1FirstScreenTemplateProps) => {
-  if (!eyebrow || !headline || !heroImageSrc || !heroImageAlt || !primaryCtaLabel || !secondaryCtaLabel) {
-    return null;
-  }
-
   const [showOverlay, setShowOverlay] = useState(false);
   const isKiosk1 = kioskId === 'kiosk-1';
   const eyebrowText = eyebrow;
@@ -78,16 +70,15 @@ const HardCodedKiosk1FirstScreenTemplate = ({
 
   return (
     <div
-      className="group/kiosk relative flex h-screen w-full flex-col overflow-hidden"
+      className={`group/kiosk relative flex h-screen w-full flex-col ${
+        isKiosk1 || isKiosk3 ? 'overflow-visible' : 'overflow-hidden'
+      }`}
       data-kiosk={kioskId}
-      data-node-id="5893:7411"
       data-scroll-section="hardcoded-first-screen"
-      style={isKiosk1 || isKiosk3 ? { overflow: 'visible' } : undefined}
     >
       <div
-        className="absolute inset-0"
+        className="absolute inset-0 bg-gradient-to-b from-[#1b75bc] to-[#05254b]"
         style={{
-          background: `linear-gradient(180deg, ${backgroundStartColor} 0%, ${backgroundEndColor} 100%)`,
           height: isKiosk1 ? '10530px' : isKiosk3 ? '15630px' : undefined,
         }}
       />
@@ -118,11 +109,8 @@ const HardCodedKiosk1FirstScreenTemplate = ({
           <ArrowIcon />
         </button>
         <button
-          className="flex h-[200px] items-center justify-between rounded-[999px] px-[100px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-transform duration-150 hover:scale-[1.01]"
+          className="flex h-[200px] items-center justify-between rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[100px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-transform duration-150 hover:scale-[1.01]"
           onClick={handleSecondaryClick}
-          style={{
-            background: 'linear-gradient(296deg, #A2115E 28.75%, #8A0D71 82.59%)',
-          }}
           type="button"
         >
           <span className={secondaryLabelPadding}>{renderRegisteredMark(secondaryCtaLabel)}</span>
@@ -139,7 +127,9 @@ const HardCodedKiosk1FirstScreenTemplate = ({
 
       {/* Hero diamond image */}
       <div className="pointer-events-none absolute bottom-[160px] left-[1100px] h-[1380px] w-[1380px] rotate-[45deg] overflow-hidden rounded-[140px]">
-        <Image alt={heroImageAlt} className="-rotate-[45deg] object-cover" fill sizes="680px" src={heroImageSrc} />
+        {heroImageSrc && (
+          <Image alt={heroImageAlt || ''} className="-rotate-[45deg] object-cover" fill sizes="680px" src={heroImageSrc} />
+        )}
       </div>
 
       {/* Decorative diamonds */}
@@ -149,11 +139,9 @@ const HardCodedKiosk1FirstScreenTemplate = ({
 
       {/* Overlay - Demo Screen */}
       <div
-        className="absolute inset-0 z-[999] transition-opacity duration-700"
-        style={{
-          opacity: showOverlay ? 1 : 0,
-          pointerEvents: showOverlay ? 'auto' : 'none',
-        }}
+        className={`absolute inset-0 z-[999] transition-opacity duration-700 ${
+          showOverlay ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
+        }`}
       >
         <HardCodedDemoScreenTemplate
           cardLabel={overlayCardLabel}

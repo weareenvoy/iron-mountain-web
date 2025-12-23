@@ -86,7 +86,6 @@ const HardCodedKiosk3ThirdScreenTemplate = ({
   return (
     <div
       className="relative flex h-screen w-full flex-col overflow-hidden"
-      data-node-id="5896:13360"
       data-scroll-section="hardcoded-third-screen"
     >
       <div className="absolute inset-0 bg-transparent" />
@@ -188,10 +187,9 @@ const HardCodedKiosk3ThirdScreenTemplate = ({
                 loop
                 muted
                 playsInline
-                poster={current.primaryImageSrc}
                 src={current.primaryVideoSrc}
               />
-            ) : (
+            ) : current.primaryImageSrc ? (
               <Image
                 alt={current.primaryImageAlt || 'Primary slide image'}
                 className="origin-center scale-[1.35] object-cover"
@@ -199,7 +197,7 @@ const HardCodedKiosk3ThirdScreenTemplate = ({
                 sizes="830px"
                 src={current.primaryImageSrc}
               />
-            )}
+            ) : null}
           </div>
         </div>
         {current.secondaryImageSrc && (
@@ -246,11 +244,9 @@ const HardCodedKiosk3ThirdScreenTemplate = ({
 
       {/* Overlay */}
       <div
-        className="absolute inset-0 z-[999] transition-opacity duration-700"
-        style={{
-          opacity: showOverlay ? 1 : 0,
-          pointerEvents: showOverlay ? 'auto' : 'none',
-        }}
+        className={`absolute inset-0 z-[999] transition-opacity duration-700 ${
+          showOverlay ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
+        }`}
       >
         <HardCodedDemoScreenTemplate
           cardLabel={overlayCardLabel}

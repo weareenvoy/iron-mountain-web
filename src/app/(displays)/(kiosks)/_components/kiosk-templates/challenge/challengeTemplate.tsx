@@ -39,8 +39,12 @@ export const buildChallengeSlides = (
             {...initialScreen}
             kioskId={kioskId}
             onButtonClick={() => {
+              console.log('[Challenge Initial] Button clicked!');
+              console.log('[Challenge Initial] Calling onInitialButtonClick...');
               overrides?.onInitialButtonClick?.();
+              console.log('[Challenge Initial] Calling controller.next()...');
               controller.next();
+              console.log('[Challenge Initial] controller.next() completed');
             }}
           />
         </SectionSlide>

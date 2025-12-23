@@ -21,7 +21,7 @@ export type SolutionThirdScreenTemplateProps = {
   readonly mediaDiamondRightSrc?: string;
   readonly onNavigateDown?: () => void;
   readonly onNavigateUp?: () => void;
-  readonly solutionLabel?: string;
+  readonly labelText?: string;
   readonly subheadline?: string;
   readonly title?: string;
   readonly topLeftLabel?: string;
@@ -58,7 +58,7 @@ const SolutionThirdScreenTemplate = ({
   onNavigateDown: _onNavigateDown,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateUp: _onNavigateUp,
-  solutionLabel,
+  labelText,
   subheadline,
   title,
   topLeftLabel,
@@ -115,12 +115,10 @@ const SolutionThirdScreenTemplate = ({
     <div
       className="group/kiosk relative z-[1] flex h-screen w-full flex-col overflow-hidden bg-transparent"
       data-kiosk={kioskId}
-      data-node-id="5168:9626"
     >
       {/* Gradient backdrop */}
       <div
         className="absolute top-[-296px] left-0 h-[5416px] w-full rounded-t-[100px] bg-transparent"
-        data-node-id="5168:9628"
       />
 
       {/* Subheadline */}
@@ -136,7 +134,7 @@ const SolutionThirdScreenTemplate = ({
           <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
         </div>
         <h1 className="relative top-[20px] left-[-80px] text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed] group-data-[kiosk=kiosk-3]/kiosk:top-[-20px] group-data-[kiosk=kiosk-3]/kiosk:left-[-100px]">
-          {solutionLabel}
+          {labelText}
         </h1>
       </div>
 

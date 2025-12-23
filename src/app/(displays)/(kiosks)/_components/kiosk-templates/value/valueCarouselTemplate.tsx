@@ -199,8 +199,6 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
   const resolvedCarouselId = carouselId ?? `value-carousel-${generatedId}`;
   const [emblaRef, emblaApi] = useEmblaCarousel({ align: 'start', loop: false });
   const isOverview = resolvedCarouselId.includes('overview');
-  const contentHeight = isOverview ? '9360px' : '4150px';
-  const contentBackground = isOverview ? '#ededed' : 'transparent';
   const heroVideo = isOverview ? heroVideoSrc : undefined;
 
   const slidesToRender = slides?.length ? slides : [];
@@ -234,7 +232,6 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
       className="relative flex h-screen w-full flex-col overflow-visible bg-transparent"
       data-carousel-id={resolvedCarouselId}
       {...(isOverview ? { 'data-scroll-section': 'value-carousel' } : {})}
-      data-node-id="5688:14628"
     >
       <div className="absolute top-0 left-0 z-[0] h-[1284px] w-full overflow-hidden">
         {heroVideo ? (
@@ -261,7 +258,6 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
 
       <div
         className="absolute top-0 left-0 z-[2] flex h-[1284px] w-full flex-col justify-between px-[120px] py-[240px]"
-        data-node-id="5688:14630"
       >
         <p className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
           {renderRegisteredMark(normalizeMultiline(eyebrow))}
@@ -279,9 +275,9 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
       </div>
 
       <div
-        className="absolute top-[1060px] left-0 z-[3] w-full rounded-t-[100px] px-[240px] pt-[200px] pb-[1166px]"
-        data-node-id="5688:14631"
-        style={{ background: contentBackground, height: contentHeight }}
+        className={`absolute top-[1060px] left-0 z-[3] w-full rounded-t-[100px] px-[240px] pt-[200px] pb-[1166px] ${
+          isOverview ? 'h-[9360px] bg-[#ededed]' : 'h-[4150px] bg-transparent'
+        }`}
       >
         <div className="relative top-[-10px] flex flex-col gap-[360px] text-[#8a0d71]">
           <div>

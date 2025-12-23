@@ -57,7 +57,7 @@ export type SolutionFourthScreenTemplateProps = {
   readonly mediaDiamondSolidSrc?: string;
   readonly onNavigateDown?: () => void;
   readonly onNavigateUp?: () => void;
-  readonly solutionLabel?: string;
+  readonly labelText?: string;
   readonly subheadline?: string;
   readonly title?: string;
 };
@@ -71,14 +71,14 @@ const SolutionFourthScreenTemplate = ({
   onNavigateDown: _onNavigateDown,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateUp: _onNavigateUp,
-  solutionLabel,
+  labelText,
   subheadline,
   title,
 }: SolutionFourthScreenTemplateProps) => {
   const entries = accordionItems?.length ? accordionItems : [];
 
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-hidden bg-transparent" data-node-id="5168:10496">
+    <div className="relative flex h-screen w-full flex-col overflow-hidden bg-transparent">
       {/* Background gradient (now transparent) */}
       <div className="absolute top-0 left-0 h-[5120px] w-full bg-transparent" />
 
@@ -91,7 +91,7 @@ const SolutionFourthScreenTemplate = ({
 
       {/* Solution label */}
       <div
-        className="absolute top-[790px] left-[140px] flex items-center gap-[41px]"
+        className="absolute top-[790px] z-[1] left-[140px] flex items-center gap-[41px]"
       >
         <div className="relative left-[-55px] top-[-25px] flex h-[200px] w-[200px] items-center justify-center">
           <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
@@ -99,7 +99,7 @@ const SolutionFourthScreenTemplate = ({
         <h1
           className="relative left-[-100px] top-[-20px] text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]"
         >
-          {solutionLabel}
+          {labelText}
         </h1>
       </div>
 

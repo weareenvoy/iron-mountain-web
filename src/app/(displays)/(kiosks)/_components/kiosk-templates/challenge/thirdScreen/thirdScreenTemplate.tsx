@@ -7,6 +7,7 @@ import { DEFAULT_KIOSK_ID, type KioskId } from '../../../../_types/kiosk-id';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
 export type ThirdScreenTemplateProps = {
+  readonly labelText?: string;
   readonly description?: string;
   readonly heroImageSrc?: string;
   readonly kioskId?: KioskId;
@@ -22,6 +23,7 @@ export type ThirdScreenTemplateProps = {
 };
 
 export const ThirdScreenTemplate = ({
+  labelText,
   description,
   heroImageSrc,
   kioskId = DEFAULT_KIOSK_ID,
@@ -37,10 +39,6 @@ export const ThirdScreenTemplate = ({
   subheadline,
   videoSrc,
 }: ThirdScreenTemplateProps) => {
-  if (!metricImageSrc || !subheadline || !description || !metricAmount || !metricDescription) {
-    return null;
-  }
-
   return (
     <div
       // className={styles.container}
@@ -49,7 +47,6 @@ export const ThirdScreenTemplate = ({
       data-kiosk={kioskId}
       data-large-icon-center={largeIconCenterSrc}
       data-large-icon-top={largeIconTopSrc}
-      data-node-id="5168:9928"
       data-video-src={videoSrc}
     >
       {/* Background gradient layer */}
@@ -58,14 +55,16 @@ export const ThirdScreenTemplate = ({
       {/* Decorative background diamond */}
       <div className="pointer-events-none absolute top-[2490px] left-[920px] z-[1] flex h-[940px] w-[940px] scale-y-[-1] rotate-[225deg] items-center justify-center group-data-[kiosk=kiosk-2]/kiosk:top-[2430px] group-data-[kiosk=kiosk-2]/kiosk:left-[1070px] group-data-[kiosk=kiosk-2]/kiosk:size-[800px] group-data-[kiosk=kiosk-3]/kiosk:top-[1740px] group-data-[kiosk=kiosk-3]/kiosk:left-[1080px] group-data-[kiosk=kiosk-3]/kiosk:size-[800px]">
         <div className="relative h-full w-full">
-          <Image
-            alt={`Graphic representing ${metricDescription}`}
-            className="rotate-45 object-contain"
-            fill
-            sizes="795px"
-            src={metricImageSrc}
-            unoptimized
-          />
+          {metricImageSrc && (
+            <Image
+              alt={metricDescription ? `Graphic representing ${metricDescription}` : 'Metric graphic'}
+              className="rotate-45 object-contain"
+              fill
+              sizes="795px"
+              src={metricImageSrc}
+              unoptimized
+            />
+          )}
         </div>
       </div>
 
@@ -80,7 +79,7 @@ export const ThirdScreenTemplate = ({
             <Diamond aria-hidden="true" className="h-full w-full text-[#ededed]" focusable="false" strokeWidth={1.25} />
           </div>
           <h1 className="text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]">
-            Challenge
+            {renderRegisteredMark(labelText)}
           </h1>
         </div>
       </div>

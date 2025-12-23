@@ -37,7 +37,6 @@ const HardCodedKiosk3SecondScreenTemplate = ({
   return (
     <div
       className="relative flex h-screen w-full flex-col overflow-hidden"
-      data-node-id="5896:13301"
       data-scroll-section="hardcoded-second-screen"
     >
       <div className="absolute inset-0 bg-transparent" />
@@ -95,40 +94,22 @@ const HardCodedKiosk3SecondScreenTemplate = ({
           <span className="relative top-[5px] z-10 text-[80px] leading-[1.3] font-normal tracking-[-4px] text-white">
             {renderRegisteredMark(tapToBeginLabel)}
           </span>
-          <div
-            className="absolute"
-            style={{ left: '50%', top: '48%', transform: 'translate(-50%, -50%) rotate(0deg) translateY(-430px)' }}
-          >
+          <div className="absolute left-[50%] top-[48%] [transform:translate(-50%,-50%)_rotate(0deg)_translateY(-430px)]">
             <BlueDot className="h-[60px] w-[60px]" />
           </div>
-          <div
-            className="absolute"
-            style={{ left: '53%', top: '50%', transform: 'translate(-50%, -50%) rotate(60deg) translateY(-430px)' }}
-          >
+          <div className="absolute left-[53%] top-[50%] [transform:translate(-50%,-50%)_rotate(60deg)_translateY(-430px)]">
             <BlueDot className="h-[60px] w-[60px]" />
           </div>
-          <div
-            className="absolute"
-            style={{ left: '53%', top: '49%', transform: 'translate(-50%, -50%) rotate(120deg) translateY(-430px)' }}
-          >
+          <div className="absolute left-[53%] top-[49%] [transform:translate(-50%,-50%)_rotate(120deg)_translateY(-430px)]">
             <BlueDot className="h-[60px] w-[60px]" />
           </div>
-          <div
-            className="absolute"
-            style={{ left: '50%', top: '52%', transform: 'translate(-50%, -50%) rotate(180deg) translateY(-430px)' }}
-          >
+          <div className="absolute left-[50%] top-[52%] [transform:translate(-50%,-50%)_rotate(180deg)_translateY(-430px)]">
             <BlueDot className="h-[60px] w-[60px]" />
           </div>
-          <div
-            className="absolute"
-            style={{ left: '47%', top: '50%', transform: 'translate(-50%, -50%) rotate(240deg) translateY(-430px)' }}
-          >
+          <div className="absolute left-[47%] top-[50%] [transform:translate(-50%,-50%)_rotate(240deg)_translateY(-430px)]">
             <BlueDot className="h-[60px] w-[60px]" />
           </div>
-          <div
-            className="absolute"
-            style={{ left: '47%', top: '50%', transform: 'translate(-50%, -50%) rotate(300deg) translateY(-430px)' }}
-          >
+          <div className="absolute left-[47%] top-[50%] [transform:translate(-50%,-50%)_rotate(300deg)_translateY(-430px)]">
             <BlueDot className="h-[60px] w-[60px]" />
           </div>
         </button>

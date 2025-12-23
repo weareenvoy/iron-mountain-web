@@ -12,14 +12,12 @@ export type SolutionFirstScreenTemplateProps = {
   readonly accentDiamondSrc?: string;
   readonly backgroundVideoSrc?: string;
   readonly description?: string;
-  readonly gradientEndColor?: string;
-  readonly gradientStartColor?: string;
   readonly kioskId?: string;
   readonly largeDiamondSrc?: string;
   readonly mediumDiamondSrc?: string;
   readonly onNavigateDown?: () => void;
   readonly onNavigateUp?: () => void;
-  readonly solutionLabel?: string;
+  readonly labelText?: string;
   readonly subheadline?: string;
   readonly title?: string;
 };
@@ -28,8 +26,6 @@ const SolutionFirstScreenTemplate = ({
   accentDiamondSrc,
   backgroundVideoSrc,
   description,
-  gradientEndColor,
-  gradientStartColor,
   kioskId,
   largeDiamondSrc,
   mediumDiamondSrc,
@@ -37,7 +33,7 @@ const SolutionFirstScreenTemplate = ({
   onNavigateDown: _onNavigateDown,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateUp: _onNavigateUp,
-  solutionLabel,
+  labelText,
   subheadline,
   title,
 }: SolutionFirstScreenTemplateProps) => {
@@ -45,7 +41,6 @@ const SolutionFirstScreenTemplate = ({
     <div
       className="group/kiosk relative flex h-screen w-full flex-col overflow-visible bg-black"
       data-kiosk={kioskId}
-      data-node-id="5168:9669"
     >
       {/* Background video */}
       <div className="absolute top-[-5px] left-0 h-[1545px] w-full">
@@ -67,11 +62,7 @@ const SolutionFirstScreenTemplate = ({
 
       {/* Gradient body */}
       <div
-        className="absolute top-[1058px] left-0 z-[1] h-[14575px] w-full rounded-[100px] group-data-[kiosk=kiosk-2]/kiosk:top-[1110px] group-data-[kiosk=kiosk-3]/kiosk:top-[1060px]"
-        data-node-id="5168:9671"
-        style={{
-          background: `linear-gradient(to bottom, ${gradientStartColor} 0%, ${gradientEndColor} 99%)`,
-        }}
+        className="absolute top-[1058px] left-0 z-[1] h-[14575px] w-full rounded-[100px] bg-gradient-to-b from-[#A2115E] to-[#8A0D71] group-data-[kiosk=kiosk-2]/kiosk:top-[1110px] group-data-[kiosk=kiosk-3]/kiosk:top-[1060px]"
       />
 
       {/* Subheadline */}
@@ -84,7 +75,6 @@ const SolutionFirstScreenTemplate = ({
       {/* Solution label */}
       <div
         className="absolute top-[790px] left-[140px] flex items-center gap-[41px] group-data-[kiosk=kiosk-2]/kiosk:top-[830px] group-data-[kiosk=kiosk-3]/kiosk:top-[860px] group-data-[kiosk=kiosk-3]/kiosk:left-[260px]"
-        data-node-id="5168:9697"
       >
         <div className="relative left-[-55px] top-[-25px] flex h-[200px] w-[200px] items-center justify-center">
           <OutlinedDiamond aria-hidden="true" focusable="false" />
@@ -92,7 +82,7 @@ const SolutionFirstScreenTemplate = ({
         <h1
           className="relative left-[-100px] top-[-20px] text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]"
         >
-          {solutionLabel}
+          {labelText}
         </h1>
       </div>
 

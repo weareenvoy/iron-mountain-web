@@ -1,18 +1,18 @@
-{
-  "locale": "en",
-  "data": {
+[
+  {
+    "locale": "en",
+    "data": {
     "ambient": {
       "backgroundImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/Cover.webp",
       "body": "\"It's been a pleasure working with Iron Mountain. We feel very confident that the GRAMMY Museum's physical artifacts and digital content is safely protected. Smart Vault also provides significant reassurance that our iconic artist performances and interviews will remain preserved and accessible which is a huge benefit to the GRAMMY Museum.\"",
       "headline": "The GRAMMY Museum (R) preserves the soundtrack of history.",
-      "subheader": "It's been a pleasure working with...",
+      "mainCTA": "Touch to explore",
       "quoteSource": "- Michael Rohrabacher, Technical Director at the GRAMMY Museum",
-      "title": "Rich media & \ncultural heritage",
-      "mainCTA": "Touch to explore"
+      "subheader": "It's been a pleasure working with...",
+      "title": "Rich media & \ncultural heritage"
     },
 
     "challengeMain": {
-      "mainVideo": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/01+-+Challenge/Challenge-Header.webm",
       "body": "The Museum needed a secure, off-site, cloud-accessible, and easily managed solution to protect its one-of-a-kind, irreplaceable footage. Storing the only master copy locally presented a high risk of losing all assets in the event of a data failure or system crash.",
       "featuredStat1": "120 TB",
       "featuredStat1Body": "of data is safely stored and accessible for the Museum.",
@@ -24,24 +24,25 @@
       "item2Image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/01+-+Challenge/Challenge-Image2-Diamond.webp",
 
       "featuredStat2": "40 TB",
-      "featuredStat2Body": "of existing footage of data migration from physical drives into Smart Vault."
+      "featuredStat2Body": "of existing footage of data migration from physical drives into Smart Vault.",
+      "labelText": "Challenge",
+      "mainVideo": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/01+-+Challenge/Challenge-Header.webm"
     },
 
     "solutionMain": {
-      "mainVideo": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Header.webm",
-      "headline": "A partnership with Iron Mountain",
-
       "body": "With a focus on physical storage and a secure digital archive, Iron Mountain provided climate-controlled, private vaults for physical artifacts and implemented Smart Vault for digital preservation.",
 
-      "numberedListHeadline": "Together, we:",
+      "headline": "A partnership with Iron Mountain",
+      "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Image1-Diamond.webp",
+      "labelText": "Solution",
+      "mainVideo": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Header.webm",
       "numberedList": [
         "Digitized 786 video tapes (various formats like DVC pro, Beta SP, Mini DV)",
         "Restored six hard drives (~19 TB)",
         "Restored 33 hard drives (67 TB) featuring GRAMMY Award shows",
         "Stored 1,000 cubic feet total of physical, historic assets in climate-controlled, private vaults"
       ],
-
-      "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Image1-Diamond.webp"
+      "numberedListHeadline": "Together, we:"
     },
 
     "solutionGrid": {
@@ -59,35 +60,35 @@
     },
 
     "valueMain": {
-      "headline": "Expanding possibilities",
-      "mainVideo": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/03+-+Value/Value-header.webm",
-
       "body": "The partnership with Iron Mountain secured the Museum's legacy, dramatically improving its preservation workflow and content accessibility for future generations.",
 
       "diamondBenefits": [
         {
-          "label": "Operational benefits",
           "bullets": [
             "Improved accessibility and security of the museum's assets",
             "Simplified and made remote access efficient, allowing authorized users to access and distribute content quickly from anywhere",
             "Post-production workflow includes automatic, immediate upload of footage to Smart Vault"
-          ]
+          ],
+          "label": "Operational benefits"
         },
         {
-          "label": "Economical benefits",
           "bullets": [
             "Enabled new licensing opportunities",
             "Enhanced licensing opportunities due to the ability to easily retrieve original, high-resolution content, including multiple camera angles"
-          ]
+          ],
+          "label": "Economical benefits"
         },
         {
-          "label": "Strategic benefits",
           "bullets": [
             "Safely archived and protected unique performances against on-site disasters",
             "Positioned the museum for future innovation through upcoming Smart Vault enhancements, including generative AI for advanced search capabilities"
-          ]
+          ],
+          "label": "Strategic benefits"
         }
-      ]
+      ],
+      "headline": "Expanding possibilities",
+      "labelText": "Value",
+      "mainVideo": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/03+-+Value/Value-header.webm"
     },
 
     "demoMain": {
@@ -117,4 +118,4 @@
       "ModalBody5": "Digitized content is ready for licensing, streaming, and storytelling, unlocking new value across platforms while maintaining archival integrity."
     }
   }
-}
+}]

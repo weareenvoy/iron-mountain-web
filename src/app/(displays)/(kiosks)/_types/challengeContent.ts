@@ -10,7 +10,7 @@ type InitialScreen = {
 };
 
 type FirstScreen = {
-  readonly challengeLabel: string;
+  readonly labelText: string;
   readonly problemDescription: string;
   readonly savingsAmount: string;
   readonly savingsDescription: string;
@@ -21,6 +21,7 @@ type FirstScreen = {
 type SecondScreen = {
   readonly bottomDescription: string;
   readonly bottomVideoSrc?: string;
+  readonly labelText?: string;
   readonly largeIconSrc: string;
   readonly mainDescription: string;
   readonly statAmount: string;
@@ -30,6 +31,7 @@ type SecondScreen = {
 };
 
 type ThirdScreen = {
+  readonly labelText?: string;
   readonly description: string;
   readonly heroImageSrc: string;
   readonly largeIconCenterSrc: string;

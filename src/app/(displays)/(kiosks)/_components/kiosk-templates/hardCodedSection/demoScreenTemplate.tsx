@@ -41,15 +41,11 @@ const HardCodedDemoScreenTemplate = ({
   onCta,
   onEndTour,
 }: HardCodedDemoScreenTemplateProps) => {
-  if (!headline || !heroImageSrc || !heroImageAlt || !endTourLabel) {
-    return null;
-  }
-
   const headlineText = headline;
   const cardText = cardLabel;
 
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-hidden" data-node-id="7189:7471">
+    <div className="relative flex h-screen w-full flex-col overflow-hidden">
       <div
         className="absolute inset-0"
         style={{
@@ -100,7 +96,9 @@ const HardCodedDemoScreenTemplate = ({
 
       {/* Hero diamond image */}
       <div className="pointer-events-none absolute bottom-[160px] left-[1100px] h-[1380px] w-[1380px] rotate-[45deg] overflow-hidden rounded-[140px]">
-        <Image alt={heroImageAlt} className="-rotate-[45deg] object-cover" fill sizes="680px" src={heroImageSrc} />
+        {heroImageSrc && (
+          <Image alt={heroImageAlt || ''} className="-rotate-[45deg] object-cover" fill sizes="680px" src={heroImageSrc} />
+        )}
       </div>
 
       {/* Decorative diamonds */}

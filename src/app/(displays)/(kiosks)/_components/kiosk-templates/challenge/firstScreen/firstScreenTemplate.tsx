@@ -6,7 +6,7 @@ import { DEFAULT_KIOSK_ID, type KioskId } from '@/app/(displays)/(kiosks)/_types
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
 export type FirstScreenTemplateProps = {
-  readonly challengeLabel?: string;
+  readonly labelText?: string;
   readonly kioskId?: KioskId;
   readonly onNavigateDown?: () => void;
   readonly onNavigateUp?: () => void;
@@ -18,7 +18,7 @@ export type FirstScreenTemplateProps = {
 };
 
 export const FirstScreenTemplate = ({
-  challengeLabel,
+  labelText,
   kioskId = DEFAULT_KIOSK_ID,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateDown: _onNavigateDown,
@@ -35,7 +35,6 @@ export const FirstScreenTemplate = ({
       // className={styles.container}
       className="group/kiosk relative flex h-screen w-full flex-col overflow-visible bg-black"
       data-kiosk={kioskId}
-      data-node-id="5168:9882"
     >
       {/* Background gradient - stays behind all content */}
       <div className="pointer-events-none absolute inset-0 top-[1290px] z-[1] h-[14400px] rounded-[100px] bg-[linear-gradient(180deg,#1B75BC_0.01%,#14477D_98%)] group-data-[kiosk=kiosk-2]/kiosk:top-[1240px] group-data-[kiosk=kiosk-2]/kiosk:h-[14450px]" />
@@ -69,7 +68,7 @@ export const FirstScreenTemplate = ({
           <Diamond aria-hidden="true" className="h-full w-full text-[#ededed]" focusable="false" strokeWidth={1.25} />
         </div>
         <h1 className="text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]">
-          {renderRegisteredMark(challengeLabel)}
+          {renderRegisteredMark(labelText)}
         </h1>
       </div>
 

@@ -8,6 +8,7 @@ import renderRegisteredMark from '../utils/renderRegisteredMark';
 
 export type SecondScreenTemplateProps = {
   readonly bottomDescription?: string;
+  readonly labelText?: string;
   readonly kioskId?: KioskId;
   readonly largeIconSrc?: string;
   readonly mainDescription?: string;
@@ -19,6 +20,7 @@ export type SecondScreenTemplateProps = {
 
 export const SecondScreenTemplate = ({
   bottomDescription,
+  labelText,
   kioskId = DEFAULT_KIOSK_ID,
   largeIconSrc,
   mainDescription,
@@ -29,17 +31,12 @@ export const SecondScreenTemplate = ({
   subheadline,
   topImageSrc,
 }: SecondScreenTemplateProps) => {
-  if (!largeIconSrc || !subheadline || !mainDescription || !bottomDescription) {
-    return null;
-  }
-
   return (
     <div
       // className={styles.container}
       className="group/kiosk relative flex h-screen w-full flex-col overflow-x-hidden overflow-y-auto scroll-smooth bg-transparent"
       data-hero-image={topImageSrc}
       data-kiosk={kioskId}
-      data-node-id="5168:9907"
     >
       {/* Background gradient layer */}
       <div className="pointer-events-none absolute inset-0 z-[0] bg-transparent" />
@@ -47,14 +44,16 @@ export const SecondScreenTemplate = ({
       {/* Decorative background diamond */}
       <div className="pointer-events-none absolute top-[2320px] left-[-460px] z-[1] flex size-[1500px] -scale-y-100 rotate-[180deg] items-center justify-center group-data-[kiosk=kiosk-2]/kiosk:top-[2420px] group-data-[kiosk=kiosk-2]/kiosk:left-[-350px] group-data-[kiosk=kiosk-2]/kiosk:size-[1350px] group-data-[kiosk=kiosk-3]/kiosk:top-[1610px] group-data-[kiosk=kiosk-3]/kiosk:left-[-360px] group-data-[kiosk=kiosk-3]/kiosk:size-[1350px]">
         <div className="relative h-full w-full">
-          <Image
-            alt="Large decorative background diamond"
-            className="object-contain -scale-x-100"
-            fill
-            sizes="1506px"
-            src={largeIconSrc}
-            unoptimized
-          />
+          {largeIconSrc && (
+            <Image
+              alt="Large decorative background diamond"
+              className="object-contain -scale-x-100"
+              fill
+              sizes="1506px"
+              src={largeIconSrc}
+              unoptimized
+            />
+          )}
         </div>
       </div>
 
@@ -69,7 +68,7 @@ export const SecondScreenTemplate = ({
             <Diamond aria-hidden="true" className="h-full w-full text-[#ededed]" focusable="false" strokeWidth={1.25} />
           </div>
           <h1 className="text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]">
-            Challenge
+            {renderRegisteredMark(labelText)}
           </h1>
         </div>
       </div>

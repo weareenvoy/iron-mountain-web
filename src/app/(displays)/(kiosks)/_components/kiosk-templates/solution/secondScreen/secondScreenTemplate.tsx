@@ -19,7 +19,7 @@ type SolutionSecondScreenCoreProps = {
   readonly kioskId?: KioskId;
   readonly onNavigateDown?: () => void;
   readonly onNavigateUp?: () => void;
-  readonly solutionLabel?: string;
+  readonly labelText?: string;
   readonly stepFourDescription?: string;
   readonly stepFourLabel?: string;
   readonly stepOneDescription?: string;
@@ -45,7 +45,7 @@ const SolutionSecondScreenTemplate = ({
   onNavigateDown: _onNavigateDown,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNavigateUp: _onNavigateUp,
-  solutionLabel,
+  labelText,
   stepFourDescription,
   stepFourLabel,
   stepOneDescription,
@@ -59,10 +59,6 @@ const SolutionSecondScreenTemplate = ({
   subheadline,
   title,
 }: SolutionSecondScreenTemplateProps) => {
-  if (!heroImageSrc || !heroImageAlt || !solutionLabel || !subheadline || !title) {
-    return null;
-  }
-
   const legacySteps: StepConfig[] = [
     { description: stepOneDescription, label: stepOneLabel },
     { description: stepTwoDescription, label: stepTwoLabel },
@@ -92,7 +88,6 @@ const SolutionSecondScreenTemplate = ({
     <div
       className="group/kiosk relative flex h-screen w-full flex-col overflow-visible bg-transparent"
       data-kiosk={kioskId}
-      data-node-id="5168:9473"
       data-scroll-section="solution-second-group"
     >
       {/* Gradient backdrop */}
@@ -116,14 +111,14 @@ const SolutionSecondScreenTemplate = ({
       </h2>
 
       {/* Solution label */}
-      <div className="absolute relative top-[180px] top-[710px] left-[150px] flex group-data-[kiosk=kiosk-3]/kiosk:top-[720px] group-data-[kiosk=kiosk-3]/kiosk:left-[140px]">
+      <div className="absolute z-[1] relative top-[180px] top-[710px] left-[150px] flex group-data-[kiosk=kiosk-3]/kiosk:top-[720px] group-data-[kiosk=kiosk-3]/kiosk:left-[140px]">
         <div className="relative left-[-55px] top-[25px] flex h-[200px] w-[200px] items-center justify-center">
           <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
         </div>
         <h1
           className="relative left-[-50px] top-[55px] text-[126px] leading-[1.3] font-normal tracking-[-6.3px] whitespace-nowrap text-[#ededed]"
         >
-          {renderRegisteredMark(solutionLabel)}
+          {renderRegisteredMark(labelText)}
         </h1>
       </div>
 
@@ -155,7 +150,9 @@ const SolutionSecondScreenTemplate = ({
       {/* Hero media diamond */}
       <div className="absolute top-[2210px] left-[1500px] z-[2]">
         <div className="relative top-[-140px] left-[-230px] h-[900px] w-[900px] rotate-[45deg] overflow-hidden rounded-[80px] group-data-[kiosk=kiosk-2]/kiosk:top-[-160px] group-data-[kiosk=kiosk-2]/kiosk:left-[-180px] group-data-[kiosk=kiosk-2]/kiosk:size-[810px] group-data-[kiosk=kiosk-3]/kiosk:top-[-130px] group-data-[kiosk=kiosk-3]/kiosk:left-[-160px] group-data-[kiosk=kiosk-3]/kiosk:size-[800px]">
-          <Image alt={heroImageAlt} className="-rotate-[45deg] object-cover" fill sizes="800px" src={heroImageSrc} />
+          {heroImageSrc && (
+            <Image alt={heroImageAlt || ''} className="-rotate-[45deg] object-cover" fill sizes="800px" src={heroImageSrc} />
+          )}
         </div>
       </div>
     </div>

@@ -78,35 +78,43 @@ const Kiosk1View = () => {
     | null
     | undefined
     | {
-        data?: {
-          ambient?: unknown;
-          challengeMain?: unknown;
-          customInteractive1Main?: unknown;
-          solutionGrid?: unknown;
-          solutionMain?: unknown;
-          valueMain?: unknown;
-        };
+        ambient?: unknown;
+        challengeMain?: unknown;
+        customInteractive1Main?: unknown;
+        solutionGrid?: unknown;
+        solutionMain?: unknown;
+        valueMain?: unknown;
       };
 
   const challenges: KioskChallenges | null =
-    kioskContent?.data?.challengeMain && kioskContent.data.ambient
-      ? parseKioskChallenges(mapChallenges(kioskContent.data.challengeMain, kioskContent.data.ambient), 'kiosk-1')
+    kioskContent?.challengeMain && kioskContent.ambient
+      ? parseKioskChallenges(mapChallenges(kioskContent.challengeMain, kioskContent.ambient), 'kiosk-1')
       : null;
+  
+  // Debug logging
+  if (kioskData && !challenges) {
+    console.log('[Kiosk1] Data loaded but challenges is null:', { 
+      hasData: !!kioskData, 
+      hasChallengeMain: !!kioskContent?.challengeMain,
+      hasAmbient: !!kioskContent?.ambient 
+    });
+  }
+  
   const solutions =
-    kioskContent?.data?.solutionMain && kioskContent.data.solutionGrid && kioskContent.data.ambient
+    kioskContent?.solutionMain && kioskContent.solutionGrid && kioskContent.ambient
       ? (mapSolutions(
-          kioskContent.data.solutionMain,
-          kioskContent.data.solutionGrid,
-          kioskContent.data.ambient
+          kioskContent.solutionMain,
+          kioskContent.solutionGrid,
+          kioskContent.ambient
         ) as SolutionScreens)
       : null;
   const values =
-    kioskContent?.data?.valueMain && kioskContent.data.ambient
-      ? (mapValue(kioskContent.data.valueMain, kioskContent.data.ambient) as ValueScreens)
+    kioskContent?.valueMain && kioskContent.ambient
+      ? (mapValue(kioskContent.valueMain, kioskContent.ambient) as ValueScreens)
       : null;
   const hardCoded =
-    kioskContent?.data?.customInteractive1Main && kioskContent.data.ambient
-      ? (mapHardcoded(kioskContent.data.customInteractive1Main, kioskContent.data.ambient) as HardCodedScreens)
+    kioskContent?.customInteractive1Main && kioskContent.ambient
+      ? (mapHardcoded(kioskContent.customInteractive1Main, kioskContent.ambient) as HardCodedScreens)
       : null;
 
   // Pass the global handlers to all templates
@@ -302,6 +310,20 @@ const Kiosk1View = () => {
     return () => controller.setRootHandlers(null);
   }, [controller, handleNavigateDown, handleNavigateUp, scrollToSlide, slides.length]);
 
+  // Show loading state if no slides are available
+  if (slides.length === 0) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-black text-white">
+        <div className="text-center">
+          <p className="text-2xl">Loading kiosk data...</p>
+          <p className="mt-4 text-sm opacity-60">
+            {!kioskData ? 'Fetching data...' : 'Processing content...'}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       // className={styles.root}
@@ -406,6 +428,7 @@ type ChallengeContent = {
   item1Image?: string;
   item2Body?: string;
   item2Image?: string;
+  labelText?: string;
   mainVideo?: string;
 };
 
@@ -413,6 +436,7 @@ type SolutionsMain = {
   body?: string;
   headline?: string;
   image?: string;
+  labelText?: string;
   mainVideo?: string;
   numberedList?: string[];
   numberedListHeadline?: string;
@@ -428,6 +452,7 @@ type ValueContent = {
   body?: string;
   diamondBenefits?: { bullets?: string[]; label?: string }[];
   headline?: string;
+  labelText?: string;
   mainVideo?: string;
 };
 
@@ -454,7 +479,7 @@ type HardcodedContent = {
 
 const mapChallenges = (challenge: ChallengeContent, ambient: Ambient): KioskChallenges => ({
   firstScreen: {
-    challengeLabel: 'Challenge',
+    labelText: challenge.labelText ?? 'Challenge',
     problemDescription: challenge.body ?? '',
     savingsAmount: challenge.featuredStat1 ?? '',
     savingsDescription: challenge.featuredStat1Body ?? '',
@@ -472,6 +497,7 @@ const mapChallenges = (challenge: ChallengeContent, ambient: Ambient): KioskChal
   secondScreen: {
     bottomDescription: '',
     bottomVideoSrc: '',
+    labelText: challenge.labelText ?? 'Challenge',
     largeIconSrc: challenge.item1Image ?? '',
     mainDescription: challenge.item1Body ?? '',
     statAmount: '',
@@ -480,6 +506,7 @@ const mapChallenges = (challenge: ChallengeContent, ambient: Ambient): KioskChal
     topImageSrc: challenge.item1Image ?? '',
   },
   thirdScreen: {
+    labelText: challenge.labelText ?? 'Challenge',
     description: challenge.item2Body ?? '',
     heroImageSrc: challenge.item2Image ?? '',
     largeIconCenterSrc: challenge.item2Image ?? '',
@@ -500,12 +527,13 @@ const mapSolutions = (
   firstScreen: {
     backgroundVideoSrc: solutionsMain.mainVideo ?? '',
     description: solutionsMain.body ?? '',
+    labelText: solutionsMain.labelText ?? 'Solution',
     subheadline: ambient.title,
     title: solutionsMain.headline ?? '',
   },
   secondScreen: {
     heroImageSrc: solutionsMain.image ?? '',
-    solutionLabel: 'Solution',
+    labelText: solutionsMain.labelText ?? 'Solution',
     stepFourDescription: solutionsMain.numberedList?.[3] ?? '',
     stepFourLabel: '04.',
     stepOneDescription: solutionsMain.numberedList?.[0] ?? '',
@@ -515,7 +543,7 @@ const mapSolutions = (
     stepTwoDescription: solutionsMain.numberedList?.[1] ?? '',
     stepTwoLabel: '02.',
     subheadline: ambient.title,
-    title: solutionsMain.numberedListHeadline ?? 'Together, we:',
+    title: solutionsMain.numberedListHeadline,
   },
   thirdScreen: {
     bottomLeftLabel: solutionsGrid.diamondList?.[2] ?? '',
@@ -523,7 +551,7 @@ const mapSolutions = (
     centerLabel: solutionsGrid.diamondList?.[0] ?? '',
     mediaDiamondLeftSrc: solutionsGrid.images?.[0] ?? '',
     mediaDiamondRightSrc: solutionsGrid.images?.[1] ?? '',
-    solutionLabel: 'Solution',
+    labelText: solutionsMain.labelText ?? 'Solution',
     subheadline: ambient.title,
     title: solutionsGrid.headline ?? '',
     topLeftLabel: undefined,
@@ -582,7 +610,7 @@ const mapValue = (value: ValueContent, ambient: Ambient): ValueScreens => {
         eyebrow: ambient.title,
         headline,
         heroVideoSrc,
-        labelText: 'Value',
+        labelText: value.labelText ?? 'Value',
         slides: [
           {
             badgeLabel: 'Operational · Economic · Strategic',
@@ -596,7 +624,7 @@ const mapValue = (value: ValueContent, ambient: Ambient): ValueScreens => {
         description,
         eyebrow: ambient.title,
         headline,
-        labelText: 'Value',
+        labelText: value.labelText ?? 'Value',
         slides: carouselSlides,
       },
     ],
@@ -606,14 +634,19 @@ const mapValue = (value: ValueContent, ambient: Ambient): ValueScreens => {
 const mapHardcoded = (hardcoded: HardcodedContent, ambient: Ambient): HardCodedScreens => ({
   firstScreen: {
     eyebrow: ambient.title,
+    headline: hardcoded.headline,
     heroImageAlt: 'Visitors smiling while viewing content',
     heroImageSrc: hardcoded.image,
     primaryCtaLabel: hardcoded.mainCTA,
     secondaryCtaLabel: hardcoded.secondaryCTA,
   },
   secondScreen: {
+    backLabel: hardcoded.backCTA,
     eyebrow: ambient.title,
     headline: hardcoded.headline2 ?? 'From archive\nto access',
+    heroImageAlt: 'Archive visualization',
+    heroImageSrc: hardcoded.image,
+    secondaryCtaLabel: hardcoded.secondaryCTA,
     steps: hardcoded.diamondCarouselItems?.map((item, index) => {
       const modalBodyKey = `ModalBody${index + 1}` as keyof HardcodedContent;
       const modalHeadlineKey = `ModalHeadline${index + 1}` as keyof HardcodedContent;
@@ -631,9 +664,9 @@ const mapHardcoded = (hardcoded: HardcodedContent, ambient: Ambient): HardCodedS
     }),
   },
   thirdScreen: {
-    cardLabel: 'Virtual walkthrough',
-    demoIframeSrc: 'https://example.com/demo-walkthrough',
-    endTourLabel: 'End tour',
-    headline: 'Experience our solution\nin action',
+    cardLabel: hardcoded.secondaryCTA ?? 'Virtual walkthrough',
+    headline: hardcoded.body2 ?? 'Experience our solution\nin action',
+    heroImageAlt: 'Digital transformation showcase',
+    heroImageSrc: hardcoded.image,
   },
 });
