@@ -82,34 +82,6 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
       >
         <div className="absolute inset-0 bg-transparent" />
 
-        <h2 className="absolute top-[240px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
-          {renderRegisteredMark(eyebrowText)}
-        </h2>
-
-        <h1 className="absolute top-[830px] left-[240px] w-full text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]">
-          {renderRegisteredMark(headlineText)}
-        </h1>
-
-        <p className="absolute top-[1320px] left-[250px] w-[640px] text-[52px] leading-[1.4] font-normal tracking-[-2.6px] text-[#ededed]">
-          {renderRegisteredMark('Explore each section to learn how Iron Mountain can transform your enterprise')}
-        </p>
-
-        <button
-          className="absolute top-[1330px] left-[1245px] z-[10] flex h-[200px] items-center justify-between rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[70px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-transform duration-150 hover:scale-[1.01]"
-          onClick={handleSecondaryClick}
-          type="button"
-        >
-          <span className="mr-[50px]">{renderRegisteredMark(secondaryCtaLabel)}</span>
-          <div className="flex items-center justify-center pl-[80px]">
-            <SquarePlay
-              aria-hidden
-              className={`relative h-[90px] w-[90px] ${secondaryIconOffset}`}
-              color="#ededed"
-              strokeWidth={2}
-            />
-          </div>
-        </button>
-
         {/* Overlay - Demo Screen */}
         <div
           className={`absolute inset-0 transition-opacity duration-700 ${
@@ -126,6 +98,34 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
             onEndTour={() => setShowOverlay(false)}
           />
         </div>
+
+        <h2 className="absolute top-[240px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
+          {renderRegisteredMark(eyebrowText)}
+        </h2>
+
+        <h1 className="absolute top-[830px] left-[240px] w-full text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]">
+          {renderRegisteredMark(headlineText)}
+        </h1>
+
+        <p className="absolute top-[1320px] left-[250px] w-[640px] text-[52px] leading-[1.4] font-normal tracking-[-2.6px] text-[#ededed]">
+          {renderRegisteredMark('Explore each section to learn how Iron Mountain can transform your enterprise')}
+        </p>
+
+        <button
+          className="absolute top-[1330px] left-[1245px] flex h-[200px] items-center justify-between rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[70px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-transform duration-150 hover:scale-[1.01]"
+          onClick={handleSecondaryClick}
+          type="button"
+        >
+          <span className="mr-[50px]">{renderRegisteredMark(secondaryCtaLabel)}</span>
+          <div className="flex items-center justify-center pl-[80px]">
+            <SquarePlay
+              aria-hidden
+              className={`relative h-[90px] w-[90px] ${secondaryIconOffset}`}
+              color="#ededed"
+              strokeWidth={2}
+            />
+          </div>
+        </button>
 
         {/* Step Carousel */}
         <StepCarousel onStepClick={setOpenModalIndex} steps={normalizedSteps} />

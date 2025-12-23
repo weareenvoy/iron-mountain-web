@@ -63,6 +63,23 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
     >
       <div className="absolute inset-0 bg-gradient-to-b from-[#1b75bc] to-[#05254b] group-data-[kiosk=kiosk-1]/kiosk:h-[10530px] group-data-[kiosk=kiosk-3]/kiosk:h-[15630px]" />
 
+      {/* Overlay - Demo Screen */}
+      <div
+        className={`absolute inset-0 transition-opacity duration-700 ${
+          showOverlay ? 'pointer-events-auto z-[999] opacity-100' : 'pointer-events-none opacity-0'
+        }`}
+      >
+        <CustomInteractiveDemoScreenTemplate
+          cardLabel={overlayCardLabel}
+          demoIframeSrc={demoIframeSrc}
+          endTourLabel={overlayEndTourLabel}
+          headline={overlayHeadline}
+          heroImageAlt={heroImageAlt}
+          heroImageSrc={heroImageSrc}
+          onEndTour={() => setShowOverlay(false)}
+        />
+      </div>
+
       {/* Eyebrow */}
       <h2 className="absolute top-[200px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-3]/kiosk:top-[240px]">
         {renderRegisteredMark(eyebrowText)}
@@ -78,7 +95,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
 
       {/* CTA buttons */}
       <div
-        className={`absolute top-[2220px] left-[245px] flex flex-col z-[10] gap-[90px] group-data-[kiosk=kiosk-3]/kiosk:top-[2350px] ${ctaWidthClass}`}
+        className={`absolute top-[2220px] left-[245px] flex flex-col gap-[90px] group-data-[kiosk=kiosk-3]/kiosk:top-[2350px] ${ctaWidthClass}`}
       >
         <button
           className="flex h-[200px] items-center justify-between rounded-[999px] bg-[#ededed] px-[100px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-[#14477d] shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-[19px] transition-transform duration-150 group-data-[kiosk=kiosk-2]/kiosk:hidden hover:scale-[1.01]"
@@ -122,23 +139,6 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       <HCHollowBlueDiamond className="pointer-events-none absolute bottom-[1400px] left-[510px] h-[520px] w-[520px] overflow-visible" />
       <HCFilledOrangeDiamond className="pointer-events-none absolute bottom-[640px] left-[280px] h-[420px] w-[800px]" />
       <HCHollowOrangeDiamond className="pointer-events-none absolute bottom-[410px] left-[500px] h-[340px] w-[340px] overflow-visible" />
-
-      {/* Overlay - Demo Screen */}
-      <div
-        className={`absolute inset-0 transition-opacity duration-700 ${
-          showOverlay ? 'pointer-events-auto z-[999] opacity-100' : 'pointer-events-none opacity-0'
-        }`}
-      >
-        <CustomInteractiveDemoScreenTemplate
-          cardLabel={overlayCardLabel}
-          demoIframeSrc={demoIframeSrc}
-          endTourLabel={overlayEndTourLabel}
-          headline={overlayHeadline}
-          heroImageAlt={heroImageAlt}
-          heroImageSrc={heroImageSrc}
-          onEndTour={() => setShowOverlay(false)}
-        />
-      </div>
     </div>
   );
 };
