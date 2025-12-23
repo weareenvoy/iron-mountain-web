@@ -19,7 +19,9 @@ const ProblemIntro = ({ beatId, data }: Props) => {
 
   return (
     <div className="absolute inset-0 flex items-center justify-center">
-      <div className={`font-geometria text-7xl ${isProblem2 ? 'animate-problem-exit' : ''}`}>
+      <div
+        className={`font-geometria text-8xl tracking-[-3.6px] text-white ${isProblem2 ? 'animate-problem-exit' : ''}`}
+      >
         {chars.map((char, i) => (
           <span
             className={isProblem2 ? '' : 'animate-char-in inline-block'}

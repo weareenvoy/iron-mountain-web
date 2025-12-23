@@ -15,7 +15,7 @@ const PossibilitiesTitle = ({ data }: Props) => {
 
   return (
     <div className="absolute inset-0 flex items-center justify-center">
-      <div className="animate-possibilities-title text-center font-geometria text-[80px] text-black">
+      <div className="animate-possibilities-title text-center font-geometria text-[80px] leading-[1.2] tracking-[-4px] text-primary-im-grey">
         {/* Each char animates in with jump */}
         {chars.map((char, i) => (
           <span

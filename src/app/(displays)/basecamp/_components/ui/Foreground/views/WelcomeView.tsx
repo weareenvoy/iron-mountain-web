@@ -12,7 +12,7 @@ const WelcomeView = ({ data }: Props) => {
   return (
     <div className="absolute top-1/2 left-8 flex -translate-y-1/2 items-center">
       <div
-        className="animate-welcome w-130 font-geometria text-[68px] leading-tight font-bold text-white"
+        className="animate-welcome w-130 font-geometria text-[68px] leading-tight font-bold tracking-[-3.4px] text-white"
         key={data.text}
       >
         {data.text}

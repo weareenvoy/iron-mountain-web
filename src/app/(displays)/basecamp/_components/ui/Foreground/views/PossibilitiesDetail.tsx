@@ -15,21 +15,21 @@ const PossibilitiesDetail = ({ data }: Props) => {
 
   return (
     // Use key to force remount when data changes
-    <div className="absolute inset-0 text-black" key={data.title}>
+    <div className="text-primary-im-grey absolute inset-0" key={data.title}>
       {/* Title: slide up from below */}
-      <div className="animate-slide-up absolute top-24 right-0 left-56 font-geometria text-[55px] font-bold">
+      <div className="animate-slide-up absolute top-26 right-0 left-56 font-geometria text-6xl tracking-[-3px]">
         {data.title}
       </div>
 
       {/* 3 body blocks: Each block shows up word by word */}
-      <div className="absolute bottom-20 flex justify-start gap-12 px-20">
+      <div className="absolute bottom-20 flex justify-start gap-38.5 px-20">
         {bodyItems.map((bodyText, index) => {
           const baseDelay = BODY_BLOCK_DELAYS_MS[index] ?? 0;
           const words = bodyText.split(' ');
 
           return (
             <div className="space-y-2 text-center" key={`${data.title}-body-${index}`}>
-              <p className="w-120 text-left text-4xl">
+              <p className="w-120 text-left text-[40px] leading-[1.3] tracking-[-2px]">
                 {words.map((word, i) => (
                   <span
                     className="animate-char-in inline-block"

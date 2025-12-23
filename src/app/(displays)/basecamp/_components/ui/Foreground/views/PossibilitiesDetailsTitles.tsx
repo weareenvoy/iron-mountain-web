@@ -5,7 +5,7 @@ type Props = {
 };
 
 // Animation timing constants
-const BLOCK_DELAYS_MS = [2000, 3500, 5000] as const;
+const BLOCK_DELAYS_MS = [2000, 3400, 4800] as const;
 const WORD_STAGGER_MS = 100 as const;
 
 // 3 blocks of text. First shows up in left, second in center, third in right

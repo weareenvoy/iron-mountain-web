@@ -40,9 +40,9 @@ const Problem4 = ({ data }: Props) => {
   const mainTitleWords = data.title.split(' ');
 
   return (
-    <div className="flex h-full w-full flex-row items-center justify-between px-20 text-black">
+    <div className="text-primary-im-grey flex h-full w-full flex-row items-center justify-between px-20">
       {/* Main title: word by word */}
-      <div className="mt-60 h-full w-140 font-geometria text-[66px] leading-tight">
+      <div className="mt-60 h-full w-140 font-geometria text-[66px] leading-[1.3]">
         {mainTitleWords.map((word, i) => (
           <span
             className="animate-char-in inline-block"
@@ -62,14 +62,14 @@ const Problem4 = ({ data }: Props) => {
           const bodyWords = challenge.body.split(' ');
 
           return (
-            <div className="flex w-150 flex-col items-center gap-6" key={`challenge-${index}`}>
+            <div className="flex w-150 flex-col items-center gap-6.5" key={`challenge-${index}`}>
               {/* Blue background grows horizontally - fits content width */}
               <div
-                className="animate-grow-x bg-primary-im-dark-blue inline-flex items-center justify-center rounded-full px-4 py-2"
+                className="animate-grow-x bg-primary-im-dark-blue inline-flex items-center justify-center rounded-full px-6.5 py-2"
                 style={{ animationDelay: `${blockStart}ms` }}
               >
                 {/* Title text: show up word by word */}
-                <p className="text-2xl font-semibold whitespace-nowrap text-white">
+                <p className="text-[33px] tracking-[-1.6px] whitespace-nowrap text-white">
                   {cardTitleWords.map((word, i) => (
                     <span
                       className="animate-char-in inline-block"
@@ -88,11 +88,11 @@ const Problem4 = ({ data }: Props) => {
                 className="animate-scale-fade-in flex items-center justify-center"
                 style={{ animationDelay: `${getCardIconDelay(blockStart)}ms` }}
               >
-                <Image alt={challenge.title} height={300} src={challenge.icon} width={300} />
+                <Image alt={challenge.title} height={267} src={challenge.icon} width={267} />
               </div>
 
               {/* Body: word by word */}
-              <div className="w-68 text-center text-[20px] text-black">
+              <div className="text-primary-im-grey w-83 text-center text-[27px] leading-[1.3] tracking-[-1.3px]">
                 {bodyWords.map((word, i) => (
                   <span
                     className="animate-char-in inline-block"

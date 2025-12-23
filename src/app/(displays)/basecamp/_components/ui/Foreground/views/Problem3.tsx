@@ -7,8 +7,8 @@ type Props = {
 };
 
 // Animation timing constants
-const BLOCK_DELAYS_MS = [4000, 5500, 7000] as const;
-const CHAR_STAGGER_MS = 30 as const;
+const BLOCK_DELAYS_MS = [3900, 5400, 6900] as const;
+const WORD_STAGGER_MS = 100 as const;
 const LAST_BLOCK_OFFSET_PX = -50 as const;
 
 // 3 locks of text. First shows up in left, second in center, third in right
@@ -18,7 +18,6 @@ const Problem3 = ({ data }: Props) => {
     <div className="absolute inset-0 flex">
       {data.map((item, index) => {
         const baseDelay = BLOCK_DELAYS_MS[index] ?? 0;
-        const subtitleChars = item.percentSubtitle.split('');
         const isLastBlock = index === data.length - 1;
 
         return (
@@ -28,25 +27,26 @@ const Problem3 = ({ data }: Props) => {
           >
             {/* Add margin-left to last div to match design */}
             <div
-              className="space-y-2 text-center"
+              className="mt-10 space-y-1 text-center"
               style={isLastBlock ? { marginLeft: `${LAST_BLOCK_OFFSET_PX}px` } : undefined}
             >
               {/* Percent fades in */}
               <div
-                className="animate-fade-in text-8xl font-bold opacity-0"
+                className="animate-fade-in h-28 text-[86px] tracking-[-4.3px] opacity-0"
                 style={{ animationDelay: `${baseDelay}ms` }}
               >
                 {item.percent}
               </div>
-              {/* Subtitle: char by char with small jump */}
-              <div className="text-2xl">
-                {subtitleChars.map((char, i) => (
+              {/* Subtitle: word by word with small jump */}
+              <div className="min-h-22 w-80 text-center font-interstate text-[33px] leading-[1.3] tracking-[-1.6px]">
+                {item.percentSubtitle.split(' ').map((word, i, arr) => (
                   <span
                     className="animate-char-in inline-block"
                     key={i}
-                    style={{ animationDelay: `${baseDelay + i * CHAR_STAGGER_MS}ms` }}
+                    style={{ animationDelay: `${baseDelay + i * WORD_STAGGER_MS}ms` }}
                   >
-                    {char === ' ' ? '\u00A0' : char}
+                    {word}
+                    {i < arr.length - 1 && '\u00A0'}
                   </span>
                 ))}
               </div>

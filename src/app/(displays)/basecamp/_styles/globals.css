@@ -6,6 +6,7 @@
   /* Custom (Basecamp-only) */
   /* e.g. --basecamp-accent: #...; */
   --primary-im-dark-blue: #14477d;
+  --primary-im-grey: #58595b;
 }
 
 [data-theme='dark'] [data-app='displays-basecamp'],
@@ -19,6 +20,7 @@
 
 @theme inline {
   --color-primary-im-dark-blue: var(--primary-im-dark-blue);
+  --color-primary-im-grey: var(--primary-im-grey);
 }
 
 @source '../**/**/**/*.{ts,tsx}';
