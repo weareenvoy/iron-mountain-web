@@ -206,17 +206,16 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                       <span
                         className={
                           isActive
-                            ? 'text-[61px] leading-[1.3] tracking-[-3px] text-[#14477d]'
-                            : 'text-[43px] leading-[1.3] tracking-[-2.1px] text-[#ededed]'
+                            ? 'w-[340px] text-[61px] leading-[1.3] tracking-[-3px] text-[#14477d]'
+                            : 'w-[300px] text-[43px] leading-[1.3] tracking-[-2.1px] text-[#ededed]'
                         }
-                        style={{ width: isActive ? '340px' : '300px' }}
                       >
                         {renderRegisteredMark(step.label)}
                       </span>
                       {isActive ? (
                         <div
                           aria-label="Open details"
-                          className="absolute inset-0 flex cursor-pointer items-center justify-center"
+                          className="absolute inset-0 flex cursor-pointer items-center justify-center pr-[5px] pt-[490px]"
                           onClick={event => {
                             event.stopPropagation();
                             onStepClick(idx);
@@ -229,7 +228,6 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                             }
                           }}
                           role="button"
-                          style={{ paddingRight: '5px', paddingTop: '490px' }}
                           tabIndex={0}
                         >
                           <CirclePlus className="h-[80px] w-[80px] text-[#14477d]" />
@@ -242,27 +240,22 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
             );
           })}
         </CarouselContent>
-        <div
-          className="pointer-events-none absolute inset-x-0 -bottom-[220px] flex items-center justify-center gap-[48px]"
-          style={{ bottom: '-290px' }}
-        >
+        <div className="pointer-events-none absolute inset-x-0 bottom-[-290px] flex items-center justify-center gap-[48px]">
           <button
             aria-label="Previous"
-            className="pointer-events-auto flex h-[64px] w-[64px] items-center justify-center text-white transition-transform duration-150 hover:scale-110"
+            className="pointer-events-auto flex h-[102px] w-[102px] mr-[25px] items-center justify-center text-white transition-transform duration-150 hover:scale-110"
             onClick={handlePrev}
-            style={{ height: '102px', marginRight: '25px', width: '102px' }}
             type="button"
           >
-            <ChevronLeft className="h-[36px] w-[36px]" style={{ height: '102px', width: '102px' }} />
+            <ChevronLeft className="h-[102px] w-[102px]" />
           </button>
           <button
             aria-label="Next"
-            className="pointer-events-auto flex h-[64px] w-[64px] items-center justify-center text-white transition-transform duration-150 hover:scale-110"
+            className="pointer-events-auto flex h-[102px] w-[102px] ml-[25px] items-center justify-center text-white transition-transform duration-150 hover:scale-110"
             onClick={handleNext}
-            style={{ height: '102px', marginLeft: '25px', width: '102px' }}
             type="button"
           >
-            <ChevronRight className="h-[36px] w-[36px]" style={{ height: '102px', width: '102px' }} />
+            <ChevronRight className="h-[102px] w-[102px]" />
           </button>
         </div>
       </Carousel>

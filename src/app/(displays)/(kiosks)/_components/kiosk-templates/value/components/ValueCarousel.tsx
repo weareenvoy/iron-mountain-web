@@ -1,13 +1,13 @@
 'use client';
 
 import useEmblaCarousel from 'embla-carousel-react';
-import { useEffect, type CSSProperties } from 'react';
+import { useEffect } from 'react';
 import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
 import DiamondStack, { type DiamondStackVariant } from '../DiamondStack';
 import type { ValueCarouselSlide, ValueDiamondCard } from '../valueCarouselTemplate';
 
 type ValueCarouselProps = {
-  readonly carouselColumnStyle?: CSSProperties;
+  readonly hasCarouselSlides?: boolean;
   readonly onRegisterCarouselHandlers?: (handlers: {
     canScrollNext: () => boolean;
     canScrollPrev: () => boolean;
@@ -17,7 +17,7 @@ type ValueCarouselProps = {
   readonly slides: readonly ValueCarouselSlide[];
 };
 
-const ValueCarousel = ({ carouselColumnStyle, onRegisterCarouselHandlers, slides }: ValueCarouselProps) => {
+const ValueCarousel = ({ hasCarouselSlides, onRegisterCarouselHandlers, slides }: ValueCarouselProps) => {
   const [emblaRef, emblaApi] = useEmblaCarousel({ align: 'start', loop: false });
 
   const getBulletItems = (slide: ValueCarouselSlide) =>
@@ -35,7 +35,9 @@ const ValueCarousel = ({ carouselColumnStyle, onRegisterCarouselHandlers, slides
   }, [emblaApi, onRegisterCarouselHandlers]);
 
   return (
-    <div className="flex flex-col items-end gap-[80px]" style={carouselColumnStyle}>
+    <div
+      className={`flex flex-col items-end gap-[80px] ${hasCarouselSlides ? 'relative left-[-330px] self-baseline' : ''}`}
+    >
       <div className="w-full overflow-hidden" ref={emblaRef}>
         <div className="flex w-full">
           {slides.map(slide => {

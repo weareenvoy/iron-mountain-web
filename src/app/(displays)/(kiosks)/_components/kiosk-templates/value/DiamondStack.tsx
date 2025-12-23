@@ -1,4 +1,3 @@
-import { type CSSProperties } from 'react';
 import renderRegisteredMark from '../challenge/utils/renderRegisteredMark';
 import { getDiamondIcon, type ValueDiamondCard } from './valueCarouselTemplate';
 
@@ -6,14 +5,14 @@ export type DiamondStackVariant = 'carousel' | 'overview';
 
 const diamondLayouts: Record<
   DiamondStackVariant,
-  Readonly<{ containerStyle?: CSSProperties; positions: readonly number[] }>
+  Readonly<{ className?: string; positions: readonly number[] }>
 > = {
   carousel: {
-    containerStyle: { left: -330, position: 'relative' },
+    className: 'relative left-[-330px]',
     positions: [335, 490, 650],
   },
   overview: {
-    containerStyle: undefined,
+    className: undefined,
     positions: [0, 565, 1130],
   },
 } as const;
@@ -27,7 +26,7 @@ const DiamondStack = ({ cards, variant = 'overview' }: DiamondStackProps) => {
   const layout = diamondLayouts[variant];
 
   return (
-    <div className="relative flex h-[565px] w-[920px] items-center" style={layout.containerStyle}>
+    <div className={`relative flex h-[565px] w-[920px] items-center ${layout.className ?? ''}`}>
       {cards.map((card, index) => {
         const Icon = getDiamondIcon(card);
         const fallbackColor = card.color ?? '#8a0d71';

@@ -102,7 +102,7 @@ const SolutionSecondScreenTemplate = ({
       </h2>
 
       {/* Solution label */}
-      <div className="absolute relative top-[180px] top-[710px] left-[150px] z-[1] flex group-data-[kiosk=kiosk-3]/kiosk:top-[720px] group-data-[kiosk=kiosk-3]/kiosk:left-[140px]">
+      <div className="absolute top-[710px] left-[150px] z-1 flex group-data-[kiosk=kiosk-3]/kiosk:top-[720px] group-data-[kiosk=kiosk-3]/kiosk:left-[140px]">
         <div className="relative top-[25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
           <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
         </div>

@@ -8,7 +8,6 @@ export type DiamondProps = {
   readonly sizeClass?: string;
   readonly textColor?: string;
   readonly textWrapperClassName?: string;
-  readonly textWrapperStyles?: Record<string, string>;
 };
 
 const Diamond = ({
@@ -18,7 +17,6 @@ const Diamond = ({
   sizeClass = 'size-[666px]',
   textColor = '#ededed',
   textWrapperClassName,
-  textWrapperStyles,
 }: DiamondProps) => {
   return (
     <div className={`absolute ${className}`}>
@@ -30,11 +28,10 @@ const Diamond = ({
           className={`absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center text-center ${
             textWrapperClassName ?? 'w-[600px]'
           }`}
-          style={textWrapperStyles}
         >
           <span
-            className="text-[67px] leading-[1.4] font-normal tracking-[-3.3px] text-[#ededed]"
-            style={textColor !== '#ededed' ? { color: textColor } : undefined}
+            className="text-[67px] leading-[1.4] font-normal tracking-[-3.3px]"
+            style={{ color: textColor }}
           >
             {renderRegisteredMark(label)}
           </span>

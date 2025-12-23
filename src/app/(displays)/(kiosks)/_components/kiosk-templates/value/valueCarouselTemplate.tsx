@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useId, type ComponentType, type CSSProperties, type SVGProps } from 'react';
+import { useId, type ComponentType, type SVGProps } from 'react';
 import BlueFilledDiamond from '@/components/ui/icons/Kiosks/Solutions/BlueFilledDiamond';
 import OrangeFilledDiamond from '@/components/ui/icons/Kiosks/Solutions/OrangeFilledDiamond';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
@@ -146,9 +146,6 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
     slide.bullets?.filter(entry => entry && entry.trim().length > 0) ?? [];
 
   const hasCarouselSlides = slidesWithDefaults.some(slide => getBulletItems(slide).length > 0);
-  const carouselColumnStyle: CSSProperties | undefined = hasCarouselSlides
-    ? { alignSelf: 'baseline', left: -330, position: 'relative' }
-    : undefined;
 
   return (
     <div
@@ -209,7 +206,7 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
             </p>
           </div>
           <ValueCarousel
-            carouselColumnStyle={carouselColumnStyle}
+            hasCarouselSlides={hasCarouselSlides}
             onRegisterCarouselHandlers={onRegisterCarouselHandlers}
             slides={slidesWithDefaults}
           />

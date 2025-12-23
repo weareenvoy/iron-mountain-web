@@ -50,22 +50,24 @@ const CircularCarousel = ({ children, slides }: CircularCarouselProps) => {
           </div>
 
           {/* Dots */}
-          {[
-            { left: '50%', top: '0%' },
-            { left: '95%', top: '28%' },
-            { left: '94%', top: '73%' },
-            { left: '52%', top: '100%' },
-            { left: '7%', top: '73%' },
-            { left: '7%', top: '27%' },
-          ].map((pos, i) => (
-            <div
-              className="absolute"
-              key={i}
-              style={{ left: pos.left, top: pos.top, transform: 'translate(-50%, -50%)' }}
-            >
-              <div className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]" />
-            </div>
-          ))}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
+            <div className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]" />
+          </div>
+          <div className="absolute top-[28%] left-[95%] -translate-x-1/2 -translate-y-1/2">
+            <div className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]" />
+          </div>
+          <div className="absolute top-[73%] left-[94%] -translate-x-1/2 -translate-y-1/2">
+            <div className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]" />
+          </div>
+          <div className="absolute top-full left-[52%] -translate-x-1/2 -translate-y-1/2">
+            <div className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]" />
+          </div>
+          <div className="absolute top-[73%] left-[7%] -translate-x-1/2 -translate-y-1/2">
+            <div className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]" />
+          </div>
+          <div className="absolute top-[27%] left-[7%] -translate-x-1/2 -translate-y-1/2">
+            <div className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]" />
+          </div>
 
           {/* Arrows */}
           <button

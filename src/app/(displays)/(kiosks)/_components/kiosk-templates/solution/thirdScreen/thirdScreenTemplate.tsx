@@ -51,7 +51,6 @@ const SolutionThirdScreenTemplate = ({
     outline?: ComponentType<SVGProps<SVGSVGElement>>;
     sizeClass?: string;
     textWrapperClassName?: string;
-    textWrapperStyles?: Record<string, string>;
   };
 
   const textDiamonds: ReadonlyArray<TextDiamondConfig> = [
@@ -60,8 +59,7 @@ const SolutionThirdScreenTemplate = ({
       label: centerLabel,
       outline: GreenDiamondThird,
       sizeClass: 'size-[910px]',
-      textWrapperClassName: 'w-[500px]',
-      textWrapperStyles: { left: '460px' },
+      textWrapperClassName: 'w-[500px] left-[460px]',
     },
     {
       className: 'left-[-270px] top-[880px]',
@@ -74,7 +72,7 @@ const SolutionThirdScreenTemplate = ({
       label: topRightLabel,
       outline: BlueDiamondThird,
       sizeClass: 'size-[900px]',
-      textWrapperStyles: { width: '700px' },
+      textWrapperClassName: 'w-[700px]',
     },
     {
       className: 'left-[245px] top-[1410px]',
@@ -125,7 +123,7 @@ const SolutionThirdScreenTemplate = ({
 
       {/* Diamond cluster */}
       <div className="absolute top-[1220px] left-[240px] h-[2800px] w-[1680px]">
-        {textDiamonds.map(({ className, label, outline, sizeClass, textWrapperClassName, textWrapperStyles }) =>
+        {textDiamonds.map(({ className, label, outline, sizeClass, textWrapperClassName }) =>
           label ? (
             <Diamond
               className={className}
@@ -135,7 +133,6 @@ const SolutionThirdScreenTemplate = ({
               sizeClass={sizeClass}
               textColor="#ededed"
               textWrapperClassName={textWrapperClassName}
-              textWrapperStyles={textWrapperStyles}
             />
           ) : null
         )}
