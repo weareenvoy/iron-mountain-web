@@ -3,7 +3,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
 import { buildChallengeSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeSlides';
 import {
   buildCustomInteractiveSlides,
@@ -21,12 +20,9 @@ import {
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueSlides';
 import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers/kiosk-provider';
 import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
-import type { Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 
 const Kiosk1View = () => {
-  const controller: Controller = useKioskController();
   const { data: kioskData } = useKiosk();
-  const [topIndex, setTopIndex] = useState(0);
   const [showArrows, setShowArrows] = useState(false);
   const [allowArrowsToShow, setAllowArrowsToShow] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -155,8 +151,9 @@ const Kiosk1View = () => {
     ]
   );
 
-  // Determine current section based on scroll target (more accurate than topIndex)
-  const currentSlide = slides[topIndex];
+  // Determine current section based on scroll target
+  const topIndex = slides.findIndex(slide => slide.id === currentScrollTarget);
+  const currentSlide = slides[topIndex >= 0 ? topIndex : 0];
   const currentSection = currentSlide?.id.split('-')[0] || 'challenge';
   const isInitialScreen = currentSlide?.id === 'challenge-initial';
 
@@ -285,35 +282,6 @@ const Kiosk1View = () => {
   // Arrows should be visible when showArrows is true (controlled by the effects above)
   const shouldShowArrows = showArrows && !isCustomInteractiveSection;
 
-  const scrollToSlide = useCallback((index: number) => {
-    if (!containerRef.current) return;
-
-    const slideHeight = containerRef.current.clientHeight;
-    const targetScroll = slideHeight * index;
-
-    containerRef.current.scrollTo({
-      behavior: 'smooth',
-      top: targetScroll,
-    });
-
-    setTopIndex(index);
-  }, []);
-
-  useEffect(() => {
-    // Override controller navigation with paragraph navigation
-    controller.setRootHandlers({
-      goTo: (i: number) => {
-        const targetIndex = Math.max(0, Math.min(i, slides.length - 1));
-        scrollToSlide(targetIndex);
-        return true;
-      },
-      next: handleNavigateDown,
-      prev: handleNavigateUp,
-    });
-
-    return () => controller.setRootHandlers(null);
-  }, [controller, handleNavigateDown, handleNavigateUp, scrollToSlide, slides.length]);
-
   // Focus container on mount to capture keyboard events
   useEffect(() => {
     if (containerRef.current) {
@@ -350,17 +318,13 @@ const Kiosk1View = () => {
       ref={containerRef}
       tabIndex={-1}
     >
-      <div className="flex w-full flex-col" data-top-index={topIndex}>
+      <div className="flex w-full flex-col">
         {/* Render ALL slides, always visible, stacked vertically */}
         {slides.map((slide, idx) => (
           <div className="h-screen w-full flex-shrink-0" data-slide-index={idx} key={slide.id}>
             {slide.render(idx === topIndex)}
           </div>
         ))}
-      </div>
-      <div className="absolute right-[12px] bottom-[12px] z-[1000] flex gap-2">
-        <button onClick={() => controller.prev()}>Prev</button>
-        <button onClick={() => controller.next()}>Next</button>
       </div>
 
       {/* Global Navigation Arrows */}

@@ -5,6 +5,13 @@ import Image from 'next/image';
 import { useState } from 'react';
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
+import HCBlueFilledDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCBlueFilledDiamond';
+import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCFilledOrangeDiamond';
+import HCFilledOrangeDiamond2 from '@/components/ui/icons/Kiosks/CustomInteractive/HCFilledOrangeDiamond2';
+import HCFilledTealDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCFilledTealDiamond';
+import HCHollowBlueDiamond2 from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowBlueDiamond2';
+import HCHollowGreenDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowGreenDiamond';
+import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowOrangeDiamond';
 import CircularCarousel, { type CarouselSlide } from './components/CircularCarousel';
 
 export type CustomInteractiveKiosk3ThirdScreenTemplateProps = {
@@ -106,18 +113,17 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
                 {current.primaryVideoSrc ? (
                   <video
                     autoPlay
-                    className="h-full w-full -rotate-[45deg] object-cover"
+                    className="h-full w-full origin-center -rotate-[45deg] scale-[1.35] object-cover"
                     loop
                     muted
                     playsInline
                     poster={current.primaryImageSrc}
-                  >
-                    <source src={current.primaryVideoSrc} type="video/mp4" />
-                  </video>
+                    src={current.primaryVideoSrc}
+                  />
                 ) : current.primaryImageSrc ? (
                   <Image
                     alt={current.primaryImageAlt}
-                    className="-rotate-[45deg] object-cover"
+                    className="origin-center -rotate-[45deg] scale-[1.35] object-cover"
                     fill
                     sizes="1200px"
                     src={current.primaryImageSrc}
@@ -130,13 +136,42 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
                 <div className={secondaryDiamondClass}>
                   <Image
                     alt={current.secondaryImageAlt}
-                    className="-rotate-[45deg] object-cover"
+                    className="origin-center -rotate-[45deg] scale-[1.35] object-cover"
                     fill
                     sizes="880px"
                     src={current.secondaryImageSrc}
                   />
                 </div>
               ) : null}
+
+              {/* Decorative SVG Diamonds - Slide 2 & 5 (Teal, Blue, Orange) */}
+              {(isSlide2 || isSlide5) && (
+                <>
+                  <HCFilledTealDiamond className="pointer-events-none absolute bottom-[670px] left-[-20px] h-[510px] w-[560px]" />
+                  <HCHollowBlueDiamond2 className="pointer-events-none absolute bottom-[-1560px] left-[-10px] h-[2400px] w-[2400px] overflow-visible" />
+                  <HCFilledOrangeDiamond2 className="pointer-events-none absolute bottom-[-1555px] left-[1100px] h-[1200px] w-[1200px] rotate-[45deg] overflow-visible" />
+                  <HCHollowOrangeDiamond className="pointer-events-none absolute bottom-[-980px] left-[1240px] h-[1800px] w-[1800px] overflow-visible" />
+                </>
+              )}
+
+              {/* Decorative SVG Diamonds - Slide 3 & 6 (Orange, Blue, Green) */}
+              {(isSlide3 || isSlide6) && (
+                <>
+                  <HCFilledOrangeDiamond
+                    className="pointer-events-none absolute bottom-[670px] left-[1880px] h-[450px] w-[450px]"
+                  />
+                  <HCHollowBlueDiamond2 className="pointer-events-none absolute bottom-[-1650px] left-[1290px] h-[2400px] w-[2400px] overflow-visible" />
+                  <HCHollowGreenDiamond className="pointer-events-none absolute bottom-[-1240px] left-[0px] h-[1800px] w-[1800px] overflow-visible" />
+                </>
+              )}
+
+              {/* Decorative SVG Diamonds - Slide 1 & 4 (Blue, Orange) */}
+              {!isSlide2 && !isSlide3 && !isSlide5 && !isSlide6 && (
+                <>
+                  <HCBlueFilledDiamond className="pointer-events-none absolute bottom-[590px] left-[490px] h-[510px] w-[560px]" />
+                  <HCHollowOrangeDiamond className="pointer-events-none absolute bottom-[-1755px] left-[650px] h-[2400px] w-[2400px] overflow-visible" />
+                </>
+              )}
             </>
           );
         }}
