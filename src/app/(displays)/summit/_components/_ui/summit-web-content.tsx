@@ -1,5 +1,6 @@
 'use client';
 
+import { ChevronDown } from 'lucide-react';
 import { ReactElement, useEffect, useMemo, useRef, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import { useSummit } from '@/app/(displays)/summit/_components/providers/summit-provider';
@@ -215,63 +216,92 @@ const SummitWebContent = () => {
 
   const filtersSlot = (
     <div className="flex w-full flex-col gap-3 pt-4">
-      <p className="text-sm text-muted-foreground">
-        Filter experiences using the drop-down menus below. Your results will update on this page.
+      <p className="text-sm text-[#58595B]">
+        Filter experiences using the drop-down menus below.
+        <br />
+        Your results will update on this page.
       </p>
       <div className="flex flex-col gap-3">
         <div className="grid gap-4 md:grid-cols-3">
           <div className="flex flex-col gap-1">
-            <label className="text-xs font-semibold text-muted-foreground">Year</label>
-            <select
-              className="w-full rounded-md border border-[#D0D0D3] bg-white px-3 py-2 text-sm text-[#12406A] transition outline-none focus:border-[#12406A] disabled:cursor-not-allowed disabled:bg-muted"
-              onChange={event => handleYearChange(event.target.value)}
-              value={selectedYear}
-            >
-              {availableYears.map(year => (
-                <option key={year} value={year}>
-                  {year}
-                </option>
-              ))}
-            </select>
+            <label className="text-xs font-semibold text-[#58595B]">Year</label>
+            <div className="relative">
+              <select
+                className={`w-full appearance-none rounded-lg bg-[#F2F2F2] px-4 py-3 pr-12 text-base transition outline-none ${
+                  selectedYear === '' ? 'text-[#58595B]' : 'text-[#14477D]'
+                } disabled:cursor-not-allowed disabled:bg-muted disabled:text-[#58595B]`}
+                onChange={event => handleYearChange(event.target.value)}
+                value={selectedYear}
+              >
+                {availableYears.map(year => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown
+                aria-hidden
+                className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-[#14477D]"
+                size={24}
+              />
+            </div>
           </div>
 
           <div className="flex flex-col gap-1">
-            <label className="text-xs font-semibold text-muted-foreground">Month</label>
-            <select
-              className="w-full rounded-md border border-[#D0D0D3] bg-white px-3 py-2 text-sm text-[#12406A] transition outline-none focus:border-[#12406A] disabled:cursor-not-allowed disabled:bg-muted"
-              disabled={isMonthDisabled}
-              onChange={event => handleMonthChange(event.target.value)}
-              value={selectedMonth}
-            >
-              <option value="">Select month</option>
-              {MONTHS.map((month, index) => {
-                const hasTours = monthAvailability.get(index) !== undefined;
-                return (
-                  <option disabled={!hasTours} key={month} value={index}>
-                    {month}
-                  </option>
-                );
-              })}
-            </select>
+            <label className="text-xs font-semibold text-[#58595B]">Month</label>
+            <div className="relative">
+              <select
+                className={`w-full appearance-none rounded-lg bg-[#F2F2F2] px-4 py-3 pr-12 text-base transition outline-none ${
+                  selectedMonth === '' ? 'text-[#58595B]' : 'text-[#14477D]'
+                } disabled:cursor-not-allowed disabled:bg-muted disabled:text-[#58595B]`}
+                disabled={isMonthDisabled}
+                onChange={event => handleMonthChange(event.target.value)}
+                value={selectedMonth}
+              >
+                <option value="">Select month</option>
+                {MONTHS.map((month, index) => {
+                  const hasTours = monthAvailability.get(index) !== undefined;
+                  return (
+                    <option disabled={!hasTours} key={month} value={index}>
+                      {month}
+                    </option>
+                  );
+                })}
+              </select>
+              <ChevronDown
+                aria-hidden
+                className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-[#14477D]"
+                size={24}
+              />
+            </div>
           </div>
 
           <div className="flex flex-col gap-1">
-            <label className="text-xs font-semibold text-muted-foreground">Experience</label>
-            <select
-              className="w-full rounded-md border border-[#D0D0D3] bg-white px-3 py-2 text-sm text-[#12406A] transition outline-none focus:border-[#12406A] disabled:cursor-not-allowed disabled:bg-muted"
-              disabled={isExperienceDisabled}
-              onChange={event => handleExperienceChange(event.target.value)}
-              value={selectedExperience}
-            >
-              <option value="">Select experience</option>
-              {toursByYearAndMonth.map(tour => {
-                return (
-                  <option key={tour.id} value={tour.id}>
-                    {tour.name}
-                  </option>
-                );
-              })}
-            </select>
+            <label className="text-xs font-semibold text-[#58595B]">Experience</label>
+            <div className="relative">
+              <select
+                className={`w-full appearance-none rounded-lg bg-[#F2F2F2] px-4 py-3 pr-12 text-base transition outline-none ${
+                  selectedExperience === '' ? 'text-[#58595B]' : 'text-[#14477D]'
+                } disabled:cursor-not-allowed disabled:bg-muted disabled:text-[#58595B]`}
+                disabled={isExperienceDisabled}
+                onChange={event => handleExperienceChange(event.target.value)}
+                value={selectedExperience}
+              >
+                <option value="">Select experience</option>
+                {toursByYearAndMonth.map(tour => {
+                  return (
+                    <option key={tour.id} value={tour.id}>
+                      {tour.name}
+                    </option>
+                  );
+                })}
+              </select>
+              <ChevronDown
+                aria-hidden
+                className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-[#14477D]"
+                size={24}
+              />
+            </div>
           </div>
         </div>
 
