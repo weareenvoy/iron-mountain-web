@@ -32,33 +32,62 @@ export function useGlobalParagraphNavigation({
 
   // Detect ALL paragraph sections in the entire container
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
+    let cleanupObserver: (() => void) | null = null;
+    
+    const setupObserver = () => {
+      const container = containerRef.current;
+      console.log('[useGlobalParagraphNavigation] Setting up observer, container:', container);
+      
+      if (!container) {
+        console.log('[useGlobalParagraphNavigation] No container yet, retrying in 50ms...');
+        setTimeout(setupObserver, 50);
+        return;
+      }
 
-    const detectAllParagraphs = () => {
-      const paragraphElements = Array.from(container.querySelectorAll<HTMLElement>('[data-scroll-section]'));
-      // Filter out elements with no text content, BUT keep video/media elements
-      const nonEmptyParagraphs = paragraphElements.filter(el => {
-        // Always include video, audio, img, or other media elements
-        if (el.tagName === 'VIDEO' || el.tagName === 'AUDIO' || el.tagName === 'IMG') {
-          return true;
+      const detectAllParagraphs = () => {
+        console.log('[useGlobalParagraphNavigation] detectAllParagraphs called');
+        const paragraphElements = Array.from(container.querySelectorAll<HTMLElement>('[data-scroll-section]'));
+        console.log('[useGlobalParagraphNavigation] Found paragraphElements:', paragraphElements.length, paragraphElements);
+        // Filter out elements with no text content, BUT keep video/media elements
+        const nonEmptyParagraphs = paragraphElements.filter(el => {
+          // Always include video, audio, img, or other media elements
+          if (el.tagName === 'VIDEO' || el.tagName === 'AUDIO' || el.tagName === 'IMG') {
+            return true;
+          }
+          // For text elements, check if they have content
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          const textContent = el.textContent?.trim() || '';
+          return textContent.length > 0;
+        });
+        console.log('[useGlobalParagraphNavigation] After filtering, nonEmptyParagraphs:', nonEmptyParagraphs.length);
+        setAllParagraphs(nonEmptyParagraphs);
+        
+        // If no paragraphs found, retry after a short delay
+        if (nonEmptyParagraphs.length === 0) {
+          console.log('[useGlobalParagraphNavigation] No paragraphs found, retrying in 100ms');
+          setTimeout(detectAllParagraphs, 100);
         }
-        // For text elements, check if they have content
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        const textContent = el.textContent?.trim() || '';
-        return textContent.length > 0;
+      };
+
+      // Initial detection
+      detectAllParagraphs();
+
+      // Re-detect on content changes
+      const observer = new MutationObserver(() => {
+        console.log('[useGlobalParagraphNavigation] MutationObserver triggered');
+        detectAllParagraphs();
       });
-      setAllParagraphs(nonEmptyParagraphs);
+      observer.observe(container, { childList: true, subtree: true });
+
+      cleanupObserver = () => observer.disconnect();
     };
+    
+    // Start trying to set up the observer
+    setupObserver();
 
-    // Initial detection
-    detectAllParagraphs();
-
-    // Re-detect on content changes
-    const observer = new MutationObserver(detectAllParagraphs);
-    observer.observe(container, { childList: true, subtree: true });
-
-    return () => observer.disconnect();
+    return () => {
+      if (cleanupObserver) cleanupObserver();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -161,11 +190,24 @@ export function useGlobalParagraphNavigation({
 
   // Handle navigate down
   const handleNavigateDown = useCallback(() => {
-    if (isScrollingRef.current) return;
+    console.log('[useGlobalParagraphNavigation] handleNavigateDown called');
+    console.log('[useGlobalParagraphNavigation] isScrollingRef.current:', isScrollingRef.current);
+    console.log('[useGlobalParagraphNavigation] currentIndex:', currentIndex);
+    console.log('[useGlobalParagraphNavigation] allParagraphs.length:', allParagraphs.length);
+    
+    if (isScrollingRef.current) {
+      console.log('[useGlobalParagraphNavigation] Already scrolling, ignoring');
+      return;
+    }
 
     const nextIndex = currentIndex + 1;
+    console.log('[useGlobalParagraphNavigation] nextIndex:', nextIndex);
+    
     if (nextIndex < allParagraphs.length) {
+      console.log('[useGlobalParagraphNavigation] Scrolling to paragraph at index:', nextIndex);
       scrollToParagraph(nextIndex);
+    } else {
+      console.log('[useGlobalParagraphNavigation] At end, cannot scroll further');
     }
     // If we're at the end, do nothing (or could loop back to start)
   }, [allParagraphs.length, currentIndex, scrollToParagraph]);
