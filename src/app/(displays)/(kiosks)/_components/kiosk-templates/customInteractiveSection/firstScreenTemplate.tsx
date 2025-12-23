@@ -78,7 +78,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
 
       {/* CTA buttons */}
       <div
-        className={`absolute top-[2220px] left-[245px] flex flex-col gap-[90px] group-data-[kiosk=kiosk-3]/kiosk:top-[2350px] ${ctaWidthClass}`}
+        className={`absolute top-[2220px] left-[245px] flex flex-col z-[10] gap-[90px] group-data-[kiosk=kiosk-3]/kiosk:top-[2350px] ${ctaWidthClass}`}
       >
         <button
           className="flex h-[200px] items-center justify-between rounded-[999px] bg-[#ededed] px-[100px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-[#14477d] shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-[19px] transition-transform duration-150 group-data-[kiosk=kiosk-2]/kiosk:hidden hover:scale-[1.01]"
