@@ -215,7 +215,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                       {isActive ? (
                         <div
                           aria-label="Open details"
-                          className="absolute inset-0 flex cursor-pointer items-center justify-center pr-[5px] pt-[490px]"
+                          className="absolute inset-0 flex cursor-pointer items-center justify-center pt-[490px] pr-[5px]"
                           onClick={event => {
                             event.stopPropagation();
                             onStepClick(idx);
@@ -243,7 +243,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
         <div className="pointer-events-none absolute inset-x-0 bottom-[-290px] flex items-center justify-center gap-[48px]">
           <button
             aria-label="Previous"
-            className="pointer-events-auto flex h-[102px] w-[102px] mr-[25px] items-center justify-center text-white transition-transform duration-150 hover:scale-110"
+            className="pointer-events-auto mr-[25px] flex h-[102px] w-[102px] items-center justify-center text-white transition-transform duration-150 hover:scale-110"
             onClick={handlePrev}
             type="button"
           >
@@ -251,7 +251,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
           </button>
           <button
             aria-label="Next"
-            className="pointer-events-auto flex h-[102px] w-[102px] ml-[25px] items-center justify-center text-white transition-transform duration-150 hover:scale-110"
+            className="pointer-events-auto ml-[25px] flex h-[102px] w-[102px] items-center justify-center text-white transition-transform duration-150 hover:scale-110"
             onClick={handleNext}
             type="button"
           >
