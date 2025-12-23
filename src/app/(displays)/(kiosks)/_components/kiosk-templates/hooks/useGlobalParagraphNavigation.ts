@@ -102,27 +102,19 @@ export function useGlobalParagraphNavigation({
         isScrollingRef.current = true;
         setIsScrolling(true);
         setCurrentScrollTarget(null);
-        const containerTop = container.scrollTop;
-        const start = performance.now();
+        
+        container.scrollTo({
+          behavior: 'smooth',
+          top: 0,
+        });
 
-        const animateScroll = (currentTime: number) => {
-          const elapsed = currentTime - start;
-          const progress = Math.min(elapsed / duration, 1);
-          const easeProgress = progress < 0.5 ? 2 * progress * progress : 1 - Math.pow(-2 * progress + 2, 2) / 2;
-
-          container.scrollTop = containerTop - containerTop * easeProgress;
-
-          if (progress < 1) {
-            requestAnimationFrame(animateScroll);
-          } else {
-            isScrollingRef.current = false;
-            setIsScrolling(false);
-            setCurrentScrollTarget(null);
-            setCurrentIndex(-1);
-          }
-        };
-
-        requestAnimationFrame(animateScroll);
+        // Wait for scroll to complete
+        setTimeout(() => {
+          isScrollingRef.current = false;
+          setIsScrolling(false);
+          setCurrentScrollTarget(null);
+          setCurrentIndex(-1);
+        }, duration);
         return;
       }
 
@@ -137,14 +129,11 @@ export function useGlobalParagraphNavigation({
         return;
       }
 
-      const containerTop = container.scrollTop;
-
       // Set the target section ID
       const targetId = targetParagraph.getAttribute('data-scroll-section');
       setCurrentScrollTarget(targetId);
 
       // Get element's position in the scrollable content (not viewport)
-      // We need to calculate the offset from the container's scrollable area
       let elementOffsetTop = 0;
       let currentElement: HTMLElement | null = targetParagraph;
 
@@ -164,25 +153,18 @@ export function useGlobalParagraphNavigation({
       // Target scroll position = element's position in content - desired offset from top
       const targetScroll = elementOffsetTop - topOffset;
 
-      const start = performance.now();
+      // Use native smooth scrolling
+      container.scrollTo({
+        behavior: 'smooth',
+        top: targetScroll,
+      });
 
-      const animateScroll = (currentTime: number) => {
-        const elapsed = currentTime - start;
-        const progress = Math.min(elapsed / duration, 1);
-        const easeProgress = progress < 0.5 ? 2 * progress * progress : 1 - Math.pow(-2 * progress + 2, 2) / 2;
-
-        container.scrollTop = containerTop + (targetScroll - containerTop) * easeProgress;
-
-        if (progress < 1) {
-          requestAnimationFrame(animateScroll);
-        } else {
-          isScrollingRef.current = false;
-          setIsScrolling(false);
-          setCurrentIndex(index);
-        }
-      };
-
-      requestAnimationFrame(animateScroll);
+      // Wait for scroll to complete
+      setTimeout(() => {
+        isScrollingRef.current = false;
+        setIsScrolling(false);
+        setCurrentIndex(index);
+      }, duration);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [allParagraphs, containerRef, currentIndex, duration]

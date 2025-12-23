@@ -49,7 +49,7 @@ const Kiosk2View = () => {
     scrollToSectionById,
   } = useGlobalParagraphNavigation({
     containerRef,
-    duration: 800,
+    duration: 1200,
   });
 
   // Wrap navigation handlers to check carousel first
@@ -248,7 +248,7 @@ const Kiosk2View = () => {
       const timer = setTimeout(() => {
         setShowArrows(true);
         setWasScrollingToVideo(false);
-      }, 1000); // SECTION TRANSITION DELAY: Adjust this to control reappearance between sections (Challenge ? Solution ? Value)
+      }, 300); // SECTION TRANSITION DELAY: Adjust this to control reappearance between sections (Challenge ? Solution ? Value)
       return () => clearTimeout(timer);
     }
     return undefined;
@@ -296,6 +296,13 @@ const Kiosk2View = () => {
     return () => controller.setRootHandlers(null);
   }, [controller, handleNavigateDown, handleNavigateUp, scrollToSlide, slides.length]);
 
+  // Focus container on mount to capture keyboard events
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.focus();
+    }
+  }, []);
+
   // Show loading state if no slides are available
   if (slides.length === 0) {
     return (
@@ -314,7 +321,19 @@ const Kiosk2View = () => {
     <div
       // className={styles.root}
       className="relative h-screen w-full overflow-y-auto scroll-smooth"
+      onKeyDown={event => {
+        // Prevent default arrow key scrolling to avoid jump before smooth scroll
+        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+          event.preventDefault();
+          if (event.key === 'ArrowDown') {
+            handleNavigateDown();
+          } else {
+            handleNavigateUp();
+          }
+        }
+      }}
       ref={containerRef}
+      tabIndex={-1}
     >
       <div className="flex w-full flex-col" data-top-index={topIndex}>
         {/* Render ALL slides, always visible, stacked vertically */}
