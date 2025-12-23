@@ -5,13 +5,13 @@ import { ArrowLeft, ChevronLeft, ChevronRight, CirclePlus, SquarePlay } from 'lu
 import NextImage from 'next/image';
 import { createPortal } from 'react-dom';
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
-import HardCodedDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/demoScreenTemplate';
+import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/shadcn/carousel';
-import HCBlueDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCBlueDiamond';
-import HCWhiteDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCWhiteDiamond';
+import HCBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCBlueDiamond';
+import HCWhiteDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCWhiteDiamond';
 import type { UseEmblaCarouselType } from 'embla-carousel-react';
 
-export type HardCodedKiosk1SecondScreenTemplateProps = {
+export type CustomInteractiveKiosk1SecondScreenTemplateProps = {
   readonly eyebrow?: string;
   readonly headline?: string;
   readonly heroImageAlt?: string;
@@ -44,7 +44,7 @@ const normalizeText = (value?: string): string => {
   return '';
 };
 
-const HardCodedKiosk1SecondScreenTemplate = ({
+const CustomInteractiveKiosk1SecondScreenTemplate = ({
   eyebrow,
   headline,
   heroImageAlt,
@@ -55,7 +55,7 @@ const HardCodedKiosk1SecondScreenTemplate = ({
   overlayHeadline,
   secondaryCtaLabel,
   steps,
-}: HardCodedKiosk1SecondScreenTemplateProps) => {
+}: CustomInteractiveKiosk1SecondScreenTemplateProps) => {
   const eyebrowText: string = normalizeText(eyebrow);
   const headlineText: string = normalizeText(headline);
   const normalizedSteps = steps ?? [];
@@ -206,7 +206,7 @@ const HardCodedKiosk1SecondScreenTemplate = ({
     <>
       <div
         className="relative flex h-screen w-full flex-col overflow-visible bg-transparent"
-        data-scroll-section="hardcoded-second-screen"
+        data-scroll-section="customInteractive-second-screen"
         ref={containerRef}
       >
         <div className="absolute inset-0 bg-transparent" />
@@ -249,7 +249,7 @@ const HardCodedKiosk1SecondScreenTemplate = ({
             showOverlay ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
           }`}
         >
-          <HardCodedDemoScreenTemplate
+          <CustomInteractiveDemoScreenTemplate
             cardLabel={overlayCardLabel}
             headline={overlayHeadline}
             heroImageAlt={heroImageAlt}
@@ -444,4 +444,4 @@ const HardCodedKiosk1SecondScreenTemplate = ({
   );
 };
 
-export default HardCodedKiosk1SecondScreenTemplate;
+export default CustomInteractiveKiosk1SecondScreenTemplate;

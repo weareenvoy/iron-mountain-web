@@ -3,11 +3,11 @@
 import { LogOut } from 'lucide-react';
 import Image from 'next/image';
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
-import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCFilledOrangeDiamond';
-import HCHollowBlueDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollowBlueDiamond';
-import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollowOrangeDiamond';
+import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCFilledOrangeDiamond';
+import HCHollowBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowBlueDiamond';
+import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowOrangeDiamond';
 
-export interface HardCodedDemoScreenTemplateProps {
+export interface CustomInteractiveDemoScreenTemplateProps {
   readonly backgroundEndColor?: string;
   readonly backgroundStartColor?: string;
   readonly cardBackgroundColor?: string;
@@ -24,7 +24,7 @@ export interface HardCodedDemoScreenTemplateProps {
   readonly onEndTour?: () => void;
 }
 
-const HardCodedDemoScreenTemplate = ({
+const CustomInteractiveDemoScreenTemplate = ({
   backgroundEndColor,
   backgroundStartColor,
   cardBackgroundColor,
@@ -39,7 +39,7 @@ const HardCodedDemoScreenTemplate = ({
   heroImageSrc,
   onCta,
   onEndTour,
-}: HardCodedDemoScreenTemplateProps) => {
+}: CustomInteractiveDemoScreenTemplateProps) => {
   const headlineText = headline;
   const cardText = cardLabel;
 
@@ -108,4 +108,4 @@ const HardCodedDemoScreenTemplate = ({
   );
 };
 
-export default HardCodedDemoScreenTemplate;
+export default CustomInteractiveDemoScreenTemplate;

@@ -8,6 +8,7 @@ import OrangeFilledDiamond from '@/components/ui/icons/Kiosks/Solutions/OrangeFi
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
 import PurpleFilledDiamond from '@/components/ui/icons/Kiosks/Solutions/PurpleFilledDiamond';
 import renderRegisteredMark from '../challenge/utils/renderRegisteredMark';
+import DiamondStack, { type DiamondStackVariant } from './DiamondStack';
 
 const fallbackDiamondCards: readonly ValueDiamondCard[] = [];
 const paletteColors = ['#8a0d71', '#1b75bc', '#f26522'] as const;
@@ -69,7 +70,7 @@ const diamondIconMap: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
   '#f26522': OrangeFilledDiamond,
 };
 
-const getDiamondIcon = (card: ValueDiamondCard) => {
+export const getDiamondIcon = (card: ValueDiamondCard) => {
   if (card.icon) return card.icon;
 
   const normalizedColor = card.color?.toLowerCase();
@@ -115,66 +116,6 @@ export type ValueCarouselTemplateProps = {
     scrollPrev: () => void;
   }) => void;
   readonly slides?: readonly ValueCarouselSlide[];
-};
-
-type DiamondStackVariant = 'carousel' | 'overview';
-
-const diamondLayouts: Record<
-  DiamondStackVariant,
-  Readonly<{ containerStyle?: CSSProperties; positions: readonly number[] }>
-> = {
-  carousel: {
-    containerStyle: { left: -330, position: 'relative' },
-    positions: [335, 490, 650],
-  },
-  overview: {
-    containerStyle: undefined,
-    positions: [0, 565, 1130],
-  },
-} as const;
-
-const DiamondStack = ({
-  cards,
-  variant = 'overview',
-}: Readonly<{ cards: readonly ValueDiamondCard[]; variant?: DiamondStackVariant }>) => {
-  const layout = diamondLayouts[variant];
-
-  return (
-    <div className="relative flex h-[565px] w-[920px] items-center" style={layout.containerStyle}>
-      {cards.map((card, index) => {
-        const Icon = getDiamondIcon(card);
-        const fallbackColor = card.color ?? '#8a0d71';
-        const leftOffset = layout.positions[index] ?? index * 160;
-
-        return (
-          <div
-            className="absolute h-[550px] w-[550px] rotate-[45deg] rounded-[80px]"
-            key={`${card.label ?? fallbackColor}-${index}`}
-            style={{ left: leftOffset }}
-          >
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="h-full w-full -rotate-[45deg]">
-                {Icon ? (
-                  <Icon aria-hidden className="h-full w-full" focusable="false" />
-                ) : (
-                  <div className="h-full w-full rounded-[80px]" style={{ backgroundColor: fallbackColor }} />
-                )}
-              </div>
-            </div>
-            {card.label ? (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div
-                  className="flex h-[320px] w-[320px] -rotate-[45deg] items-center justify-center px-10 text-center text-[48px] leading-[1.4] font-normal tracking-[-2.4px] text-[#ededed]"
-                >
-                  {renderRegisteredMark(card.label)}
-                </div>
-              </div>
-            ) : null}
-          </div>
-        );
-      })}
-    </div>
-  );
 };
 
 const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {

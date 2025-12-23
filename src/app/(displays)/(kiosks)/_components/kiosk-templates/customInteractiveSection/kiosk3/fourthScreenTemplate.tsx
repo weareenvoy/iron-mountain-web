@@ -2,11 +2,11 @@
 
 import Image from 'next/image';
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
-import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCFilledOrangeDiamond';
-import HCHollowBlueDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollowBlueDiamond';
-import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollowOrangeDiamond';
+import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCFilledOrangeDiamond';
+import HCHollowBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowBlueDiamond';
+import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowOrangeDiamond';
 
-export interface HardCodedKiosk3FourthScreenTemplateProps {
+export interface CustomInteractiveKiosk3FourthScreenTemplateProps {
   readonly cardLabel?: string;
   readonly headline?: string;
   readonly heroImageAlt?: string;
@@ -14,13 +14,13 @@ export interface HardCodedKiosk3FourthScreenTemplateProps {
   readonly onCta?: () => void;
 }
 
-const HardCodedKiosk3FourthScreenTemplate = ({
+const CustomInteractiveKiosk3FourthScreenTemplate = ({
   cardLabel,
   headline,
   heroImageAlt,
   heroImageSrc,
   onCta,
-}: HardCodedKiosk3FourthScreenTemplateProps) => {
+}: CustomInteractiveKiosk3FourthScreenTemplateProps) => {
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-[#1b75bc] to-[#05254b]" />
@@ -55,4 +55,4 @@ const HardCodedKiosk3FourthScreenTemplate = ({
   );
 };
 
-export default HardCodedKiosk3FourthScreenTemplate;
+export default CustomInteractiveKiosk3FourthScreenTemplate;

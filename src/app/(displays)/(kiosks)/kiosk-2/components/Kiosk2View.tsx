@@ -6,9 +6,9 @@ import { ArrowDown, ArrowUp } from 'lucide-react';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
 import { buildChallengeSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeSlides';
 import {
-  buildHardcodedSlides,
-  type HardCodedScreens,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/hardCodedTemplate';
+  buildCustomInteractiveSlides,
+  type CustomInteractiveScreens,
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/customInteractiveSlides';
 import { useGlobalParagraphNavigation } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useGlobalParagraphNavigation';
 import { type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
 import {
@@ -114,9 +114,9 @@ const Kiosk2View = () => {
     kioskContent?.valueMain && kioskContent.ambient
       ? (mapValue(kioskContent.valueMain, kioskContent.ambient) as ValueScreens)
       : null;
-  const hardCoded =
+  const customInteractive =
     kioskContent?.customInteractive2 && kioskContent.ambient
-      ? (mapHardcoded(kioskContent.customInteractive2, kioskContent.ambient) as HardCodedScreens)
+      ? (mapCustomInteractive(kioskContent.customInteractive2, kioskContent.ambient) as CustomInteractiveScreens)
       : null;
 
   // Pass the global handlers to all templates
@@ -126,7 +126,7 @@ const Kiosk2View = () => {
   };
 
   const slides: Slide[] =
-    challenges && solutions && values && hardCoded
+    challenges && solutions && values && customInteractive
       ? [
           ...buildChallengeSlides(
             challenges,
@@ -151,7 +151,7 @@ const Kiosk2View = () => {
               },
             }
           ),
-          ...buildHardcodedSlides(hardCoded, 'kiosk-2', scrollToSectionById),
+          ...buildCustomInteractiveSlides(customInteractive, 'kiosk-2', scrollToSectionById),
         ]
       : [];
 
@@ -161,7 +161,7 @@ const Kiosk2View = () => {
     hasChallenges: !!challenges,
     hasSolutions: !!solutions,
     hasValues: !!values,
-    hasHardCoded: !!hardCoded,
+    hasCustomInteractive: !!customInteractive,
   });
 
   // Determine current section based on slide ID
@@ -170,8 +170,8 @@ const Kiosk2View = () => {
   const isInitialScreen = currentSlide?.id === 'challenge-initial';
   const isValueSection =
     currentSection === 'value' || (currentScrollTarget && currentScrollTarget.startsWith('value-'));
-  const isHardcodedSection =
-    currentSection === 'hardcoded' || (currentScrollTarget && currentScrollTarget.startsWith('hardcoded-'));
+  const isCustomInteractiveSection =
+    currentSection === 'customInteractive' || (currentScrollTarget && currentScrollTarget.startsWith('customInteractive-'));
 
   // Show arrows only after scroll completes (INITIAL APPEARANCE from button click)
   useEffect(() => {
@@ -263,7 +263,7 @@ const Kiosk2View = () => {
   }, [isValueSection, showArrows]);
 
   // Arrows should be visible when showArrows is true (controlled by the effects above)
-  const shouldShowArrows = showArrows && !isHardcodedSection;
+  const shouldShowArrows = showArrows && !isCustomInteractiveSection;
 
   const scrollToSlide = useCallback((index: number) => {
     if (!containerRef.current) return;
@@ -455,7 +455,7 @@ type ValueContent = {
   mainVideo?: string;
 };
 
-type HardcodedContent = {
+type CustomInteractiveContent = {
   headline?: string;
   image?: string;
   secondaryCTA?: string;
@@ -614,13 +614,13 @@ const mapValue = (value: ValueContent, ambient: Ambient): ValueScreens => {
   };
 };
 
-const mapHardcoded = (hardcoded: HardcodedContent, ambient: Ambient): HardCodedScreens => ({
+const mapCustomInteractive = (customInteractive: CustomInteractiveContent, ambient: Ambient): CustomInteractiveScreens => ({
   firstScreen: {
     eyebrow: ambient.title,
-    headline: hardcoded.headline,
+    headline: customInteractive.headline,
     heroImageAlt: 'Healthcare professional working',
-    heroImageSrc: hardcoded.image,
+    heroImageSrc: customInteractive.image,
     primaryCtaLabel: undefined,
-    secondaryCtaLabel: hardcoded.secondaryCTA,
+    secondaryCtaLabel: customInteractive.secondaryCTA,
   },
 });

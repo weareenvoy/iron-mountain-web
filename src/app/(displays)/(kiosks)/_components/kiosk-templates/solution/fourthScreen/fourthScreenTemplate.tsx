@@ -1,6 +1,5 @@
 'use client';
 
-import { Minus, Plus } from 'lucide-react';
 import Image from 'next/image';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/shadcn/accordion';
 import GreenDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondFourth';
@@ -8,6 +7,8 @@ import OrangeDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/OrangeDi
 import OrangeGradientDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/OrangeGradientDiamondFourth';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
 import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
+import PhotoDiamond from './PhotoDiamond';
+import PlusMinusIcon from './PlusMinusIcon';
 
 type AccordionColor = 'blue' | 'lightBlue' | 'navy' | 'white';
 
@@ -241,39 +242,3 @@ const SolutionFourthScreenTemplate = ({
 
 export default SolutionFourthScreenTemplate;
 
-const PlusMinusIcon = ({ color }: { readonly color: string }) => {
-  return (
-    <span aria-hidden className="relative block h-[72px] w-[72px]" style={{ color }}>
-      <Minus
-        className="absolute inset-0 h-full w-full opacity-0 transition-opacity group-data-[state=open]/accordion-trigger:opacity-100"
-        strokeWidth={1.5}
-      />
-      <Plus
-        className="absolute inset-0 h-full w-full transition-opacity group-data-[state=open]/accordion-trigger:opacity-0"
-        strokeWidth={1.5}
-      />
-    </span>
-  );
-};
-
-const PhotoDiamond = ({
-  className,
-  imageAlt,
-  imageSrc,
-}: {
-  readonly className: string;
-  readonly imageAlt?: string;
-  readonly imageSrc?: string;
-}) => {
-  return (
-    <div className={className}>
-      <div className="relative size-full rotate-[45deg] overflow-hidden rounded-[160px]">
-        {imageSrc ? (
-          <Image alt={imageAlt ?? ''} className="-rotate-[45deg] object-cover" fill sizes="520px" src={imageSrc} />
-        ) : (
-          <div className="h-full w-full -rotate-[45deg] bg-[#6dcff6]" />
-        )}
-      </div>
-    </div>
-  );
-};

@@ -2,11 +2,11 @@
 
 import { ArrowLeft } from 'lucide-react';
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
-import BlueDot from '@/components/ui/icons/Kiosks/HardCoded/BlueDot';
-import InnerRing from '@/components/ui/icons/Kiosks/HardCoded/InnerRing';
-import OuterRing from '@/components/ui/icons/Kiosks/HardCoded/OuterRing';
+import BlueDot from '@/components/ui/icons/Kiosks/CustomInteractive/BlueDot';
+import InnerRing from '@/components/ui/icons/Kiosks/CustomInteractive/InnerRing';
+import OuterRing from '@/components/ui/icons/Kiosks/CustomInteractive/OuterRing';
 
-export interface HardCodedKiosk3SecondScreenTemplateProps {
+export interface CustomInteractiveKiosk3SecondScreenTemplateProps {
   readonly backgroundImageSrc?: string;
   readonly backLabel?: string;
   readonly description?: string;
@@ -18,7 +18,7 @@ export interface HardCodedKiosk3SecondScreenTemplateProps {
   readonly videoAsset?: string;
 }
 
-const HardCodedKiosk3SecondScreenTemplate = ({
+const CustomInteractiveKiosk3SecondScreenTemplate = ({
   backgroundImageSrc,
   backLabel,
   description,
@@ -28,7 +28,7 @@ const HardCodedKiosk3SecondScreenTemplate = ({
   onTapToBegin,
   tapToBeginLabel,
   videoAsset,
-}: HardCodedKiosk3SecondScreenTemplateProps) => {
+}: CustomInteractiveKiosk3SecondScreenTemplateProps) => {
   const eyebrowText = eyebrow;
   const headlineText = headline;
   const descriptionText = description;
@@ -36,7 +36,7 @@ const HardCodedKiosk3SecondScreenTemplate = ({
   return (
     <div
       className="relative flex h-screen w-full flex-col overflow-hidden"
-      data-scroll-section="hardcoded-second-screen"
+      data-scroll-section="customInteractive-second-screen"
     >
       <div className="absolute inset-0 bg-transparent" />
 
@@ -117,4 +117,4 @@ const HardCodedKiosk3SecondScreenTemplate = ({
   );
 };
 
-export default HardCodedKiosk3SecondScreenTemplate;
+export default CustomInteractiveKiosk3SecondScreenTemplate;

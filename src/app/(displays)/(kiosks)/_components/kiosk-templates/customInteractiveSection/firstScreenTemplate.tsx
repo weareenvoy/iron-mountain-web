@@ -2,12 +2,13 @@ import { SquarePlay } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
-import HardCodedDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/demoScreenTemplate';
-import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCFilledOrangeDiamond';
-import HCHollowBlueDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollowBlueDiamond';
-import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollowOrangeDiamond';
+import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
+import ArrowIcon from '@/components/ui/icons/Kiosks/CustomInteractive/ArrowIcon';
+import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCFilledOrangeDiamond';
+import HCHollowBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowBlueDiamond';
+import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowOrangeDiamond';
 
-export interface HardCodedKiosk1FirstScreenTemplateProps {
+export interface CustomInteractiveKiosk1FirstScreenTemplateProps {
   readonly eyebrow?: string;
   readonly headline?: string;
   readonly heroImageAlt?: string;
@@ -21,27 +22,7 @@ export interface HardCodedKiosk1FirstScreenTemplateProps {
   readonly secondaryCtaLabel?: string;
 }
 
-const ArrowIcon = () => (
-  <svg
-    aria-hidden="true"
-    className="h-[61px] w-[126px]"
-    fill="none"
-    height="61"
-    viewBox="0 0 126 61"
-    width="126"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M3 30.5h120M94.5 6l24 24.5-24 24.5"
-      stroke="#14477d"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="6"
-    />
-  </svg>
-);
-
-const HardCodedKiosk1FirstScreenTemplate = ({
+const CustomInteractiveKiosk1FirstScreenTemplate = ({
   eyebrow,
   headline,
   heroImageAlt,
@@ -53,7 +34,7 @@ const HardCodedKiosk1FirstScreenTemplate = ({
   overlayHeadline,
   primaryCtaLabel,
   secondaryCtaLabel,
-}: HardCodedKiosk1FirstScreenTemplateProps) => {
+}: CustomInteractiveKiosk1FirstScreenTemplateProps) => {
   const [showOverlay, setShowOverlay] = useState(false);
   const isKiosk1 = kioskId === 'kiosk-1';
   const eyebrowText = eyebrow;
@@ -74,7 +55,7 @@ const HardCodedKiosk1FirstScreenTemplate = ({
         isKiosk1 || isKiosk3 ? 'overflow-visible' : 'overflow-hidden'
       }`}
       data-kiosk={kioskId}
-      data-scroll-section="hardcoded-first-screen"
+      data-scroll-section="customInteractive-first-screen"
     >
       <div className="absolute inset-0 bg-gradient-to-b from-[#1b75bc] to-[#05254b] group-data-[kiosk=kiosk-1]/kiosk:h-[10530px] group-data-[kiosk=kiosk-3]/kiosk:h-[15630px]" />
 
@@ -86,7 +67,7 @@ const HardCodedKiosk1FirstScreenTemplate = ({
       {/* Headline */}
       <h1
         className="absolute top-[1250px] left-[250px] w-full text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed] group-data-[kiosk=kiosk-3]/kiosk:top-[830px]"
-        data-scroll-section="hardcoded-headline"
+        data-scroll-section="customInteractive-headline"
       >
         {renderRegisteredMark(headlineText)}
       </h1>
@@ -138,7 +119,7 @@ const HardCodedKiosk1FirstScreenTemplate = ({
           showOverlay ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         }`}
       >
-        <HardCodedDemoScreenTemplate
+        <CustomInteractiveDemoScreenTemplate
           cardLabel={overlayCardLabel}
           headline={overlayHeadline}
           heroImageAlt={heroImageAlt}
@@ -150,4 +131,4 @@ const HardCodedKiosk1FirstScreenTemplate = ({
   );
 };
 
-export default HardCodedKiosk1FirstScreenTemplate;
+export default CustomInteractiveKiosk1FirstScreenTemplate;

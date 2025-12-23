@@ -4,16 +4,16 @@ import { useState } from 'react';
 import { ChevronLeft, ChevronRight, SquarePlay } from 'lucide-react';
 import Image from 'next/image';
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
-import HardCodedDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/demoScreenTemplate';
-import HCBlueFilledDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCBlueFilledDiamond';
-import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCFilledOrangeDiamond';
-import HCFilledOrangeDiamond2 from '@/components/ui/icons/Kiosks/HardCoded/HCFilledOrangeDiamond2';
-import HCFilledTealDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCFilledTealDiamond';
-import HCHollowBlueDiamond2 from '@/components/ui/icons/Kiosks/HardCoded/HCHollowBlueDiamond2';
-import HCHollowGreenDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollowGreenDiamond';
-import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/HardCoded/HCHollowOrangeDiamond';
+import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
+import HCBlueFilledDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCBlueFilledDiamond';
+import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCFilledOrangeDiamond';
+import HCFilledOrangeDiamond2 from '@/components/ui/icons/Kiosks/CustomInteractive/HCFilledOrangeDiamond2';
+import HCFilledTealDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCFilledTealDiamond';
+import HCHollowBlueDiamond2 from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowBlueDiamond2';
+import HCHollowGreenDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowGreenDiamond';
+import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowOrangeDiamond';
 
-export interface HardCodedKiosk3ThirdScreenTemplateProps {
+export interface CustomInteractiveKiosk3ThirdScreenTemplateProps {
   readonly demoIframeSrc?: string;
   readonly endTourLabel?: string;
   readonly headline?: string;
@@ -37,7 +37,7 @@ type CarouselSlide = {
   sectionTitle: string;
 };
 
-const HardCodedKiosk3ThirdScreenTemplate = ({
+const CustomInteractiveKiosk3ThirdScreenTemplate = ({
   demoIframeSrc,
   endTourLabel,
   headline,
@@ -46,7 +46,7 @@ const HardCodedKiosk3ThirdScreenTemplate = ({
   overlayCardLabel,
   overlayHeadline,
   slides,
-}: HardCodedKiosk3ThirdScreenTemplateProps) => {
+}: CustomInteractiveKiosk3ThirdScreenTemplateProps) => {
   const [index, setIndex] = useState(0);
   const [showOverlay, setShowOverlay] = useState(false);
 
@@ -85,7 +85,7 @@ const HardCodedKiosk3ThirdScreenTemplate = ({
   return (
     <div
       className="relative flex h-screen w-full flex-col overflow-hidden"
-      data-scroll-section="hardcoded-third-screen"
+      data-scroll-section="customInteractive-third-screen"
     >
       <div className="absolute inset-0 bg-transparent" />
       <div className="absolute inset-0 bg-black/15 backdrop-blur-[12px]" />
@@ -247,7 +247,7 @@ const HardCodedKiosk3ThirdScreenTemplate = ({
           showOverlay ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         }`}
       >
-        <HardCodedDemoScreenTemplate
+        <CustomInteractiveDemoScreenTemplate
           cardLabel={overlayCardLabel}
           demoIframeSrc={demoIframeSrc}
           endTourLabel={endTourLabel}
@@ -261,4 +261,4 @@ const HardCodedKiosk3ThirdScreenTemplate = ({
   );
 };
 
-export default HardCodedKiosk3ThirdScreenTemplate;
+export default CustomInteractiveKiosk3ThirdScreenTemplate;

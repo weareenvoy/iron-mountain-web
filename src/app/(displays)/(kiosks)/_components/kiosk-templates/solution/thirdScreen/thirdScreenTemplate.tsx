@@ -1,15 +1,16 @@
 'use client';
 
-import { type ComponentType, type ReactNode, type SVGProps } from 'react';
-import Image from 'next/image';
+import { type ComponentType, type SVGProps } from 'react';
 import BlueDiamondThird from '@/components/ui/icons/Kiosks/Solutions/BlueDiamondThird';
 import GreenDiamondThird from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondThird';
 import GreenDiamondThird2 from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondThird2';
 import OrangeDiamondThird from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondThird';
 import OrangeDiamondThird2 from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondThird2';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
-import TealGradientDiamondThird from '@/components/ui/icons/Kiosks/Solutions/TealGradientDiamondThird';
 import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
+import Diamond from './components/Diamond';
+import FilledDiamond from './components/FilledDiamond';
+import MediaDiamond from './components/MediaDiamond';
 
 export type SolutionThirdScreenTemplateProps = {
   readonly accentDiamondSrc?: string;
@@ -26,24 +27,6 @@ export type SolutionThirdScreenTemplateProps = {
   readonly title?: string;
   readonly topLeftLabel?: string;
   readonly topRightLabel?: string;
-};
-
-type DiamondProps = {
-  readonly className: string;
-  readonly label?: string;
-  readonly outline?: ComponentType<SVGProps<SVGSVGElement>>;
-  readonly sizeClass?: string;
-  readonly textColor?: string;
-  readonly textWrapperClassName?: string;
-  readonly textWrapperStyles?: Record<string, string>;
-};
-
-type MediaDiamondProps = {
-  readonly className: string;
-  readonly fallback?: ReactNode;
-  readonly imageAlt?: string;
-  readonly imageSrc?: string;
-  readonly sizeClass?: string;
 };
 
 const SolutionThirdScreenTemplate = ({
@@ -189,74 +172,3 @@ const SolutionThirdScreenTemplate = ({
 
 export default SolutionThirdScreenTemplate;
 
-const Diamond = ({
-  className,
-  label,
-  outline: OutlineComponent,
-  sizeClass = 'size-[666px]',
-  textColor = '#ededed',
-  textWrapperClassName,
-  textWrapperStyles,
-}: DiamondProps) => {
-  return (
-    <div className={`absolute ${className}`}>
-      <div className={`relative ${sizeClass}`}>
-        {OutlineComponent ? (
-          <OutlineComponent aria-hidden="true" className="block h-full w-full object-contain" focusable="false" />
-        ) : null}
-        <div
-          className={`absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center text-center ${
-            textWrapperClassName ?? 'w-[600px]'
-          }`}
-          style={textWrapperStyles}
-        >
-          <span className="text-[67px] leading-[1.4] font-normal tracking-[-3.3px] text-[#ededed]" style={textColor !== '#ededed' ? { color: textColor } : undefined}>
-            {renderRegisteredMark(label)}
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const MediaDiamond = ({
-  className,
-  fallback,
-  imageAlt,
-  imageSrc,
-  sizeClass = 'size-[666px]',
-}: MediaDiamondProps) => {
-  return (
-    <div className={`absolute ${className}`}>
-      <div className={`relative ${sizeClass} rotate-[45deg] overflow-hidden rounded-[120px]`}>
-        {imageSrc ? (
-          <Image alt={imageAlt ?? ''} className="-rotate-[45deg] object-cover" fill sizes="900px" src={imageSrc} />
-        ) : (
-          <div className="flex h-full w-full -rotate-[45deg] items-center justify-center">{fallback}</div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-const FilledDiamond = ({
-  className,
-  imageAlt,
-  imageSrc,
-}: {
-  readonly className: string;
-  readonly imageAlt?: string;
-  readonly imageSrc?: string;
-}) => {
-  return (
-    <div className={`absolute ${className}`}>
-      <div className="relative size-[390px] rotate-[45deg]">
-        {imageSrc ? (
-          <Image alt={imageAlt ?? ''} className="-rotate-[45deg] object-cover" fill sizes="390px" src={imageSrc} />
-        ) : (
-          <TealGradientDiamondThird aria-hidden="true" className="h-full w-full -rotate-[45deg]" focusable="false" />
-        )}
-      </div>
-    </div>
-  );
-};

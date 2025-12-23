@@ -367,11 +367,11 @@ export interface KioskData {
   readonly data?: {
     readonly ambient?: unknown;
     readonly challenge?: unknown;
-    readonly hardcoded?: unknown;
+    readonly customInteractive?: unknown;
     readonly solutions?: unknown;
     readonly value?: unknown;
   };
-  readonly hardcoded?: unknown;
+  readonly customInteractive?: unknown;
   readonly locale?: string;
   // Allow any other properties
   readonly [key: string]: unknown;

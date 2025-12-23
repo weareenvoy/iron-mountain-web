@@ -59,7 +59,7 @@ const Kiosk3View = () => {
   // Note: `KioskData` is intentionally flexible (kiosk-1 nested vs kiosk-2/3 flat).
   // Your view/template layer is responsible for mapping/parsing the sections it needs.
   const challenges = data.challenges ?? data.challenge;
-  const hardcoded = data.hardcoded;
+  const customInteractive = data.customInteractive;
   const solutions = data.solutions;
   const value = data.value;
 
@@ -87,12 +87,12 @@ interface KioskData {
   readonly data?: {
     readonly ambient?: unknown;
     readonly challenge?: unknown;
-    readonly hardcoded?: unknown;
+    readonly customInteractive?: unknown;
     readonly solutions?: unknown;
     readonly value?: unknown;
   };
 
-  readonly hardcoded?: unknown;
+  readonly customInteractive?: unknown;
   readonly solutions?: unknown;
   readonly value?: unknown;
 }

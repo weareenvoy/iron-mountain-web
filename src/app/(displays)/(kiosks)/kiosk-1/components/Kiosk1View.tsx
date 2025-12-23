@@ -6,9 +6,9 @@ import { ArrowDown, ArrowUp } from 'lucide-react';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
 import { buildChallengeSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeSlides';
 import {
-  buildHardcodedSlides,
-  type HardCodedScreens,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hardCodedSection/hardCodedTemplate';
+  buildCustomInteractiveSlides,
+  type CustomInteractiveScreens,
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/customInteractiveSlides';
 import { useGlobalParagraphNavigation } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useGlobalParagraphNavigation';
 import { type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
 import {
@@ -110,9 +110,9 @@ const Kiosk1View = () => {
     kioskContent?.valueMain && kioskContent.ambient
       ? (mapValue(kioskContent.valueMain, kioskContent.ambient) as ValueScreens)
       : null;
-  const hardCoded =
+  const customInteractive =
     kioskContent?.customInteractive1Main && kioskContent.ambient
-      ? (mapHardcoded(kioskContent.customInteractive1Main, kioskContent.ambient) as HardCodedScreens)
+      ? (mapCustomInteractive(kioskContent.customInteractive1Main, kioskContent.ambient) as CustomInteractiveScreens)
       : null;
 
   // Pass the global handlers to all templates
@@ -122,7 +122,7 @@ const Kiosk1View = () => {
   };
 
   const slides: Slide[] =
-    challenges && solutions && values && hardCoded
+    challenges && solutions && values && customInteractive
       ? [
           ...buildChallengeSlides(
             challenges,
@@ -146,7 +146,7 @@ const Kiosk1View = () => {
               },
             }
           ),
-          ...buildHardcodedSlides(hardCoded, 'kiosk-1', scrollToSectionById),
+          ...buildCustomInteractiveSlides(customInteractive, 'kiosk-1', scrollToSectionById),
         ]
       : [];
 
@@ -158,7 +158,7 @@ const Kiosk1View = () => {
   // Also check if current scroll target is in value section
   const isValueSection =
     currentSection === 'value' || (currentScrollTarget && currentScrollTarget.startsWith('value-'));
-  const isHardcodedSection = currentSection === 'hardcoded';
+  const isCustomInteractiveSection = currentSection === 'customInteractive';
 
   // Track arrow color and persist it during fade transitions
   const [arrowColor, setArrowColor] = useState('#6DCFF6');
@@ -169,21 +169,21 @@ const Kiosk1View = () => {
     // Track if we were in value section
     if (isValueSection) {
       setWasInValueSection(true);
-    } else if (!currentScrollTarget || !currentScrollTarget.includes('hardcoded-')) {
-      // Only clear the flag if we're not transitioning to hardcoded
+    } else if (!currentScrollTarget || !currentScrollTarget.includes('customInteractive-')) {
+      // Only clear the flag if we're not transitioning to customInteractive
       setWasInValueSection(false);
     }
   }, [isValueSection, currentScrollTarget]);
 
   useEffect(() => {
-    // Only update color when arrows are visible AND not scrolling to hardcoded
-    const isScrollingToHardcoded = currentScrollTarget && currentScrollTarget.includes('hardcoded-');
+    // Only update color when arrows are visible AND not scrolling to customInteractive
+    const isScrollingToCustomInteractive = currentScrollTarget && currentScrollTarget.includes('customInteractive-');
 
-    if (showArrows && !isScrollingToHardcoded) {
+    if (showArrows && !isScrollingToCustomInteractive) {
       // Use current value section status
       setArrowColor(isValueSection ? '#58595B' : '#6DCFF6');
-    } else if (showArrows && isScrollingToHardcoded && wasInValueSection) {
-      // Preserve gray color when transitioning from value to hardcoded
+    } else if (showArrows && isScrollingToCustomInteractive && wasInValueSection) {
+      // Preserve gray color when transitioning from value to customInteractive
       setArrowColor('#58595B');
     }
   }, [isValueSection, showArrows, currentScrollTarget, wasInValueSection]);
@@ -238,18 +238,18 @@ const Kiosk1View = () => {
         currentScrollTarget.includes('-first-video') ||
         currentScrollTarget === 'value-carousel');
 
-    // Also detect scrolling to hardcoded section
-    const isScrollingToHardcoded = isScrolling && currentScrollTarget && currentScrollTarget.includes('hardcoded-');
+    // Also detect scrolling to customInteractive section
+    const isScrollingToCustomInteractive = isScrolling && currentScrollTarget && currentScrollTarget.includes('customInteractive-');
 
-    const shouldHideArrows = isScrollingToVideo || isScrollingToHardcoded;
+    const shouldHideArrows = isScrollingToVideo || isScrollingToCustomInteractive;
 
-    // Track when we START scrolling to a video or hardcoded section
+    // Track when we START scrolling to a video or customInteractive section
     if (shouldHideArrows && !wasScrollingToVideo) {
       setWasScrollingToVideo(true);
-      setShowArrows(false); // Hide arrows immediately when scrolling to video/hardcoded starts
+      setShowArrows(false); // Hide arrows immediately when scrolling to video/customInteractive starts
     }
 
-    // When scroll completes and we were scrolling to a video, reappear after delay (but NOT for hardcoded)
+    // When scroll completes and we were scrolling to a video, reappear after delay (but NOT for customInteractive)
     if (
       wasScrollingToVideo &&
       !isScrolling &&
@@ -257,9 +257,9 @@ const Kiosk1View = () => {
       (currentScrollTarget.includes('-video') ||
         currentScrollTarget.includes('-first-video') ||
         currentScrollTarget === 'value-carousel') &&
-      !currentScrollTarget.includes('hardcoded-') && // Don't reappear for hardcoded
+      !currentScrollTarget.includes('customInteractive-') && // Don't reappear for customInteractive
       allowArrowsToShow &&
-      !isHardcodedSection
+      !isCustomInteractiveSection
     ) {
       // Delay before arrows reappear after scrolling to a new section video
       const timer = setTimeout(() => {
@@ -269,15 +269,15 @@ const Kiosk1View = () => {
       return () => clearTimeout(timer);
     }
 
-    // Reset tracking state if we finish scrolling to hardcoded
-    if (wasScrollingToVideo && !isScrolling && currentScrollTarget?.includes('hardcoded-')) {
+    // Reset tracking state if we finish scrolling to customInteractive
+    if (wasScrollingToVideo && !isScrolling && currentScrollTarget?.includes('customInteractive-')) {
       setWasScrollingToVideo(false);
     }
     return undefined;
-  }, [isScrolling, currentScrollTarget, wasScrollingToVideo, allowArrowsToShow, isHardcodedSection]);
+  }, [isScrolling, currentScrollTarget, wasScrollingToVideo, allowArrowsToShow, isCustomInteractiveSection]);
 
   // Arrows should be visible when showArrows is true (controlled by the effects above)
-  const shouldShowArrows = showArrows && !isHardcodedSection;
+  const shouldShowArrows = showArrows && !isCustomInteractiveSection;
 
   const scrollToSlide = useCallback((index: number) => {
     if (!containerRef.current) return;
@@ -470,7 +470,7 @@ type ValueContent = {
   mainVideo?: string;
 };
 
-type HardcodedContent = {
+type CustomInteractiveContent = {
   backCTA?: string;
   body2?: string;
   diamondCarouselItems?: string[];
@@ -644,27 +644,27 @@ const mapValue = (value: ValueContent, ambient: Ambient): ValueScreens => {
   };
 };
 
-const mapHardcoded = (hardcoded: HardcodedContent, ambient: Ambient): HardCodedScreens => ({
+const mapCustomInteractive = (customInteractive: CustomInteractiveContent, ambient: Ambient): CustomInteractiveScreens => ({
   firstScreen: {
     eyebrow: ambient.title,
-    headline: hardcoded.headline,
+    headline: customInteractive.headline,
     heroImageAlt: 'Visitors smiling while viewing content',
-    heroImageSrc: hardcoded.image,
-    primaryCtaLabel: hardcoded.mainCTA,
-    secondaryCtaLabel: hardcoded.secondaryCTA,
+    heroImageSrc: customInteractive.image,
+    primaryCtaLabel: customInteractive.mainCTA,
+    secondaryCtaLabel: customInteractive.secondaryCTA,
   },
   secondScreen: {
-    backLabel: hardcoded.backCTA,
+    backLabel: customInteractive.backCTA,
     eyebrow: ambient.title,
-    headline: hardcoded.headline2 ?? 'From archive\nto access',
+    headline: customInteractive.headline2 ?? 'From archive\nto access',
     heroImageAlt: 'Archive visualization',
-    heroImageSrc: hardcoded.image,
-    secondaryCtaLabel: hardcoded.secondaryCTA,
-    steps: hardcoded.diamondCarouselItems?.map((item, index) => {
-      const modalBodyKey = `ModalBody${index + 1}` as keyof HardcodedContent;
-      const modalHeadlineKey = `ModalHeadline${index + 1}` as keyof HardcodedContent;
-      const modalBody = hardcoded[modalBodyKey] as string | undefined;
-      const modalHeadline = hardcoded[modalHeadlineKey] as string | undefined;
+    heroImageSrc: customInteractive.image,
+    secondaryCtaLabel: customInteractive.secondaryCTA,
+    steps: customInteractive.diamondCarouselItems?.map((item, index) => {
+      const modalBodyKey = `ModalBody${index + 1}` as keyof CustomInteractiveContent;
+      const modalHeadlineKey = `ModalHeadline${index + 1}` as keyof CustomInteractiveContent;
+      const modalBody = customInteractive[modalBodyKey] as string | undefined;
+      const modalHeadline = customInteractive[modalHeadlineKey] as string | undefined;
       return {
         label: item,
         modal: {
@@ -677,9 +677,9 @@ const mapHardcoded = (hardcoded: HardcodedContent, ambient: Ambient): HardCodedS
     }),
   },
   thirdScreen: {
-    cardLabel: hardcoded.secondaryCTA ?? 'Virtual walkthrough',
-    headline: hardcoded.body2 ?? 'Experience our solution\nin action',
+    cardLabel: customInteractive.secondaryCTA ?? 'Virtual walkthrough',
+    headline: customInteractive.body2 ?? 'Experience our solution\nin action',
     heroImageAlt: 'Digital transformation showcase',
-    heroImageSrc: hardcoded.image,
+    heroImageSrc: customInteractive.image,
   },
 });
