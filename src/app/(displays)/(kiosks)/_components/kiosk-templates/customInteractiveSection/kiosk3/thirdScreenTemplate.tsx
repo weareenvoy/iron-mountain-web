@@ -181,23 +181,10 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
         }}
       </CircularCarousel>
 
-      {/* Hero diamond image - always visible */}
-      {heroImageSrc ? (
-        <div className="pointer-events-none absolute bottom-[160px] left-[1100px] z-10 h-[1380px] w-[1380px] rotate-[45deg] overflow-hidden rounded-[140px]">
-          <Image
-            alt={heroImageAlt ?? 'Hero image'}
-            className="-rotate-[45deg] object-cover"
-            fill
-            sizes="680px"
-            src={heroImageSrc}
-          />
-        </div>
-      ) : null}
-
       {/* Overlay - Demo Screen */}
       <div
-        className={`absolute inset-0 z-[999] transition-opacity duration-700 ${
-          showOverlay ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
+        className={`absolute inset-0 transition-opacity duration-700 ${
+          showOverlay ? 'pointer-events-auto z-[999] opacity-100' : 'pointer-events-none opacity-0'
         }`}
       >
         <CustomInteractiveDemoScreenTemplate
