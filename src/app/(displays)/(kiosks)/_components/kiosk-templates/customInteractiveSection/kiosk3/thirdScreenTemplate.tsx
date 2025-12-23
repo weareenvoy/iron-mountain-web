@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import { SquarePlay } from 'lucide-react';
 import Image from 'next/image';
+import { useState } from 'react';
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
 import CircularCarousel, { type CarouselSlide } from './components/CircularCarousel';
@@ -17,7 +17,7 @@ export type CustomInteractiveKiosk3ThirdScreenTemplateProps = {
   readonly overlayCardLabel?: string;
   readonly overlayHeadline?: string;
   readonly slides?: CarouselSlide[];
-}
+};
 
 const CustomInteractiveKiosk3ThirdScreenTemplate = ({
   headline,
@@ -29,7 +29,7 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
 }: CustomInteractiveKiosk3ThirdScreenTemplateProps) => {
   const [showOverlay, setShowOverlay] = useState(false);
   const safeSlides = slides ?? [];
-  
+
   if (safeSlides.length === 0 || !headline) {
     return null;
   }

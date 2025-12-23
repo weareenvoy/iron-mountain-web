@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, type CSSProperties } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
+import { useEffect, type CSSProperties } from 'react';
 import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
 import DiamondStack, { type DiamondStackVariant } from '../DiamondStack';
 import type { ValueCarouselSlide, ValueDiamondCard } from '../valueCarouselTemplate';
@@ -71,4 +71,3 @@ const ValueCarousel = ({ carouselColumnStyle, onRegisterCarouselHandlers, slides
 };
 
 export default ValueCarousel;
-

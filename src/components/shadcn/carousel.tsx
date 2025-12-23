@@ -1,8 +1,16 @@
 'use client';
 
-import { createContext, forwardRef, useCallback, useContext, useEffect, useState, type ButtonHTMLAttributes, type HTMLAttributes } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
-
+import {
+  createContext,
+  forwardRef,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+  type ButtonHTMLAttributes,
+  type HTMLAttributes,
+} from 'react';
 import { cn } from '@/lib/tailwind/utils/cn';
 
 type EmblaApi = ReturnType<typeof useEmblaCarousel>[1];
@@ -70,9 +78,9 @@ Carousel.displayName = 'Carousel';
 
 type CarouselContentProps = HTMLAttributes<HTMLDivElement>;
 
-export const CarouselContent = forwardRef<HTMLDivElement, CarouselContentProps>(
-  ({ className, ...props }, ref) => <div className={cn('-ml-4 flex', className)} ref={ref} {...props} />
-);
+export const CarouselContent = forwardRef<HTMLDivElement, CarouselContentProps>(({ className, ...props }, ref) => (
+  <div className={cn('-ml-4 flex', className)} ref={ref} {...props} />
+));
 CarouselContent.displayName = 'CarouselContent';
 
 type CarouselItemProps = HTMLAttributes<HTMLDivElement>;

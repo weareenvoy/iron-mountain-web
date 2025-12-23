@@ -1,7 +1,7 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, CirclePlus } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/shadcn/carousel';
 import HCBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCBlueDiamond';
 import HCWhiteDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCWhiteDiamond';
@@ -202,9 +202,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                     ) : (
                       <HCWhiteDiamond aria-hidden className="h-full w-full" focusable="false" />
                     )}
-                    <div
-                      className="absolute top-1/2 left-1/2 flex h-[160px] w-[160px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/70 shadow-[0_10px_30px_rgba(0,0,0,0.2)]"
-                    >
+                    <div className="absolute top-1/2 left-1/2 flex h-[160px] w-[160px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/70 shadow-[0_10px_30px_rgba(0,0,0,0.2)]">
                       <CirclePlus aria-hidden className="h-[80px] w-[80px] text-[#14477d]" strokeWidth={2.4} />
                     </div>
                     <span
@@ -247,4 +245,3 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
 };
 
 export default StepCarousel;
-

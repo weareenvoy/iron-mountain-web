@@ -1,5 +1,3 @@
-
-
 const HCHollowBlueDiamond2 = (props: React.SVGProps<SVGSVGElement>) => (
   <svg {...props} fill="none" height="792" width="1007" xmlns="http://www.w3.org/2000/svg">
     <path

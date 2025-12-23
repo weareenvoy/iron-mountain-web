@@ -5,8 +5,8 @@ import { DEFAULT_KIOSK_ID, type KioskId } from '@/app/(displays)/(kiosks)/_types
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
 export type FirstScreenTemplateProps = {
-  readonly labelText?: string;
   readonly kioskId?: KioskId;
+  readonly labelText?: string;
   readonly onNavigateDown?: () => void;
   readonly onNavigateUp?: () => void;
   readonly problemDescription?: string;
@@ -17,10 +17,8 @@ export type FirstScreenTemplateProps = {
 };
 
 export const FirstScreenTemplate = ({
-  labelText,
   kioskId = DEFAULT_KIOSK_ID,
-  onNavigateDown: _onNavigateDown,
-  onNavigateUp: _onNavigateUp,
+  labelText,
   problemDescription,
   savingsAmount,
   savingsDescription,
@@ -28,10 +26,7 @@ export const FirstScreenTemplate = ({
   videoSrc,
 }: FirstScreenTemplateProps) => {
   return (
-    <div
-      className="group/kiosk relative flex h-screen w-full flex-col overflow-visible bg-black"
-      data-kiosk={kioskId}
-    >
+    <div className="group/kiosk relative flex h-screen w-full flex-col overflow-visible bg-black" data-kiosk={kioskId}>
       {/* Background gradient - stays behind all content */}
       <div className="pointer-events-none absolute inset-0 top-[1290px] z-[1] h-[14400px] rounded-[100px] bg-[linear-gradient(180deg,#1B75BC_0.01%,#14477D_98%)] group-data-[kiosk=kiosk-2]/kiosk:top-[1240px] group-data-[kiosk=kiosk-2]/kiosk:h-[14450px]" />
 
@@ -87,6 +82,5 @@ export const FirstScreenTemplate = ({
     </div>
   );
 };
-
 
 export default FirstScreenTemplate;

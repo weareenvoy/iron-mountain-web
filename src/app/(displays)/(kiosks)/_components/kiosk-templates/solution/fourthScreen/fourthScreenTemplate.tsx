@@ -53,11 +53,11 @@ const palettes: Record<AccordionColor, PaletteConfig> = {
 export type SolutionFourthScreenTemplateProps = {
   readonly accentDiamondSrc?: string;
   readonly accordionItems?: AccordionEntry[];
+  readonly labelText?: string;
   readonly mediaDiamondOutlineSrc?: string;
   readonly mediaDiamondSolidSrc?: string;
   readonly onNavigateDown?: () => void;
   readonly onNavigateUp?: () => void;
-  readonly labelText?: string;
   readonly subheadline?: string;
   readonly title?: string;
 };
@@ -65,11 +65,9 @@ export type SolutionFourthScreenTemplateProps = {
 const SolutionFourthScreenTemplate = ({
   accentDiamondSrc,
   accordionItems,
+  labelText,
   mediaDiamondOutlineSrc,
   mediaDiamondSolidSrc,
-  onNavigateDown: _onNavigateDown,
-  onNavigateUp: _onNavigateUp,
-  labelText,
   subheadline,
   title,
 }: SolutionFourthScreenTemplateProps) => {
@@ -81,30 +79,22 @@ const SolutionFourthScreenTemplate = ({
       <div className="absolute top-0 left-0 h-[5120px] w-full bg-transparent" />
 
       {/* Subheadline */}
-      <h2
-        className="absolute top-[400px] left-[120px] z-[1] w-[390px] -translate-y-full text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed]"
-      >
+      <h2 className="absolute top-[400px] left-[120px] z-[1] w-[390px] -translate-y-full text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed]">
         {renderRegisteredMark(subheadline)}
       </h2>
 
       {/* Solution label */}
-      <div
-        className="absolute top-[790px] z-[1] left-[140px] flex items-center gap-[41px]"
-      >
-        <div className="relative left-[-55px] top-[-25px] flex h-[200px] w-[200px] items-center justify-center">
+      <div className="absolute top-[790px] left-[140px] z-[1] flex items-center gap-[41px]">
+        <div className="relative top-[-25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
           <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
         </div>
-        <h1
-          className="relative left-[-100px] top-[-20px] text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]"
-        >
+        <h1 className="relative top-[-20px] left-[-100px] text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]">
           {labelText}
         </h1>
       </div>
 
       {/* Title */}
-      <div
-        className="absolute top-[1260px] left-[240px] z-10 w-[1300px]"
-      >
+      <div className="absolute top-[1260px] left-[240px] z-10 w-[1300px]">
         <p
           className="text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]"
           data-scroll-section="solution-fourth-title"
@@ -167,7 +157,7 @@ const SolutionFourthScreenTemplate = ({
                 <AccordionContent className="relative z-[1] [&>div]:pb-0">
                   {hasContent ? (
                     <div
-                      className="pl-[210px] pt-[35px] px-[80px] pb-[120px]"
+                      className="px-[80px] pt-[35px] pb-[120px] pl-[210px]"
                       style={{
                         backgroundColor: palette.body,
                         color: palette.text,
@@ -175,10 +165,7 @@ const SolutionFourthScreenTemplate = ({
                     >
                       <ul className="space-y-[16px] text-[52px] leading-[1.4] tracking-[-2.6px]">
                         {item.contentList?.map(bullet => (
-                          <li
-                            className="list-disc ms-[70px] ps-[15px] mb-0"
-                            key={bullet}
-                          >
+                          <li className="ms-[70px] mb-0 list-disc ps-[15px]" key={bullet}>
                             {renderRegisteredMark(bullet)}
                           </li>
                         ))}
@@ -241,4 +228,3 @@ const SolutionFourthScreenTemplate = ({
 };
 
 export default SolutionFourthScreenTemplate;
-

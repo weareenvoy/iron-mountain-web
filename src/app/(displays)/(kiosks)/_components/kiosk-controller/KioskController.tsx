@@ -63,14 +63,10 @@ export const KioskControllerProvider = ({
   }, []);
 
   const next = useCallback(() => {
-    console.log('[KioskController] next() called');
     const active = getActive();
-    console.log('[KioskController] Active handler:', active);
     if (active?.next) {
       try {
-        console.log('[KioskController] Calling active.next()');
         const handled = active.next();
-        console.log('[KioskController] Active.next() returned:', handled);
         if (handled === true) return;
       } catch (error) {
         console.error('[KioskController] Error in active.next():', error);
@@ -79,11 +75,8 @@ export const KioskControllerProvider = ({
     }
 
     // fallback to root/top-level handler
-    console.log('[KioskController] Checking root handler:', rootRef.current);
     if (rootRef.current?.next) {
-      console.log('[KioskController] Calling rootRef.current.next()');
       rootRef.current.next();
-      console.log('[KioskController] Root next() completed');
     } else {
       console.warn('[KioskController] No root handler available!');
     }

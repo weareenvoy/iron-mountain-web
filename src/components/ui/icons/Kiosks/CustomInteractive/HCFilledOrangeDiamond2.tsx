@@ -1,5 +1,3 @@
-
-
 const HCFilledOrangeDiamond2 = (props: React.SVGProps<SVGSVGElement>) => (
   <svg {...props} fill="none" height="449" width="294" xmlns="http://www.w3.org/2000/svg">
     <path

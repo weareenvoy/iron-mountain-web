@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useState } from 'react';
 
 export type CarouselSlide = {
   readonly bullets: string[];
@@ -17,20 +17,15 @@ export type CarouselSlide = {
 };
 
 type CircularCarouselProps = {
-  readonly children: (props: {
-    current: CarouselSlide;
-    index: number;
-    total: number;
-  }) => React.ReactNode;
+  readonly children: (props: { current: CarouselSlide; index: number; total: number }) => React.ReactNode;
   readonly slides: readonly CarouselSlide[];
 };
 
 const CircularCarousel = ({ children, slides }: CircularCarouselProps) => {
   const [index, setIndex] = useState(0);
-  const safeSlides = slides ?? [];
-  const total = safeSlides.length;
+  const total = slides.length;
   const currentIndex = total > 0 ? index % total : 0;
-  const current = safeSlides[currentIndex];
+  const current = slides[currentIndex];
 
   const goNext = () => setIndex(i => (i + 1) % total);
   const goPrev = () => setIndex(i => (i - 1 + total) % total);
@@ -96,4 +91,3 @@ const CircularCarousel = ({ children, slides }: CircularCarouselProps) => {
 };
 
 export default CircularCarousel;
-

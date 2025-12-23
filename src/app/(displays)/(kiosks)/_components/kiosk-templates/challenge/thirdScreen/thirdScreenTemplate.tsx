@@ -6,10 +6,10 @@ import { DEFAULT_KIOSK_ID, type KioskId } from '../../../../_types/kiosk-id';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
 
 export type ThirdScreenTemplateProps = {
-  readonly labelText?: string;
   readonly description?: string;
   readonly heroImageSrc?: string;
   readonly kioskId?: KioskId;
+  readonly labelText?: string;
   readonly largeIconCenterSrc?: string;
   readonly largeIconTopSrc?: string;
   readonly metricAmount?: string;
@@ -22,17 +22,15 @@ export type ThirdScreenTemplateProps = {
 };
 
 export const ThirdScreenTemplate = ({
-  labelText,
   description,
   heroImageSrc,
   kioskId = DEFAULT_KIOSK_ID,
+  labelText,
   largeIconCenterSrc,
   largeIconTopSrc,
   metricAmount,
   metricDescription,
   metricImageSrc,
-  onNavigateDown: _onNavigateDown,
-  onNavigateUp: _onNavigateUp,
   subheadline,
   videoSrc,
 }: ThirdScreenTemplateProps) => {
@@ -104,6 +102,5 @@ export const ThirdScreenTemplate = ({
     </div>
   );
 };
-
 
 export default ThirdScreenTemplate;

@@ -7,8 +7,8 @@ import renderRegisteredMark from '../utils/renderRegisteredMark';
 
 export type SecondScreenTemplateProps = {
   readonly bottomDescription?: string;
-  readonly labelText?: string;
   readonly kioskId?: KioskId;
+  readonly labelText?: string;
   readonly largeIconSrc?: string;
   readonly mainDescription?: string;
   readonly onNavigateDown?: () => void;
@@ -19,12 +19,10 @@ export type SecondScreenTemplateProps = {
 
 export const SecondScreenTemplate = ({
   bottomDescription,
-  labelText,
   kioskId = DEFAULT_KIOSK_ID,
+  labelText,
   largeIconSrc,
   mainDescription,
-  onNavigateDown: _onNavigateDown,
-  onNavigateUp: _onNavigateUp,
   subheadline,
   topImageSrc,
 }: SecondScreenTemplateProps) => {
@@ -43,7 +41,7 @@ export const SecondScreenTemplate = ({
           {largeIconSrc && (
             <Image
               alt="Large decorative background diamond"
-              className="object-contain -scale-x-100"
+              className="-scale-x-100 object-contain"
               fill
               sizes="1506px"
               src={largeIconSrc}
@@ -92,6 +90,5 @@ export const SecondScreenTemplate = ({
     </div>
   );
 };
-
 
 export default SecondScreenTemplate;

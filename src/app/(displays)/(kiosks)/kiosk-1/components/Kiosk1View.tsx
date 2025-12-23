@@ -1,8 +1,8 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowDown, ArrowUp } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
 import { buildChallengeSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeSlides';
 import {
@@ -87,24 +87,12 @@ const Kiosk1View = () => {
 
   const challenges: KioskChallenges | null =
     kioskContent?.challengeMain && kioskContent.ambient
-      ? parseKioskChallenges(mapChallenges(kioskContent.challengeMain, kioskContent.ambient), 'kiosk-1')
+      ? parseKioskChallenges(mapChallenges(kioskContent.challengeMain, kioskContent.ambient))
       : null;
-  
-  if (kioskData && !challenges) {
-    console.log('[Kiosk1] Data loaded but challenges is null:', { 
-      hasData: !!kioskData, 
-      hasChallengeMain: !!kioskContent?.challengeMain,
-      hasAmbient: !!kioskContent?.ambient 
-    });
-  }
-  
+
   const solutions =
     kioskContent?.solutionMain && kioskContent.solutionGrid && kioskContent.ambient
-      ? (mapSolutions(
-          kioskContent.solutionMain,
-          kioskContent.solutionGrid,
-          kioskContent.ambient
-        ) as SolutionScreens)
+      ? (mapSolutions(kioskContent.solutionMain, kioskContent.solutionGrid, kioskContent.ambient) as SolutionScreens)
       : null;
   const values =
     kioskContent?.valueMain && kioskContent.ambient
@@ -121,6 +109,23 @@ const Kiosk1View = () => {
     onNavigateUp: handleNavigateUp,
   };
 
+  // Stable callbacks to avoid ref access during render
+  const handleInitialButtonClick = useCallback(() => {
+    setAllowArrowsToShow(true);
+  }, []);
+
+  const handleRegisterCarouselHandlers = useCallback(
+    (handlers: {
+      canScrollNext: () => boolean;
+      canScrollPrev: () => boolean;
+      scrollNext: () => void;
+      scrollPrev: () => void;
+    }) => {
+      carouselHandlersRef.current = handlers;
+    },
+    []
+  );
+
   const slides: Slide[] =
     challenges && solutions && values && customInteractive
       ? [
@@ -129,10 +134,7 @@ const Kiosk1View = () => {
             'kiosk-1',
             { ...controller, ...globalHandlers },
             {
-              onInitialButtonClick: () => {
-                // Start the scroll, arrows will appear after scroll completes
-                setAllowArrowsToShow(true);
-              },
+              onInitialButtonClick: handleInitialButtonClick,
             }
           ),
           ...buildSolutionSlides(solutions, 'kiosk-1', { ...controller, ...globalHandlers }),
@@ -141,9 +143,7 @@ const Kiosk1View = () => {
             'kiosk-1',
             { ...controller, ...globalHandlers },
             {
-              onRegisterCarouselHandlers: handlers => {
-                carouselHandlersRef.current = handlers;
-              },
+              onRegisterCarouselHandlers: handleRegisterCarouselHandlers,
             }
           ),
           ...buildCustomInteractiveSlides(customInteractive, 'kiosk-1', scrollToSectionById),
@@ -239,7 +239,8 @@ const Kiosk1View = () => {
         currentScrollTarget === 'value-carousel');
 
     // Also detect scrolling to customInteractive section
-    const isScrollingToCustomInteractive = isScrolling && currentScrollTarget && currentScrollTarget.includes('customInteractive-');
+    const isScrollingToCustomInteractive =
+      isScrolling && currentScrollTarget && currentScrollTarget.includes('customInteractive-');
 
     const shouldHideArrows = isScrollingToVideo || isScrollingToCustomInteractive;
 
@@ -321,9 +322,7 @@ const Kiosk1View = () => {
       <div className="flex h-screen w-full items-center justify-center bg-black text-white">
         <div className="text-center">
           <p className="text-2xl">Loading kiosk data...</p>
-          <p className="mt-4 text-sm opacity-60">
-            {!kioskData ? 'Fetching data...' : 'Processing content...'}
-          </p>
+          <p className="mt-4 text-sm opacity-60">{!kioskData ? 'Fetching data...' : 'Processing content...'}</p>
         </div>
       </div>
     );
@@ -354,9 +353,7 @@ const Kiosk1View = () => {
           </div>
         ))}
       </div>
-      <div
-        className="absolute right-[12px] bottom-[12px] z-[1000] flex gap-2"
-      >
+      <div className="absolute right-[12px] bottom-[12px] z-[1000] flex gap-2">
         <button onClick={() => controller.prev()}>Prev</button>
         <button onClick={() => controller.next()}>Next</button>
       </div>
@@ -419,7 +416,6 @@ const Kiosk1View = () => {
     </div>
   );
 };
-
 
 export default Kiosk1View;
 
@@ -520,9 +516,9 @@ const mapChallenges = (challenge: ChallengeContent, ambient: Ambient): KioskChal
     topImageSrc: challenge.item1Image ?? '',
   },
   thirdScreen: {
-    labelText: challenge.labelText ?? 'Challenge',
     description: challenge.item2Body ?? '',
     heroImageSrc: challenge.item2Image ?? '',
+    labelText: challenge.labelText ?? 'Challenge',
     largeIconCenterSrc: challenge.item2Image ?? '',
     largeIconTopSrc: challenge.item2Image ?? '',
     metricAmount: challenge.featuredStat2 ?? '',
@@ -563,9 +559,9 @@ const mapSolutions = (
     bottomLeftLabel: solutionsGrid.diamondList?.[2] ?? '',
     bottomRightLabel: solutionsGrid.diamondList?.[3] ?? '',
     centerLabel: solutionsGrid.diamondList?.[0] ?? '',
+    labelText: solutionsMain.labelText ?? 'Solution',
     mediaDiamondLeftSrc: solutionsGrid.images?.[0] ?? '',
     mediaDiamondRightSrc: solutionsGrid.images?.[1] ?? '',
-    labelText: solutionsMain.labelText ?? 'Solution',
     subheadline: ambient.title,
     title: solutionsGrid.headline ?? '',
     topLeftLabel: undefined,
@@ -644,7 +640,10 @@ const mapValue = (value: ValueContent, ambient: Ambient): ValueScreens => {
   };
 };
 
-const mapCustomInteractive = (customInteractive: CustomInteractiveContent, ambient: Ambient): CustomInteractiveScreens => ({
+const mapCustomInteractive = (
+  customInteractive: CustomInteractiveContent,
+  ambient: Ambient
+): CustomInteractiveScreens => ({
   firstScreen: {
     eyebrow: ambient.title,
     headline: customInteractive.headline,

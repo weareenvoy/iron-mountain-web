@@ -63,20 +63,14 @@ export const InitialScreenTemplate = ({
       </div>
 
       <div
-        className="absolute bg-[#F7931E] top-[1130px] left-[120px] z-[2] flex w-[1920px] flex-col gap-[200px] rounded-[60px] px-[120px] py-[240px] pb-[330px] backdrop-blur-[30px] group-data-[kiosk=kiosk-2]/kiosk:py-[220px] group-data-[kiosk=kiosk-2]/kiosk:pb-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[1920px] group-data-[kiosk=kiosk-3]/kiosk:pb-0"
+        className="absolute top-[1130px] left-[120px] z-[2] flex w-[1920px] flex-col gap-[200px] rounded-[60px] bg-[#F7931E] px-[120px] py-[240px] pb-[330px] backdrop-blur-[30px] group-data-[kiosk=kiosk-2]/kiosk:py-[220px] group-data-[kiosk=kiosk-2]/kiosk:pb-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[1920px] group-data-[kiosk=kiosk-3]/kiosk:pb-0"
         data-name="Challenge Initial Screen Content Box"
         style={contentBoxBgColor ? { backgroundColor: contentBoxBgColor } : undefined}
       >
         <div className="absolute top-[2910px] left-[120px] z-[3] flex h-[182px] w-[703px] items-center group-data-[kiosk=kiosk-2]/kiosk:top-[2890px] group-data-[kiosk=kiosk-3]/kiosk:hidden">
           <div className="relative h-full w-full">
             {logoCombinedSrc ? (
-              <Image
-                alt="Partner logos"
-                className="object-contain"
-                fill
-                sizes="710px"
-                src={logoCombinedSrc}
-              />
+              <Image alt="Partner logos" className="object-contain" fill sizes="710px" src={logoCombinedSrc} />
             ) : (
               <WhiteLogoSimple aria-hidden="true" className="h-full w-full" preserveAspectRatio="xMidYMid meet" />
             )}
@@ -132,6 +126,5 @@ export const InitialScreenTemplate = ({
     </div>
   );
 };
-
 
 export default InitialScreenTemplate;

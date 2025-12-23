@@ -12,11 +12,11 @@ export type SolutionFirstScreenTemplateProps = {
   readonly backgroundVideoSrc?: string;
   readonly description?: string;
   readonly kioskId?: string;
+  readonly labelText?: string;
   readonly largeDiamondSrc?: string;
   readonly mediumDiamondSrc?: string;
   readonly onNavigateDown?: () => void;
   readonly onNavigateUp?: () => void;
-  readonly labelText?: string;
   readonly subheadline?: string;
   readonly title?: string;
 };
@@ -26,19 +26,14 @@ const SolutionFirstScreenTemplate = ({
   backgroundVideoSrc,
   description,
   kioskId,
+  labelText,
   largeDiamondSrc,
   mediumDiamondSrc,
-  onNavigateDown: _onNavigateDown,
-  onNavigateUp: _onNavigateUp,
-  labelText,
   subheadline,
   title,
 }: SolutionFirstScreenTemplateProps) => {
   return (
-    <div
-      className="group/kiosk relative flex h-screen w-full flex-col overflow-visible bg-black"
-      data-kiosk={kioskId}
-    >
+    <div className="group/kiosk relative flex h-screen w-full flex-col overflow-visible bg-black" data-kiosk={kioskId}>
       {/* Background video */}
       <div className="absolute top-[-5px] left-0 h-[1545px] w-full">
         <div className="relative h-full w-full">
@@ -58,27 +53,19 @@ const SolutionFirstScreenTemplate = ({
       </div>
 
       {/* Gradient body */}
-      <div
-        className="absolute top-[1058px] left-0 z-[1] h-[14575px] w-full rounded-[100px] bg-gradient-to-b from-[#A2115E] to-[#8A0D71] group-data-[kiosk=kiosk-2]/kiosk:top-[1110px] group-data-[kiosk=kiosk-3]/kiosk:top-[1060px]"
-      />
+      <div className="absolute top-[1058px] left-0 z-[1] h-[14575px] w-full rounded-[100px] bg-gradient-to-b from-[#A2115E] to-[#8A0D71] group-data-[kiosk=kiosk-2]/kiosk:top-[1110px] group-data-[kiosk=kiosk-3]/kiosk:top-[1060px]" />
 
       {/* Subheadline */}
-      <h2
-        className="absolute top-[240px] left-[120px] z-[1] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:top-[290px] group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-2]/kiosk:w-[450px] group-data-[kiosk=kiosk-3]/kiosk:top-[300px] group-data-[kiosk=kiosk-3]/kiosk:left-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[330px]"
-      >
+      <h2 className="absolute top-[240px] left-[120px] z-[1] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:top-[290px] group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-2]/kiosk:w-[450px] group-data-[kiosk=kiosk-3]/kiosk:top-[300px] group-data-[kiosk=kiosk-3]/kiosk:left-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[330px]">
         {renderRegisteredMark(subheadline)}
       </h2>
 
       {/* Solution label */}
-      <div
-        className="absolute top-[790px] left-[140px] flex items-center gap-[41px] group-data-[kiosk=kiosk-2]/kiosk:top-[830px] group-data-[kiosk=kiosk-3]/kiosk:top-[860px] group-data-[kiosk=kiosk-3]/kiosk:left-[260px]"
-      >
-        <div className="relative left-[-55px] top-[-25px] flex h-[200px] w-[200px] items-center justify-center">
+      <div className="absolute top-[790px] left-[140px] flex items-center gap-[41px] group-data-[kiosk=kiosk-2]/kiosk:top-[830px] group-data-[kiosk=kiosk-3]/kiosk:top-[860px] group-data-[kiosk=kiosk-3]/kiosk:left-[260px]">
+        <div className="relative top-[-25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
           <OutlinedDiamond aria-hidden="true" focusable="false" />
         </div>
-        <h1
-          className="relative left-[-100px] top-[-20px] text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]"
-        >
+        <h1 className="relative top-[-20px] left-[-100px] text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]">
           {labelText}
         </h1>
       </div>

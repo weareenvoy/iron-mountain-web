@@ -1,7 +1,7 @@
 'use client';
 
-import { useId, type ComponentType, type CSSProperties, type SVGProps } from 'react';
 import Image from 'next/image';
+import { useId, type ComponentType, type CSSProperties, type SVGProps } from 'react';
 import BlueFilledDiamond from '@/components/ui/icons/Kiosks/Solutions/BlueFilledDiamond';
 import OrangeFilledDiamond from '@/components/ui/icons/Kiosks/Solutions/OrangeFilledDiamond';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
@@ -128,8 +128,6 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
     heroVideoPosterSrc,
     heroVideoSrc,
     labelText,
-    onNavigateDown: _onNavigateDown,
-    onNavigateUp: _onNavigateUp,
     onRegisterCarouselHandlers,
     slides,
   } = props;
@@ -181,19 +179,15 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
         <div className="absolute inset-0 bg-black/20" />
       </div>
 
-      <div
-        className="absolute top-0 left-0 z-[2] flex h-[1284px] w-full flex-col justify-between px-[120px] py-[240px]"
-      >
+      <div className="absolute top-0 left-0 z-[2] flex h-[1284px] w-full flex-col justify-between px-[120px] py-[240px]">
         <p className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
           {renderRegisteredMark(normalizeMultiline(eyebrow))}
         </p>
-        <div className="relative left-[10px] top-[-100px] flex items-center gap-[41px]">
-          <div className="relative left-[-55px] top-[25px] flex h-[200px] w-[200px] items-center justify-center">
+        <div className="relative top-[-100px] left-[10px] flex items-center gap-[41px]">
+          <div className="relative top-[25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
             <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
           </div>
-          <h1
-            className="relative left-[-90px] top-[30px] text-[126px] leading-[1.3] font-normal tracking-[-6.3px] whitespace-nowrap text-[#ededed]"
-          >
+          <h1 className="relative top-[30px] left-[-90px] text-[126px] leading-[1.3] font-normal tracking-[-6.3px] whitespace-nowrap text-[#ededed]">
             {renderRegisteredMark(labelText)}
           </h1>
         </div>
@@ -224,6 +218,5 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
     </div>
   );
 };
-
 
 export default ValueCarouselTemplate;

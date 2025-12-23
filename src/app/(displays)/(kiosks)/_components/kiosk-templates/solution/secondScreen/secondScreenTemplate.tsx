@@ -5,21 +5,20 @@ import GreenDiamondSecond from '@/components/ui/icons/Kiosks/Solutions/GreenDiam
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
 import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
 
+export type SolutionSecondScreenTemplateProps = SolutionSecondScreenCoreProps & SolutionSecondScreenStepsProps;
+
 type StepConfig = {
   readonly description?: string;
   readonly label?: string;
 };
 
-export type SolutionSecondScreenTemplateProps =
-  SolutionSecondScreenCoreProps & SolutionSecondScreenStepsProps;
-
 type SolutionSecondScreenCoreProps = {
   readonly heroImageAlt?: string;
   readonly heroImageSrc?: string;
   readonly kioskId?: KioskId;
+  readonly labelText?: string;
   readonly onNavigateDown?: () => void;
   readonly onNavigateUp?: () => void;
-  readonly labelText?: string;
   readonly stepFourDescription?: string;
   readonly stepFourLabel?: string;
   readonly stepOneDescription?: string;
@@ -41,8 +40,6 @@ const SolutionSecondScreenTemplate = ({
   heroImageAlt,
   heroImageSrc,
   kioskId = DEFAULT_KIOSK_ID,
-  onNavigateDown: _onNavigateDown,
-  onNavigateUp: _onNavigateUp,
   labelText,
   stepFourDescription,
   stepFourLabel,
@@ -89,9 +86,7 @@ const SolutionSecondScreenTemplate = ({
       data-scroll-section="solution-second-group"
     >
       {/* Gradient backdrop */}
-      <div
-        className="absolute top-[-296px] left-0 h-[14575px] w-full rounded-t-[100px] bg-transparent"
-      />
+      <div className="absolute top-[-296px] left-0 h-[14575px] w-full rounded-t-[100px] bg-transparent" />
 
       {/* Decorative diamonds */}
       <div className="pointer-events-none absolute top-[1080px] left-[-100px] z-[1] h-[1790px] w-[1790px]">
@@ -102,20 +97,16 @@ const SolutionSecondScreenTemplate = ({
       </div>
 
       {/* Subheadline */}
-      <h2
-        className="absolute top-[230px] left-[120px] z-[1] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]"
-      >
+      <h2 className="absolute top-[230px] left-[120px] z-[1] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
         {renderRegisteredMark(subheadline)}
       </h2>
 
       {/* Solution label */}
-      <div className="absolute z-[1] relative top-[180px] top-[710px] left-[150px] flex group-data-[kiosk=kiosk-3]/kiosk:top-[720px] group-data-[kiosk=kiosk-3]/kiosk:left-[140px]">
-        <div className="relative left-[-55px] top-[25px] flex h-[200px] w-[200px] items-center justify-center">
+      <div className="absolute relative top-[180px] top-[710px] left-[150px] z-[1] flex group-data-[kiosk=kiosk-3]/kiosk:top-[720px] group-data-[kiosk=kiosk-3]/kiosk:left-[140px]">
+        <div className="relative top-[25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
           <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
         </div>
-        <h1
-          className="relative left-[-50px] top-[55px] text-[126px] leading-[1.3] font-normal tracking-[-6.3px] whitespace-nowrap text-[#ededed]"
-        >
+        <h1 className="relative top-[55px] left-[-50px] text-[126px] leading-[1.3] font-normal tracking-[-6.3px] whitespace-nowrap text-[#ededed]">
           {renderRegisteredMark(labelText)}
         </h1>
       </div>
@@ -149,7 +140,13 @@ const SolutionSecondScreenTemplate = ({
       <div className="absolute top-[2210px] left-[1500px] z-[2]">
         <div className="relative top-[-140px] left-[-230px] h-[900px] w-[900px] rotate-[45deg] overflow-hidden rounded-[80px] group-data-[kiosk=kiosk-2]/kiosk:top-[-160px] group-data-[kiosk=kiosk-2]/kiosk:left-[-180px] group-data-[kiosk=kiosk-2]/kiosk:size-[810px] group-data-[kiosk=kiosk-3]/kiosk:top-[-130px] group-data-[kiosk=kiosk-3]/kiosk:left-[-160px] group-data-[kiosk=kiosk-3]/kiosk:size-[800px]">
           {heroImageSrc && (
-            <Image alt={heroImageAlt || ''} className="-rotate-[45deg] object-cover" fill sizes="800px" src={heroImageSrc} />
+            <Image
+              alt={heroImageAlt || ''}
+              className="-rotate-[45deg] object-cover"
+              fill
+              sizes="800px"
+              src={heroImageSrc}
+            />
           )}
         </div>
       </div>

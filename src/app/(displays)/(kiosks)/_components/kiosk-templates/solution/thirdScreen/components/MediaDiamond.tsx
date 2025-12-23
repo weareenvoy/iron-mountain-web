@@ -1,5 +1,5 @@
-import { type ReactNode } from 'react';
 import Image from 'next/image';
+import { type ReactNode } from 'react';
 
 export type MediaDiamondProps = {
   readonly className: string;
@@ -9,13 +9,7 @@ export type MediaDiamondProps = {
   readonly sizeClass?: string;
 };
 
-const MediaDiamond = ({
-  className,
-  fallback,
-  imageAlt,
-  imageSrc,
-  sizeClass = 'size-[666px]',
-}: MediaDiamondProps) => {
+const MediaDiamond = ({ className, fallback, imageAlt, imageSrc, sizeClass = 'size-[666px]' }: MediaDiamondProps) => {
   return (
     <div className={`absolute ${className}`}>
       <div className={`relative ${sizeClass} rotate-[45deg] overflow-hidden rounded-[120px]`}>
@@ -30,4 +24,3 @@ const MediaDiamond = ({
 };
 
 export default MediaDiamond;
-

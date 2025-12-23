@@ -19,4 +19,3 @@ const ArrowIcon = () => (
 );
 
 export default ArrowIcon;
-

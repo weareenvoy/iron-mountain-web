@@ -364,6 +364,7 @@ export interface KioskData {
   readonly challenge?: unknown;
   readonly challenges?: unknown;
   // Kiosk 1 nested structure
+  readonly customInteractive?: unknown;
   readonly data?: {
     readonly ambient?: unknown;
     readonly challenge?: unknown;
@@ -371,7 +372,6 @@ export interface KioskData {
     readonly solutions?: unknown;
     readonly value?: unknown;
   };
-  readonly customInteractive?: unknown;
   readonly locale?: string;
   // Allow any other properties
   readonly [key: string]: unknown;

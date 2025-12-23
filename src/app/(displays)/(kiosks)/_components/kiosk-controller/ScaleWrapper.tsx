@@ -29,5 +29,4 @@ const ScaleWrapper = ({ background = 'black', children, targetHeight, targetWidt
   );
 };
 
-
 export default ScaleWrapper;

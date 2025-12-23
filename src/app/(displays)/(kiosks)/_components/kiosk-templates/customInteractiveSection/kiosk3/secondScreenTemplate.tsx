@@ -93,22 +93,22 @@ const CustomInteractiveKiosk3SecondScreenTemplate = ({
           <span className="relative top-[5px] z-10 text-[80px] leading-[1.3] font-normal tracking-[-4px] text-white">
             {renderRegisteredMark(tapToBeginLabel)}
           </span>
-          <div className="absolute left-[50%] top-[48%] [transform:translate(-50%,-50%)_rotate(0deg)_translateY(-430px)]">
+          <div className="absolute top-[48%] left-[50%] [transform:translate(-50%,-50%)_rotate(0deg)_translateY(-430px)]">
             <BlueDot className="h-[60px] w-[60px]" />
           </div>
-          <div className="absolute left-[53%] top-[50%] [transform:translate(-50%,-50%)_rotate(60deg)_translateY(-430px)]">
+          <div className="absolute top-[50%] left-[53%] [transform:translate(-50%,-50%)_rotate(60deg)_translateY(-430px)]">
             <BlueDot className="h-[60px] w-[60px]" />
           </div>
-          <div className="absolute left-[53%] top-[49%] [transform:translate(-50%,-50%)_rotate(120deg)_translateY(-430px)]">
+          <div className="absolute top-[49%] left-[53%] [transform:translate(-50%,-50%)_rotate(120deg)_translateY(-430px)]">
             <BlueDot className="h-[60px] w-[60px]" />
           </div>
-          <div className="absolute left-[50%] top-[52%] [transform:translate(-50%,-50%)_rotate(180deg)_translateY(-430px)]">
+          <div className="absolute top-[52%] left-[50%] [transform:translate(-50%,-50%)_rotate(180deg)_translateY(-430px)]">
             <BlueDot className="h-[60px] w-[60px]" />
           </div>
-          <div className="absolute left-[47%] top-[50%] [transform:translate(-50%,-50%)_rotate(240deg)_translateY(-430px)]">
+          <div className="absolute top-[50%] left-[47%] [transform:translate(-50%,-50%)_rotate(240deg)_translateY(-430px)]">
             <BlueDot className="h-[60px] w-[60px]" />
           </div>
-          <div className="absolute left-[47%] top-[50%] [transform:translate(-50%,-50%)_rotate(300deg)_translateY(-430px)]">
+          <div className="absolute top-[50%] left-[47%] [transform:translate(-50%,-50%)_rotate(300deg)_translateY(-430px)]">
             <BlueDot className="h-[60px] w-[60px]" />
           </div>
         </button>

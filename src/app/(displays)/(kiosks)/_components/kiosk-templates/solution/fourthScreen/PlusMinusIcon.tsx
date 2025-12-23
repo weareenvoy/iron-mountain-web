@@ -20,4 +20,3 @@ const PlusMinusIcon = ({ color }: PlusMinusIconProps) => {
 };
 
 export default PlusMinusIcon;
-

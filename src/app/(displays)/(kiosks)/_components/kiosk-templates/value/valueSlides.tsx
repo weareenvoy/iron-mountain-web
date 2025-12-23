@@ -6,7 +6,10 @@ import ValueCarouselTemplate, {
 import { type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 export type ValueScreens = {
-  readonly valueScreens?: Omit<ValueCarouselTemplateProps, 'onNavigateDown' | 'onNavigateUp' | 'onRegisterCarouselHandlers'>[];
+  readonly valueScreens?: Omit<
+    ValueCarouselTemplateProps,
+    'onNavigateDown' | 'onNavigateUp' | 'onRegisterCarouselHandlers'
+  >[];
 };
 
 export const buildValueSlides = (

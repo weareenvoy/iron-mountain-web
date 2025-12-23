@@ -1,3 +1,10 @@
+export type KioskChallenges = {
+  readonly firstScreen: FirstScreen;
+  readonly initialScreen: InitialScreen;
+  readonly secondScreen: SecondScreen;
+  readonly thirdScreen: ThirdScreen;
+};
+
 type InitialScreen = {
   readonly arrowIconSrc?: string;
   readonly attribution: string;
@@ -31,9 +38,9 @@ type SecondScreen = {
 };
 
 type ThirdScreen = {
-  readonly labelText?: string;
   readonly description: string;
   readonly heroImageSrc: string;
+  readonly labelText?: string;
   readonly largeIconCenterSrc: string;
   readonly largeIconTopSrc: string;
   readonly metricAmount: string;
@@ -43,13 +50,6 @@ type ThirdScreen = {
   readonly videoSrc?: string;
 };
 
-export type KioskChallenges = {
-  readonly firstScreen: FirstScreen;
-  readonly initialScreen: InitialScreen;
-  readonly secondScreen: SecondScreen;
-  readonly thirdScreen: ThirdScreen;
-};
-
-export const parseKioskChallenges = (value: unknown, _kioskName: string): KioskChallenges => {
+export const parseKioskChallenges = (value: unknown): KioskChallenges => {
   return value as KioskChallenges;
 };

@@ -1,5 +1,3 @@
-
-
 const HCWhiteDiamond = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     fill="none"

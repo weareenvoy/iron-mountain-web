@@ -33,21 +33,17 @@ export function useGlobalParagraphNavigation({
   // Detect ALL paragraph sections in the entire container
   useEffect(() => {
     let cleanupObserver: (() => void) | null = null;
-    
+
     const setupObserver = () => {
       const container = containerRef.current;
-      console.log('[useGlobalParagraphNavigation] Setting up observer, container:', container);
-      
+
       if (!container) {
-        console.log('[useGlobalParagraphNavigation] No container yet, retrying in 50ms...');
         setTimeout(setupObserver, 50);
         return;
       }
 
       const detectAllParagraphs = () => {
-        console.log('[useGlobalParagraphNavigation] detectAllParagraphs called');
         const paragraphElements = Array.from(container.querySelectorAll<HTMLElement>('[data-scroll-section]'));
-        console.log('[useGlobalParagraphNavigation] Found paragraphElements:', paragraphElements.length, paragraphElements);
         // Filter out elements with no text content, BUT keep video/media elements
         const nonEmptyParagraphs = paragraphElements.filter(el => {
           // Always include video, audio, img, or other media elements
@@ -55,15 +51,13 @@ export function useGlobalParagraphNavigation({
             return true;
           }
           // For text elements, check if they have content
-          const textContent = el.textContent?.trim() || '';
+          const textContent = (el.textContent || '').trim();
           return textContent.length > 0;
         });
-        console.log('[useGlobalParagraphNavigation] After filtering, nonEmptyParagraphs:', nonEmptyParagraphs.length);
         setAllParagraphs(nonEmptyParagraphs);
-        
+
         // If no paragraphs found, retry after a short delay
         if (nonEmptyParagraphs.length === 0) {
-          console.log('[useGlobalParagraphNavigation] No paragraphs found, retrying in 100ms');
           setTimeout(detectAllParagraphs, 100);
         }
       };
@@ -73,21 +67,20 @@ export function useGlobalParagraphNavigation({
 
       // Re-detect on content changes
       const observer = new MutationObserver(() => {
-        console.log('[useGlobalParagraphNavigation] MutationObserver triggered');
         detectAllParagraphs();
       });
       observer.observe(container, { childList: true, subtree: true });
 
       cleanupObserver = () => observer.disconnect();
     };
-    
+
     // Start trying to set up the observer
     setupObserver();
 
     return () => {
       if (cleanupObserver) cleanupObserver();
     };
-  }, []);
+  }, [containerRef]);
 
   const scrollToParagraph = useCallback(
     (index: number) => {
@@ -99,7 +92,7 @@ export function useGlobalParagraphNavigation({
         isScrollingRef.current = true;
         setIsScrolling(true);
         setCurrentScrollTarget(null);
-        
+
         container.scrollTo({
           behavior: 'smooth',
           top: 0,
@@ -119,7 +112,6 @@ export function useGlobalParagraphNavigation({
       setIsScrolling(true);
       const targetParagraph = allParagraphs[index];
 
-      // Guard against undefined element
       if (!targetParagraph) {
         isScrollingRef.current = false;
         setIsScrolling(false);
@@ -135,7 +127,8 @@ export function useGlobalParagraphNavigation({
       let currentElement: HTMLElement | null = targetParagraph;
 
       // Walk up the tree to calculate total offset relative to container
-      while (currentElement && currentElement !== container) {
+      while (currentElement) {
+        if (currentElement === container) break;
         elementOffsetTop += currentElement.offsetTop;
         currentElement = currentElement.offsetParent as HTMLElement;
       }
@@ -162,29 +155,19 @@ export function useGlobalParagraphNavigation({
         setCurrentIndex(index);
       }, duration);
     },
-    [allParagraphs, containerRef, currentIndex, duration]
+    [allParagraphs, containerRef, duration]
   );
 
   // Handle navigate down
   const handleNavigateDown = useCallback(() => {
-    console.log('[useGlobalParagraphNavigation] handleNavigateDown called');
-    console.log('[useGlobalParagraphNavigation] isScrollingRef.current:', isScrollingRef.current);
-    console.log('[useGlobalParagraphNavigation] currentIndex:', currentIndex);
-    console.log('[useGlobalParagraphNavigation] allParagraphs.length:', allParagraphs.length);
-    
     if (isScrollingRef.current) {
-      console.log('[useGlobalParagraphNavigation] Already scrolling, ignoring');
       return;
     }
 
     const nextIndex = currentIndex + 1;
-    console.log('[useGlobalParagraphNavigation] nextIndex:', nextIndex);
-    
+
     if (nextIndex < allParagraphs.length) {
-      console.log('[useGlobalParagraphNavigation] Scrolling to paragraph at index:', nextIndex);
       scrollToParagraph(nextIndex);
-    } else {
-      console.log('[useGlobalParagraphNavigation] At end, cannot scroll further');
     }
     // If we're at the end, do nothing (or could loop back to start)
   }, [allParagraphs.length, currentIndex, scrollToParagraph]);

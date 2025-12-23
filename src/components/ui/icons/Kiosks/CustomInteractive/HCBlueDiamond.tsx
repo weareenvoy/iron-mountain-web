@@ -1,5 +1,3 @@
-
-
 const HCBlueDiamond = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     fill="none"

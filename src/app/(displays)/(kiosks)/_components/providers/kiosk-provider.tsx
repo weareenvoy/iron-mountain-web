@@ -39,18 +39,15 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
 
     try {
       const kioskData = await getKioskData(kioskId);
-      console.log(`[KioskProvider] Data fetched successfully for ${kioskId}:`, kioskData);
       setData(kioskData.data);
       setError(null);
       return true;
     } catch (err) {
       console.error(`[KioskProvider] Error fetching ${kioskId} data:`, err);
       setError(err instanceof Error ? err.message : 'Unknown error');
-      console.error(`Error fetching ${kioskId} data:`, err);
       return false;
     } finally {
       setLoading(false);
-      console.log(`[KioskProvider] Loading state set to false for ${kioskId}`);
     }
   }, [kioskId]);
 

@@ -18,11 +18,11 @@ export type SolutionThirdScreenTemplateProps = {
   readonly bottomRightLabel?: string;
   readonly centerLabel?: string;
   readonly kioskId?: string;
+  readonly labelText?: string;
   readonly mediaDiamondLeftSrc?: string;
   readonly mediaDiamondRightSrc?: string;
   readonly onNavigateDown?: () => void;
   readonly onNavigateUp?: () => void;
-  readonly labelText?: string;
   readonly subheadline?: string;
   readonly title?: string;
   readonly topLeftLabel?: string;
@@ -35,11 +35,9 @@ const SolutionThirdScreenTemplate = ({
   bottomRightLabel,
   centerLabel,
   kioskId,
+  labelText,
   mediaDiamondLeftSrc,
   mediaDiamondRightSrc,
-  onNavigateDown: _onNavigateDown,
-  onNavigateUp: _onNavigateUp,
-  labelText,
   subheadline,
   title,
   topLeftLabel,
@@ -98,20 +96,16 @@ const SolutionThirdScreenTemplate = ({
       data-kiosk={kioskId}
     >
       {/* Gradient backdrop */}
-      <div
-        className="absolute top-[-296px] left-0 h-[5416px] w-full rounded-t-[100px] bg-transparent"
-      />
+      <div className="absolute top-[-296px] left-0 h-[5416px] w-full rounded-t-[100px] bg-transparent" />
 
       {/* Subheadline */}
-      <h2
-        className="absolute top-[230px] left-[120px] z-[1] w-[500px] -translate-y-full text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:top-[250px] group-data-[kiosk=kiosk-2]/kiosk:translate-y-0 group-data-[kiosk=kiosk-3]/kiosk:relative group-data-[kiosk=kiosk-3]/kiosk:top-[410px] group-data-[kiosk=kiosk-3]/kiosk:left-auto group-data-[kiosk=kiosk-3]/kiosk:w-[380px] group-data-[kiosk=kiosk-3]/kiosk:translate-y-0"
-      >
+      <h2 className="absolute top-[230px] left-[120px] z-[1] w-[500px] -translate-y-full text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:top-[250px] group-data-[kiosk=kiosk-2]/kiosk:translate-y-0 group-data-[kiosk=kiosk-3]/kiosk:relative group-data-[kiosk=kiosk-3]/kiosk:top-[410px] group-data-[kiosk=kiosk-3]/kiosk:left-auto group-data-[kiosk=kiosk-3]/kiosk:w-[380px] group-data-[kiosk=kiosk-3]/kiosk:translate-y-0">
         {renderRegisteredMark(subheadline)}
       </h2>
 
       {/* Solution label */}
       <div className="absolute top-[570px] left-[120px] flex items-center gap-[45px]">
-        <div className="relative left-[-45px] top-[15px] flex h-[200px] w-[200px] items-center justify-center">
+        <div className="relative top-[15px] left-[-45px] flex h-[200px] w-[200px] items-center justify-center">
           <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
         </div>
         <h1 className="relative top-[20px] left-[-80px] text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed] group-data-[kiosk=kiosk-3]/kiosk:top-[-20px] group-data-[kiosk=kiosk-3]/kiosk:left-[-100px]">
@@ -171,4 +165,3 @@ const SolutionThirdScreenTemplate = ({
 };
 
 export default SolutionThirdScreenTemplate;
-

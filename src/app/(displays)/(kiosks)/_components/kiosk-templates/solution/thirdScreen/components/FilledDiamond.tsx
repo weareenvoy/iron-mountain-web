@@ -22,4 +22,3 @@ const FilledDiamond = ({ className, imageAlt, imageSrc }: FilledDiamondProps) =>
 };
 
 export default FilledDiamond;
-

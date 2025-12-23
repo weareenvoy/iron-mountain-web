@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
 import { SquarePlay } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
@@ -82,11 +82,11 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
           {renderRegisteredMark(eyebrowText)}
         </h2>
 
-        <h1 className="absolute left-[240px] top-[830px] w-full text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]">
+        <h1 className="absolute top-[830px] left-[240px] w-full text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]">
           {renderRegisteredMark(headlineText)}
         </h1>
 
-        <p className="absolute left-[250px] top-[1320px] w-[640px] text-[52px] leading-[1.4] font-normal tracking-[-2.6px] text-[#ededed]">
+        <p className="absolute top-[1320px] left-[250px] w-[640px] text-[52px] leading-[1.4] font-normal tracking-[-2.6px] text-[#ededed]">
           {renderRegisteredMark('Explore each section to learn how Iron Mountain can transform your enterprise')}
         </p>
 
@@ -127,10 +127,7 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
 
       {/* Step Modal */}
       {activeModalContent && portalTarget
-        ? createPortal(
-            <StepModal content={activeModalContent} onClose={() => setOpenModalIndex(null)} />,
-            portalTarget
-          )
+        ? createPortal(<StepModal content={activeModalContent} onClose={() => setOpenModalIndex(null)} />, portalTarget)
         : null}
     </>
   );

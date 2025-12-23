@@ -17,7 +17,8 @@ export type CustomInteractiveScreens = {
   readonly demoScreen?: CustomInteractiveDemoScreenTemplateProps;
   readonly firstScreen?: CustomInteractiveKiosk1FirstScreenTemplateProps;
   readonly fourthScreen?: CustomInteractiveDemoScreenTemplateProps;
-  readonly secondScreen?: CustomInteractiveKiosk1SecondScreenTemplateProps & CustomInteractiveKiosk3SecondScreenTemplateProps;
+  readonly secondScreen?: CustomInteractiveKiosk1SecondScreenTemplateProps &
+    CustomInteractiveKiosk3SecondScreenTemplateProps;
   readonly thirdScreen?: CustomInteractiveDemoScreenTemplateProps & CustomInteractiveKiosk3ThirdScreenTemplateProps;
 };
 

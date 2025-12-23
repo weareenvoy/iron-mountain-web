@@ -21,4 +21,3 @@ const PhotoDiamond = ({ className, imageAlt, imageSrc }: PhotoDiamondProps) => {
 };
 
 export default PhotoDiamond;
-

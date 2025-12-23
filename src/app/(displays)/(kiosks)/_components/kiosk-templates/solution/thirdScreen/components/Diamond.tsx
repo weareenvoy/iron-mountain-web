@@ -32,7 +32,10 @@ const Diamond = ({
           }`}
           style={textWrapperStyles}
         >
-          <span className="text-[67px] leading-[1.4] font-normal tracking-[-3.3px] text-[#ededed]" style={textColor !== '#ededed' ? { color: textColor } : undefined}>
+          <span
+            className="text-[67px] leading-[1.4] font-normal tracking-[-3.3px] text-[#ededed]"
+            style={textColor !== '#ededed' ? { color: textColor } : undefined}
+          >
             {renderRegisteredMark(label)}
           </span>
         </div>
@@ -42,4 +45,3 @@ const Diamond = ({
 };
 
 export default Diamond;
-
