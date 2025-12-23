@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowDown, ArrowUp } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
 import { buildChallengeSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeSlides';
 import {
@@ -104,10 +104,13 @@ const Kiosk2View = () => {
       : null;
 
   // Pass the global handlers to all templates
-  const globalHandlers = {
-    onNavigateDown: handleNavigateDown,
-    onNavigateUp: handleNavigateUp,
-  };
+  const globalHandlers = useMemo(
+    () => ({
+      onNavigateDown: handleNavigateDown,
+      onNavigateUp: handleNavigateUp,
+    }),
+    [handleNavigateDown, handleNavigateUp]
+  );
 
   // Stable callbacks to avoid ref access during render
   const handleInitialButtonClick = useCallback(() => {
@@ -126,30 +129,32 @@ const Kiosk2View = () => {
     []
   );
 
-  const slides: Slide[] =
-    challenges && solutions && values && customInteractive
-      ? [
-          ...buildChallengeSlides(
-            challenges,
-            'kiosk-2',
-            { ...controller, ...globalHandlers },
-            {
+  const slides: Slide[] = useMemo(
+    () =>
+      challenges && solutions && values && customInteractive
+        ? [
+            ...buildChallengeSlides(challenges, 'kiosk-2', globalHandlers, {
               initialScreen: { ...challenges.initialScreen, contentBoxBgColor: '#8DC13F' },
               onInitialButtonClick: handleInitialButtonClick,
-            }
-          ),
-          ...buildSolutionSlides(solutions, 'kiosk-2', { ...controller, ...globalHandlers }),
-          ...buildValueSlides(
-            values,
-            'kiosk-2',
-            { ...controller, ...globalHandlers },
-            {
+            }),
+            ...buildSolutionSlides(solutions, 'kiosk-2', globalHandlers),
+            ...buildValueSlides(values, 'kiosk-2', globalHandlers, {
               onRegisterCarouselHandlers: handleRegisterCarouselHandlers,
-            }
-          ),
-          ...buildCustomInteractiveSlides(customInteractive, 'kiosk-2', scrollToSectionById),
-        ]
-      : [];
+            }),
+            ...buildCustomInteractiveSlides(customInteractive, 'kiosk-2', scrollToSectionById),
+          ]
+        : [],
+    [
+      challenges,
+      customInteractive,
+      globalHandlers,
+      handleInitialButtonClick,
+      handleRegisterCarouselHandlers,
+      scrollToSectionById,
+      solutions,
+      values,
+    ]
+  );
 
   // Determine current section based on slide ID
   const currentSlide = slides[topIndex];

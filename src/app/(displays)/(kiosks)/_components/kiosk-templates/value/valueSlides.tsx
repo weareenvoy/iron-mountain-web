@@ -1,4 +1,3 @@
-import { type Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 import { SectionSlide, type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
 import ValueCarouselTemplate, {
   type ValueCarouselTemplateProps,
@@ -15,7 +14,7 @@ export type ValueScreens = {
 export const buildValueSlides = (
   values: ValueScreens,
   kioskId: KioskId,
-  controller: Controller,
+  handlers: { onNavigateDown: () => void; onNavigateUp: () => void },
   options?: {
     onRegisterCarouselHandlers?: (handlers: {
       canScrollNext: () => boolean;
@@ -34,8 +33,8 @@ export const buildValueSlides = (
         <ValueCarouselTemplate
           {...config}
           carouselId={config.carouselId ?? `${kioskId}-value-${idx}`}
-          onNavigateDown={() => controller.next()}
-          onNavigateUp={() => controller.prev()}
+          onNavigateDown={handlers.onNavigateDown}
+          onNavigateUp={handlers.onNavigateUp}
           onRegisterCarouselHandlers={options?.onRegisterCarouselHandlers}
         />
       </SectionSlide>

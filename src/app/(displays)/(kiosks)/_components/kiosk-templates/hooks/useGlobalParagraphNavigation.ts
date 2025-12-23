@@ -127,10 +127,9 @@ export function useGlobalParagraphNavigation({
       let currentElement: HTMLElement | null = targetParagraph;
 
       // Walk up the tree to calculate total offset relative to container
-      while (currentElement) {
-        if (currentElement === container) break;
+      while (currentElement !== null && currentElement !== container) {
         elementOffsetTop += currentElement.offsetTop;
-        currentElement = currentElement.offsetParent as HTMLElement;
+        currentElement = currentElement.offsetParent as HTMLElement | null;
       }
 
       // Use 0 offset for videos and root container divs (scroll to exact position)

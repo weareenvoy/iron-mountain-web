@@ -1,4 +1,3 @@
-import { type Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 import { SectionSlide, type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
 import SolutionFirstScreenTemplate, {
   type SolutionFirstScreenTemplateProps,
@@ -22,7 +21,11 @@ export type SolutionScreens = {
   readonly thirdScreen?: SolutionThirdScreenTemplateProps;
 };
 
-export const buildSolutionSlides = (solutions: SolutionScreens, kioskId: KioskId, controller: Controller): Slide[] => {
+export const buildSolutionSlides = (
+  solutions: SolutionScreens,
+  kioskId: KioskId,
+  handlers: { onNavigateDown: () => void; onNavigateUp: () => void }
+): Slide[] => {
   const slides: Slide[] = [];
 
   if (solutions.firstScreen) {
@@ -33,8 +36,8 @@ export const buildSolutionSlides = (solutions: SolutionScreens, kioskId: KioskId
           <SolutionFirstScreenTemplate
             {...solutions.firstScreen}
             kioskId={kioskId}
-            onNavigateDown={() => controller.next()}
-            onNavigateUp={() => controller.prev()}
+            onNavigateDown={handlers.onNavigateDown}
+            onNavigateUp={handlers.onNavigateUp}
           />
         </SectionSlide>
       ),
@@ -57,8 +60,8 @@ export const buildSolutionSlides = (solutions: SolutionScreens, kioskId: KioskId
           <SolutionSecondScreenTemplate
             {...config}
             kioskId={kioskId}
-            onNavigateDown={() => controller.next()}
-            onNavigateUp={() => controller.prev()}
+            onNavigateDown={handlers.onNavigateDown}
+            onNavigateUp={handlers.onNavigateUp}
           />
         </SectionSlide>
       ),
@@ -78,8 +81,8 @@ export const buildSolutionSlides = (solutions: SolutionScreens, kioskId: KioskId
           <SolutionThirdScreenTemplate
             {...solutions.thirdScreen}
             kioskId={kioskId}
-            onNavigateDown={() => controller.next()}
-            onNavigateUp={() => controller.prev()}
+            onNavigateDown={handlers.onNavigateDown}
+            onNavigateUp={handlers.onNavigateUp}
           />
         </SectionSlide>
       ),
@@ -94,8 +97,8 @@ export const buildSolutionSlides = (solutions: SolutionScreens, kioskId: KioskId
         <SectionSlide isActive={isActive}>
           <SolutionFourthScreenTemplate
             {...solutions.fourthScreen}
-            onNavigateDown={() => controller.next()}
-            onNavigateUp={() => controller.prev()}
+            onNavigateDown={handlers.onNavigateDown}
+            onNavigateUp={handlers.onNavigateUp}
           />
         </SectionSlide>
       ),

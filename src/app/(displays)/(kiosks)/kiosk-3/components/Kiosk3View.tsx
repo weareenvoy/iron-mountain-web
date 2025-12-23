@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowDown, ArrowUp } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import useKioskController from '@/app/(displays)/(kiosks)/_components/kiosk-controller/useKioskController';
 import { buildChallengeSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeSlides';
 import {
@@ -107,10 +107,14 @@ const Kiosk3View = () => {
       : null;
 
   // Pass the global handlers to all templates
-  const globalHandlers = {
-    onNavigateDown: handleNavigateDown,
-    onNavigateUp: handleNavigateUp,
-  };
+  // Pass the global handlers to all templates
+  const globalHandlers = useMemo(
+    () => ({
+      onNavigateDown: handleNavigateDown,
+      onNavigateUp: handleNavigateUp,
+    }),
+    [handleNavigateDown, handleNavigateUp]
+  );
 
   // Stable callbacks to avoid ref access during render
   const handleInitialButtonClick = useCallback(() => {
@@ -129,30 +133,32 @@ const Kiosk3View = () => {
     []
   );
 
-  const slides: Slide[] =
-    challenges && solutions && values && customInteractive
-      ? [
-          ...buildChallengeSlides(
-            challenges,
-            'kiosk-3',
-            { ...controller, ...globalHandlers },
-            {
+  const slides: Slide[] = useMemo(
+    () =>
+      challenges && solutions && values && customInteractive
+        ? [
+            ...buildChallengeSlides(challenges, 'kiosk-3', globalHandlers, {
               initialScreen: { ...challenges.initialScreen, contentBoxBgColor: '#00A88E' },
               onInitialButtonClick: handleInitialButtonClick,
-            }
-          ),
-          ...buildSolutionSlides(solutions, 'kiosk-3', { ...controller, ...globalHandlers }),
-          ...buildValueSlides(
-            values,
-            'kiosk-3',
-            { ...controller, ...globalHandlers },
-            {
+            }),
+            ...buildSolutionSlides(solutions, 'kiosk-3', globalHandlers),
+            ...buildValueSlides(values, 'kiosk-3', globalHandlers, {
               onRegisterCarouselHandlers: handleRegisterCarouselHandlers,
-            }
-          ),
-          ...buildCustomInteractiveSlides(customInteractive, 'kiosk-3', scrollToSectionById),
-        ]
-      : [];
+            }),
+            ...buildCustomInteractiveSlides(customInteractive, 'kiosk-3', scrollToSectionById),
+          ]
+        : [],
+    [
+      challenges,
+      customInteractive,
+      globalHandlers,
+      handleInitialButtonClick,
+      handleRegisterCarouselHandlers,
+      scrollToSectionById,
+      solutions,
+      values,
+    ]
+  );
 
   // Determine current section based on scroll target (more accurate than topIndex)
   const currentSlide = slides[topIndex];

@@ -58,7 +58,8 @@ export const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
     useEffect(() => {
       if (!api) return;
       setApi?.(api);
-      onSelect();
+      // Schedule onSelect to avoid setState during effect
+      queueMicrotask(() => onSelect());
       api.on('reInit', onSelect);
       api.on('select', onSelect);
     }, [api, onSelect, setApi]);

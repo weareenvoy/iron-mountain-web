@@ -1,4 +1,3 @@
-import { type Controller } from '@/app/(displays)/(kiosks)/_components/kiosk-controller/KioskController';
 import FirstScreenTemplate, {
   type FirstScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/firstScreen/firstScreenTemplate';
@@ -25,7 +24,7 @@ export type ChallengeScreens = {
 export const buildChallengeSlides = (
   challenges: KioskChallenges,
   kioskId: KioskId,
-  controller: Controller,
+  handlers: { onNavigateDown: () => void; onNavigateUp: () => void },
   overrides?: Partial<ChallengeScreens> & { onInitialButtonClick?: () => void }
 ): Slide[] => {
   const initialScreen = { ...challenges.initialScreen, ...overrides?.initialScreen };
@@ -40,7 +39,7 @@ export const buildChallengeSlides = (
             kioskId={kioskId}
             onButtonClick={() => {
               overrides?.onInitialButtonClick?.();
-              controller.next();
+              handlers.onNavigateDown();
             }}
           />
         </SectionSlide>
@@ -54,8 +53,8 @@ export const buildChallengeSlides = (
           <FirstScreenTemplate
             {...challenges.firstScreen}
             kioskId={kioskId}
-            onNavigateDown={() => controller.next()}
-            onNavigateUp={() => controller.prev()}
+            onNavigateDown={handlers.onNavigateDown}
+            onNavigateUp={handlers.onNavigateUp}
           />
         </SectionSlide>
       ),
@@ -68,8 +67,8 @@ export const buildChallengeSlides = (
           <SecondScreenTemplate
             {...challenges.secondScreen}
             kioskId={kioskId}
-            onNavigateDown={() => controller.next()}
-            onNavigateUp={() => controller.prev()}
+            onNavigateDown={handlers.onNavigateDown}
+            onNavigateUp={handlers.onNavigateUp}
           />
         </SectionSlide>
       ),
@@ -82,8 +81,8 @@ export const buildChallengeSlides = (
           <ThirdScreenTemplate
             {...challenges.thirdScreen}
             kioskId={kioskId}
-            onNavigateDown={() => controller.next()}
-            onNavigateUp={() => controller.prev()}
+            onNavigateDown={handlers.onNavigateDown}
+            onNavigateUp={handlers.onNavigateUp}
           />
         </SectionSlide>
       ),
