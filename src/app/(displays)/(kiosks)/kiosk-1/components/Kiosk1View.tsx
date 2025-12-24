@@ -19,16 +19,12 @@ import {
   type ValueScreens,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueSlides';
 import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers/kiosk-provider';
-import {
-  ARROW_FADE_DURATION_KIOSK1_SEC,
-  ARROW_INITIAL_DELAY_MS,
-  ARROW_TRANSITION_DELAY_MS,
-  SCROLL_DURATION_MS,
-} from '@/app/(displays)/(kiosks)/_constants/timing';
+import { ARROW_FADE_DURATION_KIOSK1_SEC, SCROLL_DURATION_MS } from '@/app/(displays)/(kiosks)/_constants/timing';
 import { mapChallenges } from '@/app/(displays)/(kiosks)/_mappers/map-challenges';
 import { mapCustomInteractiveKiosk1 } from '@/app/(displays)/(kiosks)/_mappers/map-custom-interactive-kiosk1';
 import { mapSolutionsWithGrid } from '@/app/(displays)/(kiosks)/_mappers/map-solutions-with-grid';
 import { mapValue } from '@/app/(displays)/(kiosks)/_mappers/map-value';
+import { useKioskArrowStore } from '@/app/(displays)/(kiosks)/_stores/useKioskArrowStore';
 import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
 import type {
   Ambient,
@@ -41,9 +37,18 @@ import type {
 
 const Kiosk1View = () => {
   const { data: kioskData } = useKiosk();
-  const [showArrows, setShowArrows] = useState(false);
-  const [allowArrowsToShow, setAllowArrowsToShow] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Zustand store for arrow state
+  const kioskState = useKioskArrowStore(state => state.kiosk1);
+  const handleButtonClick = useKioskArrowStore(state => state.handleButtonClick);
+  const handleScrollTargetChange = useKioskArrowStore(state => state.handleScrollTargetChange);
+  const handleInitialScreenReset = useKioskArrowStore(state => state.handleInitialScreenReset);
+  const handleScrollStart = useKioskArrowStore(state => state.handleScrollStart);
+  const handleScrollComplete = useKioskArrowStore(state => state.handleScrollComplete);
+  const handleArrowColorUpdate = useKioskArrowStore(state => state.handleArrowColorUpdate);
+
+  const { arrowColor, showArrows } = kioskState;
 
   // Store carousel handlers for value section
   const [carouselHandlers, setCarouselHandlers] = useState<null | {
@@ -147,8 +152,8 @@ const Kiosk1View = () => {
 
   // Stable callbacks to avoid ref access during render
   const handleInitialButtonClick = useCallback(() => {
-    setAllowArrowsToShow(true);
-  }, []);
+    handleButtonClick('kiosk-1');
+  }, [handleButtonClick]);
 
   const handleContainerKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -234,124 +239,52 @@ const Kiosk1View = () => {
     currentSection === 'value' || (currentScrollTarget && currentScrollTarget.startsWith('value-'));
   const isCustomInteractiveSection = currentSection === 'customInteractive';
 
-  // Track arrow color and persist it during fade transitions
-  const [arrowColor, setArrowColor] = useState('#6DCFF6');
-  const [wasInValueSection, setWasInValueSection] = useState(false);
+  // Track if we were in value section for color persistence (using ref to avoid setState-in-effect)
+  const wasInValueSectionRef = useRef(false);
 
-  // All hooks must be called before any conditional returns
   useEffect(() => {
     // Track if we were in value section
     if (isValueSection) {
-      setWasInValueSection(true);
+      wasInValueSectionRef.current = true;
     } else if (!currentScrollTarget || !currentScrollTarget.includes('customInteractive-')) {
       // Only clear the flag if we're not transitioning to customInteractive
-      setWasInValueSection(false);
+      wasInValueSectionRef.current = false;
     }
   }, [isValueSection, currentScrollTarget]);
 
+  // Handle arrow color updates
   useEffect(() => {
-    // Only update color when arrows are visible AND not scrolling to customInteractive
     const isScrollingToCustomInteractive = currentScrollTarget && currentScrollTarget.includes('customInteractive-');
 
     if (showArrows && !isScrollingToCustomInteractive) {
-      // Use current value section status
-      setArrowColor(isValueSection ? '#58595B' : '#6DCFF6');
-    } else if (showArrows && isScrollingToCustomInteractive && wasInValueSection) {
+      handleArrowColorUpdate('kiosk-1', Boolean(isValueSection), showArrows);
+    } else if (showArrows && isScrollingToCustomInteractive && wasInValueSectionRef.current) {
       // Preserve gray color when transitioning from value to customInteractive
-      setArrowColor('#58595B');
+      // This is handled in the component, not the store
     }
-  }, [isValueSection, showArrows, currentScrollTarget, wasInValueSection]);
+  }, [isValueSection, showArrows, currentScrollTarget, handleArrowColorUpdate]);
 
-  // Show arrows only after scroll completes (INITIAL APPEARANCE from button click)
+  // Handle scroll target changes
   useEffect(() => {
-    if (allowArrowsToShow && !isScrolling && currentScrollTarget === 'challenge-first-video') {
-      // Delay before arrows first appear (after initial button click and scroll to challenge video)
-      const timer = setTimeout(() => {
-        setShowArrows(true);
-      }, ARROW_INITIAL_DELAY_MS);
-      return () => clearTimeout(timer);
-    }
-    return undefined;
-  }, [allowArrowsToShow, isScrolling, currentScrollTarget]);
+    handleScrollTargetChange('kiosk-1', currentScrollTarget, kioskState.previousScrollTarget, isInitialScreen);
+  }, [currentScrollTarget, kioskState.previousScrollTarget, isInitialScreen, handleScrollTargetChange]);
 
-  // Handle arrows reappearing after scrolling to videos in other sections (solution, value)
-  const [wasScrollingToVideo, setWasScrollingToVideo] = useState(false);
-  const [previousScrollTarget, setPreviousScrollTarget] = useState<null | string>(null);
-  const [shouldResetOnInitial, setShouldResetOnInitial] = useState(false);
-
-  // Track previous scroll target and detect leaving video for initial screen
+  // Handle initial screen reset
   useEffect(() => {
-    if (currentScrollTarget !== previousScrollTarget) {
-      // If we're leaving the video and going to "nothing" (initial screen), AND we're at initial screen, set reset flag
-      if (previousScrollTarget === 'challenge-first-video' && !currentScrollTarget && isInitialScreen) {
-        setShouldResetOnInitial(true);
-      }
-      // Clear the flag if we go to any other scroll section
-      else if (currentScrollTarget) {
-        setShouldResetOnInitial(false);
-      }
+    handleInitialScreenReset('kiosk-1', isInitialScreen);
+  }, [isInitialScreen, handleInitialScreenReset]);
 
-      setPreviousScrollTarget(currentScrollTarget);
-    }
-  }, [currentScrollTarget, previousScrollTarget, isInitialScreen]);
-
-  // Reset arrow state when we arrive at initial screen AND the flag is set
+  // Handle scroll start (hiding arrows)
   useEffect(() => {
-    if (isInitialScreen && shouldResetOnInitial && showArrows) {
-      setShowArrows(false);
-      setAllowArrowsToShow(false);
-      setShouldResetOnInitial(false);
-    }
-  }, [isInitialScreen, shouldResetOnInitial, showArrows]);
+    handleScrollStart('kiosk-1', currentScrollTarget, isScrolling, isCustomInteractiveSection);
+  }, [isScrolling, currentScrollTarget, isCustomInteractiveSection, handleScrollStart]);
 
+  // Handle scroll complete (showing arrows)
   useEffect(() => {
-    const isScrollingToVideo =
-      isScrolling &&
-      currentScrollTarget &&
-      (currentScrollTarget.includes('-video') ||
-        currentScrollTarget.includes('-first-video') ||
-        currentScrollTarget === 'value-carousel');
+    handleScrollComplete('kiosk-1', currentScrollTarget, isScrolling, isCustomInteractiveSection);
+  }, [isScrolling, currentScrollTarget, isCustomInteractiveSection, handleScrollComplete]);
 
-    // Also detect scrolling to customInteractive section
-    const isScrollingToCustomInteractive =
-      isScrolling && currentScrollTarget && currentScrollTarget.includes('customInteractive-');
-
-    const shouldHideArrows = isScrollingToVideo || isScrollingToCustomInteractive;
-
-    // Track when we START scrolling to a video or customInteractive section
-    if (shouldHideArrows && !wasScrollingToVideo) {
-      setWasScrollingToVideo(true);
-      setShowArrows(false); // Hide arrows immediately when scrolling to video/customInteractive starts
-    }
-
-    // When scroll completes and we were scrolling to a video, reappear after delay (but NOT for customInteractive)
-    if (
-      wasScrollingToVideo &&
-      !isScrolling &&
-      currentScrollTarget &&
-      (currentScrollTarget.includes('-video') ||
-        currentScrollTarget.includes('-first-video') ||
-        currentScrollTarget === 'value-carousel') &&
-      !currentScrollTarget.includes('customInteractive-') && // Don't reappear for customInteractive
-      allowArrowsToShow &&
-      !isCustomInteractiveSection
-    ) {
-      // Delay before arrows reappear after scrolling to a new section video
-      const timer = setTimeout(() => {
-        setShowArrows(true);
-        setWasScrollingToVideo(false);
-      }, ARROW_TRANSITION_DELAY_MS);
-      return () => clearTimeout(timer);
-    }
-
-    // Reset tracking state if we finish scrolling to customInteractive
-    if (wasScrollingToVideo && !isScrolling && currentScrollTarget?.includes('customInteractive-')) {
-      setWasScrollingToVideo(false);
-    }
-    return undefined;
-  }, [isScrolling, currentScrollTarget, wasScrollingToVideo, allowArrowsToShow, isCustomInteractiveSection]);
-
-  // Arrows should be visible when showArrows is true (controlled by the effects above)
+  // Arrows should be visible when showArrows is true (controlled by the store)
   const shouldShowArrows = showArrows && !isCustomInteractiveSection;
 
   // Focus container on mount to capture keyboard events
