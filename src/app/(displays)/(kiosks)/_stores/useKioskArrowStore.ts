@@ -70,7 +70,7 @@ export const useKioskArrowStore = create<Store>((set, get) => ({
       const defaultColors: Record<KioskId, string> = {
         'kiosk-1': '#6DCFF6',
         'kiosk-2': '#6DCFF6',
-        'kiosk-3': '#F7931E',
+        'kiosk-3': '#6DCFF6',
       };
 
       const newColor = isValueSection ? '#58595B' : defaultColors[kioskId];
@@ -119,7 +119,20 @@ export const useKioskArrowStore = create<Store>((set, get) => ({
     const key = getStoreKey(kioskId);
     const state = get()[key];
 
-    if (isScrolling || !currentScrollTarget) return;
+    if (isScrolling) return;
+
+    // Don't show arrows on initial screen (currentScrollTarget is null when scrolling to top/initial screen)
+    const isInitialScreen = currentScrollTarget === null || currentScrollTarget === 'challenge-initial';
+    if (isInitialScreen) {
+      set({
+        [key]: {
+          ...state,
+          showArrows: false,
+          wasScrollingToVideo: false,
+        },
+      });
+      return;
+    }
 
     // Initial appearance after button click
     if (state.allowArrowsToShow && currentScrollTarget === 'challenge-first-video') {
@@ -178,20 +191,23 @@ export const useKioskArrowStore = create<Store>((set, get) => ({
     isScrolling: boolean,
     isCustomInteractiveSection: boolean
   ) => {
-    if (!isScrolling || !currentScrollTarget) return;
+    if (!isScrolling) return;
 
     const key = getStoreKey(kioskId);
+    const isScrollingToInitial = currentScrollTarget === null || currentScrollTarget === 'challenge-initial';
     const isScrollingToVideo =
-      currentScrollTarget.includes('-video') ||
-      currentScrollTarget.includes('-first-video') ||
-      currentScrollTarget === 'value-carousel';
+      currentScrollTarget &&
+      (currentScrollTarget.includes('-video') ||
+        currentScrollTarget.includes('-first-video') ||
+        currentScrollTarget === 'value-carousel');
 
-    const isScrollingToCustomInteractive = currentScrollTarget.includes('customInteractive-');
-    const shouldHideArrows = isScrollingToVideo || (isScrollingToCustomInteractive && isCustomInteractiveSection);
+    const isScrollingToCustomInteractive = currentScrollTarget && currentScrollTarget.includes('customInteractive-');
+    const shouldHideArrows =
+      isScrollingToInitial || isScrollingToVideo || (isScrollingToCustomInteractive && isCustomInteractiveSection);
 
     const state = get()[key];
 
-    if (shouldHideArrows && !state.wasScrollingToVideo) {
+    if (shouldHideArrows) {
       set({
         [key]: {
           ...state,
@@ -229,14 +245,14 @@ export const useKioskArrowStore = create<Store>((set, get) => ({
 
   kiosk2: { ...defaultKioskState, arrowColor: '#6DCFF6' },
 
-  kiosk3: { ...defaultKioskState, arrowColor: '#F7931E' },
+  kiosk3: { ...defaultKioskState, arrowColor: '#6DCFF6' },
 
   resetKiosk: (kioskId: KioskId) => {
     const key = getStoreKey(kioskId);
     const defaultColors: Record<KioskId, string> = {
       'kiosk-1': '#6DCFF6',
       'kiosk-2': '#6DCFF6',
-      'kiosk-3': '#F7931E',
+      'kiosk-3': '#6DCFF6',
     };
 
     set({
