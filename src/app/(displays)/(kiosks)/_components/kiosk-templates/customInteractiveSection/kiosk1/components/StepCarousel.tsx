@@ -25,10 +25,13 @@ type StepCarouselProps = {
   readonly steps: readonly Step[];
 };
 
+const INITIAL_CENTER_INDEX = 2;
+const EDGE_OFFSET = 2; // This helps to catch what the carousel items on the far left and right are since they're 2 spots away from the active item in the center. (5 items total). The items on the far left and right have specific sizes which this helps to adjust further in the code.
+
 const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
   const [emblaApi, setEmblaApi] = useState<EmblaApi | undefined>(undefined);
   const hasAppliedInitialAlignment = useRef(false);
-  const [selectedIndex, setSelectedIndex] = useState(2);
+  const [selectedIndex, setSelectedIndex] = useState(() => Math.min(steps.length - 1, INITIAL_CENTER_INDEX));
   const totalSlides = steps.length;
 
   const applyEdgeTransforms = useCallback(
@@ -77,7 +80,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
         if (normalizedIndex === currentIndex && slide !== activeSlide) {
           const slideRect = slide.getBoundingClientRect();
           const slideCenter = slideRect.left + slideRect.width / 2;
-          delta = slideCenter < rootCenter ? -2 : 2;
+          delta = slideCenter < rootCenter ? -EDGE_OFFSET : EDGE_OFFSET;
         }
 
         if (delta > half) {
@@ -88,7 +91,11 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
         }
 
         const transform =
-          delta === -2 ? 'translate3d(240px, 0px, 0px)' : delta === 2 ? 'translate3d(-240px, 0px, 0px)' : '';
+          delta === -EDGE_OFFSET
+            ? 'translate3d(240px, 0px, 0px)'
+            : delta === EDGE_OFFSET
+              ? 'translate3d(-240px, 0px, 0px)'
+              : '';
         slide.style.transform = transform;
       });
     },
@@ -126,7 +133,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
 
   useEffect(() => {
     if (!emblaApi || totalSlides === 0 || hasAppliedInitialAlignment.current) return;
-    const desiredIndex = Math.min(totalSlides - 1, 2);
+    const desiredIndex = Math.min(totalSlides - 1, INITIAL_CENTER_INDEX);
     hasAppliedInitialAlignment.current = true;
     emblaApi.scrollTo(desiredIndex, true);
   }, [applyEdgeTransforms, emblaApi, totalSlides]);
@@ -180,15 +187,15 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
           dragFree: false,
           loop: true,
           slidesToScroll: 1,
-          startIndex: 2,
+          startIndex: Math.min(steps.length - 1, INITIAL_CENTER_INDEX),
         }}
         setApi={setEmblaApi}
       >
         <CarouselContent className="flex items-center gap-[60px] px-0">
           {steps.map((step, idx) => {
             const isActive = idx === selectedIndex;
-            const leftIndex = (selectedIndex - 2 + totalSlides) % totalSlides;
-            const rightIndex = (selectedIndex + 2) % totalSlides;
+            const leftIndex = (selectedIndex - EDGE_OFFSET + totalSlides) % totalSlides;
+            const rightIndex = (selectedIndex + EDGE_OFFSET) % totalSlides;
             const isLeftEdge = idx === leftIndex;
             const isRightEdge = idx === rightIndex;
             const inactiveSize = isLeftEdge || isRightEdge ? 440 : 640;
@@ -213,7 +220,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
               >
                 <div className="flex flex-col items-center gap-[28px]">
                   <button
-                    className="relative z-[1] flex items-center justify-center"
+                    className="relative z-1 flex items-center justify-center"
                     data-idx={idx}
                     onClick={handleDiamondClick}
                     type="button"
