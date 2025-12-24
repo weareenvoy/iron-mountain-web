@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import { useId } from 'react';
 import { normalizeDiamondCards } from '@/app/(displays)/(kiosks)/_utils/normalize-diamond-cards';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
 import { getVideoMimeType } from '@/lib/utils/get-video-mime-type';
@@ -45,9 +44,7 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
     onRegisterCarouselHandlers,
     slides,
   } = props;
-  const generatedId = useId();
-  const resolvedCarouselId = carouselId ?? `value-carousel-${generatedId}`;
-  const isOverview = resolvedCarouselId.includes('overview');
+  const isOverview = carouselId?.includes('overview');
   const heroVideo = isOverview ? heroVideoSrc : undefined;
 
   const slidesToRender = slides?.length ? slides : [];

@@ -34,6 +34,8 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
   const [selectedIndex, setSelectedIndex] = useState(() => Math.min(steps.length - 1, INITIAL_CENTER_INDEX));
   const totalSlides = steps.length;
 
+
+  // The function below takes the two diamonds in the diamond carousel and pushes them towards the center by 240px to have them overlap with the two diamonds that are directly to the left and right of the active center diamond. This keeps the intended layout in Figma.
   const applyEdgeTransforms = useCallback(
     (currentIndex: number) => {
       if (!emblaApi?.rootNode || totalSlides === 0) return;
