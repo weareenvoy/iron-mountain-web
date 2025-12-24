@@ -45,15 +45,16 @@ const SolutionThirdScreenTemplate = ({
 }: SolutionThirdScreenTemplateProps) => {
   const isKiosk1 = kioskId === 'kiosk-1';
   const accentDiamondImageSrc = isKiosk1 ? undefined : accentDiamondSrc;
+
   type TextDiamondConfig = {
-    className: string;
-    label?: string;
-    outline?: ComponentType<SVGProps<SVGSVGElement>>;
-    sizeClass?: string;
-    textWrapperClassName?: string;
+    readonly className: string;
+    readonly label?: string;
+    readonly outline?: ComponentType<SVGProps<SVGSVGElement>>;
+    readonly sizeClass?: string;
+    readonly textWrapperClassName?: string;
   };
 
-  const textDiamonds: ReadonlyArray<TextDiamondConfig> = [
+  const textDiamonds: readonly TextDiamondConfig[] = [
     {
       className: 'left-[240px] top-[350px]',
       label: centerLabel,

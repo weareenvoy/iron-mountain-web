@@ -3,7 +3,12 @@ import { getDiamondIcon, type ValueDiamondCard } from './valueCarouselTemplate';
 
 export type DiamondStackVariant = 'carousel' | 'overview';
 
-const diamondLayouts: Record<DiamondStackVariant, Readonly<{ className?: string; positions: readonly number[] }>> = {
+type DiamondLayout = {
+  readonly className?: string;
+  readonly positions: readonly number[];
+};
+
+const diamondLayouts: Record<DiamondStackVariant, DiamondLayout> = {
   carousel: {
     className: 'relative left-[-330px]',
     positions: [335, 490, 650],

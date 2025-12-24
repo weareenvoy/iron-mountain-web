@@ -199,8 +199,8 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
           <div>
             <p className="text-[100px] leading-[1.3] font-normal tracking-[-5px]">{renderRegisteredMark(headline)}</p>
             <p
-              className="mt-[80px] w-[1480px] text-[60px] leading-[1.4] font-normal tracking-[-3px]"
               {...(!isOverview ? { 'data-scroll-section': 'value-description' } : {})}
+              className="mt-[80px] w-[1480px] text-[60px] leading-[1.4] font-normal tracking-[-3px]"
             >
               {renderRegisteredMark(normalizeMultiline(description))}
             </p>
