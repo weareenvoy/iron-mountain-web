@@ -6,7 +6,7 @@ export type DiamondProps = {
   readonly label?: string;
   readonly outline?: ComponentType<SVGProps<SVGSVGElement>>;
   readonly sizeClass?: string;
-  readonly textColor?: string;
+  readonly textColorClass?: string;
   readonly textWrapperClassName?: string;
 };
 
@@ -15,7 +15,7 @@ const Diamond = ({
   label,
   outline: OutlineComponent,
   sizeClass = 'size-[666px]',
-  textColor = '#ededed',
+  textColorClass = 'text-[#ededed]',
   textWrapperClassName,
 }: DiamondProps) => {
   return (
@@ -29,7 +29,7 @@ const Diamond = ({
             textWrapperClassName ?? 'w-[600px]'
           }`}
         >
-          <span className="text-[67px] leading-[1.4] font-normal tracking-[-3.3px]" style={{ color: textColor }}>
+          <span className={`text-[67px] leading-[1.4] font-normal tracking-[-3.3px] ${textColorClass}`}>
             {renderRegisteredMark(label)}
           </span>
         </div>

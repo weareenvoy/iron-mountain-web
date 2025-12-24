@@ -348,6 +348,7 @@ const Kiosk2View = () => {
               onKeyDown={handleUpArrowKeyDown}
               onPointerDown={handleNavigateUp}
               role="button"
+              style={{ '--arrow-color': arrowColor } as React.CSSProperties}
               tabIndex={0}
             >
               <ArrowUp
@@ -355,7 +356,7 @@ const Kiosk2View = () => {
                 className="h-full w-full"
                 focusable="false"
                 strokeWidth={1.5}
-                style={{ color: arrowColor }}
+                style={{ color: 'var(--arrow-color)' }}
               />
             </div>
             <div

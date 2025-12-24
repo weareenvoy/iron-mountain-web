@@ -38,14 +38,17 @@ const DiamondStack = ({ cards, variant = 'overview' }: DiamondStackProps) => {
           <div
             className="absolute h-[550px] w-[550px] rotate-[45deg] rounded-[80px]"
             key={`${card.label ?? fallbackColor}-${index}`}
-            style={{ left: leftOffset }}
+            style={{ '--left-offset': `${leftOffset}px`, 'left': 'var(--left-offset)' } as React.CSSProperties}
           >
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="h-full w-full -rotate-[45deg]">
                 {Icon ? (
                   <Icon aria-hidden className="h-full w-full" focusable="false" />
                 ) : (
-                  <div className="h-full w-full rounded-[80px]" style={{ backgroundColor: fallbackColor }} />
+                  <div
+                    className="h-full w-full rounded-[80px]"
+                    style={{ '--bg-color': fallbackColor, 'backgroundColor': 'var(--bg-color)' } as React.CSSProperties}
+                  />
                 )}
               </div>
             </div>

@@ -136,17 +136,13 @@ const SolutionFourthScreenTemplate = ({
                   />
                 ) : null}
                 <AccordionTrigger
-                  className={`group/accordion-trigger relative z-[1] flex h-[120px] min-h-[240px] items-center px-[80px] text-left text-[52px] leading-[1.4] tracking-[-2.6px] transition-none hover:no-underline focus-visible:outline-none ${triggerRoundedClass}`}
+                  className={`group/accordion-trigger relative z-[1] flex h-[120px] min-h-[240px] items-center rounded-t-[50px] px-[80px] pt-[30px] pb-[20px] text-left text-[52px] leading-[1.4] tracking-[-2.6px] transition-none hover:no-underline focus-visible:outline-none ${
+                    index === entries.length - 1 ? 'rounded-b-[50px]' : ''
+                  } ${triggerRoundedClass}`}
                   indicator={<PlusMinusIcon color={palette.text} />}
                   style={{
                     backgroundColor: palette.header,
-                    borderBottomLeftRadius: index === entries.length - 1 ? '50px' : undefined,
-                    borderBottomRightRadius: index === entries.length - 1 ? '50px' : undefined,
-                    borderTopLeftRadius: '50px',
-                    borderTopRightRadius: '50px',
                     color: palette.text,
-                    paddingBottom: '20px',
-                    paddingTop: '30px',
                   }}
                 >
                   <div className="flex flex-1 items-center gap-[40px]">

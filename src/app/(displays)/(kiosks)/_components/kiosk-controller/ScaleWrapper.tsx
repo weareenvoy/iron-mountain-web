@@ -17,15 +17,21 @@ const ScaleWrapper = ({ background = 'black', children, targetHeight, targetWidt
   // This file scales the build down to a size that is compatible with xScope when screenshots of Figma are taken at 10% zoom. For context it is compatible when the 0.415 scale is used and the custom Kiosk viewport is 2160x5120 at 50% zoom.
 
   const innerStyle: CSSProperties = {
-    height: `${targetHeight}px`,
-    transform: `scale(${scale})`,
-    transformOrigin: 'top left',
-    width: `${targetWidth}px`,
-    willChange: 'transform',
-  };
+    '--scale': scale,
+    '--target-height': `${targetHeight}px`,
+    '--target-width': `${targetWidth}px`,
+    'height': 'var(--target-height)',
+    'transform': 'scale(var(--scale))',
+    'transformOrigin': 'top left',
+    'width': 'var(--target-width)',
+    'willChange': 'transform',
+  } as CSSProperties;
 
   return (
-    <div className="grid w-screen place-items-center" style={{ background }}>
+    <div
+      className="grid w-screen place-items-center"
+      style={{ '--background': background, 'background': 'var(--background)' } as CSSProperties}
+    >
       <div style={innerStyle}>{children}</div>
     </div>
   );

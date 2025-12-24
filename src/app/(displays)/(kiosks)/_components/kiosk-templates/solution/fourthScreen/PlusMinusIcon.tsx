@@ -6,7 +6,11 @@ type PlusMinusIconProps = {
 
 const PlusMinusIcon = ({ color }: PlusMinusIconProps) => {
   return (
-    <span aria-hidden className="relative block h-[72px] w-[72px]" style={{ color }}>
+    <span
+      aria-hidden
+      className="relative block h-[72px] w-[72px]"
+      style={{ '--icon-color': color, 'color': 'var(--icon-color)' } as React.CSSProperties}
+    >
       <Minus
         className="absolute inset-0 h-full w-full opacity-0 transition-opacity group-data-[state=open]/accordion-trigger:opacity-100"
         strokeWidth={1.5}

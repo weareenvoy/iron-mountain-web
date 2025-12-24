@@ -128,7 +128,12 @@ const SolutionSecondScreenTemplate = ({
               <div className="mt-[30px] ml-[140px]">
                 <div
                   className="border-l border-dashed border-[#ededed]/60"
-                  style={{ height: `${dividerHeights[index] ?? 280}px` }}
+                  style={
+                    {
+                      '--divider-height': `${dividerHeights[index] ?? 280}px`,
+                      'height': 'var(--divider-height)',
+                    } as React.CSSProperties
+                  }
                 />
               </div>
             ) : null}

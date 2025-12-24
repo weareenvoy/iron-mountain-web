@@ -149,9 +149,9 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
 
   return (
     <div
+      {...(isOverview ? { 'data-scroll-section': 'value-carousel' } : {})}
       className="relative flex h-screen w-full flex-col overflow-visible bg-transparent"
       data-carousel-id={resolvedCarouselId}
-      {...(isOverview ? { 'data-scroll-section': 'value-carousel' } : {})}
     >
       <div className="absolute top-0 left-0 z-[0] h-[1284px] w-full overflow-hidden">
         {heroVideo ? (

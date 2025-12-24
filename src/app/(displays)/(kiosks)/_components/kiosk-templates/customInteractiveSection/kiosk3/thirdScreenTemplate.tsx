@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { useCallback, useState } from 'react';
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
-import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import HCBlueFilledDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCBlueFilledDiamond';
 import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCFilledOrangeDiamond';
 import HCFilledOrangeDiamond2 from '@/components/ui/icons/Kiosks/CustomInteractive/HCFilledOrangeDiamond2';
@@ -14,6 +13,7 @@ import HCHollowBlueDiamond2 from '@/components/ui/icons/Kiosks/CustomInteractive
 import HCHollowGreenDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowGreenDiamond';
 import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowOrangeDiamond';
 import CircularCarousel, { type CarouselSlide } from './components/CircularCarousel';
+import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 export type CustomInteractiveKiosk3ThirdScreenTemplateProps = {
   readonly demoIframeSrc?: string;

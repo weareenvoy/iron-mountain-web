@@ -132,7 +132,6 @@ const SolutionThirdScreenTemplate = ({
               label={label}
               outline={outline}
               sizeClass={sizeClass}
-              textColor="#ededed"
               textWrapperClassName={textWrapperClassName}
             />
           ) : null

@@ -386,6 +386,7 @@ const Kiosk3View = () => {
               onKeyDown={handleUpArrowKeyDown}
               onPointerDown={handleNavigateUp}
               role="button"
+              style={{ '--arrow-color': arrowColor } as React.CSSProperties}
               tabIndex={0}
             >
               <ArrowUp
@@ -393,7 +394,7 @@ const Kiosk3View = () => {
                 className="h-full w-full"
                 focusable="false"
                 strokeWidth={1.5}
-                style={{ color: arrowColor }}
+                style={{ color: 'var(--arrow-color)' }}
               />
             </div>
             <div
@@ -402,6 +403,7 @@ const Kiosk3View = () => {
               onKeyDown={handleDownArrowKeyDown}
               onPointerDown={handleNavigateDown}
               role="button"
+              style={{ '--arrow-color': arrowColor } as React.CSSProperties}
               tabIndex={0}
             >
               <ArrowDown
@@ -409,7 +411,7 @@ const Kiosk3View = () => {
                 className="h-full w-full"
                 focusable="false"
                 strokeWidth={1.5}
-                style={{ color: arrowColor }}
+                style={{ color: 'var(--arrow-color)' }}
               />
             </div>
           </motion.div>

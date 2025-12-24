@@ -1,10 +1,10 @@
 'use client';
 
 import Image from 'next/image';
-import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import ButtonArrow from '@/components/ui/icons/ButtonArrow';
 import WhiteLogoSimple from '@/components/ui/icons/WhiteLogoSimple';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
+import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 export type InitialScreenTemplateProps = {
   readonly arrowIconSrc?: string;

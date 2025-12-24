@@ -11,8 +11,8 @@ import CustomInteractiveKiosk3ThirdScreenTemplate, {
   type CustomInteractiveKiosk3ThirdScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/kiosk3/thirdScreenTemplate';
 import { SectionSlide, type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
-import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import type { CustomInteractiveDemoScreenTemplateProps } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
+import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 export type CustomInteractiveScreens = {
   readonly demoScreen?: CustomInteractiveDemoScreenTemplateProps;
