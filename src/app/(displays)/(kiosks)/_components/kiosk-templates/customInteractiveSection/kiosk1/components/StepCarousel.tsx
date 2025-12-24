@@ -144,15 +144,20 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
   };
 
   const handleDiamondClick = useCallback(
-    (idx: number) => {
-      if (!emblaApi) return;
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      const idx = Number(event.currentTarget.dataset.idx);
+      if (!emblaApi || Number.isNaN(idx)) return;
       emblaApi.scrollTo(idx);
     },
     [emblaApi]
   );
 
   const handlePlusClick = useCallback(
-    (event: React.KeyboardEvent | React.MouseEvent, idx: number) => {
+    (event: React.KeyboardEvent | React.MouseEvent) => {
+      const target = event.currentTarget as HTMLElement;
+      const idx = Number(target.dataset.idx);
+      if (Number.isNaN(idx)) return;
+
       event.stopPropagation();
       if ('key' in event && event.key !== 'Enter' && event.key !== ' ') {
         return;
@@ -209,7 +214,8 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                 <div className="flex flex-col items-center gap-[28px]">
                   <button
                     className="relative z-[1] flex items-center justify-center"
-                    onClick={() => handleDiamondClick(idx)}
+                    data-idx={idx}
+                    onClick={handleDiamondClick}
                     type="button"
                   >
                     {isActive ? (
@@ -235,8 +241,9 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                         <div
                           aria-label="Open details"
                           className="absolute inset-0 flex cursor-pointer items-center justify-center pt-[490px] pr-[5px]"
-                          onClick={event => handlePlusClick(event, idx)}
-                          onKeyDown={event => handlePlusClick(event, idx)}
+                          data-idx={idx}
+                          onClick={handlePlusClick}
+                          onKeyDown={handlePlusClick}
                           role="button"
                           tabIndex={0}
                         >

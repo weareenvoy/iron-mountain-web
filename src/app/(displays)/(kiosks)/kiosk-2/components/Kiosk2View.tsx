@@ -120,6 +120,41 @@ const Kiosk2View = () => {
     setAllowArrowsToShow(true);
   }, []);
 
+  const handleContainerKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
+      // Prevent default arrow key scrolling to avoid jump before smooth scroll
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault();
+        if (event.key === 'ArrowDown') {
+          handleNavigateDown();
+        } else {
+          handleNavigateUp();
+        }
+      }
+    },
+    [handleNavigateDown, handleNavigateUp]
+  );
+
+  const handleUpArrowKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        handleNavigateUp();
+      }
+    },
+    [handleNavigateUp]
+  );
+
+  const handleDownArrowKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        handleNavigateDown();
+      }
+    },
+    [handleNavigateDown]
+  );
+
   const handleRegisterCarouselHandlers = useCallback(
     (handlers: {
       canScrollNext: () => boolean;
@@ -284,17 +319,7 @@ const Kiosk2View = () => {
   return (
     <div
       className="relative h-screen w-full overflow-y-auto scroll-smooth"
-      onKeyDown={event => {
-        // Prevent default arrow key scrolling to avoid jump before smooth scroll
-        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-          event.preventDefault();
-          if (event.key === 'ArrowDown') {
-            handleNavigateDown();
-          } else {
-            handleNavigateUp();
-          }
-        }
-      }}
+      onKeyDown={handleContainerKeyDown}
       ref={containerRef}
       tabIndex={-1}
     >
@@ -320,12 +345,7 @@ const Kiosk2View = () => {
             <div
               aria-label="Previous"
               className="flex h-[140px] w-[120px] cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95"
-              onKeyDown={event => {
-                if (event.key === 'Enter' || event.key === ' ') {
-                  event.preventDefault();
-                  handleNavigateUp();
-                }
-              }}
+              onKeyDown={handleUpArrowKeyDown}
               onPointerDown={handleNavigateUp}
               role="button"
               tabIndex={0}
@@ -341,12 +361,7 @@ const Kiosk2View = () => {
             <div
               aria-label="Next"
               className="flex h-[140px] w-[120px] cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95"
-              onKeyDown={event => {
-                if (event.key === 'Enter' || event.key === ' ') {
-                  event.preventDefault();
-                  handleNavigateDown();
-                }
-              }}
+              onKeyDown={handleDownArrowKeyDown}
               onPointerDown={handleNavigateDown}
               role="button"
               tabIndex={0}
