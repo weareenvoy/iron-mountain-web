@@ -3,17 +3,23 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type PropsWithChildren } from 'react';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getBasecampData } from '@/lib/internal/data/get-basecamp';
-import { isBasecampSection, type BasecampData, type ExhibitNavigationState, type Locale } from '@/lib/internal/types';
+import {
+  isBasecampSection,
+  type BasecampBeatId,
+  type BasecampData,
+  type ExhibitNavigationState,
+  type Locale,
+} from '@/lib/internal/types';
 import type { ExhibitMqttState } from '@/lib/mqtt/types';
 
 interface BasecampContextType {
-  data: BasecampData | null;
-  error: null | string;
-  exhibitState: ExhibitNavigationState;
-  loading: boolean;
-  locale: Locale;
-  readyBeatId: null | string;
-  setReadyBeatId: (beatId: null | string) => void;
+  readonly data: BasecampData | null;
+  readonly error: null | string;
+  readonly exhibitState: ExhibitNavigationState;
+  readonly loading: boolean;
+  readonly locale: Locale;
+  readonly readyBeatId: BasecampBeatId | null;
+  readonly setReadyBeatId: (beatId: BasecampBeatId | null) => void;
 }
 
 export const BasecampContext = createContext<BasecampContextType | undefined>(undefined);
@@ -40,7 +46,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
   });
 
   // Which beat's video is ready. Foreground compares its beatId to this.
-  const [readyBeatId, setReadyBeatId] = useState<null | string>(null);
+  const [readyBeatId, setReadyBeatId] = useState<BasecampBeatId | null>(null);
 
   // MQTT state (what we report to GEC)
   const [mqttState, setMqttState] = useState<ExhibitMqttState>({
@@ -184,7 +190,6 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
           // Convert 1-indexed beat number to 0-indexed
           const beatIdx = beatNumber - 1;
 
-          console.info(`Parsed beat: moment=${momentId}, beatIdx=${beatIdx}`);
           setExhibitState({ beatIdx, momentId });
 
           // Report updated state with new beat-id
