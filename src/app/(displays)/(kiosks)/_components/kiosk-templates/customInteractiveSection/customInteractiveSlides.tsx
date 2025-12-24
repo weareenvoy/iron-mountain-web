@@ -11,6 +11,7 @@ import CustomInteractiveKiosk3ThirdScreenTemplate, {
   type CustomInteractiveKiosk3ThirdScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/kiosk3/thirdScreenTemplate';
 import { SectionSlide, type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
+import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import type { CustomInteractiveDemoScreenTemplateProps } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
 
 export type CustomInteractiveScreens = {
@@ -24,7 +25,7 @@ export type CustomInteractiveScreens = {
 
 export const buildCustomInteractiveSlides = (
   customInteractive: CustomInteractiveScreens,
-  kioskId: 'kiosk-1' | 'kiosk-2' | 'kiosk-3',
+  kioskId: KioskId,
   scrollToSection?: (sectionId: string) => void
 ): Slide[] => {
   const slides: Slide[] = [];

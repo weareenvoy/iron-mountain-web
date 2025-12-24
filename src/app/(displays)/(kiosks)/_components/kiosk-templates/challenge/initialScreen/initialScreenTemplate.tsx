@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import ButtonArrow from '@/components/ui/icons/ButtonArrow';
 import WhiteLogoSimple from '@/components/ui/icons/WhiteLogoSimple';
 import renderRegisteredMark from '../utils/renderRegisteredMark';
@@ -12,14 +13,12 @@ export type InitialScreenTemplateProps = {
   readonly buttonText?: string;
   readonly contentBoxBgColor?: string;
   readonly headline?: string;
-  readonly kioskId?: KioskVariant;
+  readonly kioskId?: KioskId;
   readonly logoCombinedSrc?: string;
   readonly onButtonClick?: () => void;
   readonly quote?: string;
   readonly subheadline?: string;
 };
-
-type KioskVariant = 'kiosk-1' | 'kiosk-2' | 'kiosk-3';
 
 export const InitialScreenTemplate = ({
   arrowIconSrc,

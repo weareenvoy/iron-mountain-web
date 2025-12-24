@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
+import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import ArrowIcon from '@/components/ui/icons/Kiosks/CustomInteractive/ArrowIcon';
 import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCFilledOrangeDiamond';
 import HCHollowBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowBlueDiamond';
@@ -14,7 +15,7 @@ export interface CustomInteractiveKiosk1FirstScreenTemplateProps {
   readonly headline?: string;
   readonly heroImageAlt?: string;
   readonly heroImageSrc?: string;
-  readonly kioskId?: 'kiosk-1' | 'kiosk-2' | 'kiosk-3';
+  readonly kioskId?: KioskId;
   readonly onPrimaryCta?: () => void;
   readonly onSecondaryCta?: () => void;
   readonly overlayCardLabel?: string;

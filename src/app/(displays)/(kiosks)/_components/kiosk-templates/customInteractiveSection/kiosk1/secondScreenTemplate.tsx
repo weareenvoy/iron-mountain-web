@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
+import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import StepCarousel, { type Step } from './components/StepCarousel';
 import StepModal, { type ModalContent } from './components/StepModal';
 
@@ -14,7 +15,7 @@ export type CustomInteractiveKiosk1SecondScreenTemplateProps = {
   readonly headline?: string;
   readonly heroImageAlt?: string;
   readonly heroImageSrc?: string;
-  readonly kioskId?: 'kiosk-1' | 'kiosk-2' | 'kiosk-3';
+  readonly kioskId?: KioskId;
   readonly onBack?: () => void;
   readonly onSecondaryCta?: () => void;
   readonly overlayCardLabel?: string;
