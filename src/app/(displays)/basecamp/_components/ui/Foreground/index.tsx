@@ -2,6 +2,7 @@
 
 import { startTransition, useEffect, useState } from 'react';
 import { useBasecamp } from '@/app/(displays)/basecamp/_components/providers/basecamp';
+import { isForegroundSeamlessTransition } from '@/app/(displays)/basecamp/_utils';
 import { BasecampBeatId, BasecampData, isValidBasecampBeatId } from '@/lib/internal/types';
 import AmbientView from './views/AmbientView';
 import PossibilitiesDetail from './views/PossibilitiesDetail';
@@ -32,32 +33,27 @@ const VIEWS: Partial<Record<BasecampBeatId, ViewRenderer>> = {
   'welcome-1': data => <WelcomeView data={data.welcome} />,
 };
 
-// changing from problem1 to 2 doesn't need fade.
-const SEAMLESS_GROUPS: readonly BasecampBeatId[][] = [['problem-1', 'problem-2']];
-
-const isSeamlessTransition = (from: BasecampBeatId | null, to: BasecampBeatId): boolean => {
-  if (!from) return true;
-  return SEAMLESS_GROUPS.some(group => group.includes(from) && group.includes(to));
-};
-
 const Foreground = () => {
   const { data, exhibitState, readyBeatId } = useBasecamp();
   const { beatIdx, momentId } = exhibitState;
-  const targetBeatId = `${momentId}-${beatIdx + 1}` as BasecampBeatId;
+
+  // Build and validate the target beat ID
+  const targetBeatIdRaw = `${momentId}-${beatIdx + 1}`;
+  const targetBeatId = isValidBasecampBeatId(targetBeatIdRaw) ? targetBeatIdRaw : null;
 
   const [displayedBeatId, setDisplayedBeatId] = useState<BasecampBeatId | null>(null);
   // True when fade-out completed but video wasn't ready yet
   const [fadedOut, setFadedOut] = useState(false);
 
-  const isReady = readyBeatId === targetBeatId;
-  const isValid = isValidBasecampBeatId(targetBeatId);
+  const isReady = targetBeatId !== null && readyBeatId === targetBeatId;
+  const isValid = targetBeatId !== null;
 
   // Main transition effect
   useEffect(() => {
     if (!isReady || !isValid) return;
     if (displayedBeatId === targetBeatId) return;
 
-    const seamless = isSeamlessTransition(displayedBeatId, targetBeatId);
+    const seamless = isForegroundSeamlessTransition(displayedBeatId, targetBeatId);
 
     // Switch when: seamless transition, OR fade-out already completed
     if (seamless || fadedOut) {
@@ -69,16 +65,18 @@ const Foreground = () => {
   }, [displayedBeatId, fadedOut, isReady, isValid, targetBeatId]);
 
   const handleTransitionEnd = (e: React.TransitionEvent) => {
+    // More specific check
     if (e.target !== e.currentTarget) return;
     if (e.propertyName !== 'opacity') return;
-    if (displayedBeatId === targetBeatId) return;
-
-    // Fade-out completed for non-seamless transition
-    if (displayedBeatId && !isSeamlessTransition(displayedBeatId, targetBeatId)) {
-      if (isReady) {
-        startTransition(() => setDisplayedBeatId(targetBeatId));
+    // Capture current values to avoid stale closures
+    const currentDisplayed = displayedBeatId;
+    const currentTarget = targetBeatId;
+    const currentReady = readyBeatId === currentTarget;
+    if (currentDisplayed === currentTarget) return;
+    if (currentDisplayed && !isForegroundSeamlessTransition(currentDisplayed, currentTarget)) {
+      if (currentReady) {
+        startTransition(() => setDisplayedBeatId(currentTarget));
       } else {
-        // Video not ready - mark faded out, effect will switch when ready
         setFadedOut(true);
       }
     }
@@ -95,7 +93,8 @@ const Foreground = () => {
   const View = getView();
 
   // Determine if we should be fading out
-  const shouldFadeOut = displayedBeatId !== targetBeatId && !isSeamlessTransition(displayedBeatId, targetBeatId);
+  const shouldFadeOut =
+    displayedBeatId !== targetBeatId && !isForegroundSeamlessTransition(displayedBeatId, targetBeatId);
 
   return (
     <div

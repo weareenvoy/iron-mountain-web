@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useBasecamp } from '@/app/(displays)/basecamp/_components/providers/basecamp';
-import { getNextBeatId, isSeamlessVideoTransition } from '@/app/(displays)/basecamp/_utils';
+import { getNextBeatId, isBackgroundSeamlessTransition } from '@/app/(displays)/basecamp/_utils';
 import { BasecampBeatId, isValidBasecampBeatId } from '@/lib/internal/types';
 
 const CROSSFADE_DURATION_MS = 800 as const;
@@ -27,13 +27,19 @@ const Background = () => {
     const url = data.beats[beatId].url;
     if (!url || beatId === lastBeat.current) return;
 
+    const lastBeatId: BasecampBeatId | null =
+      lastBeat.current && isValidBasecampBeatId(lastBeat.current) ? lastBeat.current : null;
+
     // First beat after page reload → force into A
-    const isFirstLoad = lastBeat.current === null;
+    const isFirstLoad = lastBeatId === null;
     const isAmbient = momentId === 'ambient';
 
     // Determine visible and invisible
     const visible = active.current === 'a' ? a.current : b.current;
     const hidden = active.current === 'a' ? b.current : a.current;
+
+    // Track listeners for cleanup
+    const cleanupFns: (() => void)[] = [];
 
     // Clear ready state - foreground will wait until this beat is ready
     setReadyBeatId(null);
@@ -49,14 +55,12 @@ const Background = () => {
     const startPlaybackAndSignalReady = (video: HTMLVideoElement) => {
       video.play().catch(e => console.error('Play failed:', e));
 
-      video.addEventListener(
-        'playing',
-        () => {
-          if (lastBeat.current !== beatId) return; // Stale
-          setReadyBeatId(beatId);
-        },
-        { once: true }
-      );
+      const handlePlaying = () => {
+        if (lastBeat.current !== beatId) return; // Stale
+        setReadyBeatId(beatId);
+      };
+      video.addEventListener('playing', handlePlaying, { once: true });
+      cleanupFns.push(() => video.removeEventListener('playing', handlePlaying));
     };
 
     if (isFirstLoad) {
@@ -64,12 +68,13 @@ const Background = () => {
       setupIncomingVideo(a.current!);
       active.current = 'a';
 
-      a.current!.addEventListener('canplaythrough', () => startPlaybackAndSignalReady(a.current!), { once: true });
+      const handleCanPlayThrough = () => startPlaybackAndSignalReady(a.current!);
+      a.current!.addEventListener('canplaythrough', handleCanPlayThrough, { once: true });
+      cleanupFns.push(() => a.current?.removeEventListener('canplaythrough', handleCanPlayThrough));
     } else {
       // Subsequent beats
       setupIncomingVideo(hidden);
-
-      const seamless = isSeamlessVideoTransition(lastBeat.current as BasecampBeatId | null, beatId);
+      const seamless = isBackgroundSeamlessTransition(lastBeat.current as BasecampBeatId | null, beatId);
 
       const performSwitch = () => {
         if (lastBeat.current !== beatId) return;
@@ -96,6 +101,7 @@ const Background = () => {
         performSwitch();
       } else {
         hidden.addEventListener('canplaythrough', performSwitch, { once: true });
+        cleanupFns.push(() => hidden.removeEventListener('canplaythrough', performSwitch));
       }
     }
 
@@ -111,19 +117,23 @@ const Background = () => {
         preloadTarget.src = data.beats[nextBeatId].url;
       } else {
         // Wait until crossfade ends
-        visible.addEventListener(
-          'transitionend',
-          () => {
-            if (lastBeat.current === beatId) {
-              preloadTarget.src = data.beats[nextBeatId].url;
-            }
-          },
-          { once: true }
-        );
+        const handleTransitionEnd = () => {
+          if (lastBeat.current === beatId) {
+            preloadTarget.src = data.beats[nextBeatId].url;
+          }
+        };
+        visible.addEventListener('transitionend', handleTransitionEnd, { once: true });
+        cleanupFns.push(() => visible.removeEventListener('transitionend', handleTransitionEnd));
       }
     }
 
+    // Update at the end. If we update early, seamless check would always be false.
     lastBeat.current = beatId;
+
+    // Remove all listeners
+    return () => {
+      cleanupFns.forEach(fn => fn());
+    };
   }, [beatId, data, momentId, setReadyBeatId]);
 
   // For debugging only. Update display time

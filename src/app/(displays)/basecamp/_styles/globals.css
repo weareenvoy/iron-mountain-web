@@ -122,8 +122,8 @@
     opacity: 1;
     transform: translateX(10%);
   }
-  /* start moving at around 5s */
-  72% {
+  /* Adjust start time per design */
+  70% {
     opacity: 1;
     transform: translateX(10%);
   }

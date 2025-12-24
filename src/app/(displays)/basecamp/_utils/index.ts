@@ -4,8 +4,16 @@ export const getMomentPrefix = (beatId: string): null | string => {
   return beatId.split('-')[0] ?? null;
 };
 
-// If same moment, and consecutive, we don't want crossfade.
-export const isSeamlessVideoTransition = (from: BasecampBeatId | null, to: BasecampBeatId): boolean => {
+// Foreground and background seamless do not match.
+// Foreground checks for specific beat pairs that skip UI fade.
+const SEAMLESS_GROUPS: readonly BasecampBeatId[][] = [['problem-1', 'problem-2']];
+export const isForegroundSeamlessTransition = (from: BasecampBeatId | null, to: BasecampBeatId | null): boolean => {
+  if (!from || !to) return true; // No fade needed when either is null
+  return SEAMLESS_GROUPS.some(group => group.includes(from) && group.includes(to));
+};
+
+// Background: Any consecutive beats in same moment skip video crossfade
+export const isBackgroundSeamlessTransition = (from: BasecampBeatId | null, to: BasecampBeatId): boolean => {
   if (!from) return false;
 
   const fromIndex = BASECAMP_BEAT_ORDER.indexOf(from);
