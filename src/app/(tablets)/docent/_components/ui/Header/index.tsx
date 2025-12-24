@@ -25,14 +25,6 @@ const Header = ({ leftButton, useDarkLogo }: HeaderProps) => {
     setLocale(newLocale);
   };
 
-  const handleEnglishClick = () => {
-    handleLocaleChange('en');
-  };
-
-  const handlePortugueseClick = () => {
-    handleLocaleChange('pt');
-  };
-
   return (
     <div className="absolute top-0 left-0 flex h-30 w-full items-center px-5">
       {/* Left Button */}
@@ -57,7 +49,7 @@ const Header = ({ leftButton, useDarkLogo }: HeaderProps) => {
       <div className="flex flex-1 justify-end gap-2">
         <Button
           className={cn('h-8 w-16', locale === 'pt' ? 'opacity-40' : 'opacity-100')}
-          onClick={handleEnglishClick}
+          onClick={() => handleLocaleChange('en')}
           size="sm"
           variant={useDarkLogo ? 'outline-mid-blue' : 'outline-light-grey'}
         >
@@ -65,7 +57,7 @@ const Header = ({ leftButton, useDarkLogo }: HeaderProps) => {
         </Button>
         <Button
           className={cn('h-8 w-16', locale === 'en' ? 'opacity-40' : 'opacity-100')}
-          onClick={handlePortugueseClick}
+          onClick={() => handleLocaleChange('pt')}
           size="sm"
           variant={useDarkLogo ? 'outline-mid-blue' : 'outline-light-grey'}
         >
