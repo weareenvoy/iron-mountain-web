@@ -9,6 +9,4 @@ const HCHollowGreenDiamond = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-HCHollowGreenDiamond.displayName = 'HCHollowGreenDiamond';
-
 export default HCHollowGreenDiamond;

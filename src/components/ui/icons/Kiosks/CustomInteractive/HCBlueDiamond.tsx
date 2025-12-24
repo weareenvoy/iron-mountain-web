@@ -15,6 +15,4 @@ const HCBlueDiamond = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-HCBlueDiamond.displayName = 'HCBlueDiamond';
-
 export default HCBlueDiamond;

@@ -19,6 +19,4 @@ const OrangeGradientDiamondFourth = (props: SVGProps<SVGSVGElement>) => {
   );
 };
 
-OrangeGradientDiamondFourth.displayName = 'OrangeGradientDiamondFourth';
-
 export default OrangeGradientDiamondFourth;

@@ -17,7 +17,7 @@ export const mapCustomInteractiveKiosk2 = (
     demoIframeSrc: demo?.iframeLink,
     eyebrow: ambient.title,
     headline: customInteractive.headline,
-    heroImageAlt: 'Healthcare professional working',
+    heroImageAlt: '',
     heroImageSrc: customInteractive.image,
     overlayCardLabel: demo?.demoText,
     overlayEndTourLabel: demo?.mainCTA,

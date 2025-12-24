@@ -102,9 +102,7 @@ const Kiosk3View = () => {
 
   const challenges: KioskChallenges | null =
     kioskContent?.challengeMain && kioskContent.ambient
-      ? parseKioskChallenges(
-          mapChallenges(kioskContent.challengeMain, kioskContent.ambient, 'IT assets & data centers')
-        )
+      ? parseKioskChallenges(mapChallenges(kioskContent.challengeMain, kioskContent.ambient))
       : null;
   const solutions =
     kioskContent?.solutionMain && kioskContent.solutionAccordion && kioskContent.ambient

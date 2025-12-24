@@ -102,9 +102,7 @@ const Kiosk2View = () => {
 
   const challenges: KioskChallenges | null =
     kioskContent?.challengeMain && kioskContent.ambient
-      ? parseKioskChallenges(
-          mapChallenges(kioskContent.challengeMain, kioskContent.ambient, 'Information & data lifecycle')
-        )
+      ? parseKioskChallenges(mapChallenges(kioskContent.challengeMain, kioskContent.ambient))
       : null;
 
   const solutions =

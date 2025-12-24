@@ -17,7 +17,7 @@ export const mapCustomInteractiveKiosk1 = (
     demoIframeSrc: demo?.iframeLink,
     eyebrow: ambient.title,
     headline: customInteractive.headline,
-    heroImageAlt: 'Visitors smiling while viewing content',
+    heroImageAlt: '',
     heroImageSrc: customInteractive.image,
     overlayCardLabel: demo?.demoText,
     overlayEndTourLabel: demo?.mainCTA,
@@ -29,8 +29,8 @@ export const mapCustomInteractiveKiosk1 = (
     backLabel: customInteractive.backCTA,
     demoIframeSrc: demo?.iframeLink,
     eyebrow: ambient.title,
-    headline: customInteractive.headline2 ?? 'From archive\nto access',
-    heroImageAlt: 'Archive visualization',
+    headline: customInteractive.headline2,
+    heroImageAlt: '',
     heroImageSrc: customInteractive.image,
     overlayCardLabel: demo?.demoText,
     overlayEndTourLabel: demo?.mainCTA,
@@ -44,9 +44,9 @@ export const mapCustomInteractiveKiosk1 = (
       return {
         label: item,
         modal: {
-          body: modalBody ?? 'Description not available.',
-          heading: modalHeadline ?? item,
-          imageAlt: `${item} illustration`,
+          body: modalBody ?? '',
+          heading: modalHeadline ?? '',
+          imageAlt: '',
           imageSrc: `https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/${item.replace(/\s+/g, '+')}.webp`,
         },
       };
@@ -57,7 +57,7 @@ export const mapCustomInteractiveKiosk1 = (
     demoIframeSrc: demo?.iframeLink,
     endTourLabel: demo?.mainCTA,
     headline: demo?.headline,
-    heroImageAlt: 'Digital transformation showcase',
+    heroImageAlt: '',
     heroImageSrc: customInteractive.image,
   },
 });

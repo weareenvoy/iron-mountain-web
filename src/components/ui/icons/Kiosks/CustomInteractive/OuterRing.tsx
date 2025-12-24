@@ -4,6 +4,4 @@ const OuterRing = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-OuterRing.displayName = 'OuterRing';
-
 export default OuterRing;

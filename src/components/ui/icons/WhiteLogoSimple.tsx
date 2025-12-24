@@ -30,6 +30,4 @@ const WhiteLogoSimple = ({
   );
 };
 
-WhiteLogoSimple.displayName = 'WhiteLogoSimple';
-
 export default WhiteLogoSimple;

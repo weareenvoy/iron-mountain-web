@@ -26,6 +26,4 @@ const BlueFilledDiamond = (props: SVGProps<SVGSVGElement>) => {
   );
 };
 
-BlueFilledDiamond.displayName = 'BlueFilledDiamond';
-
 export default BlueFilledDiamond;

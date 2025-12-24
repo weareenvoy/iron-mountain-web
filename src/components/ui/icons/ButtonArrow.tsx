@@ -25,6 +25,4 @@ const ButtonArrow = ({
   );
 };
 
-ButtonArrow.displayName = 'ButtonArrow';
-
 export default ButtonArrow;

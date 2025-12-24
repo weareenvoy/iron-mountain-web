@@ -4,6 +4,4 @@ const FadedDot = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-FadedDot.displayName = 'FadedDot';
-
 export default FadedDot;

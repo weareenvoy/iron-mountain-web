@@ -27,6 +27,4 @@ const OrangeDiamondMain = (props: SVGProps<SVGSVGElement>) => {
   );
 };
 
-OrangeDiamondMain.displayName = 'OrangeDiamondMain';
-
 export default OrangeDiamondMain;

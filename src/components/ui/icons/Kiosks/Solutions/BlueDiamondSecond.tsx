@@ -26,6 +26,4 @@ const BlueDiamondSecond = (props: SVGProps<SVGSVGElement>) => {
   );
 };
 
-BlueDiamondSecond.displayName = 'BlueDiamondSecond';
-
 export default BlueDiamondSecond;

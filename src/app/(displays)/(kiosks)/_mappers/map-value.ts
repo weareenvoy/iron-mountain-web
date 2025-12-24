@@ -52,7 +52,7 @@ export const mapValue = (value: ValueContent, ambient: Ambient, kioskId: KioskId
         eyebrow: ambient.title,
         headline,
         heroVideoSrc,
-        labelText: value.labelText ?? 'Value',
+        labelText: value.labelText ?? '',
         slides: [
           {
             badgeLabel: 'Operational · Economic · Strategic',
@@ -66,7 +66,7 @@ export const mapValue = (value: ValueContent, ambient: Ambient, kioskId: KioskId
         description,
         eyebrow: ambient.title,
         headline,
-        labelText: value.labelText ?? 'Value',
+        labelText: value.labelText ?? '',
         slides: carouselSlides,
       },
     ],

@@ -4,6 +4,4 @@ const BlueDot = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-BlueDot.displayName = 'BlueDot';
-
 export default BlueDot;

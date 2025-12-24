@@ -26,6 +26,4 @@ const TealGradientDiamondThird = (props: SVGProps<SVGSVGElement>) => {
   );
 };
 
-TealGradientDiamondThird.displayName = 'TealGradientDiamondThird';
-
 export default TealGradientDiamondThird;

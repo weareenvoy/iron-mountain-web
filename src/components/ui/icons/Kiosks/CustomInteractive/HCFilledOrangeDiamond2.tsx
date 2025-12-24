@@ -13,6 +13,4 @@ const HCFilledOrangeDiamond2 = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-HCFilledOrangeDiamond2.displayName = 'HCFilledOrangeDiamond2';
-
 export default HCFilledOrangeDiamond2;

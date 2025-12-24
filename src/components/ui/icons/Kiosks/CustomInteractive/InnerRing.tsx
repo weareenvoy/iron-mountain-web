@@ -4,6 +4,4 @@ const InnerRing = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-InnerRing.displayName = 'InnerRing';
-
 export default InnerRing;

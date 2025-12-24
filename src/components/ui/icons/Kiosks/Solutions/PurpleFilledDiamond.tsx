@@ -26,6 +26,4 @@ const PurpleFilledDiamond = (props: SVGProps<SVGSVGElement>) => {
   );
 };
 
-PurpleFilledDiamond.displayName = 'PurpleFilledDiamond';
-
 export default PurpleFilledDiamond;

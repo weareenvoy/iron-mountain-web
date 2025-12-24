@@ -11,6 +11,4 @@ const OutlinedDiamond = ({ height = 120, width = 120, ...props }: SVGProps<SVGSV
   </svg>
 );
 
-OutlinedDiamond.displayName = 'OutlinedDiamond';
-
 export default OutlinedDiamond;

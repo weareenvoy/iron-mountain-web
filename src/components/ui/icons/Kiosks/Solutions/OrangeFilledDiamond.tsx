@@ -19,6 +19,4 @@ const OrangeFilledDiamond = (props: SVGProps<SVGSVGElement>) => {
   );
 };
 
-OrangeFilledDiamond.displayName = 'OrangeFilledDiamond';
-
 export default OrangeFilledDiamond;

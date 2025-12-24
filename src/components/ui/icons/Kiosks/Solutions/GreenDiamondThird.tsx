@@ -13,6 +13,4 @@ const GreenDiamondThird = (props: SVGProps<SVGSVGElement>) => {
   );
 };
 
-GreenDiamondThird.displayName = 'GreenDiamondThird';
-
 export default GreenDiamondThird;
