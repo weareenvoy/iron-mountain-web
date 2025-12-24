@@ -3,8 +3,8 @@
 import Image from 'next/image';
 import ButtonArrow from '@/components/ui/icons/ButtonArrow';
 import WhiteLogoSimple from '@/components/ui/icons/WhiteLogoSimple';
-import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
+import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 
 export type InitialScreenTemplateProps = {
   readonly arrowIconSrc?: string;
@@ -14,7 +14,6 @@ export type InitialScreenTemplateProps = {
   readonly contentBoxBgColor?: string;
   readonly headline?: string;
   readonly kioskId?: KioskId;
-  readonly logoCombinedSrc?: string;
   readonly onButtonClick?: () => void;
   readonly quote?: string;
   readonly subheadline?: string;
@@ -28,7 +27,6 @@ const InitialScreenTemplate = ({
   contentBoxBgColor,
   headline,
   kioskId = 'kiosk-1',
-  logoCombinedSrc,
   onButtonClick,
   quote,
   subheadline,
@@ -65,13 +63,7 @@ const InitialScreenTemplate = ({
         style={contentBoxBgColor ? { backgroundColor: contentBoxBgColor } : undefined}
       >
         <div className="absolute top-[2910px] left-[120px] z-[3] flex h-[182px] w-[703px] items-center group-data-[kiosk=kiosk-2]/kiosk:top-[2890px] group-data-[kiosk=kiosk-3]/kiosk:hidden">
-          <div className="relative h-full w-full">
-            {logoCombinedSrc ? (
-              <Image alt="Partner logos" className="object-contain" fill sizes="710px" src={logoCombinedSrc} />
-            ) : (
-              <WhiteLogoSimple aria-hidden="true" className="h-full w-full" preserveAspectRatio="xMidYMid meet" />
-            )}
-          </div>
+          <WhiteLogoSimple aria-hidden="true" className="h-full w-full" preserveAspectRatio="xMidYMid meet" />
         </div>
 
         <h1 className="max-w-[1660px] text-[80px] leading-[1.3] font-normal tracking-[-4px] text-black">

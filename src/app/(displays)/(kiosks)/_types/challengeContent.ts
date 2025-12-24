@@ -11,7 +11,6 @@ type InitialScreen = {
   readonly backgroundImage: string;
   readonly buttonText: string;
   readonly headline: string;
-  readonly logoCombinedSrc?: string;
   readonly quote: string;
   readonly subheadline: string;
 };
