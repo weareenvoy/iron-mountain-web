@@ -148,6 +148,11 @@ const StaticWelcomeSlide = ({
 }) => {
   const resolvedVideo = videoUrl || WELCOME_BG_VIDEO;
 
+  const handleVideoError = (event: React.SyntheticEvent<HTMLVideoElement>) => {
+    const video = event.currentTarget;
+    video.style.display = 'none';
+  };
+
   return (
     <div className="relative h-full w-full overflow-hidden bg-[#F3F5F7] text-[#58595B]">
       <video
@@ -157,10 +162,7 @@ const StaticWelcomeSlide = ({
         crossOrigin="anonymous"
         loop
         muted
-        onError={event => {
-          const video = event.currentTarget;
-          video.style.display = 'none';
-        }}
+        onError={handleVideoError}
         playsInline
         preload="auto"
         src={resolvedVideo}

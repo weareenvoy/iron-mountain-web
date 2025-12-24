@@ -2,7 +2,7 @@
 
 import { SquarePlay } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
 import HCBlueFilledDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCBlueFilledDiamond';
@@ -40,6 +40,14 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
 }: CustomInteractiveKiosk3ThirdScreenTemplateProps) => {
   const [showOverlay, setShowOverlay] = useState(false);
   const safeSlides = slides ?? [];
+
+  const handleShowOverlay = useCallback(() => {
+    setShowOverlay(true);
+  }, []);
+
+  const handleHideOverlay = useCallback(() => {
+    setShowOverlay(false);
+  }, []);
 
   if (safeSlides.length === 0 || !headline) {
     return null;
@@ -105,7 +113,7 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
               {/* CTA */}
               <button
                 className="absolute top-[2630px] left-[240px] flex h-[200px] items-center gap-[18px] rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[110px] text-[55px] leading-[1.1] font-semibold tracking-[2px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)]"
-                onClick={() => setShowOverlay(true)}
+                onClick={handleShowOverlay}
                 type="button"
               >
                 Launch demo
@@ -192,7 +200,7 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
           headline={overlayHeadline}
           heroImageAlt={heroImageAlt}
           heroImageSrc={heroImageSrc}
-          onEndTour={() => setShowOverlay(false)}
+          onEndTour={handleHideOverlay}
         />
       </div>
     </div>

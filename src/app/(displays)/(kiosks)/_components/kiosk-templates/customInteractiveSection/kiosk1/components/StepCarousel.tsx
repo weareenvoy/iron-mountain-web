@@ -143,6 +143,28 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
     emblaApi.scrollTo(target);
   };
 
+  const handleDiamondClick = useCallback(
+    (idx: number) => {
+      if (!emblaApi) return;
+      emblaApi.scrollTo(idx);
+    },
+    [emblaApi]
+  );
+
+  const handlePlusClick = useCallback(
+    (event: React.KeyboardEvent | React.MouseEvent, idx: number) => {
+      event.stopPropagation();
+      if ('key' in event && event.key !== 'Enter' && event.key !== ' ') {
+        return;
+      }
+      if ('key' in event) {
+        event.preventDefault();
+      }
+      onStepClick(idx);
+    },
+    [onStepClick]
+  );
+
   return (
     <div className="absolute top-[1980px] left-0 w-full">
       <Carousel
@@ -187,10 +209,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                 <div className="flex flex-col items-center gap-[28px]">
                   <button
                     className="relative z-[1] flex items-center justify-center"
-                    onClick={() => {
-                      if (!emblaApi) return;
-                      emblaApi.scrollTo(idx);
-                    }}
+                    onClick={() => handleDiamondClick(idx)}
                     type="button"
                   >
                     {isActive ? (
@@ -216,17 +235,8 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                         <div
                           aria-label="Open details"
                           className="absolute inset-0 flex cursor-pointer items-center justify-center pt-[490px] pr-[5px]"
-                          onClick={event => {
-                            event.stopPropagation();
-                            onStepClick(idx);
-                          }}
-                          onKeyDown={event => {
-                            if (event.key === 'Enter' || event.key === ' ') {
-                              event.preventDefault();
-                              event.stopPropagation();
-                              onStepClick(idx);
-                            }
-                          }}
+                          onClick={event => handlePlusClick(event, idx)}
+                          onKeyDown={event => handlePlusClick(event, idx)}
                           role="button"
                           tabIndex={0}
                         >

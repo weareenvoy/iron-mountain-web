@@ -29,19 +29,17 @@ export const buildChallengeSlides = (
 ): Slide[] => {
   const initialScreen = { ...challenges.initialScreen, ...overrides?.initialScreen };
 
+  const handleInitialButtonClick = () => {
+    overrides?.onInitialButtonClick?.();
+    handlers.onNavigateDown();
+  };
+
   return [
     {
       id: 'challenge-initial',
       render: (isActive: boolean) => (
         <SectionSlide isActive={isActive}>
-          <InitialScreenTemplate
-            {...initialScreen}
-            kioskId={kioskId}
-            onButtonClick={() => {
-              overrides?.onInitialButtonClick?.();
-              handlers.onNavigateDown();
-            }}
-          />
+          <InitialScreenTemplate {...initialScreen} kioskId={kioskId} onButtonClick={handleInitialButtonClick} />
         </SectionSlide>
       ),
       title: 'Challenge Intro',
