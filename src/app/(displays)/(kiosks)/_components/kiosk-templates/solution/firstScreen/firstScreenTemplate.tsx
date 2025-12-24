@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import BlueDiamondMain from '@/components/ui/icons/Kiosks/Solutions/BlueDiamondMain';
 import GreenDiamondMain from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondMain';
 import OrangeDiamondMain from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondMain';
@@ -9,13 +8,10 @@ import { getVideoMimeType } from '@/lib/utils/get-video-mime-type';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 
 export type SolutionFirstScreenTemplateProps = {
-  readonly accentDiamondSrc?: string;
   readonly backgroundVideoSrc?: string;
   readonly description?: string;
   readonly kioskId?: string;
   readonly labelText?: string;
-  readonly largeDiamondSrc?: string;
-  readonly mediumDiamondSrc?: string;
   readonly onNavigateDown?: () => void;
   readonly onNavigateUp?: () => void;
   readonly subheadline?: string;
@@ -23,13 +19,10 @@ export type SolutionFirstScreenTemplateProps = {
 };
 
 const SolutionFirstScreenTemplate = ({
-  accentDiamondSrc,
   backgroundVideoSrc,
   description,
   kioskId,
   labelText,
-  largeDiamondSrc,
-  mediumDiamondSrc,
   subheadline,
   title,
 }: SolutionFirstScreenTemplateProps) => {
@@ -81,49 +74,13 @@ const SolutionFirstScreenTemplate = ({
 
       {/* Decorative diamonds */}
       <div className="pointer-events-none absolute top-[2420px] left-[-170px] z-[3] h-[1770px] w-[1770px] opacity-60 group-data-[kiosk=kiosk-2]/kiosk:top-[2420px] group-data-[kiosk=kiosk-2]/kiosk:top-[2450px] group-data-[kiosk=kiosk-3]/kiosk:top-[2420px] group-data-[kiosk=kiosk-3]/kiosk:left-[-180px] group-data-[kiosk=kiosk-3]/kiosk:size-[1780px]">
-        {largeDiamondSrc ? (
-          <div className="relative h-full w-full">
-            <Image
-              alt="Large gradient diamond accent"
-              className="object-contain"
-              fill
-              sizes="1770px"
-              src={largeDiamondSrc}
-            />
-          </div>
-        ) : (
-          <BlueDiamondMain aria-hidden="true" className="h-full w-full" focusable="false" />
-        )}
+        <BlueDiamondMain aria-hidden="true" className="h-full w-full" focusable="false" />
       </div>
       <div className="pointer-events-none absolute top-[2400px] left-[1250px] z-[3] h-[800px] w-[800px] opacity-70 group-data-[kiosk=kiosk-2]/kiosk:top-[2420px] group-data-[kiosk=kiosk-2]/kiosk:left-[1240px] group-data-[kiosk=kiosk-2]/kiosk:size-[805px] group-data-[kiosk=kiosk-3]/kiosk:top-[2390px] group-data-[kiosk=kiosk-3]/kiosk:left-[1250px] group-data-[kiosk=kiosk-3]/kiosk:size-[810px]">
-        {mediumDiamondSrc ? (
-          <div className="relative h-full w-full">
-            <Image
-              alt="Medium green diamond accent"
-              className="object-contain"
-              fill
-              sizes="800px"
-              src={mediumDiamondSrc}
-            />
-          </div>
-        ) : (
-          <GreenDiamondMain aria-hidden="true" className="h-full w-full" focusable="false" />
-        )}
+        <GreenDiamondMain aria-hidden="true" className="h-full w-full" focusable="false" />
       </div>
       <div className="pointer-events-none absolute top-[3440px] left-[1250px] z-[3] h-[795px] w-[795px] opacity-70 group-data-[kiosk=kiosk-3]/kiosk:top-[3420px] group-data-[kiosk=kiosk-3]/kiosk:left-[1250px] group-data-[kiosk=kiosk-3]/kiosk:size-[810px]">
-        {accentDiamondSrc ? (
-          <div className="relative h-full w-full">
-            <Image
-              alt="Small orange accent diamond"
-              className="object-contain"
-              fill
-              sizes="795px"
-              src={accentDiamondSrc}
-            />
-          </div>
-        ) : (
-          <OrangeDiamondMain aria-hidden="true" className="h-full w-full" focusable="false" />
-        )}
+        <OrangeDiamondMain aria-hidden="true" className="h-full w-full" focusable="false" />
       </div>
     </div>
   );

@@ -3,8 +3,8 @@
 import Image from 'next/image';
 import ButtonArrow from '@/components/ui/icons/ButtonArrow';
 import WhiteLogoSimple from '@/components/ui/icons/WhiteLogoSimple';
-import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
+import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 export type InitialScreenTemplateProps = {
   readonly arrowIconSrc?: string;
