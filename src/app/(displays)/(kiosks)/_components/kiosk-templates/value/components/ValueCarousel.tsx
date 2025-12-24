@@ -2,9 +2,9 @@
 
 import useEmblaCarousel from 'embla-carousel-react';
 import { useEffect } from 'react';
-import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
+import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import DiamondStack, { type DiamondStackVariant } from '../DiamondStack';
-import type { ValueCarouselSlide, ValueDiamondCard } from '../valueCarouselTemplate';
+import type { ValueCarouselSlide, ValueDiamondCard } from '@/app/(displays)/(kiosks)/_types/value-types';
 
 type ValueCarouselProps = {
   readonly hasCarouselSlides?: boolean;

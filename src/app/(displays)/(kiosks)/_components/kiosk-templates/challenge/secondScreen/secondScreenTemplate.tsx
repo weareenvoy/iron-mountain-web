@@ -3,7 +3,7 @@
 import { Diamond } from 'lucide-react';
 import Image from 'next/image';
 import { DEFAULT_KIOSK_ID, type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
-import renderRegisteredMark from '../utils/renderRegisteredMark';
+import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 
 export type SecondScreenTemplateProps = {
   readonly bottomDescription?: string;
@@ -17,7 +17,7 @@ export type SecondScreenTemplateProps = {
   readonly topImageSrc?: string;
 };
 
-export const SecondScreenTemplate = ({
+const SecondScreenTemplate = ({
   bottomDescription,
   kioskId = DEFAULT_KIOSK_ID,
   labelText,

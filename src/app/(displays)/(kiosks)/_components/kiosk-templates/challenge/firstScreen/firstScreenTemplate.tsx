@@ -2,7 +2,8 @@
 
 import { Diamond } from 'lucide-react';
 import { DEFAULT_KIOSK_ID, type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
-import renderRegisteredMark from '../utils/renderRegisteredMark';
+import { getVideoMimeType } from '@/lib/utils/get-video-mime-type';
+import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 
 export type FirstScreenTemplateProps = {
   readonly kioskId?: KioskId;
@@ -16,7 +17,7 @@ export type FirstScreenTemplateProps = {
   readonly videoSrc?: string;
 };
 
-export const FirstScreenTemplate = ({
+const FirstScreenTemplate = ({
   kioskId = DEFAULT_KIOSK_ID,
   labelText,
   problemDescription,
@@ -41,7 +42,7 @@ export const FirstScreenTemplate = ({
           muted
           playsInline
         >
-          <source src={videoSrc} type="video/mp4" />
+          <source src={videoSrc} type={getVideoMimeType(videoSrc)} />
         </video>
         <div className="pointer-events-none absolute inset-0 top-[230px] bg-black/20" />
 

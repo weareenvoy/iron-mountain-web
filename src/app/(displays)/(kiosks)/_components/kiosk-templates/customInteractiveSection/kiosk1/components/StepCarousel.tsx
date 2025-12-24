@@ -2,10 +2,10 @@
 
 import { ChevronLeft, ChevronRight, CirclePlus } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/shadcn/carousel';
 import HCBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCBlueDiamond';
 import HCWhiteDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCWhiteDiamond';
+import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import type { UseEmblaCarouselType } from 'embla-carousel-react';
 
 export type Step = {

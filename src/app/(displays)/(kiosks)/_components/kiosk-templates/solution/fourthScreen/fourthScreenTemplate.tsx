@@ -1,54 +1,15 @@
 'use client';
 
 import Image from 'next/image';
+import { palettes, type AccordionEntry } from '@/app/(displays)/(kiosks)/_types/accordion-types';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/shadcn/accordion';
 import GreenDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondFourth';
 import OrangeDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondFourth';
 import OrangeGradientDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/OrangeGradientDiamondFourth';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
-import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
+import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import PhotoDiamond from './PhotoDiamond';
 import PlusMinusIcon from './PlusMinusIcon';
-
-type AccordionColor = 'blue' | 'lightBlue' | 'navy' | 'white';
-
-type AccordionEntry = {
-  readonly color?: AccordionColor;
-  readonly contentList?: string[];
-  readonly expanded?: boolean;
-  readonly id: string;
-  readonly number: string;
-  readonly title: string;
-};
-
-type PaletteConfig = {
-  readonly body: string;
-  readonly header: string;
-  readonly text: string;
-};
-
-const palettes: Record<AccordionColor, PaletteConfig> = {
-  blue: {
-    body: '#1b75bc',
-    header: '#1b75bc',
-    text: '#ededed',
-  },
-  lightBlue: {
-    body: '#6dcff6',
-    header: '#6dcff6',
-    text: '#14477d',
-  },
-  navy: {
-    body: '#14477d',
-    header: '#14477d',
-    text: '#ededed',
-  },
-  white: {
-    body: '#ededed',
-    header: '#ededed',
-    text: '#14477d',
-  },
-} as const;
 
 export type SolutionFourthScreenTemplateProps = {
   readonly accentDiamondSrc?: string;

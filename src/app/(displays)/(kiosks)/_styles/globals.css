@@ -23,14 +23,5 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
-@layer base {
-  .registered-mark {
-    display: inline-block;
-    font-size: 0.66em;
-    line-height: 1;
-    vertical-align: text-top;
-  }
-}
-
 @layer utilities {
 }

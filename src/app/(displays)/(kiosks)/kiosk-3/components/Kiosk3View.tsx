@@ -19,7 +19,25 @@ import {
   type ValueScreens,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueSlides';
 import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers/kiosk-provider';
+import {
+  ARROW_FADE_DURATION_SEC,
+  ARROW_INITIAL_DELAY_MS,
+  ARROW_TRANSITION_DELAY_MS,
+  SCROLL_DURATION_MS,
+} from '@/app/(displays)/(kiosks)/_constants/timing';
+import { mapChallenges } from '@/app/(displays)/(kiosks)/_mappers/map-challenges';
+import { mapCustomInteractiveKiosk3 } from '@/app/(displays)/(kiosks)/_mappers/map-custom-interactive-kiosk3';
+import { mapSolutionsWithAccordion } from '@/app/(displays)/(kiosks)/_mappers/map-solutions-with-accordion';
+import { mapValue } from '@/app/(displays)/(kiosks)/_mappers/map-value';
 import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
+import type {
+  Ambient,
+  ChallengeContent,
+  CustomInteractiveContent,
+  SolutionsAccordion,
+  SolutionsMain,
+  ValueContent,
+} from '@/app/(displays)/(kiosks)/_types/content-types';
 
 const Kiosk3View = () => {
   const { data: kioskData } = useKiosk();
@@ -44,7 +62,7 @@ const Kiosk3View = () => {
     scrollToSectionById,
   } = useGlobalParagraphNavigation({
     containerRef,
-    duration: 1200,
+    duration: SCROLL_DURATION_MS,
   });
 
   // Wrap navigation handlers to check carousel first
@@ -73,22 +91,24 @@ const Kiosk3View = () => {
     | null
     | undefined
     | {
-        ambient?: unknown;
-        challengeMain?: unknown;
-        customInteractive3?: unknown;
+        ambient?: Ambient;
+        challengeMain?: ChallengeContent;
+        customInteractive3?: CustomInteractiveContent;
         demoMain?: unknown;
-        solutionAccordion?: unknown;
-        solutionMain?: unknown;
-        valueMain?: unknown;
+        solutionAccordion?: SolutionsAccordion;
+        solutionMain?: SolutionsMain;
+        valueMain?: ValueContent;
       };
 
   const challenges: KioskChallenges | null =
     kioskContent?.challengeMain && kioskContent.ambient
-      ? parseKioskChallenges(mapChallenges(kioskContent.challengeMain, kioskContent.ambient))
+      ? parseKioskChallenges(
+          mapChallenges(kioskContent.challengeMain, kioskContent.ambient, 'IT assets & data centers')
+        )
       : null;
   const solutions =
     kioskContent?.solutionMain && kioskContent.solutionAccordion && kioskContent.ambient
-      ? (mapSolutions(
+      ? (mapSolutionsWithAccordion(
           kioskContent.solutionMain,
           kioskContent.solutionAccordion,
           kioskContent.ambient
@@ -96,14 +116,16 @@ const Kiosk3View = () => {
       : null;
   const values =
     kioskContent?.valueMain && kioskContent.ambient
-      ? (mapValue(kioskContent.valueMain, kioskContent.ambient) as ValueScreens)
+      ? (mapValue(kioskContent.valueMain, kioskContent.ambient, 'kiosk-3') as ValueScreens)
       : null;
   const customInteractive =
     kioskContent?.customInteractive3 && kioskContent.ambient
-      ? (mapCustomInteractive(
+      ? (mapCustomInteractiveKiosk3(
           kioskContent.customInteractive3,
           kioskContent.ambient,
-          kioskContent.demoMain as undefined | { headline?: string; iframeLink?: string; mainCTA?: string }
+          kioskContent.demoMain as
+            | undefined
+            | { demoText?: string; headline?: string; iframeLink?: string; mainCTA?: string }
         ) as CustomInteractiveScreens)
       : null;
 
@@ -249,7 +271,7 @@ const Kiosk3View = () => {
       // Delay before arrows first appear (after initial button click and scroll to challenge video)
       const timer = setTimeout(() => {
         setShowArrows(true);
-      }, 1500); // INITIAL DELAY: Adjust this to control first appearance after button click
+      }, ARROW_INITIAL_DELAY_MS);
       return () => clearTimeout(timer);
     }
     return undefined;
@@ -321,7 +343,7 @@ const Kiosk3View = () => {
       const timer = setTimeout(() => {
         setShowArrows(true);
         setWasScrollingToVideo(false);
-      }, 300); // SECTION TRANSITION DELAY: Adjust this to control reappearance between sections (Challenge → Solution → Value)
+      }, ARROW_TRANSITION_DELAY_MS);
       return () => clearTimeout(timer);
     }
 
@@ -378,7 +400,7 @@ const Kiosk3View = () => {
             className="fixed top-[1945px] right-[120px] z-[50] flex -translate-y-1/2 flex-col gap-[100px]"
             exit={{ opacity: 0, scale: 0.9 }}
             initial={{ opacity: 0, scale: 0.9 }}
-            transition={{ duration: 0.4, ease: 'easeOut' }}
+            transition={{ duration: ARROW_FADE_DURATION_SEC, ease: 'easeOut' }}
           >
             <div
               aria-label="Previous"
@@ -422,294 +444,3 @@ const Kiosk3View = () => {
 };
 
 export default Kiosk3View;
-
-type Ambient = {
-  backgroundImage?: string;
-  body?: string;
-  headline?: string;
-  mainCTA?: string;
-  quoteSource?: string;
-  title?: string;
-};
-
-type ChallengeContent = {
-  body?: string;
-  featuredStat1?: string;
-  featuredStat1Body?: string;
-  featuredStat2?: string;
-  featuredStat2Body?: string;
-  item1Body?: string;
-  item1Image?: string;
-  item2Body?: string;
-  item2Image?: string;
-  labelText?: string;
-  mainVideo?: string;
-};
-
-type SolutionsMain = {
-  body?: string;
-  headline?: string;
-  image?: string;
-  labelText?: string;
-  mainVideo?: string;
-  numberedList?: string[];
-  numberedListHeadline?: string;
-};
-
-type SolutionsAccordion = {
-  accordion?: Array<{
-    bullets?: string[];
-    title?: string;
-  }>;
-  headline?: string;
-  image?: string;
-  labelText?: string;
-};
-
-type ValueContent = {
-  body?: string;
-  diamondBenefits?: { bullets?: string[]; label?: string; title?: string }[];
-  headline?: string;
-  labelText?: string;
-  mainVideo?: string;
-};
-
-type CustomInteractiveContent = {
-  backCTA?: string;
-  body?: string;
-  headline?: string;
-  headline2?: string;
-  image?: string;
-  mainCTA?: string;
-  secondaryCTA?: string;
-  tapCarousel?: Array<{
-    bullets?: string[];
-    image?: string;
-    title?: string;
-    video?: string;
-  }>;
-  tapCTA?: string;
-  video?: string;
-};
-
-const mapChallenges = (challenge: ChallengeContent, ambient: Ambient): KioskChallenges => ({
-  firstScreen: {
-    labelText: challenge.labelText ?? 'Challenge',
-    problemDescription: challenge.body ?? '',
-    savingsAmount: challenge.featuredStat1 ?? '',
-    savingsDescription: challenge.featuredStat1Body ?? '',
-    subheadline: ambient.title ?? 'IT assets & data centers',
-    videoSrc: challenge.mainVideo ?? '',
-  },
-  initialScreen: {
-    attribution: ambient.quoteSource ?? '',
-    backgroundImage: ambient.backgroundImage ?? '',
-    buttonText: ambient.mainCTA ?? 'Touch to explore',
-    headline: ambient.headline ?? '',
-    quote: ambient.body ?? '',
-    subheadline: ambient.title ?? 'IT assets & data centers',
-  },
-  secondScreen: {
-    bottomDescription: '',
-    bottomVideoSrc: '',
-    labelText: challenge.labelText ?? 'Challenge',
-    largeIconSrc: challenge.item1Image ?? '',
-    mainDescription: challenge.item1Body ?? '',
-    statAmount: '',
-    statDescription: '',
-    subheadline: ambient.title ?? 'IT assets & data centers',
-    topImageSrc: challenge.item1Image ?? '',
-  },
-  thirdScreen: {
-    description: challenge.item2Body ?? '',
-    heroImageSrc: challenge.item2Image ?? '',
-    labelText: challenge.labelText ?? 'Challenge',
-    largeIconCenterSrc: challenge.item2Image ?? '',
-    largeIconTopSrc: challenge.item2Image ?? '',
-    metricAmount: challenge.featuredStat2 ?? '',
-    metricDescription: challenge.featuredStat2Body ?? '',
-    metricImageSrc: challenge.item2Image ?? '',
-    subheadline: ambient.title ?? 'IT assets & data centers',
-    videoSrc: '',
-  },
-});
-
-const mapSolutions = (
-  solutionsMain: SolutionsMain,
-  solutionAccordion: SolutionsAccordion,
-  ambient: Ambient
-): SolutionScreens => {
-  return {
-    firstScreen: {
-      backgroundVideoSrc: solutionsMain.mainVideo ?? '',
-      description: solutionsMain.body ?? '',
-      labelText: solutionsMain.labelText ?? 'Solution',
-      subheadline: ambient.title,
-      title: solutionsMain.headline ?? '',
-    },
-    fourthScreen: {
-      accordionItems: solutionAccordion.accordion?.map((item, index) => ({
-        color:
-          index === 0
-            ? ('white' as const)
-            : index === 1
-              ? ('lightBlue' as const)
-              : index === 2
-                ? ('blue' as const)
-                : ('navy' as const),
-        contentList: item.bullets ?? [],
-        expanded: index === 0,
-        id: `accordion-${index}`,
-        number: `${String(index + 1).padStart(2, '0')}.`,
-        title: item.title ?? '',
-      })),
-      labelText: solutionAccordion.labelText ?? 'Solution',
-      mediaDiamondSolidSrc: solutionAccordion.image,
-      subheadline: ambient.title,
-      title: solutionAccordion.headline ?? '',
-    },
-    secondScreen: {
-      heroImageSrc: solutionsMain.image ?? '',
-      labelText: solutionsMain.labelText ?? 'Solution',
-      stepFourDescription: solutionsMain.numberedList?.[3] ?? '',
-      stepFourLabel: '04.',
-      stepOneDescription: solutionsMain.numberedList?.[0] ?? '',
-      stepOneLabel: '01.',
-      stepThreeDescription: solutionsMain.numberedList?.[2] ?? '',
-      stepThreeLabel: '03.',
-      stepTwoDescription: solutionsMain.numberedList?.[1] ?? '',
-      stepTwoLabel: '02.',
-      subheadline: ambient.title,
-      title: solutionsMain.numberedListHeadline,
-    },
-  };
-};
-
-const mapValue = (value: ValueContent, ambient: Ambient): ValueScreens => {
-  const heroVideoSrc = value.mainVideo;
-  const description = value.body;
-  const headline = value.headline;
-
-  const benefits = value.diamondBenefits ?? [];
-  const overviewCards = [
-    { color: '#8a0d71', label: 'Operational benefits' },
-    { color: '#1b75bc', label: 'Economic benefits' },
-    { color: '#f26522', label: 'Strategic benefits', textColor: '#4a154b' },
-  ];
-
-  const buildDiamondCards = (label?: string) => {
-    const normalized = (label ?? '').toLowerCase();
-    if (normalized.includes('operational')) {
-      return [
-        { color: '#f26522', label: '', textColor: '#4a154b' },
-        { color: '#1b75bc', label: '' },
-        { color: '#8a0d71', label: 'Operational benefits' },
-      ];
-    }
-    if (normalized.includes('economic') || normalized.includes('economical')) {
-      return [
-        { color: '#8a0d71', label: '' },
-        { color: '#f26522', label: '', textColor: '#4a154b' },
-        { color: '#1b75bc', label: 'Economic benefits' },
-      ];
-    }
-    return [
-      { color: '#1b75bc', label: '' },
-      { color: '#8a0d71', label: '' },
-      { color: '#f26522', label: 'Strategic benefits', textColor: '#4a154b' },
-    ];
-  };
-
-  const carouselSlides = benefits.map(benefit => ({
-    badgeLabel: benefit.label,
-    bullets: benefit.bullets,
-    diamondCards: buildDiamondCards(benefit.label),
-    id: `value-${(benefit.label ?? '').toLowerCase().replace(/\s+/g, '-')}`,
-  }));
-
-  return {
-    valueScreens: [
-      {
-        carouselId: 'kiosk-3-value-overview',
-        description,
-        eyebrow: ambient.title,
-        headline,
-        heroVideoSrc,
-        labelText: value.labelText ?? 'Value',
-        slides: [
-          {
-            badgeLabel: 'Operational · Economic · Strategic',
-            diamondCards: overviewCards,
-            id: 'value-trio-overview',
-          },
-        ],
-      },
-      {
-        carouselId: 'kiosk-3-value-carousel',
-        description,
-        eyebrow: ambient.title,
-        headline,
-        labelText: value.labelText ?? 'Value',
-        slides: carouselSlides,
-      },
-    ],
-  };
-};
-
-const mapCustomInteractive = (
-  customInteractive: CustomInteractiveContent,
-  ambient: Ambient,
-  demo?: { demoText?: string; headline?: string; iframeLink?: string; mainCTA?: string }
-): CustomInteractiveScreens => ({
-  firstScreen: {
-    demoIframeSrc: demo?.iframeLink,
-    eyebrow: ambient.title,
-    headline: customInteractive.headline,
-    heroImageAlt: 'Data center facility',
-    heroImageSrc: customInteractive.image,
-    overlayCardLabel: demo?.demoText,
-    overlayEndTourLabel: demo?.mainCTA,
-    overlayHeadline: demo?.headline,
-    primaryCtaLabel: customInteractive.mainCTA,
-    secondaryCtaLabel: customInteractive.secondaryCTA,
-  },
-  fourthScreen: {
-    cardLabel: demo?.demoText,
-    demoIframeSrc: demo?.iframeLink,
-    endTourLabel: demo?.mainCTA,
-    headline: demo?.headline,
-    heroImageAlt: 'Interactive experience showcase',
-    heroImageSrc: customInteractive.image,
-  },
-  secondScreen: {
-    backgroundImageSrc: customInteractive.image,
-    backLabel: customInteractive.backCTA,
-    description: customInteractive.body,
-    eyebrow: ambient.title,
-    headline: customInteractive.headline2 ?? 'Centralized management\nof services via API',
-    tapToBeginLabel: customInteractive.tapCTA,
-    videoAsset: customInteractive.video,
-  },
-  thirdScreen: {
-    demoIframeSrc: demo?.iframeLink,
-    headline: customInteractive.headline ?? 'Learn more about how we\nunlocked new possibilities',
-    heroImageAlt: 'Data center facility',
-    heroImageSrc: customInteractive.image,
-    overlayCardLabel: demo?.demoText,
-    overlayEndTourLabel: demo?.mainCTA,
-    overlayHeadline: demo?.headline,
-    slides:
-      customInteractive.tapCarousel?.map((item, index) => ({
-        bullets: item.bullets ?? [],
-        eyebrow: ambient.title,
-        headline: item.title ?? '',
-        id: `slide-${index + 1}`,
-        primaryImageAlt: item.title ?? 'Service illustration',
-        primaryImageSrc: item.image ?? '',
-        primaryVideoSrc: item.video,
-        secondaryImageAlt: item.title ?? 'Service illustration',
-        secondaryImageSrc: item.video && item.image ? item.image : undefined,
-        sectionTitle: item.title ?? '',
-      })) ?? [],
-  },
-});

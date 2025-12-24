@@ -7,7 +7,7 @@ import GreenDiamondThird2 from '@/components/ui/icons/Kiosks/Solutions/GreenDiam
 import OrangeDiamondThird from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondThird';
 import OrangeDiamondThird2 from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondThird2';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
-import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
+import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import Diamond from './components/Diamond';
 import FilledDiamond from './components/FilledDiamond';
 import MediaDiamond from './components/MediaDiamond';
@@ -91,14 +91,14 @@ const SolutionThirdScreenTemplate = ({
 
   return (
     <div
-      className="group/kiosk relative z-[1] flex h-screen w-full flex-col overflow-hidden bg-transparent"
+      className="group/kiosk relative z-1 flex h-screen w-full flex-col overflow-hidden bg-transparent"
       data-kiosk={kioskId}
     >
       {/* Gradient backdrop */}
       <div className="absolute top-[-296px] left-0 h-[5416px] w-full rounded-t-[100px] bg-transparent" />
 
       {/* Subheadline */}
-      <h2 className="absolute top-[230px] left-[120px] z-[1] w-[500px] -translate-y-full text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:top-[250px] group-data-[kiosk=kiosk-2]/kiosk:translate-y-0 group-data-[kiosk=kiosk-3]/kiosk:relative group-data-[kiosk=kiosk-3]/kiosk:top-[410px] group-data-[kiosk=kiosk-3]/kiosk:left-auto group-data-[kiosk=kiosk-3]/kiosk:w-[380px] group-data-[kiosk=kiosk-3]/kiosk:translate-y-0">
+      <h2 className="absolute top-[230px] left-[120px] z-1 w-[500px] -translate-y-full text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:top-[250px] group-data-[kiosk=kiosk-2]/kiosk:translate-y-0 group-data-[kiosk=kiosk-3]/kiosk:relative group-data-[kiosk=kiosk-3]/kiosk:top-[410px] group-data-[kiosk=kiosk-3]/kiosk:left-auto group-data-[kiosk=kiosk-3]/kiosk:w-[380px] group-data-[kiosk=kiosk-3]/kiosk:translate-y-0">
         {renderRegisteredMark(subheadline)}
       </h2>
 
@@ -139,14 +139,12 @@ const SolutionThirdScreenTemplate = ({
 
         <MediaDiamond
           className="top-[1950px] left-[-280px]"
-          fallback={<GreenDiamondThird2 aria-hidden="true" className="h-full w-full" focusable="false" />}
           imageAlt="Left solution media diamond"
           imageSrc={mediaDiamondLeftSrc}
           sizeClass="size-[900px]"
         />
         <MediaDiamond
           className="top-[1425px] left-[1295px]"
-          fallback={<BlueDiamondThird aria-hidden="true" className="h-full w-full" focusable="false" />}
           imageAlt="Right solution media diamond"
           imageSrc={mediaDiamondRightSrc}
           sizeClass="size-[900px]"

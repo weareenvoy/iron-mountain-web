@@ -1,6 +1,11 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState, type RefObject } from 'react';
+import {
+  OBSERVER_SETUP_RETRY_MS,
+  PARAGRAPH_DETECTION_RETRY_MS,
+  PARAGRAPH_SCROLL_DURATION_MS,
+} from '@/app/(displays)/(kiosks)/_constants/timing';
 
 // This controls the arrow navigation to paragraph tags and video elements as shown in the motion comp. (In some cases it scrolls to root divs as well which is intended and can be adjusted with data-scroll-)
 
@@ -24,7 +29,7 @@ export interface UseGlobalParagraphNavigationReturn {
  */
 export function useGlobalParagraphNavigation({
   containerRef,
-  duration = 150, // how long the scroll is in ms
+  duration = PARAGRAPH_SCROLL_DURATION_MS,
 }: UseGlobalParagraphNavigationOptions): UseGlobalParagraphNavigationReturn {
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [allParagraphs, setAllParagraphs] = useState<HTMLElement[]>([]);
@@ -40,7 +45,7 @@ export function useGlobalParagraphNavigation({
       const container = containerRef.current;
 
       if (!container) {
-        setTimeout(setupObserver, 50);
+        setTimeout(setupObserver, OBSERVER_SETUP_RETRY_MS);
         return;
       }
 
@@ -60,7 +65,7 @@ export function useGlobalParagraphNavigation({
 
         // If no paragraphs found, retry after a short delay
         if (nonEmptyParagraphs.length === 0) {
-          setTimeout(detectAllParagraphs, 100);
+          setTimeout(detectAllParagraphs, PARAGRAPH_DETECTION_RETRY_MS);
         }
       };
 

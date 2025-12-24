@@ -3,7 +3,7 @@ import { DEFAULT_KIOSK_ID, type KioskId } from '@/app/(displays)/(kiosks)/_types
 import BlueDiamondSecond from '@/components/ui/icons/Kiosks/Solutions/BlueDiamondSecond';
 import GreenDiamondSecond from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondSecond';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
-import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
+import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 
 export type SolutionSecondScreenTemplateProps = SolutionSecondScreenCoreProps & SolutionSecondScreenStepsProps;
 

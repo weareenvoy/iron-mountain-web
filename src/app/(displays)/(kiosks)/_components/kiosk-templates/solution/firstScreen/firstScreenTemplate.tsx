@@ -5,7 +5,8 @@ import BlueDiamondMain from '@/components/ui/icons/Kiosks/Solutions/BlueDiamondM
 import GreenDiamondMain from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondMain';
 import OrangeDiamondMain from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondMain';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
-import renderRegisteredMark from '../../challenge/utils/renderRegisteredMark';
+import { getVideoMimeType } from '@/lib/utils/get-video-mime-type';
+import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 
 export type SolutionFirstScreenTemplateProps = {
   readonly accentDiamondSrc?: string;
@@ -46,7 +47,7 @@ const SolutionFirstScreenTemplate = ({
             muted
             playsInline
           >
-            <source src={backgroundVideoSrc} type="video/mp4" />
+            <source src={backgroundVideoSrc} type={getVideoMimeType(backgroundVideoSrc)} />
           </video>
           <div className="pointer-events-none absolute inset-0 bg-black/20" />
         </div>

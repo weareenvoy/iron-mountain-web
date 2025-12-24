@@ -1,8 +1,7 @@
+import { normalizeNewlines } from './normalize-newlines';
 import type { ReactNode } from 'react';
 
 const REGISTERED_SYMBOL_REGEX = /(\(R\)|\(r\)|[Ⓡ®])/g;
-
-const normalizeNewlines = (input: string) => input.replace(/\\\\n/g, '\n').replace(/\r?\n/g, '\n');
 
 export const renderRegisteredMark = (text?: string): ReactNode => {
   const stringValue = text ?? '';
@@ -27,7 +26,10 @@ export const renderRegisteredMark = (text?: string): ReactNode => {
     }
     const symbol = match[0].toUpperCase() === '(R)' ? 'Ⓡ' : match[0];
     parts.push(
-      <span className="registered-mark" key={`registered-mark-${matchIndex}-${index}`}>
+      <span
+        className="inline-block align-text-top text-[0.66em] leading-none"
+        key={`registered-mark-${matchIndex}-${index}`}
+      >
         {symbol}
       </span>
     );

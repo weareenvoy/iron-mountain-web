@@ -1,10 +1,10 @@
 'use client';
 
 import { ArrowLeft } from 'lucide-react';
-import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
 import BlueDot from '@/components/ui/icons/Kiosks/CustomInteractive/BlueDot';
 import InnerRing from '@/components/ui/icons/Kiosks/CustomInteractive/InnerRing';
 import OuterRing from '@/components/ui/icons/Kiosks/CustomInteractive/OuterRing';
+import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 
 export interface CustomInteractiveKiosk3SecondScreenTemplateProps {
   readonly backgroundImageSrc?: string;

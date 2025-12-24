@@ -1,5 +1,5 @@
 import { type ComponentType, type SVGProps } from 'react';
-import renderRegisteredMark from '../../../challenge/utils/renderRegisteredMark';
+import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 
 export type DiamondProps = {
   readonly className: string;

@@ -2,8 +2,8 @@
 
 import { Diamond } from 'lucide-react';
 import Image from 'next/image';
+import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import { DEFAULT_KIOSK_ID, type KioskId } from '../../../../_types/kiosk-id';
-import renderRegisteredMark from '../utils/renderRegisteredMark';
 
 export type ThirdScreenTemplateProps = {
   readonly description?: string;
@@ -21,7 +21,7 @@ export type ThirdScreenTemplateProps = {
   readonly videoSrc?: string;
 };
 
-export const ThirdScreenTemplate = ({
+const ThirdScreenTemplate = ({
   description,
   heroImageSrc,
   kioskId = DEFAULT_KIOSK_ID,

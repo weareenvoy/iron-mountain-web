@@ -3,8 +3,10 @@
 import { SquarePlay } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
+import { cn } from '@/lib/tailwind/utils/cn';
+import { normalizeText } from '@/lib/utils/normalize-text';
+import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import StepCarousel, { type Step } from './components/StepCarousel';
 import StepModal, { type ModalContent } from './components/StepModal';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
@@ -23,11 +25,6 @@ export type CustomInteractiveKiosk1SecondScreenTemplateProps = {
   readonly overlayHeadline?: string;
   readonly secondaryCtaLabel?: string;
   readonly steps?: readonly Step[];
-};
-
-const normalizeText = (value?: string): string => {
-  if (typeof value === 'string') return value;
-  return '';
 };
 
 const CustomInteractiveKiosk1SecondScreenTemplate = ({
@@ -85,9 +82,10 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
 
         {/* Overlay - Demo Screen */}
         <div
-          className={`absolute inset-0 transition-opacity duration-700 ${
-            showOverlay ? 'pointer-events-auto z-[999] opacity-100' : 'pointer-events-none opacity-0'
-          }`}
+          className={cn(
+            'absolute inset-0 transition-opacity duration-700',
+            showOverlay ? 'pointer-events-auto z-50 opacity-100' : 'pointer-events-none opacity-0'
+          )}
         >
           <CustomInteractiveDemoScreenTemplate
             cardLabel={overlayCardLabel}

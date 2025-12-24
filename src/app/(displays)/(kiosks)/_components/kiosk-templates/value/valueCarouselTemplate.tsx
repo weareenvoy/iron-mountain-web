@@ -1,100 +1,14 @@
 'use client';
 
 import Image from 'next/image';
-import { useId, type ComponentType, type SVGProps } from 'react';
-import BlueFilledDiamond from '@/components/ui/icons/Kiosks/Solutions/BlueFilledDiamond';
-import OrangeFilledDiamond from '@/components/ui/icons/Kiosks/Solutions/OrangeFilledDiamond';
+import { useId } from 'react';
+import { normalizeDiamondCards } from '@/app/(displays)/(kiosks)/_utils/normalize-diamond-cards';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
-import PurpleFilledDiamond from '@/components/ui/icons/Kiosks/Solutions/PurpleFilledDiamond';
-import renderRegisteredMark from '../challenge/utils/renderRegisteredMark';
+import { getVideoMimeType } from '@/lib/utils/get-video-mime-type';
+import { normalizeMultiline } from '@/lib/utils/normalize-multiline';
+import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import ValueCarousel from './components/ValueCarousel';
-
-const fallbackDiamondCards: readonly ValueDiamondCard[] = [];
-const paletteColors = ['#8a0d71', '#1b75bc', '#f26522'] as const;
-const paletteTextColors = [undefined, undefined, undefined] as const;
-
-const normalizeDiamondCards = (cards?: readonly ValueDiamondCard[]) => {
-  const base = cards && cards.length > 0 ? cards : fallbackDiamondCards;
-
-  // Check if this is a carousel slide (has a labeled card at the end with empty labels before it)
-  const lastCard = base[base.length - 1];
-  const hasCarouselPattern =
-    base.length === 3 && lastCard?.label && base.slice(0, -1).every(card => !card.label || card.label === '');
-
-  if (hasCarouselPattern) {
-    // Apply Kiosk 1's carousel color logic based on the labeled benefit
-    const labelNormalized = (lastCard.label ?? '').toLowerCase();
-
-    if (labelNormalized.includes('operational')) {
-      // Operational: [Orange, Blue, Purple (labeled)]
-      return [
-        { ...base[0], color: '#f26522', textColor: '#4a154b' },
-        { ...base[1], color: '#1b75bc' },
-        { ...base[2], color: '#8a0d71', label: lastCard.label },
-      ];
-    }
-
-    if (labelNormalized.includes('economic')) {
-      // Economic: [Purple, Orange, Blue (labeled)]
-      return [
-        { ...base[0], color: '#8a0d71' },
-        { ...base[1], color: '#f26522', textColor: '#4a154b' },
-        { ...base[2], color: '#1b75bc', label: lastCard.label },
-      ];
-    }
-
-    // Strategic (default): [Blue, Purple, Orange (labeled)]
-    return [
-      { ...base[0], color: '#1b75bc' },
-      { ...base[1], color: '#8a0d71' },
-      { ...base[2], color: '#f26522', label: lastCard.label, textColor: '#4a154b' },
-    ];
-  }
-
-  // For overview slides or other patterns, use the palette
-  return base.map((card, idx) => ({
-    ...card,
-    color: card.color ?? paletteColors[idx % paletteColors.length],
-    textColor: card.textColor ?? paletteTextColors[idx % paletteTextColors.length],
-  }));
-};
-
-const diamondIconMap: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
-  '#1b75bc': BlueFilledDiamond,
-  '#6dcff6': BlueFilledDiamond,
-  '#8a0d71': PurpleFilledDiamond,
-  '#a2115e': PurpleFilledDiamond,
-  '#f99d1c': OrangeFilledDiamond,
-  '#f7931e': OrangeFilledDiamond,
-  '#f26522': OrangeFilledDiamond,
-};
-
-export const getDiamondIcon = (card: ValueDiamondCard) => {
-  if (card.icon) return card.icon;
-
-  const normalizedColor = card.color?.toLowerCase();
-  return normalizedColor ? diamondIconMap[normalizedColor] : undefined;
-};
-
-const normalizeMultiline = (value?: string): string | undefined => {
-  if (value == null) return undefined;
-  if (typeof value === 'string') return value;
-  return undefined;
-};
-
-export type ValueDiamondCard = {
-  readonly color?: string;
-  readonly icon?: ComponentType<SVGProps<SVGSVGElement>>;
-  readonly label?: string;
-  readonly textColor?: string;
-};
-
-export type ValueCarouselSlide = {
-  readonly badgeLabel?: string;
-  readonly bullets?: readonly string[];
-  readonly diamondCards?: readonly ValueDiamondCard[];
-  readonly id?: string;
-};
+import type { ValueCarouselSlide } from '@/app/(displays)/(kiosks)/_types/value-types';
 
 export type ValueCarouselTemplateProps = {
   readonly carouselId?: string;
@@ -153,7 +67,7 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
       className="relative flex h-screen w-full flex-col overflow-visible bg-transparent"
       data-carousel-id={resolvedCarouselId}
     >
-      <div className="absolute top-0 left-0 z-[0] h-[1284px] w-full overflow-hidden">
+      <div className="absolute top-0 left-0 z-0 h-[1284px] w-full overflow-hidden">
         {heroVideo ? (
           <video
             autoPlay
@@ -164,7 +78,7 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
             playsInline
             poster={heroVideoPosterSrc}
           >
-            <source src={heroVideo} type="video/mp4" />
+            <source src={heroVideo} type={getVideoMimeType(heroVideo)} />
           </video>
         ) : heroImageSrc && heroImageAlt ? (
           <div className="relative h-full w-full">
@@ -176,7 +90,7 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
         <div className="absolute inset-0 bg-black/20" />
       </div>
 
-      <div className="absolute top-0 left-0 z-[2] flex h-[1284px] w-full flex-col justify-between px-[120px] py-[240px]">
+      <div className="absolute top-0 left-0 z-2 flex h-[1284px] w-full flex-col justify-between px-[120px] py-[240px]">
         <p className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
           {renderRegisteredMark(normalizeMultiline(eyebrow))}
         </p>
@@ -191,7 +105,7 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
       </div>
 
       <div
-        className={`absolute top-[1060px] left-0 z-[3] w-full rounded-t-[100px] px-[240px] pt-[200px] pb-[1166px] ${
+        className={`absolute top-[1060px] left-0 z-3 w-full rounded-t-[100px] px-[240px] pt-[200px] pb-[1166px] ${
           isOverview ? 'h-[9360px] bg-[#ededed]' : 'h-[4150px] bg-transparent'
         }`}
       >

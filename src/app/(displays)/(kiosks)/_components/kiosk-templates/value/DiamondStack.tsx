@@ -1,5 +1,6 @@
-import renderRegisteredMark from '../challenge/utils/renderRegisteredMark';
-import { getDiamondIcon, type ValueDiamondCard } from './valueCarouselTemplate';
+import { getDiamondIcon } from '@/app/(displays)/(kiosks)/_utils/get-diamond-icon';
+import renderRegisteredMark from '@/lib/utils/render-registered-mark';
+import type { ValueDiamondCard } from '@/app/(displays)/(kiosks)/_types/value-types';
 
 export type DiamondStackVariant = 'carousel' | 'overview';
 
@@ -31,30 +32,22 @@ const DiamondStack = ({ cards, variant = 'overview' }: DiamondStackProps) => {
     <div className={`relative flex h-[565px] w-[920px] items-center ${layout.className ?? ''}`}>
       {cards.map((card, index) => {
         const Icon = getDiamondIcon(card);
-        const fallbackColor = card.color ?? '#8a0d71';
         const leftOffset = layout.positions[index] ?? index * 160;
 
         return (
           <div
-            className="absolute h-[550px] w-[550px] rotate-[45deg] rounded-[80px]"
-            key={`${card.label ?? fallbackColor}-${index}`}
+            className="absolute h-[550px] w-[550px] rotate-45 rounded-[80px]"
+            key={`${card.label ?? index}`}
             style={{ '--left-offset': `${leftOffset}px`, 'left': 'var(--left-offset)' } as React.CSSProperties}
           >
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="h-full w-full -rotate-[45deg]">
-                {Icon ? (
-                  <Icon aria-hidden className="h-full w-full" focusable="false" />
-                ) : (
-                  <div
-                    className="h-full w-full rounded-[80px]"
-                    style={{ '--bg-color': fallbackColor, 'backgroundColor': 'var(--bg-color)' } as React.CSSProperties}
-                  />
-                )}
+              <div className="h-full w-full -rotate-45">
+                {Icon ? <Icon aria-hidden className="h-full w-full" focusable="false" /> : null}
               </div>
             </div>
             {card.label ? (
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="flex h-[320px] w-[320px] -rotate-[45deg] items-center justify-center px-10 text-center text-[48px] leading-[1.4] font-normal tracking-[-2.4px] text-[#ededed]">
+                <div className="flex h-[320px] w-[320px] -rotate-45 items-center justify-center px-10 text-center text-[48px] leading-[1.4] font-normal tracking-[-2.4px] text-[#ededed]">
                   {renderRegisteredMark(card.label)}
                 </div>
               </div>

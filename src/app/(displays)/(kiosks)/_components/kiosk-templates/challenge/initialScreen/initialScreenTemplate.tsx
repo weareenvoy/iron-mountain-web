@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import ButtonArrow from '@/components/ui/icons/ButtonArrow';
 import WhiteLogoSimple from '@/components/ui/icons/WhiteLogoSimple';
-import renderRegisteredMark from '../utils/renderRegisteredMark';
+import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 export type InitialScreenTemplateProps = {
@@ -20,7 +20,7 @@ export type InitialScreenTemplateProps = {
   readonly subheadline?: string;
 };
 
-export const InitialScreenTemplate = ({
+const InitialScreenTemplate = ({
   arrowIconSrc,
   attribution,
   backgroundImage,
@@ -33,8 +33,6 @@ export const InitialScreenTemplate = ({
   quote,
   subheadline,
 }: InitialScreenTemplateProps) => {
-  const heroAlt = headline ? `${headline} background image` : 'Kiosk hero background image';
-
   return (
     <div
       className="group/kiosk relative flex h-screen w-full flex-col items-center justify-center overflow-hidden"
@@ -44,7 +42,7 @@ export const InitialScreenTemplate = ({
         <div className="relative h-full w-full">
           {backgroundImage && (
             <Image
-              alt={heroAlt}
+              alt={headline ? `${headline} background image` : 'Kiosk hero background image'}
               className="object-cover object-center"
               fill
               priority

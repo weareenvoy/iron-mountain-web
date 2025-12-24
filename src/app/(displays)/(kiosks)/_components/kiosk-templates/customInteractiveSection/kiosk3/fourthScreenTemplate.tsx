@@ -1,10 +1,10 @@
 'use client';
 
 import Image from 'next/image';
-import renderRegisteredMark from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/utils/renderRegisteredMark';
 import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCFilledOrangeDiamond';
 import HCHollowBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowBlueDiamond';
 import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowOrangeDiamond';
+import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 
 export interface CustomInteractiveKiosk3FourthScreenTemplateProps {
   readonly cardLabel?: string;

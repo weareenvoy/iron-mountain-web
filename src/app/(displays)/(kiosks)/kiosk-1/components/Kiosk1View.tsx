@@ -19,7 +19,25 @@ import {
   type ValueScreens,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueSlides';
 import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers/kiosk-provider';
+import {
+  ARROW_FADE_DURATION_KIOSK1_SEC,
+  ARROW_INITIAL_DELAY_MS,
+  ARROW_TRANSITION_DELAY_MS,
+  SCROLL_DURATION_MS,
+} from '@/app/(displays)/(kiosks)/_constants/timing';
+import { mapChallenges } from '@/app/(displays)/(kiosks)/_mappers/map-challenges';
+import { mapCustomInteractiveKiosk1 } from '@/app/(displays)/(kiosks)/_mappers/map-custom-interactive-kiosk1';
+import { mapSolutionsWithGrid } from '@/app/(displays)/(kiosks)/_mappers/map-solutions-with-grid';
+import { mapValue } from '@/app/(displays)/(kiosks)/_mappers/map-value';
 import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
+import type {
+  Ambient,
+  ChallengeContent,
+  CustomInteractiveContent,
+  SolutionsGrid,
+  SolutionsMain,
+  ValueContent,
+} from '@/app/(displays)/(kiosks)/_types/content-types';
 
 const Kiosk1View = () => {
   const { data: kioskData } = useKiosk();
@@ -44,7 +62,7 @@ const Kiosk1View = () => {
     scrollToSectionById,
   } = useGlobalParagraphNavigation({
     containerRef,
-    duration: 1200,
+    duration: SCROLL_DURATION_MS,
   });
 
   // Wrap navigation handlers to check carousel first
@@ -79,34 +97,44 @@ const Kiosk1View = () => {
     | null
     | undefined
     | {
-        ambient?: unknown;
-        challengeMain?: unknown;
-        customInteractive1Main?: unknown;
+        ambient?: Ambient;
+        challengeMain?: ChallengeContent;
+        customInteractive1Main?: CustomInteractiveContent;
         demoMain?: unknown;
-        solutionGrid?: unknown;
-        solutionMain?: unknown;
-        valueMain?: unknown;
+        solutionGrid?: SolutionsGrid;
+        solutionMain?: SolutionsMain;
+        valueMain?: ValueContent;
       };
 
   const challenges: KioskChallenges | null =
     kioskContent?.challengeMain && kioskContent.ambient
-      ? parseKioskChallenges(mapChallenges(kioskContent.challengeMain, kioskContent.ambient))
+      ? parseKioskChallenges(
+          mapChallenges(kioskContent.challengeMain, kioskContent.ambient, 'Rich media & cultural heritage')
+        )
       : null;
 
   const solutions =
     kioskContent?.solutionMain && kioskContent.solutionGrid && kioskContent.ambient
-      ? (mapSolutions(kioskContent.solutionMain, kioskContent.solutionGrid, kioskContent.ambient) as SolutionScreens)
+      ? (mapSolutionsWithGrid(kioskContent.solutionMain, kioskContent.solutionGrid, kioskContent.ambient, {
+          bottomLeft: 2,
+          bottomRight: 3,
+          center: 0,
+          topLeft: undefined,
+          topRight: 1,
+        }) as SolutionScreens)
       : null;
   const values =
     kioskContent?.valueMain && kioskContent.ambient
-      ? (mapValue(kioskContent.valueMain, kioskContent.ambient) as ValueScreens)
+      ? (mapValue(kioskContent.valueMain, kioskContent.ambient, 'kiosk-1') as ValueScreens)
       : null;
   const customInteractive =
     kioskContent?.customInteractive1Main && kioskContent.ambient
-      ? (mapCustomInteractive(
+      ? (mapCustomInteractiveKiosk1(
           kioskContent.customInteractive1Main,
           kioskContent.ambient,
-          kioskContent.demoMain as undefined | { headline?: string; iframeLink?: string; mainCTA?: string }
+          kioskContent.demoMain as
+            | undefined
+            | { demoText?: string; headline?: string; iframeLink?: string; mainCTA?: string }
         ) as CustomInteractiveScreens)
       : null;
 
@@ -242,7 +270,7 @@ const Kiosk1View = () => {
       // Delay before arrows first appear (after initial button click and scroll to challenge video)
       const timer = setTimeout(() => {
         setShowArrows(true);
-      }, 1500); // INITIAL DELAY: Adjust this to control first appearance after button click
+      }, ARROW_INITIAL_DELAY_MS);
       return () => clearTimeout(timer);
     }
     return undefined;
@@ -314,7 +342,7 @@ const Kiosk1View = () => {
       const timer = setTimeout(() => {
         setShowArrows(true);
         setWasScrollingToVideo(false);
-      }, 300); // SECTION TRANSITION DELAY: Adjust this to control reappearance between sections (Challenge → Solution → Value)
+      }, ARROW_TRANSITION_DELAY_MS);
       return () => clearTimeout(timer);
     }
 
@@ -371,7 +399,7 @@ const Kiosk1View = () => {
             className="fixed top-[1945px] right-[120px] z-[50] flex -translate-y-1/2 flex-col gap-[100px]"
             exit={{ opacity: 0, scale: 0.9 }}
             initial={{ opacity: 0, scale: 0.9 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
+            transition={{ duration: ARROW_FADE_DURATION_KIOSK1_SEC, ease: 'easeOut' }}
           >
             <div
               aria-label="Previous"
@@ -415,278 +443,3 @@ const Kiosk1View = () => {
 };
 
 export default Kiosk1View;
-
-type Ambient = {
-  backgroundImage?: string;
-  body?: string;
-  headline?: string;
-  mainCTA?: string;
-  quoteSource?: string;
-  title?: string;
-};
-
-type ChallengeContent = {
-  body?: string;
-  featuredStat1?: string;
-  featuredStat1Body?: string;
-  featuredStat2?: string;
-  featuredStat2Body?: string;
-  item1Body?: string;
-  item1Image?: string;
-  item2Body?: string;
-  item2Image?: string;
-  labelText?: string;
-  mainVideo?: string;
-};
-
-type SolutionsMain = {
-  body?: string;
-  headline?: string;
-  image?: string;
-  labelText?: string;
-  mainVideo?: string;
-  numberedList?: string[];
-  numberedListHeadline?: string;
-};
-
-type SolutionsGrid = {
-  diamondList?: string[];
-  headline?: string;
-  images?: string[];
-};
-
-type ValueContent = {
-  body?: string;
-  diamondBenefits?: { bullets?: string[]; label?: string }[];
-  headline?: string;
-  labelText?: string;
-  mainVideo?: string;
-};
-
-type CustomInteractiveContent = {
-  backCTA?: string;
-  body2?: string;
-  diamondCarouselItems?: string[];
-  headline?: string;
-  headline2?: string;
-  image?: string;
-  mainCTA?: string;
-  ModalBody1?: string;
-  ModalBody2?: string;
-  ModalBody3?: string;
-  ModalBody4?: string;
-  ModalBody5?: string;
-  ModalHeadline1?: string;
-  ModalHeadline2?: string;
-  ModalHeadline3?: string;
-  ModalHeadline4?: string;
-  ModalHeadline5?: string;
-  secondaryCTA?: string;
-};
-
-const mapChallenges = (challenge: ChallengeContent, ambient: Ambient): KioskChallenges => ({
-  firstScreen: {
-    labelText: challenge.labelText ?? 'Challenge',
-    problemDescription: challenge.body ?? '',
-    savingsAmount: challenge.featuredStat1 ?? '',
-    savingsDescription: challenge.featuredStat1Body ?? '',
-    subheadline: ambient.title ?? 'Rich media & cultural heritage',
-    videoSrc: challenge.mainVideo ?? '',
-  },
-  initialScreen: {
-    attribution: ambient.quoteSource ?? '- Michael Rohrabacher, Technical Director at the GRAMMY Museum',
-    backgroundImage: ambient.backgroundImage ?? '',
-    buttonText: ambient.mainCTA ?? 'Touch to explore',
-    headline: ambient.headline ?? '',
-    quote: ambient.body ?? '',
-    subheadline: ambient.title ?? 'Rich media & cultural heritage',
-  },
-  secondScreen: {
-    bottomDescription: '',
-    bottomVideoSrc: '',
-    labelText: challenge.labelText ?? 'Challenge',
-    largeIconSrc: challenge.item1Image ?? '',
-    mainDescription: challenge.item1Body ?? '',
-    statAmount: '',
-    statDescription: '',
-    subheadline: ambient.title ?? 'Rich media & cultural heritage',
-    topImageSrc: challenge.item1Image ?? '',
-  },
-  thirdScreen: {
-    description: challenge.item2Body ?? '',
-    heroImageSrc: challenge.item2Image ?? '',
-    labelText: challenge.labelText ?? 'Challenge',
-    largeIconCenterSrc: challenge.item2Image ?? '',
-    largeIconTopSrc: challenge.item2Image ?? '',
-    metricAmount: challenge.featuredStat2 ?? '',
-    metricDescription: challenge.featuredStat2Body ?? '',
-    metricImageSrc: challenge.item2Image ?? '',
-    subheadline: ambient.title ?? 'Rich media & cultural heritage',
-    videoSrc: '',
-  },
-});
-
-const mapSolutions = (
-  solutionsMain: SolutionsMain,
-  solutionsGrid: SolutionsGrid,
-  ambient: Ambient
-): SolutionScreens => ({
-  firstScreen: {
-    backgroundVideoSrc: solutionsMain.mainVideo ?? '',
-    description: solutionsMain.body ?? '',
-    labelText: solutionsMain.labelText ?? 'Solution',
-    subheadline: ambient.title,
-    title: solutionsMain.headline ?? '',
-  },
-  secondScreen: {
-    heroImageSrc: solutionsMain.image ?? '',
-    labelText: solutionsMain.labelText ?? 'Solution',
-    stepFourDescription: solutionsMain.numberedList?.[3] ?? '',
-    stepFourLabel: '04.',
-    stepOneDescription: solutionsMain.numberedList?.[0] ?? '',
-    stepOneLabel: '01.',
-    stepThreeDescription: solutionsMain.numberedList?.[2] ?? '',
-    stepThreeLabel: '03.',
-    stepTwoDescription: solutionsMain.numberedList?.[1] ?? '',
-    stepTwoLabel: '02.',
-    subheadline: ambient.title,
-    title: solutionsMain.numberedListHeadline,
-  },
-  thirdScreen: {
-    bottomLeftLabel: solutionsGrid.diamondList?.[2] ?? '',
-    bottomRightLabel: solutionsGrid.diamondList?.[3] ?? '',
-    centerLabel: solutionsGrid.diamondList?.[0] ?? '',
-    labelText: solutionsMain.labelText ?? 'Solution',
-    mediaDiamondLeftSrc: solutionsGrid.images?.[0] ?? '',
-    mediaDiamondRightSrc: solutionsGrid.images?.[1] ?? '',
-    subheadline: ambient.title,
-    title: solutionsGrid.headline ?? '',
-    topLeftLabel: undefined,
-    topRightLabel: solutionsGrid.diamondList?.[1] ?? '',
-  },
-});
-
-const mapValue = (value: ValueContent, ambient: Ambient): ValueScreens => {
-  const heroVideoSrc = value.mainVideo;
-  const description = value.body;
-  const headline = value.headline;
-
-  const benefits = value.diamondBenefits ?? [];
-  const overviewCards = [
-    { color: '#8a0d71', label: 'Operational benefits' },
-    { color: '#1b75bc', label: 'Economic benefits' },
-    { color: '#f26522', label: 'Strategic benefits', textColor: '#4a154b' },
-  ];
-
-  const buildDiamondCards = (label?: string) => {
-    const normalized = (label ?? '').toLowerCase();
-    if (normalized.includes('operational')) {
-      return [
-        { color: '#f26522', label: '', textColor: '#4a154b' },
-        { color: '#1b75bc', label: '' },
-        { color: '#8a0d71', label: 'Operational benefits' },
-      ];
-    }
-    if (normalized.includes('economic') || normalized.includes('economical')) {
-      return [
-        { color: '#8a0d71', label: '' },
-        { color: '#f26522', label: '', textColor: '#4a154b' },
-        { color: '#1b75bc', label: 'Economic benefits' },
-      ];
-    }
-    return [
-      { color: '#1b75bc', label: '' },
-      { color: '#8a0d71', label: '' },
-      { color: '#f26522', label: 'Strategic benefits', textColor: '#4a154b' },
-    ];
-  };
-
-  const carouselSlides = benefits.map(benefit => ({
-    badgeLabel: benefit.label,
-    bullets: benefit.bullets,
-    diamondCards: buildDiamondCards(benefit.label),
-    id: `value-${(benefit.label ?? '').toLowerCase().replace(/\s+/g, '-')}`,
-  }));
-
-  return {
-    valueScreens: [
-      {
-        carouselId: 'kiosk-1-value-overview',
-        description,
-        eyebrow: ambient.title,
-        headline,
-        heroVideoSrc,
-        labelText: value.labelText ?? 'Value',
-        slides: [
-          {
-            badgeLabel: 'Operational · Economic · Strategic',
-            diamondCards: overviewCards,
-            id: 'value-trio-overview',
-          },
-        ],
-      },
-      {
-        carouselId: 'kiosk-1-value-carousel',
-        description,
-        eyebrow: ambient.title,
-        headline,
-        labelText: value.labelText ?? 'Value',
-        slides: carouselSlides,
-      },
-    ],
-  };
-};
-
-const mapCustomInteractive = (
-  customInteractive: CustomInteractiveContent,
-  ambient: Ambient,
-  demo?: { demoText?: string; headline?: string; iframeLink?: string; mainCTA?: string }
-): CustomInteractiveScreens => ({
-  firstScreen: {
-    demoIframeSrc: demo?.iframeLink,
-    eyebrow: ambient.title,
-    headline: customInteractive.headline,
-    heroImageAlt: 'Visitors smiling while viewing content',
-    heroImageSrc: customInteractive.image,
-    overlayCardLabel: demo?.demoText,
-    overlayEndTourLabel: demo?.mainCTA,
-    overlayHeadline: demo?.headline,
-    primaryCtaLabel: customInteractive.mainCTA,
-    secondaryCtaLabel: customInteractive.secondaryCTA,
-  },
-  secondScreen: {
-    backLabel: customInteractive.backCTA,
-    demoIframeSrc: demo?.iframeLink,
-    eyebrow: ambient.title,
-    headline: customInteractive.headline2 ?? 'From archive\nto access',
-    heroImageAlt: 'Archive visualization',
-    heroImageSrc: customInteractive.image,
-    overlayCardLabel: demo?.demoText,
-    overlayEndTourLabel: demo?.mainCTA,
-    overlayHeadline: demo?.headline,
-    secondaryCtaLabel: customInteractive.secondaryCTA,
-    steps: customInteractive.diamondCarouselItems?.map((item, index) => {
-      const modalBodyKey = `ModalBody${index + 1}` as keyof CustomInteractiveContent;
-      const modalHeadlineKey = `ModalHeadline${index + 1}` as keyof CustomInteractiveContent;
-      const modalBody = customInteractive[modalBodyKey] as string | undefined;
-      const modalHeadline = customInteractive[modalHeadlineKey] as string | undefined;
-      return {
-        label: item,
-        modal: {
-          body: modalBody ?? 'Description not available.',
-          heading: modalHeadline ?? item,
-          imageAlt: `${item} illustration`,
-          imageSrc: `https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/${item.replace(/\s+/g, '+')}.webp`,
-        },
-      };
-    }),
-  },
-  thirdScreen: {
-    cardLabel: demo?.demoText,
-    demoIframeSrc: demo?.iframeLink,
-    endTourLabel: demo?.mainCTA,
-    headline: demo?.headline,
-    heroImageAlt: 'Digital transformation showcase',
-    heroImageSrc: customInteractive.image,
-  },
-});
