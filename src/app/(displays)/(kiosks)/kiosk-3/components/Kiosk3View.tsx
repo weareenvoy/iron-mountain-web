@@ -271,8 +271,8 @@ const Kiosk3View = () => {
 
   // Handle scroll start (hiding arrows)
   useEffect(() => {
-    handleScrollStart('kiosk-3', currentScrollTarget, isScrolling, isCustomInteractiveSection);
-  }, [isScrolling, currentScrollTarget, isCustomInteractiveSection, handleScrollStart]);
+    handleScrollStart('kiosk-3', currentScrollTarget, kioskState.previousScrollTarget, isScrolling);
+  }, [isScrolling, currentScrollTarget, kioskState.previousScrollTarget, handleScrollStart]);
 
   // Handle scroll complete (showing arrows)
   useEffect(() => {

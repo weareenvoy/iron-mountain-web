@@ -24,8 +24,8 @@ type Store = {
   readonly handleScrollStart: (
     kioskId: KioskId,
     currentScrollTarget: null | string,
-    isScrolling: boolean,
-    isCustomInteractiveSection: boolean
+    previousScrollTarget: null | string,
+    isScrolling: boolean
   ) => void;
   readonly handleScrollTargetChange: (
     kioskId: KioskId,
@@ -121,9 +121,21 @@ export const useKioskArrowStore = create<Store>((set, get) => ({
 
     if (isScrolling) return;
 
-    // Don't show arrows on initial screen (currentScrollTarget is null when scrolling to top/initial screen)
-    const isInitialScreen = currentScrollTarget === null || currentScrollTarget === 'challenge-initial';
-    if (isInitialScreen) {
+    // Helper to get section name from target
+    const getSection = (target: null | string): string => {
+      if (!target) return 'initial';
+      if (target === 'challenge-initial') return 'initial';
+      if (target.startsWith('challenge-')) return 'challenge';
+      if (target.startsWith('solution-')) return 'solution';
+      if (target.startsWith('value-')) return 'value';
+      if (target.includes('customInteractive-')) return 'customInteractive';
+      return 'unknown';
+    };
+
+    const currentSection = getSection(currentScrollTarget);
+
+    // Don't show arrows on initial screen or custom interactive
+    if (currentSection === 'initial' || (currentSection === 'customInteractive' && isCustomInteractiveSection)) {
       set({
         [key]: {
           ...state,
@@ -134,78 +146,74 @@ export const useKioskArrowStore = create<Store>((set, get) => ({
       return;
     }
 
-    // Initial appearance after button click
-    if (state.allowArrowsToShow && currentScrollTarget === 'challenge-first-video') {
-      setTimeout(() => {
-        set(currentState => ({
+    // If we just hid arrows due to section transition, show them again after delay
+    // (for Challenge, Solution, and Value sections only)
+    if (state.wasScrollingToVideo && state.allowArrowsToShow) {
+      const shouldShowArrows =
+        currentSection === 'challenge' || currentSection === 'solution' || currentSection === 'value';
+
+      if (shouldShowArrows) {
+        // Use longer delay for first appearance, shorter for subsequent
+        const delay = currentScrollTarget === 'challenge-first-video' ? 1500 : 300;
+        setTimeout(() => {
+          set(currentState => ({
+            [key]: {
+              ...currentState[key],
+              showArrows: true,
+              wasScrollingToVideo: false,
+            },
+          }));
+        }, delay);
+      } else {
+        // Reset the flag if we're not showing arrows
+        set({
           [key]: {
-            ...currentState[key],
-            showArrows: true,
-          },
-        }));
-      }, 1500); // ARROW_INITIAL_DELAY_MS
-      return;
-    }
-
-    // Reappear after scrolling to video (but not customInteractive)
-    const isVideoTarget =
-      currentScrollTarget.includes('-video') ||
-      currentScrollTarget.includes('-first-video') ||
-      currentScrollTarget === 'value-carousel';
-
-    const isCustomInteractiveTarget = currentScrollTarget.includes('customInteractive-');
-
-    if (
-      state.wasScrollingToVideo &&
-      isVideoTarget &&
-      !isCustomInteractiveTarget &&
-      state.allowArrowsToShow &&
-      !isCustomInteractiveSection
-    ) {
-      setTimeout(() => {
-        set(currentState => ({
-          [key]: {
-            ...currentState[key],
-            showArrows: true,
+            ...state,
             wasScrollingToVideo: false,
           },
-        }));
-      }, 300); // ARROW_TRANSITION_DELAY_MS
-      return;
-    }
-
-    // Reset tracking if finished scrolling to customInteractive
-    if (state.wasScrollingToVideo && isCustomInteractiveTarget) {
-      set({
-        [key]: {
-          ...state,
-          wasScrollingToVideo: false,
-        },
-      });
+        });
+      }
     }
   },
 
   handleScrollStart: (
     kioskId: KioskId,
     currentScrollTarget: null | string,
-    isScrolling: boolean,
-    isCustomInteractiveSection: boolean
+    previousScrollTarget: null | string,
+    isScrolling: boolean
   ) => {
     if (!isScrolling) return;
 
     const key = getStoreKey(kioskId);
-    const isScrollingToInitial = currentScrollTarget === null || currentScrollTarget === 'challenge-initial';
-    const isScrollingToVideo =
-      currentScrollTarget &&
-      (currentScrollTarget.includes('-video') ||
-        currentScrollTarget.includes('-first-video') ||
-        currentScrollTarget === 'value-carousel');
-
-    const isScrollingToCustomInteractive = currentScrollTarget && currentScrollTarget.includes('customInteractive-');
-    const shouldHideArrows =
-      isScrollingToInitial || isScrollingToVideo || (isScrollingToCustomInteractive && isCustomInteractiveSection);
-
     const state = get()[key];
+
+    // Helper to get section name from target
+    const getSection = (target: null | string): string => {
+      if (!target) return 'initial';
+      if (target === 'challenge-initial') return 'initial';
+      if (target.startsWith('challenge-')) return 'challenge';
+      if (target.startsWith('solution-')) return 'solution';
+      if (target.startsWith('value-')) return 'value';
+      if (target.includes('customInteractive-')) return 'customInteractive';
+      return 'unknown';
+    };
+
+    const currentSection = getSection(currentScrollTarget);
+    const previousSection = getSection(previousScrollTarget);
+
+    // Hide arrows when crossing section boundaries (entering a new major section)
+    const isCrossingSectionBoundary = currentSection !== previousSection;
+    const isEnteringInitial = currentSection === 'initial';
+    const isEnteringSolution = currentSection === 'solution';
+    const isEnteringValue = currentSection === 'value';
+    const isEnteringChallenge = currentSection === 'challenge' && previousSection !== 'challenge';
+    const isEnteringCustomInteractive = currentSection === 'customInteractive';
+
+    // Hide arrows when entering any new section (check target, not current position)
+    const shouldHideArrows =
+      isEnteringInitial ||
+      (isCrossingSectionBoundary && (isEnteringSolution || isEnteringValue || isEnteringChallenge)) ||
+      isEnteringCustomInteractive; // Removed isCustomInteractiveSection check - target determines hiding
 
     if (shouldHideArrows) {
       set({
