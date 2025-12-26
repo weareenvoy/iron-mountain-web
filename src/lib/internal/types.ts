@@ -358,6 +358,12 @@ export interface DocentData {
   };
 }
 
+export interface SummitTourSummary {
+  readonly date: string;
+  readonly id: string;
+  readonly name: string;
+}
+
 import type { SummitData } from '@/app/(displays)/summit/_types';
 
 export type Locale = 'en' | 'pt';

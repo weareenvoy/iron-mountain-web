@@ -1,5 +1,5 @@
 [
-  {
+{
     "locale": "en",
     "data": {
       "meta": [
@@ -20,7 +20,7 @@
           "body2": "Co-develop business cases tied to KPIs.",
           "body3": "Stage data for analytics and AI services.",
           "title": "Unlocking new value streams"
-        },
+      },
         "possibilitiesC": {
           "body1": "Modernize storage tiers for performance and compliance.",
           "body2": "Automate retention and defensible disposition.",
@@ -37,28 +37,28 @@
           "challenges": [
             {
               "body": "1,300 exabytes of enterprise data created daily—scattered across systems and formats",
-              "icon": "/images/summit/icons/icon-complexity.svg",
-              "title": "Too much complexity"
-            },
-            {
-              "body": "Modernization business cases stall because value capture is unclear or far from execution.",
-              "icon": "/images/summit/icons/icon-roi.svg",
+        "icon": "/images/summit/icons/icon-complexity.svg",
+        "title": "Too much complexity"
+      },
+      {
+        "body": "Modernization business cases stall because value capture is unclear or far from execution.",
+        "icon": "/images/summit/icons/icon-roi.svg",
               "title": "Cost, Uncertain ROI"
-            },
-            {
-              "body": "AI and regulatory pressure raise the stakes for every decision, slowing innovation cycles.",
-              "icon": "/images/summit/icons/icon-risk.svg",
+      },
+      {
+        "body": "AI and regulatory pressure raise the stakes for every decision, slowing innovation cycles.",
+        "icon": "/images/summit/icons/icon-risk.svg",
               "title": "Too many risks"
-            },
-            {
-              "body": "Teams juggle day jobs with transformation initiatives and rely on a small bench of specialists.",
-              "icon": "/images/summit/icons/icon-talent.svg",
+      },
+      {
+        "body": "Teams juggle day jobs with transformation initiatives and rely on a small bench of specialists.",
+        "icon": "/images/summit/icons/icon-talent.svg",
               "title": "Too few skills"
-            }
-          ],
+      }
+    ],
           "title": "What's holding you back?"
         }
-      },
+  },
       "kiosk1": {
         "ambient": {
           "attribution": "- Michael Rohrabacher, Technical Director at the GRAMMY Museum",
@@ -75,7 +75,7 @@
           "headline": "A global healthcare company mitigates risk and saves millions by finding certainty and clarity in its pension administration.",
           "solutionTitle": "Information & data lifecycle",
           "subheader": ""
-        }
+      }
       },
       "kiosk3": {
         "ambient": {
@@ -91,7 +91,7 @@
           "mapLocation1": {
             "body": "Find new ways forward in document driven processes.",
             "title": "Discover new efficiencies through Intelligent Business Process Management (iBPM)"
-          },
+        },
           "mapLocation2": {
             "body": "Innovative tokenization and blockchain technology to authenticate and verify access rights, while being able to monetize more content.",
             "title": "Generate new revenue streams with Asset Monetization Platform (AMP)"
@@ -105,7 +105,7 @@
           "mapLocation1": {
             "body": "Intelligent document processing has 97% accuracy.",
             "title": "AI-powered document processing"
-          },
+        },
           "mapLocation2": {
             "body": "Incorporates asset receiving, tagging, tracking, and storage.",
             "title": "Deploy IT assets at any moment"
@@ -138,7 +138,7 @@
           "mapLocation2": {
             "body": "Ensures your data is protected, along with onsite and offsite destruction for all media types.",
             "title": "World-class data sanitization"
-          },
+        },
           "mapLocation3": {
             "body": "Secure content with a digital preservation platform purpose-built for rich media workflows.",
             "title": "Museum-grade security"
@@ -160,6 +160,6 @@
       "protectTitle": "Protect",
       "connectTitle": "Connect",
       "activateTitle": "Activate"
-    }
   }
+}
 ]

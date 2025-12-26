@@ -6,12 +6,13 @@ import type { ReactNode } from 'react';
 
 type HeroSectionProps = {
   readonly actionSlot?: ReactNode;
+  readonly filtersSlot?: ReactNode;
   readonly meta: SummitMeta;
   readonly title: string;
   readonly variant?: 'print' | 'web';
 };
 
-const HeroSection = ({ actionSlot, meta, title, variant = 'web' }: HeroSectionProps) => {
+const HeroSection = ({ actionSlot, filtersSlot, meta, title, variant = 'web' }: HeroSectionProps) => {
   const containerGap = variant === 'print' ? 'gap-3 pb-3 pt-3' : 'gap-10 pb-10 pt-12';
   const headingSpacing = variant === 'print' ? 'mb-2 mt-4' : 'mb-8 mt-16';
   const containerClassName = cn('relative z-10 flex flex-col', containerGap);
@@ -49,6 +50,8 @@ const HeroSection = ({ actionSlot, meta, title, variant = 'web' }: HeroSectionPr
             role="img"
           />
         </div>
+
+        {filtersSlot}
 
         <div
           className={cn(

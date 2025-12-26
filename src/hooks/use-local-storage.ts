@@ -83,6 +83,8 @@ const useLocalStorage = <T>(key: string, initialValue: T) => {
       }
     };
 
+    handleStorageChange();
+
     const unsubscribe = subscribeToKey(key, handleStorageChange);
 
     const storageListener = (event: StorageEvent) => {

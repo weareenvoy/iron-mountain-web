@@ -33,7 +33,7 @@ const resolveSummitData = (
   return data;
 };
 
-export async function getSummitData(): Promise<SummitDataResponse> {
+export async function getSummitData(tourId?: string): Promise<SummitDataResponse> {
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 3500);
@@ -41,9 +41,18 @@ export async function getSummitData(): Promise<SummitDataResponse> {
   try {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (shouldUseStaticPlaceholderData()) {
-      const res = await fetch('/api/summit.json', { cache: 'force-cache' });
+      const path = tourId ? `/api/summit-${tourId}.json` : '/api/summit.json';
+      const res = await fetch(path, { cache: 'force-cache' });
       clearTimeout(timeout);
-      const rawData = (await res.json()) as SummitApiResponse | { readonly data: unknown; readonly locale?: string };
+
+      let rawData: SummitApiResponse | { readonly data: unknown; readonly locale?: string };
+      try {
+        if (!res.ok) throw new Error(`Bad status: ${res.status}`);
+        rawData = (await res.json()) as SummitApiResponse | { readonly data: unknown; readonly locale?: string };
+      } catch {
+        rawData = summitStatic as SummitApiResponse;
+      }
+
       const locale = getLocaleForTesting();
       const data = resolveSummitData(rawData, locale);
 
@@ -54,7 +63,7 @@ export async function getSummitData(): Promise<SummitDataResponse> {
     }
 
     // Online first
-    const res = await fetch(`${API_BASE}/summit`, {
+    const res = await fetch(`${API_BASE}/summit${tourId ? `/${tourId}` : ''}`, {
       cache: 'no-store',
       signal: controller.signal,
     });
@@ -71,8 +80,17 @@ export async function getSummitData(): Promise<SummitDataResponse> {
   } catch {
     clearTimeout(timeout);
     // Offline/static fallback
-    const res = await fetch('/api/summit.json', { cache: 'force-cache' });
-    const rawData = (await res.json()) as SummitApiResponse | { readonly data: unknown; readonly locale?: string };
+    const path = tourId ? `/api/summit-${tourId}.json` : '/api/summit.json';
+    const res = await fetch(path, { cache: 'force-cache' });
+
+    let rawData: SummitApiResponse | { readonly data: unknown; readonly locale?: string };
+    try {
+      if (!res.ok) throw new Error(`Bad status: ${res.status}`);
+      rawData = (await res.json()) as SummitApiResponse | { readonly data: unknown; readonly locale?: string };
+    } catch {
+      rawData = summitStatic as SummitApiResponse;
+    }
+
     const locale = getLocaleForTesting();
     const data = resolveSummitData(rawData, locale);
 
