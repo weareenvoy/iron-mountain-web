@@ -102,6 +102,12 @@ export const SummitProvider = ({ children }: PropsWithChildren) => {
     [client]
   );
 
+  // Refs for functions to avoid handler recreation
+  const fetchDataRef = useRef(fetchData);
+  fetchDataRef.current = fetchData;
+  const reportStateRef = useRef(reportState);
+  reportStateRef.current = reportState;
+
   useEffect(() => {
     if (!client) return;
 
@@ -113,10 +119,10 @@ export const SummitProvider = ({ children }: PropsWithChildren) => {
 
         if (!tourId) return;
 
-        const success = await fetchData(tourId);
+        const success = await fetchDataRef.current(tourId);
 
         if (success) {
-          reportState({
+          reportStateRef.current({
             'beat-id': 'journey-intro',
             'volume-level': 1.0,
             'volume-muted': false,
@@ -135,7 +141,7 @@ export const SummitProvider = ({ children }: PropsWithChildren) => {
         const reason = parsedMessage.body?.reason;
         console.info('Summit: received go-idle command:', reason);
 
-        reportState({
+        reportStateRef.current({
           'beat-id': 'idle',
           'volume-level': 0.0,
           'volume-muted': true,
@@ -160,7 +166,7 @@ export const SummitProvider = ({ children }: PropsWithChildren) => {
         }
 
         // Report state back to GEC - mqttState will be updated, which derives summitBeatId
-        reportState({ 'beat-id': beatId });
+        reportStateRef.current({ 'beat-id': beatId });
       } catch (err) {
         console.error('Summit: error parsing goto-beat command:', err);
       }
@@ -193,7 +199,7 @@ export const SummitProvider = ({ children }: PropsWithChildren) => {
 
         // Fetch content if we have a tour loaded
         if (state['tour-id']) {
-          fetchData(state['tour-id']);
+          fetchDataRef.current(state['tour-id']);
         }
         // We just need to get retained state once, so unsubscribe after we got the state
         client.unsubscribeFromTopic('state/summit', handleOwnState);
@@ -208,7 +214,7 @@ export const SummitProvider = ({ children }: PropsWithChildren) => {
     return () => {
       client.unsubscribeFromTopic('state/summit', handleOwnState);
     };
-  }, [client, fetchData]);
+  }, [client]);
 
   const contextValue = useMemo<SummitContextValue>(
     () => ({

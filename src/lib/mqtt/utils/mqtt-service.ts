@@ -4,7 +4,7 @@ import { createMqttMessage } from './create-mqtt-message';
 import { generateClientId } from './generate-client-id';
 import { getAvailabilityTopic } from './get-availability-topic';
 import type { DeviceId, MqttError, MqttServiceConfig, PublishArgsConfig } from '../types';
-import type { ExhibitBeatId } from '@/lib/internal/types';
+import type { BasecampBeatId, ExhibitBeatId, OverlookBeatId, SummitRoomBeatId } from '@/lib/internal/types';
 
 export class MqttService {
   private readonly availabilityTopic: string;
@@ -149,6 +149,29 @@ export class MqttService {
   }
 
   // This is for video beat
+  // Overloads for type-safe beat IDs per exhibit
+  public gotoBeatWithPlayPause(
+    exhibit: 'basecamp',
+    beatId: BasecampBeatId,
+    playPause: boolean,
+    config?: PublishArgsConfig,
+    presentationMode?: boolean
+  ): void;
+  public gotoBeatWithPlayPause(
+    exhibit: 'overlook-wall',
+    beatId: OverlookBeatId,
+    playPause: boolean,
+    config?: PublishArgsConfig,
+    presentationMode?: boolean
+  ): void;
+  public gotoBeatWithPlayPause(
+    exhibit: 'summit',
+    beatId: SummitRoomBeatId,
+    playPause: boolean,
+    config?: PublishArgsConfig,
+    presentationMode?: boolean
+  ): void;
+  // Implementation signature
   public gotoBeatWithPlayPause(
     exhibit: 'basecamp' | 'overlook-wall' | 'summit',
     beatId: ExhibitBeatId,
@@ -208,8 +231,9 @@ export class MqttService {
 
   // Exhibit → State: Report full exhibit state (retained)
   // This publishes the complete state to state/<exhibit>
+  // Note: MQTT topics use 'overlook' but we accept 'overlook-wall' for consistency with other methods
   public reportExhibitState(
-    exhibit: 'basecamp' | 'overlook' | 'summit',
+    exhibit: 'basecamp' | 'overlook-wall' | 'summit',
     state: {
       'beat-id': string;
       'playpause'?: boolean; // Only for overlook/summit
@@ -219,11 +243,13 @@ export class MqttService {
     },
     config?: PublishArgsConfig
   ): void {
-    const message = createMqttMessage(exhibit, state);
+    // Map 'overlook-wall' to 'overlook' for MQTT topic (broker uses 'overlook' for state topic)
+    const topicExhibit = exhibit === 'overlook-wall' ? 'overlook' : exhibit;
+    const message = createMqttMessage(topicExhibit, state);
 
     console.info(`${exhibit} reporting full state:`, state);
     this.publish(
-      `state/${exhibit}`,
+      `state/${topicExhibit}`,
       JSON.stringify(message),
       { qos: 1, retain: true }, // Retained
       config
