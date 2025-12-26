@@ -34,6 +34,9 @@ const Background = () => {
     const isFirstLoad = lastBeatId === null;
     const isAmbient = momentId === 'ambient';
 
+    // Calculate seamless transition (only relevant for non-first loads)
+    const seamless = !isFirstLoad && isBackgroundSeamlessTransition(lastBeatId, beatId);
+
     // Determine visible and invisible
     const visible = active.current === 'a' ? a.current : b.current;
     const hidden = active.current === 'a' ? b.current : a.current;
@@ -74,7 +77,6 @@ const Background = () => {
     } else {
       // Subsequent beats
       setupIncomingVideo(hidden);
-      const seamless = isBackgroundSeamlessTransition(lastBeat.current as BasecampBeatId | null, beatId);
 
       const performSwitch = () => {
         if (lastBeat.current !== beatId) return;
@@ -113,7 +115,9 @@ const Background = () => {
       // For transitions: preload into the video that will be hidden next (i.e. current visible)
       const preloadTarget = isFirstLoad ? b.current! : visible;
 
-      if (isFirstLoad) {
+      if (isFirstLoad || seamless) {
+        // First load or seamless: preload immediately
+        // (Chrome may fire transitionend for 0ms, but not guaranteed by CSS spec)
         preloadTarget.src = data.beats[nextBeatId].url;
       } else {
         // Wait until crossfade ends
