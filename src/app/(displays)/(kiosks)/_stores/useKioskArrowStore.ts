@@ -129,6 +129,8 @@ export const useKioskArrowStore = create<Store>((set, get) => ({
       if (target.startsWith('solution-')) return 'solution';
       if (target.startsWith('value-')) return 'value';
       if (target.includes('customInteractive-')) return 'customInteractive';
+      // Challenge section scroll targets without prefix
+      if (target === 'description' || target === 'main-description' || target === 'bottom-description' || target === 'metrics-description') return 'challenge';
       return 'unknown';
     };
 
@@ -195,6 +197,8 @@ export const useKioskArrowStore = create<Store>((set, get) => ({
       if (target.startsWith('solution-')) return 'solution';
       if (target.startsWith('value-')) return 'value';
       if (target.includes('customInteractive-')) return 'customInteractive';
+      // Challenge section scroll targets without prefix
+      if (target === 'description' || target === 'main-description' || target === 'bottom-description' || target === 'metrics-description') return 'challenge';
       return 'unknown';
     };
 
