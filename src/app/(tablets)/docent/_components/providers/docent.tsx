@@ -127,14 +127,17 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
         console.info('Docent: Received GEC state:', state);
 
         // TODO TBD still under discussion what topic to use to get the data. Or do we even use a topic.
-        // Save the full state - beat states are derived from this via useMemo
-        setDocentAppState(state);
+        // Batch all state updates to prevent interleaving if GEC sends rapid updates
+        startTransition(() => {
+          // Save the full state - beat states are derived from this via useMemo
+          setDocentAppState(state);
 
-        // Get tour-id from GEC state - this is the source of truth
-        const gecTourId = getTourIdFromGecState(state);
-        setTourId(gecTourId);
+          // Get tour-id from GEC state - this is the source of truth
+          const gecTourId = getTourIdFromGecState(state);
+          setTourId(gecTourId);
 
-        setIsGecStateLoading(false);
+          setIsGecStateLoading(false);
+        });
       } catch (error) {
         console.error('Docent: Error parsing state:', error);
         setIsGecStateLoading(false);
