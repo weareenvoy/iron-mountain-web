@@ -181,7 +181,7 @@ export const SummitProvider = ({ children }: PropsWithChildren) => {
       client.unsubscribeFromTopic('cmd/dev/all/go-idle');
       client.unsubscribeFromTopic('cmd/dev/summit/goto-beat');
     };
-  }, [client, fetchData, reportState]);
+  }, [client]);
 
   // Subscribe to own state for restart/recovery
   useEffect(() => {
