@@ -369,7 +369,7 @@ const Kiosk1View = () => {
           >
             <div
               aria-label="Previous"
-              className="flex h-[118px] w-[118px] cursor-pointer items-center justify-center transition-all duration-150 ease-out hover:scale-110"
+              className="flex h-[118px] w-[118px] cursor-pointer items-center justify-center hover:scale-110"
               onKeyDown={handleUpArrowKeyDown}
               onPointerDown={() => {
                 setIsUpArrowPressed(true);
@@ -379,8 +379,9 @@ const Kiosk1View = () => {
               onPointerUp={() => setIsUpArrowPressed(false)}
               role="button"
               style={{
-                opacity: isUpArrowPressed ? 0.7 : 1,
+                opacity: isUpArrowPressed ? 0.4 : 1,
                 transform: isUpArrowPressed ? 'scale(0.95)' : 'scale(1)',
+                transition: 'opacity 150ms ease-out, transform 150ms ease-out',
               }}
               tabIndex={0}
             >
@@ -394,7 +395,7 @@ const Kiosk1View = () => {
             </div>
             <div
               aria-label="Next"
-              className="flex h-[118px] w-[118px] cursor-pointer items-center justify-center transition-all duration-150 ease-out hover:scale-110"
+              className="flex h-[118px] w-[118px] cursor-pointer items-center justify-center hover:scale-110"
               onKeyDown={handleDownArrowKeyDown}
               onPointerDown={() => {
                 setIsDownArrowPressed(true);
@@ -404,8 +405,9 @@ const Kiosk1View = () => {
               onPointerUp={() => setIsDownArrowPressed(false)}
               role="button"
               style={{
-                opacity: isDownArrowPressed ? 0.7 : 1,
+                opacity: isDownArrowPressed ? 0.4 : 1,
                 transform: isDownArrowPressed ? 'scale(0.95)' : 'scale(1)',
+                transition: 'opacity 150ms ease-out, transform 150ms ease-out',
               }}
               tabIndex={0}
             >
