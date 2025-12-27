@@ -65,7 +65,7 @@ const AnimatedNumberedList = ({ dividerHeights, onRegisterHandlers, steps }: Ani
     let cumulativeShift = 0;
     for (let i = 0; i < internalStepIndex; i++) {
       cumulativeShift += 250;
-      cumulativeShift += 60;
+      cumulativeShift += 0;
       if (i < steps.length - 1) {
         cumulativeShift += 30;
         cumulativeShift += dividerHeights[i] ?? 280;
@@ -75,10 +75,7 @@ const AnimatedNumberedList = ({ dividerHeights, onRegisterHandlers, steps }: Ani
   };
 
   return (
-    <div
-      className="absolute top-[1890px] left-[240px] z-[2] flex w-[1010px] flex-col gap-[60px] text-[60px] leading-[1.3] tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:top-[1860px] group-data-[kiosk=kiosk-2]/kiosk:left-[250px]"
-      data-scroll-section="solution-numbered-list"
-    >
+    <div className="absolute top-[1890px] left-[240px] z-[2] flex w-[1010px] flex-col gap-[60px] text-[60px] leading-[1.3] tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:top-[1860px] group-data-[kiosk=kiosk-2]/kiosk:left-[250px]">
       {steps.map((step, index) => (
         <motion.div
           animate={{

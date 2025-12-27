@@ -84,7 +84,7 @@ const Kiosk1View = () => {
   const handleNavigateDown = useCallback(() => {
     // Check if we should delegate to list
     const shouldDelegateToList =
-      currentScrollTarget === 'solution-numbered-list' && listHandlers !== null && listHandlers.canScrollNext();
+      currentScrollTarget === 'solution-second-group' && listHandlers !== null && listHandlers.canScrollNext();
 
     if (shouldDelegateToList) {
       listHandlers!.scrollNext();
@@ -106,7 +106,7 @@ const Kiosk1View = () => {
   const handleNavigateUp = useCallback(() => {
     // Check if list can handle the navigation
     const shouldDelegateToList =
-      currentScrollTarget === 'solution-numbered-list' && listHandlers !== null && listHandlers.canScrollPrev();
+      currentScrollTarget === 'solution-second-group' && listHandlers !== null && listHandlers.canScrollPrev();
 
     if (shouldDelegateToList) {
       listHandlers!.scrollPrev();
