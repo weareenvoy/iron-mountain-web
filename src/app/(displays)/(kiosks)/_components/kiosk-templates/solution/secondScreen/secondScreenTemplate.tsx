@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import AnimatedNumberedList from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/secondScreen/AnimatedNumberedList';
 import { DEFAULT_KIOSK_ID, type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import BlueDiamondSecond from '@/components/ui/icons/Kiosks/Solutions/BlueDiamondSecond';
 import GreenDiamondSecond from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondSecond';
@@ -13,6 +14,7 @@ type StepConfig = {
 };
 
 type SolutionSecondScreenCoreProps = {
+  readonly currentScrollTarget?: null | string;
   readonly heroImageAlt?: string;
   readonly heroImageSrc?: string;
   readonly image?: string;
@@ -38,6 +40,7 @@ type SolutionSecondScreenStepsProps = {
 };
 
 const SolutionSecondScreenTemplate = ({
+  currentScrollTarget = null,
   heroImageAlt,
   heroImageSrc,
   kioskId = DEFAULT_KIOSK_ID,
@@ -73,12 +76,6 @@ const SolutionSecondScreenTemplate = ({
     stepsDividerHeights && stepsDividerHeights.length >= timelineSteps.length - 1
       ? stepsDividerHeights
       : [668, 250, 250];
-
-  const getOpacityClass = (index: number) => {
-    if (index === 0) return 'opacity-100';
-    if (index === 1) return 'opacity-50';
-    return 'opacity-20';
-  };
 
   return (
     <div
@@ -117,32 +114,12 @@ const SolutionSecondScreenTemplate = ({
         {renderRegisteredMark(numberedListHeadline)}
       </p>
 
-      {/* Timeline with steps */}
-      <div className="absolute top-[1890px] left-[240px] z-[2] flex w-[1010px] flex-col gap-[60px] text-[60px] leading-[1.3] tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:top-[1860px] group-data-[kiosk=kiosk-2]/kiosk:left-[250px]">
-        {timelineSteps.map((step, index) => (
-          <div key={`${step.label}-${index}`}>
-            <div className={`flex gap-[70px] ${getOpacityClass(index)}`}>
-              <p className="w-[120px]">{renderRegisteredMark(step.label)}</p>
-              <p className="w-[1620px]">{renderRegisteredMark(step.description)}</p>
-            </div>
-            {index < timelineSteps.length - 1 ? (
-              <div className="mt-[30px] ml-[140px]">
-                <div
-                  className="border-l border-dashed border-[#ededed]/60"
-                  style={
-                    {
-                      '--divider-height': `${dividerHeights[index] ?? 280}px`,
-                      'height': 'var(--divider-height)',
-                    } as React.CSSProperties
-                    // This is inline since the current setup would require 5+ individual classes with index based conditionals which would be more complex to maintain than the current inline approach.
-                    // The heights are grabbed from an array of 5 items (currently) from the dividerHeights array with a unique height that gets applied based on content.
-                  }
-                />
-              </div>
-            ) : null}
-          </div>
-        ))}
-      </div>
+      {/* Animated Timeline with steps */}
+      <AnimatedNumberedList
+        currentScrollTarget={currentScrollTarget}
+        dividerHeights={dividerHeights}
+        steps={timelineSteps}
+      />
 
       {/* Hero media diamond */}
       <div className="absolute top-[2210px] left-[1500px] z-[2]">

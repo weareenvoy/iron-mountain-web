@@ -138,10 +138,11 @@ const Kiosk3View = () => {
   // Pass the global handlers to all templates
   const globalHandlers = useMemo(
     () => ({
+      currentScrollTarget,
       onNavigateDown: handleNavigateDown,
       onNavigateUp: handleNavigateUp,
     }),
-    [handleNavigateDown, handleNavigateUp]
+    [currentScrollTarget, handleNavigateDown, handleNavigateUp]
   );
 
   // Stable callbacks to avoid ref access during render
