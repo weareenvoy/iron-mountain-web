@@ -14,15 +14,18 @@ type StepConfig = {
 };
 
 type SolutionSecondScreenCoreProps = {
-  readonly currentScrollTarget?: null | string;
   readonly heroImageAlt?: string;
   readonly heroImageSrc?: string;
   readonly image?: string;
   readonly kioskId?: KioskId;
   readonly labelText?: string;
   readonly numberedListHeadline?: string;
-  readonly onNavigateDown?: () => void;
-  readonly onNavigateUp?: () => void;
+  readonly onRegisterListHandlers?: (handlers: {
+    canScrollNext: () => boolean;
+    canScrollPrev: () => boolean;
+    scrollNext: () => void;
+    scrollPrev: () => void;
+  }) => void;
   readonly stepFourDescription?: string;
   readonly stepFourLabel?: string;
   readonly stepOneDescription?: string;
@@ -40,12 +43,12 @@ type SolutionSecondScreenStepsProps = {
 };
 
 const SolutionSecondScreenTemplate = ({
-  currentScrollTarget = null,
   heroImageAlt,
   heroImageSrc,
   kioskId = DEFAULT_KIOSK_ID,
   labelText,
   numberedListHeadline,
+  onRegisterListHandlers,
   stepFourDescription,
   stepFourLabel,
   stepOneDescription,
@@ -116,8 +119,8 @@ const SolutionSecondScreenTemplate = ({
 
       {/* Animated Timeline with steps */}
       <AnimatedNumberedList
-        currentScrollTarget={currentScrollTarget}
         dividerHeights={dividerHeights}
+        onRegisterHandlers={onRegisterListHandlers}
         steps={timelineSteps}
       />
 

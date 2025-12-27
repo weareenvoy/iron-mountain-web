@@ -26,7 +26,16 @@ export type SolutionScreens = {
 export const buildSolutionSlides = (
   solutions: SolutionScreens,
   kioskId: KioskId,
-  handlers: { currentScrollTarget: null | string; onNavigateDown: () => void; onNavigateUp: () => void }
+  handlers: {
+    onNavigateDown: () => void;
+    onNavigateUp: () => void;
+    onRegisterListHandlers?: (handlers: {
+      canScrollNext: () => boolean;
+      canScrollPrev: () => boolean;
+      scrollNext: () => void;
+      scrollPrev: () => void;
+    }) => void;
+  }
 ): Slide[] => {
   const slides: Slide[] = [];
 
@@ -61,10 +70,8 @@ export const buildSolutionSlides = (
         <SectionSlide>
           <SolutionSecondScreenTemplate
             {...config}
-            currentScrollTarget={handlers.currentScrollTarget}
             kioskId={kioskId}
-            onNavigateDown={handlers.onNavigateDown}
-            onNavigateUp={handlers.onNavigateUp}
+            onRegisterListHandlers={handlers.onRegisterListHandlers}
           />
         </SectionSlide>
       ),

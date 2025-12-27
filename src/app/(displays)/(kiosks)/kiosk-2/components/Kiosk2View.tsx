@@ -60,6 +60,14 @@ const Kiosk2View = () => {
     scrollPrev: () => void;
   }>(null);
 
+  // Store list handlers for solution numbered list
+  const [listHandlers, setListHandlers] = useState<null | {
+    canScrollNext: () => boolean;
+    canScrollPrev: () => boolean;
+    scrollNext: () => void;
+    scrollPrev: () => void;
+  }>(null);
+
   // Global paragraph navigation
   const {
     currentScrollTarget,
@@ -72,8 +80,17 @@ const Kiosk2View = () => {
     duration: SCROLL_DURATION_MS,
   });
 
-  // Wrap navigation handlers to check carousel first
+  // Wrap navigation handlers to check carousel and list first
   const handleNavigateDown = useCallback(() => {
+    // Check if we should delegate to list
+    const shouldDelegateToList =
+      currentScrollTarget === 'solution-numbered-list' && listHandlers !== null && listHandlers.canScrollNext();
+
+    if (shouldDelegateToList) {
+      listHandlers!.scrollNext();
+      return;
+    }
+
     // If we're at value-description and carousel can scroll, let carousel handle it
     if (currentScrollTarget === 'value-description' && carouselHandlers?.canScrollNext()) {
       carouselHandlers.scrollNext();
@@ -81,9 +98,18 @@ const Kiosk2View = () => {
     }
 
     baseHandleNavigateDown();
-  }, [baseHandleNavigateDown, carouselHandlers, currentScrollTarget]);
+  }, [baseHandleNavigateDown, carouselHandlers, currentScrollTarget, listHandlers]);
 
   const handleNavigateUp = useCallback(() => {
+    // Check if list can handle the navigation
+    const shouldDelegateToList =
+      currentScrollTarget === 'solution-numbered-list' && listHandlers !== null && listHandlers.canScrollPrev();
+
+    if (shouldDelegateToList) {
+      listHandlers!.scrollPrev();
+      return;
+    }
+
     // If carousel can scroll back, let it handle the navigation
     if (currentScrollTarget === 'value-description' && carouselHandlers?.canScrollPrev()) {
       carouselHandlers.scrollPrev();
@@ -91,7 +117,7 @@ const Kiosk2View = () => {
     }
 
     baseHandleNavigateUp();
-  }, [baseHandleNavigateUp, carouselHandlers, currentScrollTarget]);
+  }, [baseHandleNavigateUp, carouselHandlers, currentScrollTarget, listHandlers]);
 
   // Parse data from provider (kiosk-2 now uses new flat structure)
   const kioskContent = kioskData as
@@ -143,6 +169,7 @@ const Kiosk2View = () => {
       currentScrollTarget,
       onNavigateDown: handleNavigateDown,
       onNavigateUp: handleNavigateUp,
+      onRegisterListHandlers: setListHandlers,
     }),
     [currentScrollTarget, handleNavigateDown, handleNavigateUp]
   );
