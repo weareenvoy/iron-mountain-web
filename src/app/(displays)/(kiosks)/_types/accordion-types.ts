@@ -1,5 +1,7 @@
 export type AccordionColor = 'blue' | 'lightBlue' | 'navy' | 'white';
 
+// This file contains the types for the Solution Accordion and its data along with its color scheme.
+
 export type AccordionEntry = {
   readonly color?: AccordionColor;
   readonly contentList?: string[];
@@ -7,33 +9,4 @@ export type AccordionEntry = {
   readonly id: string;
   readonly number: string;
   readonly title: string;
-};
-
-export type PaletteConfig = {
-  readonly body: string;
-  readonly header: string;
-  readonly text: string;
-};
-
-export const palettes: Record<AccordionColor, PaletteConfig> = {
-  blue: {
-    body: '#1b75bc',
-    header: '#1b75bc',
-    text: '#ededed',
-  },
-  lightBlue: {
-    body: '#6dcff6',
-    header: '#6dcff6',
-    text: '#14477d',
-  },
-  navy: {
-    body: '#14477d',
-    header: '#14477d',
-    text: '#ededed',
-  },
-  white: {
-    body: '#ededed',
-    header: '#ededed',
-    text: '#14477d',
-  },
 };

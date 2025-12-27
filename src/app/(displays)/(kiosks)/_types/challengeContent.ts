@@ -1,3 +1,5 @@
+// This file is used to define the structure of the Challenge section of the Kiosk setup. Every slide's data / types are defined here.
+
 export type KioskChallenges = {
   readonly firstScreen: FirstScreen;
   readonly initialScreen: InitialScreen;

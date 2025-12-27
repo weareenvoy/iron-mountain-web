@@ -1,6 +1,8 @@
 import type { SolutionScreens } from '../_components/kiosk-templates/solution/solutionSlides';
 import type { Ambient, SolutionsAccordion, SolutionsMain } from '../_types/content-types';
 
+// This maps CMS content for Solutions with Accordion to the Kiosk Solutions structure.
+
 export const mapSolutionsWithAccordion = (
   solutionsMain: SolutionsMain,
   solutionAccordion: SolutionsAccordion,

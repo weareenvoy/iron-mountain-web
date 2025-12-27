@@ -35,6 +35,8 @@ import type {
   ValueContent,
 } from '@/app/(displays)/(kiosks)/_types/content-types';
 
+// Main component for displaying Kiosk 3 content.
+
 const Kiosk3View = () => {
   const { data: kioskData } = useKiosk();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -312,7 +314,7 @@ const Kiosk3View = () => {
         {/* Render ALL slides, always visible, stacked vertically */}
         {slides.map((slide, idx) => (
           <div className="h-screen w-full flex-shrink-0" data-slide-index={idx} key={slide.id}>
-            {slide.render(idx === topIndex)}
+            {slide.render()}
           </div>
         ))}
       </div>

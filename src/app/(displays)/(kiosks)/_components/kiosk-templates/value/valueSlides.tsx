@@ -4,6 +4,8 @@ import ValueCarouselTemplate, {
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueCarouselTemplate';
 import { type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
+// This file builds the slides for the Value section of the Kiosk setup and gives each one ids for use if needed.
+
 export type ValueScreens = {
   readonly valueScreens?: Omit<
     ValueCarouselTemplateProps,
@@ -28,8 +30,8 @@ export const buildValueSlides = (
 
   return valueScreens.map((config, idx) => ({
     id: `value-${idx}`,
-    render: (isActive: boolean) => (
-      <SectionSlide isActive={isActive}>
+    render: () => (
+      <SectionSlide>
         <ValueCarouselTemplate
           {...config}
           carouselId={config.carouselId ?? `${kioskId}-value-${idx}`}

@@ -1,6 +1,8 @@
 import type { SolutionScreens } from '../_components/kiosk-templates/solution/solutionSlides';
 import type { Ambient, SolutionsGrid, SolutionsMain } from '../_types/content-types';
 
+// This maps CMS content for Solutions with Grid to the Kiosk Solutions structure. (The diamond grid in Solutions.)
+
 export const mapSolutionsWithGrid = (
   solutionsMain: SolutionsMain,
   solutionsGrid: SolutionsGrid,

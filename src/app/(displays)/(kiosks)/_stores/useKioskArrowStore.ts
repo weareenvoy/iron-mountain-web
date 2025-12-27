@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import type { KioskId } from '../_types/kiosk-id';
 
+// This file is used to manage arrow visibility, color, and animation states for the arrow nav in all three kiosks.
+
 type KioskArrowState = {
   readonly allowArrowsToShow: boolean;
   readonly arrowColor: string;

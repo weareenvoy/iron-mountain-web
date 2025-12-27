@@ -14,6 +14,8 @@ import { SectionSlide, type Slide } from '@/app/(displays)/(kiosks)/_components/
 import { type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
 import { type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
+// This file builds the slides for the Challenge section of the Kiosk setup and gives each one ids for use if needed.
+
 export type ChallengeScreens = {
   readonly firstScreen?: FirstScreenTemplateProps;
   readonly initialScreen?: InitialScreenTemplateProps;
@@ -37,8 +39,8 @@ export const buildChallengeSlides = (
   return [
     {
       id: 'challenge-initial',
-      render: (isActive: boolean) => (
-        <SectionSlide isActive={isActive}>
+      render: () => (
+        <SectionSlide>
           <InitialScreenTemplate {...initialScreen} kioskId={kioskId} onButtonClick={handleInitialButtonClick} />
         </SectionSlide>
       ),
@@ -46,8 +48,8 @@ export const buildChallengeSlides = (
     },
     {
       id: 'challenge-first',
-      render: (isActive: boolean) => (
-        <SectionSlide isActive={isActive}>
+      render: () => (
+        <SectionSlide>
           <FirstScreenTemplate
             {...challenges.firstScreen}
             kioskId={kioskId}
@@ -60,8 +62,8 @@ export const buildChallengeSlides = (
     },
     {
       id: 'challenge-second',
-      render: (isActive: boolean) => (
-        <SectionSlide isActive={isActive}>
+      render: () => (
+        <SectionSlide>
           <SecondScreenTemplate
             {...challenges.secondScreen}
             kioskId={kioskId}
@@ -74,8 +76,8 @@ export const buildChallengeSlides = (
     },
     {
       id: 'challenge-third',
-      render: (isActive: boolean) => (
-        <SectionSlide isActive={isActive}>
+      render: () => (
+        <SectionSlide>
           <ThirdScreenTemplate
             {...challenges.thirdScreen}
             kioskId={kioskId}

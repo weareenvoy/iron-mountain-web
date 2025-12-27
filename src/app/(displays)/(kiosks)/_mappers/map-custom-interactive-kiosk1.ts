@@ -1,6 +1,8 @@
 import type { CustomInteractiveScreens } from '../_components/kiosk-templates/customInteractiveSection/customInteractiveSlides';
 import type { Ambient, CustomInteractiveContent } from '../_types/content-types';
 
+// This maps CMS content for Custom Interactive Kiosk 1 to the Kiosk Custom Interactive structure.
+
 type DemoConfig = {
   readonly demoText?: string;
   readonly headline?: string;

@@ -1,3 +1,5 @@
+// This makes sure a value is always a string and never undefined or null.
+
 /**
  * Normalizes a string value to ensure it's always a string.
  * Converts undefined/null to empty string.

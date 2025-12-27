@@ -1,3 +1,5 @@
+// Handles potentially undefined multiline strings.
+
 /**
  * Normalizes a multiline string value.
  * Returns undefined if value is null/undefined, or the string if it's valid.

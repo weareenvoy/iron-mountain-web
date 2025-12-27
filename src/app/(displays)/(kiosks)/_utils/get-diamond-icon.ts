@@ -4,6 +4,8 @@ import OrangeFilledDiamond from '@/components/ui/icons/Kiosks/Solutions/OrangeFi
 import PurpleFilledDiamond from '@/components/ui/icons/Kiosks/Solutions/PurpleFilledDiamond';
 import type { ValueDiamondCard } from '../_types/value-types';
 
+// This file gets the appropriate diamond icon component based on the card's color. For example it matches color hex codes to the blueFilledDiamond, the orangeFilledDiamond, or the purpleFilledDiamond SVG Components.
+
 const diamondIconMap: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
   '#1b75bc': BlueFilledDiamond,
   '#6dcff6': BlueFilledDiamond,

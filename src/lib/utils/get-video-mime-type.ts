@@ -1,3 +1,6 @@
+// This file derives the MIME type for a video source based on its file extension.
+// This way when a video file is uploaded to the CMS its file type is detected automatically and the correct MIME type is returned.
+
 /**
  * Derives the MIME type for a video source based on its file extension.
  * Falls back to 'video/mp4' if the extension cannot be determined.

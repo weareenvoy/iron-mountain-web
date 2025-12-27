@@ -13,6 +13,8 @@ import SolutionThirdScreenTemplate, {
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/thirdScreen/thirdScreenTemplate';
 import { type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
+// This file builds the slides for the Solution section of the Kiosk setup and gives each one ids for use if needed.
+
 export type SolutionScreens = {
   readonly firstScreen?: SolutionFirstScreenTemplateProps;
   readonly fourthScreen?: SolutionFourthScreenTemplateProps;
@@ -31,8 +33,8 @@ export const buildSolutionSlides = (
   if (solutions.firstScreen) {
     slides.push({
       id: 'solution-first',
-      render: (isActive: boolean) => (
-        <SectionSlide isActive={isActive}>
+      render: () => (
+        <SectionSlide>
           <SolutionFirstScreenTemplate
             {...solutions.firstScreen}
             kioskId={kioskId}
@@ -55,8 +57,8 @@ export const buildSolutionSlides = (
   secondScreens.forEach((config, idx) => {
     slides.push({
       id: `solution-second-${idx}`,
-      render: (isActive: boolean) => (
-        <SectionSlide isActive={isActive}>
+      render: () => (
+        <SectionSlide>
           <SolutionSecondScreenTemplate
             {...config}
             kioskId={kioskId}
@@ -76,8 +78,8 @@ export const buildSolutionSlides = (
   if (solutions.thirdScreen && !solutions.fourthScreen) {
     slides.push({
       id: 'solution-third',
-      render: (isActive: boolean) => (
-        <SectionSlide isActive={isActive}>
+      render: () => (
+        <SectionSlide>
           <SolutionThirdScreenTemplate
             {...solutions.thirdScreen}
             kioskId={kioskId}
@@ -93,8 +95,8 @@ export const buildSolutionSlides = (
   if (solutions.fourthScreen) {
     slides.push({
       id: 'solution-fourth',
-      render: (isActive: boolean) => (
-        <SectionSlide isActive={isActive}>
+      render: () => (
+        <SectionSlide>
           <SolutionFourthScreenTemplate
             {...solutions.fourthScreen}
             onNavigateDown={handlers.onNavigateDown}

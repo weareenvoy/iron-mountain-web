@@ -1,3 +1,5 @@
+// This file contains all the timing constants for the Kiosk setup in milliseconds.
+
 /**
  * Timing constants for kiosk navigation and UI transitions
  */

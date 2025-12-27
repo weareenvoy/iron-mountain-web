@@ -2,6 +2,8 @@ import type { ValueScreens } from '../_components/kiosk-templates/value/valueSli
 import type { Ambient, ValueContent } from '../_types/content-types';
 import type { KioskId } from '../_types/kiosk-id';
 
+// This maps CMS content for Value to the Kiosk Value structure.
+
 export const mapValue = (value: ValueContent, ambient: Ambient, kioskId: KioskId): ValueScreens => {
   const heroVideoSrc = value.mainVideo;
   const description = value.body;

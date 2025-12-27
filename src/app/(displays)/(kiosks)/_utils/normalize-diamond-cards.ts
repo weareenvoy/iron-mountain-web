@@ -1,5 +1,7 @@
 import type { ValueDiamondCard } from '../_types/value-types';
 
+// This file applies consistent color patterns to diamond cards in the Value section of the Kiosk setup. For example it will detect the carousel in Value and put the Diamonds in the right Color order (Orange, Blue, Purple - Purple, Orange, Blue, etc. Based on which slide is in use in the value Carousel.)
+
 const paletteColors = ['#8a0d71', '#1b75bc', '#f26522'] as const;
 const paletteTextColors = [undefined, undefined, undefined] as const;
 

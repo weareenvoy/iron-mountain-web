@@ -1,6 +1,8 @@
 import { normalizeNewlines } from './normalize-newlines';
 import type { ReactNode } from 'react';
 
+// This file renders the registered mark (Ⓡ) for text content with the intended styles.
+
 const REGISTERED_SYMBOL_REGEX = /(\(R\)|\(r\)|[Ⓡ®])/g;
 
 export const renderRegisteredMark = (text?: string): ReactNode => {

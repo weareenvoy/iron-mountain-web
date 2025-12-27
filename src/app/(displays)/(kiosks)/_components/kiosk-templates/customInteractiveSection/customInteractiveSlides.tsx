@@ -14,6 +14,8 @@ import { SectionSlide, type Slide } from '@/app/(displays)/(kiosks)/_components/
 import type { CustomInteractiveDemoScreenTemplateProps } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
+// This file builds the slides for the Custom Interactive section of the Kiosk setup and gives each one ids for use if needed.
+
 export type CustomInteractiveScreens = {
   readonly demoScreen?: CustomInteractiveDemoScreenTemplateProps;
   readonly firstScreen?: CustomInteractiveKiosk1FirstScreenTemplateProps;
@@ -36,8 +38,8 @@ export const buildCustomInteractiveSlides = (
 
     slides.push({
       id: 'customInteractive-first',
-      render: (isActive: boolean) => (
-        <SectionSlide isActive={isActive}>
+      render: () => (
+        <SectionSlide>
           <CustomInteractiveFirstScreenTemplate
             kioskId={kioskId}
             {...customInteractive.firstScreen}
@@ -58,8 +60,8 @@ export const buildCustomInteractiveSlides = (
 
     slides.push({
       id: 'customInteractive-second',
-      render: (isActive: boolean) => (
-        <SectionSlide isActive={isActive}>
+      render: () => (
+        <SectionSlide>
           <KioskSecond
             {...customInteractive.secondScreen}
             onBack={() => scrollToSection?.('customInteractive-first-screen')}
@@ -76,8 +78,8 @@ export const buildCustomInteractiveSlides = (
   if (kioskId === 'kiosk-3' && customInteractive.thirdScreen) {
     slides.push({
       id: 'customInteractive-third',
-      render: (isActive: boolean) => (
-        <SectionSlide isActive={isActive}>
+      render: () => (
+        <SectionSlide>
           <CustomInteractiveKiosk3ThirdScreenTemplate {...customInteractive.thirdScreen} />
         </SectionSlide>
       ),

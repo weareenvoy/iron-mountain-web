@@ -1,4 +1,4 @@
-import ScaleWrapper from '@/app/(displays)/(kiosks)/_components/kiosk-controller/ScaleWrapper';
+import ScaleWrapper from '@/app/(displays)/(kiosks)/_components/kiosk-scale-wrapper/ScaleWrapper';
 import config from './kiosk.config.json';
 import type { PropsWithChildren } from 'react';
 import './_styles/globals.css';

@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { palettes, type AccordionEntry } from '@/app/(displays)/(kiosks)/_types/accordion-types';
+import { type AccordionEntry } from '@/app/(displays)/(kiosks)/_types/accordion-types';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/shadcn/accordion';
 import GreenDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondFourth';
 import OrangeDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondFourth';
@@ -73,38 +73,34 @@ const SolutionFourthScreenTemplate = ({
           type="single"
         >
           {entries.map((item, index) => {
-            const palette = palettes[item.color ?? 'white'];
+            const accordionColor = item.color ?? 'white';
+            const prevAccordionColor = index > 0 ? (entries[index - 1]?.color ?? 'white') : null;
             const hasContent = Boolean(item.contentList?.length);
             const roundedClass =
               index === 0 ? 'rounded-t-[80px]' : index === entries.length - 1 ? 'rounded-b-[80px]' : 'rounded-none';
             const triggerRoundedClass =
               index === 0 ? 'rounded-t-[50px]' : index === entries.length - 1 ? 'rounded-b-[50px]' : 'rounded-none';
 
-            const prevPalette = index > 0 ? palettes[entries[index - 1]?.color ?? 'white'] : undefined;
-
             return (
               <AccordionItem
-                className={`relative z-[1] overflow-hidden border-none ${roundedClass}`}
+                className={`relative z-[1] overflow-hidden border-none ${roundedClass} data-[accordion-color=blue]:bg-[#1b75bc] data-[accordion-color=lightBlue]:bg-[#6dcff6] data-[accordion-color=navy]:bg-[#14477d] data-[accordion-color=white]:bg-[#ededed]`}
+                data-accordion-color={index === entries.length - 1 ? accordionColor : undefined}
                 key={item.id}
-                style={index === entries.length - 1 ? { backgroundColor: palette.header } : undefined}
                 value={item.id}
               >
-                {index > 0 ? (
+                {index > 0 && prevAccordionColor ? (
                   <div
                     aria-hidden="true"
-                    className="pointer-events-none absolute top-0 right-0 left-0 h-[50px]"
-                    style={{ backgroundColor: prevPalette?.header, zIndex: 0 }}
+                    className="pointer-events-none absolute top-0 right-0 left-0 z-0 h-[50px] data-[accordion-color=blue]:bg-[#1b75bc] data-[accordion-color=lightBlue]:bg-[#6dcff6] data-[accordion-color=navy]:bg-[#14477d] data-[accordion-color=white]:bg-[#ededed]"
+                    data-accordion-color={prevAccordionColor}
                   />
                 ) : null}
                 <AccordionTrigger
                   className={`group/accordion-trigger relative z-[1] flex h-[120px] min-h-[240px] items-center rounded-t-[50px] px-[80px] pt-[30px] pb-[20px] text-left text-[52px] leading-[1.4] tracking-[-2.6px] transition-none hover:no-underline focus-visible:outline-none ${
                     index === entries.length - 1 ? 'rounded-b-[50px]' : ''
-                  } ${triggerRoundedClass}`}
-                  indicator={<PlusMinusIcon color={palette.text} />}
-                  style={{
-                    backgroundColor: palette.header,
-                    color: palette.text,
-                  }}
+                  } ${triggerRoundedClass} data-[accordion-color=blue]:bg-[#1b75bc] data-[accordion-color=blue]:text-[#ededed] data-[accordion-color=lightBlue]:bg-[#6dcff6] data-[accordion-color=lightBlue]:text-[#14477d] data-[accordion-color=navy]:bg-[#14477d] data-[accordion-color=navy]:text-[#ededed] data-[accordion-color=white]:bg-[#ededed] data-[accordion-color=white]:text-[#14477d]`}
+                  data-accordion-color={accordionColor}
+                  indicator={<PlusMinusIcon accordionColor={accordionColor} />}
                 >
                   <div className="flex flex-1 items-center gap-[40px]">
                     <span>{renderRegisteredMark(item.number)}</span>
@@ -114,11 +110,8 @@ const SolutionFourthScreenTemplate = ({
                 <AccordionContent className="relative z-[1] [&>div]:pb-0">
                   {hasContent ? (
                     <div
-                      className="px-[80px] pt-[35px] pb-[120px] pl-[210px]"
-                      style={{
-                        backgroundColor: palette.body,
-                        color: palette.text,
-                      }}
+                      className="px-[80px] pt-[35px] pb-[120px] pl-[210px] data-[accordion-color=blue]:bg-[#1b75bc] data-[accordion-color=blue]:text-[#ededed] data-[accordion-color=lightBlue]:bg-[#6dcff6] data-[accordion-color=lightBlue]:text-[#14477d] data-[accordion-color=navy]:bg-[#14477d] data-[accordion-color=navy]:text-[#ededed] data-[accordion-color=white]:bg-[#ededed] data-[accordion-color=white]:text-[#14477d]"
+                      data-accordion-color={accordionColor}
                     >
                       <ul className="space-y-[16px] text-[52px] leading-[1.4] tracking-[-2.6px]">
                         {item.contentList?.map(bullet => (

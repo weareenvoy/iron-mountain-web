@@ -1,3 +1,5 @@
+// This file defines the data types for the Kiosk setup before they get mapped to the Kiosk structure.
+
 export type Ambient = {
   readonly backgroundImage?: string;
   readonly body?: string;
