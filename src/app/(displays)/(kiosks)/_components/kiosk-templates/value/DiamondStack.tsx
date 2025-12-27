@@ -39,6 +39,7 @@ const DiamondStack = ({ cards, variant = 'overview' }: DiamondStackProps) => {
             className="absolute h-[550px] w-[550px] rotate-45 rounded-[80px]"
             key={`${card.label ?? index}`}
             style={{ '--left-offset': `${leftOffset}px`, 'left': 'var(--left-offset)' } as React.CSSProperties}
+            // These styles are inline because this setup requires runtime calculation based on index and array lookup to create the visual stack effect when overlapping diamonds to create a staggered layout pattern with leftOffset (left positions based on index).
           >
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="h-full w-full -rotate-45">

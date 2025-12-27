@@ -48,9 +48,9 @@ const Kiosk1View = () => {
   const handleInitialScreenReset = useKioskArrowStore(state => state.handleInitialScreenReset);
   const handleScrollStart = useKioskArrowStore(state => state.handleScrollStart);
   const handleScrollComplete = useKioskArrowStore(state => state.handleScrollComplete);
-  const handleArrowColorUpdate = useKioskArrowStore(state => state.handleArrowColorUpdate);
+  const handleArrowThemeUpdate = useKioskArrowStore(state => state.handleArrowThemeUpdate);
 
-  const { arrowColor, showArrows } = kioskState;
+  const { arrowTheme, showArrows } = kioskState;
 
   // Store carousel handlers for value section
   const [carouselHandlers, setCarouselHandlers] = useState<null | {
@@ -254,17 +254,17 @@ const Kiosk1View = () => {
     }
   }, [isValueSection, currentScrollTarget]);
 
-  // Handle arrow color updates
+  // Handle arrow theme updates
   useEffect(() => {
     const isScrollingToCustomInteractive = currentScrollTarget && currentScrollTarget.includes('customInteractive-');
 
     if (showArrows && !isScrollingToCustomInteractive) {
-      handleArrowColorUpdate('kiosk-1', Boolean(isValueSection), showArrows);
+      handleArrowThemeUpdate('kiosk-1', Boolean(isValueSection), showArrows);
     } else if (showArrows && isScrollingToCustomInteractive && wasInValueSectionRef.current) {
-      // Preserve gray color when transitioning from value to customInteractive
+      // Preserve gray theme when transitioning from value to customInteractive
       // This is handled in the component, not the store
     }
-  }, [isValueSection, showArrows, currentScrollTarget, handleArrowColorUpdate]);
+  }, [isValueSection, showArrows, currentScrollTarget, handleArrowThemeUpdate]);
 
   // Handle scroll target changes
   useEffect(() => {
@@ -330,6 +330,7 @@ const Kiosk1View = () => {
           <motion.div
             animate={{ opacity: 1, scale: 1 }}
             className="fixed top-[1945px] right-[120px] z-[50] flex -translate-y-1/2 flex-col gap-[100px]"
+            data-arrow-theme={arrowTheme}
             exit={{ opacity: 0, scale: 0.9 }}
             initial={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: ARROW_FADE_DURATION_KIOSK1_SEC, ease: 'easeOut' }}
@@ -340,15 +341,14 @@ const Kiosk1View = () => {
               onKeyDown={handleUpArrowKeyDown}
               onPointerDown={handleNavigateUp}
               role="button"
-              style={{ '--arrow-color': arrowColor } as React.CSSProperties}
               tabIndex={0}
             >
               <ArrowUp
                 aria-hidden="true"
-                className="h-full w-full"
+                className="h-full w-full data-[arrow-theme=blue]:text-[#6DCFF6] data-[arrow-theme=gray]:text-[#58595B]"
+                data-arrow-theme={arrowTheme}
                 focusable="false"
                 strokeWidth={1.5}
-                style={{ color: 'var(--arrow-color)' }}
               />
             </div>
             <div
@@ -357,15 +357,14 @@ const Kiosk1View = () => {
               onKeyDown={handleDownArrowKeyDown}
               onPointerDown={handleNavigateDown}
               role="button"
-              style={{ '--arrow-color': arrowColor } as React.CSSProperties}
               tabIndex={0}
             >
               <ArrowDown
                 aria-hidden="true"
-                className="h-full w-full"
+                className="h-full w-full data-[arrow-theme=blue]:text-[#6DCFF6] data-[arrow-theme=gray]:text-[#58595B]"
+                data-arrow-theme={arrowTheme}
                 focusable="false"
                 strokeWidth={1.5}
-                style={{ color: 'var(--arrow-color)' }}
               />
             </div>
           </motion.div>

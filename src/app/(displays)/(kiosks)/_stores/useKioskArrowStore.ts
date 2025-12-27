@@ -3,9 +3,11 @@ import type { KioskId } from '../_types/kiosk-id';
 
 // This file is used to manage arrow visibility, color, and animation states for the arrow nav in all three kiosks.
 
+export type ArrowTheme = 'blue' | 'gray';
+
 type KioskArrowState = {
   readonly allowArrowsToShow: boolean;
-  readonly arrowColor: string;
+  readonly arrowTheme: ArrowTheme;
   readonly previousScrollTarget: null | string;
   readonly shouldResetOnInitial: boolean;
   readonly showArrows: boolean;
@@ -14,7 +16,7 @@ type KioskArrowState = {
 
 type Store = {
   // Actions
-  readonly handleArrowColorUpdate: (kioskId: KioskId, isValueSection: boolean, showArrows: boolean) => void;
+  readonly handleArrowThemeUpdate: (kioskId: KioskId, isValueSection: boolean, showArrows: boolean) => void;
   readonly handleButtonClick: (kioskId: KioskId) => void;
   readonly handleInitialScreenReset: (kioskId: KioskId, isInitialScreen: boolean) => void;
   readonly handleScrollComplete: (
@@ -43,7 +45,7 @@ type Store = {
 
 const defaultKioskState: KioskArrowState = {
   allowArrowsToShow: false,
-  arrowColor: '#6DCFF6',
+  arrowTheme: 'blue',
   previousScrollTarget: null,
   shouldResetOnInitial: false,
   showArrows: false,
@@ -63,25 +65,19 @@ const getStoreKey = (kioskId: KioskId): 'kiosk1' | 'kiosk2' | 'kiosk3' => {
 };
 
 export const useKioskArrowStore = create<Store>((set, get) => ({
-  handleArrowColorUpdate: (kioskId: KioskId, isValueSection: boolean, showArrows: boolean) => {
+  handleArrowThemeUpdate: (kioskId: KioskId, isValueSection: boolean, showArrows: boolean) => {
     const key = getStoreKey(kioskId);
     const state = get()[key];
 
-    // Only update color when arrows are visible
+    // Only update theme when arrows are visible
     if (showArrows) {
-      const defaultColors: Record<KioskId, string> = {
-        'kiosk-1': '#6DCFF6',
-        'kiosk-2': '#6DCFF6',
-        'kiosk-3': '#6DCFF6',
-      };
+      const newTheme: ArrowTheme = isValueSection ? 'gray' : 'blue';
 
-      const newColor = isValueSection ? '#58595B' : defaultColors[kioskId];
-
-      if (state.arrowColor !== newColor) {
+      if (state.arrowTheme !== newTheme) {
         set({
           [key]: {
             ...state,
-            arrowColor: newColor,
+            arrowTheme: newTheme,
           },
         });
       }
@@ -267,24 +263,19 @@ export const useKioskArrowStore = create<Store>((set, get) => ({
     }));
   },
 
-  kiosk1: { ...defaultKioskState, arrowColor: '#6DCFF6' },
+  kiosk1: { ...defaultKioskState, arrowTheme: 'blue' },
 
-  kiosk2: { ...defaultKioskState, arrowColor: '#6DCFF6' },
+  kiosk2: { ...defaultKioskState, arrowTheme: 'blue' },
 
-  kiosk3: { ...defaultKioskState, arrowColor: '#6DCFF6' },
+  kiosk3: { ...defaultKioskState, arrowTheme: 'blue' },
 
   resetKiosk: (kioskId: KioskId) => {
     const key = getStoreKey(kioskId);
-    const defaultColors: Record<KioskId, string> = {
-      'kiosk-1': '#6DCFF6',
-      'kiosk-2': '#6DCFF6',
-      'kiosk-3': '#6DCFF6',
-    };
 
     set({
       [key]: {
         ...defaultKioskState,
-        arrowColor: defaultColors[kioskId],
+        arrowTheme: 'blue',
       },
     });
   },
