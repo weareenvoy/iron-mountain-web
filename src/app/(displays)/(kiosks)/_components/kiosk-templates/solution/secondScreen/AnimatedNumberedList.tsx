@@ -37,16 +37,30 @@ const AnimatedNumberedList = ({ currentScrollTarget, dividerHeights, steps }: An
 
   // Calculate opacity based on distance from active index
   const getOpacity = (index: number) => {
-    if (index === activeIndex) return 1;
-    if (index === activeIndex + 1) return 0.5;
-    if (index === activeIndex + 2) return 0.2;
-    return 0;
+    if (index === activeIndex) return 1; // Active item: full opacity
+    if (index === activeIndex - 1) return 0; // Previous item: faded out (scrolled up)
+    if (index === activeIndex + 1) return 0.5; // Next item: partially visible
+    if (index === activeIndex + 2) return 0.2; // Two away: fading
+    return 0; // Others: invisible
   };
 
-  // Calculate Y offset - items above active scroll up and fade out
-  const getYOffset = (index: number) => {
-    const offset = (index - activeIndex) * -100; // Negative moves items up
-    return offset;
+  // Calculate Y offset - all items shift up uniformly as activeIndex increases
+  // This creates the effect where current item scrolls up and out, next item scrolls up into its place
+  const getYOffset = () => {
+    // Calculate cumulative height of all items that have "passed" (been scrolled out)
+    let cumulativeShift = 0;
+    for (let i = 0; i < activeIndex; i++) {
+      cumulativeShift += 250; // Approximate item height
+      cumulativeShift += 60; // gap-[60px]
+      if (i < steps.length - 1) {
+        cumulativeShift += 30; // mt-[30px] for divider
+        cumulativeShift += dividerHeights[i] ?? 280; // divider height
+      }
+    }
+
+    // All items move up by the same amount (the cumulative shift)
+    // This makes them scroll up together, with the active item landing at y=0
+    return -cumulativeShift;
   };
 
   return (
@@ -55,7 +69,7 @@ const AnimatedNumberedList = ({ currentScrollTarget, dividerHeights, steps }: An
         <motion.div
           animate={{
             opacity: getOpacity(index),
-            y: getYOffset(index),
+            y: getYOffset(),
           }}
           key={`${step.label}-${index}`}
           transition={{
