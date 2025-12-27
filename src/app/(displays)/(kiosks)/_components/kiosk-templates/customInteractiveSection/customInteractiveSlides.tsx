@@ -33,8 +33,20 @@ export const buildCustomInteractiveSlides = (
   const slides: Slide[] = [];
 
   if (customInteractive.firstScreen) {
-    // Kiosk 1 uses thirdScreen for overlay, Kiosk 3 uses fourthScreen
-    const overlayData = kioskId === 'kiosk-1' ? customInteractive.thirdScreen : customInteractive.fourthScreen;
+    // Kiosk 1 uses thirdScreen for overlay, Kiosk 2 uses firstScreen props directly, Kiosk 3 uses fourthScreen
+    let overlayCardLabel: string | undefined;
+    let overlayHeadline: string | undefined;
+
+    if (kioskId === 'kiosk-1' && customInteractive.thirdScreen) {
+      overlayCardLabel = customInteractive.thirdScreen.cardLabel;
+      overlayHeadline = customInteractive.thirdScreen.headline;
+    } else if (kioskId === 'kiosk-2') {
+      overlayCardLabel = customInteractive.firstScreen.overlayCardLabel;
+      overlayHeadline = customInteractive.firstScreen.overlayHeadline;
+    } else if (kioskId === 'kiosk-3' && customInteractive.fourthScreen) {
+      overlayCardLabel = customInteractive.fourthScreen.cardLabel;
+      overlayHeadline = customInteractive.fourthScreen.headline;
+    }
 
     slides.push({
       id: 'customInteractive-first',
@@ -44,8 +56,8 @@ export const buildCustomInteractiveSlides = (
             kioskId={kioskId}
             {...customInteractive.firstScreen}
             onPrimaryCta={() => scrollToSection?.('customInteractive-second-screen')}
-            overlayCardLabel={overlayData?.cardLabel}
-            overlayHeadline={overlayData?.headline}
+            overlayCardLabel={overlayCardLabel}
+            overlayHeadline={overlayHeadline}
           />
         </SectionSlide>
       ),

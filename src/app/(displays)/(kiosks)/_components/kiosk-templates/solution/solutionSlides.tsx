@@ -43,7 +43,7 @@ export const buildSolutionSlides = (
           />
         </SectionSlide>
       ),
-      title: solutions.firstScreen.title ?? 'Solution Intro',
+      title: solutions.firstScreen.headline ?? '',
     });
   }
 
@@ -67,10 +67,10 @@ export const buildSolutionSlides = (
           />
         </SectionSlide>
       ),
-      title: config.title
-        ? Array.isArray(config.title)
-          ? config.title.join(' ')
-          : config.title
+      title: config.numberedListHeadline
+        ? Array.isArray(config.numberedListHeadline)
+          ? config.numberedListHeadline.join(' ')
+          : config.numberedListHeadline
         : `Solution Step ${idx + 1}`,
     });
   });
@@ -88,7 +88,7 @@ export const buildSolutionSlides = (
           />
         </SectionSlide>
       ),
-      title: solutions.thirdScreen.title ?? 'Solution Walkthrough',
+      title: solutions.thirdScreen.headline ?? '',
     });
   }
 
@@ -104,7 +104,7 @@ export const buildSolutionSlides = (
           />
         </SectionSlide>
       ),
-      title: solutions.fourthScreen.title ?? 'Solution Details',
+      title: solutions.fourthScreen.headline ?? '',
     });
   }
 

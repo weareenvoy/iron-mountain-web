@@ -6,30 +6,26 @@ import { DEFAULT_KIOSK_ID, type KioskId } from '@/app/(displays)/(kiosks)/_types
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 
 export type SecondScreenTemplateProps = {
-  readonly bottomDescription?: string;
+  readonly item1Body?: string;
+  readonly item1Image?: string;
   readonly kioskId?: KioskId;
   readonly labelText?: string;
-  readonly largeIconSrc?: string;
-  readonly mainDescription?: string;
   readonly onNavigateDown?: () => void;
   readonly onNavigateUp?: () => void;
   readonly subheadline?: string;
-  readonly topImageSrc?: string;
 };
 
 const SecondScreenTemplate = ({
-  bottomDescription,
+  item1Body,
+  item1Image,
   kioskId = DEFAULT_KIOSK_ID,
   labelText,
-  largeIconSrc,
-  mainDescription,
   subheadline,
-  topImageSrc,
 }: SecondScreenTemplateProps) => {
   return (
     <div
       className="group/kiosk relative flex h-screen w-full flex-col overflow-x-hidden overflow-y-auto scroll-smooth bg-transparent"
-      data-hero-image={topImageSrc}
+      data-hero-image={item1Image}
       data-kiosk={kioskId}
     >
       {/* Background gradient layer */}
@@ -38,13 +34,13 @@ const SecondScreenTemplate = ({
       {/* Decorative background diamond */}
       <div className="pointer-events-none absolute top-[2320px] left-[-460px] z-[1] flex size-[1500px] -scale-y-100 rotate-[180deg] items-center justify-center group-data-[kiosk=kiosk-2]/kiosk:top-[2420px] group-data-[kiosk=kiosk-2]/kiosk:left-[-350px] group-data-[kiosk=kiosk-2]/kiosk:size-[1350px] group-data-[kiosk=kiosk-3]/kiosk:top-[1610px] group-data-[kiosk=kiosk-3]/kiosk:left-[-360px] group-data-[kiosk=kiosk-3]/kiosk:size-[1350px]">
         <div className="relative h-full w-full">
-          {largeIconSrc && (
+          {item1Image && (
             <Image
               alt="Large decorative background diamond"
               className="-scale-x-100 object-contain"
               fill
               sizes="1506px"
-              src={largeIconSrc}
+              src={item1Image}
             />
           )}
         </div>
@@ -72,21 +68,9 @@ const SecondScreenTemplate = ({
           className="max-w-[1000px] text-[60px] leading-[1.3] font-normal tracking-[-3px] text-white group-data-[kiosk=kiosk-2]/kiosk:w-[1100px] group-data-[kiosk=kiosk-3]/kiosk:max-w-[1100px]"
           data-scroll-section="main-description"
         >
-          {renderRegisteredMark(mainDescription)}
+          {renderRegisteredMark(item1Body)}
         </p>
       </div>
-
-      {/* Bottom Description - SCROLLABLE */}
-      {bottomDescription && (
-        <div className="relative z-[2] px-[120px] py-[300px]">
-          <p
-            className="max-w-[971px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white"
-            data-scroll-section="bottom-description"
-          >
-            {renderRegisteredMark(bottomDescription)}
-          </p>
-        </div>
-      )}
     </div>
   );
 };

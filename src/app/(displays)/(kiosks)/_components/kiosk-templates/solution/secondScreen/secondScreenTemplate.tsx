@@ -15,8 +15,10 @@ type StepConfig = {
 type SolutionSecondScreenCoreProps = {
   readonly heroImageAlt?: string;
   readonly heroImageSrc?: string;
+  readonly image?: string;
   readonly kioskId?: KioskId;
   readonly labelText?: string;
+  readonly numberedListHeadline?: string;
   readonly onNavigateDown?: () => void;
   readonly onNavigateUp?: () => void;
   readonly stepFourDescription?: string;
@@ -28,7 +30,6 @@ type SolutionSecondScreenCoreProps = {
   readonly stepTwoDescription?: string;
   readonly stepTwoLabel?: string;
   readonly subheadline?: string;
-  readonly title?: string;
 };
 
 type SolutionSecondScreenStepsProps = {
@@ -41,6 +42,7 @@ const SolutionSecondScreenTemplate = ({
   heroImageSrc,
   kioskId = DEFAULT_KIOSK_ID,
   labelText,
+  numberedListHeadline,
   stepFourDescription,
   stepFourLabel,
   stepOneDescription,
@@ -52,7 +54,6 @@ const SolutionSecondScreenTemplate = ({
   stepTwoDescription,
   stepTwoLabel,
   subheadline,
-  title,
 }: SolutionSecondScreenTemplateProps) => {
   const legacySteps: StepConfig[] = [
     { description: stepOneDescription, label: stepOneLabel },
@@ -113,7 +114,7 @@ const SolutionSecondScreenTemplate = ({
 
       {/* Title */}
       <p className="absolute top-[1600px] left-[240px] z-[1] text-[100px] leading-[1.3] font-normal tracking-[-5px] text-white group-data-[kiosk=kiosk-2]/kiosk:top-[1570px] group-data-[kiosk=kiosk-2]/kiosk:left-[250px]">
-        {renderRegisteredMark(title)}
+        {renderRegisteredMark(numberedListHeadline)}
       </p>
 
       {/* Timeline with steps */}

@@ -8,23 +8,23 @@ import { getVideoMimeType } from '@/lib/utils/get-video-mime-type';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 
 export type SolutionFirstScreenTemplateProps = {
-  readonly backgroundVideoSrc?: string;
-  readonly description?: string;
+  readonly body?: string;
+  readonly headline?: string;
   readonly kioskId?: string;
   readonly labelText?: string;
+  readonly mainVideo?: string;
   readonly onNavigateDown?: () => void;
   readonly onNavigateUp?: () => void;
   readonly subheadline?: string;
-  readonly title?: string;
 };
 
 const SolutionFirstScreenTemplate = ({
-  backgroundVideoSrc,
-  description,
+  body,
+  headline,
   kioskId,
   labelText,
+  mainVideo,
   subheadline,
-  title,
 }: SolutionFirstScreenTemplateProps) => {
   return (
     <div className="group/kiosk relative flex h-screen w-full flex-col overflow-visible bg-black" data-kiosk={kioskId}>
@@ -40,7 +40,7 @@ const SolutionFirstScreenTemplate = ({
             muted
             playsInline
           >
-            <source src={backgroundVideoSrc} type={getVideoMimeType(backgroundVideoSrc)} />
+            <source src={mainVideo} type={getVideoMimeType(mainVideo)} />
           </video>
           <div className="pointer-events-none absolute inset-0 bg-black/20" />
         </div>
@@ -67,9 +67,9 @@ const SolutionFirstScreenTemplate = ({
       {/* Body copy */}
       <div className="absolute top-[1270px] left-[120px] z-[1] flex w-auto max-w-[1271px] flex-col gap-[80px] text-white group-data-[kiosk=kiosk-2]/kiosk:top-[1300px] group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-3]/kiosk:top-[1260px] group-data-[kiosk=kiosk-3]/kiosk:left-[120px]">
         <p className="w-[900px] text-[100px] leading-[1.3] font-normal tracking-[-5px]">
-          {renderRegisteredMark(title)}
+          {renderRegisteredMark(headline)}
         </p>
-        <p className="text-[60px] leading-[1.4] font-normal tracking-[-3px]">{renderRegisteredMark(description)}</p>
+        <p className="text-[60px] leading-[1.4] font-normal tracking-[-3px]">{renderRegisteredMark(body)}</p>
       </div>
 
       {/* Decorative diamonds */}

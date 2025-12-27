@@ -17,6 +17,9 @@ export type SolutionThirdScreenTemplateProps = {
   readonly bottomLeftLabel?: string;
   readonly bottomRightLabel?: string;
   readonly centerLabel?: string;
+  readonly diamondList?: readonly string[];
+  readonly headline?: string;
+  readonly images?: readonly string[];
   readonly kioskId?: string;
   readonly labelText?: string;
   readonly mediaDiamondLeftSrc?: string;
@@ -24,7 +27,6 @@ export type SolutionThirdScreenTemplateProps = {
   readonly onNavigateDown?: () => void;
   readonly onNavigateUp?: () => void;
   readonly subheadline?: string;
-  readonly title?: string;
   readonly topLeftLabel?: string;
   readonly topRightLabel?: string;
 };
@@ -34,12 +36,12 @@ const SolutionThirdScreenTemplate = ({
   bottomLeftLabel,
   bottomRightLabel,
   centerLabel,
+  headline,
   kioskId,
   labelText,
   mediaDiamondLeftSrc,
   mediaDiamondRightSrc,
   subheadline,
-  title,
   topLeftLabel,
   topRightLabel,
 }: SolutionThirdScreenTemplateProps) => {
@@ -118,7 +120,7 @@ const SolutionThirdScreenTemplate = ({
           className="text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line"
           data-scroll-section="solution-third-title"
         >
-          {renderRegisteredMark(title)}
+          {renderRegisteredMark(headline)}
         </p>
       </div>
 

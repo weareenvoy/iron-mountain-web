@@ -13,26 +13,27 @@ import PlusMinusIcon from './PlusMinusIcon';
 
 export type SolutionFourthScreenTemplateProps = {
   readonly accentDiamondSrc?: string;
-  readonly accordionItems?: AccordionEntry[];
+  readonly accordion?: AccordionEntry[];
+  readonly headline?: string;
+  readonly image?: string;
   readonly labelText?: string;
   readonly mediaDiamondOutlineSrc?: string;
   readonly mediaDiamondSolidSrc?: string;
   readonly onNavigateDown?: () => void;
   readonly onNavigateUp?: () => void;
   readonly subheadline?: string;
-  readonly title?: string;
 };
 
 const SolutionFourthScreenTemplate = ({
   accentDiamondSrc,
-  accordionItems,
+  accordion,
+  headline,
   labelText,
   mediaDiamondOutlineSrc,
   mediaDiamondSolidSrc,
   subheadline,
-  title,
 }: SolutionFourthScreenTemplateProps) => {
-  const entries = accordionItems?.length ? accordionItems : [];
+  const entries = accordion?.length ? accordion : [];
 
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden bg-transparent">
@@ -60,7 +61,7 @@ const SolutionFourthScreenTemplate = ({
           className="text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]"
           data-scroll-section="solution-fourth-title"
         >
-          {renderRegisteredMark(title)}
+          {renderRegisteredMark(headline)}
         </p>
       </div>
 

@@ -5,8 +5,8 @@ import type { KioskId } from '../_types/kiosk-id';
 // This maps CMS content for Value to the Kiosk Value structure.
 
 export const mapValue = (value: ValueContent, ambient: Ambient, kioskId: KioskId): ValueScreens => {
-  const heroVideoSrc = value.mainVideo;
-  const description = value.body;
+  const mainVideo = value.mainVideo;
+  const body = value.body;
   const headline = value.headline;
 
   const benefits = value.diamondBenefits ?? [];
@@ -49,12 +49,12 @@ export const mapValue = (value: ValueContent, ambient: Ambient, kioskId: KioskId
   return {
     valueScreens: [
       {
+        body,
         carouselId: `${kioskId}-value-overview`,
-        description,
         eyebrow: ambient.title,
         headline,
-        heroVideoSrc,
         labelText: value.labelText ?? '',
+        mainVideo,
         slides: [
           {
             badgeLabel: 'Operational · Economic · Strategic',
@@ -64,8 +64,8 @@ export const mapValue = (value: ValueContent, ambient: Ambient, kioskId: KioskId
         ],
       },
       {
+        body,
         carouselId: `${kioskId}-value-carousel`,
-        description,
         eyebrow: ambient.title,
         headline,
         labelText: value.labelText ?? '',

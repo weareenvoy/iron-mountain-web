@@ -18,37 +18,28 @@ type InitialScreen = {
 };
 
 type FirstScreen = {
+  readonly body: string;
+  readonly featuredStat1: string;
+  readonly featuredStat1Body: string;
   readonly labelText: string;
-  readonly problemDescription: string;
-  readonly savingsAmount: string;
-  readonly savingsDescription: string;
+  readonly mainVideo: string;
   readonly subheadline: string;
-  readonly videoSrc: string;
 };
 
 type SecondScreen = {
-  readonly bottomDescription: string;
-  readonly bottomVideoSrc?: string;
+  readonly item1Body: string;
+  readonly item1Image: string;
   readonly labelText?: string;
-  readonly largeIconSrc: string;
-  readonly mainDescription: string;
-  readonly statAmount: string;
-  readonly statDescription: string;
   readonly subheadline: string;
-  readonly topImageSrc: string;
 };
 
 type ThirdScreen = {
-  readonly description: string;
-  readonly heroImageSrc: string;
+  readonly featuredStat2: string;
+  readonly featuredStat2Body: string;
+  readonly item2Body: string;
+  readonly item2Image: string;
   readonly labelText?: string;
-  readonly largeIconCenterSrc: string;
-  readonly largeIconTopSrc: string;
-  readonly metricAmount: string;
-  readonly metricDescription: string;
-  readonly metricImageSrc: string;
   readonly subheadline: string;
-  readonly videoSrc?: string;
 };
 
 export const parseKioskChallenges = (value: unknown): KioskChallenges => {

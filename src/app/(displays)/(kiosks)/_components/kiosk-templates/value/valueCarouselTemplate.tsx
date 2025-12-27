@@ -10,15 +10,15 @@ import ValueCarousel from './components/ValueCarousel';
 import type { ValueCarouselSlide } from '@/app/(displays)/(kiosks)/_types/value-types';
 
 export type ValueCarouselTemplateProps = {
+  readonly body?: string;
   readonly carouselId?: string;
-  readonly description?: string;
   readonly eyebrow?: string;
   readonly headline?: string;
   readonly heroImageAlt?: string;
   readonly heroImageSrc?: string;
   readonly heroVideoPosterSrc?: string;
-  readonly heroVideoSrc?: string;
   readonly labelText?: string;
+  readonly mainVideo?: string;
   readonly onNavigateDown?: () => void;
   readonly onNavigateUp?: () => void;
   readonly onRegisterCarouselHandlers?: (handlers: {
@@ -32,20 +32,20 @@ export type ValueCarouselTemplateProps = {
 
 const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
   const {
+    body,
     carouselId,
-    description,
     eyebrow,
     headline,
     heroImageAlt,
     heroImageSrc,
     heroVideoPosterSrc,
-    heroVideoSrc,
     labelText,
+    mainVideo,
     onRegisterCarouselHandlers,
     slides,
   } = props;
   const isOverview = carouselId?.includes('overview');
-  const heroVideo = isOverview ? heroVideoSrc : undefined;
+  const heroVideo = isOverview ? mainVideo : undefined;
 
   const slidesToRender = slides?.length ? slides : [];
   const slidesWithDefaults = slidesToRender.map(slide => ({
@@ -113,7 +113,7 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
               {...(!isOverview ? { 'data-scroll-section': 'value-description' } : {})}
               className="mt-[80px] w-[1480px] text-[60px] leading-[1.4] font-normal tracking-[-3px]"
             >
-              {renderRegisteredMark(normalizeMultiline(description))}
+              {renderRegisteredMark(normalizeMultiline(body))}
             </p>
           </div>
           <ValueCarousel

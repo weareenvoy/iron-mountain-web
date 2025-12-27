@@ -16,15 +16,17 @@ export const mapSolutionsWithGrid = (
   }
 ): SolutionScreens => ({
   firstScreen: {
-    backgroundVideoSrc: solutionsMain.mainVideo ?? '',
-    description: solutionsMain.body ?? '',
+    body: solutionsMain.body ?? '',
+    headline: solutionsMain.headline ?? '',
     labelText: solutionsMain.labelText ?? '',
+    mainVideo: solutionsMain.mainVideo ?? '',
     subheadline: ambient.title,
-    title: solutionsMain.headline ?? '',
   },
   secondScreen: {
     heroImageSrc: solutionsMain.image ?? '',
+    image: solutionsMain.image ?? '',
     labelText: solutionsMain.labelText ?? '',
+    numberedListHeadline: solutionsMain.numberedListHeadline,
     stepFourDescription: solutionsMain.numberedList?.[3] ?? '',
     stepFourLabel: '04.',
     stepOneDescription: solutionsMain.numberedList?.[0] ?? '',
@@ -34,17 +36,18 @@ export const mapSolutionsWithGrid = (
     stepTwoDescription: solutionsMain.numberedList?.[1] ?? '',
     stepTwoLabel: '02.',
     subheadline: ambient.title,
-    title: solutionsMain.numberedListHeadline,
   },
   thirdScreen: {
     bottomLeftLabel: solutionsGrid.diamondList?.[diamondMapping.bottomLeft] ?? '',
     bottomRightLabel: solutionsGrid.diamondList?.[diamondMapping.bottomRight] ?? '',
     centerLabel: solutionsGrid.diamondList?.[diamondMapping.center] ?? '',
+    diamondList: solutionsGrid.diamondList,
+    headline: solutionsGrid.headline ?? '',
+    images: solutionsGrid.images,
     labelText: solutionsMain.labelText ?? '',
     mediaDiamondLeftSrc: solutionsGrid.images?.[0] ?? '',
     mediaDiamondRightSrc: solutionsGrid.images?.[1] ?? '',
     subheadline: ambient.title,
-    title: solutionsGrid.headline ?? '',
     topLeftLabel:
       diamondMapping.topLeft !== undefined ? solutionsGrid.diamondList?.[diamondMapping.topLeft] : undefined,
     topRightLabel: solutionsGrid.diamondList?.[diamondMapping.topRight] ?? '',

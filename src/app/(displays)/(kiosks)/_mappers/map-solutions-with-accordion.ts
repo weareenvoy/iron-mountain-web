@@ -10,14 +10,14 @@ export const mapSolutionsWithAccordion = (
 ): SolutionScreens => {
   return {
     firstScreen: {
-      backgroundVideoSrc: solutionsMain.mainVideo ?? '',
-      description: solutionsMain.body ?? '',
+      body: solutionsMain.body ?? '',
+      headline: solutionsMain.headline ?? '',
       labelText: solutionsMain.labelText ?? '',
+      mainVideo: solutionsMain.mainVideo ?? '',
       subheadline: ambient.title,
-      title: solutionsMain.headline ?? '',
     },
     fourthScreen: {
-      accordionItems: solutionAccordion.accordion?.map((item, index) => ({
+      accordion: solutionAccordion.accordion?.map((item, index) => ({
         color:
           index === 0
             ? ('white' as const)
@@ -32,14 +32,17 @@ export const mapSolutionsWithAccordion = (
         number: `${String(index + 1).padStart(2, '0')}.`,
         title: item.title ?? '',
       })),
+      headline: solutionAccordion.headline ?? '',
+      image: solutionAccordion.image,
       labelText: solutionAccordion.labelText ?? '',
       mediaDiamondSolidSrc: solutionAccordion.image,
       subheadline: ambient.title,
-      title: solutionAccordion.headline ?? '',
     },
     secondScreen: {
       heroImageSrc: solutionsMain.image ?? '',
+      image: solutionsMain.image ?? '',
       labelText: solutionsMain.labelText ?? '',
+      numberedListHeadline: solutionsMain.numberedListHeadline,
       stepFourDescription: solutionsMain.numberedList?.[3] ?? '',
       stepFourLabel: '04.',
       stepOneDescription: solutionsMain.numberedList?.[0] ?? '',
@@ -49,7 +52,6 @@ export const mapSolutionsWithAccordion = (
       stepTwoDescription: solutionsMain.numberedList?.[1] ?? '',
       stepTwoLabel: '02.',
       subheadline: ambient.title,
-      title: solutionsMain.numberedListHeadline,
     },
   };
 };

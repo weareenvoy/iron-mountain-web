@@ -1,14 +1,16 @@
 import type { KioskChallenges } from '../_types/challengeContent';
 import type { Ambient, ChallengeContent } from '../_types/content-types';
 
+// This maps CMS content for Challenges to the Kiosk Challenges structure.
+
 export const mapChallenges = (challenge: ChallengeContent, ambient: Ambient): KioskChallenges => ({
   firstScreen: {
+    body: challenge.body ?? '',
+    featuredStat1: challenge.featuredStat1 ?? '',
+    featuredStat1Body: challenge.featuredStat1Body ?? '',
     labelText: challenge.labelText ?? '',
-    problemDescription: challenge.body ?? '',
-    savingsAmount: challenge.featuredStat1 ?? '',
-    savingsDescription: challenge.featuredStat1Body ?? '',
+    mainVideo: challenge.mainVideo ?? '',
     subheadline: ambient.title ?? '',
-    videoSrc: challenge.mainVideo ?? '',
   },
   initialScreen: {
     attribution: ambient.quoteSource ?? '',
@@ -19,26 +21,17 @@ export const mapChallenges = (challenge: ChallengeContent, ambient: Ambient): Ki
     subheadline: ambient.title ?? '',
   },
   secondScreen: {
-    bottomDescription: '',
-    bottomVideoSrc: '',
+    item1Body: challenge.item1Body ?? '',
+    item1Image: challenge.item1Image ?? '',
     labelText: challenge.labelText ?? '',
-    largeIconSrc: challenge.item1Image ?? '',
-    mainDescription: challenge.item1Body ?? '',
-    statAmount: '',
-    statDescription: '',
     subheadline: ambient.title ?? '',
-    topImageSrc: challenge.item1Image ?? '',
   },
   thirdScreen: {
-    description: challenge.item2Body ?? '',
-    heroImageSrc: challenge.item2Image ?? '',
+    featuredStat2: challenge.featuredStat2 ?? '',
+    featuredStat2Body: challenge.featuredStat2Body ?? '',
+    item2Body: challenge.item2Body ?? '',
+    item2Image: challenge.item2Image ?? '',
     labelText: challenge.labelText ?? '',
-    largeIconCenterSrc: challenge.item2Image ?? '',
-    largeIconTopSrc: challenge.item2Image ?? '',
-    metricAmount: challenge.featuredStat2 ?? '',
-    metricDescription: challenge.featuredStat2Body ?? '',
-    metricImageSrc: challenge.item2Image ?? '',
     subheadline: ambient.title ?? '',
-    videoSrc: '',
   },
 });
