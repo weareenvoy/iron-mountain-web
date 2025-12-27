@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 
 type StepConfig = {
@@ -23,9 +23,21 @@ type AnimatedNumberedListProps = {
 /**
  * Animated numbered list component with Framer Motion animations.
  * Registers handlers with parent to control when navigation can advance.
+ * Dynamically measures item heights for accurate positioning.
  */
 const AnimatedNumberedList = ({ dividerHeights, onRegisterHandlers, steps }: AnimatedNumberedListProps) => {
   const [internalStepIndex, setInternalStepIndex] = useState(0);
+  const [itemHeights, setItemHeights] = useState<number[]>([]);
+  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  // Measure actual item heights on mount and when steps change
+  useEffect(() => {
+    const measuredHeights = itemRefs.current.map(ref => {
+      if (!ref) return 0;
+      return ref.getBoundingClientRect().height;
+    });
+    setItemHeights(measuredHeights);
+  }, [steps]);
 
   // Register navigation handlers
   const scrollNext = useCallback(() => {
@@ -60,16 +72,16 @@ const AnimatedNumberedList = ({ dividerHeights, onRegisterHandlers, steps }: Ani
     return 0;
   };
 
-  // Calculate Y offset - all items shift up uniformly
+  // Calculate Y offset using measured heights
   const getYOffset = () => {
+    if (itemHeights.length === 0) return 0; // Wait for measurements
+
     let cumulativeShift = 0;
     for (let i = 0; i < internalStepIndex; i++) {
-      cumulativeShift += 250;
-      cumulativeShift += 0;
-      if (i < steps.length - 1) {
-        cumulativeShift += 30;
-        cumulativeShift += dividerHeights[i] ?? 280;
-      }
+      // Add the actual measured height of this item's content
+      cumulativeShift += itemHeights[i] ?? 0;
+      // Add gap between items
+      cumulativeShift += 60;
     }
     return -cumulativeShift;
   };
@@ -83,6 +95,9 @@ const AnimatedNumberedList = ({ dividerHeights, onRegisterHandlers, steps }: Ani
             y: getYOffset(),
           }}
           key={`${step.label}-${index}`}
+          ref={el => {
+            itemRefs.current[index] = el;
+          }}
           transition={{
             duration: 0.6,
             ease: [0.43, 0.13, 0.23, 0.96],
