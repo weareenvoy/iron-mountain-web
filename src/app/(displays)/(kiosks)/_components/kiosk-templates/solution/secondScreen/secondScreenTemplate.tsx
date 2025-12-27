@@ -133,7 +133,7 @@ const SolutionSecondScreenTemplate = ({
                       '--divider-height': `${dividerHeights[index] ?? 280}px`,
                       'height': 'var(--divider-height)',
                     } as React.CSSProperties
-                    // This is inline since the current setup would require 5+ individual classes with index based conditionals which would be more complex to maintain than the current inline approach.  
+                    // This is inline since the current setup would require 5+ individual classes with index based conditionals which would be more complex to maintain than the current inline approach.
                     // The heights are grabbed from an array of 5 items (currently) from the dividerHeights array with a unique height that gets applied based on content.
                   }
                 />

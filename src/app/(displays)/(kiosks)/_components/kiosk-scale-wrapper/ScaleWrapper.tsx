@@ -33,7 +33,7 @@ const ScaleWrapper = ({ background = 'black', children, targetHeight, targetWidt
       style={{ '--background': background, 'background': 'var(--background)' } as CSSProperties}
     >
       <div style={innerStyle}>{children}</div>
-      {/* Inline appraoch here since arbitrary values in tailwind like scale([${scle}]) don't work with runtime values. targetHeight, targetWidth, and scale are calculated from config and won't be known at buildtime. (kiosk.config.json)*/}
+      {/* Inline approach here since arbitrary values in tailwind like scale([${scale}]) don't work with runtime values. targetHeight, targetWidth, and scale are calculated from config and won't be known at buildtime. (kiosk.config.json)*/}
     </div>
   );
 };

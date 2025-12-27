@@ -218,7 +218,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                       }
                     : undefined
                 }
-                // These styles are inline because the transform values for the carousl are computed at runtime based on carousel position, conditional z indexes based on active state would also require complex class logic.
+                // These styles are inline because the transform values for the carousel are computed at runtime based on carousel position, conditional z indexes based on active state would also require complex class logic.
               >
                 <div className="flex flex-col items-center gap-[28px]">
                   <button
