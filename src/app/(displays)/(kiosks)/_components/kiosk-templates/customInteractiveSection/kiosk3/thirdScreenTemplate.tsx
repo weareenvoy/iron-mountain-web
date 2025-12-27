@@ -40,6 +40,7 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
   slides,
 }: CustomInteractiveKiosk3ThirdScreenTemplateProps) => {
   const [showOverlay, setShowOverlay] = useState(false);
+  const [isLaunchPressed, setIsLaunchPressed] = useState(false);
   const safeSlides = slides ?? [];
 
   const handleShowOverlay = useCallback(() => {
@@ -113,8 +114,15 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
 
               {/* CTA */}
               <button
-                className="absolute top-[2630px] left-[240px] flex h-[200px] items-center gap-[18px] rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[110px] text-[55px] leading-[1.1] font-semibold tracking-[2px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)]"
+                className="absolute top-[2630px] left-[240px] flex h-[200px] items-center gap-[18px] rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[110px] text-[55px] leading-[1.1] font-semibold tracking-[2px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] transition-all duration-150 ease-out"
                 onClick={handleShowOverlay}
+                onPointerDown={() => setIsLaunchPressed(true)}
+                onPointerLeave={() => setIsLaunchPressed(false)}
+                onPointerUp={() => setIsLaunchPressed(false)}
+                style={{
+                  opacity: isLaunchPressed ? 0.7 : 1,
+                  transform: isLaunchPressed ? 'scale(0.98)' : 'scale(1)',
+                }}
                 type="button"
               >
                 Launch demo

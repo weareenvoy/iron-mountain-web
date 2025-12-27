@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { useState } from 'react';
 import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCFilledOrangeDiamond';
 import HCHollowBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowBlueDiamond';
 import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowOrangeDiamond';
@@ -21,6 +22,8 @@ const CustomInteractiveKiosk1ThirdScreenTemplate = ({
   heroImageSrc,
   onCta,
 }: CustomInteractiveKiosk1ThirdScreenTemplateProps) => {
+  const [isCtaPressed, setIsCtaPressed] = useState(false);
+
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-[#1b75bc] to-[#05254b]" />
@@ -32,8 +35,15 @@ const CustomInteractiveKiosk1ThirdScreenTemplate = ({
 
       <div className="absolute top-[1290px] left-[120px] h-[1080px] w-[1920px] rounded-[20px] bg-[#e0e0e0] shadow-[0_40px_120px_rgba(0,0,0,0.45)]">
         <button
-          className="flex h-full w-full items-center justify-center rounded-[20px] text-[80px] leading-[1.3] font-normal tracking-[-4px] text-[#4a4a4a]"
+          className="flex h-full w-full items-center justify-center rounded-[20px] text-[80px] leading-[1.3] font-normal tracking-[-4px] text-[#4a4a4a] transition-all duration-150 ease-out"
           onClick={onCta}
+          onPointerDown={() => setIsCtaPressed(true)}
+          onPointerLeave={() => setIsCtaPressed(false)}
+          onPointerUp={() => setIsCtaPressed(false)}
+          style={{
+            opacity: isCtaPressed ? 0.7 : 1,
+            transform: isCtaPressed ? 'scale(0.98)' : 'scale(1)',
+          }}
           type="button"
         >
           {renderRegisteredMark(cardLabel)}

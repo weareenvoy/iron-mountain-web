@@ -1,6 +1,7 @@
 'use client';
 
 import { ArrowLeft } from 'lucide-react';
+import { useState } from 'react';
 import BlueDot from '@/components/ui/icons/Kiosks/CustomInteractive/BlueDot';
 import InnerRing from '@/components/ui/icons/Kiosks/CustomInteractive/InnerRing';
 import OuterRing from '@/components/ui/icons/Kiosks/CustomInteractive/OuterRing';
@@ -32,6 +33,8 @@ const CustomInteractiveKiosk3SecondScreenTemplate = ({
   const eyebrowText = eyebrow;
   const headlineText = headline;
   const descriptionText = description;
+  const [isBackPressed, setIsBackPressed] = useState(false);
+  const [isTapToBeginPressed, setIsTapToBeginPressed] = useState(false);
 
   return (
     <div
@@ -71,8 +74,15 @@ const CustomInteractiveKiosk3SecondScreenTemplate = ({
 
       <div className="absolute top-[240px] right-[120px]">
         <button
-          className="relative top-[1070px] flex h-[200px] items-center gap-[20px] rounded-[1000px] bg-[#ededed] px-[120px] text-[54px] leading-[1.4] font-normal tracking-[-2px] text-[#14477d] transition hover:scale-[1.01]"
+          className="relative top-[1070px] flex h-[200px] items-center gap-[20px] rounded-[1000px] bg-[#ededed] px-[120px] text-[54px] leading-[1.4] font-normal tracking-[-2px] text-[#14477d] transition-all duration-150 ease-out hover:scale-[1.01]"
           onClick={onBack}
+          onPointerDown={() => setIsBackPressed(true)}
+          onPointerLeave={() => setIsBackPressed(false)}
+          onPointerUp={() => setIsBackPressed(false)}
+          style={{
+            opacity: isBackPressed ? 0.7 : 1,
+            transform: isBackPressed ? 'scale(0.98)' : 'scale(1)',
+          }}
           type="button"
         >
           <ArrowLeft aria-hidden className="h-[32px] w-[32px]" color="#14477d" strokeWidth={2} />
@@ -82,8 +92,15 @@ const CustomInteractiveKiosk3SecondScreenTemplate = ({
 
       <div className="absolute top-[2266px] left-1/2 h-[1000px] w-[1000px] -translate-x-1/2 -translate-y-1/2">
         <button
-          className="relative flex h-full w-full items-center justify-center rounded-full transition hover:scale-[1.05]"
+          className="relative flex h-full w-full items-center justify-center rounded-full transition-all duration-150 ease-out hover:scale-[1.05]"
           onClick={onTapToBegin}
+          onPointerDown={() => setIsTapToBeginPressed(true)}
+          onPointerLeave={() => setIsTapToBeginPressed(false)}
+          onPointerUp={() => setIsTapToBeginPressed(false)}
+          style={{
+            opacity: isTapToBeginPressed ? 0.7 : 1,
+            transform: isTapToBeginPressed ? 'scale(0.98)' : 'scale(1)',
+          }}
           type="button"
         >
           <OuterRing className="absolute top-1/2 left-1/2 h-[900px] w-[900px] -translate-x-1/2 -translate-y-1/2" />

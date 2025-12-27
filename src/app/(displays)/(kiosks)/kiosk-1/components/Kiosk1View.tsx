@@ -68,6 +68,10 @@ const Kiosk1View = () => {
     scrollPrev: () => void;
   }>(null);
 
+  // Touch feedback states for navigation arrows
+  const [isUpArrowPressed, setIsUpArrowPressed] = useState(false);
+  const [isDownArrowPressed, setIsDownArrowPressed] = useState(false);
+
   // Global paragraph navigation
   const {
     currentScrollTarget,
@@ -365,10 +369,19 @@ const Kiosk1View = () => {
           >
             <div
               aria-label="Previous"
-              className="flex h-[118px] w-[118px] cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95"
+              className="flex h-[118px] w-[118px] cursor-pointer items-center justify-center transition-all duration-150 ease-out hover:scale-110"
               onKeyDown={handleUpArrowKeyDown}
-              onPointerDown={handleNavigateUp}
+              onPointerDown={() => {
+                setIsUpArrowPressed(true);
+                handleNavigateUp();
+              }}
+              onPointerLeave={() => setIsUpArrowPressed(false)}
+              onPointerUp={() => setIsUpArrowPressed(false)}
               role="button"
+              style={{
+                opacity: isUpArrowPressed ? 0.7 : 1,
+                transform: isUpArrowPressed ? 'scale(0.95)' : 'scale(1)',
+              }}
               tabIndex={0}
             >
               <ArrowUp
@@ -381,10 +394,19 @@ const Kiosk1View = () => {
             </div>
             <div
               aria-label="Next"
-              className="flex h-[118px] w-[118px] cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95"
+              className="flex h-[118px] w-[118px] cursor-pointer items-center justify-center transition-all duration-150 ease-out hover:scale-110"
               onKeyDown={handleDownArrowKeyDown}
-              onPointerDown={handleNavigateDown}
+              onPointerDown={() => {
+                setIsDownArrowPressed(true);
+                handleNavigateDown();
+              }}
+              onPointerLeave={() => setIsDownArrowPressed(false)}
+              onPointerUp={() => setIsDownArrowPressed(false)}
               role="button"
+              style={{
+                opacity: isDownArrowPressed ? 0.7 : 1,
+                transform: isDownArrowPressed ? 'scale(0.95)' : 'scale(1)',
+              }}
               tabIndex={0}
             >
               <ArrowDown
