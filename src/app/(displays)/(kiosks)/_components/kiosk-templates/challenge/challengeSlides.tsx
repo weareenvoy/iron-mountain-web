@@ -10,11 +10,18 @@ import SecondScreenTemplate, {
 import ThirdScreenTemplate, {
   type ThirdScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/thirdScreen/thirdScreenTemplate';
-import { SectionSlide, type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
+import {
+  createSlide,
+  createSlideWithoutHandlers,
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slideFactory';
+import { type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
 import { type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
 import { type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
-// This file builds the slides for the Challenge section of the Kiosk setup and gives each one ids for use if needed.
+/**
+ * Builds the slides for the Challenge section.
+ * Simplified using the slide factory pattern for reduced boilerplate.
+ */
 
 export type ChallengeScreens = {
   readonly firstScreen?: FirstScreenTemplateProps;
@@ -37,56 +44,41 @@ export const buildChallengeSlides = (
   };
 
   return [
-    {
-      id: 'challenge-initial',
-      render: () => (
-        <SectionSlide>
-          <InitialScreenTemplate {...initialScreen} kioskId={kioskId} onButtonClick={handleInitialButtonClick} />
-        </SectionSlide>
-      ),
-      title: 'Challenge Intro',
-    },
-    {
-      id: 'challenge-first',
-      render: () => (
-        <SectionSlide>
-          <FirstScreenTemplate
-            {...challenges.firstScreen}
-            kioskId={kioskId}
-            onNavigateDown={handlers.onNavigateDown}
-            onNavigateUp={handlers.onNavigateUp}
-          />
-        </SectionSlide>
-      ),
-      title: 'Challenge Story',
-    },
-    {
-      id: 'challenge-second',
-      render: () => (
-        <SectionSlide>
-          <SecondScreenTemplate
-            {...challenges.secondScreen}
-            kioskId={kioskId}
-            onNavigateDown={handlers.onNavigateDown}
-            onNavigateUp={handlers.onNavigateUp}
-          />
-        </SectionSlide>
-      ),
-      title: 'Challenge Stats',
-    },
-    {
-      id: 'challenge-third',
-      render: () => (
-        <SectionSlide>
-          <ThirdScreenTemplate
-            {...challenges.thirdScreen}
-            kioskId={kioskId}
-            onNavigateDown={handlers.onNavigateDown}
-            onNavigateUp={handlers.onNavigateUp}
-          />
-        </SectionSlide>
-      ),
-      title: 'Challenge Impact',
-    },
+    createSlideWithoutHandlers(
+      {
+        component: InitialScreenTemplate,
+        id: 'challenge-initial',
+        props: { ...initialScreen, onButtonClick: handleInitialButtonClick },
+        title: 'Challenge Intro',
+      },
+      kioskId
+    ),
+    createSlide(
+      {
+        component: FirstScreenTemplate,
+        id: 'challenge-first',
+        props: challenges.firstScreen,
+        title: 'Challenge Story',
+      },
+      { handlers, kioskId }
+    ),
+    createSlide(
+      {
+        component: SecondScreenTemplate,
+        id: 'challenge-second',
+        props: challenges.secondScreen,
+        title: 'Challenge Stats',
+      },
+      { handlers, kioskId }
+    ),
+    createSlide(
+      {
+        component: ThirdScreenTemplate,
+        id: 'challenge-third',
+        props: challenges.thirdScreen,
+        title: 'Challenge Impact',
+      },
+      { handlers, kioskId }
+    ),
   ];
 };
