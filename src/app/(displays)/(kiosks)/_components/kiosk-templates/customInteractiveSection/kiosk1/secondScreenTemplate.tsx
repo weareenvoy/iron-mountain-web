@@ -113,15 +113,12 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
         </p>
 
         <button
-          className="absolute top-[1330px] left-[1245px] flex h-[200px] items-center justify-between rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[70px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-all duration-150 ease-out hover:scale-[1.01]"
+          className="absolute top-[1330px] left-[1245px] flex h-[200px] items-center justify-between rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[70px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-all duration-150 ease-out hover:scale-[1.01] data-[pressed=true]:scale-[0.98] data-[pressed=true]:opacity-70"
+          data-pressed={isSecondaryPressed}
           onClick={handleSecondaryClick}
           onPointerDown={() => setIsSecondaryPressed(true)}
           onPointerLeave={() => setIsSecondaryPressed(false)}
           onPointerUp={() => setIsSecondaryPressed(false)}
-          style={{
-            opacity: isSecondaryPressed ? 0.7 : 1,
-            transform: isSecondaryPressed ? 'scale(0.98)' : 'scale(1)',
-          }}
           type="button"
         >
           <span className="mr-[50px]">{renderRegisteredMark(secondaryCtaLabel)}</span>

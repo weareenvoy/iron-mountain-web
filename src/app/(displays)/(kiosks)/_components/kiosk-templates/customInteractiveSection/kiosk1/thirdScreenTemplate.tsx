@@ -35,15 +35,12 @@ const CustomInteractiveKiosk1ThirdScreenTemplate = ({
 
       <div className="absolute top-[1290px] left-[120px] h-[1080px] w-[1920px] rounded-[20px] bg-[#e0e0e0] shadow-[0_40px_120px_rgba(0,0,0,0.45)]">
         <button
-          className="flex h-full w-full items-center justify-center rounded-[20px] text-[80px] leading-[1.3] font-normal tracking-[-4px] text-[#4a4a4a] transition-all duration-150 ease-out"
+          className="flex h-full w-full items-center justify-center rounded-[20px] text-[80px] leading-[1.3] font-normal tracking-[-4px] text-[#4a4a4a] transition-all duration-150 ease-out data-[pressed=true]:scale-[0.98] data-[pressed=true]:opacity-70"
+          data-pressed={isCtaPressed}
           onClick={onCta}
           onPointerDown={() => setIsCtaPressed(true)}
           onPointerLeave={() => setIsCtaPressed(false)}
           onPointerUp={() => setIsCtaPressed(false)}
-          style={{
-            opacity: isCtaPressed ? 0.7 : 1,
-            transform: isCtaPressed ? 'scale(0.98)' : 'scale(1)',
-          }}
           type="button"
         >
           {renderRegisteredMark(cardLabel)}

@@ -369,7 +369,8 @@ const Kiosk1View = () => {
           >
             <div
               aria-label="Previous"
-              className="flex h-[118px] w-[118px] cursor-pointer items-center justify-center hover:scale-110"
+              className="flex h-[118px] w-[118px] cursor-pointer items-center justify-center transition-all duration-150 ease-out hover:scale-110 data-[pressed=true]:scale-95 data-[pressed=true]:opacity-40"
+              data-pressed={isUpArrowPressed}
               onKeyDown={handleUpArrowKeyDown}
               onPointerDown={() => {
                 setIsUpArrowPressed(true);
@@ -378,11 +379,6 @@ const Kiosk1View = () => {
               onPointerLeave={() => setIsUpArrowPressed(false)}
               onPointerUp={() => setIsUpArrowPressed(false)}
               role="button"
-              style={{
-                opacity: isUpArrowPressed ? 0.4 : 1,
-                transform: isUpArrowPressed ? 'scale(0.95)' : 'scale(1)',
-                transition: 'opacity 150ms ease-out, transform 150ms ease-out',
-              }}
               tabIndex={0}
             >
               <ArrowUp
@@ -395,7 +391,8 @@ const Kiosk1View = () => {
             </div>
             <div
               aria-label="Next"
-              className="flex h-[118px] w-[118px] cursor-pointer items-center justify-center hover:scale-110"
+              className="flex h-[118px] w-[118px] cursor-pointer items-center justify-center transition-all duration-150 ease-out hover:scale-110 data-[pressed=true]:scale-95 data-[pressed=true]:opacity-40"
+              data-pressed={isDownArrowPressed}
               onKeyDown={handleDownArrowKeyDown}
               onPointerDown={() => {
                 setIsDownArrowPressed(true);
@@ -404,11 +401,6 @@ const Kiosk1View = () => {
               onPointerLeave={() => setIsDownArrowPressed(false)}
               onPointerUp={() => setIsDownArrowPressed(false)}
               role="button"
-              style={{
-                opacity: isDownArrowPressed ? 0.4 : 1,
-                transform: isDownArrowPressed ? 'scale(0.95)' : 'scale(1)',
-                transition: 'opacity 150ms ease-out, transform 150ms ease-out',
-              }}
               tabIndex={0}
             >
               <ArrowDown

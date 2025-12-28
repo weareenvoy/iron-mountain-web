@@ -82,16 +82,13 @@ const InitialScreenTemplate = ({
         <div className="relative top-[190px] flex w-full flex-col items-start justify-center gap-[10px] group-data-[kiosk=kiosk-2]/kiosk:top-0 group-data-[kiosk=kiosk-3]/kiosk:top-[-220px]">
           <button
             aria-label={buttonText}
-            className="flex h-[200px] items-center justify-center gap-[60px] rounded-[999px] bg-[#ededed] px-[100px] py-[70px] text-left backdrop-blur-[19px] transition-all duration-150 ease-out group-data-[kiosk=kiosk-2]/kiosk:px-[110px] hover:scale-[1.05] hover:shadow-[0_8px_24px_rgba(0,0,0,0.15)]"
+            className="flex h-[200px] items-center justify-center gap-[60px] rounded-[999px] bg-[#ededed] px-[100px] py-[70px] text-left backdrop-blur-[19px] transition-all duration-150 ease-out group-data-[kiosk=kiosk-2]/kiosk:px-[110px] hover:scale-[1.05] hover:shadow-[0_8px_24px_rgba(0,0,0,0.15)] data-[pressed=true]:scale-[0.98] data-[pressed=true]:opacity-70"
             data-name="button_default"
+            data-pressed={isButtonPressed}
             onClick={onButtonClick}
             onPointerDown={() => setIsButtonPressed(true)}
             onPointerLeave={() => setIsButtonPressed(false)}
             onPointerUp={() => setIsButtonPressed(false)}
-            style={{
-              opacity: isButtonPressed ? 0.7 : 1,
-              transform: isButtonPressed ? 'scale(0.98)' : 'scale(1)',
-            }}
           >
             <span className="text-[60.792px] leading-none font-normal tracking-[-1.8238px] whitespace-nowrap text-[#14477d]">
               {renderRegisteredMark(buttonText)}

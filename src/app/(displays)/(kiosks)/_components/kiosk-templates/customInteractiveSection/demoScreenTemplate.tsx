@@ -47,15 +47,12 @@ const CustomInteractiveDemoScreenTemplate = ({
 
       {/* End tour button */}
       <button
-        className="absolute top-[2618px] left-[240px] flex h-[200px] items-center gap-[46px] rounded-[1000px] bg-[#ededed] px-[90px] py-[60px] transition-all duration-150 ease-out hover:scale-[1.01]"
+        className="absolute top-[2618px] left-[240px] flex h-[200px] items-center gap-[46px] rounded-[1000px] bg-[#ededed] px-[90px] py-[60px] transition-all duration-150 ease-out hover:scale-[1.01] data-[pressed=true]:scale-[0.98] data-[pressed=true]:opacity-70"
+        data-pressed={isEndTourPressed}
         onClick={onEndTour}
         onPointerDown={() => setIsEndTourPressed(true)}
         onPointerLeave={() => setIsEndTourPressed(false)}
         onPointerUp={() => setIsEndTourPressed(false)}
-        style={{
-          opacity: isEndTourPressed ? 0.7 : 1,
-          transform: isEndTourPressed ? 'scale(0.98)' : 'scale(1)',
-        }}
         type="button"
       >
         <span className="text-center text-[54.545px] leading-[1.4] font-normal tracking-[-2.7273px] whitespace-nowrap text-[#14477d]">
@@ -75,15 +72,12 @@ const CustomInteractiveDemoScreenTemplate = ({
           />
         ) : (
           <button
-            className="flex h-full w-full items-center justify-center rounded-[20px] text-[80px] leading-[1.3] font-normal tracking-[-4px] text-[#4a4a4a] transition-all duration-150 ease-out"
+            className="flex h-full w-full items-center justify-center rounded-[20px] text-[80px] leading-[1.3] font-normal tracking-[-4px] text-[#4a4a4a] transition-all duration-150 ease-out data-[pressed=true]:scale-[0.98] data-[pressed=true]:opacity-70"
+            data-pressed={isCtaPressed}
             onClick={onCta}
             onPointerDown={() => setIsCtaPressed(true)}
             onPointerLeave={() => setIsCtaPressed(false)}
             onPointerUp={() => setIsCtaPressed(false)}
-            style={{
-              opacity: isCtaPressed ? 0.7 : 1,
-              transform: isCtaPressed ? 'scale(0.98)' : 'scale(1)',
-            }}
             type="button"
           >
             {renderRegisteredMark(cardText)}

@@ -116,7 +116,7 @@ const AnimatedNumberedList = ({ dividerHeights, onRegisterHandlers, steps }: Ani
                     '--divider-height': `${dividerHeights[index] ?? 280}px`,
                     'height': 'var(--divider-height)',
                   } as React.CSSProperties
-                }
+                } // Heights are dynamic per item and they're calculated after render in the useEffect at the top of the component which makes them runtime. This is inline because tailwind works with build time values not runtime values.
               />
             </div>
           ) : null}

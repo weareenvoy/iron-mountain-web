@@ -102,30 +102,24 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
         className={`absolute top-[2220px] left-[245px] flex flex-col gap-[90px] group-data-[kiosk=kiosk-3]/kiosk:top-[2350px] ${ctaWidthClass}`}
       >
         <button
-          className="flex h-[200px] items-center justify-between rounded-[999px] bg-[#ededed] px-[100px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-[#14477d] shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-[19px] transition-all duration-150 ease-out group-data-[kiosk=kiosk-2]/kiosk:hidden hover:scale-[1.01]"
+          className="flex h-[200px] items-center justify-between rounded-[999px] bg-[#ededed] px-[100px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-[#14477d] shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-[19px] transition-all duration-150 ease-out group-data-[kiosk=kiosk-2]/kiosk:hidden hover:scale-[1.01] data-[pressed=true]:scale-[0.98] data-[pressed=true]:opacity-70"
+          data-pressed={isPrimaryPressed}
           onClick={onPrimaryCta}
           onPointerDown={() => setIsPrimaryPressed(true)}
           onPointerLeave={() => setIsPrimaryPressed(false)}
           onPointerUp={() => setIsPrimaryPressed(false)}
-          style={{
-            opacity: isPrimaryPressed ? 0.7 : 1,
-            transform: isPrimaryPressed ? 'scale(0.98)' : 'scale(1)',
-          }}
           type="button"
         >
           <span className="pt-[10px] pl-[10px]">{renderRegisteredMark(primaryCtaLabel)}</span>
           <ArrowIcon />
         </button>
         <button
-          className="flex h-[200px] items-center justify-between rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[100px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-all duration-150 ease-out hover:scale-[1.01]"
+          className="flex h-[200px] items-center justify-between rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[100px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-all duration-150 ease-out hover:scale-[1.01] data-[pressed=true]:scale-[0.98] data-[pressed=true]:opacity-70"
+          data-pressed={isSecondaryPressed}
           onClick={handleSecondaryClick}
           onPointerDown={() => setIsSecondaryPressed(true)}
           onPointerLeave={() => setIsSecondaryPressed(false)}
           onPointerUp={() => setIsSecondaryPressed(false)}
-          style={{
-            opacity: isSecondaryPressed ? 0.7 : 1,
-            transform: isSecondaryPressed ? 'scale(0.98)' : 'scale(1)',
-          }}
           type="button"
         >
           <span className={secondaryLabelPadding}>{renderRegisteredMark(secondaryCtaLabel)}</span>
