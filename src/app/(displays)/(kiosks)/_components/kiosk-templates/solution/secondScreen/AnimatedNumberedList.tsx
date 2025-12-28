@@ -52,16 +52,24 @@ const AnimatedNumberedList = ({ dividerHeights, onRegisterHandlers, steps }: Ani
     }
   }, [internalStepIndex]);
 
+  const canScrollNext = useCallback(() => {
+    return internalStepIndex < steps.length - 1;
+  }, [internalStepIndex, steps.length]);
+
+  const canScrollPrev = useCallback(() => {
+    return internalStepIndex > 0;
+  }, [internalStepIndex]);
+
   useEffect(() => {
     if (onRegisterHandlers) {
       onRegisterHandlers({
-        canScrollNext: () => internalStepIndex < steps.length - 1,
-        canScrollPrev: () => internalStepIndex > 0,
+        canScrollNext,
+        canScrollPrev,
         scrollNext,
         scrollPrev,
       });
     }
-  }, [internalStepIndex, onRegisterHandlers, scrollNext, scrollPrev, steps.length]);
+  }, [canScrollNext, canScrollPrev, onRegisterHandlers, scrollNext, scrollPrev]);
 
   // Calculate opacity based on distance from active index
   const getOpacity = (index: number) => {
