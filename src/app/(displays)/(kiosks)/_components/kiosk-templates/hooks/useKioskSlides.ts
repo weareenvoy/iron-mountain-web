@@ -10,11 +10,21 @@ import { mapSolutionsWithAccordion } from '@/app/(displays)/(kiosks)/_mappers/ma
 import { mapSolutionsWithGrid, type DiamondMapping } from '@/app/(displays)/(kiosks)/_mappers/map-solutions-with-grid';
 import { mapValue } from '@/app/(displays)/(kiosks)/_mappers/map-value';
 import { parseKioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
+import { getOptionalProperty, validateObject } from '@/app/(displays)/(kiosks)/_utils/validators';
+import type {
+  Ambient,
+  ChallengeContent,
+  CustomInteractiveContent,
+  SolutionsAccordion,
+  SolutionsGrid,
+  SolutionsMain,
+  ValueContent,
+} from '@/app/(displays)/(kiosks)/_types/content-types';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 /**
  * Hook for transforming raw CMS data into kiosk slides.
- * Handles data mapping, slide building, and memoization.
+ * Handles data mapping, slide building, and memoization with strict type checking.
  *
  * This encapsulates the complex data transformation logic that was previously
  * scattered throughout the Kiosk view components.
@@ -37,12 +47,39 @@ type SlideBuilders = {
   readonly scrollToSectionById: (id: string) => void;
 };
 
+type DemoConfig = {
+  readonly demoText?: string;
+  readonly headline?: string;
+  readonly iframeLink?: string;
+  readonly mainCTA?: string;
+};
+
 type UseKioskSlidesConfig = {
   readonly diamondMapping?: DiamondMapping;
   readonly kioskData: KioskData;
   readonly kioskId: KioskId;
   readonly slideBuilders: SlideBuilders;
   readonly usesAccordion?: boolean;
+};
+
+/**
+ * Safely extracts typed data from unknown kiosk data.
+ */
+const parseKioskData = (kioskData: KioskData) => {
+  if (!kioskData) return null;
+
+  return validateObject(kioskData, 'kioskData', obj => ({
+    ambient: getOptionalProperty(obj, 'ambient', val => val as Ambient),
+    challengeMain: getOptionalProperty(obj, 'challengeMain', val => val as ChallengeContent),
+    customInteractive1Main: getOptionalProperty(obj, 'customInteractive1Main', val => val as CustomInteractiveContent),
+    customInteractive2: getOptionalProperty(obj, 'customInteractive2', val => val as CustomInteractiveContent),
+    customInteractive3: getOptionalProperty(obj, 'customInteractive3', val => val as CustomInteractiveContent),
+    demoMain: getOptionalProperty(obj, 'demoMain', val => val as DemoConfig),
+    solutionAccordion: getOptionalProperty(obj, 'solutionAccordion', val => val as SolutionsAccordion),
+    solutionGrid: getOptionalProperty(obj, 'solutionGrid', val => val as SolutionsGrid),
+    solutionMain: getOptionalProperty(obj, 'solutionMain', val => val as SolutionsMain),
+    valueMain: getOptionalProperty(obj, 'valueMain', val => val as ValueContent),
+  }));
 };
 
 export const useKioskSlides = ({
@@ -55,8 +92,8 @@ export const useKioskSlides = ({
   const { globalHandlers, handleInitialButtonClick, handleRegisterCarouselHandlers, scrollToSectionById } =
     slideBuilders;
 
-  // Parse kiosk data
-  const kioskContent = kioskData as null | Record<string, unknown> | undefined;
+  // Parse kiosk data with type safety
+  const kioskContent = useMemo(() => parseKioskData(kioskData), [kioskData]);
 
   // Map challenges
   const challenges = useMemo(() => {
@@ -112,24 +149,27 @@ export const useKioskSlides = ({
       kioskId === 'kiosk-1' ? mapCustomInteractiveKiosk1 : kioskId === 'kiosk-3' ? mapCustomInteractiveKiosk3 : null;
 
     if (!mapper) {
-      // Kiosk 2 uses direct object construction
+      // Kiosk 2 uses direct object construction with proper type extraction
+      const demo = kioskContent.demoMain;
+      const ambient = kioskContent.ambient;
+
       return {
         firstScreen: {
-          demoIframeSrc: (kioskContent.demoMain as Record<string, unknown>).iframeLink as string | undefined,
-          eyebrow: (kioskContent.ambient as Record<string, unknown>).title as string | undefined,
-          headline: (customInteractiveData as Record<string, unknown>).headline as string | undefined,
+          demoIframeSrc: demo?.iframeLink,
+          eyebrow: ambient.title,
+          headline: customInteractiveData.headline,
           heroImageAlt: '',
-          heroImageSrc: (customInteractiveData as Record<string, unknown>).image as string | undefined,
-          overlayCardLabel: (kioskContent.demoMain as Record<string, unknown>).demoText as string | undefined,
-          overlayEndTourLabel: (kioskContent.demoMain as Record<string, unknown>).mainCTA as string | undefined,
-          overlayHeadline: (kioskContent.demoMain as Record<string, unknown>).headline as string | undefined,
+          heroImageSrc: customInteractiveData.image,
+          overlayCardLabel: demo?.demoText,
+          overlayEndTourLabel: demo?.mainCTA,
+          overlayHeadline: demo?.headline,
           primaryCtaLabel: undefined,
-          secondaryCtaLabel: (customInteractiveData as Record<string, unknown>).secondaryCTA as string | undefined,
+          secondaryCtaLabel: customInteractiveData.secondaryCTA,
         },
       };
     }
 
-    return mapper(customInteractiveData as never, kioskContent.ambient as never, kioskContent.demoMain as never);
+    return mapper(customInteractiveData, kioskContent.ambient, kioskContent.demoMain);
   }, [kioskContent, kioskId]);
 
   // Build slides
