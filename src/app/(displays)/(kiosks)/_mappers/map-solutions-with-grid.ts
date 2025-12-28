@@ -7,17 +7,19 @@ import type { Ambient, SolutionsGrid, SolutionsMain } from '../_types/content-ty
  * The main value here is mapping diamond list array indices to visual positions in the grid.
  */
 
+export type DiamondMapping = {
+  readonly bottomLeft: number;
+  readonly bottomRight: number;
+  readonly center: number;
+  readonly topLeft?: number;
+  readonly topRight: number;
+};
+
 export const mapSolutionsWithGrid = (
   solutionsMain: SolutionsMain,
   solutionsGrid: SolutionsGrid,
   ambient: Ambient,
-  diamondMapping: {
-    readonly bottomLeft: number;
-    readonly bottomRight: number;
-    readonly center: number;
-    readonly topLeft?: number;
-    readonly topRight: number;
-  }
+  diamondMapping: DiamondMapping
 ): SolutionScreens => {
   // Map diamond array to positioned labels
   const diamondPositions = mapArrayToPositions(solutionsGrid.diamondList, diamondMapping);
