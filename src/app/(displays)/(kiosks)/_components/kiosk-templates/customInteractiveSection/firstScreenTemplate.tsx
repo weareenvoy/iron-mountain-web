@@ -79,6 +79,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
           headline={overlayHeadline}
           heroImageAlt={heroImageAlt}
           heroImageSrc={heroImageSrc}
+          isVisible={showOverlay}
           onEndTour={() => setShowOverlay(false)}
         />
       </div>

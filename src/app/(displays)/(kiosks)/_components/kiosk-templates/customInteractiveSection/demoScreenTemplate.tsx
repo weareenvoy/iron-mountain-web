@@ -15,6 +15,7 @@ export interface CustomInteractiveDemoScreenTemplateProps {
   readonly headline?: string;
   readonly heroImageAlt?: string;
   readonly heroImageSrc?: string;
+  readonly isVisible?: boolean;
   readonly onCta?: () => void;
   readonly onEndTour?: () => void;
 }
@@ -26,6 +27,7 @@ const CustomInteractiveDemoScreenTemplate = ({
   headline,
   heroImageAlt,
   heroImageSrc,
+  isVisible = true,
   onCta,
   onEndTour,
 }: CustomInteractiveDemoScreenTemplateProps) => {
@@ -67,7 +69,7 @@ const CustomInteractiveDemoScreenTemplate = ({
           <iframe
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
-            className="pointer-events-auto h-full w-full rounded-[20px]"
+            className={`h-full w-full rounded-[20px] ${isVisible ? 'pointer-events-auto' : 'pointer-events-none'}`}
             src={demoIframeSrc}
             title={cardText}
           />

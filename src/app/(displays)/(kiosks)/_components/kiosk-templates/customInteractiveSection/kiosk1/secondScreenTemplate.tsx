@@ -95,6 +95,7 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
             headline={overlayHeadline}
             heroImageAlt={heroImageAlt}
             heroImageSrc={heroImageSrc}
+            isVisible={showOverlay}
             onEndTour={() => setShowOverlay(false)}
           />
         </div>
