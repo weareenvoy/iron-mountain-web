@@ -1,8 +1,10 @@
 import type { SolutionScreens } from '../_components/kiosk-templates/solution/solutionSlides';
 import type { Ambient, SolutionsAccordion, SolutionsMain } from '../_types/content-types';
 
-// This maps CMS content for Solutions with Accordion to the Kiosk Solutions structure.
-
+/**
+ * Maps CMS content for Solutions with Accordion to the Kiosk Solutions structure.
+ * Contains business logic for accordion color assignment, number formatting, and default states.
+ */
 export const mapSolutionsWithAccordion = (
   solutionsMain: SolutionsMain,
   solutionAccordion: SolutionsAccordion,
@@ -10,10 +12,10 @@ export const mapSolutionsWithAccordion = (
 ): SolutionScreens => {
   return {
     firstScreen: {
-      body: solutionsMain.body ?? '',
-      headline: solutionsMain.headline ?? '',
-      labelText: solutionsMain.labelText ?? '',
-      mainVideo: solutionsMain.mainVideo ?? '',
+      body: solutionsMain.body,
+      headline: solutionsMain.headline,
+      labelText: solutionsMain.labelText,
+      mainVideo: solutionsMain.mainVideo,
       subheadline: ambient.title,
     },
     fourthScreen: {
@@ -32,24 +34,24 @@ export const mapSolutionsWithAccordion = (
         number: `${String(index + 1).padStart(2, '0')}.`,
         title: item.title ?? '',
       })),
-      headline: solutionAccordion.headline ?? '',
+      headline: solutionAccordion.headline,
       image: solutionAccordion.image,
-      labelText: solutionAccordion.labelText ?? '',
+      labelText: solutionAccordion.labelText,
       mediaDiamondSolidSrc: solutionAccordion.image,
       subheadline: ambient.title,
     },
     secondScreen: {
-      heroImageSrc: solutionsMain.image ?? '',
-      image: solutionsMain.image ?? '',
-      labelText: solutionsMain.labelText ?? '',
+      heroImageSrc: solutionsMain.image,
+      image: solutionsMain.image,
+      labelText: solutionsMain.labelText,
       numberedListHeadline: solutionsMain.numberedListHeadline,
-      stepFourDescription: solutionsMain.numberedList?.[3] ?? '',
+      stepFourDescription: solutionsMain.numberedList?.[3],
       stepFourLabel: '04.',
-      stepOneDescription: solutionsMain.numberedList?.[0] ?? '',
+      stepOneDescription: solutionsMain.numberedList?.[0],
       stepOneLabel: '01.',
-      stepThreeDescription: solutionsMain.numberedList?.[2] ?? '',
+      stepThreeDescription: solutionsMain.numberedList?.[2],
       stepThreeLabel: '03.',
-      stepTwoDescription: solutionsMain.numberedList?.[1] ?? '',
+      stepTwoDescription: solutionsMain.numberedList?.[1],
       stepTwoLabel: '02.',
       subheadline: ambient.title,
     },

@@ -39,6 +39,7 @@ const SecondScreenTemplate = ({
               alt="Large decorative background diamond"
               className="-scale-x-100 object-contain"
               fill
+              quality={75} // All decorative images are 75 quality, the text is the main focus not the image. 75 is a good balance between quality and performance.
               sizes="1506px"
               src={item1Image}
             />

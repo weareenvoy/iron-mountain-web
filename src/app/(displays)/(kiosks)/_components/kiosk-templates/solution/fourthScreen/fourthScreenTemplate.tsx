@@ -159,6 +159,7 @@ const SolutionFourthScreenTemplate = ({
                 alt="Outline accent diamond"
                 className="object-contain"
                 fill
+                quality={75} // All decorative images are 75 quality, the text is the main focus not the image. 75 is a good balance between quality and performance.
                 sizes="880px"
                 src={mediaDiamondOutlineSrc}
               />
@@ -175,7 +176,14 @@ const SolutionFourthScreenTemplate = ({
         <div className="pointer-events-none absolute top-[4390px] left-[210px] h-[390px] w-[390px]">
           {accentDiamondSrc ? (
             <div className="relative h-full w-full">
-              <Image alt="Small accent diamond" className="object-contain" fill sizes="390px" src={accentDiamondSrc} />
+              <Image
+                alt="Small accent diamond"
+                className="object-contain"
+                fill
+                quality={75} // All decorative images are 75 quality, the text is the main focus not the image. 75 is a good balance between quality and performance.
+                sizes="390px"
+                src={accentDiamondSrc}
+              />
             </div>
           ) : (
             <OrangeGradientDiamondFourth aria-hidden="true" className="h-full w-full" focusable="false" />

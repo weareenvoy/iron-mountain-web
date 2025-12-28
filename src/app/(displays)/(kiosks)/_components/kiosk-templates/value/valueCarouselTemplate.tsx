@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { normalizeDiamondCards } from '@/app/(displays)/(kiosks)/_utils/normalize-diamond-cards';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
 import { cn } from '@/lib/tailwind/utils/cn';
@@ -37,8 +36,6 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
     carouselId,
     eyebrow,
     headline,
-    heroImageAlt,
-    heroImageSrc,
     heroVideoPosterSrc,
     labelText,
     mainVideo,
@@ -78,10 +75,6 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
           >
             <source src={heroVideo} type={getVideoMimeType(heroVideo)} />
           </video>
-        ) : heroImageSrc && heroImageAlt ? (
-          <div className="relative h-full w-full">
-            <Image alt={heroImageAlt} className="object-cover" fill sizes="1284px" src={heroImageSrc} />
-          </div>
         ) : (
           <div className="h-full w-full bg-neutral-800" />
         )}

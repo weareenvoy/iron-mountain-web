@@ -42,6 +42,7 @@ const InitialScreenTemplate = ({
               className="object-cover object-center"
               fill
               priority
+              quality={90} // 90 Quality here since it's a hero image and it's the / a main focus of the page.
               sizes="100vw"
               src={backgroundImage}
             />

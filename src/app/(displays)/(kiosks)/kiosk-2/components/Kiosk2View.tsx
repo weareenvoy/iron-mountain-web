@@ -21,7 +21,6 @@ import {
 import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers/kiosk-provider';
 import { ARROW_FADE_DURATION_SEC, SCROLL_DURATION_MS } from '@/app/(displays)/(kiosks)/_constants/timing';
 import { mapChallenges } from '@/app/(displays)/(kiosks)/_mappers/map-challenges';
-import { mapCustomInteractiveKiosk2 } from '@/app/(displays)/(kiosks)/_mappers/map-custom-interactive-kiosk2';
 import { mapSolutionsWithGrid } from '@/app/(displays)/(kiosks)/_mappers/map-solutions-with-grid';
 import { mapValue } from '@/app/(displays)/(kiosks)/_mappers/map-value';
 import { useKioskArrowStore } from '@/app/(displays)/(kiosks)/_stores/useKioskArrowStore';
@@ -107,35 +106,72 @@ const Kiosk2View = () => {
         valueMain?: ValueContent;
       };
 
-  const challenges: KioskChallenges | null =
-    kioskContent?.challengeMain && kioskContent.ambient
-      ? parseKioskChallenges(mapChallenges(kioskContent.challengeMain, kioskContent.ambient))
-      : null;
+  const challenges: KioskChallenges | null = useMemo(
+    () =>
+      kioskContent?.challengeMain && kioskContent.ambient
+        ? parseKioskChallenges(mapChallenges(kioskContent.challengeMain, kioskContent.ambient))
+        : null,
+    [kioskContent]
+  );
 
-  const solutions =
-    kioskContent?.solutionMain && kioskContent.solutionGrid && kioskContent.ambient
-      ? (mapSolutionsWithGrid(kioskContent.solutionMain, kioskContent.solutionGrid, kioskContent.ambient, {
-          bottomLeft: 3,
-          bottomRight: 4,
-          center: 0,
-          topLeft: 1,
-          topRight: 2,
-        }) as SolutionScreens)
-      : null;
-  const values =
-    kioskContent?.valueMain && kioskContent.ambient
-      ? (mapValue(kioskContent.valueMain, kioskContent.ambient, 'kiosk-2') as ValueScreens)
-      : null;
-  const customInteractive =
-    kioskContent?.customInteractive2 && kioskContent.ambient
-      ? (mapCustomInteractiveKiosk2(
-          kioskContent.customInteractive2,
-          kioskContent.ambient,
-          kioskContent.demoMain as
-            | undefined
-            | { demoText?: string; headline?: string; iframeLink?: string; mainCTA?: string }
-        ) as CustomInteractiveScreens)
-      : null;
+  const solutions = useMemo(
+    () =>
+      kioskContent?.solutionMain && kioskContent.solutionGrid && kioskContent.ambient
+        ? (mapSolutionsWithGrid(kioskContent.solutionMain, kioskContent.solutionGrid, kioskContent.ambient, {
+            bottomLeft: 3,
+            bottomRight: 4,
+            center: 0,
+            topLeft: 1,
+            topRight: 2,
+          }) as SolutionScreens)
+        : null,
+    [kioskContent]
+  );
+
+  const values = useMemo(
+    () =>
+      kioskContent?.valueMain && kioskContent.ambient
+        ? (mapValue(kioskContent.valueMain, kioskContent.ambient, 'kiosk-2') as ValueScreens)
+        : null,
+    [kioskContent]
+  );
+
+  const customInteractive = useMemo(
+    () =>
+      kioskContent?.customInteractive2 && kioskContent.ambient && kioskContent.demoMain
+        ? ({
+            firstScreen: {
+              demoIframeSrc: (
+                kioskContent.demoMain as
+                  | undefined
+                  | { demoText?: string; headline?: string; iframeLink?: string; mainCTA?: string }
+              )?.iframeLink,
+              eyebrow: kioskContent.ambient.title,
+              headline: kioskContent.customInteractive2.headline,
+              heroImageAlt: '',
+              heroImageSrc: kioskContent.customInteractive2.image,
+              overlayCardLabel: (
+                kioskContent.demoMain as
+                  | undefined
+                  | { demoText?: string; headline?: string; iframeLink?: string; mainCTA?: string }
+              )?.demoText,
+              overlayEndTourLabel: (
+                kioskContent.demoMain as
+                  | undefined
+                  | { demoText?: string; headline?: string; iframeLink?: string; mainCTA?: string }
+              )?.mainCTA,
+              overlayHeadline: (
+                kioskContent.demoMain as
+                  | undefined
+                  | { demoText?: string; headline?: string; iframeLink?: string; mainCTA?: string }
+              )?.headline,
+              primaryCtaLabel: undefined,
+              secondaryCtaLabel: kioskContent.customInteractive2.secondaryCTA,
+            },
+          } as CustomInteractiveScreens)
+        : null,
+    [kioskContent]
+  );
 
   // Pass the global handlers to all templates
   const globalHandlers = useMemo(

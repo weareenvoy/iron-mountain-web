@@ -109,14 +109,19 @@
       "backCTA": "Back",
       "ModalHeadline1": "Intake and assessment",
       "ModalBody1": "Assets, whether film, audio, digital, or physical, are logged, evaluated for condition and risk, and prioritized based on preservation and activation potential.",
+      "ModalImage1": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Intake+and+assessment.webp",
       "ModalHeadline2": "Digitization and remediation",
       "ModalBody2": "Physical media is digitized to archival standards, with restoration applied as needed and metadata extracted to ensure assets are searchable, playable, and accessible.",
+      "ModalImage2": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Digitization+and+remediation.webp",
       "ModalHeadline3": "Digital preservation",
       "ModalBody3": "Iron Mountain's digital preservation platform provides a fully managed digital repository with triple-redundant geo-distributed storage, secure access, and intuitive navigation.",
+      "ModalImage3": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Digital+preservation.webp",
       "ModalHeadline4": "Search and discover",
       "ModalBody4": "The entire archive becomes searchable through AI-powered metadata, custom filters, and integrated preview tools, enabling fast discovery from any location.",
+      "ModalImage4": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Search+and+discover.webp",
       "ModalHeadline5": "Share, stream and monetize",
-      "ModalBody5": "Digitized content is ready for licensing, streaming, and storytelling, unlocking new value across platforms while maintaining archival integrity."
+      "ModalBody5": "Digitized content is ready for licensing, streaming, and storytelling, unlocking new value across platforms while maintaining archival integrity.",
+      "ModalImage5": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Share%2C+stream+and+monetize.webp"
     }
   }
 }]

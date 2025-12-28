@@ -79,6 +79,7 @@ const CustomInteractiveDemoScreenTemplate = ({
             alt={heroImageAlt ?? 'Hero image'}
             className="-rotate-[45deg] object-cover"
             fill
+            quality={85} // 85 Quality here since it's a secondary image to the Demo iframe itself.
             sizes="680px"
             src={heroImageSrc}
           />

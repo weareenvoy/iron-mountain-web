@@ -43,6 +43,7 @@ const ThirdScreenTemplate = ({
               alt={featuredStat2Body ? `Graphic representing ${featuredStat2Body}` : 'Metric graphic'}
               className="rotate-45 object-contain"
               fill
+              quality={75} // All decorative images are 75 quality, the text is the main focus not the image. 75 is a good balance between quality and performance.
               sizes="795px"
               src={item2Image}
             />

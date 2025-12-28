@@ -134,14 +134,6 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
                     poster={current.primaryImageSrc}
                     src={current.primaryVideoSrc}
                   />
-                ) : current.primaryImageSrc ? (
-                  <Image
-                    alt={current.primaryImageAlt}
-                    className="origin-center scale-[1.35] -rotate-[45deg] object-cover"
-                    fill
-                    sizes="1200px"
-                    src={current.primaryImageSrc}
-                  />
                 ) : null}
               </div>
 
@@ -152,6 +144,7 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
                     alt={current.secondaryImageAlt}
                     className="origin-center scale-[1.35] -rotate-[45deg] object-cover"
                     fill
+                    quality={85} // 85 Quality here since it's a larger secondary image in an interactive setup (carousel)
                     sizes="880px"
                     src={current.secondaryImageSrc}
                   />

@@ -1,7 +1,11 @@
+import { mapArrayToPositions } from '@/lib/utils/cms-helpers';
 import type { SolutionScreens } from '../_components/kiosk-templates/solution/solutionSlides';
 import type { Ambient, SolutionsGrid, SolutionsMain } from '../_types/content-types';
 
-// This maps CMS content for Solutions with Grid to the Kiosk Solutions structure. (The diamond grid in Solutions.)
+/**
+ * Maps CMS content for Solutions with Grid to the Kiosk Solutions structure.
+ * The main value here is mapping diamond list array indices to visual positions in the grid.
+ */
 
 export const mapSolutionsWithGrid = (
   solutionsMain: SolutionsMain,
@@ -14,42 +18,46 @@ export const mapSolutionsWithGrid = (
     readonly topLeft?: number;
     readonly topRight: number;
   }
-): SolutionScreens => ({
-  firstScreen: {
-    body: solutionsMain.body ?? '',
-    headline: solutionsMain.headline ?? '',
-    labelText: solutionsMain.labelText ?? '',
-    mainVideo: solutionsMain.mainVideo ?? '',
-    subheadline: ambient.title,
-  },
-  secondScreen: {
-    heroImageSrc: solutionsMain.image ?? '',
-    image: solutionsMain.image ?? '',
-    labelText: solutionsMain.labelText ?? '',
-    numberedListHeadline: solutionsMain.numberedListHeadline,
-    stepFourDescription: solutionsMain.numberedList?.[3] ?? '',
-    stepFourLabel: '04.',
-    stepOneDescription: solutionsMain.numberedList?.[0] ?? '',
-    stepOneLabel: '01.',
-    stepThreeDescription: solutionsMain.numberedList?.[2] ?? '',
-    stepThreeLabel: '03.',
-    stepTwoDescription: solutionsMain.numberedList?.[1] ?? '',
-    stepTwoLabel: '02.',
-    subheadline: ambient.title,
-  },
-  thirdScreen: {
-    bottomLeftLabel: solutionsGrid.diamondList?.[diamondMapping.bottomLeft] ?? '',
-    bottomRightLabel: solutionsGrid.diamondList?.[diamondMapping.bottomRight] ?? '',
-    centerLabel: solutionsGrid.diamondList?.[diamondMapping.center] ?? '',
-    diamondList: solutionsGrid.diamondList,
-    headline: solutionsGrid.headline ?? '',
-    images: solutionsGrid.images,
-    labelText: solutionsMain.labelText ?? '',
-    mediaDiamondLeftSrc: solutionsGrid.images?.[0] ?? '',
-    mediaDiamondRightSrc: solutionsGrid.images?.[1] ?? '',
-    subheadline: ambient.title,
-    topLeftLabel:
-      diamondMapping.topLeft !== undefined ? solutionsGrid.diamondList?.[diamondMapping.topLeft] : undefined,
-    topRightLabel: solutionsGrid.diamondList?.[diamondMapping.topRight] ?? '',
-  },
-});
+): SolutionScreens => {
+  // Map diamond array to positioned labels
+  const diamondPositions = mapArrayToPositions(solutionsGrid.diamondList, diamondMapping);
+
+  return {
+    firstScreen: {
+      body: solutionsMain.body,
+      headline: solutionsMain.headline,
+      labelText: solutionsMain.labelText,
+      mainVideo: solutionsMain.mainVideo,
+      subheadline: ambient.title,
+    },
+    secondScreen: {
+      heroImageSrc: solutionsMain.image,
+      image: solutionsMain.image,
+      labelText: solutionsMain.labelText,
+      numberedListHeadline: solutionsMain.numberedListHeadline,
+      stepFourDescription: solutionsMain.numberedList?.[3],
+      stepFourLabel: '04.',
+      stepOneDescription: solutionsMain.numberedList?.[0],
+      stepOneLabel: '01.',
+      stepThreeDescription: solutionsMain.numberedList?.[2],
+      stepThreeLabel: '03.',
+      stepTwoDescription: solutionsMain.numberedList?.[1],
+      stepTwoLabel: '02.',
+      subheadline: ambient.title,
+    },
+    thirdScreen: {
+      bottomLeftLabel: diamondPositions.bottomLeft as string | undefined,
+      bottomRightLabel: diamondPositions.bottomRight as string | undefined,
+      centerLabel: diamondPositions.center as string | undefined,
+      diamondList: solutionsGrid.diamondList,
+      headline: solutionsGrid.headline,
+      images: solutionsGrid.images,
+      labelText: solutionsMain.labelText,
+      mediaDiamondLeftSrc: solutionsGrid.images?.[0],
+      mediaDiamondRightSrc: solutionsGrid.images?.[1],
+      subheadline: ambient.title,
+      topLeftLabel: diamondPositions.topLeft as string | undefined,
+      topRightLabel: diamondPositions.topRight as string | undefined,
+    },
+  };
+};

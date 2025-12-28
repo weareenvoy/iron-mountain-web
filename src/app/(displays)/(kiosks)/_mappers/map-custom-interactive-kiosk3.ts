@@ -1,7 +1,11 @@
+import { generateSlideId } from '@/lib/utils/cms-helpers';
 import type { CustomInteractiveScreens } from '../_components/kiosk-templates/customInteractiveSection/customInteractiveSlides';
 import type { Ambient, CustomInteractiveContent } from '../_types/content-types';
 
-// This maps CMS content for Custom Interactive Kiosk 3 to the Kiosk Custom Interactive structure.
+/**
+ * Maps CMS content for Custom Interactive Kiosk 3 to the Kiosk Custom Interactive structure.
+ * Contains transformation logic for carousel slides including ID generation and conditional image logic.
+ */
 
 type DemoConfig = {
   readonly demoText?: string;
@@ -57,7 +61,7 @@ export const mapCustomInteractiveKiosk3 = (
         bullets: item.bullets ? [...item.bullets] : [],
         eyebrow: ambient.title,
         headline: item.title ?? '',
-        id: `slide-${index + 1}`,
+        id: generateSlideId('slide', String(index + 1)),
         primaryImageAlt: '',
         primaryImageSrc: item.image ?? '',
         primaryVideoSrc: item.video,

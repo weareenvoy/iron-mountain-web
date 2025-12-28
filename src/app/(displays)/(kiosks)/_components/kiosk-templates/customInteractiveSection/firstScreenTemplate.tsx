@@ -136,6 +136,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
             alt={heroImageAlt || ''}
             className="-rotate-[45deg] object-cover"
             fill
+            quality={85} // 85 Quality, secondary image to the buttons and headline.
             sizes="680px"
             src={heroImageSrc}
           />
