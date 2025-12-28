@@ -11,6 +11,7 @@ import HCFilledTealDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/
 import HCHollowBlueDiamond2 from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowBlueDiamond2';
 import HCHollowGreenDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowGreenDiamond';
 import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowOrangeDiamond';
+import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import CircularCarousel, { type CarouselSlide } from './components/CircularCarousel';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
@@ -190,9 +191,10 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
 
       {/* Overlay - Demo Screen */}
       <div
-        className={`absolute inset-0 transition-opacity duration-700 ${
+        className={cn(
+          'absolute inset-0 transition-opacity duration-700',
           showOverlay ? 'pointer-events-auto z-[999] opacity-100' : 'pointer-events-none opacity-0'
-        }`}
+        )}
       >
         <CustomInteractiveDemoScreenTemplate
           cardLabel={overlayCardLabel}

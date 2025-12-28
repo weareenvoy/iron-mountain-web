@@ -7,6 +7,7 @@ import GreenDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/GreenDiam
 import OrangeDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondFourth';
 import OrangeGradientDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/OrangeGradientDiamondFourth';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
+import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import PhotoDiamond from './PhotoDiamond';
 import PlusMinusIcon from './PlusMinusIcon';
@@ -84,7 +85,14 @@ const SolutionFourthScreenTemplate = ({
 
             return (
               <AccordionItem
-                className={`relative z-[1] overflow-hidden border-none ${roundedClass} data-[accordion-color=blue]:bg-[#1b75bc] data-[accordion-color=lightBlue]:bg-[#6dcff6] data-[accordion-color=navy]:bg-[#14477d] data-[accordion-color=white]:bg-[#ededed]`}
+                className={cn(
+                  'relative z-[1] overflow-hidden border-none',
+                  roundedClass,
+                  'data-[accordion-color=blue]:bg-[#1b75bc]',
+                  'data-[accordion-color=lightBlue]:bg-[#6dcff6]',
+                  'data-[accordion-color=navy]:bg-[#14477d]',
+                  'data-[accordion-color=white]:bg-[#ededed]'
+                )}
                 data-accordion-color={index === entries.length - 1 ? accordionColor : undefined}
                 key={item.id}
                 value={item.id}
@@ -97,9 +105,18 @@ const SolutionFourthScreenTemplate = ({
                   />
                 ) : null}
                 <AccordionTrigger
-                  className={`group/accordion-trigger relative z-[1] flex h-[120px] min-h-[240px] items-center rounded-t-[50px] px-[80px] pt-[30px] pb-[20px] text-left text-[52px] leading-[1.4] tracking-[-2.6px] transition-none hover:no-underline focus-visible:outline-none ${
-                    index === entries.length - 1 ? 'rounded-b-[50px]' : ''
-                  } ${triggerRoundedClass} data-[accordion-color=blue]:bg-[#1b75bc] data-[accordion-color=blue]:text-[#ededed] data-[accordion-color=lightBlue]:bg-[#6dcff6] data-[accordion-color=lightBlue]:text-[#14477d] data-[accordion-color=navy]:bg-[#14477d] data-[accordion-color=navy]:text-[#ededed] data-[accordion-color=white]:bg-[#ededed] data-[accordion-color=white]:text-[#14477d]`}
+                  className={cn(
+                    'group/accordion-trigger relative z-[1] flex h-[120px] min-h-[240px] items-center',
+                    'rounded-t-[50px] px-[80px] pt-[30px] pb-[20px]',
+                    'text-left text-[52px] leading-[1.4] tracking-[-2.6px]',
+                    'transition-none hover:no-underline focus-visible:outline-none',
+                    index === entries.length - 1 && 'rounded-b-[50px]',
+                    triggerRoundedClass,
+                    'data-[accordion-color=blue]:bg-[#1b75bc] data-[accordion-color=blue]:text-[#ededed]',
+                    'data-[accordion-color=lightBlue]:bg-[#6dcff6] data-[accordion-color=lightBlue]:text-[#14477d]',
+                    'data-[accordion-color=navy]:bg-[#14477d] data-[accordion-color=navy]:text-[#ededed]',
+                    'data-[accordion-color=white]:bg-[#ededed] data-[accordion-color=white]:text-[#14477d]'
+                  )}
                   data-accordion-color={accordionColor}
                   indicator={<PlusMinusIcon accordionColor={accordionColor} />}
                 >

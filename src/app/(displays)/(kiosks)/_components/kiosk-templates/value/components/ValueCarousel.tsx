@@ -2,6 +2,7 @@
 
 import useEmblaCarousel from 'embla-carousel-react';
 import { useEffect } from 'react';
+import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import DiamondStack, { type DiamondStackVariant } from '../DiamondStack';
 import type { ValueCarouselSlide, ValueDiamondCard } from '@/app/(displays)/(kiosks)/_types/value-types';
@@ -36,7 +37,7 @@ const ValueCarousel = ({ hasCarouselSlides, onRegisterCarouselHandlers, slides }
 
   return (
     <div
-      className={`flex flex-col items-end gap-[80px] ${hasCarouselSlides ? 'relative left-[-330px] self-baseline' : ''}`}
+      className={cn('flex flex-col items-end gap-[80px]', hasCarouselSlides && 'relative left-[-330px] self-baseline')}
     >
       <div className="w-full overflow-hidden" ref={emblaRef}>
         <div className="flex w-full">
