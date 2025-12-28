@@ -1,17 +1,19 @@
 import { create } from 'zustand';
-import { ARROW_THEME_BLUE, ARROW_THEME_GRAY, type ArrowTheme } from '../_constants/themes';
+import { createArrowActions, defaultKioskArrowState, type KioskArrowState } from './arrowSlice';
+import { ARROW_THEME_BLUE } from '../_constants/themes';
+import { getSectionFromScrollTarget, getStoreKey } from './kioskStoreUtils';
 import type { KioskId } from '../_types/kiosk-id';
 
-// This file is used to manage arrow visibility, color, and animation states for the arrow nav in all three kiosks.
-
-type KioskArrowState = {
-  readonly allowArrowsToShow: boolean;
-  readonly arrowTheme: ArrowTheme;
-  readonly previousScrollTarget: null | string;
-  readonly shouldResetOnInitial: boolean;
-  readonly showArrows: boolean;
-  readonly wasScrollingToVideo: boolean;
-};
+/**
+ * Zustand store for managing arrow visibility, theme, and animation states.
+ * Refactored into slices for better maintainability and testability.
+ *
+ * This store manages:
+ * - Arrow visibility (show/hide)
+ * - Arrow theme (blue/gray based on section)
+ * - Scroll state tracking
+ * - Section transitions
+ */
 
 type Store = {
   // Actions
@@ -36,246 +38,119 @@ type Store = {
     previousScrollTarget: null | string,
     isInitialScreen: boolean
   ) => void;
+  // State
   readonly kiosk1: KioskArrowState;
   readonly kiosk2: KioskArrowState;
   readonly kiosk3: KioskArrowState;
   readonly resetKiosk: (kioskId: KioskId) => void;
 };
 
-const defaultKioskState: KioskArrowState = {
-  allowArrowsToShow: false,
-  arrowTheme: ARROW_THEME_BLUE,
-  previousScrollTarget: null,
-  shouldResetOnInitial: false,
-  showArrows: false,
-  wasScrollingToVideo: false,
-};
+export const useKioskArrowStore = create<Store>((set, get) => {
+  const actions = createArrowActions(get);
 
-// Helper to map KioskId to store key
-const getStoreKey = (kioskId: KioskId): 'kiosk1' | 'kiosk2' | 'kiosk3' => {
-  switch (kioskId) {
-    case 'kiosk-1':
-      return 'kiosk1';
-    case 'kiosk-2':
-      return 'kiosk2';
-    case 'kiosk-3':
-      return 'kiosk3';
-  }
-};
+  return {
+    // High-level action handlers (called by components)
+    handleArrowThemeUpdate: (kioskId: KioskId, isValueSection: boolean, showArrows: boolean) => {
+      const update = actions.updateArrowTheme(kioskId, isValueSection, showArrows);
+      if (update) set(update);
+    },
 
-export const useKioskArrowStore = create<Store>((set, get) => ({
-  handleArrowThemeUpdate: (kioskId: KioskId, isValueSection: boolean, showArrows: boolean) => {
-    const key = getStoreKey(kioskId);
-    const state = get()[key];
+    handleButtonClick: (kioskId: KioskId) => {
+      const update = actions.handleButtonClick(kioskId);
+      set(update);
+    },
 
-    // Only update theme when arrows are visible
-    if (showArrows) {
-      const newTheme: ArrowTheme = isValueSection ? ARROW_THEME_GRAY : ARROW_THEME_BLUE;
+    handleInitialScreenReset: (kioskId: KioskId, isInitialScreen: boolean) => {
+      const update = actions.resetOnInitialScreen(kioskId, isInitialScreen);
+      if (update) set(update);
+    },
 
-      if (state.arrowTheme !== newTheme) {
-        set({
-          [key]: {
-            ...state,
-            arrowTheme: newTheme,
-          },
-        });
+    handleScrollComplete: (
+      kioskId: KioskId,
+      currentScrollTarget: null | string,
+      isScrolling: boolean,
+      isCustomInteractiveSection: boolean
+    ) => {
+      if (isScrolling) return;
+
+      const key = getStoreKey(kioskId);
+      const state = get()[key];
+
+      // Get section for initial/customInteractive check
+      const section = getSectionFromScrollTarget(currentScrollTarget);
+      const isInitialOrCustomInteractive =
+        section === 'initial' || (section === 'customInteractive' && isCustomInteractiveSection);
+
+      // Always hide on initial or custom interactive
+      if (isInitialOrCustomInteractive) {
+        const update = actions.hideArrows(kioskId);
+        set(update);
+        return;
       }
-    }
-  },
-  handleButtonClick: (kioskId: KioskId) => {
-    const key = getStoreKey(kioskId);
-    set(state => ({
-      [key]: {
-        ...state[key],
-        allowArrowsToShow: true,
-      },
-    }));
-  },
-  handleInitialScreenReset: (kioskId: KioskId, isInitialScreen: boolean) => {
-    const key = getStoreKey(kioskId);
-    const state = get()[key];
 
-    if (isInitialScreen && state.shouldResetOnInitial && state.showArrows) {
-      set({
-        [key]: {
-          ...state,
-          allowArrowsToShow: false,
-          shouldResetOnInitial: false,
-          showArrows: false,
-        },
-      });
-    }
-  },
+      // Only handle show/hide if we were scrolling to video
+      if (state.wasScrollingToVideo && state.allowArrowsToShow) {
+        const delay = actions.calculateArrowShowDelay(kioskId, currentScrollTarget, isCustomInteractiveSection);
 
-  handleScrollComplete: (
-    kioskId: KioskId,
-    currentScrollTarget: null | string,
-    isScrolling: boolean,
-    isCustomInteractiveSection: boolean
-  ) => {
-    const key = getStoreKey(kioskId);
-    const state = get()[key];
-
-    if (isScrolling) return;
-
-    // Helper to get section name from target
-    const getSection = (target: null | string): string => {
-      if (!target) return 'initial';
-      if (target === 'challenge-initial') return 'initial';
-      if (target.startsWith('challenge-')) return 'challenge';
-      if (target.startsWith('solution-')) return 'solution';
-      if (target.startsWith('value-')) return 'value';
-      if (target.includes('customInteractive-')) return 'customInteractive';
-      // Challenge section scroll targets without prefix
-      if (
-        target === 'description' ||
-        target === 'main-description' ||
-        target === 'bottom-description' ||
-        target === 'metrics-description'
-      )
-        return 'challenge';
-      return 'unknown';
-    };
-
-    const currentSection = getSection(currentScrollTarget);
-
-    // Don't show arrows on initial screen or custom interactive
-    if (currentSection === 'initial' || (currentSection === 'customInteractive' && isCustomInteractiveSection)) {
-      set({
-        [key]: {
-          ...state,
-          showArrows: false,
-          wasScrollingToVideo: false,
-        },
-      });
-      return;
-    }
-
-    // If we just hid arrows due to section transition, show them again after delay
-    // (for Challenge, Solution, and Value sections only)
-    if (state.wasScrollingToVideo && state.allowArrowsToShow) {
-      const shouldShowArrows =
-        currentSection === 'challenge' || currentSection === 'solution' || currentSection === 'value';
-
-      if (shouldShowArrows) {
-        // Use longer delay for first appearance, shorter for subsequent
-        const delay = currentScrollTarget === 'challenge-first-video' ? 1500 : 300;
-        setTimeout(() => {
-          set(currentState => ({
+        if (delay !== null) {
+          // Show arrows after delay (use functional update to get fresh state)
+          setTimeout(() => {
+            set(currentState => ({
+              [key]: {
+                ...currentState[key],
+                showArrows: true,
+                wasScrollingToVideo: false,
+              },
+            }));
+          }, delay);
+        } else {
+          // Reset flag if we're not showing arrows
+          set({
             [key]: {
-              ...currentState[key],
-              showArrows: true,
+              ...state,
               wasScrollingToVideo: false,
             },
-          }));
-        }, delay);
-      } else {
-        // Reset the flag if we're not showing arrows
-        set({
-          [key]: {
-            ...state,
-            wasScrollingToVideo: false,
-          },
-        });
+          });
+        }
       }
-    }
-  },
+    },
 
-  handleScrollStart: (
-    kioskId: KioskId,
-    currentScrollTarget: null | string,
-    previousScrollTarget: null | string,
-    isScrolling: boolean
-  ) => {
-    if (!isScrolling) return;
+    handleScrollStart: (
+      kioskId: KioskId,
+      currentScrollTarget: null | string,
+      previousScrollTarget: null | string,
+      isScrolling: boolean
+    ) => {
+      if (!isScrolling) return;
 
-    const key = getStoreKey(kioskId);
-    const state = get()[key];
+      const update = actions.hideArrowsOnScrollStart(kioskId, currentScrollTarget, previousScrollTarget);
+      if (update) set(update);
+    },
 
-    // Helper to get section name from target
-    const getSection = (target: null | string): string => {
-      if (!target) return 'initial';
-      if (target === 'challenge-initial') return 'initial';
-      if (target.startsWith('challenge-')) return 'challenge';
-      if (target.startsWith('solution-')) return 'solution';
-      if (target.startsWith('value-')) return 'value';
-      if (target.includes('customInteractive-')) return 'customInteractive';
-      // Challenge section scroll targets without prefix
-      if (
-        target === 'description' ||
-        target === 'main-description' ||
-        target === 'bottom-description' ||
-        target === 'metrics-description'
-      )
-        return 'challenge';
-      return 'unknown';
-    };
+    handleScrollTargetChange: (
+      kioskId: KioskId,
+      currentScrollTarget: null | string,
+      previousScrollTarget: null | string,
+      isInitialScreen: boolean
+    ) => {
+      const update = actions.updateScrollTarget(kioskId, currentScrollTarget, previousScrollTarget, isInitialScreen);
+      if (update) set(update);
+    },
 
-    const currentSection = getSection(currentScrollTarget);
-    const previousSection = getSection(previousScrollTarget);
+    // Initial state
+    kiosk1: { ...defaultKioskArrowState, arrowTheme: ARROW_THEME_BLUE },
+    kiosk2: { ...defaultKioskArrowState, arrowTheme: ARROW_THEME_BLUE },
+    kiosk3: { ...defaultKioskArrowState, arrowTheme: ARROW_THEME_BLUE },
 
-    // Hide arrows when crossing section boundaries (entering a new major section)
-    const isCrossingSectionBoundary = currentSection !== previousSection;
-    const isEnteringInitial = currentSection === 'initial';
-    const isEnteringSolution = currentSection === 'solution';
-    const isEnteringValue = currentSection === 'value';
-    const isEnteringChallenge = currentSection === 'challenge' && previousSection !== 'challenge';
-    const isEnteringCustomInteractive = currentSection === 'customInteractive';
-
-    // Hide arrows when entering any new section (check target, not current position)
-    const shouldHideArrows =
-      isEnteringInitial ||
-      (isCrossingSectionBoundary && (isEnteringSolution || isEnteringValue || isEnteringChallenge)) ||
-      isEnteringCustomInteractive; // Removed isCustomInteractiveSection check - target determines hiding
-
-    if (shouldHideArrows) {
+    // Reset action
+    resetKiosk: (kioskId: KioskId) => {
+      const key = getStoreKey(kioskId);
       set({
         [key]: {
-          ...state,
-          showArrows: false,
-          wasScrollingToVideo: true,
+          ...defaultKioskArrowState,
+          arrowTheme: ARROW_THEME_BLUE,
         },
       });
-    }
-  },
-
-  handleScrollTargetChange: (
-    kioskId: KioskId,
-    currentScrollTarget: null | string,
-    previousScrollTarget: null | string,
-    isInitialScreen: boolean
-  ) => {
-    if (currentScrollTarget === previousScrollTarget) return;
-
-    const key = getStoreKey(kioskId);
-    const shouldResetOnInitial =
-      previousScrollTarget === 'challenge-first-video' && !currentScrollTarget && isInitialScreen;
-
-    const shouldClearReset = Boolean(currentScrollTarget);
-
-    set(state => ({
-      [key]: {
-        ...state[key],
-        previousScrollTarget: currentScrollTarget,
-        shouldResetOnInitial: shouldResetOnInitial || (!shouldClearReset && state[key].shouldResetOnInitial),
-      },
-    }));
-  },
-
-  kiosk1: { ...defaultKioskState, arrowTheme: ARROW_THEME_BLUE },
-
-  kiosk2: { ...defaultKioskState, arrowTheme: ARROW_THEME_BLUE },
-
-  kiosk3: { ...defaultKioskState, arrowTheme: ARROW_THEME_BLUE },
-
-  resetKiosk: (kioskId: KioskId) => {
-    const key = getStoreKey(kioskId);
-
-    set({
-      [key]: {
-        ...defaultKioskState,
-        arrowTheme: ARROW_THEME_BLUE,
-      },
-    });
-  },
-}));
+    },
+  };
+});
