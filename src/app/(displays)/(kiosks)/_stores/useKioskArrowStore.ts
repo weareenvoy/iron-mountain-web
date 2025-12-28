@@ -1,9 +1,8 @@
 import { create } from 'zustand';
+import { ARROW_THEME_BLUE, ARROW_THEME_GRAY, type ArrowTheme } from '../_constants/themes';
 import type { KioskId } from '../_types/kiosk-id';
 
 // This file is used to manage arrow visibility, color, and animation states for the arrow nav in all three kiosks.
-
-export type ArrowTheme = 'blue' | 'gray';
 
 type KioskArrowState = {
   readonly allowArrowsToShow: boolean;
@@ -45,7 +44,7 @@ type Store = {
 
 const defaultKioskState: KioskArrowState = {
   allowArrowsToShow: false,
-  arrowTheme: 'blue',
+  arrowTheme: ARROW_THEME_BLUE,
   previousScrollTarget: null,
   shouldResetOnInitial: false,
   showArrows: false,
@@ -71,7 +70,7 @@ export const useKioskArrowStore = create<Store>((set, get) => ({
 
     // Only update theme when arrows are visible
     if (showArrows) {
-      const newTheme: ArrowTheme = isValueSection ? 'gray' : 'blue';
+      const newTheme: ArrowTheme = isValueSection ? ARROW_THEME_GRAY : ARROW_THEME_BLUE;
 
       if (state.arrowTheme !== newTheme) {
         set({
@@ -263,11 +262,11 @@ export const useKioskArrowStore = create<Store>((set, get) => ({
     }));
   },
 
-  kiosk1: { ...defaultKioskState, arrowTheme: 'blue' },
+  kiosk1: { ...defaultKioskState, arrowTheme: ARROW_THEME_BLUE },
 
-  kiosk2: { ...defaultKioskState, arrowTheme: 'blue' },
+  kiosk2: { ...defaultKioskState, arrowTheme: ARROW_THEME_BLUE },
 
-  kiosk3: { ...defaultKioskState, arrowTheme: 'blue' },
+  kiosk3: { ...defaultKioskState, arrowTheme: ARROW_THEME_BLUE },
 
   resetKiosk: (kioskId: KioskId) => {
     const key = getStoreKey(kioskId);
@@ -275,7 +274,7 @@ export const useKioskArrowStore = create<Store>((set, get) => ({
     set({
       [key]: {
         ...defaultKioskState,
-        arrowTheme: 'blue',
+        arrowTheme: ARROW_THEME_BLUE,
       },
     });
   },

@@ -19,6 +19,7 @@ import {
   type ValueScreens,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueSlides';
 import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers/kiosk-provider';
+import { SCROLL_SECTION_VALUE_DESCRIPTION } from '@/app/(displays)/(kiosks)/_constants/scroll-sections';
 import { ARROW_FADE_DURATION_KIOSK1_SEC, SCROLL_DURATION_MS } from '@/app/(displays)/(kiosks)/_constants/timing';
 import { mapChallenges } from '@/app/(displays)/(kiosks)/_mappers/map-challenges';
 import { mapCustomInteractiveKiosk1 } from '@/app/(displays)/(kiosks)/_mappers/map-custom-interactive-kiosk1';
@@ -76,7 +77,9 @@ const Kiosk1View = () => {
   const handleNavigateDown = useCallback(() => {
     // Check if we should delegate to carousel
     const shouldDelegateToCarousel =
-      currentScrollTarget === 'value-description' && carouselHandlers !== null && carouselHandlers.canScrollNext();
+      currentScrollTarget === SCROLL_SECTION_VALUE_DESCRIPTION &&
+      carouselHandlers !== null &&
+      carouselHandlers.canScrollNext();
 
     if (shouldDelegateToCarousel) {
       carouselHandlers!.scrollNext();
@@ -89,7 +92,9 @@ const Kiosk1View = () => {
   const handleNavigateUp = useCallback(() => {
     // Check if carousel can handle the navigation
     const shouldDelegateToCarousel =
-      currentScrollTarget === 'value-description' && carouselHandlers !== null && carouselHandlers.canScrollPrev();
+      currentScrollTarget === SCROLL_SECTION_VALUE_DESCRIPTION &&
+      carouselHandlers !== null &&
+      carouselHandlers.canScrollPrev();
 
     if (shouldDelegateToCarousel) {
       carouselHandlers!.scrollPrev();

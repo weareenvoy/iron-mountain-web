@@ -19,6 +19,7 @@ import {
   type ValueScreens,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueSlides';
 import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers/kiosk-provider';
+import { SCROLL_SECTION_VALUE_DESCRIPTION } from '@/app/(displays)/(kiosks)/_constants/scroll-sections';
 import { ARROW_FADE_DURATION_SEC, SCROLL_DURATION_MS } from '@/app/(displays)/(kiosks)/_constants/timing';
 import { mapChallenges } from '@/app/(displays)/(kiosks)/_mappers/map-challenges';
 import { mapSolutionsWithGrid } from '@/app/(displays)/(kiosks)/_mappers/map-solutions-with-grid';
@@ -74,7 +75,7 @@ const Kiosk2View = () => {
   // Wrap navigation handlers to check carousel first
   const handleNavigateDown = useCallback(() => {
     // If we're at value-description and carousel can scroll, let carousel handle it
-    if (currentScrollTarget === 'value-description' && carouselHandlers?.canScrollNext()) {
+    if (currentScrollTarget === SCROLL_SECTION_VALUE_DESCRIPTION && carouselHandlers?.canScrollNext()) {
       carouselHandlers.scrollNext();
       return;
     }
@@ -84,7 +85,7 @@ const Kiosk2View = () => {
 
   const handleNavigateUp = useCallback(() => {
     // If carousel can scroll back, let it handle the navigation
-    if (currentScrollTarget === 'value-description' && carouselHandlers?.canScrollPrev()) {
+    if (currentScrollTarget === SCROLL_SECTION_VALUE_DESCRIPTION && carouselHandlers?.canScrollPrev()) {
       carouselHandlers.scrollPrev();
       return;
     }

@@ -1,3 +1,9 @@
+import {
+  ACCORDION_COLOR_BLUE,
+  ACCORDION_COLOR_LIGHT_BLUE,
+  ACCORDION_COLOR_NAVY,
+  ACCORDION_COLOR_WHITE,
+} from '../_constants/themes';
 import type { SolutionScreens } from '../_components/kiosk-templates/solution/solutionSlides';
 import type { Ambient, SolutionsAccordion, SolutionsMain } from '../_types/content-types';
 
@@ -22,12 +28,12 @@ export const mapSolutionsWithAccordion = (
       accordion: solutionAccordion.accordion?.map((item, index) => ({
         color:
           index === 0
-            ? ('white' as const)
+            ? ACCORDION_COLOR_WHITE
             : index === 1
-              ? ('lightBlue' as const)
+              ? ACCORDION_COLOR_LIGHT_BLUE
               : index === 2
-                ? ('blue' as const)
-                : ('navy' as const),
+                ? ACCORDION_COLOR_BLUE
+                : ACCORDION_COLOR_NAVY,
         contentList: item.bullets ? [...item.bullets] : [],
         expanded: index === 0,
         id: `accordion-${index}`,
