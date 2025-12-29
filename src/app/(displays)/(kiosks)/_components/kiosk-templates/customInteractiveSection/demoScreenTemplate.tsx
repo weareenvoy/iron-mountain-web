@@ -31,18 +31,26 @@ const CustomInteractiveDemoScreenTemplate = ({
   const headlineText = headline;
   const cardText = cardLabel;
 
-  return (
-    <div className="relative flex h-screen w-full flex-col overflow-hidden">
-      <div className="absolute inset-0 bg-[#14477D]" />
-      <div className="absolute inset-0 bg-black/30 backdrop-blur-[50px]" />
+  // Add autoplay and mute parameters for YouTube embed
+  // For 360° VR videos, we need: autoplay=1&mute=1&controls=1
+  const autoplayUrl = demoIframeSrc
+    ? demoIframeSrc.includes('?')
+      ? `${demoIframeSrc}&autoplay=1&mute=1`
+      : `${demoIframeSrc}?autoplay=1&mute=1`
+    : undefined;
 
-      <h1 className="absolute top-[780px] left-[240px] w-[1680px] text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-white">
+  return (
+    <div className="pointer-events-auto relative flex h-screen w-full flex-col overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 bg-[#14477D]" />
+      <div className="pointer-events-none absolute inset-0 bg-black/30 backdrop-blur-[50px]" />
+
+      <h1 className="pointer-events-none absolute top-[780px] left-[240px] z-[1] w-[1680px] text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-white">
         {renderRegisteredMark(headlineText)}
       </h1>
 
       {/* End tour button */}
       <button
-        className="absolute top-[2618px] left-[240px] flex h-[200px] items-center gap-[46px] rounded-[1000px] bg-[#ededed] px-[90px] py-[60px] transition-transform duration-150 hover:scale-[1.01]"
+        className="absolute top-[2618px] left-[240px] z-[10] flex h-[200px] items-center gap-[46px] rounded-[1000px] bg-[#ededed] px-[90px] py-[60px] transition-transform duration-150 hover:scale-[1.01]"
         onClick={onEndTour}
         type="button"
       >
@@ -52,13 +60,14 @@ const CustomInteractiveDemoScreenTemplate = ({
         <LogOut aria-hidden className="h-[54.55px] w-[54.55px]" color="#14477d" strokeWidth={2} />
       </button>
 
-      <div className="absolute top-[1290px] left-[120px] h-[1080px] w-[1920px] rounded-[20px] bg-[#e0e0e0] shadow-[0_40px_120px_rgba(0,0,0,0.45)]">
-        {demoIframeSrc ? (
+      <div className="pointer-events-auto absolute top-[1290px] left-[120px] z-[10] h-[1080px] w-[1920px] rounded-[20px] bg-[#e0e0e0] shadow-[0_40px_120px_rgba(0,0,0,0.45)]">
+        {autoplayUrl ? (
           <iframe
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
             className="pointer-events-auto h-full w-full rounded-[20px]"
-            src={demoIframeSrc}
+            src={autoplayUrl}
+            style={{ border: 0 }}
             title={cardText}
           />
         ) : (
