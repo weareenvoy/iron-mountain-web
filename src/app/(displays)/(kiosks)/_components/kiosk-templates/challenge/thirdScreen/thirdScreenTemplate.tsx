@@ -3,7 +3,7 @@
 import { Diamond } from 'lucide-react';
 import Image from 'next/image';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
-import { DEFAULT_KIOSK_ID, type KioskId } from '../../../../_types/kiosk-id';
+import type { KioskId } from '../../../../_types/kiosk-id';
 
 export type ThirdScreenTemplateProps = {
   readonly featuredStat2?: string;
@@ -22,15 +22,15 @@ const ThirdScreenTemplate = ({
   featuredStat2Body,
   item2Body,
   item2Image,
-  kioskId = DEFAULT_KIOSK_ID,
+  kioskId: _kioskId, // Unused but kept for API compatibility
   labelText,
   subheadline,
 }: ThirdScreenTemplateProps) => {
+  void _kioskId; // Intentionally unused
   return (
     <div
-      className="group/kiosk relative flex h-screen w-full flex-col overflow-x-hidden overflow-y-auto scroll-smooth bg-transparent"
+      className="relative flex h-screen w-full flex-col overflow-x-hidden overflow-y-auto scroll-smooth bg-transparent"
       data-hero-image={item2Image}
-      data-kiosk={kioskId}
     >
       {/* Background gradient layer */}
       <div className="pointer-events-none absolute inset-0 z-[0] bg-transparent" />

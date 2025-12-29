@@ -1,9 +1,9 @@
 'use client';
 
 import { Diamond } from 'lucide-react';
-import { DEFAULT_KIOSK_ID, type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import { getVideoMimeType } from '@/lib/utils/get-video-mime-type';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
+import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 export type FirstScreenTemplateProps = {
   readonly body?: string;
@@ -21,13 +21,12 @@ const FirstScreenTemplate = ({
   body,
   featuredStat1,
   featuredStat1Body,
-  kioskId = DEFAULT_KIOSK_ID,
   labelText,
   mainVideo,
   subheadline,
 }: FirstScreenTemplateProps) => {
   return (
-    <div className="group/kiosk relative flex h-screen w-full flex-col overflow-visible bg-black" data-kiosk={kioskId}>
+    <div className="relative flex h-screen w-full flex-col overflow-visible bg-black">
       {/* Background gradient - stays behind all content */}
       <div className="pointer-events-none absolute inset-0 top-[1290px] z-[1] h-[14400px] rounded-[100px] bg-[linear-gradient(180deg,#1B75BC_0.01%,#14477D_98%)] group-data-[kiosk=kiosk-2]/kiosk:top-[1240px] group-data-[kiosk=kiosk-2]/kiosk:h-[14450px]" />
 

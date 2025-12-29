@@ -24,16 +24,14 @@ const InitialScreenTemplate = ({
   backgroundImage,
   buttonText,
   headline,
-  kioskId = 'kiosk-1',
+  kioskId: _kioskId, // Unused but kept for API compatibility
   onButtonClick,
   quote,
   subheadline,
 }: InitialScreenTemplateProps) => {
+  void _kioskId; // Intentionally unused
   return (
-    <div
-      className="group/kiosk relative flex h-screen w-full flex-col items-center justify-center overflow-hidden"
-      data-kiosk={kioskId}
-    >
+    <div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="relative h-full w-full">
           {backgroundImage && (

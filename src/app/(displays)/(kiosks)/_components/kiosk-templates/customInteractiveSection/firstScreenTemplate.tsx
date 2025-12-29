@@ -61,7 +61,6 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
         'group/kiosk relative flex h-screen w-full flex-col',
         isKiosk1 || isKiosk3 ? 'overflow-visible' : 'overflow-hidden'
       )}
-      data-kiosk={kioskId}
       data-scroll-section="customInteractive-first-screen"
     >
       <div className="absolute inset-0 bg-gradient-to-b from-[#1b75bc] to-[#05254b] group-data-[kiosk=kiosk-1]/kiosk:h-[10530px] group-data-[kiosk=kiosk-3]/kiosk:h-[15630px]" />

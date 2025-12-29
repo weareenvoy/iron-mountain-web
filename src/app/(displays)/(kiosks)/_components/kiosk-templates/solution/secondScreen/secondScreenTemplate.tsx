@@ -1,9 +1,9 @@
 import Image from 'next/image';
-import { DEFAULT_KIOSK_ID, type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import BlueDiamondSecond from '@/components/ui/icons/Kiosks/Solutions/BlueDiamondSecond';
 import GreenDiamondSecond from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondSecond';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
+import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 export type SolutionSecondScreenTemplateProps = SolutionSecondScreenCoreProps & SolutionSecondScreenStepsProps;
 
@@ -40,7 +40,7 @@ type SolutionSecondScreenStepsProps = {
 const SolutionSecondScreenTemplate = ({
   heroImageAlt,
   heroImageSrc,
-  kioskId = DEFAULT_KIOSK_ID,
+  kioskId: _kioskId, // Unused but kept for API compatibility
   labelText,
   numberedListHeadline,
   stepFourDescription,
@@ -55,6 +55,8 @@ const SolutionSecondScreenTemplate = ({
   stepTwoLabel,
   subheadline,
 }: SolutionSecondScreenTemplateProps) => {
+  void _kioskId; // Intentionally unused
+
   const legacySteps: StepConfig[] = [
     { description: stepOneDescription, label: stepOneLabel },
     { description: stepTwoDescription, label: stepTwoLabel },
@@ -82,8 +84,7 @@ const SolutionSecondScreenTemplate = ({
 
   return (
     <div
-      className="group/kiosk relative flex h-screen w-full flex-col overflow-visible bg-transparent"
-      data-kiosk={kioskId}
+      className="relative flex h-screen w-full flex-col overflow-visible bg-transparent"
       data-scroll-section="solution-second-group"
     >
       {/* Gradient backdrop */}

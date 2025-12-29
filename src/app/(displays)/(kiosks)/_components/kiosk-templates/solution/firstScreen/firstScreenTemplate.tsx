@@ -21,13 +21,14 @@ export type SolutionFirstScreenTemplateProps = {
 const SolutionFirstScreenTemplate = ({
   body,
   headline,
-  kioskId,
+  kioskId: _kioskId, // Unused but kept for API compatibility
   labelText,
   mainVideo,
   subheadline,
 }: SolutionFirstScreenTemplateProps) => {
+  void _kioskId; // Intentionally unused
   return (
-    <div className="group/kiosk relative flex h-screen w-full flex-col overflow-visible bg-black" data-kiosk={kioskId}>
+    <div className="relative flex h-screen w-full flex-col overflow-visible bg-black">
       {/* Background video */}
       <div className="absolute top-[-5px] left-0 h-[1545px] w-full">
         <div className="relative h-full w-full">

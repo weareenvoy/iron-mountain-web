@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowDown, ArrowUp } from 'lucide-react';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { useCarouselDelegation } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useCarouselDelegation';
 import { useGlobalParagraphNavigation } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useGlobalParagraphNavigation';
 import { useKioskArrowState } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useKioskArrowState';
@@ -49,14 +49,17 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
     currentScrollTarget,
   });
 
-  // Create stable handleInitialButtonClick reference before building slides
-  // This will be populated by the arrow state hook below
-  const handleInitialButtonClickRef = useRef<() => void>(() => {});
-  const handleInitialButtonClick = useCallback(() => {
-    handleInitialButtonClickRef.current();
-  }, []);
+  // Single arrow state call - gets handleButtonClick for initial button
+  const { handleButtonClick } = useKioskArrowState({
+    currentScrollTarget,
+    isCustomInteractiveSection: false, // Default, will update after slides built
+    isInitialScreen: false, // Default, will update after slides built
+    isScrolling,
+    isValueSection: false, // Default, will update after slides built
+    kioskId,
+  });
 
-  // Build slides from kiosk data
+  // Build slides with actual button click handler
   const { slides } = useKioskSlides({
     diamondMapping,
     kioskData,
@@ -66,14 +69,14 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
         onNavigateDown: handleNavigateDown,
         onNavigateUp: handleNavigateUp,
       },
-      handleInitialButtonClick,
+      handleInitialButtonClick: useCallback(() => handleButtonClick(kioskId), [handleButtonClick, kioskId]),
       handleRegisterCarouselHandlers,
       scrollToSectionById,
     },
     usesAccordion,
   });
 
-  // Determine current section using utility function
+  // Determine current section using utility function - AFTER slides built
   const topIndex = slides.findIndex(slide => slide.id === currentScrollTarget);
   const currentSlide = slides[topIndex >= 0 ? topIndex : 0];
   const { isCustomInteractiveSection, isInitialScreen, isValueSection } = determineCurrentSection(
@@ -81,8 +84,8 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
     currentScrollTarget
   );
 
-  // Single arrow state call with all correct values
-  const { arrowTheme, handleButtonClick, shouldShowArrows } = useKioskArrowState({
+  // Use the section-aware values from the second hook call
+  const { arrowTheme, shouldShowArrows } = useKioskArrowState({
     currentScrollTarget,
     isCustomInteractiveSection,
     isInitialScreen,
@@ -91,10 +94,17 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
     kioskId,
   });
 
-  // Update the ref with the actual button click handler from the store
-  useEffect(() => {
-    handleInitialButtonClickRef.current = () => handleButtonClick(kioskId);
-  }, [handleButtonClick, kioskId]);
+  // Show loading state if no slides are available
+  if (slides.length === 0) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-black text-white">
+        <div className="text-center">
+          <p className="text-2xl">Loading kiosk data...</p>
+          <p className="mt-4 text-sm opacity-60">{!kioskData ? 'Fetching data...' : 'Processing content...'}</p>
+        </div>
+      </div>
+    );
+  }
 
   // Show loading state if no slides are available
   if (slides.length === 0) {
@@ -109,7 +119,11 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
   }
 
   return (
-    <div className="relative h-screen w-full overflow-y-auto scroll-smooth" ref={containerRef}>
+    <div
+      className="group/kiosk relative h-screen w-full overflow-y-auto scroll-smooth"
+      data-kiosk={kioskId}
+      ref={containerRef}
+    >
       <div className="flex w-full flex-col overflow-x-hidden">
         {/* Render ALL slides, always visible, stacked vertically */}
         {slides.map((slide, idx) => (
