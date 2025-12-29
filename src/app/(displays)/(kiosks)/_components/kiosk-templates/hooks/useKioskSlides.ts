@@ -42,6 +42,12 @@ type SlideBuilders = {
   };
   readonly handleInitialButtonClick: () => void;
   readonly handleRegisterCarouselHandlers?: (handlers: CarouselHandlers) => void;
+  readonly handleRegisterListHandlers?: (handlers: {
+    canScrollNext: () => boolean;
+    canScrollPrev: () => boolean;
+    scrollNext: () => void;
+    scrollPrev: () => void;
+  }) => void;
   readonly scrollToSectionById: (id: string) => void;
 };
 
@@ -133,8 +139,13 @@ export const useKioskSlides = ({
   slideBuilders,
   usesAccordion = false,
 }: UseKioskSlidesConfig) => {
-  const { globalHandlers, handleInitialButtonClick, handleRegisterCarouselHandlers, scrollToSectionById } =
-    slideBuilders;
+  const {
+    globalHandlers,
+    handleInitialButtonClick,
+    handleRegisterCarouselHandlers,
+    handleRegisterListHandlers,
+    scrollToSectionById,
+  } = slideBuilders;
 
   // Parse kiosk data with type safety
   const kioskContent = useMemo(() => parseKioskData(kioskData), [kioskData]);
@@ -220,7 +231,10 @@ export const useKioskSlides = ({
       ...buildChallengeSlides(challenges, kioskId, globalHandlers, {
         onInitialButtonClick: handleInitialButtonClick,
       }),
-      ...buildSolutionSlides(solutions, kioskId, globalHandlers),
+      ...buildSolutionSlides(solutions, kioskId, {
+        ...globalHandlers,
+        onRegisterListHandlers: handleRegisterListHandlers,
+      }),
       ...buildValueSlides(values, kioskId, globalHandlers, {
         onRegisterCarouselHandlers: handleRegisterCarouselHandlers,
       }),
@@ -235,6 +249,7 @@ export const useKioskSlides = ({
     globalHandlers,
     handleInitialButtonClick,
     handleRegisterCarouselHandlers,
+    handleRegisterListHandlers,
     scrollToSectionById,
   ]);
 
