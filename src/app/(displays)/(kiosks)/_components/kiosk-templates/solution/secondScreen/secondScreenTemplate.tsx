@@ -40,7 +40,6 @@ type SolutionSecondScreenStepsProps = {
 const SolutionSecondScreenTemplate = ({
   heroImageAlt,
   heroImageSrc,
-  kioskId: _kioskId, // Unused but kept for API compatibility
   labelText,
   numberedListHeadline,
   stepFourDescription,
@@ -55,8 +54,6 @@ const SolutionSecondScreenTemplate = ({
   stepTwoLabel,
   subheadline,
 }: SolutionSecondScreenTemplateProps) => {
-  void _kioskId; // Intentionally unused
-
   const legacySteps: StepConfig[] = [
     { description: stepOneDescription, label: stepOneLabel },
     { description: stepTwoDescription, label: stepTwoLabel },

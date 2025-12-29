@@ -15,14 +15,7 @@ export type SecondScreenTemplateProps = {
   readonly subheadline?: string;
 };
 
-const SecondScreenTemplate = ({
-  item1Body,
-  item1Image,
-  kioskId: _kioskId, // Unused but kept for API compatibility
-  labelText,
-  subheadline,
-}: SecondScreenTemplateProps) => {
-  void _kioskId; // Intentionally unused
+const SecondScreenTemplate = ({ item1Body, item1Image, labelText, subheadline }: SecondScreenTemplateProps) => {
   return (
     <div
       className="relative flex h-screen w-full flex-col overflow-x-hidden overflow-y-auto scroll-smooth bg-transparent"
