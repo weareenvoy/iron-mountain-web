@@ -8,12 +8,12 @@ import type { KioskConfig } from '@/app/(displays)/(kiosks)/_types/kiosk-config'
  */
 export const KIOSK_1_CONFIG: KioskConfig = {
   arrowConfig: {
-    arrowGap: 'gap-[100px]',
-    arrowHeight: 'h-[118px]',
-    arrowWidth: 'w-[118px]',
+    arrowGap: '100px',
+    arrowHeight: '118px',
+    arrowWidth: '118px',
     fadeDuration: ARROW_FADE_DURATION_KIOSK1_SEC,
-    positionRight: 'right-[120px]',
-    positionTop: 'top-[1945px]',
+    positionRight: '120px',
+    positionTop: '1945px',
   },
   diamondMapping: {
     bottomLeft: 2,
@@ -31,12 +31,12 @@ export const KIOSK_1_CONFIG: KioskConfig = {
  */
 export const KIOSK_2_CONFIG: KioskConfig = {
   arrowConfig: {
-    arrowGap: 'gap-[100px]',
-    arrowHeight: 'h-[140px]',
-    arrowWidth: 'w-[120px]',
+    arrowGap: '100px',
+    arrowHeight: '140px',
+    arrowWidth: '120px',
     fadeDuration: ARROW_FADE_DURATION_SEC,
-    positionRight: 'right-[120px]',
-    positionTop: 'top-[1536px]',
+    positionRight: '120px',
+    positionTop: '1536px',
   },
   diamondMapping: {
     bottomLeft: 3,
@@ -54,12 +54,12 @@ export const KIOSK_2_CONFIG: KioskConfig = {
  */
 export const KIOSK_3_CONFIG: KioskConfig = {
   arrowConfig: {
-    arrowGap: 'gap-[100px]',
-    arrowHeight: 'h-[118px]',
-    arrowWidth: 'w-[118px]',
+    arrowGap: '100px',
+    arrowHeight: '118px',
+    arrowWidth: '118px',
     fadeDuration: ARROW_FADE_DURATION_SEC,
-    positionRight: 'right-[120px]',
-    positionTop: 'top-[1945px]',
+    positionRight: '120px',
+    positionTop: '1945px',
   },
   diamondMapping: undefined, // Kiosk 3 uses accordion, not diamond grid
   kioskId: 'kiosk-3',

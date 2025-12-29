@@ -81,6 +81,13 @@ export const useKioskArrowStore = create<Store>()(
           const key = getStoreKey(kioskId);
           const state = get()[key];
 
+          console.info('[handleScrollComplete]', {
+            allowArrowsToShow: state.allowArrowsToShow,
+            currentScrollTarget,
+            kioskId,
+            wasScrollingToVideo: state.wasScrollingToVideo,
+          });
+
           // Get section for initial/customInteractive check
           const section = getSectionFromScrollTarget(currentScrollTarget);
           const isInitialOrCustomInteractive =

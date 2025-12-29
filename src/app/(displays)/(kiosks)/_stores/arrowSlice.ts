@@ -63,7 +63,9 @@ export const createArrowActions = (get: () => { [K in 'kiosk1' | 'kiosk2' | 'kio
 
     if (isChallenge || isSolution || isValue) {
       // Longer delay for first appearance after initial screen
-      return currentScrollTarget === 'challenge-first-video' ? 1500 : 300;
+      const isFirstChallengeSlide =
+        currentScrollTarget === 'challenge-first' || currentScrollTarget === 'challenge-first-video';
+      return isFirstChallengeSlide ? 1500 : 300;
     }
 
     return null;
@@ -128,6 +130,7 @@ export const createArrowActions = (get: () => { [K in 'kiosk1' | 'kiosk2' | 'kio
 
     if (!shouldHideArrows) return null;
 
+    // RESTORED ORIGINAL LOGIC: Always set wasScrollingToVideo when hiding arrows
     return {
       [key]: {
         ...state,
@@ -209,7 +212,9 @@ export const createArrowActions = (get: () => { [K in 'kiosk1' | 'kiosk2' | 'kio
     const state = get()[key];
 
     const shouldResetOnInitial =
-      previousScrollTarget === 'challenge-first-video' && !currentScrollTarget && isInitialScreen;
+      (previousScrollTarget === 'challenge-first' || previousScrollTarget === 'challenge-first-video') &&
+      !currentScrollTarget &&
+      isInitialScreen;
 
     const shouldClearReset = Boolean(currentScrollTarget);
 
