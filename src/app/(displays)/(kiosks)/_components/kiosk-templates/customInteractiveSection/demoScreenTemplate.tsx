@@ -14,6 +14,7 @@ export interface CustomInteractiveDemoScreenTemplateProps {
   readonly headline?: string;
   readonly heroImageAlt?: string;
   readonly heroImageSrc?: string;
+  readonly isVisible?: boolean;
   readonly onCta?: () => void;
   readonly onEndTour?: () => void;
 }
@@ -28,6 +29,8 @@ const CustomInteractiveDemoScreenTemplate = ({
   onCta,
   onEndTour,
 }: CustomInteractiveDemoScreenTemplateProps) => {
+  // Note: isVisible prop is accepted in the interface but not used here
+  // Parent component handles visibility via CSS classes
   const headlineText = headline;
   const cardText = cardLabel;
 
