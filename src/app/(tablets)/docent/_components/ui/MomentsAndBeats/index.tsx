@@ -4,8 +4,16 @@ import { CirclePause, CirclePlay } from 'lucide-react';
 import { MouseEvent } from 'react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { useMqtt } from '@/components/providers/mqtt-provider';
+import {
+  isValidBasecampBeatId,
+  isValidOverlookBeatId,
+  type ExhibitBeatId,
+  type ExhibitNavigationState,
+  type Moment,
+  type OverlookBeatId,
+  type Section,
+} from '@/lib/internal/types';
 import { cn } from '@/lib/tailwind/utils/cn';
-import type { ExhibitBeatId, ExhibitNavigationState, Moment, Section } from '@/lib/internal/types';
 
 interface MomentsAndBeatsProps {
   readonly content: Readonly<Moment[]>; // hardcoded data
@@ -35,21 +43,36 @@ const MomentsAndBeats = ({ content, exhibit, exhibitState, goTo }: MomentsAndBea
     const beatId = moment.beats[beatIdx].handle;
     const isCurrentlyActive = momentId === exhibitState.momentId && beatIdx === exhibitState.beatIdx;
 
-    // If clicking a different beat → start playing
-    // If clicking the active video beat → toggle play/pause based on current GEC state
-    const newPlaypause = isCurrentlyActive ? !currentPlaypause : true;
+    // Validate beat ID before sending MQTT command
+    const isValidBeatId = exhibit === 'basecamp' ? isValidBasecampBeatId(beatId) : isValidOverlookBeatId(beatId);
+    if (!isValidBeatId) {
+      console.error(`Invalid beat ID: ${beatId} for exhibit ${exhibit}`);
+      return;
+    }
 
-    // Send MQTT command with play/pause - GEC will update state/gec which will update our derived state
-    client.gotoBeatWithPlayPause(
-      exhibit,
-      beatId as ExhibitBeatId,
-      newPlaypause,
-      {
-        onError: (err: Error) => console.error(`Failed to send goto-beat with play/pause to ${exhibit}:`, err),
-        onSuccess: () => console.info(`Sent goto-beat with play/pause: ${beatId} (${newPlaypause}) to ${exhibit}`),
-      },
-      exhibit === 'overlook-wall' ? false : undefined
-    );
+    // Only overlook-wall supports playpause in GEC state
+    if (exhibit === 'basecamp') {
+      // Basecamp doesn't support playpause - use gotoBeat instead
+      client.gotoBeat(exhibit, beatId as ExhibitBeatId, {
+        onError: (err: Error) => console.error(`Failed to send goto-beat to ${exhibit}:`, err),
+        onSuccess: () => console.info(`Sent goto-beat: ${beatId} to ${exhibit}`),
+      });
+    } else {
+      // exhibit is 'overlook-wall' here - supports playpause
+      // If clicking a different beat → start playing
+      // If clicking the active video beat → toggle play/pause based on current GEC state
+      const newPlaypause = isCurrentlyActive ? !currentPlaypause : true;
+      client.gotoBeatWithPlayPause(
+        exhibit,
+        beatId as OverlookBeatId,
+        newPlaypause,
+        {
+          onError: (err: Error) => console.error(`Failed to send goto-beat with play/pause to ${exhibit}:`, err),
+          onSuccess: () => console.info(`Sent goto-beat with play/pause: ${beatId} (${newPlaypause}) to ${exhibit}`),
+        },
+        false
+      );
+    }
   };
 
   const handleBulletPointClick = (momentId: Section) => () => {

@@ -2,14 +2,14 @@
 
 import { Building2, MapPin, Mountain } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useMemo, useState, type ReactElement, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactElement, type ReactNode } from 'react';
 import { useSummit } from '@/app/(displays)/summit/_components/providers/summit-provider';
 import MetricsSection from '@/app/(displays)/summit/_components/sections/metrics-section';
 import StrategiesSection from '@/app/(displays)/summit/_components/sections/strategies-section';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import IronMountainLogoBlue from '@/components/ui/icons/IronMountainLogoBlue';
 import SummitRootDiamondsBg from '@/components/ui/icons/SummitRootDiamondsBg';
-import { getSlideIndexFromBeatId, SummitRoomBeatId } from '@/lib/internal/types';
+import { getSlideIndexFromBeatId, isValidSummitRoomBeatId } from '@/lib/internal/types';
 import { cn } from '@/lib/tailwind/utils/cn';
 import type { SummitFuturescaping, SummitKioskAmbient, SummitPossibility } from '@/app/(displays)/summit/_types';
 import type { SolutionItem } from '@/app/(displays)/summit/_utils';
@@ -361,6 +361,10 @@ const SummitSlidesScreen = ({
   const { client } = useMqtt();
   const { data, error, loading, slides } = useSlideRegistry();
   const searchParams = useSearchParams();
+
+  // Ref to access latest slides without recreating handler
+  const slidesRef = useRef(slides);
+
   const metaLabels: MetaLabelMap = {
     company: data?.meta.find(item => item.label.toLowerCase() === 'company')?.label ?? 'Company',
     dateOfEngagement:
@@ -372,6 +376,8 @@ const SummitSlidesScreen = ({
   const requestedSlideParam = searchParams.get('slide') ?? undefined;
   const metaItems = data?.meta ?? [];
   const summitSlides = data?.summitSlides ?? [];
+
+  const [activeSlideId, setActiveSlideId] = useState<string>(initialSlideId ?? 'welcome');
 
   const preferredSlideId = useMemo(() => {
     if (!requestedSlideParam || slides.length === 0) return undefined;
@@ -385,7 +391,9 @@ const SummitSlidesScreen = ({
     return match?.id;
   }, [requestedSlideParam, slides]);
 
-  const [activeSlideId, setActiveSlideId] = useState<string>(initialSlideId ?? 'welcome');
+  useEffect(() => {
+    slidesRef.current = slides;
+  }, [slides]);
 
   useEffect(() => {
     if (!client || screen !== 'secondary' || devControls || preferredSlideId) return;
@@ -395,10 +403,19 @@ const SummitSlidesScreen = ({
       try {
         const parsed = JSON.parse(message.toString()) as { body?: ExhibitMqttStateSummit };
         const beatId = parsed.body?.['beat-id'];
-        const slideIdx = beatId ? getSlideIndexFromBeatId(beatId as SummitRoomBeatId) : undefined;
+
+        // Validate beat ID before use
+        if (!beatId || !isValidSummitRoomBeatId(beatId)) {
+          console.warn('Summit Slides: invalid beat ID:', beatId);
+          return;
+        }
+
+        const slideIdx = getSlideIndexFromBeatId(beatId);
         if (typeof slideIdx !== 'number') return;
 
-        const next = slides[slideIdx]?.id ?? 'welcome';
+        // Use ref to access latest slides
+        const currentSlides = slidesRef.current;
+        const next = currentSlides[slideIdx]?.id ?? 'welcome';
         setActiveSlideId(next);
       } catch (err) {
         console.error('Summit Slides: failed to parse slide message', err);
@@ -409,7 +426,7 @@ const SummitSlidesScreen = ({
     return () => {
       client.unsubscribeFromTopic(topic, handleSlideMessage);
     };
-  }, [client, devControls, preferredSlideId, screen, slides]);
+  }, [client, devControls, preferredSlideId, screen]);
 
   if (loading) {
     return <PlaceholderSlide heading="Loading…" />;

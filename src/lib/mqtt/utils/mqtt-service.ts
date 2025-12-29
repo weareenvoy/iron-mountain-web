@@ -4,7 +4,7 @@ import { createMqttMessage } from './create-mqtt-message';
 import { generateClientId } from './generate-client-id';
 import { getAvailabilityTopic } from './get-availability-topic';
 import type { DeviceId, MqttError, MqttServiceConfig, PublishArgsConfig } from '../types';
-import type { ExhibitBeatId } from '@/lib/internal/types';
+import type { ExhibitBeatId, OverlookBeatId } from '@/lib/internal/types';
 
 export class MqttService {
   private readonly availabilityTopic: string;
@@ -148,10 +148,12 @@ export class MqttService {
     this.publish(`cmd/dev/${exhibit}/goto-beat`, JSON.stringify(message), { qos: 1, retain: false }, config);
   }
 
-  // This is for video beat
+  // Video beat play/pause control
+  // NOTE: Only overlook-wall supports playpause in GEC state. Basecamp and summit ignore this field.
+  // Use gotoBeat() for basecamp and summit instead.
   public gotoBeatWithPlayPause(
-    exhibit: 'basecamp' | 'overlook-wall' | 'summit',
-    beatId: ExhibitBeatId,
+    exhibit: 'overlook-wall',
+    beatId: OverlookBeatId,
     playPause: boolean,
     config?: PublishArgsConfig,
     presentationMode?: boolean
@@ -208,8 +210,9 @@ export class MqttService {
 
   // Exhibit → State: Report full exhibit state (retained)
   // This publishes the complete state to state/<exhibit>
+  // Note: MQTT topics use 'overlook' but we accept 'overlook-wall' for consistency with other methods
   public reportExhibitState(
-    exhibit: 'basecamp' | 'overlook' | 'summit',
+    exhibit: 'basecamp' | 'overlook-wall' | 'summit',
     state: {
       'beat-id': string;
       'playpause'?: boolean; // Only for overlook/summit
@@ -219,11 +222,13 @@ export class MqttService {
     },
     config?: PublishArgsConfig
   ): void {
-    const message = createMqttMessage(exhibit, state);
+    // Map 'overlook-wall' to 'overlook' for MQTT topic (broker uses 'overlook' for state topic)
+    const topicExhibit = exhibit === 'overlook-wall' ? 'overlook' : exhibit;
+    const message = createMqttMessage(topicExhibit, state);
 
     console.info(`${exhibit} reporting full state:`, state);
     this.publish(
-      `state/${exhibit}`,
+      `state/${topicExhibit}`,
       JSON.stringify(message),
       { qos: 1, retain: true }, // Retained
       config

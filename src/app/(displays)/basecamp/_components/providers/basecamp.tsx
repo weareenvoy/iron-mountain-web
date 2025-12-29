@@ -119,6 +119,12 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     [client]
   );
 
+  // Refs for functions to avoid handler recreation
+  const fetchDataRef = useRef(fetchData);
+  fetchDataRef.current = fetchData;
+  const reportStateRef = useRef(reportState);
+  reportStateRef.current = reportState;
+
   // Subscribe to GEC commands (broadcasts to ALL exhibits)
   useEffect(() => {
     if (!client) return;
@@ -133,11 +139,11 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
         if (tourId) {
           // Fetch tour-specific data for this tour
           // For now, just fetch the generic basecamp data
-          const success = await fetchData(tourId);
+          const success = await fetchDataRef.current(tourId);
 
           if (success) {
             // Only report loaded state after data is fetched
-            reportState({
+            reportStateRef.current({
               'beat-id': 'ambient-1',
               'volume-level': 1.0,
               'volume-muted': false,
@@ -156,7 +162,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
       console.info('Basecamp received end-tour command');
 
       // Reset to ambient state with no tour
-      reportState({
+      reportStateRef.current({
         'beat-id': 'ambient-1',
         'volume-level': 0.0,
         'volume-muted': false,
@@ -179,7 +185,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
           }
 
           // Report updated state with new beat-id - exhibitState will be derived from this
-          reportState({ 'beat-id': beatId });
+          reportStateRef.current({ 'beat-id': beatId });
         }
       } catch (error) {
         console.error('Basecamp: Error parsing goto-beat command:', error);
@@ -197,7 +203,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
       client.unsubscribeFromTopic('cmd/dev/all/end-tour', handleEndTour);
       client.unsubscribeFromTopic('cmd/dev/basecamp/goto-beat', handleGotoBeat);
     };
-  }, [client, fetchData, reportState]);
+  }, [client]);
 
   // Subscribe to own state for restart/recovery
   useEffect(() => {
