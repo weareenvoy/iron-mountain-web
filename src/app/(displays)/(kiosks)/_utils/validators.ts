@@ -94,3 +94,37 @@ export const getOptionalProperty = <T>(
   if (value === undefined || value === null) return undefined;
   return validator(value);
 };
+
+/**
+ * Type guard to check if value has expected properties.
+ * More rigorous than a simple type assertion.
+ */
+export const hasRequiredProperties = <T extends Record<string, unknown>>(
+  value: unknown,
+  requiredKeys: readonly (keyof T)[]
+): value is T => {
+  if (typeof value !== 'object' || value === null) return false;
+  const obj = value as Record<string, unknown>;
+  return requiredKeys.every(key => key in obj);
+};
+
+/**
+ * Validates that a value is an object and has specific required properties.
+ * More type-safe than blind 'as' casts.
+ */
+export const validateObjectWithProps = <T extends Record<string, unknown>>(
+  value: unknown,
+  fieldName: string,
+  requiredKeys: readonly (keyof T)[]
+): T => {
+  if (!hasRequiredProperties<T>(value, requiredKeys)) {
+    const missingKeys = requiredKeys.filter(key => {
+      if (typeof value !== 'object' || value === null) return true;
+      return !(key in (value as Record<string, unknown>));
+    });
+    throw createValidationError(`${fieldName} is missing required properties: ${missingKeys.join(', ')}`, [
+      { field: fieldName, message: 'Missing required properties', received: value },
+    ]);
+  }
+  return value;
+};

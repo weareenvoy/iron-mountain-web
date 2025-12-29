@@ -5,6 +5,7 @@ import {
   OBSERVER_SETUP_RETRY_MS,
   PARAGRAPH_DETECTION_RETRY_MS,
   PARAGRAPH_SCROLL_DURATION_MS,
+  TEXT_ELEMENT_SCROLL_OFFSET_PX,
 } from '@/app/(displays)/(kiosks)/_constants/timing';
 
 // This controls the arrow navigation to paragraph tags and video elements as shown in the motion comp. (In some cases it scrolls to root divs as well which is intended and can be adjusted with data-scroll-)
@@ -40,16 +41,23 @@ export function useGlobalParagraphNavigation({
   // Detect ALL paragraph sections in the entire container
   useEffect(() => {
     let cleanupObserver: (() => void) | null = null;
+    let setupTimeoutId: NodeJS.Timeout | null = null;
+    let detectionTimeoutId: NodeJS.Timeout | null = null;
+    let isMounted = true;
 
     const setupObserver = () => {
       const container = containerRef.current;
 
       if (!container) {
-        setTimeout(setupObserver, OBSERVER_SETUP_RETRY_MS);
+        setupTimeoutId = setTimeout(() => {
+          if (isMounted) setupObserver();
+        }, OBSERVER_SETUP_RETRY_MS);
         return;
       }
 
       const detectAllParagraphs = () => {
+        if (!isMounted) return;
+
         const paragraphElements = Array.from(container.querySelectorAll<HTMLElement>('[data-scroll-section]'));
         // Filter out elements with no text content, BUT keep video/media elements
         const nonEmptyParagraphs = paragraphElements.filter(el => {
@@ -65,7 +73,9 @@ export function useGlobalParagraphNavigation({
 
         // If no paragraphs found, retry after a short delay
         if (nonEmptyParagraphs.length === 0) {
-          setTimeout(detectAllParagraphs, PARAGRAPH_DETECTION_RETRY_MS);
+          detectionTimeoutId = setTimeout(() => {
+            if (isMounted) detectAllParagraphs();
+          }, PARAGRAPH_DETECTION_RETRY_MS);
         }
       };
 
@@ -74,7 +84,7 @@ export function useGlobalParagraphNavigation({
 
       // Re-detect on content changes
       const observer = new MutationObserver(() => {
-        detectAllParagraphs();
+        if (isMounted) detectAllParagraphs();
       });
       observer.observe(container, { childList: true, subtree: true });
 
@@ -85,6 +95,9 @@ export function useGlobalParagraphNavigation({
     setupObserver();
 
     return () => {
+      isMounted = false;
+      if (setupTimeoutId) clearTimeout(setupTimeoutId);
+      if (detectionTimeoutId) clearTimeout(detectionTimeoutId);
       if (cleanupObserver) cleanupObserver();
     };
   }, [containerRef]);
@@ -140,10 +153,10 @@ export function useGlobalParagraphNavigation({
       }
 
       // Use 0 offset for videos and root container divs (scroll to exact position)
-      // Use 800px offset for text elements (paragraphs, headings, etc.) so they appear lower on screen
+      // Use configured offset for text elements (paragraphs, headings, etc.) so they appear lower on screen
       const isVideo = targetParagraph.tagName === 'VIDEO';
       const isRootDiv = targetParagraph.tagName === 'DIV' && targetParagraph.classList.contains('h-screen');
-      const topOffset = isVideo || isRootDiv ? 0 : 800;
+      const topOffset = isVideo || isRootDiv ? 0 : TEXT_ELEMENT_SCROLL_OFFSET_PX;
 
       // Target scroll position = element's position in content - desired offset from top
       const targetScroll = elementOffsetTop - topOffset;

@@ -31,6 +31,13 @@ export const SCROLL_DURATION_MS = 1200;
  */
 export const PARAGRAPH_SCROLL_DURATION_MS = 150;
 
+/**
+ * Vertical offset from viewport top for text elements (paragraphs, headings)
+ * when navigating. Positions text lower on screen for better readability.
+ * Videos and full-screen divs use 0 offset for exact positioning.
+ */
+export const TEXT_ELEMENT_SCROLL_OFFSET_PX = 800;
+
 // ========== Observer & Detection Delays ==========
 
 /**

@@ -62,47 +62,54 @@ type UseKioskSlidesConfig = {
 
 /**
  * Safely extracts typed data from unknown kiosk data.
+ * Validates objects exist and are the correct type, but doesn't enforce
+ * specific properties since CMS types have all-optional fields.
  */
 const parseKioskData = (kioskData: KioskData) => {
   if (!kioskData) return null;
 
   return validateObject(kioskData, 'kioskData', obj => {
-    // Use proper validators instead of 'as' casts for type safety
-    const ambient = getOptionalProperty(obj, 'ambient', val => validateObject(val, 'ambient', a => a as Ambient));
+    // Validate each property is an object (if present), but trust TypeScript for the shape
+    // This is safer than 'as' casts because validateObject checks typeof === 'object'
+    const ambient = getOptionalProperty(obj, 'ambient', val => validateObject(val, 'ambient', a => a)) as
+      | Ambient
+      | undefined;
 
     const challengeMain = getOptionalProperty(obj, 'challengeMain', val =>
-      validateObject(val, 'challengeMain', c => c as ChallengeContent)
-    );
+      validateObject(val, 'challengeMain', c => c)
+    ) as ChallengeContent | undefined;
 
     const customInteractive1Main = getOptionalProperty(obj, 'customInteractive1Main', val =>
-      validateObject(val, 'customInteractive1Main', c => c as CustomInteractiveContent)
-    );
+      validateObject(val, 'customInteractive1Main', c => c)
+    ) as CustomInteractiveContent | undefined;
 
     const customInteractive2 = getOptionalProperty(obj, 'customInteractive2', val =>
-      validateObject(val, 'customInteractive2', c => c as CustomInteractiveContent)
-    );
+      validateObject(val, 'customInteractive2', c => c)
+    ) as CustomInteractiveContent | undefined;
 
     const customInteractive3 = getOptionalProperty(obj, 'customInteractive3', val =>
-      validateObject(val, 'customInteractive3', c => c as CustomInteractiveContent)
-    );
+      validateObject(val, 'customInteractive3', c => c)
+    ) as CustomInteractiveContent | undefined;
 
-    const demoMain = getOptionalProperty(obj, 'demoMain', val => validateObject(val, 'demoMain', d => d as DemoConfig));
+    const demoMain = getOptionalProperty(obj, 'demoMain', val => validateObject(val, 'demoMain', d => d)) as
+      | DemoConfig
+      | undefined;
 
     const solutionAccordion = getOptionalProperty(obj, 'solutionAccordion', val =>
-      validateObject(val, 'solutionAccordion', s => s as SolutionsAccordion)
-    );
+      validateObject(val, 'solutionAccordion', s => s)
+    ) as SolutionsAccordion | undefined;
 
     const solutionGrid = getOptionalProperty(obj, 'solutionGrid', val =>
-      validateObject(val, 'solutionGrid', s => s as SolutionsGrid)
-    );
+      validateObject(val, 'solutionGrid', s => s)
+    ) as SolutionsGrid | undefined;
 
     const solutionMain = getOptionalProperty(obj, 'solutionMain', val =>
-      validateObject(val, 'solutionMain', s => s as SolutionsMain)
-    );
+      validateObject(val, 'solutionMain', s => s)
+    ) as SolutionsMain | undefined;
 
-    const valueMain = getOptionalProperty(obj, 'valueMain', val =>
-      validateObject(val, 'valueMain', v => v as ValueContent)
-    );
+    const valueMain = getOptionalProperty(obj, 'valueMain', val => validateObject(val, 'valueMain', v => v)) as
+      | undefined
+      | ValueContent;
 
     return {
       ambient,

@@ -46,17 +46,52 @@ export const useKioskArrowState = ({
   // Track if we were in value section for color persistence
   const wasInValueSectionRef = useRef(false);
 
+  // Consolidated effect #1: Handle scroll target changes and initial screen state
   useEffect(() => {
-    // Track if we were in value section
+    // Track value section history
     if (isValueSection) {
       wasInValueSectionRef.current = true;
     } else if (!currentScrollTarget || !currentScrollTarget.includes('customInteractive-')) {
-      // Only clear the flag if we're not transitioning to customInteractive
       wasInValueSectionRef.current = false;
     }
-  }, [isValueSection, currentScrollTarget]);
 
-  // Handle arrow theme updates
+    // Handle scroll target changes
+    handleScrollTargetChange(kioskId, currentScrollTarget, kioskState.previousScrollTarget, isInitialScreen);
+
+    // Handle initial screen reset
+    handleInitialScreenReset(kioskId, isInitialScreen);
+  }, [
+    currentScrollTarget,
+    isInitialScreen,
+    isValueSection,
+    kioskState.previousScrollTarget,
+    handleScrollTargetChange,
+    handleInitialScreenReset,
+    kioskId,
+  ]);
+
+  // Consolidated effect #2: Handle scrolling lifecycle (start/complete) and arrow visibility
+  useEffect(() => {
+    // Handle scroll start (hiding arrows)
+    if (isScrolling) {
+      handleScrollStart(kioskId, currentScrollTarget, kioskState.previousScrollTarget, isScrolling);
+    }
+
+    // Handle scroll complete (showing arrows)
+    if (!isScrolling) {
+      handleScrollComplete(kioskId, currentScrollTarget, isScrolling, isCustomInteractiveSection);
+    }
+  }, [
+    isScrolling,
+    currentScrollTarget,
+    isCustomInteractiveSection,
+    kioskState.previousScrollTarget,
+    handleScrollStart,
+    handleScrollComplete,
+    kioskId,
+  ]);
+
+  // Effect #3: Handle arrow theme updates (depends on showArrows state)
   useEffect(() => {
     const isScrollingToCustomInteractive = currentScrollTarget && currentScrollTarget.includes('customInteractive-');
 
@@ -64,26 +99,6 @@ export const useKioskArrowState = ({
       handleArrowThemeUpdate(kioskId, isValueSection, showArrows);
     }
   }, [isValueSection, showArrows, currentScrollTarget, handleArrowThemeUpdate, kioskId]);
-
-  // Handle scroll target changes
-  useEffect(() => {
-    handleScrollTargetChange(kioskId, currentScrollTarget, kioskState.previousScrollTarget, isInitialScreen);
-  }, [currentScrollTarget, kioskState.previousScrollTarget, isInitialScreen, handleScrollTargetChange, kioskId]);
-
-  // Handle initial screen reset
-  useEffect(() => {
-    handleInitialScreenReset(kioskId, isInitialScreen);
-  }, [isInitialScreen, handleInitialScreenReset, kioskId]);
-
-  // Handle scroll start (hiding arrows)
-  useEffect(() => {
-    handleScrollStart(kioskId, currentScrollTarget, kioskState.previousScrollTarget, isScrolling);
-  }, [isScrolling, currentScrollTarget, kioskState.previousScrollTarget, handleScrollStart, kioskId]);
-
-  // Handle scroll complete (showing arrows)
-  useEffect(() => {
-    handleScrollComplete(kioskId, currentScrollTarget, isScrolling, isCustomInteractiveSection);
-  }, [isScrolling, currentScrollTarget, isCustomInteractiveSection, handleScrollComplete, kioskId]);
 
   // Arrows should be visible when showArrows is true (controlled by the store)
   const shouldShowArrows = showArrows && !isCustomInteractiveSection;
