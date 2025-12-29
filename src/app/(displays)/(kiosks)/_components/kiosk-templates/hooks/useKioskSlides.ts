@@ -11,6 +11,7 @@ import { mapSolutionsWithGrid, type DiamondMapping } from '@/app/(displays)/(kio
 import { mapValue } from '@/app/(displays)/(kiosks)/_mappers/map-value';
 import { parseKioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
 import { getOptionalProperty, validateObject } from '@/app/(displays)/(kiosks)/_utils/validators';
+import type { CarouselHandlers } from '@/app/(displays)/(kiosks)/_types/carousel-types';
 import type {
   Ambient,
   ChallengeContent,
@@ -38,12 +39,7 @@ type SlideBuilders = {
     readonly onNavigateUp: () => void;
   };
   readonly handleInitialButtonClick: () => void;
-  readonly handleRegisterCarouselHandlers?: (handlers: {
-    canScrollNext: () => boolean;
-    canScrollPrev: () => boolean;
-    scrollNext: () => void;
-    scrollPrev: () => void;
-  }) => void;
+  readonly handleRegisterCarouselHandlers?: (handlers: CarouselHandlers) => void;
   readonly scrollToSectionById: (id: string) => void;
 };
 
@@ -68,18 +64,57 @@ type UseKioskSlidesConfig = {
 const parseKioskData = (kioskData: KioskData) => {
   if (!kioskData) return null;
 
-  return validateObject(kioskData, 'kioskData', obj => ({
-    ambient: getOptionalProperty(obj, 'ambient', val => val as Ambient),
-    challengeMain: getOptionalProperty(obj, 'challengeMain', val => val as ChallengeContent),
-    customInteractive1Main: getOptionalProperty(obj, 'customInteractive1Main', val => val as CustomInteractiveContent),
-    customInteractive2: getOptionalProperty(obj, 'customInteractive2', val => val as CustomInteractiveContent),
-    customInteractive3: getOptionalProperty(obj, 'customInteractive3', val => val as CustomInteractiveContent),
-    demoMain: getOptionalProperty(obj, 'demoMain', val => val as DemoConfig),
-    solutionAccordion: getOptionalProperty(obj, 'solutionAccordion', val => val as SolutionsAccordion),
-    solutionGrid: getOptionalProperty(obj, 'solutionGrid', val => val as SolutionsGrid),
-    solutionMain: getOptionalProperty(obj, 'solutionMain', val => val as SolutionsMain),
-    valueMain: getOptionalProperty(obj, 'valueMain', val => val as ValueContent),
-  }));
+  return validateObject(kioskData, 'kioskData', obj => {
+    // Use proper validators instead of 'as' casts for type safety
+    const ambient = getOptionalProperty(obj, 'ambient', val => validateObject(val, 'ambient', a => a as Ambient));
+
+    const challengeMain = getOptionalProperty(obj, 'challengeMain', val =>
+      validateObject(val, 'challengeMain', c => c as ChallengeContent)
+    );
+
+    const customInteractive1Main = getOptionalProperty(obj, 'customInteractive1Main', val =>
+      validateObject(val, 'customInteractive1Main', c => c as CustomInteractiveContent)
+    );
+
+    const customInteractive2 = getOptionalProperty(obj, 'customInteractive2', val =>
+      validateObject(val, 'customInteractive2', c => c as CustomInteractiveContent)
+    );
+
+    const customInteractive3 = getOptionalProperty(obj, 'customInteractive3', val =>
+      validateObject(val, 'customInteractive3', c => c as CustomInteractiveContent)
+    );
+
+    const demoMain = getOptionalProperty(obj, 'demoMain', val => validateObject(val, 'demoMain', d => d as DemoConfig));
+
+    const solutionAccordion = getOptionalProperty(obj, 'solutionAccordion', val =>
+      validateObject(val, 'solutionAccordion', s => s as SolutionsAccordion)
+    );
+
+    const solutionGrid = getOptionalProperty(obj, 'solutionGrid', val =>
+      validateObject(val, 'solutionGrid', s => s as SolutionsGrid)
+    );
+
+    const solutionMain = getOptionalProperty(obj, 'solutionMain', val =>
+      validateObject(val, 'solutionMain', s => s as SolutionsMain)
+    );
+
+    const valueMain = getOptionalProperty(obj, 'valueMain', val =>
+      validateObject(val, 'valueMain', v => v as ValueContent)
+    );
+
+    return {
+      ambient,
+      challengeMain,
+      customInteractive1Main,
+      customInteractive2,
+      customInteractive3,
+      demoMain,
+      solutionAccordion,
+      solutionGrid,
+      solutionMain,
+      valueMain,
+    };
+  });
 };
 
 export const useKioskSlides = ({
@@ -98,7 +133,7 @@ export const useKioskSlides = ({
   // Map challenges
   const challenges = useMemo(() => {
     if (!kioskContent?.challengeMain || !kioskContent.ambient) return null;
-    return parseKioskChallenges(mapChallenges(kioskContent.challengeMain as never, kioskContent.ambient as never));
+    return parseKioskChallenges(mapChallenges(kioskContent.challengeMain, kioskContent.ambient));
   }, [kioskContent]);
 
   // Map solutions
@@ -106,18 +141,14 @@ export const useKioskSlides = ({
     if (!kioskContent?.solutionMain || !kioskContent.ambient) return null;
 
     if (usesAccordion && kioskContent.solutionAccordion) {
-      return mapSolutionsWithAccordion(
-        kioskContent.solutionMain as never,
-        kioskContent.solutionAccordion as never,
-        kioskContent.ambient as never
-      );
+      return mapSolutionsWithAccordion(kioskContent.solutionMain, kioskContent.solutionAccordion, kioskContent.ambient);
     }
 
     if (!usesAccordion && kioskContent.solutionGrid && diamondMapping) {
       return mapSolutionsWithGrid(
-        kioskContent.solutionMain as never,
-        kioskContent.solutionGrid as never,
-        kioskContent.ambient as never,
+        kioskContent.solutionMain,
+        kioskContent.solutionGrid,
+        kioskContent.ambient,
         diamondMapping
       );
     }
@@ -128,7 +159,7 @@ export const useKioskSlides = ({
   // Map values
   const values = useMemo(() => {
     if (!kioskContent?.valueMain || !kioskContent.ambient) return null;
-    return mapValue(kioskContent.valueMain as never, kioskContent.ambient as never, kioskId);
+    return mapValue(kioskContent.valueMain, kioskContent.ambient, kioskId);
   }, [kioskContent, kioskId]);
 
   // Map custom interactive

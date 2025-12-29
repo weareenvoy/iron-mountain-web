@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import { SCROLL_SECTION_VALUE_DESCRIPTION } from '@/app/(displays)/(kiosks)/_constants/scroll-sections';
+import type { CarouselHandlers } from '@/app/(displays)/(kiosks)/_types/carousel-types';
 
 /**
  * Hook for managing carousel delegation logic.
@@ -8,13 +9,6 @@ import { SCROLL_SECTION_VALUE_DESCRIPTION } from '@/app/(displays)/(kiosks)/_con
  *
  * This encapsulates the carousel delegation pattern used in value sections.
  */
-
-type CarouselHandlers = {
-  canScrollNext: () => boolean;
-  canScrollPrev: () => boolean;
-  scrollNext: () => void;
-  scrollPrev: () => void;
-};
 
 type UseCarouselDelegationConfig = {
   readonly baseHandleNavigateDown: () => void;

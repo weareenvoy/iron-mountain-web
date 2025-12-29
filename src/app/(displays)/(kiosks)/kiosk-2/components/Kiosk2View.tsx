@@ -2,63 +2,23 @@
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowDown, ArrowUp } from 'lucide-react';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { buildChallengeSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeSlides';
-import {
-  buildCustomInteractiveSlides,
-  type CustomInteractiveScreens,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/customInteractiveSlides';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCarouselDelegation } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useCarouselDelegation';
 import { useGlobalParagraphNavigation } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useGlobalParagraphNavigation';
-import { type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
-import {
-  buildSolutionSlides,
-  type SolutionScreens,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/solutionSlides';
-import {
-  buildValueSlides,
-  type ValueScreens,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueSlides';
+import { useKioskArrowState } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useKioskArrowState';
+import { useKioskSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useKioskSlides';
+import { useNavigationKeyboard } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useNavigationKeyboard';
 import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers/kiosk-provider';
-import { SCROLL_SECTION_VALUE_DESCRIPTION } from '@/app/(displays)/(kiosks)/_constants/scroll-sections';
 import { ARROW_FADE_DURATION_SEC, SCROLL_DURATION_MS } from '@/app/(displays)/(kiosks)/_constants/timing';
-import { mapChallenges } from '@/app/(displays)/(kiosks)/_mappers/map-challenges';
-import { mapSolutionsWithGrid } from '@/app/(displays)/(kiosks)/_mappers/map-solutions-with-grid';
-import { mapValue } from '@/app/(displays)/(kiosks)/_mappers/map-value';
-import { useKioskArrowStore } from '@/app/(displays)/(kiosks)/_stores/useKioskArrowStore';
-import { parseKioskChallenges, type KioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
-import type {
-  Ambient,
-  ChallengeContent,
-  CustomInteractiveContent,
-  SolutionsGrid,
-  SolutionsMain,
-  ValueContent,
-} from '@/app/(displays)/(kiosks)/_types/content-types';
 
-// Main component for displaying Kiosk 2 content.
+/**
+ * Main component for displaying Kiosk 2 content.
+ * Orchestrates data fetching, slide building, navigation, and arrow state.
+ */
 
 const Kiosk2View = () => {
   const { data: kioskData } = useKiosk();
   const containerRef = useRef<HTMLDivElement>(null);
-
-  // Zustand store for arrow state
-  const kioskState = useKioskArrowStore(state => state.kiosk2);
-  const handleButtonClick = useKioskArrowStore(state => state.handleButtonClick);
-  const handleScrollTargetChange = useKioskArrowStore(state => state.handleScrollTargetChange);
-  const handleInitialScreenReset = useKioskArrowStore(state => state.handleInitialScreenReset);
-  const handleScrollStart = useKioskArrowStore(state => state.handleScrollStart);
-  const handleScrollComplete = useKioskArrowStore(state => state.handleScrollComplete);
-  const handleArrowThemeUpdate = useKioskArrowStore(state => state.handleArrowThemeUpdate);
-
-  const { arrowTheme, showArrows } = kioskState;
-
-  // Store carousel handlers for value section
-  const [carouselHandlers, setCarouselHandlers] = useState<null | {
-    canScrollNext: () => boolean;
-    canScrollPrev: () => boolean;
-    scrollNext: () => void;
-    scrollPrev: () => void;
-  }>(null);
 
   // Global paragraph navigation
   const {
@@ -72,109 +32,29 @@ const Kiosk2View = () => {
     duration: SCROLL_DURATION_MS,
   });
 
-  // Wrap navigation handlers to check carousel first
-  const handleNavigateDown = useCallback(() => {
-    // If we're at value-description and carousel can scroll, let carousel handle it
-    if (currentScrollTarget === SCROLL_SECTION_VALUE_DESCRIPTION && carouselHandlers?.canScrollNext()) {
-      carouselHandlers.scrollNext();
-      return;
-    }
+  // Carousel delegation (wraps navigation handlers)
+  const { handleNavigateDown, handleNavigateUp, handleRegisterCarouselHandlers } = useCarouselDelegation({
+    baseHandleNavigateDown,
+    baseHandleNavigateUp,
+    currentScrollTarget,
+  });
 
-    baseHandleNavigateDown();
-  }, [baseHandleNavigateDown, carouselHandlers, currentScrollTarget]);
+  // Arrow state management (Zustand integration) - initial pass to get handleButtonClick
+  const { handleButtonClick } = useKioskArrowState({
+    currentScrollTarget,
+    isCustomInteractiveSection: false,
+    isInitialScreen: false,
+    isScrolling,
+    isValueSection: false,
+    kioskId: 'kiosk-2',
+  });
 
-  const handleNavigateUp = useCallback(() => {
-    // If carousel can scroll back, let it handle the navigation
-    if (currentScrollTarget === SCROLL_SECTION_VALUE_DESCRIPTION && carouselHandlers?.canScrollPrev()) {
-      carouselHandlers.scrollPrev();
-      return;
-    }
+  // Update handleInitialButtonClick to use the store
+  const handleInitialButtonClick = useCallback(() => {
+    handleButtonClick('kiosk-2');
+  }, [handleButtonClick]);
 
-    baseHandleNavigateUp();
-  }, [baseHandleNavigateUp, carouselHandlers, currentScrollTarget]);
-
-  // Parse data from provider (kiosk-2 now uses new flat structure)
-  const kioskContent = kioskData as
-    | null
-    | undefined
-    | {
-        ambient?: Ambient;
-        challengeMain?: ChallengeContent;
-        customInteractive2?: CustomInteractiveContent;
-        demoMain?: unknown;
-        solutionGrid?: SolutionsGrid;
-        solutionMain?: SolutionsMain;
-        valueMain?: ValueContent;
-      };
-
-  const challenges: KioskChallenges | null = useMemo(
-    () =>
-      kioskContent?.challengeMain && kioskContent.ambient
-        ? parseKioskChallenges(mapChallenges(kioskContent.challengeMain, kioskContent.ambient))
-        : null,
-    [kioskContent]
-  );
-
-  const solutions = useMemo(
-    () =>
-      kioskContent?.solutionMain && kioskContent.solutionGrid && kioskContent.ambient
-        ? (mapSolutionsWithGrid(kioskContent.solutionMain, kioskContent.solutionGrid, kioskContent.ambient, {
-            bottomLeft: 3,
-            bottomRight: 4,
-            center: 0,
-            topLeft: 1,
-            topRight: 2,
-          }) as SolutionScreens)
-        : null,
-    [kioskContent]
-  );
-
-  const values = useMemo(
-    () =>
-      kioskContent?.valueMain && kioskContent.ambient
-        ? (mapValue(kioskContent.valueMain, kioskContent.ambient, 'kiosk-2') as ValueScreens)
-        : null,
-    [kioskContent]
-  );
-
-  const customInteractive = useMemo(
-    () =>
-      kioskContent?.customInteractive2 && kioskContent.ambient && kioskContent.demoMain
-        ? ({
-            firstScreen: {
-              demoIframeSrc: (
-                kioskContent.demoMain as
-                  | undefined
-                  | { demoText?: string; headline?: string; iframeLink?: string; mainCTA?: string }
-              )?.iframeLink,
-              eyebrow: kioskContent.ambient.title,
-              headline: kioskContent.customInteractive2.headline,
-              heroImageAlt: '',
-              heroImageSrc: kioskContent.customInteractive2.image,
-              overlayCardLabel: (
-                kioskContent.demoMain as
-                  | undefined
-                  | { demoText?: string; headline?: string; iframeLink?: string; mainCTA?: string }
-              )?.demoText,
-              overlayEndTourLabel: (
-                kioskContent.demoMain as
-                  | undefined
-                  | { demoText?: string; headline?: string; iframeLink?: string; mainCTA?: string }
-              )?.mainCTA,
-              overlayHeadline: (
-                kioskContent.demoMain as
-                  | undefined
-                  | { demoText?: string; headline?: string; iframeLink?: string; mainCTA?: string }
-              )?.headline,
-              primaryCtaLabel: undefined,
-              secondaryCtaLabel: kioskContent.customInteractive2.secondaryCTA,
-            },
-          } as CustomInteractiveScreens)
-        : null,
-    [kioskContent]
-  );
-
-  // Pass the global handlers to all templates
+  // Global navigation handlers
   const globalHandlers = useMemo(
     () => ({
       onNavigateDown: handleNavigateDown,
@@ -183,124 +63,49 @@ const Kiosk2View = () => {
     [handleNavigateDown, handleNavigateUp]
   );
 
-  // Stable callbacks to avoid ref access during render
-  const handleInitialButtonClick = useCallback(() => {
-    handleButtonClick('kiosk-2');
-  }, [handleButtonClick]);
-
-  const handleContainerKeyDown = useCallback(
-    (event: React.KeyboardEvent<HTMLDivElement>) => {
-      // Prevent default arrow key scrolling to avoid jump before smooth scroll
-      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-        event.preventDefault();
-        if (event.key === 'ArrowDown') {
-          handleNavigateDown();
-        } else {
-          handleNavigateUp();
-        }
-      }
+  // Build slides from kiosk data
+  const { slides } = useKioskSlides({
+    diamondMapping: {
+      bottomLeft: 3,
+      bottomRight: 4,
+      center: 0,
+      topLeft: 1,
+      topRight: 2,
     },
-    [handleNavigateDown, handleNavigateUp]
-  );
-
-  const handleUpArrowKeyDown = useCallback(
-    (event: React.KeyboardEvent) => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        handleNavigateUp();
-      }
-    },
-    [handleNavigateUp]
-  );
-
-  const handleDownArrowKeyDown = useCallback(
-    (event: React.KeyboardEvent) => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        handleNavigateDown();
-      }
-    },
-    [handleNavigateDown]
-  );
-
-  const handleRegisterCarouselHandlers = useCallback(
-    (handlers: {
-      canScrollNext: () => boolean;
-      canScrollPrev: () => boolean;
-      scrollNext: () => void;
-      scrollPrev: () => void;
-    }) => {
-      setCarouselHandlers(handlers);
-    },
-    []
-  );
-
-  const slides: Slide[] = useMemo(
-    () =>
-      challenges && solutions && values && customInteractive
-        ? [
-            ...buildChallengeSlides(challenges, 'kiosk-2', globalHandlers, {
-              onInitialButtonClick: handleInitialButtonClick,
-            }),
-            ...buildSolutionSlides(solutions, 'kiosk-2', globalHandlers),
-            ...buildValueSlides(values, 'kiosk-2', globalHandlers, {
-              onRegisterCarouselHandlers: handleRegisterCarouselHandlers,
-            }),
-            ...buildCustomInteractiveSlides(customInteractive, 'kiosk-2', scrollToSectionById),
-          ]
-        : [],
-    [
-      challenges,
-      customInteractive,
+    kioskData,
+    kioskId: 'kiosk-2',
+    slideBuilders: {
       globalHandlers,
       handleInitialButtonClick,
       handleRegisterCarouselHandlers,
       scrollToSectionById,
-      solutions,
-      values,
-    ]
-  );
+    },
+  });
 
-  // Determine current section based on scroll target
+  // Determine current section
   const topIndex = slides.findIndex(slide => slide.id === currentScrollTarget);
   const currentSlide = slides[topIndex >= 0 ? topIndex : 0];
   const currentSection = currentSlide?.id.split('-')[0] || 'challenge';
   const isInitialScreen = currentSlide?.id === 'challenge-initial';
-  const isValueSection = Boolean(
-    currentSection === 'value' || (currentScrollTarget && currentScrollTarget.startsWith('value-'))
-  );
-  const isCustomInteractiveSection = Boolean(
-    currentSection === 'customInteractive' ||
-    (currentScrollTarget && currentScrollTarget.startsWith('customInteractive-'))
-  );
+  const isValueSection =
+    currentSection === 'value' || Boolean(currentScrollTarget && currentScrollTarget.startsWith('value-'));
+  const isCustomInteractiveSection = currentSection === 'customInteractive';
 
-  // Handle arrow theme updates
-  useEffect(() => {
-    handleArrowThemeUpdate('kiosk-2', isValueSection, showArrows);
-  }, [isValueSection, showArrows, handleArrowThemeUpdate]);
+  // Now recalculate arrow state with correct section info
+  const { arrowTheme: finalArrowTheme, shouldShowArrows } = useKioskArrowState({
+    currentScrollTarget,
+    isCustomInteractiveSection,
+    isInitialScreen,
+    isScrolling,
+    isValueSection,
+    kioskId: 'kiosk-2',
+  });
 
-  // Handle scroll target changes
-  useEffect(() => {
-    handleScrollTargetChange('kiosk-2', currentScrollTarget, kioskState.previousScrollTarget, isInitialScreen);
-  }, [currentScrollTarget, kioskState.previousScrollTarget, isInitialScreen, handleScrollTargetChange]);
-
-  // Handle initial screen reset
-  useEffect(() => {
-    handleInitialScreenReset('kiosk-2', isInitialScreen);
-  }, [isInitialScreen, handleInitialScreenReset]);
-
-  // Handle scroll start (hiding arrows)
-  useEffect(() => {
-    handleScrollStart('kiosk-2', currentScrollTarget, kioskState.previousScrollTarget, isScrolling);
-  }, [isScrolling, currentScrollTarget, kioskState.previousScrollTarget, handleScrollStart]);
-
-  // Handle scroll complete (showing arrows)
-  useEffect(() => {
-    handleScrollComplete('kiosk-2', currentScrollTarget, isScrolling, isCustomInteractiveSection);
-  }, [isScrolling, currentScrollTarget, isCustomInteractiveSection, handleScrollComplete]);
-
-  // Arrows should be visible when showArrows is true (controlled by the store)
-  const shouldShowArrows = showArrows && !isCustomInteractiveSection;
+  // Keyboard event handlers
+  const { handleContainerKeyDown, handleDownArrowKeyDown, handleUpArrowKeyDown } = useNavigationKeyboard({
+    handleNavigateDown,
+    handleNavigateUp,
+  });
 
   // Focus container on mount to capture keyboard events
   useEffect(() => {
@@ -343,7 +148,7 @@ const Kiosk2View = () => {
           <motion.div
             animate={{ opacity: 1, scale: 1 }}
             className="fixed top-[1536px] right-[120px] z-[50] flex -translate-y-1/2 flex-col gap-[100px]"
-            data-arrow-theme={arrowTheme}
+            data-arrow-theme={finalArrowTheme}
             exit={{ opacity: 0, scale: 0.9 }}
             initial={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: ARROW_FADE_DURATION_SEC, ease: 'easeOut' }}
@@ -359,7 +164,7 @@ const Kiosk2View = () => {
               <ArrowUp
                 aria-hidden="true"
                 className="h-full w-full data-[arrow-theme=blue]:text-[#6DCFF6] data-[arrow-theme=gray]:text-[#58595B]"
-                data-arrow-theme={arrowTheme}
+                data-arrow-theme={finalArrowTheme}
                 focusable="false"
                 strokeWidth={1.5}
               />
@@ -375,7 +180,7 @@ const Kiosk2View = () => {
               <ArrowDown
                 aria-hidden="true"
                 className="h-full w-full data-[arrow-theme=blue]:text-[#6DCFF6] data-[arrow-theme=gray]:text-[#58595B]"
-                data-arrow-theme={arrowTheme}
+                data-arrow-theme={finalArrowTheme}
                 focusable="false"
                 strokeWidth={1.5}
               />

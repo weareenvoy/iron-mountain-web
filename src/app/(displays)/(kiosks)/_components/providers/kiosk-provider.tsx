@@ -36,7 +36,6 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
 
   // Fetch kiosk content data
   const fetchData = useCallback(async () => {
-    console.info(`Fetching ${kioskId} data`);
     setLoading(true);
 
     try {
@@ -45,7 +44,8 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
       setError(null);
       return true;
     } catch (err) {
-      console.error(`[KioskProvider] Error fetching ${kioskId} data:`, err);
+      // TODO: Replace with proper logging service (DataDog, Sentry, etc.)
+      // For now, errors are tracked via the error state and can be logged at a higher level
       setError(err instanceof Error ? err.message : 'Unknown error');
       return false;
     } finally {
