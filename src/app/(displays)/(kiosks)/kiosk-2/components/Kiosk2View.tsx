@@ -2,12 +2,11 @@
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowDown, ArrowUp } from 'lucide-react';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import { useCarouselDelegation } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useCarouselDelegation';
 import { useGlobalParagraphNavigation } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useGlobalParagraphNavigation';
 import { useKioskArrowState } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useKioskArrowState';
 import { useKioskSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useKioskSlides';
-import { useNavigationKeyboard } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useNavigationKeyboard';
 import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers/kiosk-provider';
 import { ARROW_FADE_DURATION_SEC, SCROLL_DURATION_MS } from '@/app/(displays)/(kiosks)/_constants/timing';
 
@@ -101,19 +100,6 @@ const Kiosk2View = () => {
     kioskId: 'kiosk-2',
   });
 
-  // Keyboard event handlers
-  const { handleContainerKeyDown, handleDownArrowKeyDown, handleUpArrowKeyDown } = useNavigationKeyboard({
-    handleNavigateDown,
-    handleNavigateUp,
-  });
-
-  // Focus container on mount to capture keyboard events
-  useEffect(() => {
-    if (containerRef.current) {
-      containerRef.current.focus();
-    }
-  }, []);
-
   // Show loading state if no slides are available
   if (slides.length === 0) {
     return (
@@ -127,12 +113,7 @@ const Kiosk2View = () => {
   }
 
   return (
-    <div
-      className="relative h-screen w-full overflow-y-auto scroll-smooth"
-      onKeyDown={handleContainerKeyDown}
-      ref={containerRef}
-      tabIndex={-1}
-    >
+    <div className="relative h-screen w-full overflow-y-auto scroll-smooth" ref={containerRef}>
       <div className="flex w-full flex-col overflow-x-hidden">
         {/* Render ALL slides, always visible, stacked vertically */}
         {slides.map((slide, idx) => (
@@ -156,10 +137,8 @@ const Kiosk2View = () => {
             <div
               aria-label="Previous"
               className="flex h-[140px] w-[120px] cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95"
-              onKeyDown={handleUpArrowKeyDown}
               onPointerDown={handleNavigateUp}
               role="button"
-              tabIndex={0}
             >
               <ArrowUp
                 aria-hidden="true"
@@ -172,10 +151,8 @@ const Kiosk2View = () => {
             <div
               aria-label="Next"
               className="flex h-[140px] w-[120px] cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95"
-              onKeyDown={handleDownArrowKeyDown}
               onPointerDown={handleNavigateDown}
               role="button"
-              tabIndex={0}
             >
               <ArrowDown
                 aria-hidden="true"

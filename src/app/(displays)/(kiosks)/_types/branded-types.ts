@@ -1,3 +1,4 @@
+// Catches typescript issues with malformed data for section scroll ids, media urls, etc.
 /**
  * Branded types for compile-time type safety.
  * Prevents mixing different string types (e.g., URLs, IDs).

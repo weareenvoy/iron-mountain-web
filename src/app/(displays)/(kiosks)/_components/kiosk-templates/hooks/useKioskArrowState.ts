@@ -2,6 +2,8 @@ import { useEffect, useRef } from 'react';
 import { useKioskArrowStore } from '@/app/(displays)/(kiosks)/_stores/useKioskArrowStore';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
+// Bridge between React components and Zustand arrow store. Selects the store slice for Kiosk 1 2 or 3 and manages arrow related useEffect calls in one place and sends back the final arrow state for themes, whether they should be visible, click interactions, etc.
+
 /**
  * Hook for synchronizing kiosk arrow state with Zustand store.
  * Manages arrow visibility, theme updates, and scroll lifecycle events.

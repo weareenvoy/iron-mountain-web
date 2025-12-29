@@ -23,6 +23,8 @@ import type {
 } from '@/app/(displays)/(kiosks)/_types/content-types';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
+// Transforms the raw CMS data into renderable Kiosk slides. Maps the data through the mapper functions for challenges, solutions, value, and customInteractive, builds the slides and returns them in a slide array ready to render.
+
 /**
  * Hook for transforming raw CMS data into kiosk slides.
  * Handles data mapping, slide building, and memoization with strict type checking.

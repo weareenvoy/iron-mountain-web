@@ -2,6 +2,8 @@ import { useCallback, useState } from 'react';
 import { SCROLL_SECTION_VALUE_DESCRIPTION } from '@/app/(displays)/(kiosks)/_constants/scroll-sections';
 import type { CarouselHandlers } from '@/app/(displays)/(kiosks)/_types/carousel-types';
 
+// This hook decides when the carousels should use their own navigation instead of global paragraph navigation since they're both tied to the main navigation arrows.
+
 /**
  * Hook for managing carousel delegation logic.
  * Handles registration of carousel handlers and determines when to delegate

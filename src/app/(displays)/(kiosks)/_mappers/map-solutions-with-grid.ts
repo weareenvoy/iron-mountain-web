@@ -2,6 +2,8 @@ import { mapArrayToPositions } from '@/lib/utils/cms-helpers';
 import type { SolutionScreens } from '../_components/kiosk-templates/solution/solutionSlides';
 import type { Ambient, SolutionsGrid, SolutionsMain } from '../_types/content-types';
 
+// Different Kiosks position the Solution diamonds differently, this makes that setup configurable and easier to update later.
+
 /**
  * Maps CMS content for Solutions with Grid to the Kiosk Solutions structure.
  * The main value here is mapping diamond list array indices to visual positions in the grid.

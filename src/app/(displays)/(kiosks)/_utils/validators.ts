@@ -1,3 +1,5 @@
+// Catches malformed CMS data at runtime with typechecking and throws a validation error.
+
 /**
  * Runtime validation utilities for CMS data.
  * Provides type-safe parsing with proper error handling.

@@ -1,6 +1,8 @@
 import { SectionSlide, type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
+// Made to remove the boilerplate code for creating slides. Simplifies the slide builder pattern for Kiosk slides.
+
 /**
  * Factory for creating kiosk slides with consistent structure.
  * Eliminates boilerplate by providing a declarative API for slide configuration.

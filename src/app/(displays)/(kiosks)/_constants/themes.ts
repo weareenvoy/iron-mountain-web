@@ -1,3 +1,5 @@
+// The main navigation arrows change colors based on the section they're in. This keeps those colors consistent.
+
 /**
  * Constants for arrow and UI themes used in the kiosk displays.
  */

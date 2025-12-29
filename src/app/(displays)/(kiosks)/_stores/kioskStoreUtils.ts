@@ -1,5 +1,7 @@
 import type { KioskId } from '../_types/kiosk-id';
 
+// Utility functions for scroll navigation. Extracts the section names from scroll ids
+
 /**
  * Utilities for working with kiosk scroll sections.
  * Centralizes section detection logic to avoid duplication.

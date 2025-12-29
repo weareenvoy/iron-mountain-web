@@ -2,6 +2,8 @@ import { ARROW_THEME_BLUE, ARROW_THEME_GRAY, type ArrowTheme } from '../_constan
 import { getSectionFromScrollTarget, getStoreKey } from './kioskStoreUtils';
 import type { KioskId } from '../_types/kiosk-id';
 
+// All arrow state logic for arrow show delay, button click, scroll start, initial screen reset, arrow theme update, and scroll target update.
+
 /**
  * Arrow state slice for a single kiosk.
  * Encapsulates all arrow-related state and logic.

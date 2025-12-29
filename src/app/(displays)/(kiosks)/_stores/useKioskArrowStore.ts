@@ -4,6 +4,8 @@ import { ARROW_THEME_BLUE } from '../_constants/themes';
 import { getSectionFromScrollTarget, getStoreKey } from './kioskStoreUtils';
 import type { KioskId } from '../_types/kiosk-id';
 
+// Zustand store managing arrow visibility, theme, and animation state.
+
 /**
  * Zustand store for managing arrow visibility, theme, and animation states.
  * Refactored into slices for better maintainability and testability.

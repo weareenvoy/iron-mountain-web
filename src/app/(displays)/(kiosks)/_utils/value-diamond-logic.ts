@@ -1,5 +1,7 @@
 import type { ValueDiamondCard } from '../_types/value-types';
 
+// this controls how the Value diamonds in the value carousel will always show three diamonds and the last one will show its label. This way the build matches Figma.
+
 /**
  * Business logic for mapping value proposition labels to diamond card configurations
  * Each configuration determines the color and positioning of diamonds in the stack
