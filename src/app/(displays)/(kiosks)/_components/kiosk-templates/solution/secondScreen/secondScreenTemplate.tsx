@@ -128,13 +128,7 @@ const SolutionSecondScreenTemplate = ({
       <div className="absolute top-[2210px] left-[1500px] z-2">
         <div className="relative top-[-140px] left-[-230px] h-[900px] w-[900px] rotate-45 overflow-hidden rounded-[80px] group-data-[kiosk=kiosk-2]/kiosk:top-[-160px] group-data-[kiosk=kiosk-2]/kiosk:left-[-180px] group-data-[kiosk=kiosk-2]/kiosk:size-[810px] group-data-[kiosk=kiosk-3]/kiosk:top-[-130px] group-data-[kiosk=kiosk-3]/kiosk:left-[-160px] group-data-[kiosk=kiosk-3]/kiosk:size-[800px]">
           {heroImageSrc && (
-            <Image
-              alt={heroImageAlt || ''}
-              className="-rotate-45 object-cover"
-              fill
-              sizes="800px"
-              src={heroImageSrc}
-            />
+            <Image alt={heroImageAlt || ''} className="-rotate-45 object-cover" fill sizes="800px" src={heroImageSrc} />
           )}
         </div>
       </div>
