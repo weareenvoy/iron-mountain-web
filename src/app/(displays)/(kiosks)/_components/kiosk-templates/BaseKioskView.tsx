@@ -127,7 +127,8 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
             data-arrow-theme={arrowTheme}
             exit={{ opacity: 0, scale: 0.9 }}
             initial={{ opacity: 0, scale: 0.9 }}
-            style={{ // Inline because Tailwind will not include styles that come from a JS config in the final CSS file 
+            style={{
+              // Inline because Tailwind will not include styles that come from a JS config in the final CSS file
               gap: arrowConfig.arrowGap,
               right: arrowConfig.positionRight,
               top: arrowConfig.positionTop,
@@ -139,7 +140,8 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
               className="cursor-pointer transition-transform hover:scale-110 active:scale-95"
               onPointerDown={handleNavigateUp}
               role="button"
-              style={{ // Inline because Tailwind will not include styles that come from a JS config in the final CSS file 
+              style={{
+                // Inline because Tailwind will not include styles that come from a JS config in the final CSS file
                 alignItems: 'center',
                 display: 'flex',
                 height: arrowConfig.arrowHeight,
@@ -160,7 +162,8 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
               className="cursor-pointer transition-transform hover:scale-110 active:scale-95"
               onPointerDown={handleNavigateDown}
               role="button"
-              style={{ // Inline because Tailwind will not include styles that come from a JS config in the final CSS file 
+              style={{
+                // Inline because Tailwind will not include styles that come from a JS config in the final CSS file
                 alignItems: 'center',
                 display: 'flex',
                 height: arrowConfig.arrowHeight,
