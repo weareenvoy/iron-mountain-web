@@ -1,8 +1,8 @@
 'use client';
 
-import Image from 'next/image';
 import { normalizeDiamondCards } from '@/app/(displays)/(kiosks)/_utils/normalize-diamond-cards';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
+import { cn } from '@/lib/tailwind/utils/cn';
 import { getVideoMimeType } from '@/lib/utils/get-video-mime-type';
 import { normalizeMultiline } from '@/lib/utils/normalize-multiline';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
@@ -36,8 +36,6 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
     carouselId,
     eyebrow,
     headline,
-    heroImageAlt,
-    heroImageSrc,
     heroVideoPosterSrc,
     labelText,
     mainVideo,
@@ -77,10 +75,6 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
           >
             <source src={heroVideo} type={getVideoMimeType(heroVideo)} />
           </video>
-        ) : heroImageSrc && heroImageAlt ? (
-          <div className="relative h-full w-full">
-            <Image alt={heroImageAlt} className="object-cover" fill sizes="1284px" src={heroImageSrc} />
-          </div>
         ) : (
           <div className="h-full w-full bg-neutral-800" />
         )}
@@ -102,9 +96,10 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
       </div>
 
       <div
-        className={`absolute top-[1060px] left-0 z-3 w-full rounded-t-[100px] px-[240px] pt-[200px] pb-[1166px] ${
+        className={cn(
+          'absolute top-[1060px] left-0 z-3 w-full rounded-t-[100px] px-[240px] pt-[200px] pb-[1166px]',
           isOverview ? 'h-[9360px] bg-[#ededed]' : 'h-[4150px] bg-transparent'
-        }`}
+        )}
       >
         <div className="relative top-[-10px] flex flex-col gap-[360px] text-[#8a0d71]">
           <div>

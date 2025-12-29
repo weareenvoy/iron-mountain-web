@@ -1,5 +1,7 @@
 import { type ReactElement, type ReactNode } from 'react';
 
+// Defines core slide types, Slide is for all slides, slideNavHandlers is for Navigation props, and the sectionSlide is a wrapper for ensuring ful screen sections.
+
 export type Slide = {
   readonly id: string;
   readonly render: () => ReactElement;

@@ -11,6 +11,7 @@ import HCFilledTealDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/
 import HCHollowBlueDiamond2 from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowBlueDiamond2';
 import HCHollowGreenDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowGreenDiamond';
 import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowOrangeDiamond';
+import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import CircularCarousel, { type CarouselSlide } from './components/CircularCarousel';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
@@ -40,7 +41,6 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
   slides,
 }: CustomInteractiveKiosk3ThirdScreenTemplateProps) => {
   const [showOverlay, setShowOverlay] = useState(false);
-  const [isLaunchPressed, setIsLaunchPressed] = useState(false);
   const safeSlides = slides ?? [];
 
   const handleShowOverlay = useCallback(() => {
@@ -114,12 +114,8 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
 
               {/* CTA */}
               <button
-                className="absolute top-[2630px] left-[240px] flex h-[200px] items-center gap-[18px] rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[110px] text-[55px] leading-[1.1] font-semibold tracking-[2px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] transition-all duration-150 ease-out data-[pressed=true]:scale-[0.98] data-[pressed=true]:opacity-70"
-                data-pressed={isLaunchPressed}
+                className="absolute top-[2630px] left-[240px] flex h-[200px] items-center gap-[18px] rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[110px] text-[55px] leading-[1.1] font-semibold tracking-[2px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)]"
                 onClick={handleShowOverlay}
-                onPointerDown={() => setIsLaunchPressed(true)}
-                onPointerLeave={() => setIsLaunchPressed(false)}
-                onPointerUp={() => setIsLaunchPressed(false)}
                 type="button"
               >
                 Launch demo
@@ -138,14 +134,6 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
                     poster={current.primaryImageSrc}
                     src={current.primaryVideoSrc}
                   />
-                ) : current.primaryImageSrc ? (
-                  <Image
-                    alt={current.primaryImageAlt}
-                    className="origin-center scale-[1.35] -rotate-[45deg] object-cover"
-                    fill
-                    sizes="1200px"
-                    src={current.primaryImageSrc}
-                  />
                 ) : null}
               </div>
 
@@ -156,6 +144,7 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
                     alt={current.secondaryImageAlt}
                     className="origin-center scale-[1.35] -rotate-[45deg] object-cover"
                     fill
+                    quality={85} // 85 Quality here since it's a larger secondary image in an interactive setup (carousel)
                     sizes="880px"
                     src={current.secondaryImageSrc}
                   />
@@ -195,9 +184,10 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
 
       {/* Overlay - Demo Screen */}
       <div
-        className={`absolute inset-0 transition-opacity duration-700 ${
-          showOverlay ? 'pointer-events-auto z-[999] opacity-100' : 'pointer-events-none z-[-1] opacity-0'
-        }`}
+        className={cn(
+          'absolute inset-0 transition-opacity duration-700',
+          showOverlay ? 'pointer-events-auto z-[999] opacity-100' : 'pointer-events-none opacity-0'
+        )}
       >
         <CustomInteractiveDemoScreenTemplate
           cardLabel={overlayCardLabel}
@@ -206,7 +196,6 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
           headline={overlayHeadline}
           heroImageAlt={heroImageAlt}
           heroImageSrc={heroImageSrc}
-          isVisible={showOverlay}
           onEndTour={handleHideOverlay}
         />
       </div>

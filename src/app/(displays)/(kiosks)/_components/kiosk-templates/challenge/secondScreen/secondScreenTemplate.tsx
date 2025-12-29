@@ -2,8 +2,8 @@
 
 import { Diamond } from 'lucide-react';
 import Image from 'next/image';
-import { DEFAULT_KIOSK_ID, type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
+import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 export type SecondScreenTemplateProps = {
   readonly item1Body?: string;
@@ -15,18 +15,11 @@ export type SecondScreenTemplateProps = {
   readonly subheadline?: string;
 };
 
-const SecondScreenTemplate = ({
-  item1Body,
-  item1Image,
-  kioskId = DEFAULT_KIOSK_ID,
-  labelText,
-  subheadline,
-}: SecondScreenTemplateProps) => {
+const SecondScreenTemplate = ({ item1Body, item1Image, labelText, subheadline }: SecondScreenTemplateProps) => {
   return (
     <div
-      className="group/kiosk relative flex h-screen w-full flex-col overflow-x-hidden overflow-y-auto scroll-smooth bg-transparent"
+      className="relative flex h-screen w-full flex-col overflow-x-hidden overflow-y-auto scroll-smooth bg-transparent"
       data-hero-image={item1Image}
-      data-kiosk={kioskId}
     >
       {/* Background gradient layer */}
       <div className="pointer-events-none absolute inset-0 z-[0] bg-transparent" />
@@ -39,6 +32,7 @@ const SecondScreenTemplate = ({
               alt="Large decorative background diamond"
               className="-scale-x-100 object-contain"
               fill
+              quality={75} // All decorative images are 75 quality, the text is the main focus not the image. 75 is a good balance between quality and performance.
               sizes="1506px"
               src={item1Image}
             />

@@ -1,73 +1,48 @@
+import { generateSlideId } from '@/lib/utils/cms-helpers';
+import { buildDiamondCards, createOverviewDiamondCards } from '../_utils/value-diamond-logic';
 import type { ValueScreens } from '../_components/kiosk-templates/value/valueSlides';
 import type { Ambient, ValueContent } from '../_types/content-types';
 import type { KioskId } from '../_types/kiosk-id';
 
-// This maps CMS content for Value to the Kiosk Value structure.
-
+/**
+ * Maps CMS content for Value to the Kiosk Value structure.
+ * Transforms CMS benefits array into structured carousel slides with diamond card configurations.
+ */
 export const mapValue = (value: ValueContent, ambient: Ambient, kioskId: KioskId): ValueScreens => {
-  const mainVideo = value.mainVideo;
-  const body = value.body;
-  const headline = value.headline;
-
   const benefits = value.diamondBenefits ?? [];
-  const overviewCards = [
-    { color: '#8a0d71', label: 'Operational benefits' },
-    { color: '#1b75bc', label: 'Economic benefits' },
-    { color: '#f26522', label: 'Strategic benefits', textColor: '#4a154b' },
-  ];
 
-  const buildDiamondCards = (label?: string) => {
-    const normalized = (label ?? '').toLowerCase();
-    if (normalized.includes('operational')) {
-      return [
-        { color: '#f26522', label: '', textColor: '#4a154b' },
-        { color: '#1b75bc', label: '' },
-        { color: '#8a0d71', label: 'Operational benefits' },
-      ];
-    }
-    if (normalized.includes('economic') || normalized.includes('economical')) {
-      return [
-        { color: '#8a0d71', label: '' },
-        { color: '#f26522', label: '', textColor: '#4a154b' },
-        { color: '#1b75bc', label: 'Economic benefits' },
-      ];
-    }
-    return [
-      { color: '#1b75bc', label: '' },
-      { color: '#8a0d71', label: '' },
-      { color: '#f26522', label: 'Strategic benefits', textColor: '#4a154b' },
-    ];
-  };
-
+  // Build carousel slides with diamond card configurations
   const carouselSlides = benefits.map(benefit => ({
     badgeLabel: benefit.label,
     bullets: benefit.bullets,
     diamondCards: buildDiamondCards(benefit.label),
-    id: `value-${(benefit.label ?? '').toLowerCase().replace(/\s+/g, '-')}`,
+    id: generateSlideId('value', benefit.label ?? ''),
   }));
 
   return {
     valueScreens: [
+      // Overview screen showing all benefit types
       {
-        body,
+        body: value.body,
         carouselId: `${kioskId}-value-overview`,
         eyebrow: ambient.title,
-        headline,
+        headline: value.headline,
         labelText: value.labelText ?? '',
-        mainVideo,
+        mainVideo: value.mainVideo,
         slides: [
           {
             badgeLabel: 'Operational · Economic · Strategic',
-            diamondCards: overviewCards,
+            diamondCards: createOverviewDiamondCards(),
             id: 'value-trio-overview',
           },
         ],
       },
+      // Carousel screen with individual benefit slides
       {
-        body,
+        body: value.body,
         carouselId: `${kioskId}-value-carousel`,
         eyebrow: ambient.title,
-        headline,
+        headline: value.headline,
         labelText: value.labelText ?? '',
         slides: carouselSlides,
       },

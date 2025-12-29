@@ -8,11 +8,11 @@ import type { KioskData } from '@/lib/internal/types';
 // This file is used to access data from the Kiosk Provider and make it available to components in the Kiosk setup.
 
 interface KioskContextType {
-  data: KioskData | null;
-  error: null | string;
-  kioskId: KioskId;
-  loading: boolean;
-  refetch: () => Promise<boolean>;
+  readonly data: KioskData | null;
+  readonly error: null | string;
+  readonly kioskId: KioskId;
+  readonly loading: boolean;
+  readonly refetch: () => Promise<boolean>;
 }
 
 const KioskContext = createContext<KioskContextType | undefined>(undefined);
@@ -36,7 +36,6 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
 
   // Fetch kiosk content data
   const fetchData = useCallback(async () => {
-    console.info(`Fetching ${kioskId} data`);
     setLoading(true);
 
     try {
@@ -45,7 +44,8 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
       setError(null);
       return true;
     } catch (err) {
-      console.error(`[KioskProvider] Error fetching ${kioskId} data:`, err);
+      // TODO: Replace with proper logging service (DataDog, Sentry, etc.)
+      // For now, errors are tracked via the error state and can be logged at a higher level
       setError(err instanceof Error ? err.message : 'Unknown error');
       return false;
     } finally {

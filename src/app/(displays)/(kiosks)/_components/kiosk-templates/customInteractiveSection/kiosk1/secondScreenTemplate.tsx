@@ -125,7 +125,7 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
           <div className="flex items-center justify-center pl-[80px]">
             <SquarePlay
               aria-hidden
-              className={`relative h-[90px] w-[90px] ${secondaryIconOffset}`}
+              className={cn('relative h-[90px] w-[90px]', secondaryIconOffset)}
               color="#ededed"
               strokeWidth={2}
             />

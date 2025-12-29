@@ -25,7 +25,6 @@ const InitialScreenTemplate = ({
   backgroundImage,
   buttonText,
   headline,
-  kioskId = 'kiosk-1',
   onButtonClick,
   quote,
   subheadline,
@@ -33,10 +32,7 @@ const InitialScreenTemplate = ({
   const [isButtonPressed, setIsButtonPressed] = useState(false);
 
   return (
-    <div
-      className="group/kiosk relative flex h-screen w-full flex-col items-center justify-center overflow-hidden"
-      data-kiosk={kioskId}
-    >
+    <div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="relative h-full w-full">
           {backgroundImage && (
@@ -45,6 +41,7 @@ const InitialScreenTemplate = ({
               className="object-cover object-center"
               fill
               priority
+              quality={90} // 90 Quality here since it's a hero image and it's the / a main focus of the page.
               sizes="100vw"
               src={backgroundImage}
             />

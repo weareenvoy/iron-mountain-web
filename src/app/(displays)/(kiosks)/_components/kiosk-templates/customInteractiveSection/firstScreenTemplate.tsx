@@ -6,6 +6,7 @@ import ArrowIcon from '@/components/ui/icons/Kiosks/CustomInteractive/ArrowIcon'
 import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCFilledOrangeDiamond';
 import HCHollowBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowBlueDiamond';
 import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowOrangeDiamond';
+import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
@@ -58,19 +59,20 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
 
   return (
     <div
-      className={`group/kiosk relative flex h-screen w-full flex-col ${
+      className={cn(
+        'group/kiosk relative flex h-screen w-full flex-col',
         isKiosk1 || isKiosk3 ? 'overflow-visible' : 'overflow-hidden'
-      }`}
-      data-kiosk={kioskId}
+      )}
       data-scroll-section="customInteractive-first-screen"
     >
       <div className="absolute inset-0 bg-gradient-to-b from-[#1b75bc] to-[#05254b] group-data-[kiosk=kiosk-1]/kiosk:h-[10530px] group-data-[kiosk=kiosk-3]/kiosk:h-[15630px]" />
 
       {/* Overlay - Demo Screen */}
       <div
-        className={`absolute inset-0 transition-opacity duration-700 ${
+        className={cn(
+          'absolute inset-0 transition-opacity duration-700',
           showOverlay ? 'pointer-events-auto z-[999] opacity-100' : 'pointer-events-none opacity-0'
-        }`}
+        )}
       >
         <CustomInteractiveDemoScreenTemplate
           cardLabel={overlayCardLabel}
@@ -99,7 +101,10 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
 
       {/* CTA buttons */}
       <div
-        className={`absolute top-[2220px] left-[245px] flex flex-col gap-[90px] group-data-[kiosk=kiosk-3]/kiosk:top-[2350px] ${ctaWidthClass}`}
+        className={cn(
+          'absolute top-[2220px] left-[245px] flex flex-col gap-[90px] group-data-[kiosk=kiosk-3]/kiosk:top-[2350px]',
+          ctaWidthClass
+        )}
       >
         <button
           className="flex h-[200px] items-center justify-between rounded-[999px] bg-[#ededed] px-[100px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-[#14477d] shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-[19px] transition-all duration-150 ease-out group-data-[kiosk=kiosk-2]/kiosk:hidden hover:scale-[1.01] data-[pressed=true]:scale-[0.98] data-[pressed=true]:opacity-70"
@@ -126,7 +131,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
           <div className="flex items-center justify-center">
             <SquarePlay
               aria-hidden
-              className={`relative h-[90px] w-[90px] ${secondaryIconOffset}`}
+              className={cn('relative h-[90px] w-[90px]', secondaryIconOffset)}
               color="#ededed"
               strokeWidth={2}
             />
@@ -141,6 +146,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
             alt={heroImageAlt || ''}
             className="-rotate-[45deg] object-cover"
             fill
+            quality={85} // 85 Quality, secondary image to the buttons and headline.
             sizes="680px"
             src={heroImageSrc}
           />

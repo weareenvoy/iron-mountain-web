@@ -2,7 +2,6 @@
 
 import { LogOut } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
 import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCFilledOrangeDiamond';
 import HCHollowBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowBlueDiamond';
 import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowOrangeDiamond';
@@ -15,7 +14,6 @@ export interface CustomInteractiveDemoScreenTemplateProps {
   readonly headline?: string;
   readonly heroImageAlt?: string;
   readonly heroImageSrc?: string;
-  readonly isVisible?: boolean;
   readonly onCta?: () => void;
   readonly onEndTour?: () => void;
 }
@@ -27,32 +25,33 @@ const CustomInteractiveDemoScreenTemplate = ({
   headline,
   heroImageAlt,
   heroImageSrc,
-  isVisible = true,
   onCta,
   onEndTour,
 }: CustomInteractiveDemoScreenTemplateProps) => {
   const headlineText = headline;
   const cardText = cardLabel;
-  const [isEndTourPressed, setIsEndTourPressed] = useState(false);
-  const [isCtaPressed, setIsCtaPressed] = useState(false);
+
+  // Add autoplay and mute parameters for YouTube embed
+  // For 360° VR videos, we need: autoplay=1&mute=1&controls=1
+  const autoplayUrl = demoIframeSrc
+    ? demoIframeSrc.includes('?')
+      ? `${demoIframeSrc}&autoplay=1&mute=1`
+      : `${demoIframeSrc}?autoplay=1&mute=1`
+    : undefined;
 
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-hidden">
-      <div className="absolute inset-0 bg-[#14477D]" />
-      <div className="absolute inset-0 bg-black/30 backdrop-blur-[50px]" />
+    <div className="pointer-events-auto relative flex h-screen w-full flex-col overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 bg-[#14477D]" />
+      <div className="pointer-events-none absolute inset-0 bg-black/30 backdrop-blur-[50px]" />
 
-      <h1 className="absolute top-[780px] left-[240px] w-[1680px] text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-white">
+      <h1 className="pointer-events-none absolute top-[780px] left-[240px] z-[1] w-[1680px] text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-white">
         {renderRegisteredMark(headlineText)}
       </h1>
 
       {/* End tour button */}
       <button
-        className="absolute top-[2618px] left-[240px] flex h-[200px] items-center gap-[46px] rounded-[1000px] bg-[#ededed] px-[90px] py-[60px] transition-all duration-150 ease-out hover:scale-[1.01] data-[pressed=true]:scale-[0.98] data-[pressed=true]:opacity-70"
-        data-pressed={isEndTourPressed}
+        className="absolute top-[2618px] left-[240px] z-[10] flex h-[200px] items-center gap-[46px] rounded-[1000px] bg-[#ededed] px-[90px] py-[60px] transition-transform duration-150 hover:scale-[1.01]"
         onClick={onEndTour}
-        onPointerDown={() => setIsEndTourPressed(true)}
-        onPointerLeave={() => setIsEndTourPressed(false)}
-        onPointerUp={() => setIsEndTourPressed(false)}
         type="button"
       >
         <span className="text-center text-[54.545px] leading-[1.4] font-normal tracking-[-2.7273px] whitespace-nowrap text-[#14477d]">
@@ -61,23 +60,20 @@ const CustomInteractiveDemoScreenTemplate = ({
         <LogOut aria-hidden className="h-[54.55px] w-[54.55px]" color="#14477d" strokeWidth={2} />
       </button>
 
-      <div className="absolute top-[1290px] left-[120px] h-[1080px] w-[1920px] rounded-[20px] bg-[#e0e0e0] shadow-[0_40px_120px_rgba(0,0,0,0.45)]">
-        {demoIframeSrc ? (
+      <div className="pointer-events-auto absolute top-[1290px] left-[120px] z-[10] h-[1080px] w-[1920px] rounded-[20px] bg-[#e0e0e0] shadow-[0_40px_120px_rgba(0,0,0,0.45)]">
+        {autoplayUrl ? (
           <iframe
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
-            className={`h-full w-full rounded-[20px] ${isVisible ? 'pointer-events-auto' : 'pointer-events-none'}`}
-            src={demoIframeSrc}
+            className="pointer-events-auto h-full w-full rounded-[20px]"
+            src={autoplayUrl}
+            style={{ border: 0 }}
             title={cardText}
           />
         ) : (
           <button
-            className="flex h-full w-full items-center justify-center rounded-[20px] text-[80px] leading-[1.3] font-normal tracking-[-4px] text-[#4a4a4a] transition-all duration-150 ease-out data-[pressed=true]:scale-[0.98] data-[pressed=true]:opacity-70"
-            data-pressed={isCtaPressed}
+            className="flex h-full w-full items-center justify-center rounded-[20px] text-[80px] leading-[1.3] font-normal tracking-[-4px] text-[#4a4a4a]"
             onClick={onCta}
-            onPointerDown={() => setIsCtaPressed(true)}
-            onPointerLeave={() => setIsCtaPressed(false)}
-            onPointerUp={() => setIsCtaPressed(false)}
             type="button"
           >
             {renderRegisteredMark(cardText)}
@@ -92,6 +88,7 @@ const CustomInteractiveDemoScreenTemplate = ({
             alt={heroImageAlt ?? 'Hero image'}
             className="-rotate-[45deg] object-cover"
             fill
+            quality={85} // 85 Quality here since it's a secondary image to the Demo iframe itself.
             sizes="680px"
             src={heroImageSrc}
           />

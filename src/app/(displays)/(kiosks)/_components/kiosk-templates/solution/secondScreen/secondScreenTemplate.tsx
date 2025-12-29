@@ -45,7 +45,6 @@ type SolutionSecondScreenStepsProps = {
 const SolutionSecondScreenTemplate = ({
   heroImageAlt,
   heroImageSrc,
-  kioskId = DEFAULT_KIOSK_ID,
   labelText,
   numberedListHeadline,
   onRegisterListHandlers,
@@ -82,8 +81,7 @@ const SolutionSecondScreenTemplate = ({
 
   return (
     <div
-      className="group/kiosk relative flex h-screen w-full flex-col overflow-visible bg-transparent"
-      data-kiosk={kioskId}
+      className="relative flex h-screen w-full flex-col overflow-visible bg-transparent"
       data-scroll-section="solution-second-group"
     >
       {/* Gradient backdrop */}

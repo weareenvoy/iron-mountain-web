@@ -80,6 +80,11 @@ export type CustomInteractiveContent = {
   readonly ModalHeadline3?: string;
   readonly ModalHeadline4?: string;
   readonly ModalHeadline5?: string;
+  readonly ModalImage1?: string;
+  readonly ModalImage2?: string;
+  readonly ModalImage3?: string;
+  readonly ModalImage4?: string;
+  readonly ModalImage5?: string;
   readonly secondaryCTA?: string;
   readonly tapCarousel?: readonly {
     readonly bullets?: readonly string[];
