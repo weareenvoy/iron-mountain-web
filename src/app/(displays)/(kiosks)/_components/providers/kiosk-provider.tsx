@@ -8,11 +8,11 @@ import type { KioskData } from '@/lib/internal/types';
 // This file is used to access data from the Kiosk Provider and make it available to components in the Kiosk setup.
 
 interface KioskContextType {
-  data: KioskData | null;
-  error: null | string;
-  kioskId: KioskId;
-  loading: boolean;
-  refetch: () => Promise<boolean>;
+  readonly data: KioskData | null;
+  readonly error: null | string;
+  readonly kioskId: KioskId;
+  readonly loading: boolean;
+  readonly refetch: () => Promise<boolean>;
 }
 
 const KioskContext = createContext<KioskContextType | undefined>(undefined);

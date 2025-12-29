@@ -43,3 +43,12 @@ export type ScrollSectionId =
   | typeof SCROLL_SECTION_SOLUTION_SECOND_GROUP
   | typeof SCROLL_SECTION_SOLUTION_THIRD_TITLE
   | typeof SCROLL_SECTION_VALUE_DESCRIPTION;
+
+// Slide ID constants
+export const SLIDE_ID_CHALLENGE_INITIAL = 'challenge-initial';
+
+// Section prefix constants
+export const SECTION_PREFIX_CHALLENGE = 'challenge';
+export const SECTION_PREFIX_CUSTOM_INTERACTIVE = 'customInteractive';
+export const SECTION_PREFIX_SOLUTION = 'solution';
+export const SECTION_PREFIX_VALUE = 'value';
