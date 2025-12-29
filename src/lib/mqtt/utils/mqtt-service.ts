@@ -1,5 +1,6 @@
 import mqtt, { MqttClient, type IClientOptions } from 'mqtt';
 import { getMqttBrokerUrl, MQTT_BASE_OPTIONS, mqttCommands } from '../constants';
+import { createAvailabilityMessage } from './create-avaiability-message';
 import { createMqttMessage } from './create-mqtt-message';
 import { generateClientId } from './generate-client-id';
 import { getAvailabilityTopic } from './get-availability-topic';
@@ -25,12 +26,11 @@ export class MqttService {
 
   public connect() {
     // Configure Last Will & Testament for automatic offline detection
-    const offlineMessage = createMqttMessage(this.deviceId, { status: 'offline' });
     const optionsWithLWT: IClientOptions = {
       ...MQTT_BASE_OPTIONS,
       clientId: generateClientId(this.deviceId),
       will: {
-        payload: Buffer.from(JSON.stringify(offlineMessage)),
+        payload: Buffer.from(JSON.stringify(createAvailabilityMessage(this.deviceId, 'offline'))),
         qos: 1,
         retain: true,
         topic: this.availabilityTopic,
@@ -44,10 +44,9 @@ export class MqttService {
       console.info(`MQTT connected as ${this.deviceId}`);
 
       // Birth message
-      const onlineMessage = createMqttMessage(this.deviceId, { status: 'online' });
       this.publish(
         this.availabilityTopic,
-        JSON.stringify(onlineMessage),
+        JSON.stringify(createAvailabilityMessage(this.deviceId, 'online')),
         { qos: 1, retain: true },
         {
           onError: (err: MqttError) => console.error('Failed to publish availability:', err),
@@ -87,10 +86,9 @@ export class MqttService {
   public disconnect(): void {
     if (this.client?.connected) {
       // Publish offline before we go offline
-      const offlineMessage = createMqttMessage(this.deviceId, { status: 'offline' });
       this.publish(
         this.availabilityTopic,
-        JSON.stringify(offlineMessage),
+        JSON.stringify(createAvailabilityMessage(this.deviceId, 'offline')),
         { qos: 1, retain: true },
         {
           onError: (err: MqttError) => {
