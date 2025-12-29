@@ -68,6 +68,15 @@ const RECAP_TONES_BY_INDEX: readonly (RecapTone | undefined)[] = [
 const SECTION_WRAPPER_CLASS = 'lg:px-12 max-w-[1200px] mx-auto px-4 sm:px-8 w-full';
 const STRATEGY_ACCENT_COLORS = ['#8A0D71', '#00A88E', '#F7931E', '#1B75BC'] as const;
 
+const getYearFromDate = (dateString: string): null | number => {
+  const date = new Date(dateString);
+  if (Number.isNaN(date.getTime())) {
+    console.warn('Invalid summit tour date:', dateString);
+    return null;
+  }
+  return date.getFullYear();
+};
+
 const SummitWebContent = () => {
   const { data, error, loading } = useSummit();
   const printableRef = useRef<HTMLDivElement>(null);
@@ -93,11 +102,7 @@ const SummitWebContent = () => {
         setTours(tourList);
         if (tourList.length > 0) {
           const years = Array.from(
-            new Set(
-              tourList.map(tour => {
-                return new Date(tour.date).getFullYear();
-              })
-            )
+            new Set(tourList.map(tour => getYearFromDate(tour.date)).filter((year): year is number => year !== null))
           ).sort((a, b) => a - b);
           const latestYear = years.at(-1) ?? '';
           setSelectedYear(latestYear);
@@ -113,13 +118,10 @@ const SummitWebContent = () => {
     loadTours();
   }, []);
 
+  // Include all years from 2025 to current, even if no tours exist yet, so users can see the full range for planning.
   const availableYears = useMemo(() => {
     const yearsFromTours = Array.from(
-      new Set(
-        tours.map(tour => {
-          return new Date(tour.date).getFullYear();
-        })
-      )
+      new Set(tours.map(tour => getYearFromDate(tour.date)).filter((year): year is number => year !== null))
     );
     const currentYear = new Date().getFullYear();
     const startYear = 2025;
