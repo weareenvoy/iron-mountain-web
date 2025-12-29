@@ -4,7 +4,7 @@ import { createMqttMessage } from './create-mqtt-message';
 import { generateClientId } from './generate-client-id';
 import { getAvailabilityTopic } from './get-availability-topic';
 import type { DeviceId, MqttError, MqttServiceConfig, PublishArgsConfig } from '../types';
-import type { BasecampBeatId, ExhibitBeatId, OverlookBeatId, SummitRoomBeatId } from '@/lib/internal/types';
+import type { ExhibitBeatId, OverlookBeatId } from '@/lib/internal/types';
 
 export class MqttService {
   private readonly availabilityTopic: string;
@@ -148,33 +148,12 @@ export class MqttService {
     this.publish(`cmd/dev/${exhibit}/goto-beat`, JSON.stringify(message), { qos: 1, retain: false }, config);
   }
 
-  // This is for video beat
-  // Overloads for type-safe beat IDs per exhibit
-  public gotoBeatWithPlayPause(
-    exhibit: 'basecamp',
-    beatId: BasecampBeatId,
-    playPause: boolean,
-    config?: PublishArgsConfig,
-    presentationMode?: boolean
-  ): void;
+  // Video beat play/pause control
+  // NOTE: Only overlook-wall supports playpause in GEC state. Basecamp and summit ignore this field.
+  // Use gotoBeat() for basecamp and summit instead.
   public gotoBeatWithPlayPause(
     exhibit: 'overlook-wall',
     beatId: OverlookBeatId,
-    playPause: boolean,
-    config?: PublishArgsConfig,
-    presentationMode?: boolean
-  ): void;
-  public gotoBeatWithPlayPause(
-    exhibit: 'summit',
-    beatId: SummitRoomBeatId,
-    playPause: boolean,
-    config?: PublishArgsConfig,
-    presentationMode?: boolean
-  ): void;
-  // Implementation signature
-  public gotoBeatWithPlayPause(
-    exhibit: 'basecamp' | 'overlook-wall' | 'summit',
-    beatId: ExhibitBeatId,
     playPause: boolean,
     config?: PublishArgsConfig,
     presentationMode?: boolean

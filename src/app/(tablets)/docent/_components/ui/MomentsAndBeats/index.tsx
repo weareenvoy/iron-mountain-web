@@ -7,7 +7,7 @@ import { useMqtt } from '@/components/providers/mqtt-provider';
 import {
   isValidBasecampBeatId,
   isValidOverlookBeatId,
-  type BasecampBeatId,
+  type ExhibitBeatId,
   type ExhibitNavigationState,
   type Moment,
   type OverlookBeatId,
@@ -50,19 +50,18 @@ const MomentsAndBeats = ({ content, exhibit, exhibitState, goTo }: MomentsAndBea
       return;
     }
 
-    // If clicking a different beat → start playing
-    // If clicking the active video beat → toggle play/pause based on current GEC state
-    const newPlaypause = isCurrentlyActive ? !currentPlaypause : true;
-
-    // Send MQTT command with play/pause - GEC will update state/gec which will update our derived state
-    // Type narrowing for overloads - TypeScript needs explicit branches
+    // Only overlook-wall supports playpause in GEC state
     if (exhibit === 'basecamp') {
-      client.gotoBeatWithPlayPause(exhibit, beatId as BasecampBeatId, newPlaypause, {
-        onError: (err: Error) => console.error(`Failed to send goto-beat with play/pause to ${exhibit}:`, err),
-        onSuccess: () => console.info(`Sent goto-beat with play/pause: ${beatId} (${newPlaypause}) to ${exhibit}`),
+      // Basecamp doesn't support playpause - use gotoBeat instead
+      client.gotoBeat(exhibit, beatId as ExhibitBeatId, {
+        onError: (err: Error) => console.error(`Failed to send goto-beat to ${exhibit}:`, err),
+        onSuccess: () => console.info(`Sent goto-beat: ${beatId} to ${exhibit}`),
       });
     } else {
-      // exhibit is 'overlook-wall' here
+      // exhibit is 'overlook-wall' here - supports playpause
+      // If clicking a different beat → start playing
+      // If clicking the active video beat → toggle play/pause based on current GEC state
+      const newPlaypause = isCurrentlyActive ? !currentPlaypause : true;
       client.gotoBeatWithPlayPause(
         exhibit,
         beatId as OverlookBeatId,
