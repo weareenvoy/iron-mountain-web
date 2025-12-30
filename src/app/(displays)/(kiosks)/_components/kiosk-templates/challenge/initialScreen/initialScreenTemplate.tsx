@@ -72,23 +72,28 @@ const InitialScreenTemplate = ({
         <div className="absolute top-[2910px] left-[120px] z-3 flex h-[182px] w-[703px] items-center group-data-[kiosk=kiosk-2]/kiosk:top-[2890px] group-data-[kiosk=kiosk-3]/kiosk:hidden">
           <WhiteLogoSimple aria-hidden="true" className="h-full w-full" preserveAspectRatio="xMidYMid meet" />
         </div>
-        <motion.div
+
+        <motion.h1
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 150 }}
+          className="max-w-[1660px] text-[80px] leading-[1.3] font-normal tracking-[-4px] text-black"
           initial={{ opacity: 0, y: 150 }}
           transition={{ delay: 0.3, duration: 0.8, ease: [0.3, 0, 0.6, 1] }}
         >
-          <h1 className="max-w-[1660px] text-[80px] leading-[1.3] font-normal tracking-[-4px] text-black">
-            {renderRegisteredMark(headline)}
-          </h1>
+          {renderRegisteredMark(headline)}
+        </motion.h1>
 
-          <div className="relative top-[10px] flex w-[1670px] flex-col gap-[20px]">
-            <p className="text-[80px] leading-[1.3] font-normal tracking-[-4px] text-white group-data-[kiosk=kiosk-3]/kiosk:relative group-data-[kiosk=kiosk-3]/kiosk:top-[-230px] group-data-[kiosk=kiosk-3]/kiosk:text-[120px] group-data-[kiosk=kiosk-3]/kiosk:tracking-[-6px]">
-              {renderRegisteredMark(quote)}
-            </p>
-            <p className="relative top-[180px] text-[52px] leading-[1.4] font-semibold tracking-[-2.6px] whitespace-pre-wrap text-black">
-              {renderRegisteredMark(attribution)}
-            </p>
-          </div>
+        <motion.div
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 150 }}
+          className="relative top-[10px] flex w-[1670px] flex-col gap-[20px]"
+          initial={{ opacity: 0, y: 150 }}
+          transition={{ delay: 0.3, duration: 0.8, ease: [0.3, 0, 0.6, 1] }}
+        >
+          <p className="text-[80px] leading-[1.3] font-normal tracking-[-4px] text-white group-data-[kiosk=kiosk-3]/kiosk:relative group-data-[kiosk=kiosk-3]/kiosk:top-[-230px] group-data-[kiosk=kiosk-3]/kiosk:text-[120px] group-data-[kiosk=kiosk-3]/kiosk:tracking-[-6px]">
+            {renderRegisteredMark(quote)}
+          </p>
+          <p className="relative top-[180px] text-[52px] leading-[1.4] font-semibold tracking-[-2.6px] whitespace-pre-wrap text-black">
+            {renderRegisteredMark(attribution)}
+          </p>
         </motion.div>
 
         <motion.div
