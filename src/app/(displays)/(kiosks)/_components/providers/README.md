@@ -12,6 +12,8 @@ Layout (per kiosk)
   ↓
 KioskProvider (data + state)
   ↓
+KioskControllerProvider (slide navigation)
+  ↓
 View Component (renders slides)
 ```
 
@@ -30,9 +32,14 @@ View Component (renders slides)
 ```tsx
 // layout.tsx
 import { KioskProvider } from '@/app/(displays)/(kiosks)/_components/providers/kiosk-provider';
+import { KioskControllerProvider } from '@/app/(displays)/(kiosks)/_components/kiosk-controller';
 
 const Kiosk3Layout = ({ children }: LayoutProps) => {
-  return <KioskProvider kioskId="kiosk-3">{children}</KioskProvider>;
+  return (
+    <KioskProvider kioskId="kiosk-3">
+      <KioskControllerProvider kioskId="kiosk-3">{children}</KioskControllerProvider>
+    </KioskProvider>
+  );
 };
 ```
 
