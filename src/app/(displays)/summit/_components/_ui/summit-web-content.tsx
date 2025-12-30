@@ -90,7 +90,7 @@ const SummitWebContent = () => {
   const [toursLoading, setToursLoading] = useState(false);
   const [selectedYear, setSelectedYear] = useState<'' | number>('');
   const [selectedMonth, setSelectedMonth] = useState<'' | number>('');
-  const [selectedExperience, setSelectedExperience] = useState<string>('');
+  const [selectedExperience, setSelectedExperience] = useState<'' | string>('');
   const [experienceLoading, setExperienceLoading] = useState(false);
   const [experienceError, setExperienceError] = useState<null | string>(null);
 

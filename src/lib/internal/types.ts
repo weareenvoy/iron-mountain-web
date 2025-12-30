@@ -355,6 +355,9 @@ export interface DocentData {
   };
 }
 
+/**
+ * ISO 8601 date string (YYYY-MM-DD)
+ */
 export interface SummitTourSummary {
   readonly date: string;
   readonly id: string;
