@@ -1,6 +1,16 @@
 'use client';
 
-import { createContext, useCallback, useContext, useEffect, useRef, useState, type PropsWithChildren } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type PropsWithChildren,
+} from 'react';
+import { parseBasecampBeatId } from '@/app/(tablets)/docent/_utils';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getBasecampData } from '@/lib/internal/data/get-basecamp';
 import {
@@ -10,7 +20,7 @@ import {
   type ExhibitNavigationState,
   type Locale,
 } from '@/lib/internal/types';
-import type { ExhibitMqttState } from '@/lib/mqtt/types';
+import type { ExhibitMqttStateBase } from '@/lib/mqtt/types';
 
 interface BasecampContextType {
   readonly data: BasecampData | null;
@@ -39,19 +49,12 @@ export const useBasecamp = () => {
 export const BasecampProvider = ({ children }: BasecampProviderProps) => {
   const { client } = useMqtt();
 
-  // UI navigation state (local)
-  const [exhibitState, setExhibitState] = useState<ExhibitNavigationState>({
-    beatIdx: 0,
-    momentId: 'ambient',
-  });
-
   // Which beat's video is ready. Foreground compares its beatId to this.
   const [readyBeatId, setReadyBeatId] = useState<BasecampBeatId | null>(null);
 
-  // MQTT state (what we report to GEC)
-  const [mqttState, setMqttState] = useState<ExhibitMqttState>({
+  // MQTT state. What we report to GEC + tracks current beat being displayed.
+  const [mqttState, setMqttState] = useState<ExhibitMqttStateBase>({
     'beat-id': 'ambient-1',
-    'tour-id': null,
     'volume-level': 1.0,
     'volume-muted': false,
   });
@@ -59,7 +62,19 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
   // Ref to access latest mqttState without causing dependency changes. Avoids re-subscription.
   const mqttStateRef = useRef(mqttState);
   mqttStateRef.current = mqttState;
-  const tourIdRef = useRef<null | string>(null);
+
+  // Extract beat-id for dependency tracking
+  const beatId = mqttState['beat-id'];
+
+  // Derive exhibitState from mqttState
+  const exhibitState: ExhibitNavigationState = useMemo(() => {
+    if (beatId) {
+      const parsed = parseBasecampBeatId(beatId);
+      if (parsed) return parsed;
+    }
+    // Fallback to default
+    return { beatIdx: 0, momentId: 'ambient' };
+  }, [beatId]);
 
   const [data, setData] = useState<BasecampData | null>(null);
   const [locale, setLocale] = useState<Locale>('en');
@@ -92,7 +107,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
 
   // Helper to report full exhibit state to MQTT
   const reportState = useCallback(
-    (newState: Partial<ExhibitMqttState>) => {
+    (newState: Partial<ExhibitMqttStateBase>) => {
       if (!client) return;
 
       // Compute updated state first, update ref immediately for consistency
@@ -110,6 +125,12 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     [client]
   );
 
+  // Refs for functions to avoid handler recreation
+  const fetchDataRef = useRef(fetchData);
+  fetchDataRef.current = fetchData;
+  const reportStateRef = useRef(reportState);
+  reportStateRef.current = reportState;
+
   // Subscribe to GEC commands (broadcasts to ALL exhibits)
   useEffect(() => {
     if (!client) return;
@@ -124,14 +145,12 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
         if (tourId) {
           // Fetch tour-specific data for this tour
           // For now, just fetch the generic basecamp data
-          const success = await fetchData(tourId);
+          const success = await fetchDataRef.current(tourId);
 
           if (success) {
             // Only report loaded state after data is fetched
-            setExhibitState({ beatIdx: 0, momentId: 'ambient' });
-            reportState({
+            reportStateRef.current({
               'beat-id': 'ambient-1',
-              'tour-id': tourId,
               'volume-level': 1.0,
               'volume-muted': false,
             });
@@ -149,10 +168,8 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
       console.info('Basecamp received end-tour command');
 
       // Reset to ambient state with no tour
-      setExhibitState({ beatIdx: 0, momentId: 'ambient' });
-      reportState({
+      reportStateRef.current({
         'beat-id': 'ambient-1',
-        'tour-id': null,
         'volume-level': 0.0,
         'volume-muted': false,
       });
@@ -166,34 +183,15 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
         console.info('Basecamp received goto-beat command:', beatId);
 
         if (beatId) {
-          // Parse beat-id format: ${moment}-${beatNumber} (e.g., "ambient-1", "welcome-3", "protect-2")
-          const lastDashIndex = beatId.lastIndexOf('-');
-          if (lastDashIndex === -1) {
+          // Validate beat-id format
+          const parsed = parseBasecampBeatId(beatId);
+          if (!parsed) {
             console.error('Invalid beat-id format:', beatId);
             return;
           }
 
-          const momentId = beatId.substring(0, lastDashIndex);
-          const beatNumber = parseInt(beatId.substring(lastDashIndex + 1), 10);
-
-          if (isNaN(beatNumber) || beatNumber < 1) {
-            console.error('Invalid beat number in beat-id:', beatId);
-            return;
-          }
-
-          // Validate that momentId is a valid BasecampSection
-          if (!isBasecampSection(momentId)) {
-            console.error('Invalid moment ID for Basecamp:', momentId);
-            return;
-          }
-
-          // Convert 1-indexed beat number to 0-indexed
-          const beatIdx = beatNumber - 1;
-
-          setExhibitState({ beatIdx, momentId });
-
-          // Report updated state with new beat-id
-          reportState({ 'beat-id': beatId });
+          // Report updated state with new beat-id - exhibitState will be derived from this
+          reportStateRef.current({ 'beat-id': beatId });
         }
       } catch (error) {
         console.error('Basecamp: Error parsing goto-beat command:', error);
@@ -201,7 +199,6 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     };
 
     // Subscribe to broadcast commands (all exhibits listen to same topics)
-    // TODO Confirm with Lucas. Currently not receiving anything from these topics.
     client.subscribeToTopic('cmd/dev/all/load-tour', handleLoadTour);
     client.subscribeToTopic('cmd/dev/all/end-tour', handleEndTour);
     // Also subscribe to basecamp-specific goto-beat (direct from Docent)
@@ -212,47 +209,26 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
       client.unsubscribeFromTopic('cmd/dev/all/end-tour', handleEndTour);
       client.unsubscribeFromTopic('cmd/dev/basecamp/goto-beat', handleGotoBeat);
     };
-  }, [client, fetchData, reportState]);
+  }, [client]);
 
-  // Subscribe to own state (retained + live updates) for restart/recovery
-  // This allows exhibit to restore state after refresh, and stay in sync with GEC updates (e.g., volume/mute).
+  // Subscribe to own state for restart/recovery
   useEffect(() => {
     if (!client) return;
 
     const handleOwnState = (message: Buffer) => {
       try {
         const msg = JSON.parse(message.toString());
-        const state: ExhibitMqttState = msg.body;
+        const state: ExhibitMqttStateBase = msg.body;
         console.info('Basecamp: Received own state on boot:', state);
 
-        // Update internal MQTT state
+        // Update internal MQTT state - exhibitState will be derived from this
         mqttStateRef.current = state;
         setMqttState(state);
 
-        // Parse beat-id to update UI navigation state
-        if (state['beat-id']) {
-          const lastDashIndex = state['beat-id'].lastIndexOf('-');
-          if (lastDashIndex !== -1) {
-            const momentId = state['beat-id'].substring(0, lastDashIndex);
-            const beatNumber = parseInt(state['beat-id'].substring(lastDashIndex + 1), 10);
-
-            // Validate that momentId is a valid BasecampSection before using it
-            if (!isNaN(beatNumber) && beatNumber >= 1 && isBasecampSection(momentId)) {
-              setExhibitState({ beatIdx: beatNumber - 1, momentId });
-            } else {
-              console.warn('Invalid beat-id format or moment ID:', state['beat-id']);
-            }
-          }
-        }
-
-        // Fetch content if we have a tour loaded (only when it changes)
-        const nextTourId = state['tour-id'] ?? null;
-        if (tourIdRef.current !== nextTourId) {
-          tourIdRef.current = nextTourId;
-          if (nextTourId) {
-            fetchData(nextTourId);
-          }
-        }
+        // Fetch content if we have a tour loaded
+        fetchData();
+        // We just need to get retained state once, so unsubscribe after we got the state
+        client.unsubscribeFromTopic('state/basecamp', handleOwnState);
       } catch (error) {
         console.error('Basecamp: Error parsing own state:', error);
       }

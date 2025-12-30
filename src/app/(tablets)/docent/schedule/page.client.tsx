@@ -2,7 +2,7 @@
 
 import { ArrowLeft, ArrowRight, House, RotateCw } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useMemo, useState, type MouseEventHandler } from 'react';
+import { useCallback, useMemo, useState, type MouseEventHandler } from 'react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
@@ -18,7 +18,7 @@ interface TourByDate {
 const SchedulePageClient = () => {
   const router = useRouter();
   const { client } = useMqtt();
-  const { data, isConnected, isTourDataLoading, refreshData, setCurrentTour } = useDocent();
+  const { data, isConnected, isTourDataLoading, refreshData } = useDocent();
 
   const [selectedTourId, setSelectedTourId] = useState<null | string>(null);
   const [currentMonthDate, setCurrentMonthDate] = useState(new Date());
@@ -83,25 +83,15 @@ const SchedulePageClient = () => {
   };
 
   const handleLoadTour = (tourId: string) => {
-    const tour = Object.values(toursByDate)
-      .flatMap(group => group.tours)
-      .find(t => t.id === tourId);
+    if (!client) return;
 
-    if (tour && client) {
-      setCurrentTour(tour); // Update context
-
-      // Send load-tour command to GEC
-      client.loadTour(tourId, {
-        onError: (err: Error) => {
-          console.error('Failed to send load-tour command:', err);
-          // Still navigate even if MQTT fails
-          router.push(`/docent/tour/${tourId}`);
-        },
-        onSuccess: () => {
-          router.push(`/docent/tour/${tourId}`);
-        },
-      });
-    }
+    // Send load-tour command to GEC
+    // Navigation is handled by the docent provider when GEC confirms the tour-id
+    client.loadTour(tourId, {
+      onError: (err: Error) => {
+        console.error('Failed to send load-tour command:', err);
+      },
+    });
   };
 
   const formatScheduleDate = (dateString: string): string => {
@@ -134,13 +124,17 @@ const SchedulePageClient = () => {
     });
   }, [currentMonthDate]);
 
+  const handleBackToHome = useCallback(() => {
+    router.push('/docent');
+  }, [router]);
+
   const leftButton = useMemo(
     (): HeaderProps['leftButton'] => ({
-      href: '/docent',
       icon: <House className="size-[20px]" />,
+      onClick: handleBackToHome,
       text: data?.docent.navigation.backToHome ?? 'Back to home',
     }),
-    [data]
+    [data, handleBackToHome]
   );
 
   if (!isConnected) {
@@ -157,7 +151,7 @@ const SchedulePageClient = () => {
           {data?.docent.schedule.title ?? 'EBC schedule'}
         </h1>
         <div className="bg-primary-bg-grey relative flex w-full flex-col gap-[87px] rounded-t-[20px] px-6 py-11">
-          <div className="text-primary-im-dark-blue flex items-center justify-between">
+          <div className="text-primary-im-dark-blue relative flex items-center justify-between">
             <Button
               className="border-primary-im-dark-blue text-primary-im-dark-blue h-13 min-w-24.5 text-xl leading-[1.4] tracking-[-1px]"
               onClick={handleToday}
@@ -166,7 +160,7 @@ const SchedulePageClient = () => {
             >
               {data?.docent.actions.today ?? 'Today'}
             </Button>
-            <div className="flex items-center gap-7">
+            <div className="absolute left-1/2 flex -translate-x-1/2 items-center gap-7">
               <button className="active:opacity-50" onClick={handlePreviousMonth}>
                 <ArrowLeft className="size-[24px]" />
               </button>
@@ -209,7 +203,7 @@ const SchedulePageClient = () => {
                       return (
                         <div
                           className={cn(
-                            'flex h-[100px] cursor-pointer items-center rounded-[14px] px-3 transition-colors',
+                            'flex h-[100px] cursor-pointer items-center rounded-[14px] pr-6 pl-3 transition-colors',
                             isSelected ? 'bg-white' : ''
                           )}
                           key={tour.id}

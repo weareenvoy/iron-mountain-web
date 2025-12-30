@@ -36,7 +36,7 @@ const MetricsSection = ({ challenges, stats, title, variant = 'default' }: Metri
           <div className="flex flex-col gap-1 text-left" key={item.title}>
             <p
               className={cn(
-                'font-semibold text-[#44A6E6] print:text-[2.5rem] print:leading-[1.1]',
+                'font-semibold text-[#6DCFF6] print:text-[2.5rem] print:leading-[1.1]',
                 isSlide ? 'text-4xl sm:text-5xl' : 'text-5xl sm:text-6xl'
               )}
             >
