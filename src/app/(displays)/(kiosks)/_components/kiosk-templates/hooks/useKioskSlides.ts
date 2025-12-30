@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { buildChallengeSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeSlides';
 import { buildCustomInteractiveSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/customInteractiveSlides';
-import { buildIdleSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/idle/idleSlides';
 import { buildSolutionSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/solutionSlides';
 import { buildValueSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueSlides';
 import { mapChallenges } from '@/app/(displays)/(kiosks)/_mappers/map-challenges';
@@ -229,12 +228,12 @@ export const useKioskSlides = ({
   const slides = useMemo(() => {
     if (!challenges || !solutions || !values || !customInteractive) return [];
 
-    // Add idle slides if present, otherwise start with empty array
-    const idleSlides = idle ? buildIdleSlides(idle, kioskId, { handlers: globalHandlers }) : [];
+    // Extract idle video URL if present
+    const idleVideoSrc = idle?.idleScreen?.videoSrc;
 
     return [
-      ...idleSlides,
       ...buildChallengeSlides(challenges, kioskId, globalHandlers, {
+        idleVideoSrc,
         onInitialButtonClick: handleInitialButtonClick,
       }),
       ...buildSolutionSlides(solutions, kioskId, globalHandlers),

@@ -34,7 +34,7 @@ export const buildChallengeSlides = (
   challenges: KioskChallenges,
   kioskId: KioskId,
   handlers: { onNavigateDown: () => void; onNavigateUp: () => void },
-  overrides?: Partial<ChallengeScreens> & { onInitialButtonClick?: () => void }
+  overrides?: Partial<ChallengeScreens> & { idleVideoSrc?: string; onInitialButtonClick?: () => void }
 ): Slide[] => {
   const initialScreen = { ...challenges.initialScreen, ...overrides?.initialScreen };
 
@@ -48,7 +48,7 @@ export const buildChallengeSlides = (
       {
         component: InitialScreenTemplate,
         id: 'cover-ambient-initial',
-        props: { ...initialScreen, onButtonClick: handleInitialButtonClick },
+        props: { ...initialScreen, idleVideoSrc: overrides?.idleVideoSrc, onButtonClick: handleInitialButtonClick },
         title: 'Challenge Intro',
       },
       kioskId
