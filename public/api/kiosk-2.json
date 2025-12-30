@@ -2,111 +2,112 @@
   {
     "locale": "en",
     "data": {
-    "idle": {
-      "videoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/SP-Ambient-Kiosk.webm"
-    },
+      "idle": {
+        "videoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/SP-Ambient-Kiosk.webm"
+      },
 
-    "ambient": {
-      "backgroundImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/Cover.webp",
-      "body": "Our digital solutions centralized this healthcare organization's unstructured \"dark data.\" This enterprise-wide visibility prevented erroneous pension payments, elevated records management, and created a searchable, compliant digital core for ongoing operational improvement.",
-      "headline": "A global healthcare company mitigates risk and saves millions by finding certainty and clarity in its pension administration.",
-      "mainCTA": "Touch to explore",
-      "quoteSource": "",
-      "title": "Information \n& data lifecycle"
-    },
+      "ambient": {
+        "backgroundImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/Cover.webp",
+        "body": "Our digital solutions centralized this healthcare organization's unstructured \"dark data.\" This enterprise-wide visibility prevented erroneous pension payments, elevated records management, and created a searchable, compliant digital core for ongoing operational improvement.",
+        "headline": "A global healthcare company mitigates risk and saves millions by finding certainty and clarity in its pension administration.",
+        "mainCTA": "Touch to explore",
+        "quoteSource": "",
+        "title": "Information \n& data lifecycle"
+      },
 
-    "challengeMain": {
-      "body": "A large healthcare organization faced significant financial risk because it could not locate the appropriate documentation to confirm the eligibility of employee pension claims. The legal system ruled the organization liable to pay claims without evidence to disprove eligibility, resulting in millions of dollars paid in ineligible pension benefits.",
+      "challengeMain": {
+        "body": "A large healthcare organization faced significant financial risk because it could not locate the appropriate documentation to confirm the eligibility of employee pension claims. The legal system ruled the organization liable to pay claims without evidence to disprove eligibility, resulting in millions of dollars paid in ineligible pension benefits.",
 
-      "featuredStat1": "$2M+",
-      "featuredStat1Body": "saved annually through the identification of \"duplicate\" pension payments",
+        "featuredStat1": "$2M+",
+        "featuredStat1Body": "saved annually through the identification of \"duplicate\" pension payments",
 
-      "featuredStat2": "2.5M",
-      "featuredStat2Body": "paper images are being digitized.",
-      "item1Body": "Disparate, unstructured records across various locations and legacy systems—including paper, microfilm, CD, and digital formats—created costly, risk-laden pension administration.",
-      "item1Image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/01+-+Challenge/Challenge-Image1-Diamond.webp",
+        "featuredStat2": "2.5M",
+        "featuredStat2Body": "paper images are being digitized.",
+        "item1Body": "Disparate, unstructured records across various locations and legacy systems—including paper, microfilm, CD, and digital formats—created costly, risk-laden pension administration.",
+        "item1Image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/01+-+Challenge/Challenge-Image1-Diamond.webp",
 
-      "item2Body": "After multiple acquisitions with antiquated and disordered records, finding the required regulatory documentation was difficult to impossible.",
-      "item2Image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/01+-+Challenge/Challenge-Image2-Diamond.webp",
-      "labelText": "Challenge",
-      "mainVideo": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/01+-+Challenge/Challenge-header.webm"
-    },
+        "item2Body": "After multiple acquisitions with antiquated and disordered records, finding the required regulatory documentation was difficult to impossible.",
+        "item2Image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/01+-+Challenge/Challenge-Image2-Diamond.webp",
+        "labelText": "Challenge",
+        "mainVideo": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/01+-+Challenge/Challenge-header.webm"
+      },
 
-    "solutionMain": {
-      "body": "The organization turned to Iron Mountain for help, implementing InSightⓇ DXP. This created a unified platform for newly digitized documents and digitally-native records gathered from various departments and prior acquisitions.",
+      "solutionMain": {
+        "body": "The organization turned to Iron Mountain for help, implementing InSightⓇ DXP. This created a unified platform for newly digitized documents and digitally-native records gathered from various departments and prior acquisitions.",
 
-      "headline": "A partnership with Iron Mountain",
-      "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image1-Diamond.webp",
-      "labelText": "Solution",
-      "mainVideo": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-header.webm",
-      "numberedList": [
-        "Converted all document formats (including handwritten papers, microfilm, CD/DVD) into digital form, then identified and extracted key data to enrich the records with searchable metadata",
-        "Created a complete repository of digitized and searchable pension information",
-        "Migrated legacy systems to InSight DXP to house all pension information"
-      ],
-      "numberedListHeadline": "Together, we:"
-    },
+        "headline": "A partnership with Iron Mountain",
+        "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image1-Diamond.webp",
+        "labelText": "Solution",
+        "mainVideo": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-header.webm",
+        "numberedList": [
+          "Converted all document formats (including handwritten papers, microfilm, CD/DVD) into digital form, then identified and extracted key data to enrich the records with searchable metadata",
+          "Created a complete repository of digitized and searchable pension information",
+          "Migrated legacy systems to InSight DXP to house all pension information"
+        ],
+        "numberedListHeadline": "Together, we:"
+      },
 
-    "solutionGrid": {
-      "headline": "How the organization employed digital solutions:",
-      "diamondList": [
-        "Document digitization",
-        "Platform centralization",
-        "Metadata enrichment",
-        "Automated workflows",
-        "Searchable \nrepository of pension \ninformation"
-      ],
-      "images": [
-        "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image3-Diamond.webp",
-        "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image2-Diamond.webp"
-      ]
-    },
+      "solutionGrid": {
+        "headline": "How the organization employed digital solutions:",
+        "diamondList": [
+          "Document digitization",
+          "Platform centralization",
+          "Metadata enrichment",
+          "Automated workflows",
+          "Searchable \nrepository of pension \ninformation"
+        ],
+        "images": [
+          "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image3-Diamond.webp",
+          "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image2-Diamond.webp"
+        ]
+      },
 
-    "valueMain": {
-      "body": "The partnership with Iron Mountain and implementation of InSight DXP transitioned the organization from unknown to certainty and clarity in pension administration.",
+      "valueMain": {
+        "body": "The partnership with Iron Mountain and implementation of InSight DXP transitioned the organization from unknown to certainty and clarity in pension administration.",
 
-      "diamondBenefits": [
-        {
-          "bullets": [
-            "Rendered an accessible, searchable system for pension employees to quickly answer employee and regulatory queries",
-            "Provided scalability for future growth, including adding additional automated intelligent document processing (IDP) workflows",
-            "Enabled the organization to validate paid claims faster and more accurately upon deployment"
-          ],
-          "label": "Operational benefits"
-        },
-        {
-          "bullets": [
-            "Mitigated future financial risk, saving over $2 million annually by identifying \"duplicate\" pension payments",
-            "Saved over $1 million in claims liability upon deployment",
-            "Allowed the organization to audit existing paid claims and have documented evidence to return to the courts for relief from paying ineligible claims"
-          ],
-          "label": "Economical benefits"
-        },
-        {
-          "bullets": [
-            "Reduced financial and compliance risks through enhanced visibility into physical documentation and structured data",
-            "Easily integrated inherited physical and digital records from additional company acquisitions by following defined workflows in InSight DXP",
-            "Applied record retention disciplines to ensure efficient document management and minimize business risk"
-          ],
-          "label": "Strategic benefits"
-        }
-      ],
-      "headline": "Expanding possibilities",
-      "labelText": "Value",
-      "mainVideo": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/03+-+Value/Value-header.webm"
-    },
+        "diamondBenefits": [
+          {
+            "bullets": [
+              "Rendered an accessible, searchable system for pension employees to quickly answer employee and regulatory queries",
+              "Provided scalability for future growth, including adding additional automated intelligent document processing (IDP) workflows",
+              "Enabled the organization to validate paid claims faster and more accurately upon deployment"
+            ],
+            "label": "Operational benefits"
+          },
+          {
+            "bullets": [
+              "Mitigated future financial risk, saving over $2 million annually by identifying \"duplicate\" pension payments",
+              "Saved over $1 million in claims liability upon deployment",
+              "Allowed the organization to audit existing paid claims and have documented evidence to return to the courts for relief from paying ineligible claims"
+            ],
+            "label": "Economical benefits"
+          },
+          {
+            "bullets": [
+              "Reduced financial and compliance risks through enhanced visibility into physical documentation and structured data",
+              "Easily integrated inherited physical and digital records from additional company acquisitions by following defined workflows in InSight DXP",
+              "Applied record retention disciplines to ensure efficient document management and minimize business risk"
+            ],
+            "label": "Strategic benefits"
+          }
+        ],
+        "headline": "Expanding possibilities",
+        "labelText": "Value",
+        "mainVideo": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/03+-+Value/Value-header.webm"
+      },
 
-    "demoMain": {
-      "headline": "Lorem ipsum dolor sit amet consectetur",
-      "iframeLink": "https://www.youtube.com/embed/fsQiaQhw_IM?si=5mi5aRF7AOxg-H5L",
-      "mainCTA": "End Tour",
-      "demoText": "Demo"
-    },
+      "demoMain": {
+        "headline": "Lorem ipsum dolor sit amet consectetur",
+        "iframeLink": "https://www.youtube.com/embed/fsQiaQhw_IM?si=5mi5aRF7AOxg-H5L",
+        "mainCTA": "End Tour",
+        "demoText": "Demo"
+      },
 
-    "customInteractive2": {
-      "headline": "Learn more about how we unlocked new possibilities for our partners",
-      "secondaryCTA": "Launch demo",
-      "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image1-Diamond.webp"
+      "customInteractive2": {
+        "headline": "Learn more about how we unlocked new possibilities for our partners",
+        "secondaryCTA": "Launch demo",
+        "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image1-Diamond.webp"
+      }
     }
   }
-}]
+]
