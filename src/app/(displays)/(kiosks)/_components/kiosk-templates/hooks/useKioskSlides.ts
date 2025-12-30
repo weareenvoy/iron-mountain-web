@@ -1,11 +1,13 @@
 import { useMemo } from 'react';
 import { buildChallengeSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeSlides';
 import { buildCustomInteractiveSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/customInteractiveSlides';
+import { buildIdleSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/idle/idleSlides';
 import { buildSolutionSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/solutionSlides';
 import { buildValueSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueSlides';
 import { mapChallenges } from '@/app/(displays)/(kiosks)/_mappers/map-challenges';
 import { mapCustomInteractiveKiosk1 } from '@/app/(displays)/(kiosks)/_mappers/map-custom-interactive-kiosk1';
 import { mapCustomInteractiveKiosk3 } from '@/app/(displays)/(kiosks)/_mappers/map-custom-interactive-kiosk3';
+import { mapIdle, type IdleContent } from '@/app/(displays)/(kiosks)/_mappers/map-idle';
 import { mapSolutionsWithAccordion } from '@/app/(displays)/(kiosks)/_mappers/map-solutions-with-accordion';
 import { mapSolutionsWithGrid, type DiamondMapping } from '@/app/(displays)/(kiosks)/_mappers/map-solutions-with-grid';
 import { mapValue } from '@/app/(displays)/(kiosks)/_mappers/map-value';
@@ -95,6 +97,10 @@ const parseKioskData = (kioskData: KioskData) => {
       | DemoConfig
       | undefined;
 
+    const idle = getOptionalProperty(obj, 'idle', val => validateObject(val, 'idle', i => i)) as
+      | IdleContent
+      | undefined;
+
     const solutionAccordion = getOptionalProperty(obj, 'solutionAccordion', val =>
       validateObject(val, 'solutionAccordion', s => s)
     ) as SolutionsAccordion | undefined;
@@ -118,6 +124,7 @@ const parseKioskData = (kioskData: KioskData) => {
       customInteractive2,
       customInteractive3,
       demoMain,
+      idle,
       solutionAccordion,
       solutionGrid,
       solutionMain,
@@ -138,6 +145,12 @@ export const useKioskSlides = ({
 
   // Parse kiosk data with type safety
   const kioskContent = useMemo(() => parseKioskData(kioskData), [kioskData]);
+
+  // Map idle
+  const idle = useMemo(() => {
+    if (!kioskContent?.idle) return null;
+    return mapIdle(kioskContent.idle);
+  }, [kioskContent]);
 
   // Map challenges
   const challenges = useMemo(() => {
@@ -216,7 +229,11 @@ export const useKioskSlides = ({
   const slides = useMemo(() => {
     if (!challenges || !solutions || !values || !customInteractive) return [];
 
+    // Add idle slides if present, otherwise start with empty array
+    const idleSlides = idle ? buildIdleSlides(idle, kioskId, { handlers: globalHandlers }) : [];
+
     return [
+      ...idleSlides,
       ...buildChallengeSlides(challenges, kioskId, globalHandlers, {
         onInitialButtonClick: handleInitialButtonClick,
       }),
@@ -228,19 +245,21 @@ export const useKioskSlides = ({
     ];
   }, [
     challenges,
-    solutions,
-    values,
     customInteractive,
-    kioskId,
     globalHandlers,
     handleInitialButtonClick,
     handleRegisterCarouselHandlers,
+    idle,
+    kioskId,
     scrollToSectionById,
+    solutions,
+    values,
   ]);
 
   return {
     challenges,
     customInteractive,
+    idle,
     slides,
     solutions,
     values,

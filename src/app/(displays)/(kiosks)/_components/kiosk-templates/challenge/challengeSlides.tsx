@@ -47,7 +47,7 @@ export const buildChallengeSlides = (
     createSlideWithoutHandlers(
       {
         component: InitialScreenTemplate,
-        id: 'challenge-initial',
+        id: 'cover-ambient-initial',
         props: { ...initialScreen, onButtonClick: handleInitialButtonClick },
         title: 'Challenge Intro',
       },

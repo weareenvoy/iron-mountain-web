@@ -14,7 +14,7 @@ export type Section = 'challenge' | 'customInteractive' | 'initial' | 'solution'
  */
 export const getSectionFromScrollTarget = (target: null | string): Section => {
   if (!target) return 'initial';
-  if (target === 'challenge-initial') return 'initial';
+  if (target === 'cover-ambient-initial') return 'initial';
   if (target.startsWith('challenge-')) return 'challenge';
   if (target.startsWith('solution-')) return 'solution';
   if (target.startsWith('value-')) return 'value';

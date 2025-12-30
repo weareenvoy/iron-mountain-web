@@ -29,7 +29,10 @@ const InitialScreenTemplate = ({
   subheadline,
 }: InitialScreenTemplateProps) => {
   return (
-    <div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden">
+    <div
+      className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden"
+      data-scroll-section="cover-ambient-initial"
+    >
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="relative h-full w-full">
           {backgroundImage && (
