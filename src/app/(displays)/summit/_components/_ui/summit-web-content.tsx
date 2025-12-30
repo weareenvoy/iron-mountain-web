@@ -80,6 +80,7 @@ const getYearFromDate = (dateString: string): null | number => {
 const SummitWebContent = () => {
   const { data, error, loading } = useSummit();
   const printableRef = useRef<HTMLDivElement>(null);
+  const expectedTourIdRef = useRef<string>('');
   const [activeData, setActiveData] = useState<null | typeof data>(null);
   const [activeTourId, setActiveTourId] = useState<string>('');
   const [isPrinting, setIsPrinting] = useState(false);
@@ -180,17 +181,24 @@ const SummitWebContent = () => {
 
   const handleLoadExperience = async () => {
     if (!selectedExperience) return;
+    expectedTourIdRef.current = selectedExperience;
+    setActiveTourId(selectedExperience);
     setExperienceLoading(true);
     setExperienceError(null);
     try {
       const fetched = await getSummitData(selectedExperience);
-      setActiveData(fetched.data);
-      setActiveTourId(selectedExperience);
+      if (expectedTourIdRef.current === selectedExperience) {
+        setActiveData(fetched.data);
+      }
     } catch (err) {
-      console.error('Failed to load summit experience', err);
-      setExperienceError('Unable to load experience. Please try again.');
+      if (expectedTourIdRef.current === selectedExperience) {
+        console.error('Failed to load summit experience', err);
+        setExperienceError('Unable to load experience. Please try again.');
+      }
     } finally {
-      setExperienceLoading(false);
+      if (expectedTourIdRef.current === selectedExperience) {
+        setExperienceLoading(false);
+      }
     }
   };
 
