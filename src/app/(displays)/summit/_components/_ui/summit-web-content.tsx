@@ -95,11 +95,14 @@ const SummitWebContent = () => {
   const [experienceError, setExperienceError] = useState<null | string>(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     const loadTours = async () => {
       setToursLoading(true);
       setToursError(null);
       try {
         const tourList = await getSummitTours();
+        if (!isMounted) return;
         setTours(tourList);
         if (tourList.length > 0) {
           const years = Array.from(
@@ -109,14 +112,21 @@ const SummitWebContent = () => {
           setSelectedYear(latestYear);
         }
       } catch (err) {
+        if (!isMounted) return;
         console.error('Failed to load summit tours', err);
         setToursError('Unable to load experiences.');
       } finally {
-        setToursLoading(false);
+        if (isMounted) {
+          setToursLoading(false);
+        }
       }
     };
 
     loadTours();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   // Include all years from 2025 to current, even if no tours exist yet, so users can see the full range for planning.
@@ -142,7 +152,12 @@ const SummitWebContent = () => {
   const monthAvailability = useMemo(() => {
     const availability = new Map<number, number>();
     toursByYear.forEach(tour => {
-      const monthIndex = new Date(tour.date).getMonth();
+      const date = new Date(tour.date);
+      if (Number.isNaN(date.getTime())) {
+        console.warn('Invalid date in tour:', tour);
+        return;
+      }
+      const monthIndex = date.getMonth();
       availability.set(monthIndex, (availability.get(monthIndex) ?? 0) + 1);
     });
     return availability;
@@ -181,6 +196,12 @@ const SummitWebContent = () => {
 
   const handleLoadExperience = async () => {
     if (!selectedExperience) return;
+    const isValidTour = toursByYearAndMonth.some(tour => tour.id === selectedExperience);
+    if (!isValidTour) {
+      console.error('Invalid tour ID selected:', selectedExperience);
+      setExperienceError('Invalid experience selected. Please try again.');
+      return;
+    }
     expectedTourIdRef.current = selectedExperience;
     setActiveTourId(selectedExperience);
     setExperienceLoading(true);
@@ -273,7 +294,7 @@ const SummitWebContent = () => {
               >
                 <option value="">Select month</option>
                 {MONTHS.map((month, index) => {
-                  const hasTours = monthAvailability.get(index) !== undefined;
+                  const hasTours = (monthAvailability.get(index) ?? 0) > 0;
                   return (
                     <option disabled={!hasTours} key={month} value={index}>
                       {month}
