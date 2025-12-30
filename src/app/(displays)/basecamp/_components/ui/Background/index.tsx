@@ -115,12 +115,10 @@ const Background = () => {
       // For transitions: preload into the video that will be hidden next (i.e. current visible)
       const preloadTarget = isFirstLoad ? b.current! : visible;
 
-      if (isFirstLoad || seamless) {
-        // First load or seamless: preload immediately
-        // (Chrome may fire transitionend for 0ms, but not guaranteed by CSS spec)
+      if (isFirstLoad) {
+        // First load: preload immediately
         preloadTarget.src = data.beats[nextBeatId].url;
       } else {
-        // Wait until crossfade ends
         const handleTransitionEnd = () => {
           if (lastBeat.current === beatId) {
             preloadTarget.src = data.beats[nextBeatId].url;
