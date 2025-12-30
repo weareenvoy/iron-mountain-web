@@ -13,13 +13,7 @@ import {
 import { parseBasecampBeatId } from '@/app/(tablets)/docent/_utils';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getBasecampData } from '@/lib/internal/data/get-basecamp';
-import {
-  isBasecampSection,
-  type BasecampBeatId,
-  type BasecampData,
-  type ExhibitNavigationState,
-  type Locale,
-} from '@/lib/internal/types';
+import { type BasecampBeatId, type BasecampData, type ExhibitNavigationState, type Locale } from '@/lib/internal/types';
 import type { ExhibitMqttStateBase } from '@/lib/mqtt/types';
 
 interface BasecampContextType {
