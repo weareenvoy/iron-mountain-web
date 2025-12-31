@@ -1,36 +1,109 @@
 'use client';
 
+import Image from 'next/image';
 import type { BasecampData } from '@/lib/internal/types';
 
 type Props = {
-  readonly data: BasecampData['problem-3'];
+  readonly data: BasecampData['problem3'];
 };
 
-// Title first, then show 4 blocks 1 by 1?
-const Problem4 = ({ data }: Props) => {
-  const challenges = [data['challenge-1'], data['challenge-2'], data['challenge-3'], data['challenge-4']];
+// Animation timing constants
+const TIMING = {
+  blocks: {
+    duration: 2000,
+    phases: {
+      body: { delay: 900, wordStagger: 60 },
+      icon: { delay: 600 },
+      title: { delay: 300, wordStagger: 80 },
+    },
+    startDelay: 500,
+  },
+  mainTitle: {
+    wordStagger: 100,
+  },
+} as const;
 
-  // Stagger delays for challenges: 900ms, 1300ms, 1700ms, 2100ms
-  const challengeDelays = [900, 1300, 1700, 2100];
+// Helper functions for calculating delays
+const getBlockStartDelay = (blockIndex: number): number =>
+  TIMING.blocks.startDelay + blockIndex * TIMING.blocks.duration;
+
+const getCardTitleDelay = (blockStart: number, wordIndex: number): number =>
+  blockStart + TIMING.blocks.phases.title.delay + wordIndex * TIMING.blocks.phases.title.wordStagger;
+
+const getCardIconDelay = (blockStart: number): number => blockStart + TIMING.blocks.phases.icon.delay;
+
+const getCardBodyDelay = (blockStart: number, wordIndex: number): number =>
+  blockStart + TIMING.blocks.phases.body.delay + wordIndex * TIMING.blocks.phases.body.wordStagger;
+
+const Problem4 = ({ data }: Props) => {
+  const challenges = [data.challenge1, data.challenge2, data.challenge3, data.challenge4];
+  const mainTitleWords = data.title.split(' ');
 
   return (
-    <div className="flex h-full w-full flex-row items-center justify-between p-50 text-black">
-      <div className="animate-scale-fade-in text-5xl font-bold" style={{ animationDelay: '300ms' }}>
-        {data.title}
+    <div className="text-primary-im-grey flex h-full w-full flex-row items-center justify-between px-20">
+      {/* Main title: word by word */}
+      <div className="mt-60 h-full w-140 font-geometria text-[66px] leading-[1.3]">
+        {mainTitleWords.map((word, i) => (
+          <span
+            className="animate-char-in inline-block"
+            key={i}
+            style={{ animationDelay: `${i * TIMING.mainTitle.wordStagger}ms` }}
+          >
+            {word}
+            {i < mainTitleWords.length - 1 && '\u00A0'}
+          </span>
+        ))}
       </div>
-      <div className="flex flex-row">
+
+      <div className="flex flex-row gap-4">
         {challenges.map((challenge, index) => {
-          const challengeNum = index + 1;
-          const delay = challengeDelays[index] ?? 0;
+          const blockStart = getBlockStartDelay(index);
+          const cardTitleWords = challenge.title.split(' ');
+          const bodyWords = challenge.body.split(' ');
 
           return (
-            <div
-              className="animate-scale-fade-in w-100 space-y-2"
-              key={`${challengeNum}-container`}
-              style={{ animationDelay: `${delay}ms` }}
-            >
-              <div className="text-2xl font-semibold">{challenge.title}</div>
-              <div className="text-lg">{challenge.body}</div>
+            <div className="flex w-150 flex-col items-center gap-6.5" key={`challenge-${index}`}>
+              {/* Blue background grows horizontally - fits content width */}
+              <div
+                className="animate-grow-x bg-primary-im-dark-blue inline-flex items-center justify-center rounded-full px-6.5 py-2"
+                style={{ animationDelay: `${blockStart}ms` }}
+              >
+                {/* Title text: show up word by word */}
+                <p className="text-[33px] tracking-[-1.6px] whitespace-nowrap text-white">
+                  {cardTitleWords.map((word, i) => (
+                    <span
+                      className="animate-char-in inline-block"
+                      key={i}
+                      style={{ animationDelay: `${getCardTitleDelay(blockStart, i)}ms` }}
+                    >
+                      {word}
+                      {i < cardTitleWords.length - 1 && '\u00A0'}
+                    </span>
+                  ))}
+                </p>
+              </div>
+
+              {/* Icon scales up */}
+              <div
+                className="animate-scale-fade-in flex items-center justify-center"
+                style={{ animationDelay: `${getCardIconDelay(blockStart)}ms` }}
+              >
+                <Image alt={challenge.title} height={267} src={challenge.icon} width={267} />
+              </div>
+
+              {/* Body: word by word */}
+              <div className="text-primary-im-grey w-83 text-center text-[27px] leading-[1.3] tracking-[-1.3px]">
+                {bodyWords.map((word, i) => (
+                  <span
+                    className="animate-char-in inline-block"
+                    key={i}
+                    style={{ animationDelay: `${getCardBodyDelay(blockStart, i)}ms` }}
+                  >
+                    {word}
+                    {i < bodyWords.length - 1 && '\u00A0'}
+                  </span>
+                ))}
+              </div>
             </div>
           );
         })}
