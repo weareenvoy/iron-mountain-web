@@ -69,7 +69,7 @@ export const SummitProvider = ({ children }: PropsWithChildren) => {
     setLoading(true);
 
     try {
-      const fetchedData = await getSummitData();
+      const fetchedData = await getSummitData(tourId ?? undefined);
       setData(fetchedData.data);
       setError(null);
       setLocale(fetchedData.locale);

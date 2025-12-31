@@ -5,34 +5,34 @@
       "possibilities": {
         "title": "Discover new possibilities"
       },
-      "possibilities-a": {
-        "body-1": "Body 1",
-        "body-2": "Body 2",
-        "body-3": "Body 3",
+      "possibilitiesA": {
+        "body1": "Automate mortgage processing for 30% of the secondary market, for faster, lower-cost decisions",
+        "body2": "Make wills and tax forms available digitally, making vital information accessible",
+        "body3": "Digitize blueprints for aerospace manufacturing companies, accelerating innovation for future designs",
         "title": "Making data accessible"
       },
-      "possibilities-b": {
-        "body-1": "Body 1",
-        "body-2": "Body 2",
-        "body-3": "Body 3",
+      "possibilitiesB": {
+        "body1": "Transform lab samples to train AI models, creating new revenue streams for healthcare providers",
+        "body2": "Create buzzworthy content from extensive film archives, engaging new audiences for major studios",
+        "body3": "Preserve, restore, and digitize cultural collections, enabling greater access and revenue sources",
         "title": "Unlocking new value streams"
       },
-      "possibilities-c": {
-        "body-1": "Body 1",
-        "body-2": "Body 2",
-        "body-3": "Body 3",
+      "possibilitiesC": {
+        "body1": "Automate retention across physical and digital formats to optimize storage and reduce compliance risks",
+        "body2": "Manage, remarket, and recycle IT devices, de-risking assets for organizations with a global workforce",
+        "body3": "Process over 45 million kg of e-waste annually, making the IT lifecycle more sustainable",
         "title": "Optimizing your assets"
       },
-      "problem-1": {
+      "problem1": {
         "text": "What's standing in your way?"
       },
-      "problem-2": [
+      "problem2": [
         {
-          "percent": "20",
+          "percent": "20%",
           "percentSubtitle": "of data remains dark"
         },
         {
-          "percent": "80-90",
+          "percent": "80-90%",
           "percentSubtitle": "of new data is unstructured"
         },
         {
@@ -40,25 +40,25 @@
           "percentSubtitle": "of enterprise data is leveraged for AI"
         }
       ],
-      "problem-3": {
-        "challenge-1": {
-          "body": "body 1",
-          "icon": "icon 1",
+      "problem3": {
+        "challenge1": {
+          "body": "1,300 exabytes of enterprise data created daily—scattered across systems and formats",
+          "icon": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/complexity.png",
           "title": "Too much complexity"
         },
-        "challenge-2": {
-          "body": "body 2",
-          "icon": "icon 2",
+        "challenge2": {
+          "body": "3+ years of ROI expected for AI efforts by ~50% of business leaders",
+          "icon": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/cost.png",
           "title": "Cost, Uncertain ROI"
         },
-        "challenge-3": {
-          "body": "body 3",
-          "icon": "icon 3",
+        "challenge3": {
+          "body": "$14M cost of a non-compliant event",
+          "icon": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/risk.png",
           "title": "Too many risks"
         },
-        "challenge-4": {
-          "body": "body 4",
-          "icon": "icon 4",
+        "challenge4": {
+          "body": "Talent gaps are the third-largest barrier to getting AI ready",
+          "icon": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/skills.png",
           "title": "Too few skills"
         },
         "title": "What's holding you back?"
@@ -67,23 +67,23 @@
         "text": "Welcome to Iron Mountain"
       },
       "beats": {
-        "ambient-1":    { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Basecamp_Ambient_loop_00.webm" },
-        "welcome-1":    { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Basecamp_Welcome_01_part_1.webm" },
-        "welcome-2":    { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Basecamp_Welcome_01_part_2.webm" },
-        "welcome-3":    { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Basecamp_Welcome_01_part_3.webm" },
-        "welcome-4":    { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Basecamp_Welcome_01_part_4.webm" },
-        "problem-1":    { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Basecamp_Problem_02_part_1.webm" },
-        "problem-2":    { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Basecamp_Problem_02_part_2.webm" },
-        "problem-3":    { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Basecamp_Problem_02_part_3.webm" },
-        "problem-4":    { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Basecamp_Problem_02_part_4.webm" },
-        "possibilities-1": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Basecamp_Possibilities_03_part_1.webm" },
-        "possibilities-2": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Basecamp_Possibilities_03_part_2.webm" },
-        "possibilities-3": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Basecamp_Possibilities_03_part_3.webm" },
-        "possibilities-4": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Basecamp_Possibilities_03_part_4.webm" },
-        "possibilities-5": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Basecamp_Possibilities_03_part_5.webm" },
-        "ascend-1": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Basecamp_Ascend_04_part_1.webm" },
-        "ascend-2": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Basecamp_Ascend_04_part_2.webm" },
-        "ascend-3": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Basecamp_Ascend_04_part_3.webm" }
+        "ambient-1":    { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Ambient_loop_00.webm" },
+        "welcome-1":    { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Welcome_01_part_1.webm" },
+        "welcome-2":    { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Welcome_01_part_2.webm" },
+        "welcome-3":    { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Welcome_01_part_3.webm" },
+        "welcome-4":    { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Welcome_01_part_4.webm" },
+        "problem-1":    { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Problem_02_part_1.webm" },
+        "problem-2":    { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Problem_02_part_2.webm" },
+        "problem-3":    { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Problem_02_part_3.webm" },
+        "problem-4":    { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Problem_02_part_4.webm" },
+        "possibilities-1": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Possibilities_03_part_1.webm" },
+        "possibilities-2": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Possibilities_03_part_2.webm" },
+        "possibilities-3": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Possibilities_03_part_3.webm" },
+        "possibilities-4": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Possibilities_03_part_4.webm" },
+        "possibilities-5": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Possibilities_03_part_5.webm" },
+        "ascend-1": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Ascend_04_part_1.webm" },
+        "ascend-2": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Ascend_04_part_2.webm" },
+        "ascend-3": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Ascend_04_part_3.webm" }
       }
     }
   }

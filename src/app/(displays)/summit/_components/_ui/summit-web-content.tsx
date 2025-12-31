@@ -1,6 +1,7 @@
 'use client';
 
-import { ReactElement, useRef, useState } from 'react';
+import { ChevronDown } from 'lucide-react';
+import { ReactElement, useEffect, useMemo, useRef, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import { useSummit } from '@/app/(displays)/summit/_components/providers/summit-provider';
 import HeroSection from '@/app/(displays)/summit/_components/sections/hero-section';
@@ -10,12 +11,29 @@ import RecapSection, { type RecapTone } from '@/app/(displays)/summit/_component
 import StrategiesSection from '@/app/(displays)/summit/_components/sections/strategies-section';
 import SummitPrintableDocument from '@/app/(displays)/summit/_components/summit-printable-document';
 import PrintIcon from '@/components/ui/icons/PrintIcon';
+import { getSummitData } from '@/lib/internal/data/get-summit';
+import { getSummitTours } from '@/lib/internal/data/get-summit-tours';
 import type { SummitFuturescaping, SummitKioskAmbient, SummitPossibility } from '@/app/(displays)/summit/_types';
 import type { SolutionItem } from '@/app/(displays)/summit/_utils';
+import type { SummitTourSummary } from '@/lib/internal/types';
 
 const PAGE_CONTAINER_CLASS = 'flex flex-col gap-14 py-10';
 const PRINT_PAGE_STYLE =
   '@page { size: 8.5in 11in; margin: 0.25in; } body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }';
+const MONTHS = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+] as const;
 const RECAP_TONES_BY_INDEX: readonly (RecapTone | undefined)[] = [
   undefined,
   {
@@ -50,15 +68,172 @@ const RECAP_TONES_BY_INDEX: readonly (RecapTone | undefined)[] = [
 const SECTION_WRAPPER_CLASS = 'lg:px-12 max-w-[1200px] mx-auto px-4 sm:px-8 w-full';
 const STRATEGY_ACCENT_COLORS = ['#8A0D71', '#00A88E', '#F7931E', '#1B75BC'] as const;
 
+const getYearFromDate = (dateString: string): null | number => {
+  const date = new Date(dateString);
+  if (Number.isNaN(date.getTime())) {
+    console.warn('Invalid summit tour date:', dateString);
+    return null;
+  }
+  return date.getFullYear();
+};
+
 const SummitWebContent = () => {
   const { data, error, loading } = useSummit();
   const printableRef = useRef<HTMLDivElement>(null);
+  const expectedTourIdRef = useRef<string>('');
+  const [activeData, setActiveData] = useState<null | typeof data>(null);
+  const [activeTourId, setActiveTourId] = useState<string>('');
   const [isPrinting, setIsPrinting] = useState(false);
   const [printError, setPrintError] = useState<null | string>(null);
+  const [tours, setTours] = useState<readonly SummitTourSummary[]>([]);
+  const [toursError, setToursError] = useState<null | string>(null);
+  const [toursLoading, setToursLoading] = useState(false);
+  const [selectedYear, setSelectedYear] = useState<'' | number>('');
+  const [selectedMonth, setSelectedMonth] = useState<'' | number>('');
+  const [selectedExperience, setSelectedExperience] = useState<'' | string>('');
+  const [experienceLoading, setExperienceLoading] = useState(false);
+  const [experienceError, setExperienceError] = useState<null | string>(null);
 
-  const heroTitle =
-    data?.['summitSlides']?.find(slide => slide.handle === 'journey-1')?.title || 'Your personalized journey map';
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadTours = async () => {
+      setToursLoading(true);
+      setToursError(null);
+      try {
+        const tourList = await getSummitTours();
+        if (!isMounted) return;
+        setTours(tourList);
+        if (tourList.length > 0) {
+          const years = Array.from(
+            new Set(tourList.map(tour => getYearFromDate(tour.date)).filter((year): year is number => year !== null))
+          ).sort((a, b) => a - b);
+          const latestYear = years.at(-1) ?? '';
+          setSelectedYear(latestYear);
+        }
+      } catch (err) {
+        if (!isMounted) return;
+        console.error('Failed to load summit tours', err);
+        setToursError('Unable to load experiences.');
+      } finally {
+        if (isMounted) {
+          setToursLoading(false);
+        }
+      }
+    };
+
+    loadTours();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // Include all years from 2025 to current, even if no tours exist yet, so users can see the full range for planning.
+  const availableYears = useMemo(() => {
+    const yearsFromTours = Array.from(
+      new Set(tours.map(tour => getYearFromDate(tour.date)).filter((year): year is number => year !== null))
+    );
+    const currentYear = new Date().getFullYear();
+    const startYear = 2025;
+    const allYears = [];
+    for (let year = startYear; year <= currentYear; year += 1) {
+      allYears.push(year);
+    }
+    const merged = Array.from(new Set([...allYears, ...yearsFromTours])).sort((a, b) => a - b);
+    return merged;
+  }, [tours]);
+
+  const toursByYear = useMemo(() => {
+    if (!selectedYear) return [];
+    return tours.filter(tour => new Date(tour.date).getFullYear() === selectedYear);
+  }, [selectedYear, tours]);
+
+  const monthAvailability = useMemo(() => {
+    const availability = new Map<number, number>();
+    toursByYear.forEach(tour => {
+      const date = new Date(tour.date);
+      if (Number.isNaN(date.getTime())) {
+        console.warn('Invalid date in tour:', tour);
+        return;
+      }
+      const monthIndex = date.getMonth();
+      availability.set(monthIndex, (availability.get(monthIndex) ?? 0) + 1);
+    });
+    return availability;
+  }, [toursByYear]);
+
+  const toursByYearAndMonth = useMemo(() => {
+    if (!selectedYear) return [];
+    return toursByYear.filter(tour => {
+      const monthIndex = new Date(tour.date).getMonth();
+      if (selectedMonth === '') return true;
+      return monthIndex === selectedMonth;
+    });
+  }, [selectedMonth, selectedYear, toursByYear]);
+
+  const isMonthDisabled = !selectedYear || toursByYear.length === 0;
+  const isExperienceDisabled =
+    !selectedYear || isMonthDisabled || selectedMonth === '' || toursByYearAndMonth.length === 0;
+  const isLoadDisabled = !selectedExperience || experienceLoading;
+
+  const handleYearChange = (value: string) => {
+    const nextYear = value ? Number.parseInt(value, 10) : '';
+    setSelectedYear(Number.isNaN(nextYear) ? '' : nextYear);
+    setSelectedMonth('');
+    setSelectedExperience('');
+  };
+
+  const handleMonthChange = (value: string) => {
+    const nextMonth = value ? Number.parseInt(value, 10) : '';
+    setSelectedMonth(Number.isNaN(nextMonth) ? '' : nextMonth);
+    setSelectedExperience('');
+  };
+
+  const handleExperienceChange = (value: string) => {
+    setSelectedExperience(value);
+  };
+
+  const handleLoadExperience = async () => {
+    if (!selectedExperience) return;
+    const isValidTour = toursByYearAndMonth.some(tour => tour.id === selectedExperience);
+    if (!isValidTour) {
+      console.error('Invalid tour ID selected:', selectedExperience);
+      setExperienceError('Invalid experience selected. Please try again.');
+      return;
+    }
+    expectedTourIdRef.current = selectedExperience;
+    setActiveTourId(selectedExperience);
+    setExperienceLoading(true);
+    setExperienceError(null);
+    try {
+      const fetched = await getSummitData(selectedExperience);
+      if (expectedTourIdRef.current === selectedExperience) {
+        setActiveData(fetched.data);
+      }
+    } catch (err) {
+      if (expectedTourIdRef.current === selectedExperience) {
+        console.error('Failed to load summit experience', err);
+        setExperienceError('Unable to load experience. Please try again.');
+      }
+    } finally {
+      if (expectedTourIdRef.current === selectedExperience) {
+        setExperienceLoading(false);
+      }
+    }
+  };
+
   const recapPlaceholder = 'Type your notes here';
+
+  const loadErrorMessage = 'Unable to load summit content.';
+  const loadingMessage = 'Loading summit experience…';
+  const printErrorMessage = 'Unable to generate PDF. Please try again.';
+
+  const contentData = activeData ?? null;
+  const heroTitle =
+    contentData?.['summitSlides']?.find(slide => slide.handle === 'journey-1')?.title ||
+    data?.['summitSlides']?.find(slide => slide.handle === 'journey-1')?.title ||
+    'Your personalized journey map';
 
   const handlePrint = useReactToPrint({
     contentRef: printableRef,
@@ -73,11 +248,118 @@ const SummitWebContent = () => {
     pageStyle: PRINT_PAGE_STYLE,
   });
 
-  const loadErrorMessage = 'Unable to load summit content.';
-  const loadingMessage = 'Loading summit experience…';
-  const printErrorMessage = 'Unable to generate PDF. Please try again.';
+  const filtersSlot = (
+    <div className="flex w-full flex-col gap-3 pt-4">
+      <p className="text-sm text-[#58595B]">
+        Filter experiences using the drop-down menus below.
+        <br />
+        Your results will update on this page.
+      </p>
+      <div className="flex flex-col gap-3">
+        <div className="grid gap-4 md:grid-cols-3">
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-semibold text-[#58595B]">Year</label>
+            <div className="relative">
+              <select
+                className={`w-full appearance-none rounded-lg bg-[#F2F2F2] px-4 py-3 pr-12 text-base transition outline-none ${
+                  selectedYear === '' ? 'text-[#58595B]' : 'text-[#14477D]'
+                } disabled:cursor-not-allowed disabled:bg-[#A1A1A4] disabled:text-[#58595B]`}
+                onChange={event => handleYearChange(event.target.value)}
+                value={selectedYear}
+              >
+                {availableYears.map(year => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown
+                aria-hidden
+                className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-[#14477D]"
+                size={24}
+              />
+            </div>
+          </div>
 
-  if (loading) {
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-semibold text-[#58595B]">Month</label>
+            <div className="relative">
+              <select
+                className={`w-full appearance-none rounded-lg bg-[#F2F2F2] px-4 py-3 pr-12 text-base transition outline-none ${
+                  selectedMonth === '' ? 'text-[#58595B]' : 'text-[#14477D]'
+                } disabled:cursor-not-allowed disabled:bg-[#A1A1A4] disabled:text-[#58595B]`}
+                disabled={isMonthDisabled}
+                onChange={event => handleMonthChange(event.target.value)}
+                value={selectedMonth}
+              >
+                <option value="">Select month</option>
+                {MONTHS.map((month, index) => {
+                  const hasTours = (monthAvailability.get(index) ?? 0) > 0;
+                  return (
+                    <option disabled={!hasTours} key={month} value={index}>
+                      {month}
+                    </option>
+                  );
+                })}
+              </select>
+              <ChevronDown
+                aria-hidden
+                className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-[#14477D]"
+                size={24}
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-semibold text-[#58595B]">Experience</label>
+            <div className="relative">
+              <select
+                className={`w-full appearance-none rounded-lg bg-[#F2F2F2] px-4 py-3 pr-12 text-base transition outline-none ${
+                  selectedExperience === '' ? 'text-[#58595B]' : 'text-[#14477D]'
+                } disabled:cursor-not-allowed disabled:bg-[#A1A1A4] disabled:text-[#58595B]`}
+                disabled={isExperienceDisabled}
+                onChange={event => handleExperienceChange(event.target.value)}
+                value={selectedExperience}
+              >
+                <option value="">Select experience</option>
+                {toursByYearAndMonth.map(tour => {
+                  return (
+                    <option key={tour.id} value={tour.id}>
+                      {tour.name}
+                    </option>
+                  );
+                })}
+              </select>
+              <ChevronDown
+                aria-hidden
+                className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-[#14477D]"
+                size={24}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between">
+          {experienceError ? <p className="text-sm text-destructive">{experienceError}</p> : <span />}
+          <div className="flex items-center gap-3">
+            {toursError ? <p className="text-sm text-destructive">{toursError}</p> : null}
+            <button
+              className="rounded-full bg-[#0B4175] px-5 py-2 text-sm font-semibold text-white transition hover:bg-[#0b4175]/90 disabled:cursor-not-allowed disabled:bg-muted"
+              disabled={isLoadDisabled}
+              onClick={handleLoadExperience}
+              type="button"
+            >
+              {experienceLoading ? 'Loading…' : 'Load'}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {!!contentData && <hr className="border-t border-[#D0D0D3]" />}
+    </div>
+  );
+
+  if (loading || toursLoading) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center text-base text-muted-foreground">
         {loadingMessage}
@@ -93,7 +375,17 @@ const SummitWebContent = () => {
     );
   }
 
-  const { basecamp, kiosk1, kiosk2, kiosk3, meta = [], overlook, summitSlides = [] } = data;
+  if (!contentData) {
+    return (
+      <div className={PAGE_CONTAINER_CLASS}>
+        <div className={SECTION_WRAPPER_CLASS}>
+          <HeroSection actionSlot={null} filtersSlot={filtersSlot} meta={[]} title="" />
+        </div>
+      </div>
+    );
+  }
+
+  const { basecamp, kiosk1, kiosk2, kiosk3, meta = [], overlook, summitSlides = [] } = contentData;
 
   const handlePrintClick = async () => {
     setPrintError(null);
@@ -167,10 +459,12 @@ const SummitWebContent = () => {
     />
   );
 
+  const storageKeyPrefix = activeTourId ? `recap-${activeTourId}` : 'recap';
+
   const renderRecap = (index: number) => (
     <RecapSection
       placeholder={recapPlaceholder}
-      storageKey={`recap-${index}`}
+      storageKey={`${storageKeyPrefix}-${index}`}
       title="Recap"
       tone={RECAP_TONES_BY_INDEX[index]}
     />
@@ -180,7 +474,7 @@ const SummitWebContent = () => {
     <RecapPrintSection
       hideWhenEmpty
       placeholder={recapPlaceholder}
-      storageKey={`recap-${index}`}
+      storageKey={`${storageKeyPrefix}-${index}`}
       title="Recap"
       tone={RECAP_TONES_BY_INDEX[index]}
     />
@@ -218,6 +512,7 @@ const SummitWebContent = () => {
               ) : null}
             </div>
           }
+          filtersSlot={filtersSlot}
           meta={meta}
           title={heroTitle}
         />
