@@ -214,7 +214,20 @@ export const useKioskSlides = ({
 
   // Build slides
   const slides = useMemo(() => {
-    if (!challenges || !solutions || !values || !customInteractive) return [];
+    // Log missing sections for debugging
+    if (!challenges || !solutions || !values || !customInteractive) {
+      const missing: string[] = [];
+      if (!challenges) missing.push('challenges');
+      if (!solutions) missing.push('solutions');
+      if (!values) missing.push('values');
+      if (!customInteractive) missing.push('customInteractive');
+
+      if (process.env.NODE_ENV === 'development') {
+        console.warn(`[useKioskSlides] Kiosk ${kioskId} missing sections:`, missing.join(', '));
+      }
+
+      return [];
+    }
 
     return [
       ...buildChallengeSlides(challenges, kioskId, globalHandlers, {

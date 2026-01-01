@@ -37,6 +37,8 @@ export function useGlobalParagraphNavigation({
   const [isScrolling, setIsScrolling] = useState(false);
   const [currentScrollTarget, setCurrentScrollTarget] = useState<null | string>(null);
   const isScrollingRef = useRef(false);
+  // Track scroll timeout for cleanup
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Detect ALL paragraph sections in the entire container
   useEffect(() => {
@@ -107,6 +109,12 @@ export function useGlobalParagraphNavigation({
       const container = containerRef.current;
       if (!container || index < -1 || index >= allParagraphs.length) return;
 
+      // Clear any existing timeout before setting a new one
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+        scrollTimeoutRef.current = null;
+      }
+
       // If scrolling to -1, scroll to top
       if (index === -1) {
         isScrollingRef.current = true;
@@ -119,11 +127,12 @@ export function useGlobalParagraphNavigation({
         });
 
         // Wait for scroll to complete
-        setTimeout(() => {
+        scrollTimeoutRef.current = setTimeout(() => {
           isScrollingRef.current = false;
           setIsScrolling(false);
           setCurrentScrollTarget(null);
           setCurrentIndex(-1);
+          scrollTimeoutRef.current = null;
         }, duration);
         return;
       }
@@ -149,6 +158,8 @@ export function useGlobalParagraphNavigation({
       // Walk up the tree to calculate total offset relative to container
       while (currentElement !== null && currentElement !== container) {
         elementOffsetTop += currentElement.offsetTop;
+        // Type assertion is safe - offsetParent returns Element | null, but in our
+        // HTML context it's always HTMLElement | null (not SVG or other Element types)
         currentElement = currentElement.offsetParent as HTMLElement | null;
       }
 
@@ -168,10 +179,11 @@ export function useGlobalParagraphNavigation({
       });
 
       // Wait for scroll to complete
-      setTimeout(() => {
+      scrollTimeoutRef.current = setTimeout(() => {
         isScrollingRef.current = false;
         setIsScrolling(false);
         setCurrentIndex(index);
+        scrollTimeoutRef.current = null;
       }, duration);
     },
     [allParagraphs, containerRef, duration]
@@ -211,6 +223,15 @@ export function useGlobalParagraphNavigation({
     },
     [allParagraphs, scrollToParagraph]
   );
+
+  // Cleanup scroll timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return {
     currentScrollTarget,

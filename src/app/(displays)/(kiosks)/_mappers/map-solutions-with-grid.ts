@@ -17,14 +17,28 @@ export type DiamondMapping = {
   readonly topRight: number;
 };
 
+/**
+ * Validates that diamondList contains only strings
+ */
+const validateDiamondList = (value: unknown): readonly string[] => {
+  if (!Array.isArray(value)) {
+    throw new Error('diamondList must be an array');
+  }
+  if (!value.every(item => typeof item === 'string')) {
+    throw new Error('diamondList must contain only strings');
+  }
+  return value;
+};
+
 export const mapSolutionsWithGrid = (
   solutionsMain: SolutionsMain,
   solutionsGrid: SolutionsGrid,
   ambient: Ambient,
   diamondMapping: DiamondMapping
 ): SolutionScreens => {
-  // Map diamond array to positioned labels
-  const diamondPositions = mapArrayToPositions(solutionsGrid.diamondList, diamondMapping);
+  // Validate diamond list before mapping
+  const diamondList = validateDiamondList(solutionsGrid.diamondList);
+  const diamondPositions = mapArrayToPositions<string>(diamondList, diamondMapping);
 
   return {
     firstScreen: {
@@ -50,9 +64,10 @@ export const mapSolutionsWithGrid = (
       subheadline: ambient.title,
     },
     thirdScreen: {
-      bottomLeftLabel: diamondPositions.bottomLeft as string | undefined,
-      bottomRightLabel: diamondPositions.bottomRight as string | undefined,
-      centerLabel: diamondPositions.center as string | undefined,
+      // No type assertion needed - diamondPositions is validated as string | undefined
+      bottomLeftLabel: diamondPositions.bottomLeft,
+      bottomRightLabel: diamondPositions.bottomRight,
+      centerLabel: diamondPositions.center,
       diamondList: solutionsGrid.diamondList,
       headline: solutionsGrid.headline,
       images: solutionsGrid.images,
@@ -60,8 +75,8 @@ export const mapSolutionsWithGrid = (
       mediaDiamondLeftSrc: solutionsGrid.images?.[0],
       mediaDiamondRightSrc: solutionsGrid.images?.[1],
       subheadline: ambient.title,
-      topLeftLabel: diamondPositions.topLeft as string | undefined,
-      topRightLabel: diamondPositions.topRight as string | undefined,
+      topLeftLabel: diamondPositions.topLeft,
+      topRightLabel: diamondPositions.topRight,
     },
   };
 };

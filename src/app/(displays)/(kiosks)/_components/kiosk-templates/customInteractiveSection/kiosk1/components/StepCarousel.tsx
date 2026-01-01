@@ -162,7 +162,15 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
 
   const handlePlusClick = useCallback(
     (event: React.KeyboardEvent | React.MouseEvent) => {
-      const target = event.currentTarget as HTMLElement;
+      // Type guard for currentTarget
+      if (!(event.currentTarget instanceof HTMLElement)) {
+        if (process.env.NODE_ENV === 'development') {
+          console.error('currentTarget is not an HTMLElement');
+        }
+        return;
+      }
+
+      const target = event.currentTarget;
       const idx = Number(target.dataset.idx);
       if (Number.isNaN(idx)) return;
 

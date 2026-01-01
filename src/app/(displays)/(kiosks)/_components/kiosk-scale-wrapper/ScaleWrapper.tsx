@@ -22,9 +22,7 @@ const ScaleWrapper = ({ background = 'black', children, targetHeight, targetWidt
     '--target-width': `${targetWidth}px`,
     'height': 'var(--target-height)',
     'transform': 'scale(var(--scale))',
-    'transformOrigin': 'top left',
     'width': 'var(--target-width)',
-    'willChange': 'transform',
   } as CSSProperties;
 
   return (
@@ -32,7 +30,9 @@ const ScaleWrapper = ({ background = 'black', children, targetHeight, targetWidt
       className="grid w-screen place-items-center"
       style={{ '--background': background, 'background': 'var(--background)' } as CSSProperties}
     >
-      <div style={innerStyle}>{children}</div>
+      <div className="origin-top-left will-change-transform" style={innerStyle}>
+        {children}
+      </div>
       {/* Inline approach here since arbitrary values in tailwind like scale([${scale}]) don't work with runtime values. targetHeight, targetWidth, and scale are calculated from config and won't be known at buildtime. (kiosk.config.json)*/}
     </div>
   );
