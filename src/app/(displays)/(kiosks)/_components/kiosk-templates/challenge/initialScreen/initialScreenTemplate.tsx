@@ -48,17 +48,17 @@ const InitialScreenTemplate = memo(
             <div className="absolute inset-0 bg-[rgba(0,0,0,0.2)]" />
           </div>
         </div>
-        <div className="absolute left-[244px] top-[970px] z-3 w-[980px] -translate-y-full">
+        <div className="absolute top-[970px] left-[244px] z-3 w-[980px] -translate-y-full">
           <h2 className="text-[120px] leading-[1.3] font-normal tracking-[-6px] whitespace-pre-line text-[#ededed]">
             {renderRegisteredMark(subheadline)}
           </h2>
         </div>
 
         <div
-          className="absolute left-[120px] top-[1130px] z-2 flex w-[1920px] flex-col gap-[200px] rounded-[60px] bg-[#F7931E] px-[120px] py-[240px] pb-[330px] backdrop-blur-[30px] group-data-[kiosk=kiosk-2]/kiosk:bg-[#8DC13F] group-data-[kiosk=kiosk-2]/kiosk:py-[220px] group-data-[kiosk=kiosk-2]/kiosk:pb-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[1920px] group-data-[kiosk=kiosk-3]/kiosk:bg-[#00A88E] group-data-[kiosk=kiosk-3]/kiosk:pb-0"
+          className="absolute top-[1130px] left-[120px] z-2 flex w-[1920px] flex-col gap-[200px] rounded-[60px] bg-[#F7931E] px-[120px] py-[240px] pb-[330px] backdrop-blur-[30px] group-data-[kiosk=kiosk-2]/kiosk:bg-[#8DC13F] group-data-[kiosk=kiosk-2]/kiosk:py-[220px] group-data-[kiosk=kiosk-2]/kiosk:pb-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[1920px] group-data-[kiosk=kiosk-3]/kiosk:bg-[#00A88E] group-data-[kiosk=kiosk-3]/kiosk:pb-0"
           data-name="Challenge Initial Screen Content Box"
         >
-          <div className="absolute left-[120px] top-[2910px] z-3 flex h-[182px] w-[703px] items-center group-data-[kiosk=kiosk-2]/kiosk:top-[2890px] group-data-[kiosk=kiosk-3]/kiosk:hidden">
+          <div className="absolute top-[2910px] left-[120px] z-3 flex h-[182px] w-[703px] items-center group-data-[kiosk=kiosk-2]/kiosk:top-[2890px] group-data-[kiosk=kiosk-3]/kiosk:hidden">
             <WhiteLogoSimple aria-hidden="true" className="h-full w-full" preserveAspectRatio="xMidYMid meet" />
           </div>
 
