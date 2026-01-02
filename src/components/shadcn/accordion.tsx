@@ -37,7 +37,14 @@ export const AccordionContent = ({
   className,
   ...rest
 }: ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>) => (
-  <AccordionPrimitive.Content className={cn('text-sm', className)} {...rest}>
+  <AccordionPrimitive.Content
+    className={cn(
+      'overflow-hidden text-sm transition-all',
+      'data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down',
+      className
+    )}
+    {...rest}
+  >
     <div className="pt-0 pb-4">{children}</div>
   </AccordionPrimitive.Content>
 );
