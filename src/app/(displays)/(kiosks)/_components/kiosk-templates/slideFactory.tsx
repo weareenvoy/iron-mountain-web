@@ -33,6 +33,9 @@ type CreateSlideOptions = {
 
 /**
  * Creates a single slide with automatic prop injection and wrapping.
+ * Type assertion is safe because SlideConfig<TProps> ensures props matches TProps
+ * at compile time. The spread is necessary because TypeScript can't infer that props
+ * is assignable to TProps when spreading, despite the generic constraint.
  */
 export const createSlide = <TProps extends Record<string, unknown>>(
   config: SlideConfig<TProps>,
@@ -45,6 +48,7 @@ export const createSlide = <TProps extends Record<string, unknown>>(
     id,
     render: () => (
       <SectionSlide>
+        {/* Type assertion is safe - props is guaranteed to match TProps by generic constraint */}
         <Component {...(props as TProps)} kioskId={kioskId} {...handlers} />
       </SectionSlide>
     ),
@@ -65,6 +69,7 @@ export const createSlides = <TProps extends Record<string, unknown>>(
 
 /**
  * Creates a slide without navigation handlers (e.g., initial screen).
+ * Type assertion is safe - props is guaranteed to match TProps by generic constraint.
  */
 export const createSlideWithoutHandlers = <TProps extends Record<string, unknown>>(
   config: SlideConfig<TProps>,
@@ -76,6 +81,7 @@ export const createSlideWithoutHandlers = <TProps extends Record<string, unknown
     id,
     render: () => (
       <SectionSlide>
+        {/* Type assertion is safe - props is guaranteed to match TProps by generic constraint */}
         <Component {...(props as TProps)} kioskId={kioskId} />
       </SectionSlide>
     ),

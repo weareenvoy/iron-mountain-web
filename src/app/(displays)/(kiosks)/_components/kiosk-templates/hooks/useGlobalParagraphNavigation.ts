@@ -37,6 +37,8 @@ export function useGlobalParagraphNavigation({
   const [isScrolling, setIsScrolling] = useState(false);
   const [currentScrollTarget, setCurrentScrollTarget] = useState<null | string>(null);
   const isScrollingRef = useRef(false);
+  // Track scroll timeout for cleanup
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Detect ALL paragraph sections in the entire container
   useEffect(() => {
@@ -107,6 +109,12 @@ export function useGlobalParagraphNavigation({
       const container = containerRef.current;
       if (!container || index < -1 || index >= allParagraphs.length) return;
 
+      // Clear any existing timeout before setting a new one
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+        scrollTimeoutRef.current = null;
+      }
+
       // If scrolling to -1, scroll to top
       if (index === -1) {
         isScrollingRef.current = true;
@@ -119,11 +127,12 @@ export function useGlobalParagraphNavigation({
         });
 
         // Wait for scroll to complete
-        setTimeout(() => {
+        scrollTimeoutRef.current = setTimeout(() => {
           isScrollingRef.current = false;
           setIsScrolling(false);
           setCurrentScrollTarget(null);
           setCurrentIndex(-1);
+          scrollTimeoutRef.current = null;
         }, duration);
         return;
       }
@@ -146,10 +155,24 @@ export function useGlobalParagraphNavigation({
       let elementOffsetTop = 0;
       let currentElement: HTMLElement | null = targetParagraph;
 
+      // Type guard for offsetParent to ensure it's HTMLElement
+      const isHTMLElement = (element: Element | null): element is HTMLElement | null => {
+        return element === null || element instanceof HTMLElement;
+      };
+
       // Walk up the tree to calculate total offset relative to container
       while (currentElement !== null && currentElement !== container) {
         elementOffsetTop += currentElement.offsetTop;
-        currentElement = currentElement.offsetParent as HTMLElement | null;
+        const parent: Element | null = currentElement.offsetParent;
+        if (!isHTMLElement(parent)) {
+          // Edge case: offsetParent is not HTMLElement (e.g., SVGElement)
+          // This shouldn't happen in HTML context, but handle gracefully
+          if (process.env.NODE_ENV === 'development') {
+            console.warn('[useGlobalParagraphNavigation] offsetParent is not HTMLElement:', parent);
+          }
+          break;
+        }
+        currentElement = parent;
       }
 
       // Use 0 offset for videos and root container divs (scroll to exact position)
@@ -168,10 +191,11 @@ export function useGlobalParagraphNavigation({
       });
 
       // Wait for scroll to complete
-      setTimeout(() => {
+      scrollTimeoutRef.current = setTimeout(() => {
         isScrollingRef.current = false;
         setIsScrolling(false);
         setCurrentIndex(index);
+        scrollTimeoutRef.current = null;
       }, duration);
     },
     [allParagraphs, containerRef, duration]
@@ -211,6 +235,15 @@ export function useGlobalParagraphNavigation({
     },
     [allParagraphs, scrollToParagraph]
   );
+
+  // Cleanup scroll timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return {
     currentScrollTarget,

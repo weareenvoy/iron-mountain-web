@@ -2,8 +2,8 @@
 
 import { ChevronDownIcon } from 'lucide-react';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
-import { type ComponentPropsWithoutRef } from 'react';
 import { cn } from '@/lib/tailwind/utils/cn';
+import type { ComponentPropsWithoutRef } from 'react';
 
 export const Accordion = AccordionPrimitive.Root;
 
@@ -37,15 +37,7 @@ export const AccordionContent = ({
   className,
   ...rest
 }: ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>) => (
-  <AccordionPrimitive.Content
-    className={cn(
-      'overflow-hidden text-sm',
-      'data-[state=open]:animate-accordion-down',
-      'data-[state=closed]:animate-accordion-up',
-      className
-    )}
-    {...rest}
-  >
+  <AccordionPrimitive.Content className={cn('text-sm', className)} {...rest}>
     <div className="pt-0 pb-4">{children}</div>
   </AccordionPrimitive.Content>
 );

@@ -65,9 +65,8 @@ const CustomInteractiveDemoScreenTemplate = ({
           <iframe
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
-            className="pointer-events-auto h-full w-full rounded-[20px]"
+            className="pointer-events-auto h-full w-full rounded-[20px] border-0"
             src={autoplayUrl}
-            style={{ border: 0 }}
             title={cardText}
           />
         ) : (

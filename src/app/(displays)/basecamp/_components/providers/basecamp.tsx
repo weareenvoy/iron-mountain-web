@@ -13,17 +13,17 @@ import {
 import { parseBasecampBeatId } from '@/app/(tablets)/docent/_utils';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getBasecampData } from '@/lib/internal/data/get-basecamp';
-import { type BasecampData, type ExhibitNavigationState, type Locale } from '@/lib/internal/types';
+import { type BasecampBeatId, type BasecampData, type ExhibitNavigationState, type Locale } from '@/lib/internal/types';
 import type { ExhibitMqttStateBase } from '@/lib/mqtt/types';
 
 interface BasecampContextType {
-  data: BasecampData | null;
-  error: null | string;
-  exhibitState: ExhibitNavigationState;
-  loading: boolean;
-  locale: Locale;
-  readyBeatId: null | string;
-  setReadyBeatId: (beatId: null | string) => void;
+  readonly data: BasecampData | null;
+  readonly error: null | string;
+  readonly exhibitState: ExhibitNavigationState;
+  readonly loading: boolean;
+  readonly locale: Locale;
+  readonly readyBeatId: BasecampBeatId | null;
+  readonly setReadyBeatId: (beatId: BasecampBeatId | null) => void;
 }
 
 export const BasecampContext = createContext<BasecampContextType | undefined>(undefined);
@@ -44,7 +44,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
   const { client } = useMqtt();
 
   // Which beat's video is ready. Foreground compares its beatId to this.
-  const [readyBeatId, setReadyBeatId] = useState<null | string>(null);
+  const [readyBeatId, setReadyBeatId] = useState<BasecampBeatId | null>(null);
 
   // MQTT state. What we report to GEC + tracks current beat being displayed.
   const [mqttState, setMqttState] = useState<ExhibitMqttStateBase>({

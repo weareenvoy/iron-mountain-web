@@ -1,3 +1,5 @@
+import type { SummitData } from '@/app/(displays)/summit/_types';
+
 export type BasecampSection = 'ambient' | 'ascend' | 'possibilities' | 'problem' | 'welcome';
 export type OverlookSection =
   | 'activate'
@@ -173,63 +175,63 @@ export interface Tour {
 }
 
 export interface BasecampData {
-  readonly 'beats': {
+  readonly beats: {
     readonly [key in BasecampBeatId]: {
       readonly url: string;
     };
   };
-  readonly 'possibilities': {
+  readonly possibilities: {
     readonly title: string;
   };
-  readonly 'possibilities-a': {
-    readonly 'body-1': string;
-    readonly 'body-2': string;
-    readonly 'body-3': string;
-    readonly 'title': string;
+  readonly possibilitiesA: {
+    readonly body1: string;
+    readonly body2: string;
+    readonly body3: string;
+    readonly title: string;
   };
-  readonly 'possibilities-b': {
-    readonly 'body-1': string;
-    readonly 'body-2': string;
-    readonly 'body-3': string;
-    readonly 'title': string;
+  readonly possibilitiesB: {
+    readonly body1: string;
+    readonly body2: string;
+    readonly body3: string;
+    readonly title: string;
   };
-  readonly 'possibilities-c': {
-    readonly 'body-1': string;
-    readonly 'body-2': string;
-    readonly 'body-3': string;
-    readonly 'title': string;
+  readonly possibilitiesC: {
+    readonly body1: string;
+    readonly body2: string;
+    readonly body3: string;
+    readonly title: string;
   };
-  readonly 'problem-1': {
+  readonly problem1: {
     readonly text: string;
   };
-  readonly 'problem-2': {
+  readonly problem2: {
     readonly percent: string;
     readonly percentSubtitle: string;
   }[];
-  readonly 'problem-3': {
-    readonly 'challenge-1': {
+  readonly problem3: {
+    readonly challenge1: {
       readonly body: string;
       readonly icon: string;
       readonly title: string;
     };
-    readonly 'challenge-2': {
+    readonly challenge2: {
       readonly body: string;
       readonly icon: string;
       readonly title: string;
     };
-    readonly 'challenge-3': {
+    readonly challenge3: {
       readonly body: string;
       readonly icon: string;
       readonly title: string;
     };
-    readonly 'challenge-4': {
+    readonly challenge4: {
       readonly body: string;
       readonly icon: string;
       readonly title: string;
     };
-    readonly 'title': string;
+    readonly title: string;
   };
-  readonly 'welcome': {
+  readonly welcome: {
     readonly text: string;
   };
 }
@@ -376,7 +378,14 @@ export interface KioskData {
   readonly value?: unknown;
 }
 
-import type { SummitData } from '@/app/(displays)/summit/_types';
+/**
+ * ISO 8601 date string (YYYY-MM-DD)
+ */
+export interface SummitTourSummary {
+  readonly date: string;
+  readonly id: string;
+  readonly name: string;
+}
 
 export type Locale = 'en' | 'pt';
 
