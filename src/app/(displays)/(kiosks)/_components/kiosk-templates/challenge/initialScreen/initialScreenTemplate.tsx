@@ -83,25 +83,16 @@ const InitialScreenTemplate = memo(
             {renderRegisteredMark(headline)}
           </h1>
 
-          <div
-            className="relative flex w-[1670px] flex-col gap-[20px]"
-            style={{ top: `${LAYOUT.QUOTE_CONTAINER.top}px` }}
-          >
+          <div className="relative top-[10px] flex w-[1670px] flex-col gap-[20px]">
             <p className="text-[80px] leading-[1.3] font-normal tracking-[-4px] text-white group-data-[kiosk=kiosk-3]/kiosk:relative group-data-[kiosk=kiosk-3]/kiosk:top-[-230px] group-data-[kiosk=kiosk-3]/kiosk:text-[120px] group-data-[kiosk=kiosk-3]/kiosk:tracking-[-6px]">
               {renderRegisteredMark(quote)}
             </p>
-            <p
-              className="relative text-[52px] leading-[1.4] font-semibold tracking-[-2.6px] whitespace-pre-wrap text-black"
-              style={{ top: `${LAYOUT.ATTRIBUTION.top}px` }}
-            >
+            <p className="relative top-[180px] text-[52px] leading-[1.4] font-semibold tracking-[-2.6px] whitespace-pre-wrap text-black">
               {renderRegisteredMark(attribution)}
             </p>
           </div>
 
-          <div
-            className="relative flex w-full flex-col items-start justify-center gap-[10px] group-data-[kiosk=kiosk-2]/kiosk:top-0 group-data-[kiosk=kiosk-3]/kiosk:top-[-220px]"
-            style={{ top: `${LAYOUT.BUTTON_CONTAINER.top}px` }}
-          >
+          <div className="relative top-[190px] flex w-full flex-col items-start justify-center gap-[10px] group-data-[kiosk=kiosk-2]/kiosk:top-0 group-data-[kiosk=kiosk-3]/kiosk:top-[-220px]">
             <button
               aria-label={buttonText}
               className="flex h-[200px] items-center justify-center gap-[60px] rounded-[999px] bg-[#ededed] px-[100px] py-[70px] text-left backdrop-blur-[19px] transition-all duration-300 ease-out group-data-[kiosk=kiosk-2]/kiosk:px-[110px] hover:scale-[1.05] hover:shadow-[0_8px_24px_rgba(0,0,0,0.15)] active:scale-[0.98]"
