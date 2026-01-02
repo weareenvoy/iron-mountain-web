@@ -23,8 +23,5 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
-@layer base {
-}
-
 @layer utilities {
 }
