@@ -38,7 +38,8 @@ export const useCarouselDelegation = ({
       carouselHandlers.canScrollNext();
 
     if (shouldDelegateToCarousel) {
-      carouselHandlers!.scrollNext();
+      // Type guard above ensures carouselHandlers is not null
+      carouselHandlers.scrollNext();
       return;
     }
 
@@ -52,7 +53,8 @@ export const useCarouselDelegation = ({
       carouselHandlers.canScrollPrev();
 
     if (shouldDelegateToCarousel) {
-      carouselHandlers!.scrollPrev();
+      // Type guard above ensures carouselHandlers is not null
+      carouselHandlers.scrollPrev();
       return;
     }
 

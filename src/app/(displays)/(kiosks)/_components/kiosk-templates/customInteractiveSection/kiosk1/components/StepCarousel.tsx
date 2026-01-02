@@ -139,6 +139,13 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
     emblaApi.scrollTo(desiredIndex, true);
   }, [applyEdgeTransforms, emblaApi, totalSlides]);
 
+  // Cleanup: Destroy Embla instance on unmount to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      emblaApi?.destroy();
+    };
+  }, [emblaApi]);
+
   const handlePrev = () => {
     if (!emblaApi || totalSlides === 0) return;
     const target = (selectedIndex - 1 + totalSlides) % totalSlides;
