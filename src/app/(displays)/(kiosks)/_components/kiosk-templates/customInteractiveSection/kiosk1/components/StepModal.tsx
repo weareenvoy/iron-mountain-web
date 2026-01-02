@@ -18,8 +18,8 @@ const StepModal = ({ content, onClose }: StepModalProps) => {
 
   return (
     <div className="pointer-events-auto absolute inset-0 z-[200] flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-[50px]" onClick={onClose} />
-      <div className="relative z-[201] flex h-[2800px] max-h-[90vh] w-[1920px] flex-col overflow-hidden rounded-[48px] bg-[#97e9ff] p-[80px] text-[#14477d] shadow-[0_40px_120px_rgba(0,0,0,0.45)]">
+      <div className="pointer-events-auto absolute inset-0 bg-black/60 backdrop-blur-[50px]" onClick={onClose} />
+      <div className="pointer-events-auto relative z-[201] flex h-[2800px] max-h-[90vh] w-[1920px] flex-col overflow-hidden rounded-[48px] bg-[#97e9ff] p-[80px] text-[#14477d] shadow-[0_40px_120px_rgba(0,0,0,0.45)]">
         <div className="flex items-center justify-between">
           <button
             className="relative top-[45px] left-[60px] flex h-[200px] items-center gap-[24px] rounded-[1000px] bg-[#ededed] px-[90px] py-[60] pr-[100px] text-[55px] leading-[1.4] font-normal tracking-[-2.7px] text-[#14477d] transition hover:scale-[1.02]"
