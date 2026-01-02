@@ -18,11 +18,17 @@ type UseCarouselDelegationConfig = {
   readonly currentScrollTarget: null | string;
 };
 
+type UseCarouselDelegationReturn = {
+  readonly handleNavigateDown: () => void;
+  readonly handleNavigateUp: () => void;
+  readonly handleRegisterCarouselHandlers: (handlers: CarouselHandlers) => void;
+};
+
 export const useCarouselDelegation = ({
   baseHandleNavigateDown,
   baseHandleNavigateUp,
   currentScrollTarget,
-}: UseCarouselDelegationConfig) => {
+}: UseCarouselDelegationConfig): UseCarouselDelegationReturn => {
   const [carouselHandlers, setCarouselHandlers] = useState<CarouselHandlers | null>(null);
 
   // Register carousel handlers (called by carousel component)

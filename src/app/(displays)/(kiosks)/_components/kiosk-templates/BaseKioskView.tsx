@@ -57,7 +57,7 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
   const handleInitialButtonClick = useMemo(() => () => handleButtonClick(kioskId), [handleButtonClick, kioskId]);
 
   // Build slides with the memoized button click handler
-  const { slides } = useKioskSlides({
+  const { missingSections, slides } = useKioskSlides({
     diamondMapping,
     kioskData,
     kioskId,
@@ -110,7 +110,11 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
       <div className="flex h-screen w-full items-center justify-center bg-black text-white">
         <div className="text-center">
           <p className="text-2xl">Unable to load kiosk content</p>
-          <p className="mt-4 text-sm opacity-60">Data structure may be invalid</p>
+          {missingSections && missingSections.length > 0 ? (
+            <p className="mt-4 text-sm opacity-60">Missing sections: {missingSections.join(', ')}</p>
+          ) : (
+            <p className="mt-4 text-sm opacity-60">Data structure may be invalid</p>
+          )}
           {process.env.NODE_ENV === 'development' && (
             <p className="mt-2 text-xs opacity-40">Check console for details</p>
           )}

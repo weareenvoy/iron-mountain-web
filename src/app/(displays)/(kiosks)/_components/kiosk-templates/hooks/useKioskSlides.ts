@@ -158,6 +158,47 @@ const isCustomInteractiveContent = (value: unknown): value is CustomInteractiveC
   );
 };
 
+/**
+ * Type guard for DemoConfig - validates shape matches expected type
+ */
+const isDemoConfig = (value: unknown): value is DemoConfig => {
+  if (typeof value !== 'object' || value === null) return false;
+  const obj = value as Record<string, unknown>;
+  return (
+    (obj.demoText === undefined || typeof obj.demoText === 'string') &&
+    (obj.headline === undefined || typeof obj.headline === 'string') &&
+    (obj.iframeLink === undefined || typeof obj.iframeLink === 'string') &&
+    (obj.mainCTA === undefined || typeof obj.mainCTA === 'string')
+  );
+};
+
+/**
+ * Type guard for SolutionsAccordion - validates shape matches expected type
+ */
+const isSolutionsAccordion = (value: unknown): value is SolutionsAccordion => {
+  if (typeof value !== 'object' || value === null) return false;
+  const obj = value as Record<string, unknown>;
+  return (
+    (obj.headline === undefined || typeof obj.headline === 'string') &&
+    (obj.labelText === undefined || typeof obj.labelText === 'string') &&
+    (obj.steps === undefined || Array.isArray(obj.steps))
+  );
+};
+
+/**
+ * Type guard for SolutionsGrid - validates shape matches expected type
+ */
+const isSolutionsGrid = (value: unknown): value is SolutionsGrid => {
+  if (typeof value !== 'object' || value === null) return false;
+  const obj = value as Record<string, unknown>;
+  return (
+    (obj.diamondList === undefined ||
+      (Array.isArray(obj.diamondList) && obj.diamondList.every(item => typeof item === 'string'))) &&
+    (obj.headline === undefined || typeof obj.headline === 'string') &&
+    (obj.images === undefined || Array.isArray(obj.images))
+  );
+};
+
 const parseKioskData = (kioskData: KioskData) => {
   if (!kioskData) return null;
 
@@ -218,17 +259,38 @@ const parseKioskData = (kioskData: KioskData) => {
       return validated;
     });
 
-    const demoMain = getOptionalProperty(obj, 'demoMain', val => validateObject(val, 'demoMain', d => d)) as
-      | DemoConfig
-      | undefined;
+    const demoMain = getOptionalProperty(obj, 'demoMain', val => {
+      const validated = validateObject(val, 'demoMain', d => d);
+      if (!isDemoConfig(validated)) {
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('[useKioskSlides] demoMain object has invalid shape:', validated);
+        }
+        return undefined;
+      }
+      return validated;
+    });
 
-    const solutionAccordion = getOptionalProperty(obj, 'solutionAccordion', val =>
-      validateObject(val, 'solutionAccordion', s => s)
-    ) as SolutionsAccordion | undefined;
+    const solutionAccordion = getOptionalProperty(obj, 'solutionAccordion', val => {
+      const validated = validateObject(val, 'solutionAccordion', s => s);
+      if (!isSolutionsAccordion(validated)) {
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('[useKioskSlides] solutionAccordion object has invalid shape:', validated);
+        }
+        return undefined;
+      }
+      return validated;
+    });
 
-    const solutionGrid = getOptionalProperty(obj, 'solutionGrid', val =>
-      validateObject(val, 'solutionGrid', s => s)
-    ) as SolutionsGrid | undefined;
+    const solutionGrid = getOptionalProperty(obj, 'solutionGrid', val => {
+      const validated = validateObject(val, 'solutionGrid', s => s);
+      if (!isSolutionsGrid(validated)) {
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('[useKioskSlides] solutionGrid object has invalid shape:', validated);
+        }
+        return undefined;
+      }
+      return validated;
+    });
 
     const solutionMain = getOptionalProperty(obj, 'solutionMain', val => {
       const validated = validateObject(val, 'solutionMain', s => s);
@@ -312,6 +374,20 @@ export const useKioskSlides = ({
     return mapValue(kioskContent.valueMain, kioskContent.ambient, kioskId);
   }, [kioskContent, kioskId]);
 
+  // Helper to get appropriate custom interactive mapper by kiosk ID
+  const getCustomInteractiveMapper = (id: KioskId) => {
+    switch (id) {
+      case 'kiosk-1':
+        return mapCustomInteractiveKiosk1;
+      case 'kiosk-2':
+        return null; // Kiosk 2 uses direct object construction
+      case 'kiosk-3':
+        return mapCustomInteractiveKiosk3;
+      default:
+        throw new Error(`Invalid KioskId for custom interactive mapper: ${id}`);
+    }
+  };
+
   // Map custom interactive
   const customInteractive = useMemo(() => {
     if (!kioskContent?.ambient) return null;
@@ -326,8 +402,7 @@ export const useKioskSlides = ({
     const customInteractiveData = kioskContent[customInteractiveKey];
     if (!customInteractiveData) return null;
 
-    const mapper =
-      kioskId === 'kiosk-1' ? mapCustomInteractiveKiosk1 : kioskId === 'kiosk-3' ? mapCustomInteractiveKiosk3 : null;
+    const mapper = getCustomInteractiveMapper(kioskId);
 
     if (!mapper) {
       // Kiosk 2 uses direct object construction with proper type extraction
@@ -352,6 +427,16 @@ export const useKioskSlides = ({
 
     return mapper(customInteractiveData, kioskContent.ambient, kioskContent.demoMain);
   }, [kioskContent, kioskId]);
+
+  // Track missing sections for better error reporting
+  const missingSections = useMemo(() => {
+    const missing: string[] = [];
+    if (!challenges) missing.push('challenges');
+    if (!solutions) missing.push('solutions');
+    if (!values) missing.push('values');
+    if (!customInteractive) missing.push('customInteractive');
+    return missing;
+  }, [challenges, customInteractive, solutions, values]);
 
   // Build slides
   const slides = useMemo(() => {
@@ -395,6 +480,7 @@ export const useKioskSlides = ({
   return {
     challenges,
     customInteractive,
+    missingSections: missingSections.length > 0 ? missingSections : null,
     slides,
     solutions,
     values,
