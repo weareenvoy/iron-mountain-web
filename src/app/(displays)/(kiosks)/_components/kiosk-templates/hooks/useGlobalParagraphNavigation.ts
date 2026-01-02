@@ -155,12 +155,24 @@ export function useGlobalParagraphNavigation({
       let elementOffsetTop = 0;
       let currentElement: HTMLElement | null = targetParagraph;
 
+      // Type guard for offsetParent to ensure it's HTMLElement
+      const isHTMLElement = (element: Element | null): element is HTMLElement | null => {
+        return element === null || element instanceof HTMLElement;
+      };
+
       // Walk up the tree to calculate total offset relative to container
       while (currentElement !== null && currentElement !== container) {
         elementOffsetTop += currentElement.offsetTop;
-        // Type assertion is safe - offsetParent returns Element | null, but in our
-        // HTML context it's always HTMLElement | null (not SVG or other Element types)
-        currentElement = currentElement.offsetParent as HTMLElement | null;
+        const parent: Element | null = currentElement.offsetParent;
+        if (!isHTMLElement(parent)) {
+          // Edge case: offsetParent is not HTMLElement (e.g., SVGElement)
+          // This shouldn't happen in HTML context, but handle gracefully
+          if (process.env.NODE_ENV === 'development') {
+            console.warn('[useGlobalParagraphNavigation] offsetParent is not HTMLElement:', parent);
+          }
+          break;
+        }
+        currentElement = parent;
       }
 
       // Use 0 offset for videos and root container divs (scroll to exact position)
