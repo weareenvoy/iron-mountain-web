@@ -12,20 +12,27 @@ const Background = () => {
   const { beatIdx, momentId } = exhibitState;
   const beatId = `${momentId}-${beatIdx + 1}`;
 
+  // Derive URL outside effect. Only re-run effect when URL actually changes
+  const validBeatId = isValidBasecampBeatId(beatId) ? beatId : null;
+  const url = validBeatId ? data?.beats[validBeatId].url : undefined;
+
+  // Ref for data access inside effect without causing re-runs
+  const dataRef = useRef(data);
+  useEffect(() => {
+    dataRef.current = data;
+  }, [data]);
+
   // 2 videos "ping pong" between, 1 visible, 1 invisible.
   const a = useRef<HTMLVideoElement>(null);
   const b = useRef<HTMLVideoElement>(null);
   const active = useRef<'a' | 'b'>('a');
   const [activeDisplay, setActiveDisplay] = useState<'a' | 'b'>('a');
-  const lastBeat = useRef<null | string>(null);
+  const lastBeat = useRef<BasecampBeatId | null>(null);
 
   useEffect(() => {
-    if (!data || !a.current || !b.current) return;
+    if (!validBeatId || !url || !a.current || !b.current) return;
 
-    if (!isValidBasecampBeatId(beatId)) return;
-
-    const url = data.beats[beatId].url;
-    if (!url || beatId === lastBeat.current) return;
+    if (validBeatId === lastBeat.current) return;
 
     const lastBeatId: BasecampBeatId | null =
       lastBeat.current && isValidBasecampBeatId(lastBeat.current) ? lastBeat.current : null;
@@ -56,8 +63,8 @@ const Background = () => {
       video.play().catch(e => console.error('Play failed:', e));
 
       const handlePlaying = () => {
-        if (lastBeat.current !== beatId) return; // Stale
-        setReadyBeatId(beatId);
+        if (lastBeat.current !== validBeatId) return; // Stale
+        setReadyBeatId(validBeatId);
       };
       video.addEventListener('playing', handlePlaying, { once: true });
       cleanupFns.push(() => video.removeEventListener('playing', handlePlaying));
@@ -74,10 +81,10 @@ const Background = () => {
     } else {
       // Subsequent beats
       setupIncomingVideo(hidden);
-      const seamless = isBackgroundSeamlessTransition(lastBeat.current as BasecampBeatId | null, beatId);
+      const seamless = isBackgroundSeamlessTransition(lastBeatId, validBeatId);
 
       const performSwitch = () => {
-        if (lastBeat.current !== beatId) return;
+        if (lastBeat.current !== validBeatId) return;
 
         if (seamless) {
           // Instant switch. No fade, perfect continuity
@@ -106,20 +113,20 @@ const Background = () => {
     }
 
     // Preload next beat into the now-visible (soon-to-be-hidden) video
-    const nextBeatId = getNextBeatId(beatId, isAmbient);
+    const nextBeatId = getNextBeatId(validBeatId, isAmbient);
 
-    if (nextBeatId && data.beats[nextBeatId].url) {
+    if (nextBeatId && dataRef.current?.beats[nextBeatId].url) {
       // For first load: preload into B immediately
       // For transitions: preload into the video that will be hidden next (i.e. current visible)
       const preloadTarget = isFirstLoad ? b.current! : visible;
 
       if (isFirstLoad) {
-        preloadTarget.src = data.beats[nextBeatId].url;
+        preloadTarget.src = dataRef.current.beats[nextBeatId].url;
       } else {
         // Wait until crossfade ends
         const handleTransitionEnd = () => {
-          if (lastBeat.current === beatId) {
-            preloadTarget.src = data.beats[nextBeatId].url;
+          if (lastBeat.current === validBeatId) {
+            preloadTarget.src = dataRef.current!.beats[nextBeatId].url;
           }
         };
         visible.addEventListener('transitionend', handleTransitionEnd, { once: true });
@@ -128,13 +135,13 @@ const Background = () => {
     }
 
     // Update at the end. If we update early, seamless check would always be false.
-    lastBeat.current = beatId;
+    lastBeat.current = validBeatId;
 
     // Remove all listeners
     return () => {
       cleanupFns.forEach(fn => fn());
     };
-  }, [beatId, data, momentId, setReadyBeatId]);
+  }, [momentId, setReadyBeatId, url, validBeatId]);
 
   // For debugging only. Update display time
   const timeDisplayRef = useRef<HTMLSpanElement>(null);
