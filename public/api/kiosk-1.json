@@ -2,7 +2,11 @@
   {
     "locale": "en",
     "data": {
-    "ambient": {
+      "idle": {
+        "videoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/SP-Ambient-Kiosk.webm"
+      },
+
+      "ambient": {
       "backgroundImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/Cover.webp",
       "body": "\"It's been a pleasure working with Iron Mountain. We feel very confident that the GRAMMY Museum's physical artifacts and digital content is safely protected. Smart Vault also provides significant reassurance that our iconic artist performances and interviews will remain preserved and accessible which is a huge benefit to the GRAMMY Museum.\"",
       "headline": "The GRAMMY Museum (R) preserves the soundtrack of history.",

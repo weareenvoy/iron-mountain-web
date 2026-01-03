@@ -1,21 +1,12 @@
 'use client';
 
+import { AnimatePresence, motion, useInView } from 'framer-motion';
 import Image from 'next/image';
-import { memo } from 'react';
+import { memo, useRef, useState } from 'react';
 import ButtonArrow from '@/components/ui/icons/ButtonArrow';
 import WhiteLogoSimple from '@/components/ui/icons/WhiteLogoSimple';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
-
-// Layout positioning constants - based on Figma design specs
-const LAYOUT = {
-  ATTRIBUTION: { top: 180 },
-  BUTTON_CONTAINER: { top: 190, topKiosk2: 0, topKiosk3: -220 },
-  CONTENT_BOX: { left: 120, top: 1130, width: 1920 },
-  LOGO: { left: 120, top: 2910, topKiosk2: 2890 },
-  QUOTE_CONTAINER: { top: 10 },
-  SUBTITLE: { left: 244, top: 970, width: 980 },
-} as const;
 
 export type InitialScreenTemplateProps = {
   readonly arrowIconSrc?: string;
@@ -23,6 +14,7 @@ export type InitialScreenTemplateProps = {
   readonly backgroundImage?: string;
   readonly buttonText?: string;
   readonly headline?: string;
+  readonly idleVideoSrc?: string;
   readonly kioskId?: KioskId;
   readonly onButtonClick?: () => void;
   readonly quote?: string;
@@ -36,12 +28,31 @@ const InitialScreenTemplate = memo(
     backgroundImage,
     buttonText,
     headline,
+    idleVideoSrc,
     onButtonClick,
     quote,
     subheadline,
   }: InitialScreenTemplateProps) => {
+    const ref = useRef(null);
+    const [showIdle, setShowIdle] = useState(!!idleVideoSrc);
+    const [idleComplete, setIdleComplete] = useState(!idleVideoSrc);
+    const isInView = useInView(ref, { amount: 0.3, once: true });
+
+    const handleIdleTap = () => {
+      setShowIdle(false);
+      // Wait for fade out animation to complete before triggering initial screen animations
+      setTimeout(() => {
+        setIdleComplete(true);
+      }, 800); // Match the fade out duration
+    };
+
+    const shouldAnimate = isInView && idleComplete;
     return (
-      <div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden">
+      <div
+        className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden"
+        data-scroll-section="cover-ambient-initial"
+        ref={ref}
+      >
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <div className="relative h-full w-full">
             {backgroundImage && (
@@ -58,49 +69,52 @@ const InitialScreenTemplate = memo(
             <div className="absolute inset-0 bg-[rgba(0,0,0,0.2)]" />
           </div>
         </div>
-        <div
-          className="absolute z-[3] w-[980px] -translate-y-full"
-          style={{ left: `${LAYOUT.SUBTITLE.left}px`, top: `${LAYOUT.SUBTITLE.top}px` }}
-        >
+        <div className="absolute top-[970px] left-[244px] z-3 w-[980px] -translate-y-full">
           <h2 className="text-[120px] leading-[1.3] font-normal tracking-[-6px] whitespace-pre-line text-[#ededed]">
             {renderRegisteredMark(subheadline)}
           </h2>
         </div>
 
-        <div
-          className="absolute z-[2] flex w-[1920px] flex-col gap-[200px] rounded-[60px] bg-[#F7931E] px-[120px] py-[240px] pb-[330px] backdrop-blur-[30px] group-data-[kiosk=kiosk-2]/kiosk:bg-[#8DC13F] group-data-[kiosk=kiosk-2]/kiosk:py-[220px] group-data-[kiosk=kiosk-2]/kiosk:pb-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[1920px] group-data-[kiosk=kiosk-3]/kiosk:bg-[#00A88E] group-data-[kiosk=kiosk-3]/kiosk:pb-0"
+        <motion.div
+          animate={shouldAnimate ? { opacity: 1, y: 0 } : { opacity: 0, y: 200 }}
+          className="absolute top-[1130px] left-[120px] z-2 flex w-[1920px] flex-col gap-[200px] rounded-[60px] bg-[#F7931E] px-[120px] py-[240px] pb-[330px] backdrop-blur-[30px] will-change-[transform,opacity] group-data-[kiosk=kiosk-2]/kiosk:bg-[#8DC13F] group-data-[kiosk=kiosk-2]/kiosk:py-[220px] group-data-[kiosk=kiosk-2]/kiosk:pb-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[1920px] group-data-[kiosk=kiosk-3]/kiosk:bg-[#00A88E] group-data-[kiosk=kiosk-3]/kiosk:pb-0"
           data-name="Challenge Initial Screen Content Box"
-          style={{ left: `${LAYOUT.CONTENT_BOX.left}px`, top: `${LAYOUT.CONTENT_BOX.top}px` }}
+          initial={{ opacity: 0, y: 200 }}
+          transition={{ delay: 0, duration: 0.8, ease: [0.3, 0, 0.6, 1] }}
         >
-          <div
-            className="absolute z-[3] flex h-[182px] w-[703px] items-center group-data-[kiosk=kiosk-2]/kiosk:top-[2890px] group-data-[kiosk=kiosk-3]/kiosk:hidden"
-            style={{ left: `${LAYOUT.LOGO.left}px`, top: `${LAYOUT.LOGO.top}px` }}
-          >
+          {/* Logo - Not animated, but positioned inside the container */}
+          <div className="absolute top-[2910px] left-[120px] z-3 flex h-[182px] w-[703px] items-center group-data-[kiosk=kiosk-2]/kiosk:top-[2890px] group-data-[kiosk=kiosk-3]/kiosk:hidden">
             <WhiteLogoSimple aria-hidden="true" className="h-full w-full" preserveAspectRatio="xMidYMid meet" />
           </div>
 
-          <h1 className="max-w-[1660px] text-[80px] leading-[1.3] font-normal tracking-[-4px] text-black">
+          <motion.h1
+            animate={shouldAnimate ? { opacity: 1, y: 0 } : { opacity: 0, y: 150 }}
+            className="max-w-[1660px] text-[80px] leading-[1.3] font-normal tracking-[-4px] text-black will-change-[transform,opacity]"
+            initial={{ opacity: 0, y: 150 }}
+            transition={{ delay: 0.3, duration: 0.8, ease: [0.3, 0, 0.6, 1] }}
+          >
             {renderRegisteredMark(headline)}
-          </h1>
+          </motion.h1>
 
-          <div
-            className="relative flex w-[1670px] flex-col gap-[20px]"
-            style={{ top: `${LAYOUT.QUOTE_CONTAINER.top}px` }}
+          <motion.div
+            animate={shouldAnimate ? { opacity: 1, y: 0 } : { opacity: 0, y: 150 }}
+            className="relative top-[10px] flex w-[1670px] flex-col gap-[20px] will-change-[transform,opacity]"
+            initial={{ opacity: 0, y: 150 }}
+            transition={{ delay: 0.3, duration: 0.8, ease: [0.3, 0, 0.6, 1] }}
           >
             <p className="text-[80px] leading-[1.3] font-normal tracking-[-4px] text-white group-data-[kiosk=kiosk-3]/kiosk:relative group-data-[kiosk=kiosk-3]/kiosk:top-[-230px] group-data-[kiosk=kiosk-3]/kiosk:text-[120px] group-data-[kiosk=kiosk-3]/kiosk:tracking-[-6px]">
               {renderRegisteredMark(quote)}
             </p>
-            <p
-              className="relative text-[52px] leading-[1.4] font-semibold tracking-[-2.6px] whitespace-pre-wrap text-black"
-              style={{ top: `${LAYOUT.ATTRIBUTION.top}px` }}
-            >
+            <p className="relative top-[180px] text-[52px] leading-[1.4] font-semibold tracking-[-2.6px] whitespace-pre-wrap text-black">
               {renderRegisteredMark(attribution)}
             </p>
-          </div>
+          </motion.div>
 
-          <div
-            className="relative flex w-full flex-col items-start justify-center gap-[10px] group-data-[kiosk=kiosk-2]/kiosk:top-0 group-data-[kiosk=kiosk-3]/kiosk:top-[-220px]"
-            style={{ top: `${LAYOUT.BUTTON_CONTAINER.top}px` }}
+          <motion.div
+            animate={shouldAnimate ? { opacity: 1, y: 0 } : { opacity: 0, y: 150 }}
+            className="relative top-[190px] flex w-full flex-col items-start justify-center gap-[10px] will-change-[transform,opacity] group-data-[kiosk=kiosk-2]/kiosk:top-0 group-data-[kiosk=kiosk-3]/kiosk:top-[-220px]"
+            initial={{ opacity: 0, y: 150 }}
+            transition={{ delay: 0.6, duration: 0.8, ease: [0.3, 0, 0.6, 1] }}
           >
             <button
               aria-label={buttonText}
@@ -132,8 +146,41 @@ const InitialScreenTemplate = memo(
                 )}
               </div>
             </button>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
+
+        {/* Idle Screen Overlay */}
+        <AnimatePresence>
+          {showIdle && idleVideoSrc && (
+            <motion.div
+              animate={{ opacity: 1 }}
+              className="absolute inset-0 z-50 flex cursor-pointer items-center justify-center bg-black"
+              exit={{ opacity: 0 }}
+              initial={{ opacity: 1 }}
+              onClick={handleIdleTap}
+              onKeyDown={e => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleIdleTap();
+                }
+              }}
+              role="button"
+              tabIndex={0}
+              transition={{ duration: 0.8, ease: [0.3, 0, 0.6, 1] }}
+            >
+              <video
+                autoPlay
+                className="absolute inset-0 h-full w-full object-cover"
+                loop
+                muted
+                playsInline
+                src={idleVideoSrc}
+              >
+                <track kind="captions" />
+              </video>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     );
   }

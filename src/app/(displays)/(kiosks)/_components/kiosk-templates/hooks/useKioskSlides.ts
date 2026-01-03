@@ -215,6 +215,8 @@ const parseKioskData = (kioskData: KioskData) => {
       return validated;
     });
 
+    const idle = getOptionalProperty(obj, 'idle', val => validateObject(val, 'idle', i => i));
+
     const challengeMain = getOptionalProperty(obj, 'challengeMain', val => {
       const validated = validateObject(val, 'challengeMain', c => c);
       if (!isChallengeContent(validated)) {
@@ -321,6 +323,7 @@ const parseKioskData = (kioskData: KioskData) => {
       customInteractive2,
       customInteractive3,
       demoMain,
+      idle,
       solutionAccordion,
       solutionGrid,
       solutionMain,
@@ -457,6 +460,9 @@ export const useKioskSlides = ({
 
     return [
       ...buildChallengeSlides(challenges, kioskId, globalHandlers, {
+        initialScreen: {
+          idleVideoSrc: kioskContent?.idle?.videoSrc as string | undefined,
+        },
         onInitialButtonClick: handleInitialButtonClick,
       }),
       ...buildSolutionSlides(solutions, kioskId, globalHandlers),
@@ -467,14 +473,15 @@ export const useKioskSlides = ({
     ];
   }, [
     challenges,
-    solutions,
-    values,
     customInteractive,
-    kioskId,
     globalHandlers,
     handleInitialButtonClick,
     handleRegisterCarouselHandlers,
+    kioskContent,
+    kioskId,
     scrollToSectionById,
+    solutions,
+    values,
   ]);
 
   return {
