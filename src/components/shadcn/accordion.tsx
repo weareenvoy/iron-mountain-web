@@ -13,8 +13,19 @@ export const AccordionTrigger = (
   props: ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger> & { readonly indicator?: React.ReactNode }
 ) => {
   const { children, className, indicator = <ChevronDownIcon className="size-4" />, ...rest } = props;
+  const accordionColor = (rest as Record<string, unknown>)['data-accordion-color'] as string | undefined;
+
   return (
-    <AccordionPrimitive.Header className="flex">
+    <AccordionPrimitive.Header
+      className={cn(
+        'flex',
+        'data-[accordion-color=blue]:bg-[#1b75bc]',
+        'data-[accordion-color=lightBlue]:bg-[#6dcff6]',
+        'data-[accordion-color=navy]:bg-[#14477d]',
+        'data-[accordion-color=white]:bg-[#ededed]'
+      )}
+      data-accordion-color={accordionColor}
+    >
       <AccordionPrimitive.Trigger
         className={cn(
           'group/accordion-trigger flex flex-1 items-center justify-between py-4 font-medium transition-all',
@@ -37,8 +48,16 @@ export const AccordionContent = ({
   className,
   ...rest
 }: ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>) => (
-  <AccordionPrimitive.Content className={cn('text-sm', className)} {...rest}>
-    <div className="pt-0 pb-4">{children}</div>
+  <AccordionPrimitive.Content
+    className={cn(
+      'overflow-hidden text-sm',
+      'data-[state=closed]:animate-accordion-up',
+      'data-[state=open]:animate-accordion-down',
+      className
+    )}
+    {...rest}
+  >
+    <div className="pt-0">{children}</div>
   </AccordionPrimitive.Content>
 );
 
