@@ -10,22 +10,29 @@ const CROSSFADE_DURATION_MS = 800 as const;
 const Background = () => {
   const { data, exhibitState, setReadyBeatId } = useBasecamp();
   const { beatIdx, momentId } = exhibitState;
-  const beatId = `${momentId}-${beatIdx + 1}`;
+  const rawBeatId = `${momentId}-${beatIdx + 1}`;
+
+  // Derive URL outside effect. Only re-run effect when URL actually changes
+  const beatId = isValidBasecampBeatId(rawBeatId) ? rawBeatId : null;
+  const url = beatId ? data?.beats[beatId].url : undefined;
+
+  // Ref for data access inside effect without causing re-runs
+  const dataRef = useRef(data);
+  useEffect(() => {
+    dataRef.current = data;
+  }, [data]);
 
   // 2 videos "ping pong" between, 1 visible, 1 invisible.
   const a = useRef<HTMLVideoElement>(null);
   const b = useRef<HTMLVideoElement>(null);
   const active = useRef<'a' | 'b'>('a');
   const [activeDisplay, setActiveDisplay] = useState<'a' | 'b'>('a');
-  const lastBeat = useRef<null | string>(null);
+  const lastBeat = useRef<BasecampBeatId | null>(null);
 
   useEffect(() => {
-    if (!data || !a.current || !b.current) return;
+    if (!beatId || !url || !a.current || !b.current) return;
 
-    if (!isValidBasecampBeatId(beatId)) return;
-
-    const url = data.beats[beatId].url;
-    if (!url || beatId === lastBeat.current) return;
+    if (beatId === lastBeat.current) return;
 
     const lastBeatId: BasecampBeatId | null =
       lastBeat.current && isValidBasecampBeatId(lastBeat.current) ? lastBeat.current : null;
@@ -74,7 +81,7 @@ const Background = () => {
     } else {
       // Subsequent beats
       setupIncomingVideo(hidden);
-      const seamless = isBackgroundSeamlessTransition(lastBeat.current as BasecampBeatId | null, beatId);
+      const seamless = isBackgroundSeamlessTransition(lastBeatId, beatId);
 
       const performSwitch = () => {
         if (lastBeat.current !== beatId) return;
@@ -108,18 +115,18 @@ const Background = () => {
     // Preload next beat into the now-visible (soon-to-be-hidden) video
     const nextBeatId = getNextBeatId(beatId, isAmbient);
 
-    if (nextBeatId && data.beats[nextBeatId].url) {
+    if (nextBeatId && dataRef.current?.beats[nextBeatId].url) {
       // For first load: preload into B immediately
       // For transitions: preload into the video that will be hidden next (i.e. current visible)
       const preloadTarget = isFirstLoad ? b.current! : visible;
 
       if (isFirstLoad) {
-        preloadTarget.src = data.beats[nextBeatId].url;
+        preloadTarget.src = dataRef.current.beats[nextBeatId].url;
       } else {
         // Wait until crossfade ends
         const handleTransitionEnd = () => {
           if (lastBeat.current === beatId) {
-            preloadTarget.src = data.beats[nextBeatId].url;
+            preloadTarget.src = dataRef.current!.beats[nextBeatId].url;
           }
         };
         visible.addEventListener('transitionend', handleTransitionEnd, { once: true });
@@ -134,7 +141,7 @@ const Background = () => {
     return () => {
       cleanupFns.forEach(fn => fn());
     };
-  }, [beatId, data, momentId, setReadyBeatId]);
+  }, [momentId, setReadyBeatId, url, beatId]);
 
   // For debugging only. Update display time
   const timeDisplayRef = useRef<HTMLSpanElement>(null);
