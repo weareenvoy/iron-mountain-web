@@ -31,16 +31,8 @@ const SLIDE_BG = 'bg-white text-[#12406A]';
 const SLIDE_CONTAINER = 'relative flex h-full w-full max-w-full flex-col overflow-hidden px-10 py-10';
 const SLIDE_SCALE = 2.2;
 const STRATEGY_ACCENT_COLORS = ['#8A0D71', '#00A88E', '#F7931E', '#1B75BC'] as const;
-const WELCOME_BG_VIDEO =
-  'https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/summit/IRM_Summit_MountainLoop_V1.webm';
 
-const PlaceholderSlide = ({
-  description = 'Content will appear here during the session.',
-  heading,
-}: {
-  readonly description?: string;
-  readonly heading: string;
-}) => {
+const PlaceholderSlide = ({ description, heading }: { readonly description: string; readonly heading: string }) => {
   return (
     <div className={cn('items-center justify-center', SLIDE_BG, SLIDE_CONTAINER)}>
       <div className="flex max-w-3xl flex-col items-center gap-4 text-center">
@@ -127,28 +119,18 @@ const WelcomeSlide = ({
 };
 
 const StaticWelcomeSlide = ({
-  company,
-  elevation = 'Elevation 760 m (2,493.4 ft)',
+  elevation,
   location,
-  site = 'Executive Innovation Center',
-  title = 'Welcome to Iron Mountain',
+  site,
+  title,
   videoUrl,
 }: {
-  readonly company?: string;
-  readonly dateOfEngagement?: string;
-  readonly elevation?: string;
-  readonly labels?: {
-    readonly company: string;
-    readonly dateOfEngagement: string;
-    readonly location: string;
-  };
-  readonly location?: string;
-  readonly site?: string;
-  readonly title?: string;
-  readonly videoUrl?: string;
+  readonly elevation: string;
+  readonly location: string;
+  readonly site: string;
+  readonly title: string;
+  readonly videoUrl: string;
 }) => {
-  const resolvedVideo = videoUrl || WELCOME_BG_VIDEO;
-
   return (
     <div className="relative h-full w-full overflow-hidden bg-[#F3F5F7] text-[#58595B]">
       <video
@@ -164,7 +146,7 @@ const StaticWelcomeSlide = ({
         }}
         playsInline
         preload="auto"
-        src={resolvedVideo}
+        src={videoUrl}
       />
       <div className="absolute inset-0 z-10 bg-linear-to-b from-white/10 via-white/5 to-[#0A5E72]/15" />
       <div className="absolute top-[5%] right-[0.5%] z-30 flex justify-end">
@@ -179,11 +161,11 @@ const StaticWelcomeSlide = ({
         <div className="grid grid-cols-3 gap-10 text-white">
           <div className="flex items-center gap-4">
             <Building2 className="h-16 w-16" />
-            <span className="text-3xl leading-tight">{site || company || 'Executive Innovation Center'}</span>
+            <span className="text-3xl leading-tight">{site}</span>
           </div>
           <div className="flex items-center gap-4">
             <MapPin className="h-16 w-16" />
-            <span className="text-3xl leading-tight">{location || 'São Paulo, Brazil'}</span>
+            <span className="text-3xl leading-tight">{location}</span>
           </div>
           <div className="flex items-center gap-4">
             <Mountain className="h-16 w-16" />
@@ -201,60 +183,72 @@ const useSlideRegistry = () => {
   const slides = useMemo<SlideDefinition[]>(() => {
     if (!data) return [];
 
-    const basecamp = data.basecamp as typeof data.basecamp | undefined;
-    const kiosk1 = data.kiosk1 as typeof data.kiosk1 | undefined;
-    const kiosk2 = data.kiosk2 as typeof data.kiosk2 | undefined;
-    const kiosk3 = data.kiosk3 as typeof data.kiosk3 | undefined;
-    const meta = (data.meta as typeof data.meta | undefined) ?? [];
-    const overlook = data.overlook as typeof data.overlook | undefined;
-    const summitSlides = (data.summitSlides as typeof data.summitSlides | undefined) ?? [];
-    if (!basecamp || !overlook || !kiosk1 || !kiosk2 || !kiosk3) return [];
+    const basecamp = data.basecamp;
+    const kiosk1 = data.kiosk1;
+    const kiosk2 = data.kiosk2;
+    const kiosk3 = data.kiosk3;
+    const meta = data.meta;
+    const overlook = data.overlook;
+    const summitSlides = data.summitSlides;
 
-    const challenges = basecamp.problem3;
-    const problem1 = basecamp.problem1 as typeof basecamp.problem1 | undefined;
-    const stats = basecamp.problem2;
-
-    const getMetaValue = (label: string) => meta.find(item => item.label.toLowerCase() === label.toLowerCase())?.value;
-    const metaLabels: MetaLabelMap = {
-      company: meta.find(item => item.label.toLowerCase() === 'company')?.label ?? 'Company',
-      dateOfEngagement:
-        meta.find(item => item.label.toLowerCase() === 'date of engagement')?.label ?? 'Date of engagement',
-      location: meta.find(item => item.label.toLowerCase() === 'location')?.label ?? 'Location',
+    const requiredMeta = (label: string) => {
+      const match = meta.find(item => item.label.toLowerCase() === label.toLowerCase());
+      if (!match) {
+        throw new Error(`Missing meta label: ${label}`);
+      }
+      return match;
     };
 
-    const company = getMetaValue('Company') ?? 'Company';
-    const dateOfEngagement = getMetaValue('Date of engagement') ?? '';
-    const location = getMetaValue('Location') ?? '';
+    const companyMeta = requiredMeta('company');
+    const dateMeta = requiredMeta('date of engagement');
+    const locationMeta = requiredMeta('location');
 
-    const journey1Title =
-      summitSlides.find(slide => slide.handle === 'journey-1')?.title ?? 'Your personalized journey map';
-    const journey3Title =
-      summitSlides.find(slide => slide.handle === 'journey-3')?.title ?? 'Considering possibilities';
-    const journey4Title = summitSlides.find(slide => slide.handle === 'journey-4')?.title ?? 'Relevant solutions';
-    const journey5Title = summitSlides.find(slide => slide.handle === 'journey-5')?.title ?? 'Unlock your future';
-    const journey6Title = summitSlides.find(slide => slide.handle === 'journey-6')?.title ?? 'Stories of impact';
+    const company = companyMeta.value;
+    const dateOfEngagement = dateMeta.value;
+    const location = locationMeta.value;
 
-    const possibilitiesItems = [basecamp.possibilitiesA, basecamp.possibilitiesB, basecamp.possibilitiesC].filter(
-      (item): item is SummitPossibility => Boolean(item)
-    );
+    const metaLabels: MetaLabelMap = {
+      company: companyMeta.label,
+      dateOfEngagement: dateMeta.label,
+      location: locationMeta.label,
+    };
 
-    const activateTitle = data.activateTitle as string | undefined;
-    const connectTitle = data.connectTitle as string | undefined;
-    const protectTitle = data.protectTitle as string | undefined;
+    const getSlideTitle = (handle: string) => {
+      const slide = summitSlides.find(item => item.handle === handle);
+      if (!slide) {
+        throw new Error(`Missing summit slide: ${handle}`);
+      }
+      return slide.title;
+    };
 
-    const solutionItems = [
-      protectTitle ? { locations: overlook.protect, title: protectTitle } : null,
-      connectTitle ? { locations: overlook.connect, title: connectTitle } : null,
-      activateTitle ? { locations: overlook.activate, title: activateTitle } : null,
-    ].filter((item): item is SolutionItem => Boolean(item));
+    const journey1Title = getSlideTitle('journey-1');
+    const journey3Title = getSlideTitle('journey-3');
+    const journey4Title = getSlideTitle('journey-4');
+    const journey5Title = getSlideTitle('journey-5');
+    const journey6Title = getSlideTitle('journey-6');
 
-    const futurescapingItems = [overlook.futurescaping1, overlook.futurescaping2, overlook.futurescaping3].filter(
-      (item): item is SummitFuturescaping => Boolean(item)
-    );
+    const challenges = basecamp.problem3;
+    const possibilitiesItems: readonly SummitPossibility[] = [
+      basecamp.possibilitiesA,
+      basecamp.possibilitiesB,
+      basecamp.possibilitiesC,
+    ];
 
-    const storyItems = [kiosk1.ambient, kiosk2.ambient, kiosk3.ambient].filter((item): item is SummitKioskAmbient => {
-      return Boolean(item);
-    });
+    const stats = basecamp.problem2;
+
+    const solutionItems: readonly SolutionItem[] = [
+      { locations: overlook.protect, title: data.protectTitle },
+      { locations: overlook.connect, title: data.connectTitle },
+      { locations: overlook.activate, title: data.activateTitle },
+    ];
+
+    const futurescapingItems: readonly SummitFuturescaping[] = [
+      overlook.futurescaping1,
+      overlook.futurescaping2,
+      overlook.futurescaping3,
+    ];
+
+    const storyItems: readonly SummitKioskAmbient[] = [kiosk1.ambient, kiosk2.ambient, kiosk3.ambient];
 
     const registry: SlideDefinition[] = [
       {
@@ -274,15 +268,10 @@ const useSlideRegistry = () => {
         id: 'metrics',
         render: () => (
           <SlideFrame showDiamonds>
-            <MetricsSection
-              challenges={challenges}
-              stats={stats}
-              title={problem1?.title ?? 'What is standing in your way?'}
-              variant="slide"
-            />
+            <MetricsSection challenges={challenges} stats={stats} title={basecamp.problem1.title} variant="slide" />
           </SlideFrame>
         ),
-        title: problem1?.title ?? 'What is standing in your way?',
+        title: basecamp.problem1.title,
       },
       {
         id: 'possibilities',
@@ -365,17 +354,8 @@ const SummitSlidesScreen = ({
   // Ref to access latest slides without recreating handler
   const slidesRef = useRef(slides);
 
-  const metaLabels: MetaLabelMap = {
-    company: data?.meta.find(item => item.label.toLowerCase() === 'company')?.label ?? 'Company',
-    dateOfEngagement:
-      data?.meta.find(item => item.label.toLowerCase() === 'date of engagement')?.label ?? 'Date of engagement',
-    location: data?.meta.find(item => item.label.toLowerCase() === 'location')?.label ?? 'Location',
-  };
-
   const devControls = searchParams.get('dev') === '1' || searchParams.get('dev') === 'true';
   const requestedSlideParam = searchParams.get('slide') ?? undefined;
-  const metaItems = data?.meta ?? [];
-  const summitSlides = data?.summitSlides ?? [];
 
   const [activeSlideId, setActiveSlideId] = useState<string>(initialSlideId ?? 'welcome');
 
@@ -429,25 +409,36 @@ const SummitSlidesScreen = ({
   }, [client, devControls, preferredSlideId, screen]);
 
   if (loading) {
-    return <PlaceholderSlide heading="Loading…" />;
+    return <PlaceholderSlide description="" heading="Loading…" />;
   }
 
   if (error || !data || slides.length === 0) {
-    return <PlaceholderSlide heading="Unable to load slides" />;
+    return <PlaceholderSlide description="" heading="Unable to load slides" />;
   }
+
+  const requiredMeta = (label: string) => {
+    const match = data.meta.find(item => item.label.toLowerCase() === label.toLowerCase());
+    if (!match) {
+      throw new Error(`Missing meta label: ${label}`);
+    }
+    return match;
+  };
+
+  const summitSlides = data.summitSlides;
 
   if (screen === 'primary') {
     const journeyIntroSlide = summitSlides.find(slide => slide.handle === 'journey-intro');
-    const journeyIntroVideo = journeyIntroSlide?.backgroundVideoUrl ?? journeyIntroSlide?.videoUrl ?? WELCOME_BG_VIDEO;
+    if (!journeyIntroSlide || !journeyIntroSlide.backgroundVideoUrl) {
+      throw new Error('Missing journey-intro slide video');
+    }
 
     return (
       <StaticWelcomeSlide
-        company={metaItems.find(item => item.label.toLowerCase() === 'company')?.value ?? 'Company'}
         elevation="Elevation 760 m (2,493.4 ft)"
-        labels={metaLabels}
-        location={metaItems.find(item => item.label.toLowerCase() === 'location')?.value ?? ''}
-        title={journeyIntroSlide?.title ?? 'Welcome to Iron Mountain'}
-        videoUrl={journeyIntroVideo}
+        location={requiredMeta('location').value}
+        site="Executive Innovation Center"
+        title={journeyIntroSlide.title}
+        videoUrl={journeyIntroSlide.backgroundVideoUrl}
       />
     );
   }
