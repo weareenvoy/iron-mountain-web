@@ -13,6 +13,8 @@ export const AccordionTrigger = (
   props: ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger> & { readonly indicator?: React.ReactNode }
 ) => {
   const { children, className, indicator = <ChevronDownIcon className="size-4" />, ...rest } = props;
+  const accordionColor = (rest as Record<string, unknown>)['data-accordion-color'] as string | undefined;
+
   return (
     <AccordionPrimitive.Header
       className={cn(
@@ -22,7 +24,7 @@ export const AccordionTrigger = (
         'data-[accordion-color=navy]:bg-[#14477d]',
         'data-[accordion-color=white]:bg-[#ededed]'
       )}
-      data-accordion-color={rest['data-accordion-color']}
+      data-accordion-color={accordionColor}
     >
       <AccordionPrimitive.Trigger
         className={cn(
