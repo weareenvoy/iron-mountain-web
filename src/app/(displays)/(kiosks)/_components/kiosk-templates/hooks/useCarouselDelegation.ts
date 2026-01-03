@@ -25,11 +25,18 @@ type ListHandlers = {
   scrollPrev: () => void;
 };
 
+type UseCarouselDelegationReturn = {
+  readonly handleNavigateDown: () => void;
+  readonly handleNavigateUp: () => void;
+  readonly handleRegisterCarouselHandlers: (handlers: CarouselHandlers) => void;
+  readonly handleRegisterListHandlers: (handlers: ListHandlers) => void;
+};
+
 export const useCarouselDelegation = ({
   baseHandleNavigateDown,
   baseHandleNavigateUp,
   currentScrollTarget,
-}: UseCarouselDelegationConfig) => {
+}: UseCarouselDelegationConfig): UseCarouselDelegationReturn => {
   const [carouselHandlers, setCarouselHandlers] = useState<CarouselHandlers | null>(null);
   const [listHandlers, setListHandlers] = useState<ListHandlers | null>(null);
 

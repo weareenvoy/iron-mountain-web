@@ -14,7 +14,6 @@ export interface CustomInteractiveDemoScreenTemplateProps {
   readonly headline?: string;
   readonly heroImageAlt?: string;
   readonly heroImageSrc?: string;
-  readonly isVisible?: boolean;
   readonly onCta?: () => void;
   readonly onEndTour?: () => void;
 }
@@ -29,8 +28,6 @@ const CustomInteractiveDemoScreenTemplate = ({
   onCta,
   onEndTour,
 }: CustomInteractiveDemoScreenTemplateProps) => {
-  // Note: isVisible prop is accepted in the interface but not used here
-  // Parent component handles visibility via CSS classes
   const headlineText = headline;
   const cardText = cardLabel;
 
@@ -68,9 +65,8 @@ const CustomInteractiveDemoScreenTemplate = ({
           <iframe
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
-            className="pointer-events-auto h-full w-full rounded-[20px]"
+            className="pointer-events-auto h-full w-full rounded-[20px] border-0"
             src={autoplayUrl}
-            style={{ border: 0 }}
             title={cardText}
           />
         ) : (

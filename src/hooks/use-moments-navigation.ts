@@ -1,12 +1,20 @@
+import { useCallback } from 'react';
 import { useMqtt } from '@/components/providers/mqtt-provider';
-import type { ExhibitBeatId, ExhibitNavigationState, Moment, Section } from '@/lib/internal/types';
+import {
+  isValidBasecampBeatId,
+  isValidOverlookBeatId,
+  type ExhibitBeatId,
+  type ExhibitNavigationState,
+  type Moment,
+  type OverlookBeatId,
+  type Section,
+} from '@/lib/internal/types';
 
 // moments/beats navigation hook
 const useMomentsNavigation = (
   content: Readonly<Moment[]>,
   exhibitState: ExhibitNavigationState,
-  setExhibitState: (state: Partial<ExhibitNavigationState>) => void,
-  exhibit: 'basecamp' | 'overlook'
+  exhibit: 'basecamp' | 'overlook-wall'
 ) => {
   const { client } = useMqtt();
   const { beatIdx: currentBeatIdx, momentId } = exhibitState;
@@ -14,36 +22,74 @@ const useMomentsNavigation = (
   const currentMomentIdx = content.findIndex(m => m.id === momentId);
   const currentMoment = content[currentMomentIdx];
 
-  const publishNavigation = (momentId: Section, beatIdx: number) => {
-    if (!client) return;
+  const goTo = useCallback(
+    (momentId: Section, beatIdx: number) => {
+      if (!client) return;
 
-    // Format: ${moment}-${beatNumber} (1-indexed)
-    const beatId = `${momentId}-${beatIdx + 1}`;
+      const moment = content.find(m => m.id === momentId);
+      if (!moment || !moment.beats[beatIdx]) return;
 
-    // Send goto-beat command to exhibit
-    client.gotoBeat(exhibit, beatId as ExhibitBeatId, {
-      onError: (err: Error) => console.error(`Failed to send goto-beat to ${exhibit}:`, err),
-      onSuccess: () => console.info(`Sent goto-beat: ${beatId} to ${exhibit}`),
-    });
-  };
+      const beatId = moment.beats[beatIdx].handle;
+      const isVideoBeat = moment.beats[beatIdx].type === 'video';
 
-  const goTo = (momentId: Section, beatIdx: number) => {
-    setExhibitState({ beatIdx, momentId });
-    publishNavigation(momentId, beatIdx);
-  };
+      // Validate beat ID before sending MQTT command
+      const isValidBeatId = exhibit === 'basecamp' ? isValidBasecampBeatId(beatId) : isValidOverlookBeatId(beatId);
+      if (!isValidBeatId) {
+        console.error(`Invalid beat ID: ${beatId} for exhibit ${exhibit}`);
+        return;
+      }
+
+      // Only overlook-wall supports playpause in GEC state
+      if (exhibit === 'basecamp') {
+        // Basecamp doesn't support playpause - use gotoBeat instead
+        client.gotoBeat(exhibit, beatId as ExhibitBeatId, {
+          onError: (err: Error) => console.error(`Failed to send goto-beat to ${exhibit}:`, err),
+          onSuccess: () => console.info(`Sent goto-beat: ${beatId} to ${exhibit}`),
+        });
+      } else {
+        // exhibit is 'overlook-wall' here - supports playpause
+        if (isVideoBeat) {
+          // For video beats, always start playing when navigating
+          client.gotoBeatWithPlayPause(
+            exhibit,
+            beatId as OverlookBeatId,
+            true,
+            {
+              onError: (err: Error) => console.error(`Failed to send goto-beat with play/pause to ${exhibit}:`, err),
+              onSuccess: () => console.info(`Sent goto-beat with play/pause: ${beatId} (true) to ${exhibit}`),
+            },
+            false
+          );
+        } else {
+          // For normal beats, always send playpause: false
+          client.gotoBeatWithPlayPause(
+            exhibit,
+            beatId as OverlookBeatId,
+            false,
+            {
+              onError: (err: Error) => console.error(`Failed to send goto-beat with play/pause to ${exhibit}:`, err),
+              onSuccess: () => console.info(`Sent goto-beat with play/pause: ${beatId} (false) to ${exhibit}`),
+            },
+            false
+          );
+        }
+      }
+    },
+    [client, content, exhibit]
+  );
 
   const handlePrevious = () => {
     if (currentBeatIdx > 0) {
       goTo(momentId, currentBeatIdx - 1);
     } else if (currentMomentIdx > 0) {
       const prevMoment = content[currentMomentIdx - 1];
-      if (!prevMoment) return;
-      goTo(prevMoment.id, prevMoment.beatCount - 1);
+      if (!prevMoment || prevMoment.beats.length === 0) return;
+      goTo(prevMoment.id, prevMoment.beats.length - 1);
     }
   };
 
   const handleNext = () => {
-    if (currentMoment && currentBeatIdx < currentMoment.beatCount - 1) {
+    if (currentMoment && currentBeatIdx < currentMoment.beats.length - 1) {
       goTo(momentId, currentBeatIdx + 1);
     } else if (currentMomentIdx < content.length - 1) {
       const nextMoment = content[currentMomentIdx + 1];
@@ -54,12 +100,13 @@ const useMomentsNavigation = (
 
   const isPreviousDisabled = currentMomentIdx === 0 && currentBeatIdx === 0;
   const isNextDisabled = currentMoment
-    ? currentMomentIdx === content.length - 1 && currentBeatIdx === currentMoment.beatCount - 1
+    ? currentMomentIdx === content.length - 1 && currentBeatIdx === currentMoment.beats.length - 1
     : true;
 
   return {
     currentBeatIdx,
     currentMomentIdx,
+    goTo,
     handleNext,
     handlePrevious,
     isNextDisabled,

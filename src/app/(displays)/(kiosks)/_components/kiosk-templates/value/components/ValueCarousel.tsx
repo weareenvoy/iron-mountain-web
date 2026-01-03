@@ -33,6 +33,11 @@ const ValueCarousel = ({ hasCarouselSlides, onRegisterCarouselHandlers, slides }
         scrollPrev: () => emblaApi.scrollPrev(),
       });
     }
+
+    // Cleanup: Destroy Embla instance on unmount to prevent memory leaks
+    return () => {
+      emblaApi?.destroy();
+    };
   }, [emblaApi, onRegisterCarouselHandlers]);
 
   return (

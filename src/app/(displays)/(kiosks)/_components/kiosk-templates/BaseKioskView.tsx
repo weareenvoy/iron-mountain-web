@@ -58,7 +58,7 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
   const handleInitialButtonClick = useMemo(() => () => handleButtonClick(kioskId), [handleButtonClick, kioskId]);
 
   // Build slides with the memoized button click handler
-  const { slides } = useKioskSlides({
+  const { missingSections, slides } = useKioskSlides({
     diamondMapping,
     kioskData,
     kioskId,
@@ -93,13 +93,33 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
     kioskId,
   });
 
-  // Show loading state if no slides are available
+  // Improved empty slides state handling
   if (slides.length === 0) {
+    if (!kioskData) {
+      // Still loading data from API
+      return (
+        <div className="flex h-screen w-full items-center justify-center bg-black text-white">
+          <div className="text-center">
+            <p className="text-2xl">Loading kiosk data...</p>
+            <p className="mt-4 text-sm opacity-60">Fetching data...</p>
+          </div>
+        </div>
+      );
+    }
+
+    // Data exists but no slides - likely a data structure issue
     return (
       <div className="flex h-screen w-full items-center justify-center bg-black text-white">
         <div className="text-center">
-          <p className="text-2xl">Loading kiosk data...</p>
-          <p className="mt-4 text-sm opacity-60">{!kioskData ? 'Fetching data...' : 'Processing content...'}</p>
+          <p className="text-2xl">Unable to load kiosk content</p>
+          {missingSections && missingSections.length > 0 ? (
+            <p className="mt-4 text-sm opacity-60">Missing sections: {missingSections.join(', ')}</p>
+          ) : (
+            <p className="mt-4 text-sm opacity-60">Data structure may be invalid</p>
+          )}
+          {process.env.NODE_ENV === 'development' && (
+            <p className="mt-2 text-xs opacity-40">Check console for details</p>
+          )}
         </div>
       </div>
     );
@@ -139,15 +159,12 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
           >
             <div
               aria-label="Previous"
-              className="cursor-pointer transition-transform hover:scale-110 active:scale-95"
+              className="flex cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95"
               onPointerDown={handleNavigateUp}
               role="button"
               style={{
-                // Inline because Tailwind will not include styles that come from a JS config in the final CSS file
-                alignItems: 'center',
-                display: 'flex',
+                // Inline because Tailwind will not include styles from runtime config
                 height: arrowConfig.arrowHeight,
-                justifyContent: 'center',
                 width: arrowConfig.arrowWidth,
               }}
             >
@@ -161,15 +178,12 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
             </div>
             <div
               aria-label="Next"
-              className="cursor-pointer transition-transform hover:scale-110 active:scale-95"
+              className="flex cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95"
               onPointerDown={handleNavigateDown}
               role="button"
               style={{
-                // Inline because Tailwind will not include styles that come from a JS config in the final CSS file
-                alignItems: 'center',
-                display: 'flex',
+                // Inline because Tailwind will not include styles from runtime config
                 height: arrowConfig.arrowHeight,
-                justifyContent: 'center',
                 width: arrowConfig.arrowWidth,
               }}
             >

@@ -13,6 +13,34 @@ type DemoConfig = {
   readonly mainCTA?: string;
 };
 
+/**
+ * Type-safe accessor for modal properties with runtime validation
+ */
+const getModalProperty = (
+  customInteractive: CustomInteractiveContent,
+  property: 'Body' | 'Headline' | 'Image',
+  index: number
+): string | undefined => {
+  const key = `Modal${property}${index + 1}` as keyof CustomInteractiveContent;
+
+  // Check if key exists
+  if (!(key in customInteractive)) {
+    return undefined;
+  }
+
+  const value = customInteractive[key];
+
+  // Validate value is string or undefined
+  if (value !== undefined && typeof value !== 'string') {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn(`Modal${property}${index + 1} is not a string:`, value);
+    }
+    return undefined;
+  }
+
+  return value;
+};
+
 export const mapCustomInteractiveKiosk1 = (
   customInteractive: CustomInteractiveContent,
   ambient: Ambient,
@@ -42,14 +70,10 @@ export const mapCustomInteractiveKiosk1 = (
     overlayHeadline: demo?.headline,
     secondaryCtaLabel: customInteractive.secondaryCTA,
     steps: customInteractive.diamondCarouselItems?.map((item, index) => {
-      // Dynamically access modal content based on index
-      const modalBodyKey = `ModalBody${index + 1}` as keyof CustomInteractiveContent;
-      const modalHeadlineKey = `ModalHeadline${index + 1}` as keyof CustomInteractiveContent;
-      const modalImageKey = `ModalImage${index + 1}` as keyof CustomInteractiveContent;
-
-      const modalBody = customInteractive[modalBodyKey] as string | undefined;
-      const modalHeadline = customInteractive[modalHeadlineKey] as string | undefined;
-      const modalImage = customInteractive[modalImageKey] as string | undefined;
+      // Use type-safe accessor with validation
+      const modalBody = getModalProperty(customInteractive, 'Body', index);
+      const modalHeadline = getModalProperty(customInteractive, 'Headline', index);
+      const modalImage = getModalProperty(customInteractive, 'Image', index);
 
       return {
         label: item,

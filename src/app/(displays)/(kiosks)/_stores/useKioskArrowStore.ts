@@ -20,6 +20,7 @@ import type { KioskId } from '../_types/kiosk-id';
 
 type Store = {
   // Actions
+  readonly clearTimeout: (kioskId: KioskId) => void;
   readonly handleArrowThemeUpdate: (kioskId: KioskId, isValueSection: boolean, showArrows: boolean) => void;
   readonly handleButtonClick: (kioskId: KioskId) => void;
   readonly handleInitialScreenReset: (kioskId: KioskId, isInitialScreen: boolean) => void;
@@ -46,6 +47,12 @@ type Store = {
   readonly kiosk2: KioskArrowState;
   readonly kiosk3: KioskArrowState;
   readonly resetKiosk: (kioskId: KioskId) => void;
+  // Timeout tracking for cleanup
+  readonly timeoutRefs: {
+    readonly kiosk1: NodeJS.Timeout | null;
+    readonly kiosk2: NodeJS.Timeout | null;
+    readonly kiosk3: NodeJS.Timeout | null;
+  };
 };
 
 export const useKioskArrowStore = create<Store>()(
@@ -54,6 +61,21 @@ export const useKioskArrowStore = create<Store>()(
       const actions = createArrowActions(get);
 
       return {
+        // Cleanup action for timeouts (alphabetically first)
+        clearTimeout: (kioskId: KioskId) => {
+          const key = getStoreKey(kioskId);
+          const timeout = get().timeoutRefs[key];
+          if (timeout) {
+            clearTimeout(timeout);
+            set({
+              timeoutRefs: {
+                ...get().timeoutRefs,
+                [key]: null,
+              },
+            });
+          }
+        },
+
         // High-level action handlers (called by components)
         handleArrowThemeUpdate: (kioskId: KioskId, isValueSection: boolean, showArrows: boolean) => {
           const update = actions.updateArrowTheme(kioskId, isValueSection, showArrows);
@@ -81,12 +103,15 @@ export const useKioskArrowStore = create<Store>()(
           const key = getStoreKey(kioskId);
           const state = get()[key];
 
-          console.info('[handleScrollComplete]', {
-            allowArrowsToShow: state.allowArrowsToShow,
-            currentScrollTarget,
-            kioskId,
-            wasScrollingToVideo: state.wasScrollingToVideo,
-          });
+          // Gate console.info behind development flag
+          if (process.env.NODE_ENV === 'development') {
+            console.info('[handleScrollComplete]', {
+              allowArrowsToShow: state.allowArrowsToShow,
+              currentScrollTarget,
+              kioskId,
+              wasScrollingToVideo: state.wasScrollingToVideo,
+            });
+          }
 
           // Get section for initial/customInteractive check
           const section = getSectionFromScrollTarget(currentScrollTarget);
@@ -105,16 +130,62 @@ export const useKioskArrowStore = create<Store>()(
             const delay = actions.calculateArrowShowDelay(kioskId, currentScrollTarget, isCustomInteractiveSection);
 
             if (delay !== null) {
-              // Show arrows after delay (use functional update to get fresh state)
-              setTimeout(() => {
-                set(currentState => ({
-                  [key]: {
-                    ...currentState[key],
-                    showArrows: true,
-                    wasScrollingToVideo: false,
-                  },
-                }));
+              // Clear any existing timeout before setting a new one
+              const currentTimeout = get().timeoutRefs[key];
+              if (currentTimeout) {
+                clearTimeout(currentTimeout);
+              }
+
+              // Show arrows after delay with state validation
+              const timeoutId = setTimeout(() => {
+                set(currentState => {
+                  const currentStateForKey = currentState[key];
+
+                  // Validate state hasn't changed before updating
+                  if (currentStateForKey.previousScrollTarget !== currentScrollTarget) {
+                    // State changed, don't update arrows
+                    return {
+                      ...currentState,
+                      timeoutRefs: {
+                        ...currentState.timeoutRefs,
+                        [key]: null,
+                      },
+                    };
+                  }
+
+                  // Only update if we're still in the expected state
+                  if (!currentStateForKey.wasScrollingToVideo || !currentStateForKey.allowArrowsToShow) {
+                    return {
+                      ...currentState,
+                      timeoutRefs: {
+                        ...currentState.timeoutRefs,
+                        [key]: null,
+                      },
+                    };
+                  }
+
+                  return {
+                    ...currentState,
+                    [key]: {
+                      ...currentStateForKey,
+                      showArrows: true,
+                      wasScrollingToVideo: false,
+                    },
+                    timeoutRefs: {
+                      ...currentState.timeoutRefs,
+                      [key]: null,
+                    },
+                  };
+                });
               }, delay);
+
+              // Store timeout ID for cleanup
+              set({
+                timeoutRefs: {
+                  ...get().timeoutRefs,
+                  [key]: timeoutId,
+                },
+              });
             } else {
               // Reset flag if we're not showing arrows
               set({
@@ -162,12 +233,28 @@ export const useKioskArrowStore = create<Store>()(
         // Reset action
         resetKiosk: (kioskId: KioskId) => {
           const key = getStoreKey(kioskId);
+          // Clear any pending timeouts
+          const timeout = get().timeoutRefs[key];
+          if (timeout) {
+            clearTimeout(timeout);
+          }
           set({
             [key]: {
               ...defaultKioskArrowState,
               arrowTheme: ARROW_THEME_BLUE,
             },
+            timeoutRefs: {
+              ...get().timeoutRefs,
+              [key]: null,
+            },
           });
+        },
+
+        // Initial timeout refs state
+        timeoutRefs: {
+          kiosk1: null,
+          kiosk2: null,
+          kiosk3: null,
         },
       };
     },

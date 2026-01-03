@@ -42,8 +42,6 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   secondaryCtaLabel,
 }: CustomInteractiveKiosk1FirstScreenTemplateProps) => {
   const [showOverlay, setShowOverlay] = useState(false);
-  const [isPrimaryPressed, setIsPrimaryPressed] = useState(false);
-  const [isSecondaryPressed, setIsSecondaryPressed] = useState(false);
   const isKiosk1 = kioskId === 'kiosk-1';
   const eyebrowText = eyebrow;
   const headlineText = headline;
@@ -81,7 +79,6 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
           headline={overlayHeadline}
           heroImageAlt={heroImageAlt}
           heroImageSrc={heroImageSrc}
-          isVisible={showOverlay}
           onEndTour={() => setShowOverlay(false)}
         />
       </div>
@@ -107,24 +104,16 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
         )}
       >
         <button
-          className="flex h-[200px] items-center justify-between rounded-[999px] bg-[#ededed] px-[100px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-[#14477d] shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-[19px] transition-all duration-150 ease-out group-data-[kiosk=kiosk-2]/kiosk:hidden hover:scale-[1.01] data-[pressed=true]:scale-[0.98] data-[pressed=true]:opacity-70"
-          data-pressed={isPrimaryPressed}
+          className="flex h-[200px] items-center justify-between rounded-[999px] bg-[#ededed] px-[100px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-[#14477d] shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-[19px] transition-transform duration-150 group-data-[kiosk=kiosk-2]/kiosk:hidden hover:scale-[1.01]"
           onClick={onPrimaryCta}
-          onPointerDown={() => setIsPrimaryPressed(true)}
-          onPointerLeave={() => setIsPrimaryPressed(false)}
-          onPointerUp={() => setIsPrimaryPressed(false)}
           type="button"
         >
           <span className="pt-[10px] pl-[10px]">{renderRegisteredMark(primaryCtaLabel)}</span>
           <ArrowIcon />
         </button>
         <button
-          className="flex h-[200px] items-center justify-between rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[100px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-all duration-150 ease-out hover:scale-[1.01] data-[pressed=true]:scale-[0.98] data-[pressed=true]:opacity-70"
-          data-pressed={isSecondaryPressed}
+          className="flex h-[200px] items-center justify-between rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[100px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-transform duration-150 hover:scale-[1.01]"
           onClick={handleSecondaryClick}
-          onPointerDown={() => setIsSecondaryPressed(true)}
-          onPointerLeave={() => setIsSecondaryPressed(false)}
-          onPointerUp={() => setIsSecondaryPressed(false)}
           type="button"
         >
           <span className={secondaryLabelPadding}>{renderRegisteredMark(secondaryCtaLabel)}</span>
