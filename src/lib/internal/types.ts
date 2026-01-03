@@ -1,3 +1,5 @@
+import type { SummitData } from '@/app/(displays)/summit/_types';
+
 export type BasecampSection = 'ambient' | 'ascend' | 'possibilities' | 'problem' | 'welcome';
 export type OverlookSection =
   | 'activate'
@@ -355,6 +357,27 @@ export interface DocentData {
   };
 }
 
+export interface KioskData {
+  // Kiosk 2/3 flat structure
+  readonly ambient?: unknown;
+  readonly challenge?: unknown;
+  readonly challenges?: unknown;
+  // Kiosk 1 nested structure
+  readonly customInteractive?: unknown;
+  readonly data?: {
+    readonly ambient?: unknown;
+    readonly challenge?: unknown;
+    readonly customInteractive?: unknown;
+    readonly solutions?: unknown;
+    readonly value?: unknown;
+  };
+  readonly locale?: string;
+  // Allow any other properties
+  readonly [key: string]: unknown;
+  readonly solutions?: unknown;
+  readonly value?: unknown;
+}
+
 /**
  * ISO 8601 date string (YYYY-MM-DD)
  */
@@ -363,8 +386,6 @@ export interface SummitTourSummary {
   readonly id: string;
   readonly name: string;
 }
-
-import type { SummitData } from '@/app/(displays)/summit/_types';
 
 export type Locale = 'en' | 'pt';
 
@@ -380,6 +401,7 @@ export type ApiResponse<T> = readonly ApiResponseItem<T>[];
 export type BasecampApiResponse = ApiResponse<BasecampData>;
 export type DocentApiResponse = ApiResponse<DocentData>;
 export type SummitApiResponse = ApiResponse<SummitData>;
+export type KioskApiResponse = ApiResponse<KioskData>;
 
 // Function return types (transformed from API responses)
 export interface DocentDataResponse {
@@ -396,5 +418,10 @@ export interface BasecampDataResponse {
 
 export interface SummitDataResponse {
   readonly data: SummitData;
+  readonly locale: Locale;
+}
+
+export interface KioskDataResponse {
+  readonly data: KioskData;
   readonly locale: Locale;
 }
