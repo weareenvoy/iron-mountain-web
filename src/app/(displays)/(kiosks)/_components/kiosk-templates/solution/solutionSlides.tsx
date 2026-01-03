@@ -30,7 +30,16 @@ export type SolutionScreens = {
 export const buildSolutionSlides = (
   solutions: SolutionScreens,
   kioskId: KioskId,
-  handlers: { onNavigateDown: () => void; onNavigateUp: () => void }
+  handlers: {
+    onNavigateDown: () => void;
+    onNavigateUp: () => void;
+    onRegisterListHandlers?: (handlers: {
+      canScrollNext: () => boolean;
+      canScrollPrev: () => boolean;
+      scrollNext: () => void;
+      scrollPrev: () => void;
+    }) => void;
+  }
 ): Slide[] => {
   const slides: Slide[] = [];
   const options = { handlers, kioskId };
@@ -64,7 +73,10 @@ export const buildSolutionSlides = (
         {
           component: SolutionSecondScreenTemplate,
           id: `solution-second-${idx}`,
-          props: config,
+          props: {
+            ...config,
+            onRegisterListHandlers: handlers.onRegisterListHandlers,
+          },
           title: config.numberedListHeadline
             ? Array.isArray(config.numberedListHeadline)
               ? config.numberedListHeadline.join(' ')

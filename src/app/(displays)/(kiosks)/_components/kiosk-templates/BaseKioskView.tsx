@@ -44,11 +44,12 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
   });
 
   // Carousel delegation (wraps navigation handlers)
-  const { handleNavigateDown, handleNavigateUp, handleRegisterCarouselHandlers } = useCarouselDelegation({
-    baseHandleNavigateDown,
-    baseHandleNavigateUp,
-    currentScrollTarget,
-  });
+  const { handleNavigateDown, handleNavigateUp, handleRegisterCarouselHandlers, handleRegisterListHandlers } =
+    useCarouselDelegation({
+      baseHandleNavigateDown,
+      baseHandleNavigateUp,
+      currentScrollTarget,
+    });
 
   // Get store action directly to avoid double hook call
   const handleButtonClick = useKioskArrowStore(state => state.handleButtonClick);
@@ -68,6 +69,7 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
       },
       handleInitialButtonClick,
       handleRegisterCarouselHandlers,
+      handleRegisterListHandlers,
       scrollToSectionById,
     },
     usesAccordion,
