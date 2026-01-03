@@ -40,7 +40,7 @@ const CustomInteractiveDemoScreenTemplate = ({
     : undefined;
 
   return (
-    <div className="pointer-events-auto relative flex h-screen w-full flex-col overflow-hidden">
+    <div className="relative flex h-screen w-full flex-col overflow-hidden">
       <div className="pointer-events-none absolute inset-0 bg-[#14477D]" />
       <div className="pointer-events-none absolute inset-0 bg-black/30 backdrop-blur-[50px]" />
 
@@ -60,12 +60,12 @@ const CustomInteractiveDemoScreenTemplate = ({
         <LogOut aria-hidden className="h-[54.55px] w-[54.55px]" color="#14477d" strokeWidth={2} />
       </button>
 
-      <div className="pointer-events-auto absolute top-[1290px] left-[120px] z-[10] h-[1080px] w-[1920px] rounded-[20px] bg-[#e0e0e0] shadow-[0_40px_120px_rgba(0,0,0,0.45)]">
+      <div className="absolute top-[1290px] left-[120px] z-[10] h-[1080px] w-[1920px] rounded-[20px] bg-[#e0e0e0] shadow-[0_40px_120px_rgba(0,0,0,0.45)]">
         {autoplayUrl ? (
           <iframe
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
-            className="pointer-events-auto h-full w-full rounded-[20px] border-0"
+            className="h-full w-full rounded-[20px] border-0"
             src={autoplayUrl}
             title={cardText}
           />
