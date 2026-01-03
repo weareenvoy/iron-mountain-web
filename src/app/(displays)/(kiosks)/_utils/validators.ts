@@ -79,6 +79,9 @@ export const validateObject = <T extends Record<string, unknown>>(
     ]);
   }
 
+  // Type assertion is safe - we've validated that value is a non-null object
+  // at runtime (line 76). TypeScript requires the assertion because it doesn't narrow
+  // the type through the runtime check.
   return validator(value as Record<string, unknown>);
 };
 

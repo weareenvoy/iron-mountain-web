@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import { normalizeDiamondCards } from '@/app/(displays)/(kiosks)/_utils/normalize-diamond-cards';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
 import { cn } from '@/lib/tailwind/utils/cn';
@@ -30,7 +31,7 @@ export type ValueCarouselTemplateProps = {
   readonly slides?: readonly ValueCarouselSlide[];
 };
 
-const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
+const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
   const {
     body,
     carouselId,
@@ -120,6 +121,6 @@ const ValueCarouselTemplate = (props: ValueCarouselTemplateProps) => {
       </div>
     </div>
   );
-};
+});
 
 export default ValueCarouselTemplate;

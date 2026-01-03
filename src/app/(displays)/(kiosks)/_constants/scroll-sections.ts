@@ -45,7 +45,7 @@ export type ScrollSectionId =
   | typeof SCROLL_SECTION_VALUE_DESCRIPTION;
 
 // Slide ID constants
-export const SLIDE_ID_CHALLENGE_INITIAL = 'cover-ambient-initial';
+export const SLIDE_ID_CHALLENGE_INITIAL = 'challenge-initial';
 
 // Section prefix constants
 export const SECTION_PREFIX_CHALLENGE = 'challenge';

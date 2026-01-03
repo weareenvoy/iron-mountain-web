@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { getStoreKey } from '@/app/(displays)/(kiosks)/_stores/kioskStoreUtils';
 import { useKioskArrowStore } from '@/app/(displays)/(kiosks)/_stores/useKioskArrowStore';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
@@ -31,9 +32,7 @@ export const useKioskArrowState = ({
   kioskId,
 }: UseKioskArrowStateConfig) => {
   // Zustand store selectors
-  const kioskState = useKioskArrowStore(
-    state => state[`kiosk${kioskId.split('-')[1]}` as 'kiosk1' | 'kiosk2' | 'kiosk3']
-  );
+  const kioskState = useKioskArrowStore(state => state[getStoreKey(kioskId)]);
   const handleButtonClick = useKioskArrowStore(state => state.handleButtonClick);
   const handleScrollTargetChange = useKioskArrowStore(state => state.handleScrollTargetChange);
   const handleInitialScreenReset = useKioskArrowStore(state => state.handleInitialScreenReset);
