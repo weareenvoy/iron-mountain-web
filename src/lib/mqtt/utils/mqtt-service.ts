@@ -267,6 +267,7 @@ export class MqttService {
 
     const message = createMqttMessage('docent-app', {
       'volume-level': volumeLevel,
+      'volume-muted': muted,
     });
 
     console.info(`Setting volume for ${subject}: ${muted ? 'muted' : 'unmuted'} (volume-level: ${volumeLevel})`);
