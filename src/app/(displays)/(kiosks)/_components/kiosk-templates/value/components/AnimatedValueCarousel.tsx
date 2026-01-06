@@ -240,7 +240,7 @@ const AnimatedValueCarousel = ({
                     initial={{ opacity: 0, y: 40 }}
                     key={slide.id}
                     transition={{
-                      delay: isFirstSlide && !diamondsSettled ? 0 : 0,
+                      delay: isFirstSlide && !diamondsSettled ? 1.2 : 0,
                       duration: 0.6,
                       ease: [0.4, 0, 0.2, 1],
                     }}
