@@ -174,21 +174,16 @@ const AnimatedValueCarousel = ({
                 ];
                 const diamondLabel = diamondLabels[index];
 
-                // Initial position: spread if first slide and hasn't animated yet, otherwise target
-                const initialPosition =
-                  isFirstSlide && !shouldAnimate ? INITIAL_SPREAD_POSITIONS[index] : targetPosition;
+                // For first slide: start at spread position, animate to target when shouldAnimate is true
+                // For other slides: always at target position
+                const animateLeft = isFirstSlide && !shouldAnimate ? INITIAL_SPREAD_POSITIONS[index] : targetPosition;
 
                 return (
                   <motion.div
-                    animate={{
-                      left: shouldAnimate ? targetPosition : initialPosition,
-                    }}
+                    animate={{ left: animateLeft }}
                     className={cn('absolute h-[550px] w-[550px] rotate-45 rounded-[80px]', zIndexClass)}
-                    initial={false}
+                    initial={{ left: INITIAL_SPREAD_POSITIONS[index] }}
                     key={`diamond-original-${index}`}
-                    style={{
-                      left: initialPosition,
-                    }}
                     transition={{
                       delay: isFirstSlide && shouldAnimate && !diamondsSettled ? index * 0.2 : 0,
                       duration: isFirstSlide && shouldAnimate && !diamondsSettled ? 0.8 : 0.6,
