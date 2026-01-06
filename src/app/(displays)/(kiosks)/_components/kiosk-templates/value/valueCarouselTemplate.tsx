@@ -107,10 +107,7 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
         <div className="relative top-[-10px] flex flex-col gap-[360px] text-[#8a0d71]">
           <div>
             <p className="text-[100px] leading-[1.3] font-normal tracking-[-5px]">{renderRegisteredMark(headline)}</p>
-            <p
-              {...(useAnimatedCarousel ? { 'data-scroll-section': 'value-description' } : {})}
-              className="mt-[80px] w-[1480px] text-[60px] leading-[1.4] font-normal tracking-[-3px]"
-            >
+            <p className="mt-[80px] w-[1480px] text-[60px] leading-[1.4] font-normal tracking-[-3px]">
               {renderRegisteredMark(normalizeMultiline(body))}
             </p>
           </div>
@@ -121,11 +118,11 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
               slides={slidesWithDefaults}
             />
           ) : (
-          <ValueCarousel
-            hasCarouselSlides={hasCarouselSlides}
-            onRegisterCarouselHandlers={onRegisterCarouselHandlers}
-            slides={slidesWithDefaults}
-          />
+            <ValueCarousel
+              hasCarouselSlides={hasCarouselSlides}
+              onRegisterCarouselHandlers={onRegisterCarouselHandlers}
+              slides={slidesWithDefaults}
+            />
           )}
         </div>
       </div>

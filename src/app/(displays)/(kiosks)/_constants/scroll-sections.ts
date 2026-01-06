@@ -17,6 +17,7 @@ export const SCROLL_SECTION_SOLUTION_THIRD_TITLE = 'solution-third-title';
 export const SCROLL_SECTION_SOLUTION_FOURTH_TITLE = 'solution-fourth-title';
 
 // Value section IDs
+export const SCROLL_SECTION_VALUE_CAROUSEL = 'value-carousel';
 export const SCROLL_SECTION_VALUE_DESCRIPTION = 'value-description';
 
 // Custom Interactive section IDs
@@ -42,6 +43,7 @@ export type ScrollSectionId =
   | typeof SCROLL_SECTION_SOLUTION_FOURTH_TITLE
   | typeof SCROLL_SECTION_SOLUTION_SECOND_GROUP
   | typeof SCROLL_SECTION_SOLUTION_THIRD_TITLE
+  | typeof SCROLL_SECTION_VALUE_CAROUSEL
   | typeof SCROLL_SECTION_VALUE_DESCRIPTION;
 
 // Slide ID constants
