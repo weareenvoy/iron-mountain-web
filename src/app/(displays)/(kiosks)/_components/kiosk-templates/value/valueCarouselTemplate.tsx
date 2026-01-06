@@ -11,24 +11,41 @@ import AnimatedValueCarousel from './components/AnimatedValueCarousel';
 import ValueCarousel from './components/ValueCarousel';
 import type { ValueCarouselSlide } from '@/app/(displays)/(kiosks)/_types/value-types';
 
+/**
+ * Props for the ValueCarouselTemplate component.
+ * Displays a value proposition carousel with animated diamonds and bullet points.
+ */
 export type ValueCarouselTemplateProps = {
+  /** Body text describing the value proposition */
   readonly body?: string;
+  /** Unique identifier for the carousel instance */
   readonly carouselId?: string;
+  /** Eyebrow text displayed above the main headline */
   readonly eyebrow?: string;
+  /** Main headline text */
   readonly headline?: string;
+  /** Alt text for hero image (when not using video) */
   readonly heroImageAlt?: string;
+  /** Source URL for hero image (when not using video) */
   readonly heroImageSrc?: string;
+  /** Poster image for video player */
   readonly heroVideoPosterSrc?: string;
+  /** Label text displayed with diamond icon */
   readonly labelText?: string;
+  /** Main video URL (enables animated carousel variant) */
   readonly mainVideo?: string;
+  /** Callback for downward navigation */
   readonly onNavigateDown?: () => void;
+  /** Callback for upward navigation */
   readonly onNavigateUp?: () => void;
+  /** Callback to register carousel navigation handlers for parent control */
   readonly registerCarouselHandlers?: (handlers: {
     canScrollNext: () => boolean;
     canScrollPrev: () => boolean;
     scrollNext: () => void;
     scrollPrev: () => void;
   }) => void;
+  /** Array of carousel slides with diamond cards and bullet points */
   readonly slides?: readonly ValueCarouselSlide[];
 };
 

@@ -1,62 +1,38 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { getDiamondIcon } from '@/app/(displays)/(kiosks)/_utils/get-diamond-icon';
 import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import {
+  CAROUSEL_VISIBILITY_THRESHOLD,
+  DEFAULT_LABELS,
+  DIAMOND_KEY_PREFIX,
+  DIAMOND_LABEL_INDEX,
   DIAMONDS_SETTLE_TIME,
-  POSITION_MAP,
-  TEXT_VISIBILITY_MAP,
-  Z_INDEX_MAP,
-  type DiamondIndex,
-  type SlideIndex,
 } from './constants';
 import Diamond from './Diamond';
-import type { ValueCarouselSlide } from '@/app/(displays)/(kiosks)/_types/value-types';
+import { getBulletItems, getDiamondPositionForSlide, getDiamondZIndex, shouldShowDiamondText } from './helpers';
+import type { DiamondIndex, SlideIndex, ValueCarouselSlide } from '@/app/(displays)/(kiosks)/_types/value-types';
 
+/**
+ * Props for the AnimatedValueCarousel component.
+ * This component renders an animated carousel with rotating diamonds and fading bullet points.
+ */
 type AnimatedValueCarouselProps = {
+  /** Whether the carousel has valid slides with bullet points */
   readonly hasCarouselSlides?: boolean;
+  /** Callback to register navigation handlers for parent control */
   readonly registerCarouselHandlers?: (handlers: {
     canScrollNext: () => boolean;
     canScrollPrev: () => boolean;
     scrollNext: () => void;
     scrollPrev: () => void;
   }) => void;
+  /** Array of carousel slides with diamond cards and bullet points */
   readonly slides: readonly ValueCarouselSlide[];
 };
-
-/**
- * Gets the left position (in px) for a diamond on a specific slide.
- * @param slideIndex - The current slide (0-2)
- * @param diamondIndex - The diamond being positioned (0-2)
- * @returns The left position in pixels
- */
-function getDiamondPositionForSlide(slideIndex: number, diamondIndex: number): number {
-  return POSITION_MAP[slideIndex as SlideIndex][diamondIndex as DiamondIndex];
-}
-
-/**
- * Gets the z-index class for a diamond on a specific slide.
- * @param slideIndex - The current slide (0-2)
- * @param diamondIndex - The diamond being styled (0-2)
- * @returns Tailwind z-index class string (e.g., 'z-2') or empty string
- */
-function getDiamondZIndex(slideIndex: number, diamondIndex: number): string {
-  return Z_INDEX_MAP[slideIndex as SlideIndex][diamondIndex as DiamondIndex];
-}
-
-/**
- * Determines if a diamond's text should be visible on a specific slide.
- * The diamond at position 500px always shows its text.
- * @param slideIndex - The current slide (0-2)
- * @param diamondIndex - The diamond to check (0-2)
- * @returns True if text should be visible
- */
-function shouldShowDiamondText(slideIndex: number, diamondIndex: number): boolean {
-  return TEXT_VISIBILITY_MAP[slideIndex as SlideIndex][diamondIndex as DiamondIndex];
-}
 
 const AnimatedValueCarousel = ({ hasCarouselSlides, registerCarouselHandlers, slides }: AnimatedValueCarouselProps) => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
@@ -65,8 +41,24 @@ const AnimatedValueCarousel = ({ hasCarouselSlides, registerCarouselHandlers, sl
   const containerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
-  const getBulletItems = (slide: ValueCarouselSlide) =>
-    slide.bullets?.filter(entry => entry && entry.trim().length > 0) ?? [];
+  // Memoize diamond icons to avoid recalculating on every render
+  const diamondIcons = useMemo(
+    () => slides[0]?.diamondCards?.map(card => getDiamondIcon(card) ?? null) ?? [],
+    [slides]
+  );
+
+  // Memoize diamond labels to avoid recalculating inside map loop
+  const diamondLabels = useMemo(() => {
+    const strategicCard = slides[2]?.diamondCards?.[DIAMOND_LABEL_INDEX];
+    const economicCard = slides[1]?.diamondCards?.[DIAMOND_LABEL_INDEX];
+    const operationalCard = slides[0]?.diamondCards?.[DIAMOND_LABEL_INDEX];
+
+    return [
+      strategicCard?.label ?? DEFAULT_LABELS.STRATEGIC,
+      economicCard?.label ?? DEFAULT_LABELS.ECONOMIC,
+      operationalCard?.label ?? DEFAULT_LABELS.OPERATIONAL,
+    ];
+  }, [slides]);
 
   // Navigation handlers
   const canScrollNext = useCallback(() => currentSlideIndex < slides.length - 1, [currentSlideIndex, slides.length]);
@@ -84,7 +76,7 @@ const AnimatedValueCarousel = ({ hasCarouselSlides, registerCarouselHandlers, sl
 
   /**
    * Detect when the component becomes visible using IntersectionObserver.
-   * Triggers the initial diamond animation when 30% of the carousel is visible.
+   * Triggers the initial diamond animation when the visibility threshold is met.
    */
   useEffect(() => {
     const currentContainer = containerRef.current;
@@ -100,7 +92,7 @@ const AnimatedValueCarousel = ({ hasCarouselSlides, registerCarouselHandlers, sl
       {
         root: null,
         rootMargin: '0px',
-        threshold: 0.3,
+        threshold: CAROUSEL_VISIBILITY_THRESHOLD,
       }
     );
 
@@ -148,20 +140,24 @@ const AnimatedValueCarousel = ({ hasCarouselSlides, registerCarouselHandlers, sl
           <div className="flex w-[920px] flex-col items-center gap-[71px]">
             {/* Render diamonds once - they rotate to new positions on slide change */}
             <div className="relative flex h-[565px] w-[920px] items-center">
-              {slides[0]?.diamondCards?.map((card, index) => {
-                const diamondIcon = getDiamondIcon(card) || null;
-                const targetPosition = getDiamondPositionForSlide(currentSlideIndex, index);
-                const zIndexClass = getDiamondZIndex(currentSlideIndex, index);
-                const showText = shouldShowDiamondText(currentSlideIndex, index);
+              {slides[0]?.diamondCards?.map((_card, index) => {
+                // Validate indices are within expected bounds
+                if (currentSlideIndex < 0 || currentSlideIndex > 2 || index < 0 || index > 2) {
+                  if (process.env.NODE_ENV === 'development') {
+                    console.error(`Invalid carousel indices: slide=${currentSlideIndex}, diamond=${index}`);
+                  }
+                  return null;
+                }
 
-                // Get the label for this diamond from each slide's data
-                // Each slide has its label at index [2] of diamondCards
-                const diamondLabels = [
-                  slides[2]?.diamondCards?.[2]?.label || 'Strategic benefits',
-                  slides[1]?.diamondCards?.[2]?.label || 'Economic benefits',
-                  slides[0]?.diamondCards?.[2]?.label || 'Operational benefits',
-                ];
-                const diamondLabel = diamondLabels[index] || '';
+                const diamondIcon = diamondIcons[index] ?? null;
+                const diamondLabel = diamondLabels[index] ?? '';
+
+                const targetPosition = getDiamondPositionForSlide(
+                  currentSlideIndex as SlideIndex,
+                  index as DiamondIndex
+                );
+                const zIndexClass = getDiamondZIndex(currentSlideIndex as SlideIndex, index as DiamondIndex);
+                const showText = shouldShowDiamondText(currentSlideIndex as SlideIndex, index as DiamondIndex);
 
                 return (
                   <Diamond
@@ -170,7 +166,7 @@ const AnimatedValueCarousel = ({ hasCarouselSlides, registerCarouselHandlers, sl
                     diamondLabel={diamondLabel}
                     diamondsSettled={diamondsSettled}
                     index={index}
-                    key={`diamond-original-${index}`}
+                    key={`${DIAMOND_KEY_PREFIX}-${index}`}
                     shouldAnimate={shouldAnimate}
                     showText={showText}
                     targetPosition={targetPosition}
@@ -227,7 +223,5 @@ const AnimatedValueCarousel = ({ hasCarouselSlides, registerCarouselHandlers, sl
     </div>
   );
 };
-
-AnimatedValueCarousel.displayName = 'AnimatedValueCarousel';
 
 export default AnimatedValueCarousel;
