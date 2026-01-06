@@ -222,7 +222,7 @@ const AnimatedValueCarousel = ({
           </div>
           {/* Bullets fade in/out based on current slide */}
           <div className="relative flex-1">
-            <AnimatePresence initial={false} mode="wait">
+            <AnimatePresence mode="wait">
               {slides.map((slide, slideIndex) => {
                 if (slideIndex !== currentSlideIndex) return null;
 
@@ -232,15 +232,18 @@ const AnimatedValueCarousel = ({
 
                 if (!hasBullets) return null;
 
+                // For first slide: only animate after diamonds settle and carousel is visible
+                // For other slides: animate immediately
+                const shouldShowBullets = !isFirstSlide || (shouldAnimate && diamondsSettled);
+
                 return (
                   <motion.ul
-                    animate={{ opacity: 1, y: 0 }}
+                    animate={shouldShowBullets ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
                     className="text-[52px] leading-[1.4] font-normal tracking-[-2.6px] text-[#8a0d71]"
                     exit={{ opacity: 0, y: 40 }}
                     initial={{ opacity: 0, y: 40 }}
                     key={slide.id}
                     transition={{
-                      delay: isFirstSlide && !diamondsSettled ? 1.2 : 0,
                       duration: 0.6,
                       ease: [0.4, 0, 0.2, 1],
                     }}
