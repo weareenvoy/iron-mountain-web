@@ -22,6 +22,16 @@ type DiamondLayout = {
 
 /**
  * Predefined layouts for different diamond stack variants.
+ * All positioning values are derived from Figma design specifications to ensure
+ * pixel-perfect alignment with the design system.
+ *
+ * Carousel variant:
+ * - Left offset: -330px to align diamond stack within carousel container (from Figma frame positioning)
+ * - Diamond positions: [335, 490, 650]px creating 155px spacing between centers (from Figma spacing grid)
+ *
+ * Overview variant:
+ * - No offset (positioned at container origin)
+ * - Diamond positions: [0, 565, 1130]px evenly distributed across 920px container (from Figma artboard layout)
  */
 const diamondLayouts: Record<DiamondStackVariant, DiamondLayout> = {
   carousel: {
@@ -73,7 +83,7 @@ const DiamondStack = memo(({ cards, variant = 'overview' }: DiamondStackProps) =
         return (
           <div
             className="absolute h-[550px] w-[550px] rotate-45 rounded-[80px]"
-            key={card.label ?? `diamond-${index}`}
+            key={card.label || `diamond-${variant}-${index}`}
             style={{ left: `${leftOffset}px` }}
             // Inline left position is required for runtime calculation based on variant and index
           >

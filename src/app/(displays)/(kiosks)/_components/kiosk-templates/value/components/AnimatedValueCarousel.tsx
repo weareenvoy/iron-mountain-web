@@ -1,11 +1,12 @@
 'use client';
 
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { getDiamondIcon } from '@/app/(displays)/(kiosks)/_utils/get-diamond-icon';
 import { cn } from '@/lib/tailwind/utils/cn';
-import renderRegisteredMark from '@/lib/utils/render-registered-mark';
+import BulletList from './BulletList';
 import {
+  CAROUSEL_LAYOUT,
   CAROUSEL_VISIBILITY_THRESHOLD,
   DEFAULT_LABELS,
   DIAMOND_KEY_PREFIX,
@@ -14,11 +15,10 @@ import {
 } from './constants';
 import Diamond from './Diamond';
 import { getBulletItems, getDiamondPositionForSlide, getDiamondZIndex, shouldShowDiamondText } from './helpers';
-import type { DiamondIndex, SlideIndex, ValueCarouselSlide } from '@/app/(displays)/(kiosks)/_types/value-types';
+import type { ValueCarouselSlide } from '@/app/(displays)/(kiosks)/_types/value-types';
 
 /**
  * Props for the AnimatedValueCarousel component.
- * This component renders an animated carousel with rotating diamonds and fading bullet points.
  */
 type AnimatedValueCarouselProps = {
   /** Whether the carousel has valid slides with bullet points */
@@ -33,6 +33,34 @@ type AnimatedValueCarouselProps = {
   /** Array of carousel slides with diamond cards and bullet points */
   readonly slides: readonly ValueCarouselSlide[];
 };
+
+/**
+ * AnimatedValueCarousel - Interactive carousel component with animated diamonds and bullet points.
+ *
+ * ## Overview
+ * This component displays a multi-slide carousel showcasing value propositions with animated
+ * diamond icons and corresponding bullet point lists. It features sophisticated animations
+ * including diamond rotation, position transitions, and text fade effects.
+ *
+ * ## Animation Sequence
+ * 1. **Initial Load**: Diamonds start in spread positions (660px, 1230px, 1785px apart)
+ * 2. **On Visibility**: When 30% visible, diamonds animate to stacked positions with stagger effect
+ * 3. **After Settlement**: Bullet points fade in from below for first slide
+ * 4. **Navigation**: Diamonds rotate positions, text fades in/out, bullets transition
+ *
+ * ## When to Use
+ * - Use `AnimatedValueCarousel` when `mainVideo` is provided and slides have content
+ * - Falls back to `ValueCarousel` (static) when no video or animation is not needed
+ * - Optimized for kiosk displays at 2160x5120px resolution
+ *
+ * ## Technical Details
+ * - Uses Framer Motion for declarative animations
+ * - IntersectionObserver triggers initial animation at 30% visibility
+ * - Memoizes expensive calculations (icons, labels) for performance
+ * - All positioning values aligned with Figma design specifications
+ *
+ * @component
+ */
 
 const AnimatedValueCarousel = ({ hasCarouselSlides, registerCarouselHandlers, slides }: AnimatedValueCarouselProps) => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
@@ -122,6 +150,7 @@ const AnimatedValueCarousel = ({ hasCarouselSlides, registerCarouselHandlers, sl
   /**
    * Trigger bullet fade-in after all diamonds have settled into position.
    * Uses calculated timing based on diamond animation configuration.
+   * Ensures cleanup on unmount to prevent memory leaks and state updates on unmounted components.
    */
   useEffect(() => {
     if (!shouldAnimate) return;
@@ -130,34 +159,48 @@ const AnimatedValueCarousel = ({ hasCarouselSlides, registerCarouselHandlers, sl
       setDiamondsSettled(true);
     }, DIAMONDS_SETTLE_TIME);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      setDiamondsSettled(false);
+    };
   }, [shouldAnimate]);
 
   return (
-    <div className={cn('flex flex-col items-end gap-[80px]')} ref={containerRef}>
-      <div className={cn('relative', hasCarouselSlides && 'left-0 w-[2200px]')}>
-        <div className="flex min-h-[1600px] w-full flex-row gap-[220px] pr-[80px]">
+    <div
+      className={cn('flex flex-col items-end')}
+      ref={containerRef}
+      style={{ gap: `${CAROUSEL_LAYOUT.CONTAINER_GAP}px` }}
+    >
+      <div
+        className={cn('relative', hasCarouselSlides && 'left-0')}
+        style={hasCarouselSlides ? { width: `${CAROUSEL_LAYOUT.CONTENT_WIDTH}px` } : undefined}
+      >
+        <div
+          className="flex w-full flex-row"
+          style={{
+            gap: `${CAROUSEL_LAYOUT.COLUMN_GAP}px`,
+            minHeight: `${CAROUSEL_LAYOUT.MIN_HEIGHT}px`,
+            paddingRight: `${CAROUSEL_LAYOUT.PADDING_RIGHT}px`,
+          }}
+        >
           <div className="flex w-[920px] flex-col items-center gap-[71px]">
             {/* Render diamonds once - they rotate to new positions on slide change */}
             <div className="relative flex h-[565px] w-[920px] items-center">
               {slides[0]?.diamondCards?.map((_card, index) => {
-                // Validate indices are within expected bounds
-                if (currentSlideIndex < 0 || currentSlideIndex > 2 || index < 0 || index > 2) {
+                const diamondIcon = diamondIcons[index] ?? null;
+                const diamondLabel = diamondLabels[index] ?? '';
+
+                const targetPosition = getDiamondPositionForSlide(currentSlideIndex, index);
+                const zIndexClass = getDiamondZIndex(currentSlideIndex, index);
+                const showText = shouldShowDiamondText(currentSlideIndex, index);
+
+                // Helper functions return null if indices are invalid
+                if (targetPosition === null || zIndexClass === null || showText === null) {
                   if (process.env.NODE_ENV === 'development') {
                     console.error(`Invalid carousel indices: slide=${currentSlideIndex}, diamond=${index}`);
                   }
                   return null;
                 }
-
-                const diamondIcon = diamondIcons[index] ?? null;
-                const diamondLabel = diamondLabels[index] ?? '';
-
-                const targetPosition = getDiamondPositionForSlide(
-                  currentSlideIndex as SlideIndex,
-                  index as DiamondIndex
-                );
-                const zIndexClass = getDiamondZIndex(currentSlideIndex as SlideIndex, index as DiamondIndex);
-                const showText = shouldShowDiamondText(currentSlideIndex as SlideIndex, index as DiamondIndex);
 
                 return (
                   <Diamond
@@ -193,27 +236,12 @@ const AnimatedValueCarousel = ({ hasCarouselSlides, registerCarouselHandlers, sl
                 const shouldShowBullets = !isFirstSlide || (shouldAnimate && diamondsSettled);
 
                 return (
-                  <motion.ul
-                    animate={shouldShowBullets ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-                    className="text-[52px] leading-[1.4] font-normal tracking-[-2.6px] text-[#8a0d71]"
-                    exit={{ opacity: 0, y: 40 }}
-                    initial={{ opacity: 0, y: 40 }}
+                  <BulletList
+                    bulletItems={bulletItems}
                     key={slide.id}
-                    transition={{
-                      duration: 0.6,
-                      ease: [0.4, 0, 0.2, 1],
-                    }}
-                  >
-                    {bulletItems.map((bullet, idx) => (
-                      <li
-                        className="relative mb-[80px] w-[840px] pl-[40px] last:mb-0"
-                        key={`${slide.id}-bullet-${idx}`}
-                      >
-                        <span className="absolute top-[30px] left-0 size-[16px] -translate-y-1/2 rounded-full bg-[#8a0d71]" />
-                        <span>{renderRegisteredMark(bullet)}</span>
-                      </li>
-                    ))}
-                  </motion.ul>
+                    shouldShow={shouldShowBullets}
+                    slideId={slide.id}
+                  />
                 );
               })}
             </AnimatePresence>

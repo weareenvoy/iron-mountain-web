@@ -1,26 +1,40 @@
-import { LAYOUT } from './constants';
+import { LAYOUT, MAX_DIAMONDS, MAX_SLIDES } from './constants';
 import type { DiamondIndex, SlideIndex, ValueCarouselSlide } from '@/app/(displays)/(kiosks)/_types/value-types';
+
+/**
+ * Validates if indices are within valid ranges for carousel operations.
+ * @param slideIndex - The slide index to validate
+ * @param diamondIndex - The diamond index to validate
+ * @returns True if both indices are valid
+ */
+export function areIndicesValid(slideIndex: number, diamondIndex: number): boolean {
+  return slideIndex >= 0 && slideIndex < MAX_SLIDES && diamondIndex >= 0 && diamondIndex < MAX_DIAMONDS;
+}
 
 /**
  * Gets the left position (in px) for a diamond on a specific slide.
  * @param slideIndex - The current slide (0-2)
  * @param diamondIndex - The diamond being positioned (0-2)
- * @returns The left position in pixels
+ * @returns The left position in pixels, or null if indices are invalid
  */
-export function getDiamondPositionForSlide(slideIndex: SlideIndex, diamondIndex: DiamondIndex): number {
-  // Safe to assert: SlideIndex and DiamondIndex types guarantee valid indices
-  return LAYOUT.POSITIONS[slideIndex]![diamondIndex]!;
+export function getDiamondPositionForSlide(slideIndex: number, diamondIndex: number): null | number {
+  if (!areIndicesValid(slideIndex, diamondIndex)) {
+    return null;
+  }
+  return LAYOUT.POSITIONS[slideIndex as SlideIndex]![diamondIndex as DiamondIndex]!;
 }
 
 /**
  * Gets the z-index class for a diamond on a specific slide.
  * @param slideIndex - The current slide (0-2)
  * @param diamondIndex - The diamond being styled (0-2)
- * @returns Tailwind z-index class string (e.g., 'z-2') or empty string
+ * @returns Tailwind z-index class string (e.g., 'z-2'), empty string, or null if indices are invalid
  */
-export function getDiamondZIndex(slideIndex: SlideIndex, diamondIndex: DiamondIndex): string {
-  // Safe to assert: SlideIndex and DiamondIndex types guarantee valid indices
-  return LAYOUT.Z_INDICES[slideIndex]![diamondIndex]!;
+export function getDiamondZIndex(slideIndex: number, diamondIndex: number): null | string {
+  if (!areIndicesValid(slideIndex, diamondIndex)) {
+    return null;
+  }
+  return LAYOUT.Z_INDICES[slideIndex as SlideIndex]![diamondIndex as DiamondIndex]!;
 }
 
 /**
@@ -28,11 +42,13 @@ export function getDiamondZIndex(slideIndex: SlideIndex, diamondIndex: DiamondIn
  * The diamond at position 500px always shows its text.
  * @param slideIndex - The current slide (0-2)
  * @param diamondIndex - The diamond to check (0-2)
- * @returns True if text should be visible
+ * @returns True if text should be visible, false if not, or null if indices are invalid
  */
-export function shouldShowDiamondText(slideIndex: SlideIndex, diamondIndex: DiamondIndex): boolean {
-  // Safe to assert: SlideIndex and DiamondIndex types guarantee valid indices
-  return LAYOUT.TEXT_VISIBILITY[slideIndex]![diamondIndex]!;
+export function shouldShowDiamondText(slideIndex: number, diamondIndex: number): boolean | null {
+  if (!areIndicesValid(slideIndex, diamondIndex)) {
+    return null;
+  }
+  return LAYOUT.TEXT_VISIBILITY[slideIndex as SlideIndex]![diamondIndex as DiamondIndex]!;
 }
 
 /**

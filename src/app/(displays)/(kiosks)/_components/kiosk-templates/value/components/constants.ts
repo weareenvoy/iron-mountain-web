@@ -105,6 +105,48 @@ export const CAROUSEL_VISIBILITY_THRESHOLD = 0.3;
 export const DIAMOND_KEY_PREFIX = 'diamond-original';
 
 /**
+ * Maximum number of slides supported by the carousel.
+ * Aligned with Figma design specifications.
+ */
+export const MAX_SLIDES = 3;
+
+/**
+ * Maximum number of diamonds per slide.
+ * Aligned with Figma design specifications.
+ */
+export const MAX_DIAMONDS = 3;
+
+/**
+ * Animation configuration for bullet point transitions.
+ * Values matched to Figma motion design specifications.
+ */
+export const BULLET_ANIMATION = {
+  /** Animation duration in seconds */
+  DURATION: 0.6,
+  /** Cubic bezier easing curve for smooth motion */
+  EASE: [0.4, 0, 0.2, 1] as const,
+  /** Vertical offset (in px) for fade-in animation */
+  Y_OFFSET: 40,
+} as const;
+
+/**
+ * Carousel layout dimensions from Figma design.
+ * These values ensure pixel-perfect alignment with the design system.
+ */
+export const CAROUSEL_LAYOUT = {
+  /** Gap between carousel sections (px) - from Figma spacing system */
+  COLUMN_GAP: 220,
+  /** Container gap for vertical spacing (px) - from Figma */
+  CONTAINER_GAP: 80,
+  /** Total width of carousel content area (px) - from Figma artboard */
+  CONTENT_WIDTH: 2200,
+  /** Minimum height of carousel container (px) - from Figma frame */
+  MIN_HEIGHT: 1600,
+  /** Right padding for content overflow (px) - from Figma padding spec */
+  PADDING_RIGHT: 80,
+} as const;
+
+/**
  * Organized layout configuration for diamond positioning and visibility.
  * Use these instead of accessing the individual maps directly.
  */
