@@ -1,13 +1,11 @@
 'use client';
 
-import useEmblaCarousel from 'embla-carousel-react';
-import { motion } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { getDiamondIcon } from '@/app/(displays)/(kiosks)/_utils/get-diamond-icon';
 import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
-import DiamondStack from '../DiamondStack';
-import type { ValueCarouselSlide, ValueDiamondCard } from '@/app/(displays)/(kiosks)/_types/value-types';
+import type { ValueCarouselSlide } from '@/app/(displays)/(kiosks)/_types/value-types';
 
 type AnimatedValueCarouselProps = {
   readonly hasCarouselSlides?: boolean;
@@ -25,23 +23,61 @@ const AnimatedValueCarousel = ({
   onRegisterCarouselHandlers,
   slides,
 }: AnimatedValueCarouselProps) => {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ align: 'start', loop: false });
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [diamondsSettled, setDiamondsSettled] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-  const [animationStarted, setAnimationStarted] = useState(false);
+  const [shouldAnimate, setShouldAnimate] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Configurable diamond positions per slide [left values for diamonds 0, 1, 2]
+  // Slide 1: Operational benefits
+  const SLIDE_1_POSITIONS = [165, 340, 500];
+  // Slide 2: Economic benefits
+  const SLIDE_2_POSITIONS = [165, 340, 500];
+  // Slide 3: Strategic benefits
+  const SLIDE_3_POSITIONS = [165, 340, 500];
+
+  // Initial spread positions for slide 1 animation
+  const INITIAL_SPREAD_POSITIONS = [660, 1230, 1785];
+
+  // Get diamond positions for current slide
+  const getDiamondPositions = (slideIndex: number) => {
+    switch (slideIndex) {
+      case 0:
+        return SLIDE_1_POSITIONS;
+      case 1:
+        return SLIDE_2_POSITIONS;
+      case 2:
+        return SLIDE_3_POSITIONS;
+      default:
+        return SLIDE_1_POSITIONS;
+    }
+  };
 
   const getBulletItems = (slide: ValueCarouselSlide) =>
     slide.bullets?.filter(entry => entry && entry.trim().length > 0) ?? [];
+
+  // Navigation handlers
+  const canScrollNext = useCallback(() => currentSlideIndex < slides.length - 1, [currentSlideIndex, slides.length]);
+  const canScrollPrev = useCallback(() => currentSlideIndex > 0, [currentSlideIndex]);
+  const scrollNext = useCallback(() => {
+    if (currentSlideIndex < slides.length - 1) {
+      setCurrentSlideIndex(prev => prev + 1);
+    }
+  }, [currentSlideIndex, slides.length]);
+  const scrollPrev = useCallback(() => {
+    if (currentSlideIndex > 0) {
+      setCurrentSlideIndex(prev => prev - 1);
+    }
+  }, [currentSlideIndex]);
 
   // Detect when the component becomes visible
   useEffect(() => {
     const currentContainer = containerRef.current;
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry && entry.isIntersecting && !animationStarted) {
-          setIsVisible(true);
-          setAnimationStarted(true);
+        if (entry && entry.isIntersecting) {
+          // Start animation when visible
+          setShouldAnimate(true);
         }
       },
       {
@@ -60,27 +96,23 @@ const AnimatedValueCarousel = ({
         observer.unobserve(currentContainer);
       }
     };
-  }, [animationStarted]);
+  }, []); // Only run once on mount
 
+  // Register navigation handlers
   useEffect(() => {
-    if (emblaApi && onRegisterCarouselHandlers) {
+    if (onRegisterCarouselHandlers) {
       onRegisterCarouselHandlers({
-        canScrollNext: () => emblaApi.canScrollNext(),
-        canScrollPrev: () => emblaApi.canScrollPrev(),
-        scrollNext: () => emblaApi.scrollNext(),
-        scrollPrev: () => emblaApi.scrollPrev(),
+        canScrollNext,
+        canScrollPrev,
+        scrollNext,
+        scrollPrev,
       });
     }
-
-    // Cleanup: Destroy Embla instance on unmount to prevent memory leaks
-    return () => {
-      emblaApi?.destroy();
-    };
-  }, [emblaApi, onRegisterCarouselHandlers]);
+  }, [canScrollNext, canScrollPrev, onRegisterCarouselHandlers, scrollNext, scrollPrev]);
 
   // Trigger bullets fade-in after diamonds settle
   useEffect(() => {
-    if (!isVisible) return;
+    if (!shouldAnimate) return;
 
     // Animation timing:
     // - Last diamond (index 2) starts at 0.4s delay
@@ -91,83 +123,85 @@ const AnimatedValueCarousel = ({
     }, 1200);
 
     return () => clearTimeout(timer);
-  }, [isVisible]);
+  }, [shouldAnimate]);
 
   return (
     <div className={cn('flex flex-col items-end gap-[80px]')} ref={containerRef}>
-      <div className={cn('overflow-hidden', hasCarouselSlides && 'relative left-0 w-[2200px]')} ref={emblaRef}>
-        <div className="flex w-full">
-          {slides.map((slide, slideIndex) => {
-            const cards: readonly ValueDiamondCard[] = slide.diamondCards ?? [];
-            const bulletItems = getBulletItems(slide);
-            const hasBullets = bulletItems.length > 0;
-            const isFirstSlide = slideIndex === 0;
+      <div className={cn('relative', hasCarouselSlides && 'left-0 w-[2200px]')}>
+        <div className="flex min-h-[1600px] w-full flex-row gap-[220px] pr-[80px]">
+          <div className="flex w-[920px] flex-col items-center gap-[71px]">
+            {/* Render diamonds once - they rotate to new positions on slide change */}
+            <div className="relative flex h-[565px] w-[920px] items-center">
+              {slides[0]?.diamondCards?.map((_, index) => {
+                // Get the current slide's card for this diamond position
+                const currentSlide = slides[currentSlideIndex];
+                const card = currentSlide?.diamondCards?.[index];
+                if (!card) return null;
 
-            return (
-              <div className="flex min-h-[1600px] w-full min-w-full flex-row gap-[220px] pr-[80px]" key={slide.id}>
-                <div className="flex w-[920px] flex-col items-center gap-[71px]">
-                  {/* Animate slide 1 diamonds from spread positions to stacked positions */}
-                  {isFirstSlide && isVisible ? (
-                    <div className="relative flex h-[565px] w-[920px] items-center">
-                      {cards.map((card, index) => {
-                        const Icon = getDiamondIcon(card);
-                        // Starting positions (spread out to the right)
-                        const initialPositions = [660, 1230, 1785];
-                        // Ending positions (carousel stacked positions)
-                        const targetPositions = [165, 340, 500];
-                        const leftOffset = initialPositions[index] ?? 660;
-                        const targetPosition = targetPositions[index] ?? 335;
+                const Icon = getDiamondIcon(card);
+                const diamondPositions = getDiamondPositions(currentSlideIndex);
+                const targetPosition = diamondPositions[index] ?? 165;
+                const isFirstSlide = currentSlideIndex === 0;
 
-                        // Stagger delays so they finish in order
-                        const animationDuration = 0.8;
-                        const staggerDelay = index * 0.2;
+                // Initial position: spread if first slide and hasn't animated yet, otherwise target
+                const initialPosition =
+                  isFirstSlide && !shouldAnimate ? INITIAL_SPREAD_POSITIONS[index] : targetPosition;
 
-                        return (
-                          <motion.div
-                            animate={{
-                              left: targetPosition,
-                            }}
-                            className="absolute h-[550px] w-[550px] rotate-45 rounded-[80px]"
-                            initial={{
-                              left: leftOffset,
-                            }}
-                            key={card.label || `diamond-${index}`}
-                            transition={{
-                              delay: staggerDelay,
-                              duration: animationDuration,
-                              ease: [0.4, 0, 0.2, 1],
-                            }}
-                          >
-                            <div className="absolute inset-0 flex items-center justify-center">
-                              <div className="h-full w-full -rotate-45">
-                                {Icon ? <Icon aria-hidden className="h-full w-full" focusable="false" /> : null}
-                              </div>
-                            </div>
-                            {card.label ? (
-                              <div className="absolute inset-0 flex items-center justify-center">
-                                <div className="flex h-[320px] w-[320px] -rotate-45 items-center justify-center px-10 text-center text-[48px] leading-[1.4] font-normal tracking-[-2.4px] text-[#ededed]">
-                                  {renderRegisteredMark(card.label)}
-                                </div>
-                              </div>
-                            ) : null}
-                          </motion.div>
-                        );
-                      })}
-                    </div>
-                  ) : (
-                    <DiamondStack cards={cards} variant="carousel" />
-                  )}
-                </div>
-                {hasBullets ? (
-                  <motion.ul
+                return (
+                  <motion.div
                     animate={{
-                      opacity: isFirstSlide && diamondsSettled ? 1 : 0,
-                      y: isFirstSlide && diamondsSettled ? 0 : 40,
+                      left: shouldAnimate ? targetPosition : initialPosition,
                     }}
-                    className="flex-1 text-[52px] leading-[1.4] font-normal tracking-[-2.6px] text-[#8a0d71]"
-                    initial={{ opacity: 0, y: 40 }}
+                    className="absolute h-[550px] w-[550px] rotate-45 rounded-[80px]"
+                    initial={false}
+                    key={`diamond-position-${index}`}
+                    style={{
+                      left: initialPosition,
+                    }}
                     transition={{
-                      delay: isFirstSlide ? 0 : 0,
+                      delay: isFirstSlide && shouldAnimate && !diamondsSettled ? index * 0.2 : 0,
+                      duration: isFirstSlide && shouldAnimate && !diamondsSettled ? 0.8 : 0.6,
+                      ease: [0.4, 0, 0.2, 1],
+                    }}
+                  >
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="h-full w-full -rotate-45">
+                        {Icon ? <Icon aria-hidden className="h-full w-full" focusable="false" /> : null}
+                      </div>
+                    </div>
+                    {card.label ? (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="flex h-[320px] w-[320px] -rotate-45 items-center justify-center px-10 text-center text-[48px] leading-[1.4] font-normal tracking-[-2.4px] text-[#ededed]">
+                          {renderRegisteredMark(card.label)}
+                        </div>
+                      </div>
+                    ) : null}
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+          {/* Bullets fade in/out based on current slide */}
+          <div className="relative flex-1">
+            <AnimatePresence initial={false} mode="wait">
+              {slides.map((slide, slideIndex) => {
+                if (slideIndex !== currentSlideIndex) return null;
+
+                const bulletItems = getBulletItems(slide);
+                const hasBullets = bulletItems.length > 0;
+                const isFirstSlide = slideIndex === 0;
+
+                if (!hasBullets) return null;
+
+                return (
+                  <motion.ul
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-[52px] leading-[1.4] font-normal tracking-[-2.6px] text-[#8a0d71]"
+                    exit={{ opacity: 0, y: 40 }}
+                    initial={{ opacity: 0, y: 40 }}
+                    key={slide.id}
+                    transition={{
+                      delay: isFirstSlide && !diamondsSettled ? 0 : 0,
                       duration: 0.6,
                       ease: [0.4, 0, 0.2, 1],
                     }}
@@ -182,10 +216,10 @@ const AnimatedValueCarousel = ({
                       </li>
                     ))}
                   </motion.ul>
-                ) : null}
-              </div>
-            );
-          })}
+                );
+              })}
+            </AnimatePresence>
+          </div>
         </div>
       </div>
     </div>
