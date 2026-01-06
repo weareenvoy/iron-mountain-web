@@ -5,13 +5,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { getDiamondIcon } from '@/app/(displays)/(kiosks)/_utils/get-diamond-icon';
 import { cn } from '@/lib/tailwind/utils/cn';
 import BulletList from './BulletList';
-import {
-  CAROUSEL_LAYOUT,
-  CAROUSEL_VISIBILITY_THRESHOLD,
-  DEFAULT_LABELS,
-  DIAMOND_LABEL_INDEX,
-  DIAMONDS_SETTLE_TIME,
-} from '../constants';
+import { CAROUSEL_VISIBILITY_THRESHOLD, DIAMONDS_SETTLE_TIME } from '../constants/animation';
+import { DEFAULT_LABELS, DIAMOND_LABEL_INDEX } from '../constants/layout';
 import DiamondContainer from './DiamondContainer';
 import { getBulletItems } from '../utils/helpers';
 import type { ValueCarouselSlide } from '@/app/(displays)/(kiosks)/_types/value-types';
@@ -172,23 +167,9 @@ const AnimatedValueCarousel = ({ hasCarouselSlides, registerCarouselHandlers, sl
   }, [shouldAnimate]);
 
   return (
-    <div
-      className={cn('flex flex-col items-end')}
-      ref={containerRef}
-      style={{ gap: `${CAROUSEL_LAYOUT.CONTAINER_GAP}px` }}
-    >
-      <div
-        className={cn('relative', hasCarouselSlides && 'left-0')}
-        style={hasCarouselSlides ? { width: `${CAROUSEL_LAYOUT.CONTENT_WIDTH}px` } : undefined}
-      >
-        <div
-          className="flex w-full flex-row"
-          style={{
-            gap: `${CAROUSEL_LAYOUT.COLUMN_GAP}px`,
-            minHeight: `${CAROUSEL_LAYOUT.MIN_HEIGHT}px`,
-            paddingRight: `${CAROUSEL_LAYOUT.PADDING_RIGHT}px`,
-          }}
-        >
+    <div className={cn('flex flex-col items-end gap-[80px]')} ref={containerRef}>
+      <div className={cn('relative', hasCarouselSlides && 'left-0 w-[2200px]')}>
+        <div className="flex min-h-[1600px] w-full flex-row gap-[220px] pr-[80px]">
           <div className="flex w-[920px] flex-col items-center gap-[71px]">
             {/* Render diamonds once - they rotate to new positions on slide change */}
             <DiamondContainer

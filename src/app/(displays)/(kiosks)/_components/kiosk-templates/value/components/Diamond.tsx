@@ -2,8 +2,8 @@ import { motion } from 'framer-motion';
 import { memo } from 'react';
 import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
-import { DIAMOND_ANIMATION, INITIAL_SPREAD_POSITIONS, INITIALLY_VISIBLE_DIAMOND_INDEX } from '../constants';
-import type { Position } from '@/app/(displays)/(kiosks)/_types/value-types';
+import { DIAMOND_ANIMATION, DIAMOND_TEXT_ANIMATION, INITIALLY_VISIBLE_DIAMOND_INDEX } from '../constants/animation';
+import { INITIAL_SPREAD_POSITIONS } from '../constants/layout';
 
 /**
  * Props for the Diamond component.
@@ -24,8 +24,8 @@ type DiamondProps = {
   readonly shouldAnimate: boolean;
   /** Whether this diamond's text should be visible on the current slide */
   readonly showText: boolean;
-  /** Target left position (branded Position type) for this diamond on the current slide */
-  readonly targetPosition: Position;
+  /** Target left position (in px) for this diamond on the current slide */
+  readonly targetPosition: number;
   /** Tailwind z-index class for stacking order (e.g., 'z-2') */
   readonly zIndexClass: string;
 };
@@ -80,8 +80,8 @@ const Diamond = memo(
           className="absolute inset-0 flex items-center justify-center"
           initial={{ opacity: isInitiallyVisible ? 1 : 0 }}
           transition={{
-            duration: 0.4,
-            ease: 'easeInOut',
+            duration: DIAMOND_TEXT_ANIMATION.DURATION,
+            ease: DIAMOND_TEXT_ANIMATION.EASE,
           }}
         >
           {diamondLabel ? (

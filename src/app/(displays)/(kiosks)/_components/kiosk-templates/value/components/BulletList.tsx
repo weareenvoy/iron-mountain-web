@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { memo } from 'react';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
-import { BULLET_ANIMATION, BULLET_LAYOUT } from '../constants';
+import { BULLET_ANIMATION } from '../constants/animation';
 
 type BulletListProps = {
   /** Array of bullet point strings to display */
@@ -35,12 +35,10 @@ const BulletList = memo(({ bulletItems, shouldShow, slideId }: BulletListProps) 
     >
       {bulletItems.map((bullet, idx) => (
         <li
-          className={`relative mb-[${BULLET_LAYOUT.ITEM_MARGIN}px] w-[${BULLET_LAYOUT.ITEM_WIDTH}px] pl-[${BULLET_LAYOUT.TEXT_PADDING}px] last:mb-0`}
+          className="relative mb-[80px] w-[840px] pl-[40px] last:mb-0"
           key={slideId ? `${slideId}-bullet-${idx}` : `bullet-${idx}`}
         >
-          <span
-            className={`absolute top-[${BULLET_LAYOUT.MARKER_TOP}px] left-0 size-[${BULLET_LAYOUT.MARKER_SIZE}px] -translate-y-1/2 rounded-full bg-[#8a0d71]`}
-          />
+          <span className="absolute top-[30px] left-0 size-[16px] -translate-y-1/2 rounded-full bg-[#8a0d71]" />
           <span>{renderRegisteredMark(bullet)}</span>
         </li>
       ))}

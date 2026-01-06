@@ -1,10 +1,5 @@
-import { LAYOUT, MAX_DIAMONDS, MAX_SLIDES } from '../constants';
-import type {
-  DiamondIndex,
-  Position,
-  SlideIndex,
-  ValueCarouselSlide,
-} from '@/app/(displays)/(kiosks)/_types/value-types';
+import { LAYOUT, MAX_DIAMONDS, MAX_SLIDES } from '../constants/layout';
+import type { DiamondIndex, SlideIndex, ValueCarouselSlide } from '@/app/(displays)/(kiosks)/_types/value-types';
 
 /**
  * Validates if indices are within valid ranges for carousel operations.
@@ -18,16 +13,19 @@ export function areIndicesValid(slideIndex: number, diamondIndex: number): boole
 
 /**
  * Gets the left position (in px) for a diamond on a specific slide.
- * Returns a branded Position type for type safety.
  * @param slideIndex - The current slide (0-2)
  * @param diamondIndex - The diamond being positioned (0-2)
- * @returns The left position as Position type, or null if indices are invalid
+ * @returns The left position in pixels, or null if indices are invalid
  */
-export function getDiamondPositionForSlide(slideIndex: number, diamondIndex: number): null | Position {
+export function getDiamondPositionForSlide(slideIndex: number, diamondIndex: number): null | number {
   if (!areIndicesValid(slideIndex, diamondIndex)) {
     return null;
   }
-  return LAYOUT.POSITIONS[slideIndex as SlideIndex]![diamondIndex as DiamondIndex]!;
+
+  const slidePositions = LAYOUT.POSITIONS[slideIndex as SlideIndex];
+  if (!slidePositions) return null;
+
+  return slidePositions[diamondIndex as DiamondIndex];
 }
 
 /**
@@ -40,7 +38,11 @@ export function getDiamondZIndex(slideIndex: number, diamondIndex: number): null
   if (!areIndicesValid(slideIndex, diamondIndex)) {
     return null;
   }
-  return LAYOUT.Z_INDICES[slideIndex as SlideIndex]![diamondIndex as DiamondIndex]!;
+
+  const slideZIndices = LAYOUT.Z_INDICES[slideIndex as SlideIndex];
+  if (!slideZIndices) return null;
+
+  return slideZIndices[diamondIndex as DiamondIndex];
 }
 
 /**
@@ -54,7 +56,11 @@ export function shouldShowDiamondText(slideIndex: number, diamondIndex: number):
   if (!areIndicesValid(slideIndex, diamondIndex)) {
     return null;
   }
-  return LAYOUT.TEXT_VISIBILITY[slideIndex as SlideIndex]![diamondIndex as DiamondIndex]!;
+
+  const slideTextVisibility = LAYOUT.TEXT_VISIBILITY[slideIndex as SlideIndex];
+  if (!slideTextVisibility) return null;
+
+  return slideTextVisibility[diamondIndex as DiamondIndex];
 }
 
 /**

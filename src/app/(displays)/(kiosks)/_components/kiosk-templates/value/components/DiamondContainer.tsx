@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { DIAMOND_KEY_PREFIX } from '../constants';
+import { DIAMOND_KEY_PREFIX } from '../constants/layout';
 import Diamond from './Diamond';
 import { getDiamondPositionForSlide, getDiamondZIndex, shouldShowDiamondText } from '../utils/helpers';
 
