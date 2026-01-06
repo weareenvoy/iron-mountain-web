@@ -9,12 +9,11 @@ import {
   CAROUSEL_LAYOUT,
   CAROUSEL_VISIBILITY_THRESHOLD,
   DEFAULT_LABELS,
-  DIAMOND_KEY_PREFIX,
   DIAMOND_LABEL_INDEX,
   DIAMONDS_SETTLE_TIME,
-} from './constants';
-import Diamond from './Diamond';
-import { getBulletItems, getDiamondPositionForSlide, getDiamondZIndex, shouldShowDiamondText } from './helpers';
+} from '../constants';
+import DiamondContainer from './DiamondContainer';
+import { getBulletItems } from '../utils/helpers';
 import type { ValueCarouselSlide } from '@/app/(displays)/(kiosks)/_types/value-types';
 
 /**
@@ -87,6 +86,13 @@ const AnimatedValueCarousel = ({ hasCarouselSlides, registerCarouselHandlers, sl
       operationalCard?.label ?? DEFAULT_LABELS.OPERATIONAL,
     ];
   }, [slides]);
+
+  // Memoize current slide's bullet items to prevent unnecessary BulletList re-renders
+  const currentBulletItems = useMemo(() => {
+    const currentSlide = slides[currentSlideIndex] ?? slides[0];
+    if (!currentSlide) return [];
+    return getBulletItems(currentSlide);
+  }, [slides, currentSlideIndex]);
 
   // Navigation handlers
   const canScrollNext = useCallback(() => currentSlideIndex < slides.length - 1, [currentSlideIndex, slides.length]);
@@ -185,39 +191,14 @@ const AnimatedValueCarousel = ({ hasCarouselSlides, registerCarouselHandlers, sl
         >
           <div className="flex w-[920px] flex-col items-center gap-[71px]">
             {/* Render diamonds once - they rotate to new positions on slide change */}
-            <div className="relative flex h-[565px] w-[920px] items-center">
-              {slides[0]?.diamondCards?.map((_card, index) => {
-                const diamondIcon = diamondIcons[index] ?? null;
-                const diamondLabel = diamondLabels[index] ?? '';
-
-                const targetPosition = getDiamondPositionForSlide(currentSlideIndex, index);
-                const zIndexClass = getDiamondZIndex(currentSlideIndex, index);
-                const showText = shouldShowDiamondText(currentSlideIndex, index);
-
-                // Helper functions return null if indices are invalid
-                if (targetPosition === null || zIndexClass === null || showText === null) {
-                  if (process.env.NODE_ENV === 'development') {
-                    console.error(`Invalid carousel indices: slide=${currentSlideIndex}, diamond=${index}`);
-                  }
-                  return null;
-                }
-
-                return (
-                  <Diamond
-                    currentSlideIndex={currentSlideIndex}
-                    diamondIcon={diamondIcon}
-                    diamondLabel={diamondLabel}
-                    diamondsSettled={diamondsSettled}
-                    index={index}
-                    key={`${DIAMOND_KEY_PREFIX}-${index}`}
-                    shouldAnimate={shouldAnimate}
-                    showText={showText}
-                    targetPosition={targetPosition}
-                    zIndexClass={zIndexClass}
-                  />
-                );
-              })}
-            </div>
+            <DiamondContainer
+              currentSlideIndex={currentSlideIndex}
+              diamondCount={slides[0]?.diamondCards?.length ?? 0}
+              diamondIcons={diamondIcons}
+              diamondLabels={diamondLabels}
+              diamondsSettled={diamondsSettled}
+              shouldAnimate={shouldAnimate}
+            />
           </div>
           {/* Bullets fade in/out based on current slide */}
           <div className="relative flex-1">
@@ -225,8 +206,7 @@ const AnimatedValueCarousel = ({ hasCarouselSlides, registerCarouselHandlers, sl
               {slides.map((slide, slideIndex) => {
                 if (slideIndex !== currentSlideIndex) return null;
 
-                const bulletItems = getBulletItems(slide);
-                const hasBullets = bulletItems.length > 0;
+                const hasBullets = currentBulletItems.length > 0;
                 const isFirstSlide = slideIndex === 0;
 
                 if (!hasBullets) return null;
@@ -237,7 +217,7 @@ const AnimatedValueCarousel = ({ hasCarouselSlides, registerCarouselHandlers, sl
 
                 return (
                   <BulletList
-                    bulletItems={bulletItems}
+                    bulletItems={currentBulletItems}
                     key={slide.id}
                     shouldShow={shouldShowBullets}
                     slideId={slide.id}

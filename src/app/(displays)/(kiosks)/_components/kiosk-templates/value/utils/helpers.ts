@@ -1,5 +1,10 @@
-import { LAYOUT, MAX_DIAMONDS, MAX_SLIDES } from './constants';
-import type { DiamondIndex, SlideIndex, ValueCarouselSlide } from '@/app/(displays)/(kiosks)/_types/value-types';
+import { LAYOUT, MAX_DIAMONDS, MAX_SLIDES } from '../constants';
+import type {
+  DiamondIndex,
+  Position,
+  SlideIndex,
+  ValueCarouselSlide,
+} from '@/app/(displays)/(kiosks)/_types/value-types';
 
 /**
  * Validates if indices are within valid ranges for carousel operations.
@@ -13,11 +18,12 @@ export function areIndicesValid(slideIndex: number, diamondIndex: number): boole
 
 /**
  * Gets the left position (in px) for a diamond on a specific slide.
+ * Returns a branded Position type for type safety.
  * @param slideIndex - The current slide (0-2)
  * @param diamondIndex - The diamond being positioned (0-2)
- * @returns The left position in pixels, or null if indices are invalid
+ * @returns The left position as Position type, or null if indices are invalid
  */
-export function getDiamondPositionForSlide(slideIndex: number, diamondIndex: number): null | number {
+export function getDiamondPositionForSlide(slideIndex: number, diamondIndex: number): null | Position {
   if (!areIndicesValid(slideIndex, diamondIndex)) {
     return null;
   }

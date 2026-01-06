@@ -27,3 +27,18 @@ export type SlideIndex = 0 | 1 | 2;
  * Used for type-safe array access to position, z-index, and visibility maps.
  */
 export type DiamondIndex = 0 | 1 | 2;
+
+/**
+ * Branded type for pixel positions in the value carousel.
+ * Provides type safety for position values throughout the carousel system.
+ * The brand prevents accidental mixing of raw numbers with position values.
+ */
+export type Position = number & { readonly __brand: 'Position' };
+
+/**
+ * Helper to create a Position branded type from a number.
+ * Used to safely convert pixel values to Position types.
+ * @param value - The pixel value to brand as a Position
+ * @returns A Position branded type
+ */
+export const createPosition = (value: number): Position => value as Position;

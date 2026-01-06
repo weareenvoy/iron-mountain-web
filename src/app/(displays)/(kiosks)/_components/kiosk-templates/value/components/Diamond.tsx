@@ -2,7 +2,8 @@ import { motion } from 'framer-motion';
 import { memo } from 'react';
 import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
-import { DIAMOND_ANIMATION, INITIAL_SPREAD_POSITIONS, INITIALLY_VISIBLE_DIAMOND_INDEX } from './constants';
+import { DIAMOND_ANIMATION, INITIAL_SPREAD_POSITIONS, INITIALLY_VISIBLE_DIAMOND_INDEX } from '../constants';
+import type { Position } from '@/app/(displays)/(kiosks)/_types/value-types';
 
 /**
  * Props for the Diamond component.
@@ -23,8 +24,8 @@ type DiamondProps = {
   readonly shouldAnimate: boolean;
   /** Whether this diamond's text should be visible on the current slide */
   readonly showText: boolean;
-  /** Target left position (in px) for this diamond on the current slide */
-  readonly targetPosition: number;
+  /** Target left position (branded Position type) for this diamond on the current slide */
+  readonly targetPosition: Position;
   /** Tailwind z-index class for stacking order (e.g., 'z-2') */
   readonly zIndexClass: string;
 };

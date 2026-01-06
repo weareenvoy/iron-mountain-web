@@ -3,13 +3,17 @@
  * These values control the diamond animations and positioning behavior.
  */
 
-import type { DiamondIndex } from '@/app/(displays)/(kiosks)/_types/value-types';
+import { createPosition, type DiamondIndex, type Position } from '@/app/(displays)/(kiosks)/_types/value-types';
 
 /**
  * Initial spread positions (in px) for diamonds before they animate together.
  * Used on slide 1's initial animation when the carousel becomes visible.
  */
-export const INITIAL_SPREAD_POSITIONS: readonly [number, number, number] = [660, 1230, 1785] as const;
+export const INITIAL_SPREAD_POSITIONS: readonly [Position, Position, Position] = [
+  createPosition(660),
+  createPosition(1230),
+  createPosition(1785),
+] as const;
 
 /**
  * Maps diamond indices to their left positions for each slide.
@@ -19,10 +23,10 @@ export const INITIAL_SPREAD_POSITIONS: readonly [number, number, number] = [660,
  * Slide 1: Strategic (2), Operational (0), Economic (1) at [165, 340, 500]
  * Slide 2: Economic (1), Strategic (2), Operational (0) at [165, 340, 500]
  */
-export const POSITION_MAP: ReadonlyArray<readonly [number, number, number]> = [
-  [165, 340, 500], // Slide 0: diamond 0 at 165, diamond 1 at 340, diamond 2 at 500
-  [340, 500, 165], // Slide 1: diamond 0 at 340, diamond 1 at 500, diamond 2 at 165 (Strategic featured)
-  [500, 165, 340], // Slide 2: diamond 0 at 500, diamond 1 at 165, diamond 2 at 340 (Economic featured)
+export const POSITION_MAP: ReadonlyArray<readonly [Position, Position, Position]> = [
+  [createPosition(165), createPosition(340), createPosition(500)], // Slide 0
+  [createPosition(340), createPosition(500), createPosition(165)], // Slide 1 (Strategic featured)
+  [createPosition(500), createPosition(165), createPosition(340)], // Slide 2 (Economic featured)
 ] as const;
 
 /**
@@ -127,6 +131,23 @@ export const BULLET_ANIMATION = {
   EASE: [0.4, 0, 0.2, 1] as const,
   /** Vertical offset (in px) for fade-in animation */
   Y_OFFSET: 40,
+} as const;
+
+/**
+ * Layout configuration for bullet point styling.
+ * All measurements derived from Figma design specifications.
+ */
+export const BULLET_LAYOUT = {
+  /** Spacing between bullet items (px) - from Figma spacing system */
+  ITEM_MARGIN: 80,
+  /** Width of bullet text area (px) - from Figma frame width */
+  ITEM_WIDTH: 840,
+  /** Size of circular bullet marker (px) - from Figma component spec */
+  MARKER_SIZE: 16,
+  /** Top position of bullet marker (px) - from Figma marker positioning */
+  MARKER_TOP: 30,
+  /** Left padding for bullet text (px) - from Figma padding spec */
+  TEXT_PADDING: 40,
 } as const;
 
 /**
