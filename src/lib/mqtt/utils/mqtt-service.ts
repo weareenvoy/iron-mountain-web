@@ -191,6 +191,24 @@ export class MqttService {
     );
   }
 
+  public reportWelcomeWallState(
+    exhibit: 'welcome-wall',
+    state: {
+      state: string;
+    },
+    config?: PublishArgsConfig
+  ): void {
+    const message = createMqttMessage(exhibit, state);
+
+    console.info(`${exhibit} reporting full state:`, state);
+    this.publish(
+      `state/${exhibit}`,
+      JSON.stringify(message),
+      { qos: 1, retain: true }, // Retained
+      config
+    );
+  }
+
   // Docent App → GEC: Request GEC to republish current settings
   public republishSettings(config?: PublishArgsConfig): void {
     const message = createMqttMessage('docent-app', {});

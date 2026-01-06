@@ -4,109 +4,98 @@
 
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
-import IRMLogo from '../icons/IRMLogo';
-import LocationIcon from '../icons/LocationIcon';
-import MountainBG from '../icons/MountainBG';
-import MountainIcon from '../icons/MountainIcon';
+import { useWelcomeWall } from '@/app/(displays)/welcome-wall/_components/providers/welcome-wall';
 
-const CROSSFADE_DURATION_MS = 800;
-const PING_PONG_INTERVAL_MS = 5000;
+// import IRMLogo from '../icons/IRMLogo';
+// import LocationIcon from '../icons/LocationIcon';
+// import MountainBG from '../icons/MountainBG';
+// import MountainIcon from '../icons/MountainIcon';
+
+// const CROSSFADE_DURATION_MS = 800;
+// const PING_PONG_INTERVAL_MS = 5000;
+
+const SHOW_LOGO_AT_SECONDS = 7;
+const HIDE_LOGO_AT_SECONDS = 10;
+const LOGO_FADE_DURATION_MS = 800;
+
 const TourView = () => {
-  // const { data, exhibitState } = useWelcome();
+  const { data, locale } = useWelcomeWall();
+  const [showLogo, setShowLogo] = useState(0);
 
-  // Refs to track the two images
-  const imageA = useRef<HTMLImageElement>(null);
-  const imageB = useRef<HTMLImageElement>(null);
+  // Ref for data access inside effect without causing re-runs
+  const dataRef = useRef(data);
+  useEffect(() => {
+    dataRef.current = data;
+  }, [data]);
 
-  // Track which image is currently visible
-  const activeRef = useRef<'a' | 'b'>('a');
-  const [activeDisplay, setActiveDisplay] = useState<'a' | 'b'>('a');
+  const backgroundVideoRef = useRef<HTMLVideoElement>(null);
+  const clientTourLogoRef = useRef<HTMLImageElement>(null);
+
+  const clientTourLogoUrl = data?.clientTourLogo.url ?? '';
+
+  // console.info('data in TourView', dataRef.current);
 
   useEffect(() => {
-    if (!imageA.current || !imageB.current) return;
+    if (!data || !backgroundVideoRef.current) return;
 
-    const performTransition = () => {
-      const visible = activeRef.current === 'a' ? imageA.current : imageB.current;
-      const hidden = activeRef.current === 'a' ? imageB.current : imageA.current;
+    // set the background video url based on the locale
+    const bgVideoUrl = dataRef.current?.videos[locale === 'en' ? 'tourLoopEn' : 'tourLoopPt'].url;
 
-      if (!visible || !hidden) return;
+    if (!bgVideoUrl) return;
 
-      // Apply transition to both images
-      visible.style.transition = hidden.style.transition = `opacity ${CROSSFADE_DURATION_MS}ms ease`;
+    backgroundVideoRef.current.src = bgVideoUrl;
+    backgroundVideoRef.current.currentTime = 0;
+    backgroundVideoRef.current.loop = true;
 
-      // Fade out visible, fade in hidden
-      visible.style.opacity = '0';
-      hidden.style.opacity = '1';
-
-      // Switch active reference
-      activeRef.current = activeRef.current === 'a' ? 'b' : 'a';
-      setActiveDisplay(activeRef.current);
+    const onReady = () => {
+      backgroundVideoRef.current?.play();
     };
 
-    // Set up interval for continuous ping pong
-    const intervalId = setInterval(performTransition, PING_PONG_INTERVAL_MS);
+    backgroundVideoRef.current.addEventListener('canplaythrough', onReady, { once: true });
+    backgroundVideoRef.current.load();
 
-    // Cleanup on unmount
-    return () => clearInterval(intervalId);
-  }, []);
+    const animationLoop = () => {
+      if (!backgroundVideoRef.current) return;
+
+      const shouldShow =
+        backgroundVideoRef.current.currentTime >= SHOW_LOGO_AT_SECONDS &&
+        backgroundVideoRef.current.currentTime <= HIDE_LOGO_AT_SECONDS;
+
+      setShowLogo(prev => {
+        const newValue = shouldShow ? 1 : 0;
+        if (prev !== newValue) {
+          return newValue;
+        }
+        return prev;
+      });
+
+      requestAnimationFrame(animationLoop);
+    };
+
+    requestAnimationFrame(animationLoop);
+
+    // return;
+  }, [data, locale]);
 
   return (
     <div className="welcome-container relative h-full w-full overflow-hidden">
-      {/* Logo View */}
-      <div
-        ref={imageA}
-        style={{
-          opacity: activeDisplay === 'a' ? 1 : 0,
-          transition: `opacity ${CROSSFADE_DURATION_MS}ms ease`,
-        }}
-      >
-        <div className="pointer-events-none absolute right-0 bottom-0 left-0 z-0 w-full">
-          <MountainBG className="h-auto w-full" />
-        </div>
-        <div className="logo-container">
-          <div className="logo-left">
-            <IRMLogo className="logo" />
-          </div>
-          <div className="logo-right">
-            <Image
-              alt="Client logo"
-              className="logo"
-              height={50}
-              src="/images/welcome-wall-temp/MclarenLogo.png"
-              width={50}
-            />
-          </div>
-        </div>
-      </div>
+      <video
+        className="absolute inset-0 h-full w-full object-cover"
+        muted
+        playsInline
+        preload="auto"
+        ref={backgroundVideoRef}
+      />
 
-      {/* Message View */}
-      <div
-        className="absolute inset-0 h-full w-full overflow-hidden"
-        ref={imageB}
-        style={{
-          backgroundImage: 'url(/images/welcome-wall-temp/welcome-message-bg.png)',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover',
-          opacity: activeDisplay === 'b' ? 1 : 0,
-          transition: `opacity ${CROSSFADE_DURATION_MS}ms ease`,
-        }}
-      >
-        <div className="message-container">
-          <h1>Welcome to the Iron Mountain Executive Briefing Center</h1>
-        </div>
-
-        <div className="footer-container">
-          <div className="footer-left">
-            <LocationIcon />
-            <h2 className="footer-location-text">Sao Paulo, Brazil</h2>
-          </div>
-          <div className="footer-right">
-            <MountainIcon />
-            <h2 className="footer-elevation-text">Elevation 760 m (2,493.4 ft)</h2>
-          </div>
-        </div>
-      </div>
+      <Image
+        alt="Client logo"
+        className="logo"
+        height={50}
+        ref={clientTourLogoRef}
+        src={clientTourLogoUrl}
+        style={{ opacity: showLogo, transition: `opacity ${LOGO_FADE_DURATION_MS}ms ease` }}
+        width={50}
+      />
     </div>
   );
 };

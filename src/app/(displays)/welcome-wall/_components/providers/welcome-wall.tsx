@@ -2,12 +2,25 @@
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type PropsWithChildren } from 'react';
 import { useMqtt } from '@/components/providers/mqtt-provider';
-import { createMqttMessage } from '@/lib/mqtt/utils/create-mqtt-message';
-import type { ExhibitMqttState } from '@/lib/mqtt/types';
+import { getWelcomeWallData } from '@/lib/internal/data/get-welcome-wall';
+import { type Locale, type WelcomeWallData } from '@/lib/internal/types';
+import type { WelcomeWallMqttState } from '@/lib/mqtt/types';
+
+// interface WelcomeWallContextType {
+//   showTour: boolean; // true = TourView, false = AmbientView
+//   tourId: null | string;
+// }
+
+// interface WelcomeWallContextType {
+//   state: string; // tour = TourView, idle = AmbientView
+// }
 
 interface WelcomeWallContextType {
-  showTour: boolean; // true = TourView, false = AmbientView
-  tourId: null | string;
+  data: null | WelcomeWallData;
+  error: null | string;
+  loading: boolean;
+  locale: Locale;
+  showTour: boolean;
 }
 
 export const WelcomeWallContext = createContext<undefined | WelcomeWallContextType>(undefined);
@@ -28,48 +41,73 @@ export const WelcomeWallProvider = ({ children }: WelcomeWallProviderProps) => {
   const { client } = useMqtt();
 
   // MQTT state (what we report to GEC)
-  const [mqttState, setMqttState] = useState<ExhibitMqttState>({
-    'beat-id': 'ambient-1',
-    'tour-id': null,
-    'volume-level': 0.0, // Welcome wall doesn't have audio
-    'volume-muted': false,
-  });
+  // const [mqttState, setMqttState] = useState<WelcomeWallMqttState>({
+  //   state: 'idle',
+  // });
 
   // Ref to access latest mqttState without causing dependency changes. Avoids re-subscription.
-  const mqttStateRef = useRef(mqttState);
+  // const mqttStateRef = useRef(mqttState);
+  // mqttStateRef.current = mqttState;
 
-  // Update ref when state changes (in effect to avoid render-time ref updates)
+  const [data, setData] = useState<null | WelcomeWallData>(null);
+  const [locale, setLocale] = useState<Locale>('en');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<null | string>(null);
+  const [showTour, setShowTour] = useState<boolean>(false);
+  // const [tourId, setTourId] = useState<null | string>(null);
+
+  // Fetch content data
+  const fetchData = useCallback(async (id?: null | string) => {
+    console.info('Fetching welcome wall data for tour:', id);
+    setLoading(true);
+
+    try {
+      const welcomeWallData = await getWelcomeWallData();
+      setData(welcomeWallData.data);
+      setLocale(welcomeWallData.locale);
+      setError(null);
+      return true;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+      console.error('Error fetching welcome wall data:', err);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
-    mqttStateRef.current = mqttState;
-  }, [mqttState]);
-
-  // Derive view state from tour-id: if tour-id exists, show TourView; otherwise show AmbientView
-  const showTour = mqttState['tour-id'] !== null;
+    fetchData();
+  }, [fetchData]);
 
   // Helper to report full exhibit state to MQTT
-  // Note: reportExhibitState() doesn't support 'welcome-wall', so we use generic publish
   const reportState = useCallback(
-    (newState: Partial<ExhibitMqttState>) => {
+    (newState: Partial<WelcomeWallMqttState>) => {
+      console.info('reportState called with newState:', newState);
+
       if (!client) return;
 
       // Compute updated state first, update ref immediately for consistency
-      const updatedState = { ...mqttStateRef.current, ...newState };
-      mqttStateRef.current = updatedState;
+      // const updatedState = { ...mqttStateRef.current, ...newState };
+      // mqttStateRef.current = updatedState;
 
-      // Update React state (pure function - no side effects)
-      setMqttState(prev => ({ ...prev, ...newState }));
+      // console.info('Welcome Wall: reporting state:', updatedState);
 
-      // Publish to state/welcome-wall using generic publish method
-      const message = createMqttMessage('welcome-wall', updatedState);
-      client.publish(
-        'state/welcome-wall',
-        JSON.stringify(message),
-        { qos: 1, retain: true },
-        {
-          onError: err => console.error('Welcome Wall: Failed to report state:', err),
-          onSuccess: () => console.info('Welcome Wall: State reported successfully'),
-        }
-      );
+      // // Update React state (pure function - no side effects)
+      // setMqttState(prev => ({ ...prev, ...newState }));
+
+      // Side effect runs outside the updater with fresh ref value
+      // client.reportExhibitState('welcome-wall', updatedState, {
+      //   onError: err => console.error('Welcome Wall: Failed to report state:', err),
+      // });
+
+      client.reportWelcomeWallState('welcome-wall', newState as WelcomeWallMqttState, {
+        onError: err => console.error('Welcome Wall: Failed to report state:', err),
+      });
+
+      // client.publish('state/welcome-wall', updatedState, { qos: 1, retain: true }, {
+      //   onError: err => console.error('Welcome Wall: Failed to report state:', err),
+      // });
     },
     [client]
   );
@@ -83,14 +121,24 @@ export const WelcomeWallProvider = ({ children }: WelcomeWallProviderProps) => {
       try {
         const msg = JSON.parse(message.toString());
         const tourId = msg.body?.['tour-id'];
-        console.info('Welcome Wall received load-tour command:', tourId);
+        console.info('Welcome Wall: received load-tour command:', tourId);
 
         if (tourId) {
-          // Switch to TourView and report state
-          reportState({
-            'beat-id': 'tour-1',
-            'tour-id': tourId,
-          });
+          // Fetch tour-specific data for this tour
+          // For now, just fetch the generic basecamp data
+          const success = await fetchData(tourId);
+
+          if (success) {
+            // Tour content loaded successfully - show tour state
+            setShowTour(true);
+
+            // Only report loaded state after data is fetched
+            reportState({
+              state: 'tour',
+            });
+          } else {
+            console.error('Welcome Wall: Failed to fetch tour data for tour:', tourId);
+          }
         }
       } catch (error) {
         console.error('Welcome Wall: Error parsing load-tour command:', error);
@@ -100,15 +148,17 @@ export const WelcomeWallProvider = ({ children }: WelcomeWallProviderProps) => {
     // 2. End tour command (broadcast to all exhibits)
     const handleEndTour = () => {
       console.info('Welcome Wall received end-tour command');
+      setShowTour(false);
 
-      // Switch back to AmbientView and report state
+      // Reset to ambient state with no tour
+      // setExhibitState({ beatIdx: 0, momentId: 'ambient' });
       reportState({
-        'beat-id': 'ambient-1',
-        'tour-id': null,
+        state: 'idle',
       });
     };
 
     // Subscribe to broadcast commands (all exhibits listen to same topics)
+    // TODO Confirm with Lucas. Currently not receiving anything from these topics.
     client.subscribeToTopic('cmd/dev/all/load-tour', handleLoadTour);
     client.subscribeToTopic('cmd/dev/all/end-tour', handleEndTour);
 
@@ -116,23 +166,28 @@ export const WelcomeWallProvider = ({ children }: WelcomeWallProviderProps) => {
       client.unsubscribeFromTopic('cmd/dev/all/load-tour', handleLoadTour);
       client.unsubscribeFromTopic('cmd/dev/all/end-tour', handleEndTour);
     };
-  }, [client, reportState]);
+  }, [client, fetchData, reportState]);
 
   // Subscribe to own state on boot (for restart/recovery)
   // This allows exhibit to restore state after refresh
   useEffect(() => {
     if (!client) return;
 
-    const handleOwnState = (message: Buffer) => {
+    const handleOwnState = async (message: Buffer) => {
       try {
         const msg = JSON.parse(message.toString());
-        const state: ExhibitMqttState = msg.body;
+        const state: WelcomeWallMqttState = msg.body;
         console.info('Welcome Wall: Received own state on boot:', state);
 
-        // Update internal MQTT state
-        setMqttState(state);
+        if (state.state === 'tour') {
+          const success = await fetchData();
+          if (success) {
+            setShowTour(true);
+          }
+        } else {
+          setShowTour(false);
+        }
 
-        // View state will automatically update based on tour-id
         // We just need to get retained state once, so unsubscribe after we got the state
         client.unsubscribeFromTopic('state/welcome-wall', handleOwnState);
       } catch (error) {
@@ -146,11 +201,14 @@ export const WelcomeWallProvider = ({ children }: WelcomeWallProviderProps) => {
     return () => {
       client.unsubscribeFromTopic('state/welcome-wall', handleOwnState);
     };
-  }, [client]);
+  }, [client, fetchData]);
 
   const contextValue = {
+    data,
+    error,
+    loading,
+    locale,
     showTour,
-    tourId: mqttState['tour-id'] ?? null,
   };
 
   return <WelcomeWallContext.Provider value={contextValue}>{children}</WelcomeWallContext.Provider>;

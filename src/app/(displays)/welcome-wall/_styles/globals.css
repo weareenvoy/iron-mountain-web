@@ -67,7 +67,14 @@
   /* width: auto; /* Ensures logos aren't too big */
   /* height: 243px; Maintains aspect ratio */
   height: auto;
-  width: 50%;
+  width: 28%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(0%, -50%);
+  z-index: 10;
+  /* 
+  background-color: red; */
 }
 
 .message-container {

@@ -54,3 +54,7 @@ export interface SummitMqttState {
   'slide-idx': number;
   'tour-id'?: null | string;
 }
+
+export interface WelcomeWallMqttState {
+  state: string;
+}
