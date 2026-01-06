@@ -7,6 +7,7 @@ import { cn } from '@/lib/tailwind/utils/cn';
 import { getVideoMimeType } from '@/lib/utils/get-video-mime-type';
 import { normalizeMultiline } from '@/lib/utils/normalize-multiline';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
+import AnimatedValueCarousel from './components/AnimatedValueCarousel';
 import ValueCarousel from './components/ValueCarousel';
 import type { ValueCarouselSlide } from '@/app/(displays)/(kiosks)/_types/value-types';
 
@@ -43,8 +44,8 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
     onRegisterCarouselHandlers,
     slides,
   } = props;
-  const isOverview = carouselId?.includes('overview');
-  const heroVideo = isOverview ? mainVideo : undefined;
+  // Show video background when mainVideo is provided (used in animated carousel variant)
+  const heroVideo = mainVideo;
 
   const slidesToRender = slides?.length ? slides : [];
   const slidesWithDefaults = slidesToRender.map(slide => ({
@@ -56,10 +57,11 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
     slide.bullets?.filter(entry => entry && entry.trim().length > 0) ?? [];
 
   const hasCarouselSlides = slidesWithDefaults.some(slide => getBulletItems(slide).length > 0);
+  const useAnimatedCarousel = hasCarouselSlides && heroVideo;
 
   return (
     <div
-      {...(isOverview ? { 'data-scroll-section': 'value-carousel' } : {})}
+      {...(useAnimatedCarousel ? { 'data-scroll-section': 'value-carousel' } : {})}
       className="relative flex h-screen w-full flex-col overflow-visible bg-transparent"
       data-carousel-id={carouselId}
     >
@@ -99,24 +101,32 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
       <div
         className={cn(
           'absolute top-[1060px] left-0 z-3 w-full rounded-t-[100px] px-[240px] pt-[200px] pb-[1166px]',
-          isOverview ? 'h-[9360px] bg-[#ededed]' : 'h-[4150px] bg-transparent'
+          useAnimatedCarousel ? 'h-[4150px] bg-[#ededed]' : 'h-[9360px] bg-[#ededed]'
         )}
       >
         <div className="relative top-[-10px] flex flex-col gap-[360px] text-[#8a0d71]">
           <div>
             <p className="text-[100px] leading-[1.3] font-normal tracking-[-5px]">{renderRegisteredMark(headline)}</p>
             <p
-              {...(!isOverview ? { 'data-scroll-section': 'value-description' } : {})}
+              {...(useAnimatedCarousel ? { 'data-scroll-section': 'value-description' } : {})}
               className="mt-[80px] w-[1480px] text-[60px] leading-[1.4] font-normal tracking-[-3px]"
             >
               {renderRegisteredMark(normalizeMultiline(body))}
             </p>
           </div>
-          <ValueCarousel
-            hasCarouselSlides={hasCarouselSlides}
-            onRegisterCarouselHandlers={onRegisterCarouselHandlers}
-            slides={slidesWithDefaults}
-          />
+          {useAnimatedCarousel ? (
+            <AnimatedValueCarousel
+              hasCarouselSlides={hasCarouselSlides}
+              onRegisterCarouselHandlers={onRegisterCarouselHandlers}
+              slides={slidesWithDefaults}
+            />
+          ) : (
+            <ValueCarousel
+              hasCarouselSlides={hasCarouselSlides}
+              onRegisterCarouselHandlers={onRegisterCarouselHandlers}
+              slides={slidesWithDefaults}
+            />
+          )}
         </div>
       </div>
     </div>
