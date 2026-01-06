@@ -28,29 +28,23 @@ const AnimatedValueCarousel = ({
   const [shouldAnimate, setShouldAnimate] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Configurable diamond positions per slide [left values for diamonds 0, 1, 2]
-  // Slide 1: Operational benefits
-  const SLIDE_1_POSITIONS = [165, 340, 500];
-  // Slide 2: Economic benefits
-  const SLIDE_2_POSITIONS = [165, 340, 500];
-  // Slide 3: Strategic benefits
-  const SLIDE_3_POSITIONS = [165, 340, 500];
-
   // Initial spread positions for slide 1 animation
   const INITIAL_SPREAD_POSITIONS = [660, 1230, 1785];
 
-  // Get diamond positions for current slide
-  const getDiamondPositions = (slideIndex: number) => {
-    switch (slideIndex) {
-      case 0:
-        return SLIDE_1_POSITIONS;
-      case 1:
-        return SLIDE_2_POSITIONS;
-      case 2:
-        return SLIDE_3_POSITIONS;
-      default:
-        return SLIDE_1_POSITIONS;
-    }
+  // Map which diamond index should be at which position for each slide
+  // This tells us: for slide X, diamond Y should move to position Z
+  const getDiamondPositionForSlide = (slideIndex: number, diamondIndex: number): number => {
+    // Slide 0: Operational (0), Economic (1), Strategic (2) at [165, 340, 500]
+    // Slide 1: Economic (1), Strategic (2), Operational (0) at [165, 340, 500]
+    // Slide 2: Strategic (2), Operational (0), Economic (1) at [165, 340, 500]
+
+    const positionMap = [
+      [165, 340, 500], // Slide 0: diamond 0 at 165, diamond 1 at 340, diamond 2 at 500
+      [500, 165, 340], // Slide 1: diamond 0 at 500, diamond 1 at 165, diamond 2 at 340 (Economic to front)
+      [340, 500, 165], // Slide 2: diamond 0 at 340, diamond 1 at 500, diamond 2 at 165 (Strategic to front)
+    ];
+
+    return positionMap[slideIndex]?.[diamondIndex] ?? 165;
   };
 
   const getBulletItems = (slide: ValueCarouselSlide) =>
@@ -132,15 +126,10 @@ const AnimatedValueCarousel = ({
           <div className="flex w-[920px] flex-col items-center gap-[71px]">
             {/* Render diamonds once - they rotate to new positions on slide change */}
             <div className="relative flex h-[565px] w-[920px] items-center">
-              {slides[0]?.diamondCards?.map((_, index) => {
-                // Get the current slide's card for this diamond position
-                const currentSlide = slides[currentSlideIndex];
-                const card = currentSlide?.diamondCards?.[index];
-                if (!card) return null;
-
+              {slides[0]?.diamondCards?.map((card, index) => {
+                // Keep the same SVG from slide 1, just rotate its position
                 const Icon = getDiamondIcon(card);
-                const diamondPositions = getDiamondPositions(currentSlideIndex);
-                const targetPosition = diamondPositions[index] ?? 165;
+                const targetPosition = getDiamondPositionForSlide(currentSlideIndex, index);
                 const isFirstSlide = currentSlideIndex === 0;
 
                 // Initial position: spread if first slide and hasn't animated yet, otherwise target
@@ -154,7 +143,7 @@ const AnimatedValueCarousel = ({
                     }}
                     className="absolute h-[550px] w-[550px] rotate-45 rounded-[80px]"
                     initial={false}
-                    key={`diamond-position-${index}`}
+                    key={`diamond-original-${index}`}
                     style={{
                       left: initialPosition,
                     }}
