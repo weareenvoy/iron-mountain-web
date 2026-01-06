@@ -23,7 +23,7 @@ export type ValueCarouselTemplateProps = {
   readonly mainVideo?: string;
   readonly onNavigateDown?: () => void;
   readonly onNavigateUp?: () => void;
-  readonly onRegisterCarouselHandlers?: (handlers: {
+  readonly registerCarouselHandlers?: (handlers: {
     canScrollNext: () => boolean;
     canScrollPrev: () => boolean;
     scrollNext: () => void;
@@ -41,7 +41,7 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
     heroVideoPosterSrc,
     labelText,
     mainVideo,
-    onRegisterCarouselHandlers,
+    registerCarouselHandlers,
     slides,
   } = props;
   // Show video background when mainVideo is provided (used in animated carousel variant)
@@ -114,13 +114,13 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
           {useAnimatedCarousel ? (
             <AnimatedValueCarousel
               hasCarouselSlides={hasCarouselSlides}
-              onRegisterCarouselHandlers={onRegisterCarouselHandlers}
+              registerCarouselHandlers={registerCarouselHandlers}
               slides={slidesWithDefaults}
             />
           ) : (
             <ValueCarousel
               hasCarouselSlides={hasCarouselSlides}
-              onRegisterCarouselHandlers={onRegisterCarouselHandlers}
+              registerCarouselHandlers={registerCarouselHandlers}
               slides={slidesWithDefaults}
             />
           )}

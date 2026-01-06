@@ -9,7 +9,7 @@ import { type KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 export type ValueScreens = {
   readonly valueScreens?: Omit<
     ValueCarouselTemplateProps,
-    'onNavigateDown' | 'onNavigateUp' | 'onRegisterCarouselHandlers'
+    'onNavigateDown' | 'onNavigateUp' | 'registerCarouselHandlers'
   >[];
 };
 
@@ -18,7 +18,7 @@ export const buildValueSlides = (
   kioskId: KioskId,
   handlers: { onNavigateDown: () => void; onNavigateUp: () => void },
   options?: {
-    onRegisterCarouselHandlers?: (handlers: {
+    registerCarouselHandlers?: (handlers: {
       canScrollNext: () => boolean;
       canScrollPrev: () => boolean;
       scrollNext: () => void;
@@ -37,7 +37,7 @@ export const buildValueSlides = (
           carouselId={config.carouselId ?? `${kioskId}-value-${idx}`}
           onNavigateDown={handlers.onNavigateDown}
           onNavigateUp={handlers.onNavigateUp}
-          onRegisterCarouselHandlers={options?.onRegisterCarouselHandlers}
+          registerCarouselHandlers={options?.registerCarouselHandlers}
         />
       </SectionSlide>
     ),
