@@ -35,16 +35,47 @@ const AnimatedValueCarousel = ({
   // This tells us: for slide X, diamond Y should move to position Z
   const getDiamondPositionForSlide = (slideIndex: number, diamondIndex: number): number => {
     // Slide 0: Operational (0), Economic (1), Strategic (2) at [165, 340, 500]
-    // Slide 1: Economic (1), Strategic (2), Operational (0) at [165, 340, 500]
-    // Slide 2: Strategic (2), Operational (0), Economic (1) at [165, 340, 500]
+    // Slide 1: Strategic (2), Operational (0), Economic (1) at [165, 340, 500]
+    // Slide 2: Economic (1), Strategic (2), Operational (0) at [165, 340, 500]
 
     const positionMap = [
       [165, 340, 500], // Slide 0: diamond 0 at 165, diamond 1 at 340, diamond 2 at 500
-      [500, 165, 340], // Slide 1: diamond 0 at 500, diamond 1 at 165, diamond 2 at 340 (Economic to front)
-      [340, 500, 165], // Slide 2: diamond 0 at 340, diamond 1 at 500, diamond 2 at 165 (Strategic to front)
+      [340, 500, 165], // Slide 1: diamond 0 at 340, diamond 1 at 500, diamond 2 at 165 (Strategic featured)
+      [500, 165, 340], // Slide 2: diamond 0 at 500, diamond 1 at 165, diamond 2 at 340 (Economic featured)
     ];
 
     return positionMap[slideIndex]?.[diamondIndex] ?? 165;
+  };
+
+  // Get z-index for diamond based on slide
+  const getDiamondZIndex = (slideIndex: number, diamondIndex: number): string => {
+    // Slide 0: All diamonds have default z-index
+    // Slide 1: Strategic featured - diamond 0 gets z-2, diamond 1 gets z-3, diamond 2 stays default
+    // Slide 2: Economic featured - diamond 0 (at 500) gets z-3, diamond 1 (at 165) gets z-1, diamond 2 (at 340) gets z-2
+
+    const zIndexMap = [
+      ['', '', ''], // Slide 0: no z-index classes
+      ['z-2', 'z-3', ''], // Slide 1: diamond 0 z-2, diamond 1 z-3, diamond 2 default
+      ['z-3', 'z-1', 'z-2'], // Slide 2: diamond 0 z-3, diamond 1 z-1, diamond 2 z-2
+    ];
+
+    return zIndexMap[slideIndex]?.[diamondIndex] ?? '';
+  };
+
+  // Determine if diamond text should be visible
+  const shouldShowDiamondText = (slideIndex: number, diamondIndex: number): boolean => {
+    // The diamond at position 500 always shows text
+    // Slide 0: Diamond 2 is at 500 (Strategic)
+    // Slide 1: Diamond 1 is at 500 (Economic)
+    // Slide 2: Diamond 0 is at 500 (Operational)
+
+    const textVisibilityMap = [
+      [false, false, true], // Slide 0: only diamond 2 (at 500px)
+      [false, true, false], // Slide 1: only diamond 1 (at 500px)
+      [true, false, false], // Slide 2: only diamond 0 (at 500px)
+    ];
+
+    return textVisibilityMap[slideIndex]?.[diamondIndex] ?? false;
   };
 
   const getBulletItems = (slide: ValueCarouselSlide) =>
@@ -130,7 +161,18 @@ const AnimatedValueCarousel = ({
                 // Keep the same SVG from slide 1, just rotate its position
                 const Icon = getDiamondIcon(card);
                 const targetPosition = getDiamondPositionForSlide(currentSlideIndex, index);
+                const zIndexClass = getDiamondZIndex(currentSlideIndex, index);
+                const showText = shouldShowDiamondText(currentSlideIndex, index);
                 const isFirstSlide = currentSlideIndex === 0;
+
+                // Get the label for this diamond from each slide's data
+                // Each slide has its label at index [2] of diamondCards
+                const diamondLabels = [
+                  slides[2]?.diamondCards?.[2]?.label || 'Strategic benefits', // Diamond 0: Strategic
+                  slides[1]?.diamondCards?.[2]?.label || 'Economic benefits', // Diamond 1: Economic
+                  slides[0]?.diamondCards?.[2]?.label || 'Operational benefits', // Diamond 2: Operational
+                ];
+                const diamondLabel = diamondLabels[index];
 
                 // Initial position: spread if first slide and hasn't animated yet, otherwise target
                 const initialPosition =
@@ -141,7 +183,7 @@ const AnimatedValueCarousel = ({
                     animate={{
                       left: shouldAnimate ? targetPosition : initialPosition,
                     }}
-                    className="absolute h-[550px] w-[550px] rotate-45 rounded-[80px]"
+                    className={cn('absolute h-[550px] w-[550px] rotate-45 rounded-[80px]', zIndexClass)}
                     initial={false}
                     key={`diamond-original-${index}`}
                     style={{
@@ -158,13 +200,21 @@ const AnimatedValueCarousel = ({
                         {Icon ? <Icon aria-hidden className="h-full w-full" focusable="false" /> : null}
                       </div>
                     </div>
-                    {card.label ? (
-                      <div className="absolute inset-0 flex items-center justify-center">
+                    <motion.div
+                      animate={{ opacity: showText ? 1 : 0 }}
+                      className="absolute inset-0 flex items-center justify-center"
+                      initial={{ opacity: index === 2 ? 1 : 0 }}
+                      transition={{
+                        duration: 0.4,
+                        ease: 'easeInOut',
+                      }}
+                    >
+                      {diamondLabel ? (
                         <div className="flex h-[320px] w-[320px] -rotate-45 items-center justify-center px-10 text-center text-[48px] leading-[1.4] font-normal tracking-[-2.4px] text-[#ededed]">
-                          {renderRegisteredMark(card.label)}
+                          {renderRegisteredMark(diamondLabel)}
                         </div>
-                      </div>
-                    ) : null}
+                      ) : null}
+                    </motion.div>
                   </motion.div>
                 );
               })}

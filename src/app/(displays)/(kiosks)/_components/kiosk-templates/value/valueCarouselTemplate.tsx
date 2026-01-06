@@ -121,11 +121,11 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
               slides={slidesWithDefaults}
             />
           ) : (
-            <ValueCarousel
-              hasCarouselSlides={hasCarouselSlides}
-              onRegisterCarouselHandlers={onRegisterCarouselHandlers}
-              slides={slidesWithDefaults}
-            />
+          <ValueCarousel
+            hasCarouselSlides={hasCarouselSlides}
+            onRegisterCarouselHandlers={onRegisterCarouselHandlers}
+            slides={slidesWithDefaults}
+          />
           )}
         </div>
       </div>
