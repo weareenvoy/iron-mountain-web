@@ -133,12 +133,11 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
         {heroImageSrc && (
           <Image
             alt={heroImageAlt || ''}
-            className="object-cover"
+            className="clip-diamond-rounded object-cover"
             fill
             quality={85} // 85 Quality, secondary image to the buttons and headline.
             sizes="680px"
             src={heroImageSrc}
-            className="clip-diamond-rounded object-cover"
           />
         )}
       </div>

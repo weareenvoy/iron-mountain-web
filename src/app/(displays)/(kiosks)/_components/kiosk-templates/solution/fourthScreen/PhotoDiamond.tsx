@@ -13,12 +13,11 @@ const PhotoDiamond = ({ className, imageAlt, imageSrc }: PhotoDiamondProps) => {
         {imageSrc ? (
           <Image
             alt={imageAlt ?? ''}
-            className="object-cover"
+            className="clip-diamond-rounded object-cover"
             fill
             quality={75} // All decorative images are 75 quality, the text is the main focus not the image. 75 is a good balance between quality and performance.
             sizes="520px"
             src={imageSrc}
-            className="clip-diamond-rounded object-cover"
           />
         ) : (
           <div className="clip-diamond-rounded h-full w-full bg-[#6dcff6]" />

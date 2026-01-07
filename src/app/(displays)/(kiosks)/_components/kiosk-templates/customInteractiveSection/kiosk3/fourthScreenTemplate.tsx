@@ -45,11 +45,10 @@ const CustomInteractiveKiosk3FourthScreenTemplate = ({
         {heroImageSrc && (
           <Image
             alt={heroImageAlt || ''}
-            className="object-cover"
+            className="clip-diamond-rounded object-cover"
             fill
             sizes="680px"
             src={heroImageSrc}
-            className="clip-diamond-rounded object-cover"
           />
         )}
       </div>

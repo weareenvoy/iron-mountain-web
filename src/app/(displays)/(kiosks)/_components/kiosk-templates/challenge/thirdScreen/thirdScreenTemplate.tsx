@@ -35,16 +35,16 @@ const ThirdScreenTemplate = ({
 
       {/* Decorative background diamond */}
       <div className="pointer-events-none absolute top-[2490px] left-[920px] z-[1] h-[940px] w-[940px] group-data-[kiosk=kiosk-2]/kiosk:top-[2430px] group-data-[kiosk=kiosk-2]/kiosk:left-[1070px] group-data-[kiosk=kiosk-2]/kiosk:size-[800px] group-data-[kiosk=kiosk-3]/kiosk:top-[1740px] group-data-[kiosk=kiosk-3]/kiosk:left-[1080px] group-data-[kiosk=kiosk-3]/kiosk:size-[800px]">
-          {item2Image && (
-            <Image
-              alt={featuredStat2Body ? `Graphic representing ${featuredStat2Body}` : 'Metric graphic'}
-                className="clip-diamond-rounded object-cover"
-              fill
-              quality={75} // All decorative images are 75 quality, the text is the main focus not the image. 75 is a good balance between quality and performance.
-              sizes="795px"
-              src={item2Image}
-            />
-          )}
+        {item2Image && (
+          <Image
+            alt={featuredStat2Body ? `Graphic representing ${featuredStat2Body}` : 'Metric graphic'}
+            className="clip-diamond-rounded object-cover"
+            fill
+            quality={75} // All decorative images are 75 quality, the text is the main focus not the image. 75 is a good balance between quality and performance.
+            sizes="795px"
+            src={item2Image}
+          />
+        )}
       </div>
 
       {/* Header Section */}

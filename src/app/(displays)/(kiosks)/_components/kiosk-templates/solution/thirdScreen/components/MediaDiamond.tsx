@@ -14,12 +14,11 @@ const MediaDiamond = ({ className, imageAlt, imageSrc, sizeClass = 'size-[666px]
         {imageSrc ? (
           <Image
             alt={imageAlt ?? ''}
-            className="object-cover"
+            className="clip-diamond-rounded object-cover"
             fill
             quality={75} // All decorative images are 75 quality, the text is the main focus not the image. 75 is a good balance between quality and performance.
             sizes="900px"
             src={imageSrc}
-            className="clip-diamond-rounded object-cover"
           />
         ) : null}
       </div>

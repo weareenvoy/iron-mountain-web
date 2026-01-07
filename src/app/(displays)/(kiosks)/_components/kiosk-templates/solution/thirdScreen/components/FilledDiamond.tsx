@@ -14,7 +14,7 @@ const FilledDiamond = ({ className, imageAlt, imageSrc }: FilledDiamondProps) =>
         {imageSrc ? (
           <Image
             alt={imageAlt ?? ''}
-          className="clip-diamond-rounded object-cover"
+            className="clip-diamond-rounded object-cover"
             fill
             quality={75} // All decorative images are 75 quality, the text is the main focus not the image. 75 is a good balance between quality and performance.
             sizes="390px"

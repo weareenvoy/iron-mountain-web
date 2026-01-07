@@ -26,16 +26,16 @@ const SecondScreenTemplate = ({ item1Body, item1Image, labelText, subheadline }:
 
       {/* Decorative background diamond */}
       <div className="pointer-events-none absolute top-[2320px] left-[-460px] z-[1] size-[1500px] group-data-[kiosk=kiosk-2]/kiosk:top-[2420px] group-data-[kiosk=kiosk-2]/kiosk:left-[-350px] group-data-[kiosk=kiosk-2]/kiosk:size-[1350px] group-data-[kiosk=kiosk-3]/kiosk:top-[1610px] group-data-[kiosk=kiosk-3]/kiosk:left-[-360px] group-data-[kiosk=kiosk-3]/kiosk:size-[1350px]">
-          {item1Image && (
-            <Image
-              alt="Large decorative background diamond"
-                className="clip-diamond-rounded object-cover"
-              fill
-              quality={75} // All decorative images are 75 quality, the text is the main focus not the image. 75 is a good balance between quality and performance.
-              sizes="1506px"
-              src={item1Image}
-            />
-          )}
+        {item1Image && (
+          <Image
+            alt="Large decorative background diamond"
+            className="clip-diamond-rounded object-cover"
+            fill
+            quality={75} // All decorative images are 75 quality, the text is the main focus not the image. 75 is a good balance between quality and performance.
+            sizes="1506px"
+            src={item1Image}
+          />
+        )}
       </div>
 
       {/* Header Section */}
