@@ -1,5 +1,7 @@
+import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import NextImage from 'next/image';
+import { useState } from 'react';
 
 export type ModalContent = {
   readonly body: string;
@@ -8,18 +10,43 @@ export type ModalContent = {
   readonly imageSrc?: string;
 };
 
+// Animation configuration for modal entrance and SVG drawing
+const MODAL_ANIMATION = {
+  DURATION: 0.6,
+  EASE: [0.3, 0, 0.4, 1] as const, // 30 out 60 in easing
+  START_Y: 4000, // Slides up from far below
+} as const;
+
+const SVG_DRAW_ANIMATION = {
+  DELAY: 0.6, // Starts after modal finishes sliding in
+  DURATION: 1.2,
+  EASE: [0.3, 0, 0.4, 1] as const,
+} as const;
+
 type StepModalProps = {
   readonly content: ModalContent | null;
   readonly onClose: () => void;
 };
 
 const StepModal = ({ content, onClose }: StepModalProps) => {
+  const [isAnimationComplete, setIsAnimationComplete] = useState(false);
+  const isSvg = content?.imageSrc?.endsWith('.svg');
+
   if (!content) return null;
 
   return (
     <div className="pointer-events-auto absolute inset-0 z-[200] flex items-center justify-center">
       <div className="pointer-events-auto absolute inset-0 bg-black/60 backdrop-blur-[50px]" onClick={onClose} />
-      <div className="pointer-events-auto relative z-[201] flex h-[2800px] max-h-[90vh] w-[1920px] flex-col overflow-hidden rounded-[48px] bg-[#97e9ff] p-[80px] text-[#14477d] shadow-[0_40px_120px_rgba(0,0,0,0.45)]">
+      <motion.div
+        animate={{ y: 0 }}
+        className="pointer-events-auto relative z-[201] flex h-[2800px] max-h-[90vh] w-[1920px] flex-col overflow-hidden rounded-[48px] bg-[#97e9ff] p-[80px] text-[#14477d] shadow-[0_40px_120px_rgba(0,0,0,0.45)]"
+        initial={{ y: MODAL_ANIMATION.START_Y }}
+        onAnimationComplete={() => setIsAnimationComplete(true)}
+        transition={{
+          duration: MODAL_ANIMATION.DURATION,
+          ease: MODAL_ANIMATION.EASE,
+        }}
+      >
         <div className="flex items-center justify-between">
           <button
             className="relative top-[45px] left-[60px] flex h-[200px] items-center gap-[24px] rounded-[1000px] bg-[#ededed] px-[90px] py-[60] pr-[100px] text-[55px] leading-[1.4] font-normal tracking-[-2.7px] text-[#14477d] transition hover:scale-[1.02]"
@@ -45,19 +72,42 @@ const StepModal = ({ content, onClose }: StepModalProps) => {
             <div className="flex items-center justify-center">
               <div className="relative top-[130px] h-[1680px] w-[1680px] rotate-[45deg] rounded-[80px] border-0 bg-transparent">
                 <div className="absolute inset-0 flex -rotate-[45deg] items-center justify-center rounded-[80px] bg-transparent">
-                  <NextImage
-                    alt={content.imageAlt ?? 'Modal illustration'}
-                    className="h-full w-full object-contain"
-                    height={1394}
-                    src={content.imageSrc}
-                    width={1680}
-                  />
+                  {isSvg ? (
+                    <motion.div className="relative h-full w-full overflow-hidden">
+                      <NextImage
+                        alt={content.imageAlt ?? 'Modal illustration'}
+                        className="h-full w-full object-contain"
+                        height={1394}
+                        src={content.imageSrc}
+                        width={1680}
+                      />
+                      {/* Reveal mask that slides down to reveal the SVG */}
+                      <motion.div
+                        animate={isAnimationComplete ? { y: '100%' } : { y: 0 }}
+                        className="absolute inset-0 bg-[#97e9ff]"
+                        initial={{ y: 0 }}
+                        transition={{
+                          delay: SVG_DRAW_ANIMATION.DELAY,
+                          duration: SVG_DRAW_ANIMATION.DURATION,
+                          ease: SVG_DRAW_ANIMATION.EASE,
+                        }}
+                      />
+                    </motion.div>
+                  ) : (
+                    <NextImage
+                      alt={content.imageAlt ?? 'Modal illustration'}
+                      className="h-full w-full object-contain"
+                      height={1394}
+                      src={content.imageSrc}
+                      width={1680}
+                    />
+                  )}
                 </div>
               </div>
             </div>
           ) : null}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
