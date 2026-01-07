@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, CirclePlus } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/shadcn/carousel';
@@ -40,6 +40,12 @@ const DIAMOND_ANIMATION = {
   MIDDLE: { delay: 0.15, startY: -350 },
   // Outermost diamonds (±2): highest starting Y, longest delay
   OUTER: { delay: 0, startY: -550 },
+} as const;
+
+// Animation configuration for diamond color/size transitions (active/inactive)
+const DIAMOND_TRANSITION = {
+  DURATION: 0.5,
+  EASE: [0.3, 0, 0.4, 1] as const, // 30 out 60 in easing
 } as const;
 
 const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
@@ -291,7 +297,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
               >
                 <motion.div
                   animate={shouldAnimate ? { y: 0 } : { y: animConfig.startY }}
-                  className="flex flex-col items-center gap-[28px] will-change-transform"
+                  className="flex h-[880px] w-[880px] flex-col items-center justify-center gap-[28px] will-change-transform"
                   initial={{ y: animConfig.startY }}
                   transition={{
                     delay: animConfig.delay,
@@ -300,43 +306,93 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                   }}
                 >
                   <button
-                    className="relative z-1 flex items-center justify-center"
+                    className="relative z-1 flex h-[880px] w-[880px] items-center justify-center"
                     data-idx={idx}
                     onClick={handleDiamondClick}
                     type="button"
                   >
-                    {isActive ? (
-                      <HCWhiteDiamond aria-hidden="true" className="h-[880px] w-[880px]" focusable="false" />
-                    ) : (
-                      <HCBlueDiamond
-                        aria-hidden="true"
-                        className={inactiveSize === 440 ? 'h-[440px] w-[440px]' : 'h-[640px] w-[640px]'}
-                        focusable="false"
-                      />
-                    )}
+                    {/* Container with animated size - both diamonds positioned absolutely inside */}
+                    <motion.div
+                      animate={{
+                        height: isActive ? 880 : inactiveSize,
+                        width: isActive ? 880 : inactiveSize,
+                      }}
+                      className="relative flex items-center justify-center"
+                      initial={{
+                        height: isActive ? 880 : inactiveSize,
+                        width: isActive ? 880 : inactiveSize,
+                      }}
+                      transition={{
+                        duration: DIAMOND_TRANSITION.DURATION,
+                        ease: DIAMOND_TRANSITION.EASE,
+                      }}
+                    >
+                      {/* White Diamond (Active) - cross-fades in when active */}
+                      <motion.div
+                        animate={{ opacity: isActive ? 1 : 0 }}
+                        className="absolute inset-0 flex items-center justify-center"
+                        initial={{ opacity: isActive ? 1 : 0 }}
+                        transition={{
+                          duration: DIAMOND_TRANSITION.DURATION,
+                          ease: DIAMOND_TRANSITION.EASE,
+                        }}
+                      >
+                        <HCWhiteDiamond aria-hidden="true" className="h-full w-full" focusable="false" />
+                      </motion.div>
+                      {/* Blue Diamond (Inactive) - cross-fades in when inactive */}
+                      <motion.div
+                        animate={{ opacity: isActive ? 0 : 1 }}
+                        className="absolute inset-0 flex items-center justify-center"
+                        initial={{ opacity: isActive ? 0 : 1 }}
+                        transition={{
+                          duration: DIAMOND_TRANSITION.DURATION,
+                          ease: DIAMOND_TRANSITION.EASE,
+                        }}
+                      >
+                        <HCBlueDiamond aria-hidden="true" className="h-full w-full" focusable="false" />
+                      </motion.div>
+                    </motion.div>
                     <div className="absolute inset-0 flex items-center justify-center px-8 text-center">
-                      <span
+                      <motion.span
+                        animate={{
+                          color: isActive ? '#14477d' : '#ededed',
+                          fontSize: isActive ? '61px' : '43px',
+                        }}
                         className={
                           isActive
-                            ? 'w-[340px] text-[61px] leading-[1.3] tracking-[-3px] text-[#14477d]'
-                            : 'w-[300px] text-[43px] leading-[1.3] tracking-[-2.1px] text-[#ededed]'
+                            ? 'w-[340px] leading-[1.3] tracking-[-3px]'
+                            : 'w-[300px] leading-[1.3] tracking-[-2.1px]'
                         }
+                        transition={{
+                          duration: DIAMOND_TRANSITION.DURATION,
+                          ease: DIAMOND_TRANSITION.EASE,
+                        }}
                       >
                         {renderRegisteredMark(step.label)}
-                      </span>
-                      {isActive ? (
-                        <div
-                          aria-label="Open details"
-                          className="absolute inset-0 flex cursor-pointer items-center justify-center pt-[490px] pr-[5px]"
-                          data-idx={idx}
-                          onClick={handlePlusClick}
-                          onKeyDown={handlePlusClick}
-                          role="button"
-                          tabIndex={0}
-                        >
-                          <CirclePlus className="h-[80px] w-[80px] text-[#14477d]" />
-                        </div>
-                      ) : null}
+                      </motion.span>
+                      <AnimatePresence>
+                        {isActive ? (
+                          <motion.div
+                            animate={{ opacity: 1 }}
+                            aria-label="Open details"
+                            className="absolute inset-0 flex cursor-pointer items-center justify-center pt-[490px] pr-[5px]"
+                            data-idx={idx}
+                            exit={{ opacity: 0 }}
+                            initial={{ opacity: 0 }}
+                            key="plus-icon"
+                            onClick={handlePlusClick}
+                            onKeyDown={handlePlusClick}
+                            role="button"
+                            tabIndex={0}
+                            transition={{
+                              duration: DIAMOND_TRANSITION.DURATION,
+                              ease: DIAMOND_TRANSITION.EASE,
+                            }}
+                          >
+                            <CirclePlus className="h-[80px] w-[80px] text-[#14477d]" />
+                          </motion.div>
+                        ) : null}
+                      </AnimatePresence>
                     </div>
                   </button>
                 </motion.div>
