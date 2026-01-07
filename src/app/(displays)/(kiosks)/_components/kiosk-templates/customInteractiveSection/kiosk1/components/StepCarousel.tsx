@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, CirclePlus } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/shadcn/carousel';
 import HCBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCBlueDiamond';
 import HCWhiteDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCWhiteDiamond';
@@ -144,12 +144,6 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
   const applyEdgeTransforms = useCallback(
     (currentIndex: number) => {
       if (!emblaApi?.rootNode || totalSlides === 0) {
-        if (process.env.NODE_ENV === 'development') {
-          console.warn('[StepCarousel] applyEdgeTransforms: Missing emblaApi or empty slides', {
-            hasApi: !!emblaApi,
-            totalSlides,
-          });
-        }
         return;
       }
 
@@ -176,9 +170,6 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
           slide.getAttribute('data-embla-index');
         const rawIndex = Number(indexAttr);
         if (Number.isNaN(rawIndex)) {
-          if (process.env.NODE_ENV === 'development') {
-            console.warn('[StepCarousel] Slide missing valid index attribute', { indexAttr, slide });
-          }
           return;
         }
         const normalizedIndex = ((rawIndex % totalSlides) + totalSlides) % totalSlides;
@@ -272,14 +263,19 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
 
   /**
    * Detect when carousel becomes visible to trigger animations
-   * Properly handles unmount/remount cycles
+   * Properly handles unmount/remount cycles with mounted flag to prevent memory leaks
+   * Threshold of 0.3 ensures animation starts when carousel is reasonably visible
+   * (approximately 1/3 of viewport height for 1080p displays)
    */
   useEffect(() => {
     const currentContainer = containerRef.current;
     if (!currentContainer) return;
 
+    let isMounted = true;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
+        if (!isMounted) return;
         if (entry && entry.isIntersecting) {
           setShouldAnimate(true);
         }
@@ -294,6 +290,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
     observer.observe(currentContainer);
 
     return () => {
+      isMounted = false;
       observer.disconnect();
     };
   }, []);
@@ -324,19 +321,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
   const handleDiamondClick = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
       const idx = Number(event.currentTarget.dataset.idx);
-      if (Number.isNaN(idx)) {
-        if (process.env.NODE_ENV === 'development') {
-          console.error('[StepCarousel] handleDiamondClick: Invalid index', {
-            dataIdx: event.currentTarget.dataset.idx,
-            target: event.currentTarget,
-          });
-        }
-        return;
-      }
-      if (!emblaApi) {
-        if (process.env.NODE_ENV === 'development') {
-          console.warn('[StepCarousel] handleDiamondClick: emblaApi not initialized');
-        }
+      if (Number.isNaN(idx) || !emblaApi) {
         return;
       }
       emblaApi.scrollTo(idx);
@@ -351,32 +336,17 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
     (event: React.KeyboardEvent | React.MouseEvent) => {
       // Type guard for currentTarget
       if (!(event.currentTarget instanceof HTMLElement)) {
-        if (process.env.NODE_ENV === 'development') {
-          console.error('[StepCarousel] handlePlusClick: currentTarget is not an HTMLElement', {
-            currentTarget: event.currentTarget,
-            type: typeof event.currentTarget,
-          });
-        }
         return;
       }
 
       const target = event.currentTarget;
       const idx = Number(target.dataset.idx);
       if (Number.isNaN(idx)) {
-        if (process.env.NODE_ENV === 'development') {
-          console.error('[StepCarousel] handlePlusClick: Invalid index', {
-            dataIdx: target.dataset.idx,
-            target,
-          });
-        }
         return;
       }
 
       // Don't allow modal open during transition
       if (transitioningIndex !== null) {
-        if (process.env.NODE_ENV === 'development') {
-          console.info('[StepCarousel] handlePlusClick: Blocked during transition', { transitioningIndex });
-        }
         return;
       }
 
@@ -467,14 +437,15 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                   }}
                 >
                   <button
+                    aria-label={isActive ? undefined : `Select ${step.label}`}
                     className="relative flex items-center justify-center"
                     data-idx={idx}
-                    onClick={handleDiamondClick}
+                    onClick={isActive ? undefined : handleDiamondClick}
                     onPointerCancel={() => setPressedIndex(null)}
                     onPointerDown={() => isActive && setPressedIndex(idx)}
                     onPointerLeave={() => setPressedIndex(null)}
                     onPointerUp={() => setPressedIndex(null)}
-                    style={{ zIndex: Z_INDEX.DIAMOND_BUTTON }}
+                    style={{ cursor: isActive ? 'default' : 'pointer', zIndex: Z_INDEX.DIAMOND_BUTTON }}
                     type="button"
                   >
                     {/* Fixed outer container prevents layout shift, inner container animates size */}
@@ -553,7 +524,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                       </motion.span>
                       <AnimatePresence>
                         {isActive ? (
-                          <motion.div
+                          <motion.button
                             animate={{ opacity: 1 }}
                             aria-label="Open details"
                             className="absolute inset-0 flex cursor-pointer items-center justify-center pt-[490px] pr-[5px]"
@@ -562,16 +533,14 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                             initial={{ opacity: 0 }}
                             key="plus-icon"
                             onClick={handlePlusClick}
-                            onKeyDown={handlePlusClick}
-                            role="button"
-                            tabIndex={0}
                             transition={{
                               duration: DIAMOND_TRANSITION.DURATION,
                               ease: DIAMOND_TRANSITION.EASE,
                             }}
+                            type="button"
                           >
                             <CirclePlus className="h-[80px] w-[80px] text-[#14477d]" />
-                          </motion.div>
+                          </motion.button>
                         ) : null}
                       </AnimatePresence>
                     </div>
@@ -604,4 +573,8 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
   );
 };
 
-export default StepCarousel;
+/**
+ * Memoized to prevent unnecessary re-renders when parent state changes
+ * Only re-renders when steps or onStepClick change
+ */
+export default memo(StepCarousel);

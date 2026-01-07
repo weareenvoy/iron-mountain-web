@@ -2,7 +2,7 @@
 
 import { AnimatePresence } from 'framer-motion';
 import { SquarePlay } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
 import { cn } from '@/lib/tailwind/utils/cn';
@@ -52,7 +52,7 @@ export type CustomInteractiveKiosk1SecondScreenTemplateProps = {
  * Features animated headline/body/button and diamond carousel with modal details
  */
 const CustomInteractiveKiosk1SecondScreenTemplate = ({
-  bodyText = 'Explore each section to learn how Iron Mountain can transform your enterprise',
+  bodyText,
   demoIframeSrc,
   eyebrow,
   headline,
@@ -68,6 +68,8 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
 }: CustomInteractiveKiosk1SecondScreenTemplateProps) => {
   const eyebrowText: string = normalizeText(eyebrow);
   const headlineText: string = normalizeText(headline);
+  const normalizedBodyText =
+    bodyText ?? 'Explore each section to learn how Iron Mountain can transform your enterprise';
   const normalizedSteps = steps ?? [];
   const isKiosk3 = kioskId === 'kiosk-3';
   const secondaryIconOffset = isKiosk3 ? 'left-[-330px]' : 'left-[-70px]';
@@ -89,10 +91,10 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
       }
     : null;
 
-  const handleSecondaryClick = () => {
+  const handleSecondaryClick = useCallback(() => {
     setShowOverlay(true);
     onSecondaryCta?.();
-  };
+  }, [onSecondaryCta]);
 
   useEffect(() => {
     setPortalTarget(containerRef.current);
@@ -100,6 +102,8 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
 
   /**
    * Detect when text/button become visible to trigger animations
+   * Lower threshold (0.1) triggers earlier than carousel (0.3) because text
+   * starts 550px below initial position and needs time to animate into view
    */
   useEffect(() => {
     const currentHeadline = headlineRef.current;
@@ -114,7 +118,7 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
       {
         root: null,
         rootMargin: '0px',
-        threshold: 0.1, // Trigger when 10% visible (earlier to account for transform offset)
+        threshold: 0.1,
       }
     );
 
@@ -166,13 +170,12 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
           {renderRegisteredMark(headlineText)}
         </AnimatedText>
 
-        {/* Use bodyText prop instead of hardcoded string */}
         <AnimatedText
           as="p"
           className="absolute top-[1320px] left-[250px] z-0 w-[640px] text-[52px] leading-[1.4] font-normal tracking-[-2.6px] text-[#ededed] will-change-transform"
           shouldAnimate={shouldAnimateText}
         >
-          {renderRegisteredMark(bodyText)}
+          {renderRegisteredMark(normalizedBodyText)}
         </AnimatedText>
 
         <AnimatedText
