@@ -297,7 +297,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
               >
                 <motion.div
                   animate={shouldAnimate ? { y: 0 } : { y: animConfig.startY }}
-                  className="flex h-[880px] w-[880px] flex-col items-center justify-center gap-[28px] will-change-transform"
+                  className="flex flex-col items-center gap-[28px] will-change-transform"
                   initial={{ y: animConfig.startY }}
                   transition={{
                     delay: animConfig.delay,
@@ -306,52 +306,54 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                   }}
                 >
                   <button
-                    className="relative z-1 flex h-[880px] w-[880px] items-center justify-center"
+                    className="relative z-1 flex items-center justify-center"
                     data-idx={idx}
                     onClick={handleDiamondClick}
                     type="button"
                   >
-                    {/* Container with animated size - both diamonds positioned absolutely inside */}
-                    <motion.div
-                      animate={{
-                        height: isActive ? 880 : inactiveSize,
-                        width: isActive ? 880 : inactiveSize,
-                      }}
-                      className="relative flex items-center justify-center"
-                      initial={{
-                        height: isActive ? 880 : inactiveSize,
-                        width: isActive ? 880 : inactiveSize,
-                      }}
-                      transition={{
-                        duration: DIAMOND_TRANSITION.DURATION,
-                        ease: DIAMOND_TRANSITION.EASE,
-                      }}
-                    >
-                      {/* White Diamond (Active) - cross-fades in when active */}
+                    {/* Fixed outer container prevents layout shift, inner container animates size */}
+                    <div className="flex h-[880px] w-[880px] items-center justify-center">
                       <motion.div
-                        animate={{ opacity: isActive ? 1 : 0 }}
-                        className="absolute inset-0 flex items-center justify-center"
-                        initial={{ opacity: isActive ? 1 : 0 }}
+                        animate={{
+                          height: isActive ? 880 : inactiveSize,
+                          width: isActive ? 880 : inactiveSize,
+                        }}
+                        className="relative flex items-center justify-center"
+                        initial={{
+                          height: isActive ? 880 : inactiveSize,
+                          width: isActive ? 880 : inactiveSize,
+                        }}
                         transition={{
                           duration: DIAMOND_TRANSITION.DURATION,
                           ease: DIAMOND_TRANSITION.EASE,
                         }}
                       >
-                        <HCWhiteDiamond aria-hidden="true" className="h-full w-full" focusable="false" />
+                        {/* White Diamond (Active) - cross-fades in when active */}
+                        <motion.div
+                          animate={{ opacity: isActive ? 1 : 0 }}
+                          className="absolute inset-0 flex items-center justify-center"
+                          initial={{ opacity: isActive ? 1 : 0 }}
+                          transition={{
+                            duration: DIAMOND_TRANSITION.DURATION,
+                            ease: DIAMOND_TRANSITION.EASE,
+                          }}
+                        >
+                          <HCWhiteDiamond aria-hidden="true" className="h-full w-full" focusable="false" />
+                        </motion.div>
+                        {/* Blue Diamond (Inactive) - cross-fades in when inactive */}
+                        <motion.div
+                          animate={{ opacity: isActive ? 0 : 1 }}
+                          className="absolute inset-0 flex items-center justify-center"
+                          initial={{ opacity: isActive ? 0 : 1 }}
+                          transition={{
+                            duration: DIAMOND_TRANSITION.DURATION,
+                            ease: DIAMOND_TRANSITION.EASE,
+                          }}
+                        >
+                          <HCBlueDiamond aria-hidden="true" className="h-full w-full" focusable="false" />
+                        </motion.div>
                       </motion.div>
-                      {/* Blue Diamond (Inactive) - cross-fades in when inactive */}
-                      <motion.div
-                        animate={{ opacity: isActive ? 0 : 1 }}
-                        className="absolute inset-0 flex items-center justify-center"
-                        initial={{ opacity: isActive ? 0 : 1 }}
-                        transition={{
-                          duration: DIAMOND_TRANSITION.DURATION,
-                          ease: DIAMOND_TRANSITION.EASE,
-                        }}
-                      >
-                        <HCBlueDiamond aria-hidden="true" className="h-full w-full" focusable="false" />
-                      </motion.div>
-                    </motion.div>
+                    </div>
                     <div className="absolute inset-0 flex items-center justify-center px-8 text-center">
                       <motion.span
                         animate={{
