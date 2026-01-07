@@ -9,11 +9,19 @@ export const Accordion = AccordionPrimitive.Root;
 
 export const AccordionItem = AccordionPrimitive.Item;
 
-export const AccordionTrigger = (
-  props: ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger> & { readonly indicator?: React.ReactNode }
-) => {
-  const { children, className, indicator = <ChevronDownIcon className="size-4" />, ...rest } = props;
-  const accordionColor = (rest as Record<string, unknown>)['data-accordion-color'] as string | undefined;
+type AccordionTriggerProps = ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger> & {
+  readonly 'data-accordion-color'?: 'blue' | 'lightBlue' | 'navy' | 'white';
+  readonly 'indicator'?: React.ReactNode;
+};
+
+export const AccordionTrigger = (props: AccordionTriggerProps) => {
+  const {
+    children,
+    className,
+    'data-accordion-color': accordionColor,
+    indicator = <ChevronDownIcon className="size-4" />,
+    ...rest
+  } = props;
 
   return (
     <AccordionPrimitive.Header
