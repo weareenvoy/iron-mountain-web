@@ -33,9 +33,9 @@ const EDGE_OFFSET = 2; // This helps to catch what the carousel items on the far
 const DIAMOND_ANIMATION = {
   // Center diamond: minimal movement, shortest delay
   CENTER: { delay: 0.3, startY: -120 },
-  // Animation duration and easing
+  // Animation duration and easing (30 out 60 in)
   DURATION: 0.8,
-  EASE: [0.4, 0, 0.2, 1] as const,
+  EASE: [0.3, 0, 0.4, 1] as const,
   // Next pair (±1): medium starting Y, medium delay
   MIDDLE: { delay: 0.15, startY: -350 },
   // Outermost diamonds (±2): highest starting Y, longest delay

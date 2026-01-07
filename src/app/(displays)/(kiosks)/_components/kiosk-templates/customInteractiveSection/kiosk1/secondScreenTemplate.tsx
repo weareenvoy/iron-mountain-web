@@ -16,7 +16,7 @@ import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 const TEXT_ANIMATION = {
   DELAY: 0.4, // Starts after center diamond begins moving
   DURATION: 0.8,
-  EASE: [0.4, 0, 0.2, 1] as const,
+  EASE: [0.3, 0, 0.4, 1] as const, // 30 out 60 in easing
   START_Y: 550, // Animates UP from far below (bleeds significantly into diamonds area)
 } as const;
 
