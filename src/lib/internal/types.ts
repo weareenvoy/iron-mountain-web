@@ -351,7 +351,10 @@ export interface WelcomeWallData {
     readonly url: string;
   };
   readonly videos: {
-    readonly ambientLoop: {
+    readonly ambientLoopEn: {
+      readonly url: string;
+    };
+    readonly ambientLoopPt: {
       readonly url: string;
     };
     readonly tourLoopEn: {

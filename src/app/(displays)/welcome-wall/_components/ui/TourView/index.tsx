@@ -1,18 +1,8 @@
 'use client';
 
-// import { useWelcome } from '@/app/(displays)/welcome/_components/providers/welcome';
-
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { useWelcomeWall } from '@/app/(displays)/welcome-wall/_components/providers/welcome-wall';
-
-// import IRMLogo from '../icons/IRMLogo';
-// import LocationIcon from '../icons/LocationIcon';
-// import MountainBG from '../icons/MountainBG';
-// import MountainIcon from '../icons/MountainIcon';
-
-// const CROSSFADE_DURATION_MS = 800;
-// const PING_PONG_INTERVAL_MS = 5000;
 
 const SHOW_LOGO_AT_SECONDS = 7;
 const HIDE_LOGO_AT_SECONDS = 10;
@@ -32,8 +22,6 @@ const TourView = () => {
   const clientTourLogoRef = useRef<HTMLImageElement>(null);
 
   const clientTourLogoUrl = data?.clientTourLogo.url ?? '';
-
-  // console.info('data in TourView', dataRef.current);
 
   useEffect(() => {
     if (!data || !backgroundVideoRef.current) return;
@@ -73,8 +61,6 @@ const TourView = () => {
     };
 
     requestAnimationFrame(animationLoop);
-
-    // return;
   }, [data, locale]);
 
   return (

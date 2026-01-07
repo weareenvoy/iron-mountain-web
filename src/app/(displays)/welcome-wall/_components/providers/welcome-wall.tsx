@@ -1,19 +1,10 @@
 'use client';
 
-import { createContext, useCallback, useContext, useEffect, useRef, useState, type PropsWithChildren } from 'react';
+import { createContext, useCallback, useContext, useEffect, useState, type PropsWithChildren } from 'react';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getWelcomeWallData } from '@/lib/internal/data/get-welcome-wall';
 import { type Locale, type WelcomeWallData } from '@/lib/internal/types';
 import type { WelcomeWallMqttState } from '@/lib/mqtt/types';
-
-// interface WelcomeWallContextType {
-//   showTour: boolean; // true = TourView, false = AmbientView
-//   tourId: null | string;
-// }
-
-// interface WelcomeWallContextType {
-//   state: string; // tour = TourView, idle = AmbientView
-// }
 
 interface WelcomeWallContextType {
   data: null | WelcomeWallData;
@@ -40,21 +31,11 @@ export const useWelcomeWall = () => {
 export const WelcomeWallProvider = ({ children }: WelcomeWallProviderProps) => {
   const { client } = useMqtt();
 
-  // MQTT state (what we report to GEC)
-  // const [mqttState, setMqttState] = useState<WelcomeWallMqttState>({
-  //   state: 'idle',
-  // });
-
-  // Ref to access latest mqttState without causing dependency changes. Avoids re-subscription.
-  // const mqttStateRef = useRef(mqttState);
-  // mqttStateRef.current = mqttState;
-
   const [data, setData] = useState<null | WelcomeWallData>(null);
   const [locale, setLocale] = useState<Locale>('en');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<null | string>(null);
   const [showTour, setShowTour] = useState<boolean>(false);
-  // const [tourId, setTourId] = useState<null | string>(null);
 
   // Fetch content data
   const fetchData = useCallback(async (id?: null | string) => {
@@ -83,31 +64,11 @@ export const WelcomeWallProvider = ({ children }: WelcomeWallProviderProps) => {
   // Helper to report full exhibit state to MQTT
   const reportState = useCallback(
     (newState: Partial<WelcomeWallMqttState>) => {
-      console.info('reportState called with newState:', newState);
-
       if (!client) return;
-
-      // Compute updated state first, update ref immediately for consistency
-      // const updatedState = { ...mqttStateRef.current, ...newState };
-      // mqttStateRef.current = updatedState;
-
-      // console.info('Welcome Wall: reporting state:', updatedState);
-
-      // // Update React state (pure function - no side effects)
-      // setMqttState(prev => ({ ...prev, ...newState }));
-
-      // Side effect runs outside the updater with fresh ref value
-      // client.reportExhibitState('welcome-wall', updatedState, {
-      //   onError: err => console.error('Welcome Wall: Failed to report state:', err),
-      // });
 
       client.reportWelcomeWallState('welcome-wall', newState as WelcomeWallMqttState, {
         onError: err => console.error('Welcome Wall: Failed to report state:', err),
       });
-
-      // client.publish('state/welcome-wall', updatedState, { qos: 1, retain: true }, {
-      //   onError: err => console.error('Welcome Wall: Failed to report state:', err),
-      // });
     },
     [client]
   );
@@ -150,8 +111,7 @@ export const WelcomeWallProvider = ({ children }: WelcomeWallProviderProps) => {
       console.info('Welcome Wall received end-tour command');
       setShowTour(false);
 
-      // Reset to ambient state with no tour
-      // setExhibitState({ beatIdx: 0, momentId: 'ambient' });
+      // Reset to ambient state
       reportState({
         state: 'idle',
       });
