@@ -14,30 +14,39 @@ const TEXT_ANIMATION = {
 
 type AnimatedTextElement = 'button' | 'h1' | 'h2' | 'p';
 
-type AnimatedTextProps = {
+type BaseAnimatedTextProps = {
   readonly as?: AnimatedTextElement;
   readonly children: React.ReactNode;
   readonly className?: string;
-  readonly onClick?: () => void;
   readonly shouldAnimate: boolean;
+};
+
+type AnimatedTextButtonProps = BaseAnimatedTextProps & {
+  readonly as: 'button';
+  readonly onClick?: () => void;
   readonly type?: 'button' | 'reset' | 'submit';
 };
+
+type AnimatedTextHeadingProps = BaseAnimatedTextProps & {
+  readonly as?: 'h1' | 'h2';
+};
+
+type AnimatedTextParagraphProps = BaseAnimatedTextProps & {
+  readonly as?: 'p';
+};
+
+type AnimatedTextProps = AnimatedTextButtonProps | AnimatedTextHeadingProps | AnimatedTextParagraphProps;
 
 /**
  * AnimatedText - Reusable component for text elements that slide up from below
  * Used for headline, body text, and button animations that trigger together
  */
 const AnimatedText = forwardRef<HTMLElement, AnimatedTextProps>(
-  ({ as = 'p', children, className, onClick, shouldAnimate, type }, ref) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const Component = motion[as] as any;
-
-    const baseProps = {
+  ({ as = 'p', children, className, shouldAnimate, ...restProps }, ref) => {
+    const animationProps = {
       animate: shouldAnimate ? { y: 0 } : { y: TEXT_ANIMATION.START_Y },
       className,
       initial: { y: TEXT_ANIMATION.START_Y },
-      onClick,
-      ref,
       transition: {
         delay: TEXT_ANIMATION.DELAY,
         duration: TEXT_ANIMATION.DURATION,
@@ -45,11 +54,39 @@ const AnimatedText = forwardRef<HTMLElement, AnimatedTextProps>(
       },
     };
 
-    // Add type prop only for buttons
-    const props = as === 'button' && type ? { ...baseProps, type } : baseProps;
+    if (as === 'button') {
+      const buttonProps = restProps as Omit<AnimatedTextButtonProps, 'as' | 'children' | 'className' | 'shouldAnimate'>;
+      return (
+        <motion.button ref={ref as React.Ref<HTMLButtonElement>} {...animationProps} {...buttonProps}>
+          {children}
+        </motion.button>
+      );
+    }
 
-    return <Component {...props}>{children}</Component>;
+    if (as === 'h1') {
+      return (
+        <motion.h1 ref={ref as React.Ref<HTMLHeadingElement>} {...animationProps}>
+          {children}
+        </motion.h1>
+      );
+    }
+
+    if (as === 'h2') {
+      return (
+        <motion.h2 ref={ref as React.Ref<HTMLHeadingElement>} {...animationProps}>
+          {children}
+        </motion.h2>
+      );
+    }
+
+    return (
+      <motion.p ref={ref as React.Ref<HTMLParagraphElement>} {...animationProps}>
+        {children}
+      </motion.p>
+    );
   }
 );
+
+AnimatedText.displayName = 'AnimatedText';
 
 export default AnimatedText;

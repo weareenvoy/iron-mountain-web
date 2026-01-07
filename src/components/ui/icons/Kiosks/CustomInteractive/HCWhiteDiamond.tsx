@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion';
 
 type HCWhiteDiamondProps = {
-  readonly 'aria-hidden'?: boolean | 'true' | 'false';
+  readonly 'aria-hidden'?: 'false' | 'true' | boolean;
   readonly 'className'?: string;
   readonly 'fill'?: string;
-  readonly 'focusable'?: boolean | 'false' | 'true';
+  readonly 'focusable'?: 'false' | 'true' | boolean;
 };
 
 /**

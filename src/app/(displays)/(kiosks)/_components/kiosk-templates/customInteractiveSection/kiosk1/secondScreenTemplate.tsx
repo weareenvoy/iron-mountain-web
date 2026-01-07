@@ -17,6 +17,8 @@ import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
  * Props for Custom Interactive Kiosk 1 Second Screen Template
  */
 export type CustomInteractiveKiosk1SecondScreenTemplateProps = {
+  /** Body text below headline (extracted from hardcoded string) */
+  readonly bodyText?: string;
   /** URL for demo iframe content */
   readonly demoIframeSrc?: string;
   /** Small heading above main headline */
@@ -39,8 +41,6 @@ export type CustomInteractiveKiosk1SecondScreenTemplateProps = {
   readonly overlayEndTourLabel?: string;
   /** Headline for overlay screen */
   readonly overlayHeadline?: string;
-  /** Body text below headline (extracted from hardcoded string) */
-  readonly bodyText?: string;
   /** Label for secondary CTA button */
   readonly secondaryCtaLabel?: string;
   /** Array of carousel steps */
@@ -74,6 +74,7 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
 
   const [openModalIndex, setOpenModalIndex] = useState<null | number>(null);
   const [showOverlay, setShowOverlay] = useState(false);
+  const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
   const [shouldAnimateText, setShouldAnimateText] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
@@ -92,6 +93,10 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
     setShowOverlay(true);
     onSecondaryCta?.();
   };
+
+  useEffect(() => {
+    setPortalTarget(containerRef.current);
+  }, []);
 
   /**
    * Detect when text/button become visible to trigger animations
@@ -192,15 +197,15 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
         <StepCarousel onStepClick={setOpenModalIndex} steps={normalizedSteps} />
       </div>
 
-      {/* Step Modal - Use containerRef.current directly to avoid stale portal target */}
-      {containerRef.current
+      {/* Step Modal */}
+      {portalTarget
         ? createPortal(
             <AnimatePresence>
               {activeModalContent ? (
                 <StepModal content={activeModalContent} key="step-modal" onClose={() => setOpenModalIndex(null)} />
               ) : null}
             </AnimatePresence>,
-            containerRef.current
+            portalTarget
           )
         : null}
     </>

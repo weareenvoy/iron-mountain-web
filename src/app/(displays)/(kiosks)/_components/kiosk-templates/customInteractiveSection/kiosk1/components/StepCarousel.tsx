@@ -36,20 +36,20 @@ type StepCarouselProps = {
 const LAYOUT = {
   /** Number of visible carousel items at once */
   CAROUSEL_VISIBLE_ITEMS: 5,
+  /** Size of active diamond in center */
+  DIAMOND_SIZE_ACTIVE: 880,
   /** Size of diamonds at left/right edges (±2 from center) */
   DIAMOND_SIZE_EDGE: 440,
   /** Size of diamonds adjacent to center (±1 from center) */
   DIAMOND_SIZE_MIDDLE: 640,
-  /** Size of active diamond in center */
-  DIAMOND_SIZE_ACTIVE: 880,
   /** Offset to push edge diamonds toward center for overlap effect */
   EDGE_TRANSFORM_X: 240,
   /** Gap between carousel items */
   GAP: 60,
-  /** Gap between diamond button and label text below */
-  ITEM_VERTICAL_GAP: 28,
   /** Starting carousel index (0-based) */
   INITIAL_CENTER_INDEX: 2,
+  /** Gap between diamond button and label text below */
+  ITEM_VERTICAL_GAP: 28,
 } as const;
 
 /**
@@ -136,15 +136,6 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
   const slidesCacheRef = useRef<HTMLElement[]>([]);
   const totalSlides = steps.length;
 
-  // Early return for empty steps
-  if (steps.length === 0) {
-    return (
-      <div className="absolute top-[1980px] left-0 flex w-full items-center justify-center">
-        <p className="text-[52px] leading-[1.4] font-normal tracking-[-2.6px] text-[#ededed]">No steps available</p>
-      </div>
-    );
-  }
-
   /**
    * Applies transform to edge diamonds to create overlap effect
    * Cached slide references for performance
@@ -186,7 +177,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
         const rawIndex = Number(indexAttr);
         if (Number.isNaN(rawIndex)) {
           if (process.env.NODE_ENV === 'development') {
-            console.warn('[StepCarousel] Slide missing valid index attribute', { slide, indexAttr });
+            console.warn('[StepCarousel] Slide missing valid index attribute', { indexAttr, slide });
           }
           return;
         }
@@ -287,8 +278,6 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
     const currentContainer = containerRef.current;
     if (!currentContainer) return;
 
-    setShouldAnimate(false); // Reset on mount
-
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry && entry.isIntersecting) {
@@ -306,7 +295,6 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
 
     return () => {
       observer.disconnect();
-      setShouldAnimate(false); // Reset on unmount
     };
   }, []);
 
@@ -387,7 +375,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
       // Don't allow modal open during transition
       if (transitioningIndex !== null) {
         if (process.env.NODE_ENV === 'development') {
-          console.log('[StepCarousel] handlePlusClick: Blocked during transition', { transitioningIndex });
+          console.info('[StepCarousel] handlePlusClick: Blocked during transition', { transitioningIndex });
         }
         return;
       }
@@ -404,6 +392,15 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
     [onStepClick, transitioningIndex]
   );
 
+  // Early return for empty steps (after all hooks)
+  if (steps.length === 0) {
+    return (
+      <div className="absolute top-[1980px] left-0 flex w-full items-center justify-center">
+        <p className="text-[52px] leading-[1.4] font-normal tracking-[-2.6px] text-[#ededed]">No steps available</p>
+      </div>
+    );
+  }
+
   return (
     <div className="absolute top-[1980px] left-0 w-full overflow-visible" ref={containerRef}>
       <Carousel
@@ -418,7 +415,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
         }}
         setApi={setEmblaApi}
       >
-        <CarouselContent className={`flex items-center gap-[${LAYOUT.GAP}px] overflow-visible px-0`}>
+        <CarouselContent className="flex items-center overflow-visible px-0" style={{ gap: `${LAYOUT.GAP}px` }}>
           {steps.map((step, idx) => {
             const isActive = idx === selectedIndex;
             const leftIndex = (selectedIndex - EDGE_OFFSET + totalSlides) % totalSlides;
@@ -460,8 +457,9 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
               >
                 <motion.div
                   animate={shouldAnimate ? { y: 0 } : { y: animConfig.startY }}
-                  className={`flex flex-col items-center gap-[${LAYOUT.ITEM_VERTICAL_GAP}px] will-change-transform`}
+                  className="flex flex-col items-center will-change-transform"
                   initial={{ y: animConfig.startY }}
+                  style={{ gap: `${LAYOUT.ITEM_VERTICAL_GAP}px` }}
                   transition={{
                     delay: animConfig.delay,
                     duration: DIAMOND_ANIMATION.DURATION,
@@ -469,18 +467,20 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                   }}
                 >
                   <button
-                    className={`relative z-${Z_INDEX.DIAMOND_BUTTON} flex items-center justify-center`}
+                    className="relative flex items-center justify-center"
                     data-idx={idx}
                     onClick={handleDiamondClick}
                     onPointerCancel={() => setPressedIndex(null)}
                     onPointerDown={() => isActive && setPressedIndex(idx)}
                     onPointerLeave={() => setPressedIndex(null)}
                     onPointerUp={() => setPressedIndex(null)}
+                    style={{ zIndex: Z_INDEX.DIAMOND_BUTTON }}
                     type="button"
                   >
                     {/* Fixed outer container prevents layout shift, inner container animates size */}
                     <div
-                      className={`flex h-[${LAYOUT.DIAMOND_SIZE_ACTIVE}px] w-[${LAYOUT.DIAMOND_SIZE_ACTIVE}px] items-center justify-center`}
+                      className="flex items-center justify-center"
+                      style={{ height: `${LAYOUT.DIAMOND_SIZE_ACTIVE}px`, width: `${LAYOUT.DIAMOND_SIZE_ACTIVE}px` }}
                     >
                       <motion.div
                         animate={{
@@ -492,8 +492,8 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                           height: isActive ? LAYOUT.DIAMOND_SIZE_ACTIVE : inactiveSize,
                           width: isActive ? LAYOUT.DIAMOND_SIZE_ACTIVE : inactiveSize,
                         }}
-                        onAnimationStart={() => setTransitioningIndex(idx)}
                         onAnimationComplete={() => setTransitioningIndex(null)}
+                        onAnimationStart={() => setTransitioningIndex(idx)}
                         transition={{
                           duration: DIAMOND_TRANSITION.DURATION,
                           ease: DIAMOND_TRANSITION.EASE,
