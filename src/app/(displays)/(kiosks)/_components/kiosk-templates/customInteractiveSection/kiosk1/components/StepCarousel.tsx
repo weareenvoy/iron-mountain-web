@@ -1,5 +1,6 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, CirclePlus } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/shadcn/carousel';
@@ -28,10 +29,25 @@ type StepCarouselProps = {
 const INITIAL_CENTER_INDEX = 2;
 const EDGE_OFFSET = 2; // This helps to catch what the carousel items on the far left and right are since they're 2 spots away from the active item in the center. (5 items total). The items on the far left and right have specific sizes which this helps to adjust further in the code.
 
+// Animation configuration for staggered diamond entrance
+const DIAMOND_ANIMATION = {
+  // Center diamond: minimal movement, shortest delay
+  CENTER: { delay: 0.3, startY: -120 },
+  // Animation duration and easing
+  DURATION: 0.8,
+  EASE: [0.4, 0, 0.2, 1] as const,
+  // Next pair (±1): medium starting Y, medium delay
+  MIDDLE: { delay: 0.15, startY: -350 },
+  // Outermost diamonds (±2): highest starting Y, longest delay
+  OUTER: { delay: 0, startY: -550 },
+} as const;
+
 const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
   const [emblaApi, setEmblaApi] = useState<EmblaApi | undefined>(undefined);
   const hasAppliedInitialAlignment = useRef(false);
   const [selectedIndex, setSelectedIndex] = useState(() => Math.min(steps.length - 1, INITIAL_CENTER_INDEX));
+  const [shouldAnimate, setShouldAnimate] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
   const totalSlides = steps.length;
 
   // The function below takes the two diamonds in the diamond carousel and pushes them towards the center by 240px to have them overlap with the two diamonds that are directly to the left and right of the active center diamond. This keeps the intended layout in Figma.
@@ -139,6 +155,31 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
     emblaApi.scrollTo(desiredIndex, true);
   }, [applyEdgeTransforms, emblaApi, totalSlides]);
 
+  // Detect when carousel becomes visible to trigger animations
+  useEffect(() => {
+    const currentContainer = containerRef.current;
+    if (!currentContainer) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry && entry.isIntersecting) {
+          setShouldAnimate(true);
+        }
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.3, // Trigger when 30% visible
+      }
+    );
+
+    observer.observe(currentContainer);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   // Cleanup: Destroy Embla instance on unmount to prevent memory leaks
   useEffect(() => {
     return () => {
@@ -194,9 +235,9 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
   );
 
   return (
-    <div className="absolute top-[1980px] left-0 w-full">
+    <div className="absolute top-[1980px] left-0 w-full overflow-visible" ref={containerRef}>
       <Carousel
-        className="w-full"
+        className="w-full overflow-visible [&>div]:overflow-visible"
         opts={{
           align: 'center',
           containScroll: false,
@@ -207,7 +248,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
         }}
         setApi={setEmblaApi}
       >
-        <CarouselContent className="flex items-center gap-[60px] px-0">
+        <CarouselContent className="flex items-center gap-[60px] overflow-visible px-0">
           {steps.map((step, idx) => {
             const isActive = idx === selectedIndex;
             const leftIndex = (selectedIndex - EDGE_OFFSET + totalSlides) % totalSlides;
@@ -220,6 +261,19 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
               : isRightEdge
                 ? 'translate3d(-240px, 0px, 0px)'
                 : undefined;
+
+            // Determine animation config based on position relative to center
+            const leftMiddleIndex = (selectedIndex - 1 + totalSlides) % totalSlides;
+            const rightMiddleIndex = (selectedIndex + 1) % totalSlides;
+            const isMiddle = idx === leftMiddleIndex || idx === rightMiddleIndex;
+            const isOuter = isLeftEdge || isRightEdge;
+
+            const animConfig = isOuter
+              ? DIAMOND_ANIMATION.OUTER
+              : isMiddle
+                ? DIAMOND_ANIMATION.MIDDLE
+                : DIAMOND_ANIMATION.CENTER;
+
             return (
               <CarouselItem
                 className="shrink-0 grow-0 basis-[560px] pl-0"
@@ -235,7 +289,16 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                 }
                 // These styles are inline because the transform values for the carousel are computed at runtime based on carousel position, conditional z indexes based on active state would also require complex class logic.
               >
-                <div className="flex flex-col items-center gap-[28px]">
+                <motion.div
+                  animate={shouldAnimate ? { y: 0 } : { y: animConfig.startY }}
+                  className="flex flex-col items-center gap-[28px] will-change-transform"
+                  initial={{ y: animConfig.startY }}
+                  transition={{
+                    delay: animConfig.delay,
+                    duration: DIAMOND_ANIMATION.DURATION,
+                    ease: DIAMOND_ANIMATION.EASE,
+                  }}
+                >
                   <button
                     className="relative z-1 flex items-center justify-center"
                     data-idx={idx}
@@ -276,7 +339,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                       ) : null}
                     </div>
                   </button>
-                </div>
+                </motion.div>
               </CarouselItem>
             );
           })}
