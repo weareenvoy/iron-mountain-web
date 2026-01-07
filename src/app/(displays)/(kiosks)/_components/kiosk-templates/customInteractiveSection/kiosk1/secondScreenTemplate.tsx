@@ -8,9 +8,9 @@ import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_comp
 import { cn } from '@/lib/tailwind/utils/cn';
 import { normalizeText } from '@/lib/utils/normalize-text';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
-import AnimatedText from './components/AnimatedText';
-import StepCarousel, { type Step } from './components/StepCarousel';
-import StepModal, { type ModalContent } from './components/StepModal';
+import { AnimatedText } from './components/AnimatedText';
+import { StepCarousel, type Step } from './components/StepCarousel';
+import { StepModal, type ModalContent } from './components/StepModal';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 /**

@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import NextImage from 'next/image';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 /**
  * ModalContent - Content configuration for step detail modal
@@ -33,17 +33,25 @@ type StepModalProps = {
  * Features slide-up animation and escape key support
  */
 const StepModal = ({ content, onClose }: StepModalProps) => {
-  // Add escape key support
+  // Store latest onClose in ref to avoid recreating event listener
+  const onCloseRef = useRef(onClose);
+
+  // Update ref when onClose changes
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
+
+  // Add escape key support - uses ref to avoid memory leak
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        onClose();
+        onCloseRef.current();
       }
     };
 
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
-  }, [onClose]);
+  }, []); // Empty deps - listener never recreated
 
   if (!content) return null;
 
@@ -118,4 +126,4 @@ const StepModal = ({ content, onClose }: StepModalProps) => {
   );
 };
 
-export default StepModal;
+export { StepModal };

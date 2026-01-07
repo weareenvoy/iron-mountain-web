@@ -68,8 +68,18 @@ type AnimatedTextProps =
   | AnimatedTextParagraphProps;
 
 /**
+ * Runtime validation helper for button props
+ * Ensures type safety at runtime when using discriminated unions
+ */
+function isButtonProps(props: AnimatedTextProps): props is AnimatedTextButtonProps {
+  return props.as === 'button';
+}
+
+/**
  * AnimatedText - Reusable component for text elements that slide up from below
  * Used for headline, body text, and button animations that trigger together
+ * Includes runtime validation to prevent prop mismatches
+ * Uses safe type assertions for ref forwarding (TypeScript limitation with discriminated unions)
  */
 const AnimatedText = forwardRef<HTMLElement, AnimatedTextProps>((props, ref) => {
   const { as = 'p', children, className, shouldAnimate } = props;
@@ -86,9 +96,21 @@ const AnimatedText = forwardRef<HTMLElement, AnimatedTextProps>((props, ref) => 
   };
 
   if (as === 'button') {
-    const { onClick, type } = props as AnimatedTextButtonProps;
+    // Runtime validation ensures props match button variant
+    if (!isButtonProps(props)) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[AnimatedText] Invalid props for button variant', props);
+      }
+      return null;
+    }
+    const { onClick, type } = props;
     return (
-      <motion.button onClick={onClick} ref={ref as React.Ref<HTMLButtonElement>} type={type} {...animationProps}>
+      <motion.button
+        {...animationProps}
+        onClick={onClick}
+        ref={ref as React.ForwardedRef<HTMLButtonElement>}
+        type={type}
+      >
         {children}
       </motion.button>
     );
@@ -96,7 +118,7 @@ const AnimatedText = forwardRef<HTMLElement, AnimatedTextProps>((props, ref) => 
 
   if (as === 'h1') {
     return (
-      <motion.h1 ref={ref as React.Ref<HTMLHeadingElement>} {...animationProps}>
+      <motion.h1 {...animationProps} ref={ref as React.ForwardedRef<HTMLHeadingElement>}>
         {children}
       </motion.h1>
     );
@@ -104,17 +126,17 @@ const AnimatedText = forwardRef<HTMLElement, AnimatedTextProps>((props, ref) => 
 
   if (as === 'h2') {
     return (
-      <motion.h2 ref={ref as React.Ref<HTMLHeadingElement>} {...animationProps}>
+      <motion.h2 {...animationProps} ref={ref as React.ForwardedRef<HTMLHeadingElement>}>
         {children}
       </motion.h2>
     );
   }
 
   return (
-    <motion.p ref={ref as React.Ref<HTMLParagraphElement>} {...animationProps}>
+    <motion.p {...animationProps} ref={ref as React.ForwardedRef<HTMLParagraphElement>}>
       {children}
     </motion.p>
   );
 });
 
-export default AnimatedText;
+export { AnimatedText };
