@@ -81,7 +81,7 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
 
-  const activeStep = openModalIndex !== null ? normalizedSteps[openModalIndex] : null;
+  const activeStep = (openModalIndex !== null && normalizedSteps[openModalIndex]) ?? null;
   const activeModalContent: ModalContent | null = activeStep
     ? {
         body: activeStep.modal?.body ?? '',

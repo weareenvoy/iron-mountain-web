@@ -78,8 +78,6 @@ const DIAMOND_TRANSITION = {
   DURATION: 0.5,
   /** Cubic bezier easing (30 out 60 in) */
   EASE: [0.3, 0, 0.4, 1] as const,
-  /** Duration for pressed state color change */
-  PRESS_DURATION: 0.2,
 } as const;
 
 /**
@@ -123,14 +121,12 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
   const [pressedIndex, setPressedIndex] = useState<null | number>(null);
   const [transitioningIndex, setTransitioningIndex] = useState<null | number>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const slidesCacheRef = useRef<HTMLElement[]>([]);
   const transitionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const totalSlides = steps.length;
 
   /**
    * Applies transform to edge diamonds to create overlap effect
-   * Cached slide references for performance
-   * Improved error logging with context
+   * Operates on actual DOM (including Embla's cloned slides) for loop consistency
    */
   const applyEdgeTransforms = useCallback(
     (currentIndex: number) => {
@@ -139,13 +135,8 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
       }
 
       const root = emblaApi.rootNode();
-
-      // Use cached slides or refresh cache if needed
-      if (slidesCacheRef.current.length === 0) {
-        slidesCacheRef.current = Array.from(root.querySelectorAll<HTMLElement>('[data-slide-index], .embla__slide'));
-      }
-
-      const slides = slidesCacheRef.current;
+      // Query fresh on each call - no caching needed for consistency
+      const slides = root.querySelectorAll<HTMLElement>('[data-slide-index], .embla__slide');
       const half = Math.floor(totalSlides / 2);
       const rootRect = root.getBoundingClientRect();
       const rootCenter = rootRect.left + rootRect.width / 2;
@@ -153,7 +144,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
       let activeSlide: HTMLElement | null = null;
       let activeDistance = Number.POSITIVE_INFINITY;
 
-      // Find the active slide closest to center
+      // Find the active slide closest to center (handles clones)
       slides.forEach((slide: HTMLElement) => {
         const indexAttr =
           slide.dataset.slideIndex ??
@@ -206,26 +197,22 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
             ? `translate3d(${LAYOUT.EDGE_TRANSFORM_X}px, 0px, 0px)`
             : delta === EDGE_OFFSET
               ? `translate3d(-${LAYOUT.EDGE_TRANSFORM_X}px, 0px, 0px)`
-              : null;
-        slide.style.transform = transform ?? '';
+              : '';
+        slide.style.transform = transform;
       });
     },
     [emblaApi, totalSlides]
   );
 
-  // Embla event listeners
+  // Embla event listeners - update selectedIndex on scroll/select
   useEffect(() => {
     if (!emblaApi) return undefined;
     const handleSelect = () => {
       const nextIndex = emblaApi.selectedScrollSnap();
       setSelectedIndex(nextIndex);
-      // Don't call applyEdgeTransforms synchronously - RAF effect handles it
+      applyEdgeTransforms(nextIndex);
     };
-    emblaApi.on('reInit', () => {
-      // Refresh cache on reInit
-      slidesCacheRef.current = [];
-      handleSelect();
-    });
+    emblaApi.on('reInit', handleSelect);
     emblaApi.on('scroll', handleSelect);
     emblaApi.on('select', handleSelect);
     return () => {
@@ -233,9 +220,9 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
       emblaApi.off('reInit', handleSelect);
       emblaApi.off('scroll', handleSelect);
     };
-  }, [emblaApi]);
+  }, [applyEdgeTransforms, emblaApi]);
 
-  // Remove duplicate synchronous call, keep only RAF version
+  // Apply transforms on selectedIndex change with RAF for consistency
   useEffect(() => {
     if (!emblaApi) return undefined;
     const frame = requestAnimationFrame(() => {
@@ -304,7 +291,6 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
   useEffect(() => {
     return () => {
       emblaApi?.destroy();
-      slidesCacheRef.current = []; // Clear cache on unmount
     };
   }, [emblaApi]);
 
@@ -359,7 +345,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
   return (
     <div className="absolute top-[1980px] left-0 w-full overflow-visible" ref={containerRef}>
       <Carousel
-        className="w-full overflow-visible [&>div]:overflow-visible"
+        className="w-full overflow-visible [&_.embla__container]:overflow-visible [&_.embla__viewport]:overflow-visible [&>div]:overflow-visible"
         opts={{
           align: 'center',
           containScroll: false,
@@ -393,12 +379,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
 
             return (
               <CarouselItem
-                className={cn(
-                  'shrink-0 grow-0 basis-[560px] pl-0',
-                  isLeftEdge && 'translate-x-[240px]',
-                  isRightEdge && '-translate-x-[240px]',
-                  isActive && 'z-10'
-                )}
+                className={cn('shrink-0 grow-0 basis-[560px] pl-0', isActive && 'z-10')}
                 data-slide-index={idx}
                 key={step.label}
               >
