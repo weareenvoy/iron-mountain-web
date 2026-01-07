@@ -395,7 +395,13 @@ const SummitSlidesScreen = ({
 
         // Use ref to access latest slides
         const currentSlides = slidesRef.current;
-        const next = currentSlides[slideIdx]?.id ?? 'welcome';
+        const firstSlideId = currentSlides[0]?.id;
+        if (!firstSlideId) {
+          console.warn('Summit Slides: no registered slides available');
+          return;
+        }
+
+        const next = currentSlides[slideIdx]?.id ?? firstSlideId;
         setActiveSlideId(next);
       } catch (err) {
         console.error('Summit Slides: failed to parse slide message', err);
@@ -434,9 +440,9 @@ const SummitSlidesScreen = ({
 
     return (
       <StaticWelcomeSlide
-        elevation="Elevation 760 m (2,493.4 ft)"
+        elevation={requiredMeta('elevation').value}
         location={requiredMeta('location').value}
-        site="Executive Innovation Center"
+        site={requiredMeta('site').value}
         title={journeyIntroSlide.title}
         videoUrl={journeyIntroSlide.backgroundVideoUrl}
       />
