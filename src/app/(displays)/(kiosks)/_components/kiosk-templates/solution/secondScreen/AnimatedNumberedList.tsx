@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 
 type StepConfig = {
@@ -22,16 +22,22 @@ type AnimatedNumberedListProps = {
 
 /**
  * Animated numbered list component with Framer Motion animations.
- * Registers handlers with parent to control when navigation can advance.
- * Dynamically measures item heights for accurate positioning.
+ * Registers stable handlers with parent to control when navigation can advance.
+ * Dynamically measures item heights for accurate positioning using useLayoutEffect to prevent first-frame jumps.
  */
 const AnimatedNumberedList = ({ dividerHeights, onRegisterHandlers, steps }: AnimatedNumberedListProps) => {
   const [internalStepIndex, setInternalStepIndex] = useState(0);
   const [itemHeights, setItemHeights] = useState<number[]>([]);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const stepIndexRef = useRef(0);
 
-  // Measure actual item heights on mount and when steps change
+  // Keep ref in sync with state for stable handler reads
   useEffect(() => {
+    stepIndexRef.current = internalStepIndex;
+  }, [internalStepIndex]);
+
+  // Measure actual item heights synchronously before paint to prevent first-frame jump
+  useLayoutEffect(() => {
     const measuredHeights = itemRefs.current.map(ref => {
       if (!ref) return 0;
       return ref.getBoundingClientRect().height;
@@ -39,26 +45,22 @@ const AnimatedNumberedList = ({ dividerHeights, onRegisterHandlers, steps }: Ani
     setItemHeights(measuredHeights);
   }, [steps]);
 
-  // Register navigation handlers
+  // Register stable navigation handlers (no dependency on internalStepIndex)
   const scrollNext = useCallback(() => {
-    if (internalStepIndex < steps.length - 1) {
-      setInternalStepIndex(prev => prev + 1);
-    }
-  }, [internalStepIndex, steps.length]);
+    setInternalStepIndex(prev => (prev < steps.length - 1 ? prev + 1 : prev));
+  }, [steps.length]);
 
   const scrollPrev = useCallback(() => {
-    if (internalStepIndex > 0) {
-      setInternalStepIndex(prev => prev - 1);
-    }
-  }, [internalStepIndex]);
+    setInternalStepIndex(prev => (prev > 0 ? prev - 1 : prev));
+  }, []);
 
   const canScrollNext = useCallback(() => {
-    return internalStepIndex < steps.length - 1;
-  }, [internalStepIndex, steps.length]);
+    return stepIndexRef.current < steps.length - 1;
+  }, [steps.length]);
 
   const canScrollPrev = useCallback(() => {
-    return internalStepIndex > 0;
-  }, [internalStepIndex]);
+    return stepIndexRef.current > 0;
+  }, []);
 
   useEffect(() => {
     if (onRegisterHandlers) {
@@ -95,12 +97,18 @@ const AnimatedNumberedList = ({ dividerHeights, onRegisterHandlers, steps }: Ani
   };
 
   return (
-    <div className="absolute top-[1890px] left-[240px] z-[2] flex w-[1010px] flex-col gap-[60px] text-[60px] leading-[1.3] tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:top-[1860px] group-data-[kiosk=kiosk-2]/kiosk:left-[250px]">
+    <motion.div
+      animate={{ y: getYOffset() }}
+      className="absolute top-[1890px] left-[240px] z-[2] flex w-[1010px] flex-col gap-[60px] text-[60px] leading-[1.3] tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:top-[1860px] group-data-[kiosk=kiosk-2]/kiosk:left-[250px]"
+      transition={{
+        duration: 0.6,
+        ease: [0.43, 0.13, 0.23, 0.96],
+      }}
+    >
       {steps.map((step, index) => (
         <motion.div
           animate={{
             opacity: getOpacity(index),
-            y: getYOffset(),
           }}
           key={`${step.label}-${index}`}
           ref={el => {
@@ -124,13 +132,13 @@ const AnimatedNumberedList = ({ dividerHeights, onRegisterHandlers, steps }: Ani
                     '--divider-height': `${dividerHeights[index] ?? 280}px`,
                     'height': 'var(--divider-height)',
                   } as React.CSSProperties
-                } // Heights are dynamic per item and they're calculated after render in the useEffect at the top of the component which makes them runtime. This is inline because tailwind works with build time values not runtime values.
+                } // Heights are dynamic per item and they're calculated after render in the useLayoutEffect at the top of the component which makes them runtime. This is inline because tailwind works with build time values not runtime values.
               />
             </div>
           ) : null}
         </motion.div>
       ))}
-    </div>
+    </motion.div>
   );
 };
 

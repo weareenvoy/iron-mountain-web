@@ -29,6 +29,7 @@ type SolutionSecondScreenCoreProps = {
     scrollNext: () => void;
     scrollPrev: () => void;
   }) => void;
+  readonly scrollSectionId?: string;
   readonly stepFourDescription?: string;
   readonly stepFourLabel?: string;
   readonly stepOneDescription?: string;
@@ -42,6 +43,12 @@ type SolutionSecondScreenCoreProps = {
 
 type SolutionSecondScreenStepsProps = {
   readonly steps?: StepConfig[];
+  /**
+   * Design-tuned divider heights for vertical spacing between timeline steps.
+   * These are intentional design values from Figma, not derived from content.
+   * Each value corresponds to the divider after that step index.
+   * Defaults to [668, 250, 250] if not provided or if array is shorter than steps.length - 1.
+   */
   readonly stepsDividerHeights?: number[];
 };
 
@@ -52,6 +59,7 @@ const SolutionSecondScreenTemplate = memo(
     labelText,
     numberedListHeadline,
     onRegisterListHandlers,
+    scrollSectionId,
     stepFourDescription,
     stepFourLabel,
     stepOneDescription,
@@ -86,7 +94,7 @@ const SolutionSecondScreenTemplate = memo(
     return (
       <div
         className="relative flex h-screen w-full flex-col overflow-visible bg-transparent"
-        data-scroll-section="solution-second-group"
+        data-scroll-section={scrollSectionId ?? 'solution-second-group'}
       >
         {/* Gradient backdrop */}
         <div className="absolute top-[-296px] left-0 h-[14575px] w-full rounded-t-[100px] bg-transparent" />

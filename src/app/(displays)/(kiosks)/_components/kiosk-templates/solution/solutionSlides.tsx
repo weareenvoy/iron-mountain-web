@@ -68,6 +68,7 @@ export const buildSolutionSlides = (
         : [];
 
   secondScreens.forEach((config, idx) => {
+    const scrollSectionId = `solution-second-group-${idx}`;
     slides.push(
       createSlide(
         {
@@ -76,6 +77,7 @@ export const buildSolutionSlides = (
           props: {
             ...config,
             onRegisterListHandlers: handlers.onRegisterListHandlers,
+            scrollSectionId,
           },
           title: config.numberedListHeadline
             ? Array.isArray(config.numberedListHeadline)
