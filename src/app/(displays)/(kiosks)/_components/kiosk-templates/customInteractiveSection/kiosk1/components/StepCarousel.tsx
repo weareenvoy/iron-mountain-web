@@ -237,7 +237,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
               >
                 <div className="flex flex-col items-center gap-[28px]">
                   <button
-                    className="relative z-1 flex items-center justify-center"
+                    className="relative z-1 flex items-center justify-center active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.4,0,0.2,1)]"
                     data-idx={idx}
                     onClick={handleDiamondClick}
                     type="button"
@@ -284,19 +284,19 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
         <div className="pointer-events-none absolute inset-x-0 bottom-[-290px] flex items-center justify-center gap-[48px]">
           <button
             aria-label="Previous"
-            className="pointer-events-auto mr-[25px] flex h-[102px] w-[102px] items-center justify-center text-white transition-transform duration-150 hover:scale-110"
+            className="group pointer-events-auto mr-[25px] flex h-[102px] w-[102px] items-center justify-center text-white transition-transform duration-150 hover:scale-110 active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.4,0,0.2,1)]"
             onClick={handlePrev}
             type="button"
           >
-            <ChevronLeft className="h-[102px] w-[102px]" />
+            <ChevronLeft className="h-[102px] w-[102px] group-active:opacity-40 group-active:transition-opacity group-active:duration-[60ms] group-active:ease-[cubic-bezier(0.4,0,0.2,1)]" />
           </button>
           <button
             aria-label="Next"
-            className="pointer-events-auto ml-[25px] flex h-[102px] w-[102px] items-center justify-center text-white transition-transform duration-150 hover:scale-110"
+            className="group pointer-events-auto ml-[25px] flex h-[102px] w-[102px] items-center justify-center text-white transition-transform duration-150 hover:scale-110 active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.4,0,0.2,1)]"
             onClick={handleNext}
             type="button"
           >
-            <ChevronRight className="h-[102px] w-[102px]" />
+            <ChevronRight className="h-[102px] w-[102px] group-active:opacity-40 group-active:transition-opacity group-active:duration-[60ms] group-active:ease-[cubic-bezier(0.4,0,0.2,1)]" />
           </button>
         </div>
       </Carousel>

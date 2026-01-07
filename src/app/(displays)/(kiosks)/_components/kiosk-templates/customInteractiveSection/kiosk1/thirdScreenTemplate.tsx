@@ -32,7 +32,7 @@ const CustomInteractiveKiosk1ThirdScreenTemplate = ({
 
       <div className="absolute top-[1290px] left-[120px] h-[1080px] w-[1920px] rounded-[20px] bg-[#e0e0e0] shadow-[0_40px_120px_rgba(0,0,0,0.45)]">
         <button
-          className="flex h-full w-full items-center justify-center rounded-[20px] text-[80px] leading-[1.3] font-normal tracking-[-4px] text-[#4a4a4a]"
+          className="flex h-full w-full items-center justify-center rounded-[20px] text-[80px] leading-[1.3] font-normal tracking-[-4px] text-[#4a4a4a] active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.4,0,0.2,1)]"
           onClick={onCta}
           type="button"
         >

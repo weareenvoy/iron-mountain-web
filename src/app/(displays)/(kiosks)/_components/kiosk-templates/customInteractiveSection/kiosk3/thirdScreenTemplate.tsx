@@ -114,12 +114,16 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
 
               {/* CTA */}
               <button
-                className="absolute top-[2630px] left-[240px] z-10 flex h-[200px] items-center gap-[18px] rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[110px] text-[55px] leading-[1.1] font-semibold tracking-[2px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)]"
+                className="group absolute top-[2630px] left-[240px] z-10 flex h-[200px] items-center gap-[18px] rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[110px] text-[55px] leading-[1.1] font-semibold tracking-[2px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.4,0,0.2,1)]"
                 onClick={handleShowOverlay}
                 type="button"
               >
                 Launch demo
-                <SquarePlay aria-hidden className="ml-[40px] h-[90px] w-[90px]" strokeWidth={2} />
+                <SquarePlay
+                  aria-hidden
+                  className="ml-[40px] h-[90px] w-[90px] group-active:opacity-40 group-active:transition-opacity group-active:duration-[60ms] group-active:ease-[cubic-bezier(0.4,0,0.2,1)]"
+                  strokeWidth={2}
+                />
               </button>
 
               {/* Primary Diamond */}

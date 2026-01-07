@@ -159,7 +159,7 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
           >
             <div
               aria-label="Previous"
-              className="flex cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95"
+              className="flex cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95 active:opacity-40 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.4,0,0.2,1)]"
               onPointerDown={handleNavigateUp}
               role="button"
               style={{
@@ -178,7 +178,7 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
             </div>
             <div
               aria-label="Next"
-              className="flex cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95"
+              className="flex cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95 active:opacity-40 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.4,0,0.2,1)]"
               onPointerDown={handleNavigateDown}
               role="button"
               style={{

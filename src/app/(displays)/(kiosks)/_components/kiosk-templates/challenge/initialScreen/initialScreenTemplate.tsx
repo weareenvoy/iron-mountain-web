@@ -78,14 +78,14 @@ const InitialScreenTemplate = memo(
           <div className="relative top-[190px] flex w-full flex-col items-start justify-center gap-[10px] group-data-[kiosk=kiosk-2]/kiosk:top-0 group-data-[kiosk=kiosk-3]/kiosk:top-[-220px]">
             <button
               aria-label={buttonText}
-              className="flex h-[200px] items-center justify-center gap-[60px] rounded-[999px] bg-[#ededed] px-[100px] py-[70px] text-left backdrop-blur-[19px] transition-all duration-300 ease-out group-data-[kiosk=kiosk-2]/kiosk:px-[110px] hover:scale-[1.05] hover:shadow-[0_8px_24px_rgba(0,0,0,0.15)] active:scale-[0.98]"
+              className="group flex h-[200px] items-center justify-center gap-[60px] rounded-[999px] bg-[#ededed] px-[100px] py-[70px] text-left backdrop-blur-[19px] transition-all duration-300 ease-out group-data-[kiosk=kiosk-2]/kiosk:px-[110px] hover:scale-[1.05] hover:shadow-[0_8px_24px_rgba(0,0,0,0.15)] active:scale-[0.98] active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.4,0,0.2,1)]"
               data-name="button_default"
               onClick={onButtonClick}
             >
               <span className="text-[60.792px] leading-none font-normal tracking-[-1.8238px] whitespace-nowrap text-[#14477d]">
                 {renderRegisteredMark(buttonText)}
               </span>
-              <div className="relative flex h-[60px] w-[120px] items-center justify-center">
+              <div className="relative flex h-[60px] w-[120px] items-center justify-center group-active:opacity-40 group-active:transition-opacity group-active:duration-[60ms] group-active:ease-[cubic-bezier(0.4,0,0.2,1)]">
                 {arrowIconSrc ? (
                   <Image
                     alt=""
