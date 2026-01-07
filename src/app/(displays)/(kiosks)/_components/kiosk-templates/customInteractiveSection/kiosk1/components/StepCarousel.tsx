@@ -5,7 +5,6 @@ import { ChevronLeft, ChevronRight, CirclePlus } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/shadcn/carousel';
 import HCBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCBlueDiamond';
-import HCWhiteDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCWhiteDiamond';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import type { UseEmblaCarouselType } from 'embla-carousel-react';
 
@@ -53,6 +52,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
   const hasAppliedInitialAlignment = useRef(false);
   const [selectedIndex, setSelectedIndex] = useState(() => Math.min(steps.length - 1, INITIAL_CENTER_INDEX));
   const [shouldAnimate, setShouldAnimate] = useState(false);
+  const [pressedIndex, setPressedIndex] = useState<null | number>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const totalSlides = steps.length;
 
@@ -309,6 +309,10 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                     className="relative z-1 flex items-center justify-center"
                     data-idx={idx}
                     onClick={handleDiamondClick}
+                    onPointerCancel={() => setPressedIndex(null)}
+                    onPointerDown={() => isActive && setPressedIndex(idx)}
+                    onPointerLeave={() => setPressedIndex(null)}
+                    onPointerUp={() => setPressedIndex(null)}
                     type="button"
                   >
                     {/* Fixed outer container prevents layout shift, inner container animates size */}
@@ -328,7 +332,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                           ease: DIAMOND_TRANSITION.EASE,
                         }}
                       >
-                        {/* White Diamond (Active) - cross-fades in when active */}
+                        {/* White Diamond (Active) - cross-fades in when active, color changes when pressed */}
                         <motion.div
                           animate={{ opacity: isActive ? 1 : 0 }}
                           className="absolute inset-0 flex items-center justify-center"
@@ -338,7 +342,27 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                             ease: DIAMOND_TRANSITION.EASE,
                           }}
                         >
-                          <HCWhiteDiamond aria-hidden="true" className="h-full w-full" focusable="false" />
+                          <motion.svg
+                            aria-hidden="true"
+                            className="h-full w-full"
+                            fill="none"
+                            focusable="false"
+                            height="880"
+                            preserveAspectRatio="xMidYMid meet"
+                            viewBox="0 0 880 880"
+                            width="880"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <motion.path
+                              animate={{ fill: pressedIndex === idx ? '#78d5f7' : '#EDEDED' }}
+                              d="M398.117 17.332 17.329 398.12c-23.11 23.11-23.11 60.579 0 83.689l380.788 380.788c23.11 23.11 60.579 23.11 83.689 0l380.788-380.788c23.11-23.11 23.11-60.579 0-83.689L481.806 17.332c-23.11-23.11-60.579-23.11-83.689 0Z"
+                              initial={{ fill: '#EDEDED' }}
+                              transition={{
+                                duration: 0.2,
+                                ease: DIAMOND_TRANSITION.EASE,
+                              }}
+                            />
+                          </motion.svg>
                         </motion.div>
                         {/* Blue Diamond (Inactive) - cross-fades in when inactive */}
                         <motion.div
