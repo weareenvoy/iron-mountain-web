@@ -5,7 +5,9 @@
       "meta": [
         { "label": "Company", "value": "Boyer-Boyer" },
         { "label": "Date of engagement", "value": "24/12/2025" },
-        { "label": "Location", "value": "São Paulo, BR" }
+        { "label": "Elevation", "value": "Elevation 760 m (2,493.4 ft)" },
+        { "label": "Location", "value": "São Paulo, BR" },
+        { "label": "Site", "value": "Executive Innovation Center" }
       ],
       "basecamp": {
         "possibilities": { "title": "Discover new possibilities" },
