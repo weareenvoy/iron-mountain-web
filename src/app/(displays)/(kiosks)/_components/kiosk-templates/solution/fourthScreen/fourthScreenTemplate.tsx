@@ -150,7 +150,7 @@ const SolutionFourthScreenTemplate = ({
       {/* Decorative diamonds */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 h-full w-full [mask-image:linear-gradient(#fff_0%,#fff_calc(100%-140px),transparent_calc(100%-75px),transparent_100%)] [-webkit-mask-image:linear-gradient(#fff_0%,#fff_calc(100%-10px),transparent_calc(100%-75px),transparent_100%)]"
+        className="pointer-events-none z-[1] absolute inset-0 h-full w-full [mask-image:linear-gradient(#fff_0%,#fff_calc(100%-140px),transparent_calc(100%-75px),transparent_100%)] [-webkit-mask-image:linear-gradient(#fff_0%,#fff_calc(100%-10px),transparent_calc(100%-75px),transparent_100%)]"
       >
         <div className="pointer-events-none absolute top-[3610px] left-[240px] h-[880px] w-[880px]">
           {mediaDiamondOutlineSrc ? (
