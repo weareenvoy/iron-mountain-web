@@ -5,9 +5,13 @@ import { ChevronLeft, ChevronRight, CirclePlus } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/shadcn/carousel';
 import HCBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCBlueDiamond';
+import HCWhiteDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCWhiteDiamond';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import type { UseEmblaCarouselType } from 'embla-carousel-react';
 
+/**
+ * Step configuration for carousel items
+ */
 export type Step = {
   readonly label: string;
   readonly modal?: {
@@ -25,43 +29,147 @@ type StepCarouselProps = {
   readonly steps: readonly Step[];
 };
 
-const INITIAL_CENTER_INDEX = 2;
-const EDGE_OFFSET = 2; // This helps to catch what the carousel items on the far left and right are since they're 2 spots away from the active item in the center. (5 items total). The items on the far left and right have specific sizes which this helps to adjust further in the code.
+/**
+ * Layout constants derived from Figma designs
+ * @see https://www.figma.com/design/[project-id] (Custom Interactive Section)
+ */
+const LAYOUT = {
+  /** Number of visible carousel items at once */
+  CAROUSEL_VISIBLE_ITEMS: 5,
+  /** Size of diamonds at left/right edges (±2 from center) */
+  DIAMOND_SIZE_EDGE: 440,
+  /** Size of diamonds adjacent to center (±1 from center) */
+  DIAMOND_SIZE_MIDDLE: 640,
+  /** Size of active diamond in center */
+  DIAMOND_SIZE_ACTIVE: 880,
+  /** Offset to push edge diamonds toward center for overlap effect */
+  EDGE_TRANSFORM_X: 240,
+  /** Gap between carousel items */
+  GAP: 60,
+  /** Gap between diamond button and label text below */
+  ITEM_VERTICAL_GAP: 28,
+  /** Starting carousel index (0-based) */
+  INITIAL_CENTER_INDEX: 2,
+} as const;
 
-// Animation configuration for staggered diamond entrance
+/**
+ * Z-index scale for carousel layering
+ * Ensures proper stacking without conflicts
+ */
+const Z_INDEX = {
+  /** Active carousel item (centered diamond) */
+  ACTIVE_ITEM: 10,
+  /** Diamond buttons within items */
+  DIAMOND_BUTTON: 1,
+} as const;
+
+/**
+ * Animation configuration for staggered diamond entrance
+ * Diamonds animate from high Y positions (off-screen above) to their natural positions
+ */
 const DIAMOND_ANIMATION = {
-  // Center diamond: minimal movement, shortest delay
+  /** Center diamond: minimal movement, shortest delay */
   CENTER: { delay: 0.3, startY: -120 },
-  // Animation duration and easing (30 out 60 in)
+  /** Animation duration for all diamonds */
   DURATION: 0.8,
+  /** Cubic bezier easing (30 out 60 in) */
   EASE: [0.3, 0, 0.4, 1] as const,
-  // Next pair (±1): medium starting Y, medium delay
+  /** Middle pair (±1): medium starting Y, medium delay */
   MIDDLE: { delay: 0.15, startY: -350 },
-  // Outermost diamonds (±2): highest starting Y, longest delay
+  /** Outermost diamonds (±2): highest starting Y, longest delay */
   OUTER: { delay: 0, startY: -550 },
 } as const;
 
-// Animation configuration for diamond color/size transitions (active/inactive)
+/**
+ * Animation configuration for diamond color/size transitions (active/inactive)
+ */
 const DIAMOND_TRANSITION = {
+  /** Duration for diamond size/color/opacity transitions */
   DURATION: 0.5,
-  EASE: [0.3, 0, 0.4, 1] as const, // 30 out 60 in easing
+  /** Cubic bezier easing (30 out 60 in) */
+  EASE: [0.3, 0, 0.4, 1] as const,
+  /** Duration for pressed state color change */
+  PRESS_DURATION: 0.2,
 } as const;
 
+/**
+ * Diamond color palette
+ */
+const DIAMOND_COLORS = {
+  /** Active state (when pressed/clicked) */
+  ACTIVE_PRESSED: '#78d5f7',
+  /** Inactive state */
+  INACTIVE: '#EDEDED',
+  /** Active text color */
+  TEXT_ACTIVE: '#14477d',
+  /** Inactive text color */
+  TEXT_INACTIVE: '#ededed',
+} as const;
+
+/**
+ * Font size configuration for diamond labels
+ * Using scale transform instead of fontSize for better performance
+ */
+const LABEL_SCALE = {
+  ACTIVE: 1, // 61px equivalent (base font is 61px)
+  INACTIVE: 0.7049, // 43px equivalent (43/61 ≈ 0.7049)
+} as const;
+
+/**
+ * Distance from center to identify edge slides
+ * With 5 total items, edge offset of 2 catches items at ±2 positions
+ */
+const EDGE_OFFSET = 2;
+
+/**
+ * StepCarousel - Horizontally scrolling carousel of diamond-shaped steps
+ * Features staggered entrance animations, size/color transitions, and modal integration
+ */
 const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
   const [emblaApi, setEmblaApi] = useState<EmblaApi | undefined>(undefined);
   const hasAppliedInitialAlignment = useRef(false);
-  const [selectedIndex, setSelectedIndex] = useState(() => Math.min(steps.length - 1, INITIAL_CENTER_INDEX));
+  const [selectedIndex, setSelectedIndex] = useState(() => Math.min(steps.length - 1, LAYOUT.INITIAL_CENTER_INDEX));
   const [shouldAnimate, setShouldAnimate] = useState(false);
   const [pressedIndex, setPressedIndex] = useState<null | number>(null);
+  const [transitioningIndex, setTransitioningIndex] = useState<null | number>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const slidesCacheRef = useRef<HTMLElement[]>([]);
   const totalSlides = steps.length;
 
-  // The function below takes the two diamonds in the diamond carousel and pushes them towards the center by 240px to have them overlap with the two diamonds that are directly to the left and right of the active center diamond. This keeps the intended layout in Figma.
+  // Early return for empty steps
+  if (steps.length === 0) {
+    return (
+      <div className="absolute top-[1980px] left-0 flex w-full items-center justify-center">
+        <p className="text-[52px] leading-[1.4] font-normal tracking-[-2.6px] text-[#ededed]">No steps available</p>
+      </div>
+    );
+  }
+
+  /**
+   * Applies transform to edge diamonds to create overlap effect
+   * Cached slide references for performance
+   * Improved error logging with context
+   */
   const applyEdgeTransforms = useCallback(
     (currentIndex: number) => {
-      if (!emblaApi?.rootNode || totalSlides === 0) return;
+      if (!emblaApi?.rootNode || totalSlides === 0) {
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('[StepCarousel] applyEdgeTransforms: Missing emblaApi or empty slides', {
+            hasApi: !!emblaApi,
+            totalSlides,
+          });
+        }
+        return;
+      }
+
       const root = emblaApi.rootNode();
-      const slides = root.querySelectorAll<HTMLElement>('[data-slide-index], .embla__slide');
+
+      // Use cached slides or refresh cache if needed
+      if (slidesCacheRef.current.length === 0) {
+        slidesCacheRef.current = Array.from(root.querySelectorAll<HTMLElement>('[data-slide-index], .embla__slide'));
+      }
+
+      const slides = slidesCacheRef.current;
       const half = Math.floor(totalSlides / 2);
       const rootRect = root.getBoundingClientRect();
       const rootCenter = rootRect.left + rootRect.width / 2;
@@ -69,13 +177,19 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
       let activeSlide: HTMLElement | null = null;
       let activeDistance = Number.POSITIVE_INFINITY;
 
+      // Find the active slide closest to center
       slides.forEach((slide: HTMLElement) => {
         const indexAttr =
           slide.dataset.slideIndex ??
           slide.getAttribute('data-embla-slide-index') ??
           slide.getAttribute('data-embla-index');
         const rawIndex = Number(indexAttr);
-        if (Number.isNaN(rawIndex)) return;
+        if (Number.isNaN(rawIndex)) {
+          if (process.env.NODE_ENV === 'development') {
+            console.warn('[StepCarousel] Slide missing valid index attribute', { slide, indexAttr });
+          }
+          return;
+        }
         const normalizedIndex = ((rawIndex % totalSlides) + totalSlides) % totalSlides;
         if (normalizedIndex !== currentIndex) return;
         const slideRect = slide.getBoundingClientRect();
@@ -87,6 +201,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
         }
       });
 
+      // Apply transforms to push edge diamonds toward center
       slides.forEach((slide: HTMLElement) => {
         const indexAttr =
           slide.dataset.slideIndex ??
@@ -115,9 +230,9 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
 
         const transform =
           delta === -EDGE_OFFSET
-            ? 'translate3d(240px, 0px, 0px)'
+            ? `translate3d(${LAYOUT.EDGE_TRANSFORM_X}px, 0px, 0px)`
             : delta === EDGE_OFFSET
-              ? 'translate3d(-240px, 0px, 0px)'
+              ? `translate3d(-${LAYOUT.EDGE_TRANSFORM_X}px, 0px, 0px)`
               : '';
         slide.style.transform = transform;
       });
@@ -125,6 +240,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
     [emblaApi, totalSlides]
   );
 
+  // Embla event listeners
   useEffect(() => {
     if (!emblaApi) return undefined;
     const handleSelect = () => {
@@ -132,7 +248,11 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
       setSelectedIndex(nextIndex);
       applyEdgeTransforms(nextIndex);
     };
-    emblaApi.on('reInit', handleSelect);
+    emblaApi.on('reInit', () => {
+      // Refresh cache on reInit
+      slidesCacheRef.current = [];
+      handleSelect();
+    });
     emblaApi.on('scroll', handleSelect);
     emblaApi.on('select', handleSelect);
     return () => {
@@ -142,10 +262,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
     };
   }, [applyEdgeTransforms, emblaApi]);
 
-  useEffect(() => {
-    applyEdgeTransforms(selectedIndex);
-  }, [applyEdgeTransforms, selectedIndex]);
-
+  // Remove duplicate synchronous call, keep only RAF version
   useEffect(() => {
     if (!emblaApi) return undefined;
     const frame = requestAnimationFrame(() => {
@@ -154,17 +271,23 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
     return () => cancelAnimationFrame(frame);
   }, [applyEdgeTransforms, emblaApi, selectedIndex]);
 
+  // Initial alignment
   useEffect(() => {
     if (!emblaApi || totalSlides === 0 || hasAppliedInitialAlignment.current) return;
-    const desiredIndex = Math.min(totalSlides - 1, INITIAL_CENTER_INDEX);
+    const desiredIndex = Math.min(totalSlides - 1, LAYOUT.INITIAL_CENTER_INDEX);
     hasAppliedInitialAlignment.current = true;
     emblaApi.scrollTo(desiredIndex, true);
   }, [applyEdgeTransforms, emblaApi, totalSlides]);
 
-  // Detect when carousel becomes visible to trigger animations
+  /**
+   * Detect when carousel becomes visible to trigger animations
+   * Properly handles unmount/remount cycles
+   */
   useEffect(() => {
     const currentContainer = containerRef.current;
     if (!currentContainer) return;
+
+    setShouldAnimate(false); // Reset on mount
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -175,7 +298,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
       {
         root: null,
         rootMargin: '0px',
-        threshold: 0.3, // Trigger when 30% visible
+        threshold: 0.3,
       }
     );
 
@@ -183,6 +306,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
 
     return () => {
       observer.disconnect();
+      setShouldAnimate(false); // Reset on unmount
     };
   }, []);
 
@@ -190,6 +314,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
   useEffect(() => {
     return () => {
       emblaApi?.destroy();
+      slidesCacheRef.current = []; // Clear cache on unmount
     };
   }, [emblaApi]);
 
@@ -205,28 +330,67 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
     emblaApi.scrollTo(target);
   };
 
+  /**
+   * Stabilized callback - doesn't depend on emblaApi identity
+   */
   const handleDiamondClick = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
       const idx = Number(event.currentTarget.dataset.idx);
-      if (!emblaApi || Number.isNaN(idx)) return;
+      if (Number.isNaN(idx)) {
+        if (process.env.NODE_ENV === 'development') {
+          console.error('[StepCarousel] handleDiamondClick: Invalid index', {
+            dataIdx: event.currentTarget.dataset.idx,
+            target: event.currentTarget,
+          });
+        }
+        return;
+      }
+      if (!emblaApi) {
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('[StepCarousel] handleDiamondClick: emblaApi not initialized');
+        }
+        return;
+      }
       emblaApi.scrollTo(idx);
     },
     [emblaApi]
   );
 
+  /**
+   * Handle plus icon click with transition tracking
+   */
   const handlePlusClick = useCallback(
     (event: React.KeyboardEvent | React.MouseEvent) => {
       // Type guard for currentTarget
       if (!(event.currentTarget instanceof HTMLElement)) {
         if (process.env.NODE_ENV === 'development') {
-          console.error('currentTarget is not an HTMLElement');
+          console.error('[StepCarousel] handlePlusClick: currentTarget is not an HTMLElement', {
+            currentTarget: event.currentTarget,
+            type: typeof event.currentTarget,
+          });
         }
         return;
       }
 
       const target = event.currentTarget;
       const idx = Number(target.dataset.idx);
-      if (Number.isNaN(idx)) return;
+      if (Number.isNaN(idx)) {
+        if (process.env.NODE_ENV === 'development') {
+          console.error('[StepCarousel] handlePlusClick: Invalid index', {
+            dataIdx: target.dataset.idx,
+            target,
+          });
+        }
+        return;
+      }
+
+      // Don't allow modal open during transition
+      if (transitioningIndex !== null) {
+        if (process.env.NODE_ENV === 'development') {
+          console.log('[StepCarousel] handlePlusClick: Blocked during transition', { transitioningIndex });
+        }
+        return;
+      }
 
       event.stopPropagation();
       if ('key' in event && event.key !== 'Enter' && event.key !== ' ') {
@@ -237,7 +401,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
       }
       onStepClick(idx);
     },
-    [onStepClick]
+    [onStepClick, transitioningIndex]
   );
 
   return (
@@ -250,22 +414,22 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
           dragFree: false,
           loop: true,
           slidesToScroll: 1,
-          startIndex: Math.min(steps.length - 1, INITIAL_CENTER_INDEX),
+          startIndex: Math.min(steps.length - 1, LAYOUT.INITIAL_CENTER_INDEX),
         }}
         setApi={setEmblaApi}
       >
-        <CarouselContent className="flex items-center gap-[60px] overflow-visible px-0">
+        <CarouselContent className={`flex items-center gap-[${LAYOUT.GAP}px] overflow-visible px-0`}>
           {steps.map((step, idx) => {
             const isActive = idx === selectedIndex;
             const leftIndex = (selectedIndex - EDGE_OFFSET + totalSlides) % totalSlides;
             const rightIndex = (selectedIndex + EDGE_OFFSET) % totalSlides;
             const isLeftEdge = idx === leftIndex;
             const isRightEdge = idx === rightIndex;
-            const inactiveSize = isLeftEdge || isRightEdge ? 440 : 640;
+            const inactiveSize = isLeftEdge || isRightEdge ? LAYOUT.DIAMOND_SIZE_EDGE : LAYOUT.DIAMOND_SIZE_MIDDLE;
             const itemTransform = isLeftEdge
-              ? 'translate3d(240px, 0px, 0px)'
+              ? `translate3d(${LAYOUT.EDGE_TRANSFORM_X}px, 0px, 0px)`
               : isRightEdge
-                ? 'translate3d(-240px, 0px, 0px)'
+                ? `translate3d(-${LAYOUT.EDGE_TRANSFORM_X}px, 0px, 0px)`
                 : undefined;
 
             // Determine animation config based on position relative to center
@@ -289,15 +453,14 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                   itemTransform || isActive
                     ? {
                         transform: itemTransform,
-                        zIndex: isActive ? 10 : undefined,
+                        zIndex: isActive ? Z_INDEX.ACTIVE_ITEM : undefined,
                       }
                     : undefined
                 }
-                // These styles are inline because the transform values for the carousel are computed at runtime based on carousel position, conditional z indexes based on active state would also require complex class logic.
               >
                 <motion.div
                   animate={shouldAnimate ? { y: 0 } : { y: animConfig.startY }}
-                  className="flex flex-col items-center gap-[28px] will-change-transform"
+                  className={`flex flex-col items-center gap-[${LAYOUT.ITEM_VERTICAL_GAP}px] will-change-transform`}
                   initial={{ y: animConfig.startY }}
                   transition={{
                     delay: animConfig.delay,
@@ -306,7 +469,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                   }}
                 >
                   <button
-                    className="relative z-1 flex items-center justify-center"
+                    className={`relative z-${Z_INDEX.DIAMOND_BUTTON} flex items-center justify-center`}
                     data-idx={idx}
                     onClick={handleDiamondClick}
                     onPointerCancel={() => setPressedIndex(null)}
@@ -316,22 +479,27 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                     type="button"
                   >
                     {/* Fixed outer container prevents layout shift, inner container animates size */}
-                    <div className="flex h-[880px] w-[880px] items-center justify-center">
+                    <div
+                      className={`flex h-[${LAYOUT.DIAMOND_SIZE_ACTIVE}px] w-[${LAYOUT.DIAMOND_SIZE_ACTIVE}px] items-center justify-center`}
+                    >
                       <motion.div
                         animate={{
-                          height: isActive ? 880 : inactiveSize,
-                          width: isActive ? 880 : inactiveSize,
+                          height: isActive ? LAYOUT.DIAMOND_SIZE_ACTIVE : inactiveSize,
+                          width: isActive ? LAYOUT.DIAMOND_SIZE_ACTIVE : inactiveSize,
                         }}
                         className="relative flex items-center justify-center"
                         initial={{
-                          height: isActive ? 880 : inactiveSize,
-                          width: isActive ? 880 : inactiveSize,
+                          height: isActive ? LAYOUT.DIAMOND_SIZE_ACTIVE : inactiveSize,
+                          width: isActive ? LAYOUT.DIAMOND_SIZE_ACTIVE : inactiveSize,
                         }}
+                        onAnimationStart={() => setTransitioningIndex(idx)}
+                        onAnimationComplete={() => setTransitioningIndex(null)}
                         transition={{
                           duration: DIAMOND_TRANSITION.DURATION,
                           ease: DIAMOND_TRANSITION.EASE,
                         }}
                       >
+                        {/* Use HCWhiteDiamond component instead of inline SVG */}
                         {/* White Diamond (Active) - cross-fades in when active, color changes when pressed */}
                         <motion.div
                           animate={{ opacity: isActive ? 1 : 0 }}
@@ -342,27 +510,12 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                             ease: DIAMOND_TRANSITION.EASE,
                           }}
                         >
-                          <motion.svg
+                          <HCWhiteDiamond
                             aria-hidden="true"
                             className="h-full w-full"
-                            fill="none"
+                            fill={pressedIndex === idx ? DIAMOND_COLORS.ACTIVE_PRESSED : DIAMOND_COLORS.INACTIVE}
                             focusable="false"
-                            height="880"
-                            preserveAspectRatio="xMidYMid meet"
-                            viewBox="0 0 880 880"
-                            width="880"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <motion.path
-                              animate={{ fill: pressedIndex === idx ? '#78d5f7' : '#EDEDED' }}
-                              d="M398.117 17.332 17.329 398.12c-23.11 23.11-23.11 60.579 0 83.689l380.788 380.788c23.11 23.11 60.579 23.11 83.689 0l380.788-380.788c23.11-23.11 23.11-60.579 0-83.689L481.806 17.332c-23.11-23.11-60.579-23.11-83.689 0Z"
-                              initial={{ fill: '#EDEDED' }}
-                              transition={{
-                                duration: 0.2,
-                                ease: DIAMOND_TRANSITION.EASE,
-                              }}
-                            />
-                          </motion.svg>
+                          />
                         </motion.div>
                         {/* Blue Diamond (Inactive) - cross-fades in when inactive */}
                         <motion.div
@@ -379,16 +532,18 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                       </motion.div>
                     </div>
                     <div className="absolute inset-0 flex items-center justify-center px-8 text-center">
+                      {/* Use scale transform instead of fontSize animation */}
                       <motion.span
                         animate={{
-                          color: isActive ? '#14477d' : '#ededed',
-                          fontSize: isActive ? '61px' : '43px',
+                          color: isActive ? DIAMOND_COLORS.TEXT_ACTIVE : DIAMOND_COLORS.TEXT_INACTIVE,
+                          scale: isActive ? LABEL_SCALE.ACTIVE : LABEL_SCALE.INACTIVE,
                         }}
                         className={
                           isActive
-                            ? 'w-[340px] leading-[1.3] tracking-[-3px]'
-                            : 'w-[300px] leading-[1.3] tracking-[-2.1px]'
+                            ? 'w-[340px] text-[61px] leading-[1.3] tracking-[-3px]'
+                            : 'w-[300px] text-[61px] leading-[1.3] tracking-[-2.1px]'
                         }
+                        style={{ originX: 0.5, originY: 0.5 }}
                         transition={{
                           duration: DIAMOND_TRANSITION.DURATION,
                           ease: DIAMOND_TRANSITION.EASE,

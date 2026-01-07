@@ -1,6 +1,6 @@
 'use client';
 
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { SquarePlay } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
@@ -8,35 +8,51 @@ import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_comp
 import { cn } from '@/lib/tailwind/utils/cn';
 import { normalizeText } from '@/lib/utils/normalize-text';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
+import AnimatedText from './components/AnimatedText';
 import StepCarousel, { type Step } from './components/StepCarousel';
 import StepModal, { type ModalContent } from './components/StepModal';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
-// Animation configuration for text/button entrance from below
-const TEXT_ANIMATION = {
-  DELAY: 0.4, // Starts after center diamond begins moving
-  DURATION: 0.8,
-  EASE: [0.3, 0, 0.4, 1] as const, // 30 out 60 in easing
-  START_Y: 550, // Animates UP from far below (bleeds significantly into diamonds area)
-} as const;
-
+/**
+ * Props for Custom Interactive Kiosk 1 Second Screen Template
+ */
 export type CustomInteractiveKiosk1SecondScreenTemplateProps = {
+  /** URL for demo iframe content */
   readonly demoIframeSrc?: string;
+  /** Small heading above main headline */
   readonly eyebrow?: string;
+  /** Main headline text */
   readonly headline?: string;
+  /** Hero image alt text for demo overlay */
   readonly heroImageAlt?: string;
+  /** Hero image source for demo overlay */
   readonly heroImageSrc?: string;
+  /** Kiosk identifier for layout adjustments */
   readonly kioskId?: KioskId;
+  /** Callback when back button is pressed */
   readonly onBack?: () => void;
+  /** Callback when secondary CTA is clicked */
   readonly onSecondaryCta?: () => void;
+  /** Label for overlay card */
   readonly overlayCardLabel?: string;
+  /** Label for end tour button */
   readonly overlayEndTourLabel?: string;
+  /** Headline for overlay screen */
   readonly overlayHeadline?: string;
+  /** Body text below headline (extracted from hardcoded string) */
+  readonly bodyText?: string;
+  /** Label for secondary CTA button */
   readonly secondaryCtaLabel?: string;
+  /** Array of carousel steps */
   readonly steps?: readonly Step[];
 };
 
+/**
+ * CustomInteractiveKiosk1SecondScreenTemplate - Second screen for custom interactive kiosk
+ * Features animated headline/body/button and diamond carousel with modal details
+ */
 const CustomInteractiveKiosk1SecondScreenTemplate = ({
+  bodyText = 'Explore each section to learn how Iron Mountain can transform your enterprise',
   demoIframeSrc,
   eyebrow,
   headline,
@@ -58,7 +74,6 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
 
   const [openModalIndex, setOpenModalIndex] = useState<null | number>(null);
   const [showOverlay, setShowOverlay] = useState(false);
-  const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
   const [shouldAnimateText, setShouldAnimateText] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
@@ -78,11 +93,9 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
     onSecondaryCta?.();
   };
 
-  useEffect(() => {
-    setPortalTarget(containerRef.current);
-  }, []);
-
-  // Detect when text/button become visible to trigger animations
+  /**
+   * Detect when text/button become visible to trigger animations
+   */
   useEffect(() => {
     const currentHeadline = headlineRef.current;
     if (!currentHeadline) return;
@@ -138,43 +151,30 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
           {renderRegisteredMark(eyebrowText)}
         </h2>
 
-        <motion.h1
-          animate={shouldAnimateText ? { y: 0 } : { y: TEXT_ANIMATION.START_Y }}
+        {/* Use AnimatedText component for consistent animation */}
+        <AnimatedText
+          as="h1"
           className="absolute top-[830px] left-[240px] z-0 w-full text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed] will-change-transform"
-          initial={{ y: TEXT_ANIMATION.START_Y }}
           ref={headlineRef}
-          transition={{
-            delay: TEXT_ANIMATION.DELAY,
-            duration: TEXT_ANIMATION.DURATION,
-            ease: TEXT_ANIMATION.EASE,
-          }}
+          shouldAnimate={shouldAnimateText}
         >
           {renderRegisteredMark(headlineText)}
-        </motion.h1>
+        </AnimatedText>
 
-        <motion.p
-          animate={shouldAnimateText ? { y: 0 } : { y: TEXT_ANIMATION.START_Y }}
+        {/* Use bodyText prop instead of hardcoded string */}
+        <AnimatedText
+          as="p"
           className="absolute top-[1320px] left-[250px] z-0 w-[640px] text-[52px] leading-[1.4] font-normal tracking-[-2.6px] text-[#ededed] will-change-transform"
-          initial={{ y: TEXT_ANIMATION.START_Y }}
-          transition={{
-            delay: TEXT_ANIMATION.DELAY,
-            duration: TEXT_ANIMATION.DURATION,
-            ease: TEXT_ANIMATION.EASE,
-          }}
+          shouldAnimate={shouldAnimateText}
         >
-          {renderRegisteredMark('Explore each section to learn how Iron Mountain can transform your enterprise')}
-        </motion.p>
+          {renderRegisteredMark(bodyText)}
+        </AnimatedText>
 
-        <motion.button
-          animate={shouldAnimateText ? { y: 0 } : { y: TEXT_ANIMATION.START_Y }}
+        <AnimatedText
+          as="button"
           className="absolute top-[1330px] left-[1245px] z-0 flex h-[200px] items-center justify-between rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[70px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-transform duration-150 will-change-transform hover:scale-[1.01]"
-          initial={{ y: TEXT_ANIMATION.START_Y }}
           onClick={handleSecondaryClick}
-          transition={{
-            delay: TEXT_ANIMATION.DELAY,
-            duration: TEXT_ANIMATION.DURATION,
-            ease: TEXT_ANIMATION.EASE,
-          }}
+          shouldAnimate={shouldAnimateText}
           type="button"
         >
           <span className="mr-[50px]">{renderRegisteredMark(secondaryCtaLabel)}</span>
@@ -186,21 +186,21 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
               strokeWidth={2}
             />
           </div>
-        </motion.button>
+        </AnimatedText>
 
         {/* Step Carousel */}
         <StepCarousel onStepClick={setOpenModalIndex} steps={normalizedSteps} />
       </div>
 
-      {/* Step Modal */}
-      {portalTarget
+      {/* Step Modal - Use containerRef.current directly to avoid stale portal target */}
+      {containerRef.current
         ? createPortal(
             <AnimatePresence>
               {activeModalContent ? (
                 <StepModal content={activeModalContent} key="step-modal" onClose={() => setOpenModalIndex(null)} />
               ) : null}
             </AnimatePresence>,
-            portalTarget
+            containerRef.current
           )
         : null}
     </>
