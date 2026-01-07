@@ -41,17 +41,6 @@ const InitialScreenTemplate = memo(
     const [idleComplete, setIdleComplete] = useState(!idleVideoSrc);
     const isInView = useInView(ref, { amount: 0.3, once: true });
 
-    // Sync state with prop changes
-    useEffect(() => {
-      if (idleVideoSrc) {
-        setShowIdle(true);
-        setIdleComplete(false);
-      } else {
-        setShowIdle(false);
-        setIdleComplete(true);
-      }
-    }, [idleVideoSrc]);
-
     // Cleanup timeout on unmount
     useEffect(() => {
       return () => {
