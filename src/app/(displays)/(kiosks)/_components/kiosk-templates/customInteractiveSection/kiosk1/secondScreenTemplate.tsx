@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { SquarePlay } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
@@ -193,8 +193,15 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
       </div>
 
       {/* Step Modal */}
-      {activeModalContent && portalTarget
-        ? createPortal(<StepModal content={activeModalContent} onClose={() => setOpenModalIndex(null)} />, portalTarget)
+      {portalTarget
+        ? createPortal(
+            <AnimatePresence>
+              {activeModalContent ? (
+                <StepModal content={activeModalContent} key="step-modal" onClose={() => setOpenModalIndex(null)} />
+              ) : null}
+            </AnimatePresence>,
+            portalTarget
+          )
         : null}
     </>
   );
