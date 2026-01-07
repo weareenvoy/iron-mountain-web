@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion, useInView } from 'framer-motion';
 import Image from 'next/image';
-import { memo, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import ButtonArrow from '@/components/ui/icons/ButtonArrow';
 import WhiteLogoSimple from '@/components/ui/icons/WhiteLogoSimple';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
@@ -21,6 +21,8 @@ export type InitialScreenTemplateProps = {
   readonly subheadline?: string;
 };
 
+const IDLE_FADE_OUT_DURATION_MS = 800;
+
 const InitialScreenTemplate = memo(
   ({
     arrowIconSrc,
@@ -34,16 +36,44 @@ const InitialScreenTemplate = memo(
     subheadline,
   }: InitialScreenTemplateProps) => {
     const ref = useRef(null);
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const [showIdle, setShowIdle] = useState(!!idleVideoSrc);
     const [idleComplete, setIdleComplete] = useState(!idleVideoSrc);
     const isInView = useInView(ref, { amount: 0.3, once: true });
 
+    // Sync state with prop changes
+    useEffect(() => {
+      if (idleVideoSrc) {
+        setShowIdle(true);
+        setIdleComplete(false);
+      } else {
+        setShowIdle(false);
+        setIdleComplete(true);
+      }
+    }, [idleVideoSrc]);
+
+    // Cleanup timeout on unmount
+    useEffect(() => {
+      return () => {
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+      };
+    }, []);
+
     const handleIdleTap = () => {
       setShowIdle(false);
+
+      // Clear any existing timeout
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
       // Wait for fade out animation to complete before triggering initial screen animations
-      setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         setIdleComplete(true);
-      }, 800); // Match the fade out duration
+        timeoutRef.current = null;
+      }, IDLE_FADE_OUT_DURATION_MS);
     };
 
     const shouldAnimate = isInView && idleComplete;
@@ -166,7 +196,7 @@ const InitialScreenTemplate = memo(
               }}
               role="button"
               tabIndex={0}
-              transition={{ duration: 0.8, ease: [0.3, 0, 0.6, 1] }}
+              transition={{ duration: IDLE_FADE_OUT_DURATION_MS / 1000, ease: [0.3, 0, 0.6, 1] }}
             >
               <video
                 autoPlay
