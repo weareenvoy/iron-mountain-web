@@ -133,3 +133,10 @@
     cursor: pointer;
   }
 }
+
+/* Utilities layer for custom clip-path utilities */
+@layer utilities {
+  .clip-diamond-rounded {
+    clip-path: polygon(50% 2%, 54% 3%, 97% 46%, 98% 50%, 97% 54%, 54% 97%, 50% 98%, 46% 97%, 3% 54%, 2% 50%, 3% 46%, 46% 3%);
+  }
+}

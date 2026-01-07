@@ -9,18 +9,19 @@ type PhotoDiamondProps = {
 const PhotoDiamond = ({ className, imageAlt, imageSrc }: PhotoDiamondProps) => {
   return (
     <div className={className}>
-      <div className="relative size-full rotate-[45deg] overflow-hidden rounded-[160px]">
+      <div className="relative size-full">
         {imageSrc ? (
           <Image
             alt={imageAlt ?? ''}
-            className="-rotate-[45deg] object-cover"
+            className="object-cover"
             fill
             quality={75} // All decorative images are 75 quality, the text is the main focus not the image. 75 is a good balance between quality and performance.
             sizes="520px"
             src={imageSrc}
+            className="clip-diamond-rounded"
           />
         ) : (
-          <div className="h-full w-full -rotate-[45deg] bg-[#6dcff6]" />
+          <div className="clip-diamond-rounded h-full w-full bg-[#6dcff6]" />
         )}
       </div>
     </div>
