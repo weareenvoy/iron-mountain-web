@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { forwardRef } from 'react';
+import { forwardRef, memo } from 'react';
 
 /**
  * Animation configuration for text entrance from below
@@ -68,6 +68,12 @@ type AnimatedTextProps =
   | AnimatedTextParagraphProps;
 
 /**
+ * Ref type for AnimatedText component
+ * Covers all possible HTML elements based on 'as' prop
+ */
+type AnimatedTextRefType = HTMLButtonElement | HTMLHeadingElement | HTMLParagraphElement;
+
+/**
  * Runtime validation helper for button props
  * Ensures type safety at runtime when using discriminated unions
  */
@@ -81,7 +87,7 @@ function isButtonProps(props: AnimatedTextProps): props is AnimatedTextButtonPro
  * Includes runtime validation to prevent prop mismatches
  * Uses safe type assertions for ref forwarding (TypeScript limitation with discriminated unions)
  */
-const AnimatedText = forwardRef<HTMLElement, AnimatedTextProps>((props, ref) => {
+const AnimatedText = forwardRef<AnimatedTextRefType, AnimatedTextProps>((props, ref) => {
   const { as = 'p', children, className, shouldAnimate } = props;
 
   const animationProps = {
@@ -139,4 +145,5 @@ const AnimatedText = forwardRef<HTMLElement, AnimatedTextProps>((props, ref) => 
   );
 });
 
-export { AnimatedText };
+const MemoizedAnimatedText = memo(AnimatedText);
+export { MemoizedAnimatedText as AnimatedText };

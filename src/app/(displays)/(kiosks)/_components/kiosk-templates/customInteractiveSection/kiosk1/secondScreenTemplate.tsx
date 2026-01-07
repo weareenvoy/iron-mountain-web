@@ -2,7 +2,7 @@
 
 import { AnimatePresence } from 'framer-motion';
 import { SquarePlay } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
 import { cn } from '@/lib/tailwind/utils/cn';
@@ -96,6 +96,14 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
     onSecondaryCta?.();
   }, [onSecondaryCta]);
 
+  const handleEndTour = useCallback(() => {
+    setShowOverlay(false);
+  }, []);
+
+  const handleModalClose = useCallback(() => {
+    setOpenModalIndex(null);
+  }, [setOpenModalIndex]);
+
   useEffect(() => {
     setPortalTarget(containerRef.current);
   }, []);
@@ -152,7 +160,7 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
             headline={overlayHeadline}
             heroImageAlt={heroImageAlt}
             heroImageSrc={heroImageSrc}
-            onEndTour={() => setShowOverlay(false)}
+            onEndTour={handleEndTour}
           />
         </div>
 
@@ -205,7 +213,7 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
         ? createPortal(
             <AnimatePresence>
               {activeModalContent ? (
-                <StepModal content={activeModalContent} key="step-modal" onClose={() => setOpenModalIndex(null)} />
+                <StepModal content={activeModalContent} key="step-modal" onClose={handleModalClose} />
               ) : null}
             </AnimatePresence>,
             portalTarget
@@ -215,4 +223,5 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
   );
 };
 
-export default CustomInteractiveKiosk1SecondScreenTemplate;
+const MemoizedCustomInteractiveKiosk1SecondScreenTemplate = memo(CustomInteractiveKiosk1SecondScreenTemplate);
+export { MemoizedCustomInteractiveKiosk1SecondScreenTemplate as CustomInteractiveKiosk1SecondScreenTemplate };

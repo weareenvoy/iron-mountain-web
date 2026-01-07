@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import NextImage from 'next/image';
-import { useEffect, useRef } from 'react';
+import { memo, useEffect, useRef } from 'react';
 
 /**
  * ModalContent - Content configuration for step detail modal
@@ -58,7 +58,7 @@ const StepModal = ({ content, onClose }: StepModalProps) => {
   // Prevent backdrop click from bubbling
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
-      onClose();
+      onCloseRef.current();
     }
   };
 
@@ -87,7 +87,7 @@ const StepModal = ({ content, onClose }: StepModalProps) => {
         <div className="flex items-center justify-between">
           <button
             className="relative top-[45px] left-[60px] flex h-[200px] items-center gap-[24px] rounded-[1000px] bg-[#ededed] px-[90px] py-[60] pr-[100px] text-[55px] leading-[1.4] font-normal tracking-[-2.7px] text-[#14477d] transition hover:scale-[1.02]"
-            onClick={onClose}
+            onClick={() => onCloseRef.current()}
             type="button"
           >
             <span className="flex items-center justify-center">
@@ -126,4 +126,5 @@ const StepModal = ({ content, onClose }: StepModalProps) => {
   );
 };
 
-export { StepModal };
+const MemoizedStepModal = memo(StepModal);
+export { MemoizedStepModal as StepModal };

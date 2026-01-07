@@ -1,16 +1,23 @@
 'use client';
 
-import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight, CirclePlus } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/shadcn/carousel';
 import HCBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCBlueDiamond';
 import HCWhiteDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCWhiteDiamond';
+import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import type { UseEmblaCarouselType } from 'embla-carousel-react';
 
 /**
  * Step configuration for carousel items
+ * @property label - Display text shown inside the diamond
+ * @property modal - Optional modal content displayed when step is clicked
+ * @property modal.heading - Modal title (defaults to step label if not provided)
+ * @property modal.body - Modal description text
+ * @property modal.imageSrc - Optional image path for modal illustration
+ * @property modal.imageAlt - Alt text for modal image
  */
 export type Step = {
   readonly label: string;
@@ -31,11 +38,9 @@ type StepCarouselProps = {
 
 /**
  * Layout constants derived from Figma designs
- * @see https://www.figma.com/design/[project-id] (Custom Interactive Section)
+ * @see https://www.figma.com/design/o8KgGrIbWc0tdC32VpZ8gO/-i--Iron-Mountain-EIC-Production?node-id=5893-7489&m=dev (Custom Interactive Section)
  */
 const LAYOUT = {
-  /** Number of visible carousel items at once */
-  CAROUSEL_VISIBLE_ITEMS: 5,
   /** Size of active diamond in center */
   DIAMOND_SIZE_ACTIVE: 880,
   /** Size of diamonds at left/right edges (±2 from center) */
@@ -44,23 +49,8 @@ const LAYOUT = {
   DIAMOND_SIZE_MIDDLE: 640,
   /** Offset to push edge diamonds toward center for overlap effect */
   EDGE_TRANSFORM_X: 240,
-  /** Gap between carousel items */
-  GAP: 60,
   /** Starting carousel index (0-based) */
   INITIAL_CENTER_INDEX: 2,
-  /** Gap between diamond button and label text below */
-  ITEM_VERTICAL_GAP: 28,
-} as const;
-
-/**
- * Z-index scale for carousel layering
- * Ensures proper stacking without conflicts
- */
-const Z_INDEX = {
-  /** Active carousel item (centered diamond) */
-  ACTIVE_ITEM: 10,
-  /** Diamond buttons within items */
-  DIAMOND_BUTTON: 1,
 } as const;
 
 /**
@@ -216,8 +206,8 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
             ? `translate3d(${LAYOUT.EDGE_TRANSFORM_X}px, 0px, 0px)`
             : delta === EDGE_OFFSET
               ? `translate3d(-${LAYOUT.EDGE_TRANSFORM_X}px, 0px, 0px)`
-              : '';
-        slide.style.transform = transform;
+              : null;
+        slide.style.transform = transform ?? '';
       });
     },
     [emblaApi, totalSlides]
@@ -229,7 +219,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
     const handleSelect = () => {
       const nextIndex = emblaApi.selectedScrollSnap();
       setSelectedIndex(nextIndex);
-      applyEdgeTransforms(nextIndex);
+      // Don't call applyEdgeTransforms synchronously - RAF effect handles it
     };
     emblaApi.on('reInit', () => {
       // Refresh cache on reInit
@@ -243,7 +233,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
       emblaApi.off('reInit', handleSelect);
       emblaApi.off('scroll', handleSelect);
     };
-  }, [applyEdgeTransforms, emblaApi]);
+  }, [emblaApi]);
 
   // Remove duplicate synchronous call, keep only RAF version
   useEffect(() => {
@@ -260,7 +250,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
     const desiredIndex = Math.min(totalSlides - 1, LAYOUT.INITIAL_CENTER_INDEX);
     hasAppliedInitialAlignment.current = true;
     emblaApi.scrollTo(desiredIndex, true);
-  }, [applyEdgeTransforms, emblaApi, totalSlides]);
+  }, [emblaApi, totalSlides]);
 
   /**
    * Clear timeout when selectedIndex changes or on unmount
@@ -318,63 +308,43 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
     };
   }, [emblaApi]);
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     if (!emblaApi || totalSlides === 0) return;
     const target = (selectedIndex - 1 + totalSlides) % totalSlides;
     emblaApi.scrollTo(target);
-  };
+  }, [emblaApi, selectedIndex, totalSlides]);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (!emblaApi || totalSlides === 0) return;
     const target = (selectedIndex + 1) % totalSlides;
     emblaApi.scrollTo(target);
-  };
+  }, [emblaApi, selectedIndex, totalSlides]);
 
   /**
-   * Stabilized callback - doesn't depend on emblaApi identity
+   * Handle diamond click - navigates to inactive diamonds, opens modal for active
    */
-  const handleDiamondClick = useCallback(
+  const handleDiamondClickOrOpen = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
       const idx = Number(event.currentTarget.dataset.idx);
-      if (Number.isNaN(idx) || !emblaApi) {
-        return;
-      }
-      emblaApi.scrollTo(idx);
-    },
-    [emblaApi]
-  );
-
-  /**
-   * Handle plus icon click with transition tracking
-   */
-  const handlePlusClick = useCallback(
-    (event: React.KeyboardEvent | React.MouseEvent) => {
-      // Type guard for currentTarget
-      if (!(event.currentTarget instanceof HTMLElement)) {
-        return;
-      }
-
-      const target = event.currentTarget;
-      const idx = Number(target.dataset.idx);
       if (Number.isNaN(idx)) {
         return;
       }
 
-      // Don't allow modal open during transition
-      if (transitioningIndex !== null) {
-        return;
+      // If this is the active diamond, open the modal (if not transitioning)
+      if (idx === selectedIndex) {
+        if (transitioningIndex !== null) {
+          return;
+        }
+        onStepClick(idx);
+      } else {
+        // Otherwise, navigate to this diamond
+        if (!emblaApi) {
+          return;
+        }
+        emblaApi.scrollTo(idx);
       }
-
-      event.stopPropagation();
-      if ('key' in event && event.key !== 'Enter' && event.key !== ' ') {
-        return;
-      }
-      if ('key' in event) {
-        event.preventDefault();
-      }
-      onStepClick(idx);
     },
-    [onStepClick, transitioningIndex]
+    [emblaApi, onStepClick, selectedIndex, transitioningIndex]
   );
 
   // Early return for empty steps (after all hooks)
@@ -400,7 +370,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
         }}
         setApi={setEmblaApi}
       >
-        <CarouselContent className="flex items-center overflow-visible px-0" style={{ gap: `${LAYOUT.GAP}px` }}>
+        <CarouselContent className="flex items-center gap-[60px] overflow-visible px-0">
           {steps.map((step, idx) => {
             const isActive = idx === selectedIndex;
             const leftIndex = (selectedIndex - EDGE_OFFSET + totalSlides) % totalSlides;
@@ -408,11 +378,6 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
             const isLeftEdge = idx === leftIndex;
             const isRightEdge = idx === rightIndex;
             const inactiveSize = isLeftEdge || isRightEdge ? LAYOUT.DIAMOND_SIZE_EDGE : LAYOUT.DIAMOND_SIZE_MIDDLE;
-            const itemTransform = isLeftEdge
-              ? `translate3d(${LAYOUT.EDGE_TRANSFORM_X}px, 0px, 0px)`
-              : isRightEdge
-                ? `translate3d(-${LAYOUT.EDGE_TRANSFORM_X}px, 0px, 0px)`
-                : undefined;
 
             // Determine animation config based on position relative to center
             const leftMiddleIndex = (selectedIndex - 1 + totalSlides) % totalSlides;
@@ -428,50 +393,39 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
 
             return (
               <CarouselItem
-                className="shrink-0 grow-0 basis-[560px] pl-0"
+                className={cn(
+                  'shrink-0 grow-0 basis-[560px] pl-0',
+                  isLeftEdge && 'translate-x-[240px]',
+                  isRightEdge && '-translate-x-[240px]',
+                  isActive && 'z-10'
+                )}
                 data-slide-index={idx}
                 key={step.label}
-                style={
-                  itemTransform || isActive
-                    ? {
-                        transform: itemTransform,
-                        zIndex: isActive ? Z_INDEX.ACTIVE_ITEM : undefined,
-                      }
-                    : undefined
-                }
               >
                 <motion.div
                   animate={shouldAnimate ? { y: 0 } : { y: animConfig.startY }}
-                  className="flex flex-col items-center will-change-transform"
+                  className="flex flex-col items-center gap-[28px] will-change-transform"
                   initial={{ y: animConfig.startY }}
-                  style={{ gap: `${LAYOUT.ITEM_VERTICAL_GAP}px` }}
                   transition={{
                     delay: animConfig.delay,
                     duration: DIAMOND_ANIMATION.DURATION,
                     ease: DIAMOND_ANIMATION.EASE,
                   }}
                 >
-                  <div
-                    className="relative flex items-center justify-center"
-                    style={{ height: `${LAYOUT.DIAMOND_SIZE_ACTIVE}px`, width: `${LAYOUT.DIAMOND_SIZE_ACTIVE}px` }}
-                  >
+                  <div className="relative flex h-[880px] w-[880px] items-center justify-center">
                     <button
                       aria-label={isActive ? 'Open details' : `Select ${step.label}`}
-                      className="relative flex items-center justify-center"
+                      className="relative z-[1] flex cursor-pointer items-center justify-center"
                       data-idx={idx}
-                      onClick={isActive ? handlePlusClick : handleDiamondClick}
+                      onClick={handleDiamondClickOrOpen}
                       onPointerCancel={() => setPressedIndex(null)}
                       onPointerDown={() => isActive && setPressedIndex(idx)}
                       onPointerLeave={() => setPressedIndex(null)}
                       onPointerUp={() => setPressedIndex(null)}
-                      style={{ cursor: 'pointer', zIndex: Z_INDEX.DIAMOND_BUTTON }}
                       type="button"
                     >
                       {/* Fixed outer container prevents layout shift, inner container animates size */}
-                      <div
-                        className="flex items-center justify-center"
-                        style={{ height: `${LAYOUT.DIAMOND_SIZE_ACTIVE}px`, width: `${LAYOUT.DIAMOND_SIZE_ACTIVE}px` }}
-                      >
+                      <div className="flex h-[880px] w-[880px] items-center justify-center">
                         <motion.div
                           animate={{
                             height: isActive ? LAYOUT.DIAMOND_SIZE_ACTIVE : inactiveSize,
@@ -541,7 +495,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                         </motion.div>
                       </div>
                       <div className="absolute inset-0 flex items-center justify-center px-8 text-center">
-                        {/* Use scale transform instead of fontSize animation */}
+                        {/* Use scale transform instead of fontSize animation. origin-center controls the scale animation anchor point for diamond labels */}
                         <motion.span
                           animate={{
                             color: isActive ? DIAMOND_COLORS.TEXT_ACTIVE : DIAMOND_COLORS.TEXT_INACTIVE,
@@ -549,10 +503,9 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                           }}
                           className={
                             isActive
-                              ? 'w-[340px] text-[61px] leading-[1.3] tracking-[-3px]'
-                              : 'w-[300px] text-[61px] leading-[1.3] tracking-[-2.1px]'
+                              ? 'w-[340px] origin-center text-[61px] leading-[1.3] tracking-[-3px]'
+                              : 'w-[300px] origin-center text-[61px] leading-[1.3] tracking-[-2.1px]'
                           }
-                          style={{ originX: 0.5, originY: 0.5 }}
                           transition={{
                             duration: DIAMOND_TRANSITION.DURATION,
                             ease: DIAMOND_TRANSITION.EASE,
@@ -562,29 +515,6 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                         </motion.span>
                       </div>
                     </button>
-                    {/* Plus button - positioned absolutely, sibling to diamond button to avoid nesting */}
-                    <AnimatePresence>
-                      {isActive ? (
-                        <motion.button
-                          animate={{ opacity: 1 }}
-                          aria-label="Open details"
-                          className="absolute top-[630px] left-[400px] z-10 flex -translate-x-1/2 translate-x-[5px] cursor-pointer items-center justify-center"
-                          data-idx={idx}
-                          exit={{ opacity: 0 }}
-                          initial={{ opacity: 0 }}
-                          key="plus-icon"
-                          onClick={handlePlusClick}
-                          onKeyDown={handlePlusClick}
-                          transition={{
-                            duration: DIAMOND_TRANSITION.DURATION,
-                            ease: DIAMOND_TRANSITION.EASE,
-                          }}
-                          type="button"
-                        >
-                          <CirclePlus className="h-[80px] w-[80px] text-[#14477d]" />
-                        </motion.button>
-                      ) : null}
-                    </AnimatePresence>
                   </div>
                 </motion.div>
               </CarouselItem>
