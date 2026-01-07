@@ -456,15 +456,15 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                     style={{ height: `${LAYOUT.DIAMOND_SIZE_ACTIVE}px`, width: `${LAYOUT.DIAMOND_SIZE_ACTIVE}px` }}
                   >
                     <button
-                      aria-label={isActive ? undefined : `Select ${step.label}`}
+                      aria-label={isActive ? 'Open details' : `Select ${step.label}`}
                       className="relative flex items-center justify-center"
                       data-idx={idx}
-                      onClick={isActive ? undefined : handleDiamondClick}
+                      onClick={isActive ? handlePlusClick : handleDiamondClick}
                       onPointerCancel={() => setPressedIndex(null)}
                       onPointerDown={() => isActive && setPressedIndex(idx)}
                       onPointerLeave={() => setPressedIndex(null)}
                       onPointerUp={() => setPressedIndex(null)}
-                      style={{ cursor: isActive ? 'default' : 'pointer', zIndex: Z_INDEX.DIAMOND_BUTTON }}
+                      style={{ cursor: 'pointer', zIndex: Z_INDEX.DIAMOND_BUTTON }}
                       type="button"
                     >
                       {/* Fixed outer container prevents layout shift, inner container animates size */}
