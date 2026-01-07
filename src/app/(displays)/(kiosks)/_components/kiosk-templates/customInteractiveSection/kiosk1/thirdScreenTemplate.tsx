@@ -49,7 +49,7 @@ const CustomInteractiveKiosk1ThirdScreenTemplate = ({
             fill
             sizes="680px"
             src={heroImageSrc}
-            className="clip-diamond-rounded"
+            className="clip-diamond-rounded object-cover"
           />
         )}
       </div>

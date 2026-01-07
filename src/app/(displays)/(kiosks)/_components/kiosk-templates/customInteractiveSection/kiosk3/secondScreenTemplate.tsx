@@ -41,18 +41,19 @@ const CustomInteractiveKiosk3SecondScreenTemplate = ({
       <div className="absolute inset-0 bg-transparent" />
 
       {/* Diamond video */}
-      <div className="pointer-events-none absolute bottom-[-1000px] left-[50px] h-[2500px] w-[2500px] border border-white/10 shadow-[0_40px_120px_rgba(0,0,0,0.45)]">
-        <video
-          autoPlay
-          className="h-full w-full object-cover"
-          loop
-          muted
-          playsInline
-          poster={backgroundImageSrc}
-          src={videoAsset}
-          className="clip-diamond-rounded"
-        />
-        <div className="absolute inset-0 clip-diamond-rounded bg-gradient-to-t from-black/25 via-transparent to-transparent" />
+      <div className="pointer-events-none absolute bottom-[-1000px] left-[50px] h-[2500px] w-[2500px] rotate-[45deg] overflow-hidden rounded-[200px] border border-white/10 shadow-[0_40px_120px_rgba(0,0,0,0.45)]">
+        <div className="absolute inset-0 h-full w-full -rotate-[45deg]">
+          <video
+            autoPlay
+            className="relative left-[480px] h-full w-full origin-center scale-[1.45] object-cover"
+            loop
+            muted
+            playsInline
+            poster={backgroundImageSrc}
+            src={videoAsset}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
+        </div>
       </div>
 
       <h2 className="absolute top-[240px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-white">

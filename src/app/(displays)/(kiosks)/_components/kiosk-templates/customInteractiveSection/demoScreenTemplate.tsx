@@ -90,7 +90,7 @@ const CustomInteractiveDemoScreenTemplate = ({
             quality={85} // 85 Quality here since it's a secondary image to the Demo iframe itself.
             sizes="680px"
             src={heroImageSrc}
-            className="clip-diamond-rounded"
+            className="clip-diamond-rounded object-cover"
           />
         </div>
       ) : null}

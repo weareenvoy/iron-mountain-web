@@ -71,14 +71,14 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
           const isSlide6 = current.id === 'slide-6';
           const primaryDiamondClass =
             isSlide2 || isSlide5
-              ? 'absolute left-[510px] bottom-[670px] h-[1200px] w-[1200px] shadow-[0_30px_90px_rgba(0,0,0,0.35)]'
+              ? 'absolute left-[510px] bottom-[670px] h-[1200px] w-[1200px] rotate-[45deg] overflow-hidden rounded-[90px] shadow-[0_30px_90px_rgba(0,0,0,0.35)]'
               : isSlide3 || isSlide6
-                ? 'absolute left-[340px] bottom-[340px] h-[1130px] w-[1130px] shadow-[0_30px_90px_rgba(0,0,0,0.35)]'
-                : 'absolute left-[700px] bottom-[1120px] h-[830px] w-[830px] shadow-[0_30px_90px_rgba(0,0,0,0.35)]';
+                ? 'absolute left-[340px] bottom-[340px] h-[1130px] w-[1130px] rotate-[45deg] overflow-hidden rounded-[90px] shadow-[0_30px_90px_rgba(0,0,0,0.35)]'
+                : 'absolute left-[700px] bottom-[1120px] h-[830px] w-[830px] rotate-[45deg] overflow-hidden rounded-[90px] shadow-[0_30px_90px_rgba(0,0,0,0.35)]';
           const secondaryDiamondClass =
             isSlide3 || isSlide6
-              ? 'absolute left-[1390px] bottom-[1150px] h-[800px] w-[800px] shadow-[0_24px_70px_rgba(0,0,0,0.32)]'
-              : 'absolute left-[1380px] bottom-[400px] h-[880px] w-[880px] shadow-[0_24px_70px_rgba(0,0,0,0.32)]';
+              ? 'absolute left-[1390px] bottom-[1150px] h-[800px] w-[800px] rotate-[45deg] overflow-hidden rounded-[80px] shadow-[0_24px_70px_rgba(0,0,0,0.32)]'
+              : 'absolute left-[1380px] bottom-[400px] h-[880px] w-[880px] rotate-[45deg] overflow-hidden rounded-[80px] shadow-[0_24px_70px_rgba(0,0,0,0.32)]';
 
           const headlineText = headline;
           const eyebrowText = current.eyebrow;
@@ -127,7 +127,7 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
                 {current.primaryVideoSrc ? (
                   <video
                     autoPlay
-                    className="clip-diamond-rounded h-full w-full object-cover"
+                    className="h-full w-full origin-center scale-[1.35] -rotate-[45deg] object-cover"
                     loop
                     muted
                     playsInline
@@ -142,7 +142,7 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
                 <div className={secondaryDiamondClass}>
                   <Image
                     alt={current.secondaryImageAlt}
-                    className="clip-diamond-rounded object-cover"
+                    className="origin-center scale-[1.35] -rotate-[45deg] object-cover"
                     fill
                     quality={85} // 85 Quality here since it's a larger secondary image in an interactive setup (carousel)
                     sizes="880px"
