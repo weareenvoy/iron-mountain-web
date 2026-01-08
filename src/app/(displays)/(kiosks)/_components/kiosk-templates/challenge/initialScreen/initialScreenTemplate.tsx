@@ -39,7 +39,24 @@ const InitialScreenTemplate = memo(
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const [showIdle, setShowIdle] = useState(!!idleVideoSrc);
     const [idleComplete, setIdleComplete] = useState(!idleVideoSrc);
+    /**
+     * Animation triggers when:
+     * - Element is in view (30% visible, once: true means won't re-trigger on scroll back)
+     * - AND idle screen has been dismissed (or wasn't present)
+     * This intentional behavior ensures animations don't start while idle screen is showing.
+     */
     const isInView = useInView(ref, { amount: 0.3, once: true });
+
+    // Sync idle state with prop changes (defensive programming for dynamic content)
+    useEffect(() => {
+      if (idleVideoSrc) {
+        setShowIdle(true);
+        setIdleComplete(false);
+      } else {
+        setShowIdle(false);
+        setIdleComplete(true);
+      }
+    }, [idleVideoSrc]);
 
     // Cleanup timeout on unmount
     useEffect(() => {
@@ -65,6 +82,12 @@ const InitialScreenTemplate = memo(
       }, IDLE_FADE_OUT_DURATION_MS);
     };
 
+    /**
+     * Animations trigger only when BOTH conditions are met:
+     * 1. Element is in viewport (isInView)
+     * 2. Idle screen has been dismissed or wasn't present (idleComplete)
+     * This prevents animations from playing while idle screen is active.
+     */
     const shouldAnimate = isInView && idleComplete;
     return (
       <div
