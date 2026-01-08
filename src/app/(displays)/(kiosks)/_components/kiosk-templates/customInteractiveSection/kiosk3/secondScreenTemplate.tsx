@@ -111,24 +111,61 @@ const CustomInteractiveKiosk3SecondScreenTemplate = ({
               >
                 {renderRegisteredMark(tapToBeginLabel)}
               </motion.span>
+              
+              {/* Dot 1 - stays at 0deg (reference position, does not animate) */}
               <div className="absolute top-[48%] left-[50%] [transform:translate(-50%,-50%)_rotate(0deg)_translateY(-430px)]">
                 <BlueDot className="h-[60px] w-[60px]" />
               </div>
-              <div className="absolute top-[50%] left-[53%] [transform:translate(-50%,-50%)_rotate(60deg)_translateY(-430px)]">
+              
+              {/* Dot 2 - animates from 0deg to 60deg */}
+              <motion.div
+                animate={{ transform: 'translate(-50%, -50%) rotate(60deg) translateY(-430px)' }}
+                className="absolute top-[50%] left-[50%]"
+                initial={{ transform: 'translate(-50%, -50%) rotate(0deg) translateY(-430px)' }}
+                transition={{ delay: 0.3, duration: 0.8, ease: [0.3, 0, 0.4, 1] }}
+              >
                 <BlueDot className="h-[60px] w-[60px]" />
-              </div>
-              <div className="absolute top-[49%] left-[53%] [transform:translate(-50%,-50%)_rotate(120deg)_translateY(-430px)]">
+              </motion.div>
+              
+              {/* Dot 3 - animates from 0deg to 120deg */}
+              <motion.div
+                animate={{ transform: 'translate(-50%, -50%) rotate(120deg) translateY(-430px)' }}
+                className="absolute top-[50%] left-[50%]"
+                initial={{ transform: 'translate(-50%, -50%) rotate(0deg) translateY(-430px)' }}
+                transition={{ delay: 0.4, duration: 0.8, ease: [0.3, 0, 0.4, 1] }}
+              >
                 <BlueDot className="h-[60px] w-[60px]" />
-              </div>
-              <div className="absolute top-[52%] left-[50%] [transform:translate(-50%,-50%)_rotate(180deg)_translateY(-430px)]">
+              </motion.div>
+              
+              {/* Dot 4 - animates from 0deg to 180deg */}
+              <motion.div
+                animate={{ transform: 'translate(-50%, -50%) rotate(180deg) translateY(-430px)' }}
+                className="absolute top-[50%] left-[50%]"
+                initial={{ transform: 'translate(-50%, -50%) rotate(0deg) translateY(-430px)' }}
+                transition={{ delay: 0.5, duration: 0.8, ease: [0.3, 0, 0.4, 1] }}
+              >
                 <BlueDot className="h-[60px] w-[60px]" />
-              </div>
-              <div className="absolute top-[50%] left-[47%] [transform:translate(-50%,-50%)_rotate(240deg)_translateY(-430px)]">
+              </motion.div>
+              
+              {/* Dot 5 - animates from 0deg to 240deg */}
+              <motion.div
+                animate={{ transform: 'translate(-50%, -50%) rotate(240deg) translateY(-430px)' }}
+                className="absolute top-[50%] left-[50%]"
+                initial={{ transform: 'translate(-50%, -50%) rotate(0deg) translateY(-430px)' }}
+                transition={{ delay: 0.6, duration: 0.8, ease: [0.3, 0, 0.4, 1] }}
+              >
                 <BlueDot className="h-[60px] w-[60px]" />
-              </div>
-              <div className="absolute top-[50%] left-[47%] [transform:translate(-50%,-50%)_rotate(300deg)_translateY(-430px)]">
+              </motion.div>
+              
+              {/* Dot 6 - animates from 0deg to 300deg */}
+              <motion.div
+                animate={{ transform: 'translate(-50%, -50%) rotate(300deg) translateY(-430px)' }}
+                className="absolute top-[50%] left-[50%]"
+                initial={{ transform: 'translate(-50%, -50%) rotate(0deg) translateY(-430px)' }}
+                transition={{ delay: 0.7, duration: 0.8, ease: [0.3, 0, 0.4, 1] }}
+              >
                 <BlueDot className="h-[60px] w-[60px]" />
-              </div>
+              </motion.div>
             </>
           )}
         </button>
