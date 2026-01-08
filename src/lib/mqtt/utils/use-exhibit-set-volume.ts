@@ -20,6 +20,9 @@ export function useExhibitSetVolume({ appId, audio, client, reportStateRef, stat
 
     const handler = (message: Buffer) => {
       try {
+        const reportState = reportStateRef.current;
+        const state = stateRef.current;
+
         const msg = JSON.parse(message.toString());
         const muted = msg.body?.['volume-muted'];
         const level = msg.body?.['volume-level'];
@@ -28,9 +31,9 @@ export function useExhibitSetVolume({ appId, audio, client, reportStateRef, stat
         if (typeof level === 'number') audio.setMasterVolume(level);
 
         // reportState merges with current state. beat-id is included.
-        reportStateRef.current({
-          'volume-level': typeof level === 'number' ? level : stateRef.current['volume-level'],
-          'volume-muted': typeof muted === 'boolean' ? muted : stateRef.current['volume-muted'],
+        reportState({
+          'volume-level': typeof level === 'number' ? level : state['volume-level'],
+          'volume-muted': typeof muted === 'boolean' ? muted : state['volume-muted'],
         });
       } catch (error) {
         console.error(`${appId}: Error parsing set-volume command:`, error);

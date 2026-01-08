@@ -38,7 +38,7 @@ export class MqttService {
 
   // Docent App → ALL Exhibits: Unmute all exhibits
   public allExhibitsUnmute(): void {
-    console.info('Unmuting all exhibits');
+    console.info('Unmute all exhibits');
     ALL_VOLUME_CONTROLLABLE_EXHIBITS.forEach(exhibit => this.setVolume(exhibit, false));
   }
 
