@@ -41,11 +41,11 @@ const CustomInteractiveKiosk1ThirdScreenTemplate = ({
       </div>
 
       {/* Hero diamond image */}
-      <div className="pointer-events-none absolute bottom-[160px] left-[1100px] h-[1380px] w-[1380px] rotate-[45deg] overflow-hidden rounded-[140px]">
+      <div className="pointer-events-none absolute bottom-[160px] left-[1100px] h-[1380px] w-[1380px]">
         {heroImageSrc && (
           <Image
             alt={heroImageAlt || ''}
-            className="-rotate-[45deg] object-cover"
+            className="clip-diamond-rounded object-cover"
             fill
             sizes="680px"
             src={heroImageSrc}

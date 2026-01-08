@@ -83,6 +83,7 @@ const SummitWebContent = () => {
   const expectedTourIdRef = useRef<string>('');
   const [activeData, setActiveData] = useState<null | typeof data>(null);
   const [activeTourId, setActiveTourId] = useState<string>('');
+  const [hasLoadedExperience, setHasLoadedExperience] = useState(false);
   const [isPrinting, setIsPrinting] = useState(false);
   const [printError, setPrintError] = useState<null | string>(null);
   const [tours, setTours] = useState<readonly SummitTourSummary[]>([]);
@@ -191,6 +192,10 @@ const SummitWebContent = () => {
   };
 
   const handleExperienceChange = (value: string) => {
+    setActiveData(null);
+    setActiveTourId('');
+    setHasLoadedExperience(false);
+    setExperienceError(null);
     setSelectedExperience(value);
   };
 
@@ -204,12 +209,14 @@ const SummitWebContent = () => {
     }
     expectedTourIdRef.current = selectedExperience;
     setActiveTourId(selectedExperience);
+    setHasLoadedExperience(false);
     setExperienceLoading(true);
     setExperienceError(null);
     try {
       const fetched = await getSummitData(selectedExperience);
       if (expectedTourIdRef.current === selectedExperience) {
         setActiveData(fetched.data);
+        setHasLoadedExperience(true);
       }
     } catch (err) {
       if (expectedTourIdRef.current === selectedExperience) {
@@ -225,15 +232,25 @@ const SummitWebContent = () => {
 
   const recapPlaceholder = 'Type your notes here';
 
+  const contentData = hasLoadedExperience ? activeData : null;
+  const hasExperienceSelected = selectedExperience !== '';
+  const hasTriedExperience = experienceLoading || hasLoadedExperience || Boolean(experienceError);
   const loadErrorMessage = 'Unable to load summit content.';
   const loadingMessage = 'Loading summit experience…';
   const printErrorMessage = 'Unable to generate PDF. Please try again.';
 
-  const contentData = activeData ?? null;
-  const heroTitle =
-    contentData?.['summitSlides']?.find(slide => slide.handle === 'journey-1')?.title ||
-    data?.['summitSlides']?.find(slide => slide.handle === 'journey-1')?.title ||
-    'Your personalized journey map';
+  const requireSlideTitle = (handle: string) => {
+    if (!contentData) {
+      throw new Error('Missing summit data');
+    }
+    const slide = contentData.summitSlides.find(item => item.handle === handle);
+    if (!slide) {
+      throw new Error(`Missing summit slide: ${handle}`);
+    }
+    return slide.title;
+  };
+
+  const heroTitle = contentData ? requireSlideTitle('journey-1') : '';
 
   const handlePrint = useReactToPrint({
     contentRef: printableRef,
@@ -355,7 +372,7 @@ const SummitWebContent = () => {
         </div>
       </div>
 
-      {!!contentData && <hr className="border-t border-[#D0D0D3]" />}
+      {hasExperienceSelected && !!contentData && <hr className="border-t border-[#D0D0D3]" />}
     </div>
   );
 
@@ -375,7 +392,7 @@ const SummitWebContent = () => {
     );
   }
 
-  if (!contentData) {
+  if (!hasExperienceSelected) {
     return (
       <div className={PAGE_CONTAINER_CLASS}>
         <div className={SECTION_WRAPPER_CLASS}>
@@ -385,7 +402,33 @@ const SummitWebContent = () => {
     );
   }
 
-  const { basecamp, kiosk1, kiosk2, kiosk3, meta = [], overlook, summitSlides = [] } = contentData;
+  if (experienceLoading) {
+    return (
+      <div className="flex min-h-[40vh] items-center justify-center text-base text-muted-foreground">
+        {loadingMessage}
+      </div>
+    );
+  }
+
+  if (!hasTriedExperience) {
+    return (
+      <div className={PAGE_CONTAINER_CLASS}>
+        <div className={SECTION_WRAPPER_CLASS}>
+          <HeroSection actionSlot={null} filtersSlot={filtersSlot} meta={[]} title="" />
+        </div>
+      </div>
+    );
+  }
+
+  if (!contentData) {
+    return (
+      <div className="flex min-h-[40vh] items-center justify-center text-base text-destructive">
+        {experienceError ?? loadErrorMessage}
+      </div>
+    );
+  }
+
+  const { basecamp, kiosk1, kiosk2, kiosk3, meta, overlook } = contentData;
 
   const handlePrintClick = async () => {
     setPrintError(null);
@@ -400,28 +443,30 @@ const SummitWebContent = () => {
     }
   };
 
-  const journey3Title = summitSlides.find(slide => slide.handle === 'journey-3')?.title || 'Considering possibilities';
-  const journey4Title = summitSlides.find(slide => slide.handle === 'journey-4')?.title || 'Relevant solutions';
-  const journey5Title = summitSlides.find(slide => slide.handle === 'journey-5')?.title || 'Unlock your future';
-  const journey6Title = summitSlides.find(slide => slide.handle === 'journey-6')?.title || 'Stories of impact';
+  const journey3Title = requireSlideTitle('journey-3');
+  const journey4Title = requireSlideTitle('journey-4');
+  const journey5Title = requireSlideTitle('journey-5');
+  const journey6Title = requireSlideTitle('journey-6');
 
-  const possibilitiesItems = [basecamp.possibilitiesA, basecamp.possibilitiesB, basecamp.possibilitiesC].filter(
-    (item): item is SummitPossibility => Boolean(item)
-  );
+  const possibilitiesItems: readonly SummitPossibility[] = [
+    basecamp.possibilitiesA,
+    basecamp.possibilitiesB,
+    basecamp.possibilitiesC,
+  ];
 
-  const solutionItems = [
-    { locations: overlook.protect, title: data.protectTitle },
-    { locations: overlook.connect, title: data.connectTitle },
-    { locations: overlook.activate, title: data.activateTitle },
-  ].filter((item): item is SolutionItem => Boolean(item));
+  const solutionItems: readonly SolutionItem[] = [
+    { locations: overlook.protect, title: contentData.protectTitle },
+    { locations: overlook.connect, title: contentData.connectTitle },
+    { locations: overlook.activate, title: contentData.activateTitle },
+  ];
 
-  const futurescapingItems = [overlook.futurescaping1, overlook.futurescaping2, overlook.futurescaping3].filter(
-    (item): item is SummitFuturescaping => Boolean(item)
-  );
+  const futurescapingItems: readonly SummitFuturescaping[] = [
+    overlook.futurescaping1,
+    overlook.futurescaping2,
+    overlook.futurescaping3,
+  ];
 
-  const storiesItems = [kiosk1.ambient, kiosk2.ambient, kiosk3.ambient].filter((item): item is SummitKioskAmbient => {
-    return Boolean(item);
-  });
+  const storiesItems: readonly SummitKioskAmbient[] = [kiosk1.ambient, kiosk2.ambient, kiosk3.ambient];
 
   // Render sections
   const renderMetrics = () => (

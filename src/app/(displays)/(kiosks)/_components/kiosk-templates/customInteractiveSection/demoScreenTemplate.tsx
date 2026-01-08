@@ -87,10 +87,10 @@ const CustomInteractiveDemoScreenTemplate = ({
 
       {/* Hero diamond image */}
       {heroImageSrc ? (
-        <div className="pointer-events-none absolute bottom-[160px] left-[1100px] h-[1380px] w-[1380px] rotate-[45deg] overflow-hidden rounded-[140px]">
+        <div className="pointer-events-none absolute bottom-[160px] left-[1100px] h-[1380px] w-[1380px]">
           <Image
             alt={heroImageAlt ?? 'Hero image'}
-            className="-rotate-[45deg] object-cover"
+            className="clip-diamond-rounded object-cover"
             fill
             quality={85} // 85 Quality here since it's a secondary image to the Demo iframe itself.
             sizes="680px"
