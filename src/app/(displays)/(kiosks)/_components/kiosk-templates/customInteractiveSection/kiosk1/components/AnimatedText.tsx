@@ -74,17 +74,8 @@ type AnimatedTextProps =
 type AnimatedTextRefType = HTMLButtonElement | HTMLHeadingElement | HTMLParagraphElement;
 
 /**
- * Runtime validation helper for button props
- * Ensures type safety at runtime when using discriminated unions
- */
-function isButtonProps(props: AnimatedTextProps): props is AnimatedTextButtonProps {
-  return props.as === 'button';
-}
-
-/**
  * AnimatedText - Reusable component for text elements that slide up from below
  * Used for headline, body text, and button animations that trigger together
- * Includes runtime validation to prevent prop mismatches
  * Uses safe type assertions for ref forwarding (TypeScript limitation with discriminated unions)
  */
 const AnimatedText = forwardRef<AnimatedTextRefType, AnimatedTextProps>((props, ref) => {
@@ -102,20 +93,14 @@ const AnimatedText = forwardRef<AnimatedTextRefType, AnimatedTextProps>((props, 
   };
 
   if (as === 'button') {
-    // Runtime validation ensures props match button variant
-    if (!isButtonProps(props)) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('[AnimatedText] Invalid props for button variant', props);
-      }
-      return null;
-    }
-    const { onClick, type } = props;
+    // TypeScript doesn't narrow discriminated unions automatically, so we assert the type
+    const buttonProps = props as AnimatedTextButtonProps;
     return (
       <motion.button
         {...animationProps}
-        onClick={onClick}
+        onClick={buttonProps.onClick}
         ref={ref as React.ForwardedRef<HTMLButtonElement>}
-        type={type}
+        type={buttonProps.type}
       >
         {children}
       </motion.button>

@@ -55,30 +55,15 @@ const StepModal = ({ content, onClose }: StepModalProps) => {
 
   if (!content) return null;
 
-  // Prevent backdrop click from bubbling
-  const handleBackdropClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      onCloseRef.current();
-    }
-  };
-
-  // Prevent modal content clicks from closing modal
-  const handleContentClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-  };
-
   return (
-    <div
-      className="pointer-events-auto absolute inset-0 z-[200] flex items-center justify-center"
-      onClick={handleBackdropClick}
-    >
-      <div className="pointer-events-auto absolute inset-0 bg-black/60 backdrop-blur-[50px]" />
+    <div className="absolute inset-0 z-200 flex items-center justify-center">
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-[50px]" onClick={() => onCloseRef.current()} />
       <motion.div
         animate={{ y: 0 }}
-        className="pointer-events-auto relative z-[201] flex h-[2800px] max-h-[90vh] w-[1920px] flex-col overflow-hidden rounded-[48px] bg-[#97e9ff] p-[80px] text-[#14477d] shadow-[0_40px_120px_rgba(0,0,0,0.45)]"
+        className="relative z-201 flex h-[2800px] max-h-[90vh] w-[1920px] flex-col overflow-hidden rounded-[48px] bg-[#97e9ff] p-[80px] text-[#14477d] shadow-[0_40px_120px_rgba(0,0,0,0.45)]"
         exit={{ y: MODAL_ANIMATION.START_Y }}
         initial={{ y: MODAL_ANIMATION.START_Y }}
-        onClick={handleContentClick}
+        onClick={e => e.stopPropagation()}
         transition={{
           duration: MODAL_ANIMATION.DURATION,
           ease: MODAL_ANIMATION.EASE,

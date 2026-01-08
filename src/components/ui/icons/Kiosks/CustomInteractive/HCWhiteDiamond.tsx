@@ -1,22 +1,18 @@
 import { motion } from 'framer-motion';
+import type { ComponentPropsWithoutRef } from 'react';
 
-type HCWhiteDiamondProps = {
-  readonly 'aria-hidden'?: 'false' | 'true' | boolean;
-  readonly 'className'?: string;
-  readonly 'fill'?: string;
-  readonly 'focusable'?: 'false' | 'true' | boolean;
+type HCWhiteDiamondProps = Omit<ComponentPropsWithoutRef<'svg'>, 'children'> & {
+  readonly fill?: string;
 };
 
 /**
  * HCWhiteDiamond - White diamond SVG component
  * Supports animated fill color via Framer Motion
  */
-const HCWhiteDiamond = ({ 'aria-hidden': ariaHidden, className, fill = '#EDEDED', focusable }: HCWhiteDiamondProps) => (
+const HCWhiteDiamond = ({ fill = '#EDEDED', ...svgProps }: HCWhiteDiamondProps) => (
   <svg
-    aria-hidden={ariaHidden}
-    className={className}
+    {...svgProps}
     fill="none"
-    focusable={focusable}
     height="880"
     preserveAspectRatio="xMidYMid meet"
     viewBox="0 0 880 880"

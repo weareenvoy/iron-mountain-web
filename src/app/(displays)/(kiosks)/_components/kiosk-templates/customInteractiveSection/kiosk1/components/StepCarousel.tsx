@@ -119,9 +119,10 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
   const [selectedIndex, setSelectedIndex] = useState(() => Math.min(steps.length - 1, LAYOUT.INITIAL_CENTER_INDEX));
   const [shouldAnimate, setShouldAnimate] = useState(false);
   const [pressedIndex, setPressedIndex] = useState<null | number>(null);
-  const [transitioningIndex, setTransitioningIndex] = useState<null | number>(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const transitionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const selectedIndexRef = useRef(selectedIndex);
   const totalSlides = steps.length;
 
   /**
@@ -204,32 +205,54 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
     [emblaApi, totalSlides]
   );
 
-  // Embla event listeners - update selectedIndex on scroll/select
+  // Keep selectedIndexRef in sync
+  useEffect(() => {
+    selectedIndexRef.current = selectedIndex;
+  }, [selectedIndex]);
+
+  // Embla event listeners - update selectedIndex only on snap changes (not continuous scroll)
+  // Also manages transition state to avoid race conditions
   useEffect(() => {
     if (!emblaApi) return undefined;
     const handleSelect = () => {
       const nextIndex = emblaApi.selectedScrollSnap();
-      setSelectedIndex(nextIndex);
-      applyEdgeTransforms(nextIndex);
+      const prevIndex = selectedIndexRef.current;
+
+      // Only update and trigger transition if index actually changed
+      if (nextIndex !== prevIndex) {
+        setSelectedIndex(nextIndex);
+        applyEdgeTransforms(nextIndex);
+
+        // Mark as transitioning when selection changes
+        setIsTransitioning(true);
+
+        // Clear any existing timeout
+        if (transitionTimeoutRef.current) {
+          clearTimeout(transitionTimeoutRef.current);
+        }
+
+        // Clear transition state after animation completes
+        transitionTimeoutRef.current = setTimeout(
+          () => {
+            setIsTransitioning(false);
+            transitionTimeoutRef.current = null;
+          },
+          DIAMOND_TRANSITION.DURATION * 1000 + 100
+        );
+      }
     };
     emblaApi.on('reInit', handleSelect);
-    emblaApi.on('scroll', handleSelect);
     emblaApi.on('select', handleSelect);
+    handleSelect(); // Initial call
     return () => {
       emblaApi.off('select', handleSelect);
       emblaApi.off('reInit', handleSelect);
-      emblaApi.off('scroll', handleSelect);
+      if (transitionTimeoutRef.current) {
+        clearTimeout(transitionTimeoutRef.current);
+        transitionTimeoutRef.current = null;
+      }
     };
   }, [applyEdgeTransforms, emblaApi]);
-
-  // Apply transforms on selectedIndex change with RAF for consistency
-  useEffect(() => {
-    if (!emblaApi) return undefined;
-    const frame = requestAnimationFrame(() => {
-      applyEdgeTransforms(selectedIndex);
-    });
-    return () => cancelAnimationFrame(frame);
-  }, [applyEdgeTransforms, emblaApi, selectedIndex]);
 
   // Initial alignment
   useEffect(() => {
@@ -238,20 +261,6 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
     hasAppliedInitialAlignment.current = true;
     emblaApi.scrollTo(desiredIndex, true);
   }, [emblaApi, totalSlides]);
-
-  /**
-   * Clear timeout when selectedIndex changes or on unmount
-   * Timeout fallback prevents stuck transitions if animation is interrupted
-   */
-  useEffect(() => {
-    // Cleanup on unmount or index change
-    return () => {
-      if (transitionTimeoutRef.current) {
-        clearTimeout(transitionTimeoutRef.current);
-        transitionTimeoutRef.current = null;
-      }
-    };
-  }, [selectedIndex]);
 
   /**
    * Detect when carousel becomes visible to trigger animations
@@ -317,12 +326,9 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
       }
 
       // If this is the active diamond, open the modal (if not transitioning)
-      if (idx === selectedIndex) {
-        if (transitioningIndex !== null) {
-          return;
-        }
+      if (idx === selectedIndexRef.current && !isTransitioning) {
         onStepClick(idx);
-      } else {
+      } else if (idx !== selectedIndexRef.current) {
         // Otherwise, navigate to this diamond
         if (!emblaApi) {
           return;
@@ -330,7 +336,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
         emblaApi.scrollTo(idx);
       }
     },
-    [emblaApi, onStepClick, selectedIndex, transitioningIndex]
+    [emblaApi, isTransitioning, onStepClick]
   );
 
   // Early return for empty steps (after all hooks)
@@ -381,7 +387,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
               <CarouselItem
                 className={cn('shrink-0 grow-0 basis-[560px] pl-0', isActive && 'z-10')}
                 data-slide-index={idx}
-                key={step.label}
+                key={`${idx}-${step.label}`}
               >
                 <motion.div
                   animate={shouldAnimate ? { y: 0 } : { y: animConfig.startY }}
@@ -416,27 +422,6 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                           initial={{
                             height: isActive ? LAYOUT.DIAMOND_SIZE_ACTIVE : inactiveSize,
                             width: isActive ? LAYOUT.DIAMOND_SIZE_ACTIVE : inactiveSize,
-                          }}
-                          onAnimationComplete={() => {
-                            setTransitioningIndex(null);
-                            if (transitionTimeoutRef.current) {
-                              clearTimeout(transitionTimeoutRef.current);
-                              transitionTimeoutRef.current = null;
-                            }
-                          }}
-                          onAnimationStart={() => {
-                            setTransitioningIndex(idx);
-                            // Fallback timeout to clear transition state if animation never completes
-                            if (transitionTimeoutRef.current) {
-                              clearTimeout(transitionTimeoutRef.current);
-                            }
-                            transitionTimeoutRef.current = setTimeout(
-                              () => {
-                                setTransitioningIndex(null);
-                                transitionTimeoutRef.current = null;
-                              },
-                              DIAMOND_TRANSITION.DURATION * 1000 + 100
-                            ); // Add 100ms buffer
                           }}
                           transition={{
                             duration: DIAMOND_TRANSITION.DURATION,
