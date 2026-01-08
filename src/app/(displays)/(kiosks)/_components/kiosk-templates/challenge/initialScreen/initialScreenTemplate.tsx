@@ -60,17 +60,6 @@ const InitialScreenTemplate = memo(
       };
     }, []);
 
-    // Sync idle state with prop changes (handles dynamic content updates)
-    useEffect(() => {
-      if (idleVideoSrc) {
-        setShowIdle(true);
-        setIdleComplete(false);
-      } else {
-        setShowIdle(false);
-        setIdleComplete(true);
-      }
-    }, [idleVideoSrc]);
-
     const handleIdleTap = () => {
       setShowIdle(false);
 
