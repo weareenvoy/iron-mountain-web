@@ -1,5 +1,6 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import BlueDot from '@/components/ui/icons/Kiosks/CustomInteractive/BlueDot';
 import InnerRing from '@/components/ui/icons/Kiosks/CustomInteractive/InnerRing';
@@ -90,9 +91,18 @@ const CustomInteractiveKiosk3SecondScreenTemplate = ({
           <InnerRing className="absolute top-1/2 left-1/2 h-[730px] w-[730px] -translate-x-1/2 -translate-y-1/2" />
           <div className="absolute inset-0 rounded-full bg-transparent" />
           <div className="absolute inset-[20px] rounded-full bg-transparent" />
-          <span className="relative top-[5px] z-10 text-[80px] leading-[1.3] font-normal tracking-[-4px] text-white">
+          <motion.span
+            animate={{ opacity: [0, 1, 0] }}
+            className="relative top-[5px] z-10 text-[80px] leading-[1.3] font-normal tracking-[-4px] text-white"
+            transition={{
+              duration: 2,
+              ease: 'easeInOut',
+              repeat: Infinity,
+              repeatType: 'loop',
+            }}
+          >
             {renderRegisteredMark(tapToBeginLabel)}
-          </span>
+          </motion.span>
           <div className="absolute top-[48%] left-[50%] [transform:translate(-50%,-50%)_rotate(0deg)_translateY(-430px)]">
             <BlueDot className="h-[60px] w-[60px]" />
           </div>
