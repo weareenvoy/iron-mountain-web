@@ -93,7 +93,7 @@ const SolutionFourthScreenTemplate = ({
                   'data-[accordion-color=navy]:bg-[#14477d]',
                   'data-[accordion-color=white]:bg-[#ededed]'
                 )}
-                data-accordion-color={index === entries.length - 1 ? accordionColor : undefined}
+                data-accordion-color={accordionColor}
                 key={item.id}
                 value={item.id}
               >
