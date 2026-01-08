@@ -107,16 +107,15 @@ const StepModal = ({ content, onClose }: StepModalProps) => {
 
           {content.imageSrc ? (
             <div className="flex items-center justify-center">
-              <div className="relative top-[130px] h-[1680px] w-[1680px] rotate-[45deg] rounded-[80px] border-0 bg-transparent">
-                <div className="absolute inset-0 flex -rotate-[45deg] items-center justify-center rounded-[80px] bg-transparent">
-                  <NextImage
-                    alt={content.imageAlt ?? 'Modal illustration'}
-                    className="h-full w-full object-contain"
-                    height={1394}
-                    src={content.imageSrc}
-                    width={1680}
-                  />
-                </div>
+              <div className="relative top-[130px] h-[1680px] w-[1680px]">
+                <NextImage
+                  alt={content.imageAlt ?? 'Modal illustration'}
+                  className="clip-diamond-rounded object-cover"
+                  fill
+                  quality={85}
+                  sizes="1680px"
+                  src={content.imageSrc}
+                />
               </div>
             </div>
           ) : null}

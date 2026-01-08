@@ -7,10 +7,10 @@ import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
 import MomentsAndBeats from '@/app/(tablets)/docent/_components/ui/MomentsAndBeats';
-import { parseOverlookBeatId } from '@/app/(tablets)/docent/_utils';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import CastOff from '@/components/ui/icons/CastOff';
 import useMomentsNavigation from '@/hooks/use-moments-navigation';
+import { parseOverlookBeatId } from '@/lib/internal/utils/parse-beat-id';
 import type { Section } from '@/lib/internal/types';
 
 const OverlookPage = ({ params }: PageProps<'/docent/tour/[tourId]/overlook'>) => {

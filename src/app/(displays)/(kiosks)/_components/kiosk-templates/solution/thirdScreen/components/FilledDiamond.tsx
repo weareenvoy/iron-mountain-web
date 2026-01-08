@@ -10,18 +10,18 @@ type FilledDiamondProps = {
 const FilledDiamond = ({ className, imageAlt, imageSrc }: FilledDiamondProps) => {
   return (
     <div className={`absolute ${className}`}>
-      <div className="relative size-[390px] rotate-[45deg]">
+      <div className="relative size-[390px]">
         {imageSrc ? (
           <Image
             alt={imageAlt ?? ''}
-            className="-rotate-[45deg] object-cover"
+            className="clip-diamond-rounded object-cover"
             fill
             quality={75} // All decorative images are 75 quality, the text is the main focus not the image. 75 is a good balance between quality and performance.
             sizes="390px"
             src={imageSrc}
           />
         ) : (
-          <TealGradientDiamondThird aria-hidden="true" className="h-full w-full -rotate-[45deg]" focusable="false" />
+          <TealGradientDiamondThird aria-hidden="true" className="h-full w-full" focusable="false" />
         )}
       </div>
     </div>

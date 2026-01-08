@@ -180,6 +180,9 @@ export interface BasecampData {
       readonly url: string;
     };
   };
+  readonly music?: {
+    readonly [key in BasecampSection]?: string;
+  };
   readonly possibilities: {
     readonly title: string;
   };
