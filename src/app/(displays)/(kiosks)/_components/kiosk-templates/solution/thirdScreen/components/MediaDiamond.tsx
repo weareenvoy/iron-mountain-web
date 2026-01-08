@@ -10,11 +10,11 @@ export type MediaDiamondProps = {
 const MediaDiamond = ({ className, imageAlt, imageSrc, sizeClass = 'size-[666px]' }: MediaDiamondProps) => {
   return (
     <div className={`absolute ${className}`}>
-      <div className={`relative ${sizeClass} rotate-45 overflow-hidden rounded-[120px]`}>
+      <div className={`relative ${sizeClass}`}>
         {imageSrc ? (
           <Image
             alt={imageAlt ?? ''}
-            className="-rotate-45 object-cover"
+            className="clip-diamond-rounded object-cover"
             fill
             quality={75} // All decorative images are 75 quality, the text is the main focus not the image. 75 is a good balance between quality and performance.
             sizes="900px"
