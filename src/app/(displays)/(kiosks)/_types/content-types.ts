@@ -9,6 +9,10 @@ export type Ambient = {
   readonly title?: string;
 };
 
+export type IdleContent = {
+  readonly videoSrc?: string;
+};
+
 export type ChallengeContent = {
   readonly body?: string;
   readonly featuredStat1?: string;
