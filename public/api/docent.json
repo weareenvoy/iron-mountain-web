@@ -22,13 +22,6 @@
           "subtitle": "EBC Controls",
           "title": "Iron Mountain"
         },
-        "moments": {
-          "ambientState": "Ambient state",
-          "ascend": "Ascend",
-          "possibilities": "Possibilities",
-          "problem": "Problem",
-          "welcome": "Welcome"
-        },
         "navigation": {
           "backToHome": "Back to home",
           "backToMenu": "Back to menu",
@@ -54,77 +47,6 @@
         "summitRoom": "Loading summit room…",
         "tour": "Loading tour…"
       },
-      "moments": {
-        "basecamp": [
-          {
-            "beatCount": 1,
-            "id": "ambient",
-            "title": "Ambient state"
-          },
-          {
-            "beatCount": 4,
-            "id": "welcome",
-            "title": "Welcome"
-          },
-          {
-            "beatCount": 4,
-            "id": "problem",
-            "title": "Problem"
-          },
-          {
-            "beatCount": 5,
-            "id": "possibilities",
-            "title": "Possibilities"
-          },
-          {
-            "beatCount": 3,
-            "id": "ascend",
-            "title": "Ascend"
-          }
-        ],
-        "overlook": [
-          {
-            "beatCount": 1,
-            "id": "ambient",
-            "title": "Ambient state"
-          },
-          {
-            "beatCount": 2,
-            "id": "unlock",
-            "title": "Unlock"
-          },
-          {
-            "beatCount": 2,
-            "id": "protect",
-            "title": "Protect"
-          },
-          {
-            "beatCount": 2,
-            "id": "connect",
-            "title": "Connect"
-          },
-          {
-            "beatCount": 2,
-            "id": "activate",
-            "title": "Activate"
-          },
-          {
-            "beatCount": 5,
-            "id": "insight-dxp",
-            "title": "InSight DXP"
-          },
-          {
-            "beatCount": 1,
-            "id": "case-study",
-            "title": "Impact (case study)"
-          },
-          {
-            "beatCount": 4,
-            "id": "futurescape",
-            "title": "Futurescape"
-          }
-        ]
-      },
       "settings": {
         "ebcLights": "EBC Lights",
         "endTourButton": "End tour & activate idle",
@@ -142,38 +64,15 @@
         },
         "title": "Settings"
       },
-      "slides": [
-        {
-          "borderColor": null,
-          "id": 1,
-          "title": "Your personalized journey map"
-        },
-        {
-          "borderColor": "border-primary-im-light-blue",
-          "id": 2,
-          "title": "What's standing in your way?"
-        },
-        {
-          "borderColor": "border-secondary-im-purple",
-          "id": 3,
-          "title": "Considering possibilities"
-        },
-        {
-          "borderColor": "border-secondary-im-orange",
-          "id": 4,
-          "title": "Unlock your future"
-        },
-        {
-          "borderColor": "border-primary-im-mid-blue",
-          "id": 5,
-          "title": "Stories of impact"
-        }
-      ],
       "summit": {
         "errors": {
           "loadFailed": "Unable to load summit content."
         },
-        "footerStats": ["Executive Innovation Center", "São Paulo, Brazil", "Elevation 760 m (2,493.4 ft)"],
+        "footerStats": [
+          "Executive Innovation Center",
+          "São Paulo, Brazil",
+          "Elevation 760 m (2,493.4 ft)"
+        ],
         "hero": {
           "labels": {
             "company": "Company",
@@ -206,7 +105,7 @@
           "date": "2025-09-20",
           "endTime": "02:00 PM",
           "guestLogo": null,
-          "guestName": "PMU Umbrella Pharmaceuticals",
+          "guestName": "fake co 2",
           "id": "tour-002",
           "startTime": "12:00 PM",
           "title": "fake title 2"
@@ -264,6 +163,33 @@
           "id": "tour-008",
           "startTime": "02:40 PM",
           "title": "fake title 8"
+        },
+        {
+          "date": "2025-12-17",
+          "endTime": "02:00 PM",
+          "guestLogo": null,
+          "guestName": "PMU Umbrella Pharmaceuticals",
+          "id": "tour-009",
+          "startTime": "01:00 PM",
+          "title": "Test title 9"
+        },
+        {
+          "date": "2025-12-18",
+          "endTime": "10:30 AM",
+          "guestLogo": null,
+          "guestName": "Test Company 10",
+          "id": "tour-010",
+          "startTime": "09:30 AM",
+          "title": "Test Title 10"
+        },
+        {
+          "date": "2025-12-18",
+          "endTime": "11:30 AM",
+          "guestLogo": null,
+          "guestName": "Test Company 11",
+          "id": "tour-011",
+          "startTime": "11:00 AM",
+          "title": "Test Title 11"
         }
       ],
       "ui": {
@@ -274,7 +200,231 @@
         "on": "On",
         "pause": "Pause",
         "play": "Play"
-      }
+      },
+      "basecampMoments": [
+        {
+          "title": "Ambient",
+          "handle": "ambient",
+          "beats": [
+            {
+              "handle": "ambient-1"
+            }
+          ]
+        },
+        {
+          "title": "Welcome",
+          "handle": "welcome",
+          "beats": [
+            {
+              "handle": "welcome-1"
+            },
+            {
+              "handle": "welcome-2"
+            },
+            {
+              "handle": "welcome-3"
+            },
+            {
+              "handle": "welcome-4"
+            }
+          ]
+        },
+        {
+          "title": "Problem",
+          "handle": "problem",
+          "beats": [
+            {
+              "handle": "problem-1"
+            },
+            {
+              "handle": "problem-2"
+            },
+            {
+              "handle": "problem-3"
+            },
+            {
+              "handle": "problem-4"
+            }
+          ]
+        },
+        {
+          "title": "Possibilities",
+          "handle": "possibilities",
+          "beats": [
+            {
+              "handle": "possibilities-1"
+            },
+            {
+              "handle": "possibilities-2"
+            },
+            {
+              "handle": "possibilities-3"
+            },
+            {
+              "handle": "possibilities-4"
+            },
+            {
+              "handle": "possibilities-5"
+            }
+          ]
+        },
+        {
+          "title": "Ascend",
+          "handle": "ascend",
+          "beats": [
+            {
+              "handle": "ascend-1"
+            },
+            {
+              "handle": "ascend-2"
+            },
+            {
+              "handle": "ascend-3"
+            }
+          ]
+        }
+      ],
+      "overlookMoments": [
+        {
+          "title": "Ambient",
+          "handle": "ambient",
+          "beats": [
+            {
+              "handle": "ambient-1"
+            }
+          ]
+        },
+        {
+          "title": "Unlock",
+          "handle": "unlock",
+          "beats": [
+            {
+              "handle": "unlock-1"
+            },
+            {
+              "handle": "unlock-2"
+            }
+          ]
+        },
+        {
+          "title": "Protect",
+          "handle": "protect",
+          "beats": [
+            {
+              "handle": "protect-1"
+            },
+            {
+              "handle": "protect-2"
+            }
+          ]
+        },
+        {
+          "title": "Connect",
+          "handle": "connect",
+          "beats": [
+            {
+              "handle": "connect-1"
+            },
+            {
+              "handle": "connect-2"
+            }
+          ]
+        },
+        {
+          "title": "Activate",
+          "handle": "activate",
+          "beats": [
+            {
+              "handle": "activate-1"
+            },
+            {
+              "handle": "activate-2"
+            },
+            {
+              "handle": "activate-3"
+            }
+          ]
+        },
+        {
+          "title": "InSight DXP",
+          "handle": "insightdxp",
+          "beats": [
+            {
+              "handle": "insightdxp-1"
+            },
+            {
+              "handle": "insightdxp-2"
+            },
+            {
+              "handle": "insightdxp-3"
+            },
+            {
+              "handle": "insightdxp-4"
+            }
+          ]
+        },
+        {
+          "title": "Impact (case study)",
+          "handle": "impact",
+          "beats": [
+            {
+              "handle": "impact-1"
+            },
+            {
+              "handle": "impact-2",
+              "type": "video"
+            }
+          ]
+        },
+        {
+          "title": "Futurescaping",
+          "handle": "futurescaping",
+          "beats": [
+            {
+              "handle": "futurescaping-1"
+            },
+            {
+              "handle": "futurescaping-2"
+            },
+            {
+              "handle": "futurescaping-3"
+            },
+            {
+              "handle": "futurescaping-4"
+            }
+          ]
+        }
+      ],
+      "summitSlides": [
+        {
+          "handle": "journey-intro",
+          "title": "Launch your journey"
+        },
+        {
+          "handle": "journey-1",
+          "title": "Your personalized journey map"
+        },
+        {
+          "handle": "journey-2",
+          "title": "What's standing in your way?"
+        },
+        {
+          "handle": "journey-3",
+          "title": "Considering possibilities"
+        },
+        {
+          "handle": "journey-4",
+          "title": "Relevant solutions"
+        },
+        {
+          "handle": "journey-5",
+          "title": "Unlock your future"
+        },
+        {
+          "handle": "journey-6",
+          "title": "Stories of impact"
+        }
+      ]
     }
   },
   {
@@ -299,13 +449,6 @@
           "description": "Gerencie e direcione a experiência EBC da Iron Mountain.",
           "subtitle": "Controles EBC",
           "title": "Iron Mountain"
-        },
-        "moments": {
-          "ambientState": "Estado ambiente",
-          "ascend": "Ascender",
-          "possibilities": "Possibilidades",
-          "problem": "Problema",
-          "welcome": "Bem-vindo"
         },
         "navigation": {
           "backToHome": "Voltar ao início",
@@ -338,10 +481,10 @@
         "endTourDescription": "Toque para encerrar a experiência e voltar todas as telas ao modo idle.",
         "exhibits": {
           "basecamp": "Basecamp",
-          "entryWay": "Entrada",
-          "overlook": "Visão geral",
-          "solutionPathways": "Caminhos de solução",
-          "summitRoom": "Sala do cume"
+          "entryWay": "Entry Way",
+          "overlook": "Overlook",
+          "solutionPathways": "Solution Pathways",
+          "summitRoom": "Summit Room"
         },
         "openManual": "Abrir Manual EBC",
         "status": {
@@ -353,7 +496,11 @@
         "errors": {
           "loadFailed": "Não foi possível carregar o conteúdo do Summit."
         },
-        "footerStats": ["Centro de Inovação Executiva", "São Paulo, Brasil", "Altitude 760 m (2.493,4 pés)"],
+        "footerStats": [
+          "Centro de Inovação Executiva",
+          "São Paulo, Brasil",
+          "Altitude 760 m (2.493,4 pés)"
+        ],
         "hero": {
           "labels": {
             "company": "Empresa",
@@ -372,6 +519,107 @@
           "unlockYourFuture": "Liberte seu futuro"
         }
       },
+      "tours": [
+        {
+          "date": "2025-09-20",
+          "endTime": "11:00 AM",
+          "guestLogo": null,
+          "guestName": "Herman Miller",
+          "id": "tour-001",
+          "startTime": "07:00 AM",
+          "title": "fake title 1"
+        },
+        {
+          "date": "2025-09-20",
+          "endTime": "02:00 PM",
+          "guestLogo": null,
+          "guestName": "fake co 2",
+          "id": "tour-002",
+          "startTime": "12:00 PM",
+          "title": "fake title 2"
+        },
+        {
+          "date": "2025-09-27",
+          "endTime": "05:30 PM",
+          "guestLogo": null,
+          "guestName": "Boyer-Boyer",
+          "id": "tour-003",
+          "startTime": "03:30 PM",
+          "title": "fake title 3"
+        },
+        {
+          "date": "2025-09-30",
+          "endTime": "02:00 PM",
+          "guestLogo": null,
+          "guestName": "Cremin-Okuneva",
+          "id": "tour-004",
+          "startTime": "01:00 PM",
+          "title": "fake title 4"
+        },
+        {
+          "date": "2025-09-30",
+          "endTime": "04:00 PM",
+          "guestLogo": null,
+          "guestName": "fake co 5",
+          "id": "tour-005",
+          "startTime": "03:00 PM",
+          "title": "fake title 5"
+        },
+        {
+          "date": "2025-10-12",
+          "endTime": "02:00 PM",
+          "guestLogo": null,
+          "guestName": "Zalauf Inc.",
+          "id": "tour-006",
+          "startTime": "01:00 PM",
+          "title": "fake title 6"
+        },
+        {
+          "date": "2025-10-12",
+          "endTime": "04:00 PM",
+          "guestLogo": null,
+          "guestName": "fake co 7",
+          "id": "tour-007",
+          "startTime": "03:00 PM",
+          "title": "fake title 7"
+        },
+        {
+          "date": "2025-11-04",
+          "endTime": "04:00 PM",
+          "guestLogo": null,
+          "guestName": "fake co 8",
+          "id": "tour-008",
+          "startTime": "02:40 PM",
+          "title": "fake title 8"
+        },
+        {
+          "date": "2025-12-17",
+          "endTime": "02:00 PM",
+          "guestLogo": null,
+          "guestName": "PMU Umbrella Pharmaceuticals",
+          "id": "tour-009",
+          "startTime": "01:00 PM",
+          "title": "Test title 9"
+        },
+        {
+          "date": "2025-12-18",
+          "endTime": "10:30 AM",
+          "guestLogo": null,
+          "guestName": "Test Company 10",
+          "id": "tour-010",
+          "startTime": "09:30 AM",
+          "title": "Test Title 10"
+        },
+        {
+          "date": "2025-12-18",
+          "endTime": "11:30 AM",
+          "guestLogo": null,
+          "guestName": "Test Company 11",
+          "id": "tour-011",
+          "startTime": "11:00 AM",
+          "title": "Test Title 11"
+        }
+      ],
       "ui": {
         "onOff": "Ligado/Desligado",
         "tablet": "Tablet",
@@ -380,7 +628,231 @@
         "on": "Ligado",
         "pause": "Pausar",
         "play": "Reproduzir"
-      }
+      },
+      "basecampMoments": [
+        {
+          "title": "Estado ambiente",
+          "handle": "ambient",
+          "beats": [
+            {
+              "handle": "ambient-1"
+            }
+          ]
+        },
+        {
+          "title": "Bem-vindo",
+          "handle": "welcome",
+          "beats": [
+            {
+              "handle": "welcome-1"
+            },
+            {
+              "handle": "welcome-2"
+            },
+            {
+              "handle": "welcome-3"
+            },
+            {
+              "handle": "welcome-4"
+            }
+          ]
+        },
+        {
+          "title": "Problema",
+          "handle": "problem",
+          "beats": [
+            {
+              "handle": "problem-1"
+            },
+            {
+              "handle": "problem-2"
+            },
+            {
+              "handle": "problem-3"
+            },
+            {
+              "handle": "problem-4"
+            }
+          ]
+        },
+        {
+          "title": "Possibilidades",
+          "handle": "possibilities",
+          "beats": [
+            {
+              "handle": "possibilities-1"
+            },
+            {
+              "handle": "possibilities-2"
+            },
+            {
+              "handle": "possibilities-3"
+            },
+            {
+              "handle": "possibilities-4"
+            },
+            {
+              "handle": "possibilities-5"
+            }
+          ]
+        },
+        {
+          "title": "Ascender",
+          "handle": "ascend",
+          "beats": [
+            {
+              "handle": "ascend-1"
+            },
+            {
+              "handle": "ascend-2"
+            },
+            {
+              "handle": "ascend-3"
+            }
+          ]
+        }
+      ],
+      "overlookMoments": [
+        {
+          "title": "Estado ambiente",
+          "handle": "ambient",
+          "beats": [
+            {
+              "handle": "ambient-1"
+            }
+          ]
+        },
+        {
+          "title": "Desbloquear",
+          "handle": "unlock",
+          "beats": [
+            {
+              "handle": "unlock-1"
+            },
+            {
+              "handle": "unlock-2"
+            }
+          ]
+        },
+        {
+          "title": "Proteger",
+          "handle": "protect",
+          "beats": [
+            {
+              "handle": "protect-1"
+            },
+            {
+              "handle": "protect-2"
+            }
+          ]
+        },
+        {
+          "title": "Conectar",
+          "handle": "connect",
+          "beats": [
+            {
+              "handle": "connect-1"
+            },
+            {
+              "handle": "connect-2"
+            }
+          ]
+        },
+        {
+          "title": "Ativar",
+          "handle": "activate",
+          "beats": [
+            {
+              "handle": "activate-1"
+            },
+            {
+              "handle": "activate-2"
+            },
+            {
+              "handle": "activate-3"
+            }
+          ]
+        },
+        {
+          "title": "InSight DXP",
+          "handle": "insightdxp",
+          "beats": [
+            {
+              "handle": "insightdxp-1"
+            },
+            {
+              "handle": "insightdxp-2"
+            },
+            {
+              "handle": "insightdxp-3"
+            },
+            {
+              "handle": "insightdxp-4"
+            }
+          ]
+        },
+        {
+          "title": "Impacto (estudo de caso)",
+          "handle": "impact",
+          "beats": [
+            {
+              "handle": "impact-1"
+            },
+            {
+              "handle": "impact-2",
+              "type": "video"
+            }
+          ]
+        },
+        {
+          "title": "Futurescaping",
+          "handle": "futurescaping",
+          "beats": [
+            {
+              "handle": "futurescaping-1"
+            },
+            {
+              "handle": "futurescaping-2"
+            },
+            {
+              "handle": "futurescaping-3"
+            },
+            {
+              "handle": "futurescaping-4"
+            }
+          ]
+        }
+      ],
+      "summitSlides": [
+        {
+          "handle": "journey-intro",
+          "title": "Inicie sua jornada"
+        },
+        {
+          "handle": "journey-1",
+          "title": "Seu mapa de jornada personalizado"
+        },
+        {
+          "handle": "journey-2",
+          "title": "O que está impedindo você?"
+        },
+        {
+          "handle": "journey-3",
+          "title": "Considerando possibilidades"
+        },
+        {
+          "handle": "journey-4",
+          "title": "Soluções relevantes"
+        },
+        {
+          "handle": "journey-5",
+          "title": "Desbloqueie seu futuro"
+        },
+        {
+          "handle": "journey-6",
+          "title": "Histórias de impacto"
+        }
+      ]
     }
   }
 ]

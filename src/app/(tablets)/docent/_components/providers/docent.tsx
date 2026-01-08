@@ -7,53 +7,34 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
+  useRef,
   useState,
   type PropsWithChildren,
 } from 'react';
-import { DocentAppState, type SyncState } from '@/app/(tablets)/docent/_types';
+import { type DocentAppState, type SyncState } from '@/app/(tablets)/docent/_types';
+import { getTourIdFromGecState, isDocentRoute } from '@/app/(tablets)/docent/_utils';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getDocentData } from '@/lib/internal/data/get-docent';
-import type { DocentData, ExhibitNavigationState, Locale, Tour } from '@/lib/internal/types';
-import type { Route } from 'next';
-
-const isDocentRoute = (path: string): path is Route => {
-  return /^\/docent\/tour\/[^/]+(?:\/(?:basecamp|overlook|summit-room))?$/.test(path);
-};
+import type { DocentData, Locale, Tour } from '@/lib/internal/types';
 
 export interface DocentContextType {
-  readonly basecampExhibitState: ExhibitNavigationState;
+  // Derived from tourId + data.tours
   readonly currentTour: null | Tour;
   readonly data: DocentData | null;
   // Full state from GEC (combines tour, UI mode, exhibit settings)
   readonly docentAppState: DocentAppState | null;
-  // Exhibit availability status
-  readonly exhibitAvailability: {
-    readonly basecamp: boolean;
-    readonly overlook: boolean;
-    readonly overlookTablet: boolean;
-    readonly summit: boolean;
-  };
   readonly isConnected: boolean;
   readonly isGecStateLoading: boolean;
   readonly isSettingsOpen: boolean;
-  readonly isSummitRoomJourneyMapLaunched: boolean;
   readonly isTourDataLoading: boolean;
   readonly lastUpdated: Date | null;
   readonly locale: Locale;
-  readonly overlookExhibitState: ExhibitNavigationState;
   readonly refreshData: () => Promise<void>;
-  readonly setBasecampExhibitState: (state: Partial<ExhibitNavigationState>) => void;
-
-  readonly setCurrentTour: (tour: null | Tour) => void;
   readonly setIsSettingsOpen: (open: boolean) => void;
-  readonly setIsSummitRoomJourneyMapLaunched: (launched: boolean) => void;
   readonly setLocale: (locale: Locale) => void;
-  readonly setOverlookExhibitState: (state: Partial<ExhibitNavigationState>) => void;
-
-  readonly setSummitRoomSlideIdx: (idx: number) => void;
-
-  // Summit Room state
-  readonly summitRoomSlideIdx: number;
+  // Tour ID from GEC - source of truth
+  readonly tourId: null | string;
 }
 
 export const DocentContext = createContext<DocentContextType | undefined>(undefined);
@@ -79,41 +60,23 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     pt: null,
   });
   const [locale, setLocale] = useState<Locale>('en');
-  const [currentTour, setCurrentTour] = useState<null | Tour>(null);
+  // Tour ID from GEC - source of truth
+  const [tourId, setTourId] = useState<null | string>(null);
   const [isTourDataLoading, setIsTourDataLoading] = useState(true);
   const [isGecStateLoading, setIsGecStateLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
-  // Beats for basecamp overlook, and slides for summit room.
-  const [basecampExhibitState, setBasecampExhibitStateRaw] = useState<ExhibitNavigationState>({
-    beatIdx: 0,
-    momentId: 'ambient',
-  });
-  const [overlookExhibitState, setOverlookExhibitStateRaw] = useState<ExhibitNavigationState>({
-    beatIdx: 0,
-    momentId: 'ambient',
-  });
-  const [summitRoomSlideIdx, setSummitRoomSlideIdx] = useState(0);
-  const [isSummitRoomJourneyMapLaunched, setIsSummitRoomJourneyMapLaunched] = useState(false);
-
   // Full state from GEC
   const [docentAppState, setDocentAppState] = useState<DocentAppState | null>(null);
 
-  // Derive exhibit availability from GEC state
-  const exhibitAvailability = {
-    basecamp: !!docentAppState?.exhibits?.basecamp,
-    overlook: !!docentAppState?.exhibits?.overlook,
-    overlookTablet: !!docentAppState?.exhibits?.summit,
-    summit: !!docentAppState?.exhibits?.summit,
-  };
+  // Ref to keep latest pathname without triggering re-subscriptions
+  const pathnameRef = useRef(pathname);
 
-  const setBasecampExhibitState = (state: Partial<ExhibitNavigationState>) => {
-    setBasecampExhibitStateRaw(prev => ({ ...prev, ...state }));
-  };
-  const setOverlookExhibitState = (state: Partial<ExhibitNavigationState>) => {
-    setOverlookExhibitStateRaw(prev => ({ ...prev, ...state }));
-  };
+  // Keep ref in sync with latest pathname
+  useEffect(() => {
+    pathnameRef.current = pathname;
+  }, [pathname]);
 
   // Fetch all docent data (includes tours and slides)
   const fetchDocentData = useCallback(async () => {
@@ -126,16 +89,18 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
       });
       setLastUpdated(new Date());
 
+      // Clear tourId if the tour no longer exists in the data
       const currentData = docentData.data[locale];
-      if (currentTour && !currentData.tours.find(tour => tour.id === currentTour.id)) {
-        setCurrentTour(null);
+      if (tourId && !currentData.tours.find(tour => tour.id === tourId)) {
+        console.info(`Tour ${tourId} no longer exists in data, clearing...`);
+        setTourId(null);
       }
     } catch (error) {
       console.error('Failed to fetch docent data:', error);
     } finally {
       setIsTourDataLoading(false);
     }
-  }, [currentTour, locale]);
+  }, [locale, tourId]);
 
   useEffect(() => {
     fetchDocentData();
@@ -161,55 +126,32 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
         const state: DocentAppState = msg.body;
         console.info('Docent: Received GEC state:', state);
 
-        // TODO TBD about data structure. I can no longer find the info in the Docs.
-        // Save the full state
-        setDocentAppState(state);
+        // TODO TBD still under discussion what topic to use to get the data. Or do we even use a topic.
+        // Batch all state updates to prevent interleaving if GEC sends rapid updates
+        startTransition(() => {
+          // Save the full state - beat states are derived from this via useMemo
+          setDocentAppState(state);
 
-        // Update tour if provided and different from current
-        // Get tour-id from any exhibit (they should all match)
-        const tourId =
-          state.exhibits?.basecamp?.['tour-id'] ||
-          state.exhibits?.overlook?.['tour-id'] ||
-          state.exhibits?.summit?.['tour-id'];
+          // Get tour-id from GEC state - this is the source of truth
+          const gecTourId = getTourIdFromGecState(state);
+          setTourId(gecTourId);
 
-        const allTours = dataByLocale[locale]?.tours ?? [];
-
-        if (tourId && allTours.length > 0) {
-          const tour = allTours.find(t => t.id === tourId);
-          if (tour && tour.id !== currentTour?.id) {
-            console.info(`Tour sync: GEC tour (${tourId}) differs from current tour (${currentTour?.id}), updating...`);
-            setCurrentTour(tour);
-
-            // Update URL if we're on a tour page
-            // Example: /docent/tour/tour-002/basecamp → /docent/tour/tour-004/basecamp
-            if (pathname.includes('/tour/')) {
-              const tourPathRegex = /\/tour\/[^\/]+/;
-              const newPathname = pathname.replace(tourPathRegex, `/tour/${tourId}`);
-              if (newPathname !== pathname && isDocentRoute(newPathname)) {
-                console.info(`Updating URL from ${pathname} to ${newPathname}`);
-                startTransition(() => {
-                  router.replace(newPathname);
-                });
-              }
-            }
-          }
-        }
-
-        setIsGecStateLoading(false);
+          setIsGecStateLoading(false);
+        });
       } catch (error) {
         console.error('Docent: Error parsing state:', error);
         setIsGecStateLoading(false);
       }
     };
 
-    client.subscribeToTopic('state/docent-app', handleDocentAppState);
+    client.subscribeToTopic('state/gec', handleDocentAppState);
 
     return () => {
-      client.unsubscribeFromTopic('state/docent-app', handleDocentAppState);
+      client.unsubscribeFromTopic('state/gec', handleDocentAppState);
     };
-  }, [client, dataByLocale, locale, currentTour?.id, pathname, router]);
+  }, [client]);
 
-  // TODO TBD Subscribe to which topic??
+  // Subscribe to sync state
   useEffect(() => {
     if (!client) return;
 
@@ -238,42 +180,73 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     };
   }, [client, fetchDocentData]);
 
-  // Reset navigation states when currentTour changes
-  useEffect(() => {
-    if (currentTour) {
-      setBasecampExhibitStateRaw({ beatIdx: 0, momentId: 'ambient' });
-      setOverlookExhibitStateRaw({ beatIdx: 0, momentId: 'ambient' });
-      setSummitRoomSlideIdx(0);
-      setIsSummitRoomJourneyMapLaunched(false);
-    }
-  }, [currentTour]);
+  // Note: Beat states are now derived from GEC state, so they will automatically
+  // update when GEC publishes new state. No need to reset on tour changes.
 
   // Get current locale's data
   const data = dataByLocale[locale];
 
+  // Derive currentTour from tourId + data.tours
+  const currentTour = useMemo(() => {
+    if (!tourId || !data?.tours) return null;
+    return data.tours.find(t => t.id === tourId) ?? null;
+  }, [data?.tours, tourId]);
+
+  // Track previous tourId for navigation
+  const prevTourIdRef = useRef<null | string>(null);
+
+  // Navigate when tourId changes (GEC confirms a tour)
+  useEffect(() => {
+    // Skip if tourId hasn't changed or is null
+    if (tourId === prevTourIdRef.current || !tourId) {
+      prevTourIdRef.current = tourId;
+      return;
+    }
+
+    // Validate tour exists in data
+    if (!data?.tours.find(t => t.id === tourId)) {
+      console.warn(`Tour ${tourId} not found in data, skipping navigation`);
+      prevTourIdRef.current = tourId;
+      return;
+    }
+
+    const currentPathname = pathnameRef.current;
+    if (currentPathname.includes('/tour/')) {
+      // Update URL if we're on a tour page
+      // Example: /docent/tour/tour-002/basecamp → /docent/tour/tour-004/basecamp
+      const tourPathRegex = /\/tour\/[^\/]+/;
+      const newPathname = currentPathname.replace(tourPathRegex, `/tour/${tourId}`);
+      if (newPathname !== currentPathname && isDocentRoute(newPathname)) {
+        console.info(`Updating URL from ${currentPathname} to ${newPathname}`);
+        startTransition(() => {
+          router.replace(newPathname);
+        });
+      }
+    } else {
+      // Navigate to tour overview when GEC confirms a tour and we're not on a tour page
+      console.info(`Navigating to tour overview for tour ${tourId}`);
+      startTransition(() => {
+        router.push(`/docent/tour/${tourId}`);
+      });
+    }
+
+    prevTourIdRef.current = tourId;
+  }, [data?.tours, router, tourId]);
+
   const contextValue = {
-    basecampExhibitState,
     currentTour,
     data,
     docentAppState,
-    exhibitAvailability,
     isConnected,
     isGecStateLoading,
     isSettingsOpen,
-    isSummitRoomJourneyMapLaunched,
     isTourDataLoading,
     lastUpdated,
     locale,
-    overlookExhibitState,
     refreshData: fetchDocentData,
-    setBasecampExhibitState,
-    setCurrentTour,
     setIsSettingsOpen,
-    setIsSummitRoomJourneyMapLaunched,
     setLocale,
-    setOverlookExhibitState,
-    setSummitRoomSlideIdx,
-    summitRoomSlideIdx,
+    tourId,
   };
 
   return <DocentContext.Provider value={contextValue}>{children}</DocentContext.Provider>;

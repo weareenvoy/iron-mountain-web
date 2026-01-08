@@ -1,7 +1,7 @@
-import { MqttProvider } from '@/components/providers/mqtt-provider';
+import { KioskProvider } from '@/app/(displays)/(kiosks)/_components/providers/kiosk-provider';
 
 const Kiosk1Layout = ({ children }: LayoutProps<'/kiosk-1'>) => {
-  return <MqttProvider topic="kiosk-01">{children}</MqttProvider>;
+  return <KioskProvider kioskId="kiosk-1">{children}</KioskProvider>;
 };
 
 export default Kiosk1Layout;

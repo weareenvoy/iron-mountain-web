@@ -2,110 +2,146 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useBasecamp } from '@/app/(displays)/basecamp/_components/providers/basecamp';
-import { BEAT_ORDER, isValidBeatId } from '@/lib/internal/types';
+import { getNextBeatId, isBackgroundSeamlessTransition } from '@/app/(displays)/basecamp/_utils';
+import { BasecampBeatId, isValidBasecampBeatId } from '@/lib/internal/types';
 
-const CROSSFADE_DURATION_MS = 800;
+const CROSSFADE_DURATION_MS = 800 as const;
 
 const Background = () => {
   const { data, exhibitState, setReadyBeatId } = useBasecamp();
   const { beatIdx, momentId } = exhibitState;
-  const beatId = `${momentId}-${beatIdx + 1}`;
+  const rawBeatId = `${momentId}-${beatIdx + 1}`;
+
+  // Derive URL outside effect. Only re-run effect when URL actually changes
+  const beatId = isValidBasecampBeatId(rawBeatId) ? rawBeatId : null;
+  const url = beatId ? data?.beats[beatId].url : undefined;
+
+  // Ref for data access inside effect without causing re-runs
+  const dataRef = useRef(data);
+  useEffect(() => {
+    dataRef.current = data;
+  }, [data]);
 
   // 2 videos "ping pong" between, 1 visible, 1 invisible.
   const a = useRef<HTMLVideoElement>(null);
   const b = useRef<HTMLVideoElement>(null);
   const active = useRef<'a' | 'b'>('a');
   const [activeDisplay, setActiveDisplay] = useState<'a' | 'b'>('a');
-  const lastBeat = useRef<string>('');
+  const lastBeat = useRef<BasecampBeatId | null>(null);
 
   useEffect(() => {
-    if (!data || !a.current || !b.current) return;
+    if (!beatId || !url || !a.current || !b.current) return;
 
-    if (!isValidBeatId(beatId)) return;
+    if (beatId === lastBeat.current) return;
 
-    const url = data.beats[beatId].url;
-    if (!url || beatId === lastBeat.current) return;
+    const lastBeatId: BasecampBeatId | null =
+      lastBeat.current && isValidBasecampBeatId(lastBeat.current) ? lastBeat.current : null;
 
     // First beat after page reload → force into A
-    if (!lastBeat.current) {
-      setReadyBeatId(null);
-      a.current.src = url;
-      a.current.currentTime = 0;
-      a.current.loop = momentId === 'ambient';
-
-      const onReady = () => {
-        setReadyBeatId(beatId);
-        console.info('Background: Video is ready, playing', beatId);
-        a.current?.play();
-      };
-
-      a.current.addEventListener('canplaythrough', onReady, { once: true });
-      a.current.load();
-      lastBeat.current = beatId;
-
-      // Preload next into B
-      const nextIdx = BEAT_ORDER.indexOf(beatId) + 1;
-      const nextBeatId = BEAT_ORDER[nextIdx];
-      if (nextBeatId) {
-        const nextUrl = data.beats[nextBeatId].url;
-        if (nextUrl) b.current.src = nextUrl;
-      }
-      return;
-    }
+    const isFirstLoad = lastBeatId === null;
+    const isAmbient = momentId === 'ambient';
 
     // Determine visible and invisible
     const visible = active.current === 'a' ? a.current : b.current;
     const hidden = active.current === 'a' ? b.current : a.current;
 
+    // Track listeners for cleanup
+    const cleanupFns: (() => void)[] = [];
+
     // Clear ready state - foreground will wait until this beat is ready
     setReadyBeatId(null);
 
-    // Set hidden video to use incoming beat's url
-    hidden.src = url;
-    hidden.currentTime = 0;
-    hidden.loop = momentId === 'ambient';
-
-    const go = () => {
-      // Guard against stale handler firing after beat changed
-      if (beatId !== lastBeat.current) return;
-
-      setReadyBeatId(beatId);
-
-      // Fade out visible, fade in hidden
-      visible.style.transition = hidden.style.transition = `opacity ${CROSSFADE_DURATION_MS}ms ease`;
-      visible.style.opacity = '0';
-      hidden.style.opacity = '1';
-
-      // Play hidden video
-      hidden.play();
-      active.current = active.current === 'a' ? 'b' : 'a';
-      setActiveDisplay(active.current);
-
-      // Assume docent would click the "next" beat, preload it.
-      const currIdx = BEAT_ORDER.indexOf(beatId);
-      const nextIdx = currIdx + 1 < BEAT_ORDER.length ? currIdx + 1 : 0;
-      const nextBeatId = BEAT_ORDER[nextIdx];
-
-      // Preload next video after crossfade completes. Use actual transition, not hardcoded timeout.
-      if (nextBeatId) {
-        const nextUrl = data.beats[nextBeatId].url;
-        if (nextUrl) {
-          visible.addEventListener('transitionend', () => (visible.src = nextUrl), { once: true });
-        }
-      }
+    // Configure the incoming video
+    const setupIncomingVideo = (video: HTMLVideoElement) => {
+      video.src = url;
+      video.currentTime = 0;
+      video.loop = isAmbient;
+      video.load();
     };
 
-    // If video is already loaded from preload, fire immediately
-    // readyState >= 3 means HAVE_FUTURE_DATA or HAVE_ENOUGH_DATA
-    if (hidden.readyState >= 3) {
-      go();
+    const startPlaybackAndSignalReady = (video: HTMLVideoElement) => {
+      video.play().catch(e => console.error('Play failed:', e));
+
+      const handlePlaying = () => {
+        if (lastBeat.current !== beatId) return; // Stale
+        setReadyBeatId(beatId);
+      };
+      video.addEventListener('playing', handlePlaying, { once: true });
+      cleanupFns.push(() => video.removeEventListener('playing', handlePlaying));
+    };
+
+    if (isFirstLoad) {
+      // First load: use video A directly
+      setupIncomingVideo(a.current!);
+      active.current = 'a';
+
+      const handleCanPlayThrough = () => startPlaybackAndSignalReady(a.current!);
+      a.current!.addEventListener('canplaythrough', handleCanPlayThrough, { once: true });
+      cleanupFns.push(() => a.current?.removeEventListener('canplaythrough', handleCanPlayThrough));
     } else {
-      hidden.addEventListener('canplaythrough', go, { once: true });
-      hidden.load();
+      // Subsequent beats
+      setupIncomingVideo(hidden);
+      const seamless = isBackgroundSeamlessTransition(lastBeatId, beatId);
+
+      const performSwitch = () => {
+        if (lastBeat.current !== beatId) return;
+
+        if (seamless) {
+          // Instant switch. No fade, perfect continuity
+          visible.style.transition = hidden.style.transition = 'opacity 0ms';
+          visible.style.opacity = '0';
+          hidden.style.opacity = '1';
+        } else {
+          // Normal crossfade on moment change
+          visible.style.transition = hidden.style.transition = `opacity ${CROSSFADE_DURATION_MS}ms ease`;
+          visible.style.opacity = '0';
+          hidden.style.opacity = '1';
+        }
+
+        startPlaybackAndSignalReady(hidden);
+        active.current = active.current === 'a' ? 'b' : 'a';
+        setActiveDisplay(active.current);
+      };
+
+      if (hidden.readyState >= 3) {
+        // HAVE_ENOUGH_DATA
+        performSwitch();
+      } else {
+        hidden.addEventListener('canplaythrough', performSwitch, { once: true });
+        cleanupFns.push(() => hidden.removeEventListener('canplaythrough', performSwitch));
+      }
     }
 
+    // Preload next beat into the now-visible (soon-to-be-hidden) video
+    const nextBeatId = getNextBeatId(beatId, isAmbient);
+
+    if (nextBeatId && dataRef.current?.beats[nextBeatId].url) {
+      // For first load: preload into B immediately
+      // For transitions: preload into the video that will be hidden next (i.e. current visible)
+      const preloadTarget = isFirstLoad ? b.current! : visible;
+
+      if (isFirstLoad) {
+        preloadTarget.src = dataRef.current.beats[nextBeatId].url;
+      } else {
+        // Wait until crossfade ends
+        const handleTransitionEnd = () => {
+          if (lastBeat.current === beatId) {
+            preloadTarget.src = dataRef.current!.beats[nextBeatId].url;
+          }
+        };
+        visible.addEventListener('transitionend', handleTransitionEnd, { once: true });
+        cleanupFns.push(() => visible.removeEventListener('transitionend', handleTransitionEnd));
+      }
+    }
+
+    // Update at the end. If we update early, seamless check would always be false.
     lastBeat.current = beatId;
-  }, [beatId, data, momentId, setReadyBeatId]);
+
+    // Remove all listeners
+    return () => {
+      cleanupFns.forEach(fn => fn());
+    };
+  }, [momentId, setReadyBeatId, url, beatId]);
 
   // For debugging only. Update display time
   const timeDisplayRef = useRef<HTMLSpanElement>(null);

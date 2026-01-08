@@ -1,22 +1,39 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { use, useCallback, useMemo } from 'react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
+import { useMqtt } from '@/components/providers/mqtt-provider';
 import Flag from '@/components/ui/icons/Flag';
 
 const TourOverviewPage = ({ params }: PageProps<'/docent/tour/[tourId]'>) => {
   const { tourId } = use(params);
+  const router = useRouter();
+  const { client } = useMqtt();
   const { currentTour, data } = useDocent();
+
+  const handleEndTour = useCallback(() => {
+    if (!client) return;
+
+    // Send end-tour command to all exhibits (broadcast)
+    client.endTour({
+      onError: (err: Error) => console.error('Failed to end tour:', err),
+      onSuccess: () => {
+        // Go back to home page
+        router.push('/docent');
+      },
+    });
+  }, [client, router]);
 
   const leftButton = useMemo(
     (): HeaderProps['leftButton'] => ({
-      href: '/docent',
       icon: <Flag className="h-[21px] w-[20px]" />,
+      onClick: handleEndTour,
       text: data?.docent.navigation.endTour ?? 'End tour',
     }),
-    [data]
+    [handleEndTour, data]
   );
 
   type TourSubPath = 'basecamp' | 'overlook' | 'summit-room';
@@ -41,7 +58,7 @@ const TourOverviewPage = ({ params }: PageProps<'/docent/tour/[tourId]'>) => {
           className="bg-primary-bg-grey relative flex h-50 w-50 items-center justify-center rounded-lg transition-opacity ease-in-out active:opacity-80"
           href={tourUrl('basecamp')}
         >
-          <p className="text-primary-im-dark-blue -rotate-45 text-2xl">Basecamp</p>
+          <p className="text-primary-im-dark-blue -rotate-45 text-2xl tracking-[-1.2px]">Basecamp</p>
         </Link>
 
         {/* Item 2 */}
@@ -49,7 +66,7 @@ const TourOverviewPage = ({ params }: PageProps<'/docent/tour/[tourId]'>) => {
           className="bg-primary-bg-grey relative flex h-50 w-50 items-center justify-center rounded-lg transition-opacity ease-in-out active:opacity-80"
           href={tourUrl('overlook')}
         >
-          <p className="text-primary-im-dark-blue -rotate-45 text-2xl">Overlook</p>
+          <p className="text-primary-im-dark-blue -rotate-45 text-2xl tracking-[-1.2px]">Overlook</p>
         </Link>
 
         {/* Item 3 (manually placed in column 2, row 2) */}
@@ -57,7 +74,7 @@ const TourOverviewPage = ({ params }: PageProps<'/docent/tour/[tourId]'>) => {
           className="bg-primary-bg-grey relative col-start-2 row-start-2 flex h-50 w-50 items-center justify-center rounded-lg transition-opacity ease-in-out active:opacity-80"
           href={tourUrl('summit-room')}
         >
-          <p className="text-primary-im-dark-blue -rotate-45 text-2xl">Summit Room</p>
+          <p className="text-primary-im-dark-blue -rotate-45 text-2xl tracking-[-1.2px]">Summit Room</p>
         </Link>
       </div>
     </div>

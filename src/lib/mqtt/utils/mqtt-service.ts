@@ -1,9 +1,18 @@
 import mqtt, { MqttClient, type IClientOptions } from 'mqtt';
 import { getMqttBrokerUrl, MQTT_BASE_OPTIONS, mqttCommands } from '../constants';
+import { createAvailabilityMessage } from './create-avaiability-message';
 import { createMqttMessage } from './create-mqtt-message';
 import { generateClientId } from './generate-client-id';
 import { getAvailabilityTopic } from './get-availability-topic';
-import type { DeviceId, MqttError, MqttServiceConfig, PublishArgsConfig } from '../types';
+import {
+  ALL_VOLUME_CONTROLLABLE_EXHIBITS,
+  type DeviceId,
+  type MqttError,
+  type MqttServiceConfig,
+  type PublishArgsConfig,
+  type VolumeControllableExhibit,
+} from '../types';
+import type { ExhibitBeatId, OverlookBeatId } from '@/lib/internal/types';
 
 export class MqttService {
   private readonly availabilityTopic: string;
@@ -22,13 +31,24 @@ export class MqttService {
     this.connect();
   }
 
+  public allExhibitsMute(): void {
+    console.info('Muting all exhibits');
+    ALL_VOLUME_CONTROLLABLE_EXHIBITS.forEach(exhibit => this.setVolume(exhibit, true));
+  }
+
+  // Docent App → ALL Exhibits: Unmute all exhibits
+  public allExhibitsUnmute(): void {
+    console.info('Unmute all exhibits');
+    ALL_VOLUME_CONTROLLABLE_EXHIBITS.forEach(exhibit => this.setVolume(exhibit, false));
+  }
+
   public connect() {
     // Configure Last Will & Testament for automatic offline detection
     const optionsWithLWT: IClientOptions = {
       ...MQTT_BASE_OPTIONS,
       clientId: generateClientId(this.deviceId),
       will: {
-        payload: Buffer.from('offline'),
+        payload: Buffer.from(JSON.stringify(createAvailabilityMessage(this.deviceId, 'offline'))),
         qos: 1,
         retain: true,
         topic: this.availabilityTopic,
@@ -44,7 +64,7 @@ export class MqttService {
       // Birth message
       this.publish(
         this.availabilityTopic,
-        'online',
+        JSON.stringify(createAvailabilityMessage(this.deviceId, 'online')),
         { qos: 1, retain: true },
         {
           onError: (err: MqttError) => console.error('Failed to publish availability:', err),
@@ -86,7 +106,7 @@ export class MqttService {
       // Publish offline before we go offline
       this.publish(
         this.availabilityTopic,
-        'offline',
+        JSON.stringify(createAvailabilityMessage(this.deviceId, 'offline')),
         { qos: 1, retain: true },
         {
           onError: (err: MqttError) => {
@@ -121,15 +141,55 @@ export class MqttService {
       { qos: 1, retain: false },
       config
     );
+
+    // Mute all exhibits on end-tour
+    this.allExhibitsMute();
   }
 
   // Docent App → Exhibit: Direct command to go to a specific beat
-  public gotoBeat(exhibit: 'basecamp' | 'overlook' | 'summit', beatId: string, config?: PublishArgsConfig): void {
-    const message = createMqttMessage('docent-app', {
+  public gotoBeat(
+    exhibit: 'basecamp' | 'overlook-wall' | 'summit',
+    beatId: ExhibitBeatId,
+    config?: PublishArgsConfig,
+    presentationMode?: boolean
+  ): void {
+    const messageBody: { 'beat-id': ExhibitBeatId; 'presentation-mode'?: boolean } = {
       'beat-id': beatId,
-    });
+    };
+    if (presentationMode !== undefined) {
+      messageBody['presentation-mode'] = presentationMode;
+    }
+    const message = createMqttMessage('docent-app', messageBody);
 
-    console.info(`Sending goto-beat to ${exhibit}: ${beatId}`);
+    console.info(
+      `Sending goto-beat to ${exhibit}: ${beatId}${presentationMode !== undefined ? ` (presentation-mode: ${presentationMode})` : ''}`
+    );
+    this.publish(`cmd/dev/${exhibit}/goto-beat`, JSON.stringify(message), { qos: 1, retain: false }, config);
+  }
+
+  // Video beat play/pause control
+  // NOTE: Only overlook-wall supports playpause in GEC state. Basecamp and summit ignore this field.
+  // Use gotoBeat() for basecamp and summit instead.
+  public gotoBeatWithPlayPause(
+    exhibit: 'overlook-wall',
+    beatId: OverlookBeatId,
+    playPause: boolean,
+    config?: PublishArgsConfig,
+    presentationMode?: boolean
+  ): void {
+    const messageBody: {
+      'beat-id': ExhibitBeatId;
+      'playpause': boolean;
+      'presentation-mode'?: boolean;
+    } = {
+      'beat-id': beatId,
+      'playpause': playPause,
+    };
+    if (presentationMode !== undefined) {
+      messageBody['presentation-mode'] = presentationMode;
+    }
+    const message = createMqttMessage('docent-app', messageBody);
+
     this.publish(`cmd/dev/${exhibit}/goto-beat`, JSON.stringify(message), { qos: 1, retain: false }, config);
   }
 
@@ -141,6 +201,9 @@ export class MqttService {
 
     console.info('Sending load-tour command to GEC:', tourId);
     this.publish(mqttCommands.docent.loadTour, JSON.stringify(message), { qos: 1, retain: false }, config);
+
+    // Unmute all exhibits on load-tour
+    this.allExhibitsUnmute();
   }
 
   public publish(
@@ -169,8 +232,9 @@ export class MqttService {
 
   // Exhibit → State: Report full exhibit state (retained)
   // This publishes the complete state to state/<exhibit>
+  // Note: MQTT topics use 'overlook' but we accept 'overlook-wall' for consistency with other methods
   public reportExhibitState(
-    exhibit: 'basecamp' | 'overlook' | 'summit',
+    exhibit: 'basecamp' | 'overlook-wall' | 'summit',
     state: {
       'beat-id': string;
       'playpause'?: boolean; // Only for overlook/summit
@@ -180,11 +244,13 @@ export class MqttService {
     },
     config?: PublishArgsConfig
   ): void {
-    const message = createMqttMessage(exhibit, state);
+    // Map 'overlook-wall' to 'overlook' for MQTT topic (broker uses 'overlook' for state topic)
+    const topicExhibit = exhibit === 'overlook-wall' ? 'overlook' : exhibit;
+    const message = createMqttMessage(topicExhibit, state);
 
     console.info(`${exhibit} reporting full state:`, state);
     this.publish(
-      `state/${exhibit}`,
+      `state/${topicExhibit}`,
       JSON.stringify(message),
       { qos: 1, retain: true }, // Retained
       config
@@ -227,15 +293,27 @@ export class MqttService {
     this.publish(mqttCommands.docent.sync, JSON.stringify(message), { qos: 1, retain: false }, config);
   }
 
-  // Docent App → GEC: Set volume (mute/unmute) for an exhibit
-  public setVolume(subject: 'basecamp' | 'overlook' | 'summit', muted: boolean, config?: PublishArgsConfig): void {
+  // Docent App → Overlook: Toggle presentation mode (no beat-id)
+  public setPresentationMode(exhibit: 'overlook-wall', presentationMode: boolean, config?: PublishArgsConfig): void {
     const message = createMqttMessage('docent-app', {
-      muted,
-      subject,
+      'presentation-mode': presentationMode,
     });
 
-    console.info(`Setting volume for ${subject}: ${muted ? 'muted' : 'unmuted'}`);
-    this.publish(mqttCommands.docent.setVolume, JSON.stringify(message), { qos: 1, retain: false }, config);
+    console.info(`Sending presentation-mode to ${exhibit}: ${presentationMode}`);
+    this.publish(`cmd/dev/${exhibit}/goto-beat`, JSON.stringify(message), { qos: 1, retain: false }, config);
+  }
+
+  // Docent App → Exhibit: Set mute unmute for an exhibit
+  public setVolume(subject: VolumeControllableExhibit, muted: boolean, config?: PublishArgsConfig): void {
+    const volumeLevel = muted ? 0 : 1.0;
+
+    const message = createMqttMessage('docent-app', {
+      'volume-level': volumeLevel,
+      'volume-muted': muted,
+    });
+
+    console.info(`Setting volume for ${subject}: ${muted ? 'muted' : 'unmuted'} (volume-level: ${volumeLevel})`);
+    this.publish(`cmd/dev/${subject}/set-volume`, JSON.stringify(message), { qos: 1, retain: false }, config);
   }
 
   // Custom subscription methods for route-specific topics

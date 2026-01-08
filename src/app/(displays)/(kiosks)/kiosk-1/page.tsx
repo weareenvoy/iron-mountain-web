@@ -1,5 +1,7 @@
-const Kiosk1Page = ({}: PageProps<'/kiosk-1'>) => {
-  return <div>Kiosk 1</div>;
+import Kiosk1View from './components/Kiosk1View';
+
+const Kiosk1Page = () => {
+  return <Kiosk1View />;
 };
 
 export default Kiosk1Page;
