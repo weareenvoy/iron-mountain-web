@@ -37,8 +37,9 @@ const InitialScreenTemplate = memo(
   }: InitialScreenTemplateProps) => {
     const ref = useRef(null);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-    const [showIdle, setShowIdle] = useState(!!idleVideoSrc);
-    const [idleComplete, setIdleComplete] = useState(!idleVideoSrc);
+    const idleVideoSrcRef = useRef<string | undefined>(idleVideoSrc);
+    const [dismissedIdleVideoSrc, setDismissedIdleVideoSrc] = useState<null | string>(null);
+    const [idleCompleteVideoSrc, setIdleCompleteVideoSrc] = useState<null | string>(null);
 
     /**
      * Animation trigger configuration:
@@ -60,8 +61,13 @@ const InitialScreenTemplate = memo(
       };
     }, []);
 
+    useEffect(() => {
+      idleVideoSrcRef.current = idleVideoSrc;
+    }, [idleVideoSrc]);
+
     const handleIdleTap = () => {
-      setShowIdle(false);
+      if (!idleVideoSrc) return;
+      setDismissedIdleVideoSrc(idleVideoSrc);
 
       // Clear any existing timeout
       if (timeoutRef.current) {
@@ -69,11 +75,16 @@ const InitialScreenTemplate = memo(
       }
 
       // Wait for fade out animation to complete before triggering initial screen animations
+      const videoSrcAtTap = idleVideoSrc;
       timeoutRef.current = setTimeout(() => {
-        setIdleComplete(true);
+        if (idleVideoSrcRef.current !== videoSrcAtTap) return;
+        setIdleCompleteVideoSrc(videoSrcAtTap);
         timeoutRef.current = null;
       }, IDLE_FADE_OUT_DURATION_MS);
     };
+
+    const idleComplete = !idleVideoSrc || idleCompleteVideoSrc === idleVideoSrc;
+    const showIdle = Boolean(idleVideoSrc) && dismissedIdleVideoSrc !== idleVideoSrc;
 
     const shouldAnimate = isInView && idleComplete;
     return (
