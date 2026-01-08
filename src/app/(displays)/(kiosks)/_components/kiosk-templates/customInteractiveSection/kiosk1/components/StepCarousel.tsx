@@ -119,10 +119,10 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
   const [selectedIndex, setSelectedIndex] = useState(() => Math.min(steps.length - 1, LAYOUT.INITIAL_CENTER_INDEX));
   const [shouldAnimate, setShouldAnimate] = useState(false);
   const [pressedIndex, setPressedIndex] = useState<null | number>(null);
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const transitionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const selectedIndexRef = useRef(selectedIndex);
+  const isTransitioningRef = useRef(false);
   const totalSlides = steps.length;
 
   /**
@@ -211,20 +211,18 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
   }, [selectedIndex]);
 
   // Embla event listeners - update selectedIndex only on snap changes (not continuous scroll)
-  // Also manages transition state to avoid race conditions
   useEffect(() => {
     if (!emblaApi) return undefined;
     const handleSelect = () => {
       const nextIndex = emblaApi.selectedScrollSnap();
       const prevIndex = selectedIndexRef.current;
 
-      // Only update and trigger transition if index actually changed
+      // Only update state if index actually changed
       if (nextIndex !== prevIndex) {
         setSelectedIndex(nextIndex);
-        applyEdgeTransforms(nextIndex);
 
         // Mark as transitioning when selection changes
-        setIsTransitioning(true);
+        isTransitioningRef.current = true;
 
         // Clear any existing timeout
         if (transitionTimeoutRef.current) {
@@ -234,7 +232,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
         // Clear transition state after animation completes
         transitionTimeoutRef.current = setTimeout(
           () => {
-            setIsTransitioning(false);
+            isTransitioningRef.current = false;
             transitionTimeoutRef.current = null;
           },
           DIAMOND_TRANSITION.DURATION * 1000 + 100
@@ -252,15 +250,49 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
         transitionTimeoutRef.current = null;
       }
     };
+  }, [emblaApi]);
+
+  // Apply transforms continuously during scroll using RAF throttling
+  // This keeps layout consistent while dragging without triggering React re-renders
+  useEffect(() => {
+    if (!emblaApi) return undefined;
+
+    let raf = 0;
+    let isRunning = false;
+
+    const tick = () => {
+      isRunning = false;
+      const nextSnap = emblaApi.selectedScrollSnap();
+      applyEdgeTransforms(nextSnap);
+    };
+
+    const onScroll = () => {
+      if (isRunning) return;
+      isRunning = true;
+      raf = requestAnimationFrame(tick);
+    };
+
+    emblaApi.on('scroll', onScroll);
+
+    return () => {
+      emblaApi.off('scroll', onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
   }, [applyEdgeTransforms, emblaApi]);
 
-  // Initial alignment
+  // Initial alignment and transform application
   useEffect(() => {
     if (!emblaApi || totalSlides === 0 || hasAppliedInitialAlignment.current) return;
     const desiredIndex = Math.min(totalSlides - 1, LAYOUT.INITIAL_CENTER_INDEX);
     hasAppliedInitialAlignment.current = true;
     emblaApi.scrollTo(desiredIndex, true);
-  }, [emblaApi, totalSlides]);
+
+    // Apply edge transforms after scroll completes
+    // Use RAF to ensure Embla has finished positioning
+    requestAnimationFrame(() => {
+      applyEdgeTransforms(desiredIndex);
+    });
+  }, [applyEdgeTransforms, emblaApi, totalSlides]);
 
   /**
    * Detect when carousel becomes visible to trigger animations
@@ -326,7 +358,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
       }
 
       // If this is the active diamond, open the modal (if not transitioning)
-      if (idx === selectedIndexRef.current && !isTransitioning) {
+      if (idx === selectedIndexRef.current && !isTransitioningRef.current) {
         onStepClick(idx);
       } else if (idx !== selectedIndexRef.current) {
         // Otherwise, navigate to this diamond
@@ -336,7 +368,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
         emblaApi.scrollTo(idx);
       }
     },
-    [emblaApi, isTransitioning, onStepClick]
+    [emblaApi, onStepClick]
   );
 
   // Early return for empty steps (after all hooks)
