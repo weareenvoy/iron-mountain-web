@@ -39,24 +39,17 @@ const InitialScreenTemplate = memo(
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const [showIdle, setShowIdle] = useState(!!idleVideoSrc);
     const [idleComplete, setIdleComplete] = useState(!idleVideoSrc);
+
     /**
-     * Animation triggers when:
-     * - Element is in view (30% visible, once: true means won't re-trigger on scroll back)
-     * - AND idle screen has been dismissed (or wasn't present)
-     * This intentional behavior ensures animations don't start while idle screen is showing.
+     * Animation trigger configuration:
+     * - amount: 0.3 = Animations trigger when 30% of element is visible
+     * - once: true = Animations fire once and won't re-trigger on scroll back
+     *
+     * Note: Animations are gated by both isInView AND idleComplete.
+     * This means if user scrolls away and back before dismissing idle,
+     * animations won't trigger (intentional design to wait for idle dismissal).
      */
     const isInView = useInView(ref, { amount: 0.3, once: true });
-
-    // Sync idle state with prop changes (defensive programming for dynamic content)
-    useEffect(() => {
-      if (idleVideoSrc) {
-        setShowIdle(true);
-        setIdleComplete(false);
-      } else {
-        setShowIdle(false);
-        setIdleComplete(true);
-      }
-    }, [idleVideoSrc]);
 
     // Cleanup timeout on unmount
     useEffect(() => {
@@ -66,6 +59,17 @@ const InitialScreenTemplate = memo(
         }
       };
     }, []);
+
+    // Sync idle state with prop changes (handles dynamic content updates)
+    useEffect(() => {
+      if (idleVideoSrc) {
+        setShowIdle(true);
+        setIdleComplete(false);
+      } else {
+        setShowIdle(false);
+        setIdleComplete(true);
+      }
+    }, [idleVideoSrc]);
 
     const handleIdleTap = () => {
       setShowIdle(false);
@@ -82,12 +86,6 @@ const InitialScreenTemplate = memo(
       }, IDLE_FADE_OUT_DURATION_MS);
     };
 
-    /**
-     * Animations trigger only when BOTH conditions are met:
-     * 1. Element is in viewport (isInView)
-     * 2. Idle screen has been dismissed or wasn't present (idleComplete)
-     * This prevents animations from playing while idle screen is active.
-     */
     const shouldAnimate = isInView && idleComplete;
     return (
       <div
