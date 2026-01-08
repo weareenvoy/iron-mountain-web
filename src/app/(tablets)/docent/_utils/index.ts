@@ -1,50 +1,5 @@
-import {
-  isBasecampSection,
-  isOverlookSection,
-  isValidSummitRoomBeatId,
-  type ExhibitNavigationState,
-  type SummitRoomBeatId,
-} from '@/lib/internal/types';
 import type { DocentAppState } from '@/app/(tablets)/docent/_types';
 import type { Route } from 'next';
-
-export const parseBasecampBeatId = (beatId: string): ExhibitNavigationState | null => {
-  const lastDashIndex = beatId.lastIndexOf('-');
-  if (lastDashIndex === -1) return null;
-
-  const momentId = beatId.substring(0, lastDashIndex);
-  const beatNumber = parseInt(beatId.substring(lastDashIndex + 1), 10);
-
-  if (Number.isNaN(beatNumber) || beatNumber < 1 || !isBasecampSection(momentId)) {
-    return null;
-  }
-
-  return {
-    beatIdx: beatNumber - 1,
-    momentId,
-  };
-};
-
-export const parseOverlookBeatId = (beatId: string): ExhibitNavigationState | null => {
-  const lastDashIndex = beatId.lastIndexOf('-');
-  if (lastDashIndex === -1) return null;
-
-  const momentId = beatId.substring(0, lastDashIndex);
-  const beatNumber = parseInt(beatId.substring(lastDashIndex + 1), 10);
-
-  if (Number.isNaN(beatNumber) || beatNumber < 1 || !isOverlookSection(momentId)) {
-    return null;
-  }
-
-  return {
-    beatIdx: beatNumber - 1,
-    momentId,
-  };
-};
-
-export const parseSummitBeatId = (beatId: string): null | SummitRoomBeatId => {
-  return isValidSummitRoomBeatId(beatId) ? beatId : null;
-};
 
 export const getTourIdFromGecState = (state: DocentAppState): null | string => {
   return state['tour-id'] || null;

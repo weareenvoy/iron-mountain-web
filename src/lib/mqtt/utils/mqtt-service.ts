@@ -4,7 +4,14 @@ import { createAvailabilityMessage } from './create-avaiability-message';
 import { createMqttMessage } from './create-mqtt-message';
 import { generateClientId } from './generate-client-id';
 import { getAvailabilityTopic } from './get-availability-topic';
-import type { DeviceId, MqttError, MqttServiceConfig, PublishArgsConfig } from '../types';
+import {
+  ALL_VOLUME_CONTROLLABLE_EXHIBITS,
+  type DeviceId,
+  type MqttError,
+  type MqttServiceConfig,
+  type PublishArgsConfig,
+  type VolumeControllableExhibit,
+} from '../types';
 import type { ExhibitBeatId, OverlookBeatId } from '@/lib/internal/types';
 
 export class MqttService {
@@ -22,6 +29,17 @@ export class MqttService {
     this.onError = config.onError;
 
     this.connect();
+  }
+
+  public allExhibitsMute(): void {
+    console.info('Muting all exhibits');
+    ALL_VOLUME_CONTROLLABLE_EXHIBITS.forEach(exhibit => this.setVolume(exhibit, true));
+  }
+
+  // Docent App → ALL Exhibits: Unmute all exhibits
+  public allExhibitsUnmute(): void {
+    console.info('Unmute all exhibits');
+    ALL_VOLUME_CONTROLLABLE_EXHIBITS.forEach(exhibit => this.setVolume(exhibit, false));
   }
 
   public connect() {
@@ -123,6 +141,9 @@ export class MqttService {
       { qos: 1, retain: false },
       config
     );
+
+    // Mute all exhibits on end-tour
+    this.allExhibitsMute();
   }
 
   // Docent App → Exhibit: Direct command to go to a specific beat
@@ -180,6 +201,9 @@ export class MqttService {
 
     console.info('Sending load-tour command to GEC:', tourId);
     this.publish(mqttCommands.docent.loadTour, JSON.stringify(message), { qos: 1, retain: false }, config);
+
+    // Unmute all exhibits on load-tour
+    this.allExhibitsUnmute();
   }
 
   public publish(
@@ -262,11 +286,12 @@ export class MqttService {
   }
 
   // Docent App → Exhibit: Set mute unmute for an exhibit
-  public setVolume(subject: 'basecamp' | 'overlook-wall' | 'summit', muted: boolean, config?: PublishArgsConfig): void {
+  public setVolume(subject: VolumeControllableExhibit, muted: boolean, config?: PublishArgsConfig): void {
     const volumeLevel = muted ? 0 : 1.0;
 
     const message = createMqttMessage('docent-app', {
       'volume-level': volumeLevel,
+      'volume-muted': muted,
     });
 
     console.info(`Setting volume for ${subject}: ${muted ? 'muted' : 'unmuted'} (volume-level: ${volumeLevel})`);

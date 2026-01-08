@@ -1,11 +1,11 @@
 'use client';
 
 import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { parseSummitBeatId } from '@/app/(tablets)/docent/_utils';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getLocaleForTesting } from '@/flags/flags';
 import { getSummitData } from '@/lib/internal/data/get-summit';
 import { getSlideIndexFromBeatId, type Locale, type SummitRoomBeatId } from '@/lib/internal/types';
+import { parseSummitBeatId } from '@/lib/internal/utils/parse-beat-id';
 import type { SummitData } from '@/app/(displays)/summit/_types';
 import type { ExhibitMqttStateBase, ExhibitMqttStateSummit } from '@/lib/mqtt/types';
 
