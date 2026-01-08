@@ -304,13 +304,20 @@ export class AudioEngine implements AudioController {
         }
       };
 
-      const existing = this.loopSlots[slot];
-
+      // Handle null case (stop music) - read existing immediately
       if (!idOrUrl) {
+        const existing = this.loopSlots[slot];
         stopExisting(existing);
         this.loopSlots[slot] = null;
         return;
       }
+
+      // Load buffer FIRST
+      const buffer = await this.loadBuffer(idOrUrl);
+
+      // Read existing AFTER async.
+      // This prevents the race condition where rapid setMusic calls both see existing=null.
+      const existing = this.loopSlots[slot];
 
       // If the requested loop is already playing, keep it running by default.
       // Optionally update its per-loop gain (volume) and/or restart it explicitly.
@@ -322,8 +329,6 @@ export class AudioEngine implements AudioController {
         existing.gain.gain.linearRampToValueAtTime(volume, now + fadeMs / 1000);
         return;
       }
-
-      const buffer = await this.loadBuffer(idOrUrl);
 
       const source = ctx.createBufferSource();
       source.buffer = buffer;

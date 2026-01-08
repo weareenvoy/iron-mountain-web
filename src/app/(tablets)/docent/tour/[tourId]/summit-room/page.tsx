@@ -7,10 +7,11 @@ import { use, useCallback, useEffect, useMemo } from 'react';
 import { useDocent } from '@/app/(tablets)/docent/_components/providers/docent';
 import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
-import { getSlideBorderColor, parseSummitBeatId } from '@/app/(tablets)/docent/_utils';
+import { getSlideBorderColor } from '@/app/(tablets)/docent/_utils';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import SummitRoomDiamonds from '@/components/ui/icons/SummitRoomDiamonds';
 import { getBeatIdFromSlideIndex, getSlideIndexFromBeatId, type SummitRoomBeatId } from '@/lib/internal/types';
+import { parseSummitBeatId } from '@/lib/internal/utils/parse-beat-id';
 import { cn } from '@/lib/tailwind/utils/cn';
 
 const INITIAL_BEAT_ID: SummitRoomBeatId = 'journey-intro';
