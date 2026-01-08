@@ -22,10 +22,10 @@
       "featuredStat1Body": "of data is safely stored and accessible for the Museum.",
 
       "item1Body": "The Museum also needed assistance with physical storage for a collection of historical music artifacts.",
-      "item1Image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/01+-+Challenge/Challenge-Image1-Diamond.webp",
+      "item1Image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/01+-+Challenge/Challenge-Image1-Full.webp",
 
       "item2Body": "The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.",
-      "item2Image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/01+-+Challenge/Challenge-Image2-Diamond.webp",
+      "item2Image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/01+-+Challenge/Challenge-Image2-Full.webp",
 
       "featuredStat2": "40 TB",
       "featuredStat2Body": "of existing footage of data migration from physical drives into Smart Vault.",
@@ -37,7 +37,7 @@
       "body": "With a focus on physical storage and a secure digital archive, Iron Mountain provided climate-controlled, private vaults for physical artifacts and implemented Smart Vault for digital preservation.",
 
       "headline": "A partnership with Iron Mountain",
-      "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Image1-Diamond.webp",
+      "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Image1-Full.webp",
       "labelText": "Solution",
       "mainVideo": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Header.webm",
       "numberedList": [
@@ -58,8 +58,8 @@
         "AI-powered search"
       ],
       "images": [
-        "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Image3-Diamond.webp",
-        "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Image2-Diamond.webp"
+        "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Image3-Full.webp",
+        "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Image2-Full.webp"
       ]
     },
 
@@ -106,7 +106,7 @@
       "headline": "Learn more about how we unlocked new possibilities for our partners",
       "mainCTA": "From archive to access",
       "secondaryCTA": "Virtual walkthrough",
-      "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image1-Diamond.webp",
+      "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/CU-Image1-Full.webp",
       "headline2": "From archive to access",
       "body2": "Explore each section to learn how Iron Mountain can transform your enterprise",
       "diamondCarouselItems": ["Intake and assessment", "Digitization and remediation", "Digital preservation", "Search and discover", "Share, stream and monetize"],

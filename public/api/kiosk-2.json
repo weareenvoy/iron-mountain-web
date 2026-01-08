@@ -24,10 +24,10 @@
       "featuredStat2": "2.5M",
       "featuredStat2Body": "paper images are being digitized.",
       "item1Body": "Disparate, unstructured records across various locations and legacy systems—including paper, microfilm, CD, and digital formats—created costly, risk-laden pension administration.",
-      "item1Image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/01+-+Challenge/Challenge-Image1-Diamond.webp",
+      "item1Image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/01+-+Challenge/Challenge-Image1-Full.webp",
 
       "item2Body": "After multiple acquisitions with antiquated and disordered records, finding the required regulatory documentation was difficult to impossible.",
-      "item2Image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/01+-+Challenge/Challenge-Image2-Diamond.webp",
+      "item2Image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/01+-+Challenge/Challenge-Image2-Full.webp",
       "labelText": "Challenge",
       "mainVideo": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/01+-+Challenge/Challenge-header.webm"
     },
@@ -36,7 +36,7 @@
       "body": "The organization turned to Iron Mountain for help, implementing InSightⓇ DXP. This created a unified platform for newly digitized documents and digitally-native records gathered from various departments and prior acquisitions.",
 
       "headline": "A partnership with Iron Mountain",
-      "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image1-Diamond.webp",
+      "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image1-Full.webp",
       "labelText": "Solution",
       "mainVideo": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-header.webm",
       "numberedList": [
@@ -57,8 +57,8 @@
         "Searchable \nrepository of pension \ninformation"
       ],
       "images": [
-        "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image3-Diamond.webp",
-        "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image2-Diamond.webp"
+        "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image3-Full.webp",
+        "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image2-Full.webp"
       ]
     },
 
@@ -106,7 +106,7 @@
     "customInteractive2": {
       "headline": "Learn more about how we unlocked new possibilities for our partners",
       "secondaryCTA": "Launch demo",
-      "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image1-Diamond.webp"
+      "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/04+-+Custom+Interactive/CU-Image1-Full.webp"
     }
   }
 }]
