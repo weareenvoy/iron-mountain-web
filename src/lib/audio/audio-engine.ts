@@ -39,6 +39,12 @@ export class AudioEngine implements AudioController {
 
   private isUnlockAttempted = false;
 
+  // Tracks the latest request ID per slot. Used to detect stale async completions.
+  private readonly loopRequestId: Record<'ambience' | 'music', number> = {
+    ambience: 0,
+    music: 0,
+  };
+
   private loopSlots: Record<'ambience' | 'music', LoopSlot> = {
     ambience: null,
     music: null,
@@ -272,6 +278,10 @@ export class AudioEngine implements AudioController {
     const volume = options?.volume === undefined ? null : clamp01(options.volume);
     const volumeOrDefault = volume ?? 1;
 
+    // Bump request ID so any in-flight async work becomes stale.
+    // This ensures "last call wins" even when setMusic(null) races with a pending setMusic(url).
+    const requestId = ++this.loopRequestId[slot];
+
     const start = async () => {
       const ctx = this.ensureContext();
       const channelGain = this.ensureChannelGains()[slot];
@@ -304,13 +314,20 @@ export class AudioEngine implements AudioController {
         }
       };
 
-      const existing = this.loopSlots[slot];
-
+      // Stop request should invalidate earlier in-flight requests.
       if (!idOrUrl) {
-        stopExisting(existing);
+        stopExisting(this.loopSlots[slot]);
         this.loopSlots[slot] = null;
         return;
       }
+
+      // Load buffer FIRST
+      const buffer = await this.loadBuffer(idOrUrl);
+
+      // If a newer request happened, do not commit.
+      if (this.loopRequestId[slot] !== requestId) return;
+
+      const existing = this.loopSlots[slot];
 
       // If the requested loop is already playing, keep it running by default.
       // Optionally update its per-loop gain (volume) and/or restart it explicitly.
@@ -322,8 +339,6 @@ export class AudioEngine implements AudioController {
         existing.gain.gain.linearRampToValueAtTime(volume, now + fadeMs / 1000);
         return;
       }
-
-      const buffer = await this.loadBuffer(idOrUrl);
 
       const source = ctx.createBufferSource();
       source.buffer = buffer;

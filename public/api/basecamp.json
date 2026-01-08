@@ -84,6 +84,13 @@
         "ascend-1": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Ascend_04_part_1.webm" },
         "ascend-2": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Ascend_04_part_2.webm" },
         "ascend-3": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Ascend_04_part_3.webm" }
+      },
+      "music": {
+        "ambient": "https://cdn.pixabay.com/audio/2022/03/13/audio_d0add212b7.mp3",
+        "ascend": "https://cdn.pixabay.com/audio/2025/11/19/audio_8a5dad516a.mp3",
+        "possibilities": "https://cdn.pixabay.com/audio/2025/01/31/audio_352d34e739.mp3",
+        "problem": "https://cdn.pixabay.com/audio/2023/04/04/audio_8ff7bcf37b.mp3",
+        "welcome": "https://cdn.pixabay.com/audio/2025/08/08/audio_8e1c201162.mp3"
       }
     }
   }

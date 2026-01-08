@@ -3,7 +3,7 @@ import { cn } from '@/lib/tailwind/utils/cn';
 import type { SummitProblem2Item, SummitProblem3 } from '@/app/(displays)/summit/_types';
 
 type MetricsSectionProps = {
-  readonly challenges?: null | SummitProblem3 | SummitProblem3['challenges'] | undefined;
+  readonly challenges: SummitProblem3;
   readonly stats: readonly SummitProblem2Item[];
   readonly title: string;
   readonly variant?: 'default' | 'slide';
@@ -11,11 +11,7 @@ type MetricsSectionProps = {
 
 const MetricsSection = ({ challenges, stats, title, variant = 'default' }: MetricsSectionProps) => {
   const isSlide = variant === 'slide';
-  const challengeItems = Array.isArray((challenges as SummitProblem3 | undefined)?.challenges)
-    ? (challenges as SummitProblem3).challenges
-    : Array.isArray(challenges)
-      ? challenges
-      : [];
+  const challengeItems = challenges.challenges;
 
   return (
     <section className={cn('flex flex-col', isSlide ? 'gap-5' : 'gap-12')}>
