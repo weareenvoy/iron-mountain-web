@@ -62,7 +62,7 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
       data-scroll-section="customInteractive-third-screen"
     >
       <div className="pointer-events-none absolute inset-0 bg-transparent" />
-      <div className="pointer-events-none absolute inset-0 bg-black/15 backdrop-blur-[12px]" />
+      <div className="pointer-events-none absolute inset-0 bg-black/15 backdrop-blur-md" />
 
       <CircularCarousel slides={safeSlides}>
         {({ current, index, isExiting }) => {
@@ -72,14 +72,14 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
           const isSlide6 = current.id === 'slide-6';
           const primaryDiamondClass =
             isSlide2 || isSlide5
-              ? 'absolute left-[510px] bottom-[670px] h-[1200px] w-[1200px] rotate-[45deg] overflow-hidden rounded-[90px] shadow-[0_30px_90px_rgba(0,0,0,0.35)]'
+              ? 'absolute left-[510px] bottom-[670px] h-[1200px] w-[1200px] rotate-45 overflow-hidden rounded-[90px] shadow-[0_30px_90px_rgba(0,0,0,0.35)]'
               : isSlide3 || isSlide6
-                ? 'absolute left-[340px] bottom-[340px] h-[1130px] w-[1130px] rotate-[45deg] overflow-hidden rounded-[90px] shadow-[0_30px_90px_rgba(0,0,0,0.35)]'
-                : 'absolute left-[700px] bottom-[1120px] h-[830px] w-[830px] rotate-[45deg] overflow-hidden rounded-[90px] shadow-[0_30px_90px_rgba(0,0,0,0.35)]';
+                ? 'absolute left-[340px] bottom-[340px] h-[1130px] w-[1130px] rotate-45 overflow-hidden rounded-[90px] shadow-[0_30px_90px_rgba(0,0,0,0.35)]'
+                : 'absolute left-[700px] bottom-[1120px] h-[830px] w-[830px] rotate-45 overflow-hidden rounded-[90px] shadow-[0_30px_90px_rgba(0,0,0,0.35)]';
           const secondaryDiamondClass =
             isSlide3 || isSlide6
-              ? 'absolute left-[1390px] bottom-[1150px] h-[800px] w-[800px] rotate-[45deg] overflow-hidden rounded-[80px] shadow-[0_24px_70px_rgba(0,0,0,0.32)]'
-              : 'absolute left-[1380px] bottom-[400px] h-[880px] w-[880px] rotate-[45deg] overflow-hidden rounded-[80px] shadow-[0_24px_70px_rgba(0,0,0,0.32)]';
+              ? 'absolute left-[1390px] bottom-[1150px] h-[800px] w-[800px] rotate-45 overflow-hidden rounded-[80px] shadow-[0_24px_70px_rgba(0,0,0,0.32)]'
+              : 'absolute left-[1380px] bottom-[400px] h-[880px] w-[880px] rotate-45 overflow-hidden rounded-[80px] shadow-[0_24px_70px_rgba(0,0,0,0.32)]';
 
           const headlineText = headline;
           const eyebrowText = current.eyebrow;
@@ -88,7 +88,7 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
           return (
             <>
               {/* Eyebrow */}
-              <h2 className="absolute top-[240px] left-[120px] text-[57px] leading-[1.5] font-normal tracking-[-1.8px] whitespace-pre-line text-[#ededed]">
+              <h2 className="absolute top-[240px] left-[120px] text-[57px] leading-normal font-normal tracking-[-1.8px] whitespace-pre-line text-[#ededed]">
                 {renderRegisteredMark(eyebrowText)}
               </h2>
 
@@ -100,9 +100,9 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
               {/* Data configuration + bullets */}
               <AnimatePresence mode="wait">
                 <motion.div
-                  animate={isExiting ? { opacity: 0, y: 30 } : { opacity: 1, y: 0 }}
+                  animate={isExiting ? { opacity: 0, y: -30 } : { opacity: 1, y: 0 }}
                   className="absolute top-[1650px] left-[240px] max-w-[920px] space-y-[36px] text-white"
-                  exit={{ opacity: 0, y: 30 }}
+                  exit={{ opacity: 0, y: -30 }}
                   initial={{ opacity: 0, y: 0 }}
                   key={`bullets-${index}`}
                   transition={{ duration: 0.6, ease: [0.3, 0, 0.4, 1] }}
@@ -111,7 +111,7 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
                     animate={{ opacity: 1 }}
                     className="text-[80px] leading-[1.3] tracking-[-4px]"
                     initial={{ opacity: 0 }}
-                    transition={{ delay: 0.2, duration: 0.5 }}
+                    transition={{ duration: 0.6, ease: [0.3, 0, 0.4, 1] }}
                   >
                     {renderRegisteredMark(sectionTitle)}
                   </motion.h2>
@@ -122,9 +122,9 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
                         className="flex w-[1100px] items-start gap-[16px] text-[64px]"
                         initial={{ opacity: 0 }}
                         key={`${current.id}-bullet-${i}`}
-                        transition={{ delay: 0.3 + i * 0.1, duration: 0.5 }}
+                        transition={{ delay: i * 0.1, duration: 0.6, ease: [0.3, 0, 0.4, 1] }}
                       >
-                        <span className="mt-[20px] mr-[40px] ml-[-50px] inline-block h-[35px] w-[35px] rotate-[45deg] rounded-[4px] border border-white/80" />
+                        <span className="mt-[20px] mr-[40px] ml-[-50px] inline-block h-[35px] w-[35px] rotate-45 rounded-[4px] border border-white/80" />
                         <span>{renderRegisteredMark(item)}</span>
                       </motion.li>
                     ))}
@@ -145,17 +145,17 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
               {/* Primary Diamond */}
               <AnimatePresence mode="wait">
                 <motion.div
-                  animate={isExiting ? { opacity: 0, scale: 1, y: 30 } : { opacity: 1, scale: 1, y: 0 }}
+                  animate={isExiting ? { opacity: 0, scale: 1, x: -21, y: -21 } : { opacity: 1, scale: 1, x: 0, y: 0 }}
                   className={primaryDiamondClass}
-                  exit={{ opacity: 0, scale: 1, y: 30 }}
-                  initial={{ opacity: 0, scale: 0, y: 0 }}
+                  exit={{ opacity: 0, scale: 1, x: -21, y: -21 }}
+                  initial={{ opacity: 0, scale: 0, x: 0, y: 0 }}
                   key={`primary-${index}`}
                   transition={{ duration: 0.6, ease: [0.3, 0, 0.4, 1] }}
                 >
                   {current.primaryVideoSrc ? (
                     <video
                       autoPlay
-                      className="h-full w-full origin-center scale-[1.35] -rotate-[45deg] object-cover"
+                      className="h-full w-full origin-center scale-[1.35] -rotate-45 object-cover"
                       loop
                       muted
                       playsInline
@@ -170,16 +170,18 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
               {current.secondaryImageSrc ? (
                 <AnimatePresence mode="wait">
                   <motion.div
-                    animate={isExiting ? { opacity: 0, scale: 1, y: 30 } : { opacity: 1, scale: 1, y: 0 }}
+                    animate={
+                      isExiting ? { opacity: 0, scale: 1, x: -21, y: -21 } : { opacity: 1, scale: 1, x: 0, y: 0 }
+                    }
                     className={secondaryDiamondClass}
-                    exit={{ opacity: 0, scale: 1, y: 30 }}
-                    initial={{ opacity: 0, scale: 0, y: 0 }}
+                    exit={{ opacity: 0, scale: 1, x: -21, y: -21 }}
+                    initial={{ opacity: 0, scale: 0, x: 0, y: 0 }}
                     key={`secondary-${index}`}
                     transition={{ delay: 0.1, duration: 0.6, ease: [0.3, 0, 0.4, 1] }}
                   >
                     <Image
                       alt={current.secondaryImageAlt}
-                      className="origin-center scale-[1.35] -rotate-[45deg] object-cover"
+                      className="origin-center scale-[1.35] -rotate-45 object-cover"
                       fill
                       quality={85} // 85 Quality here since it's a larger secondary image in an interactive setup (carousel)
                       sizes="880px"
@@ -193,9 +195,9 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
               {(isSlide2 || isSlide5) && (
                 <AnimatePresence mode="wait">
                   <motion.div
-                    animate={isExiting ? { opacity: 0, y: 30 } : { opacity: 1, y: 0 }}
+                    animate={isExiting ? { opacity: 0, y: -30 } : { opacity: 1, y: 0 }}
                     className="absolute inset-0"
-                    exit={{ opacity: 0, y: 30 }}
+                    exit={{ opacity: 0, y: -30 }}
                     initial={{ opacity: 0, y: 0 }}
                     key={`svg-group-2-5-${index}`}
                     transition={{ duration: 0.6, ease: [0.3, 0, 0.4, 1] }}
@@ -218,7 +220,7 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
                     </motion.div>
                     <motion.div
                       animate={{ scale: 1 }}
-                      className="pointer-events-none absolute bottom-[-1555px] left-[1100px] h-[1200px] w-[1200px] rotate-[45deg] overflow-visible"
+                      className="pointer-events-none absolute bottom-[-1555px] left-[1100px] h-[1200px] w-[1200px] rotate-45 overflow-visible"
                       initial={{ scale: 0 }}
                       transition={{ duration: 0.6, ease: [0.3, 0, 0.4, 1] }}
                     >
@@ -240,9 +242,9 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
               {(isSlide3 || isSlide6) && (
                 <AnimatePresence mode="wait">
                   <motion.div
-                    animate={isExiting ? { opacity: 0, y: 30 } : { opacity: 1, y: 0 }}
+                    animate={isExiting ? { opacity: 0, y: -30 } : { opacity: 1, y: 0 }}
                     className="absolute inset-0"
-                    exit={{ opacity: 0, y: 30 }}
+                    exit={{ opacity: 0, y: -30 }}
                     initial={{ opacity: 0, y: 0 }}
                     key={`svg-group-3-6-${index}`}
                     transition={{ duration: 0.6, ease: [0.3, 0, 0.4, 1] }}
@@ -265,7 +267,7 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
                     </motion.div>
                     <motion.div
                       animate={{ scale: 1 }}
-                      className="pointer-events-none absolute bottom-[-1240px] left-[0px] h-[1800px] w-[1800px] overflow-visible"
+                      className="pointer-events-none absolute bottom-[-1240px] left-0 h-[1800px] w-[1800px] overflow-visible"
                       initial={{ scale: 0 }}
                       transition={{ duration: 0.6, ease: [0.3, 0, 0.4, 1] }}
                     >
@@ -279,9 +281,9 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
               {!isSlide2 && !isSlide3 && !isSlide5 && !isSlide6 && (
                 <AnimatePresence mode="wait">
                   <motion.div
-                    animate={isExiting ? { opacity: 0, y: 30 } : { opacity: 1, y: 0 }}
+                    animate={isExiting ? { opacity: 0, y: -30 } : { opacity: 1, y: 0 }}
                     className="absolute inset-0"
-                    exit={{ opacity: 0, y: 30 }}
+                    exit={{ opacity: 0, y: -30 }}
                     initial={{ opacity: 0, y: 0 }}
                     key={`svg-group-1-4-${index}`}
                     transition={{ duration: 0.6, ease: [0.3, 0, 0.4, 1] }}
@@ -314,7 +316,7 @@ const CustomInteractiveKiosk3ThirdScreenTemplate = ({
       <div
         className={cn(
           'absolute inset-0 transition-opacity duration-700',
-          showOverlay ? 'pointer-events-auto z-[999] opacity-100' : 'pointer-events-none opacity-0'
+          showOverlay ? 'pointer-events-auto z-999 opacity-100' : 'pointer-events-none opacity-0'
         )}
       >
         <CustomInteractiveDemoScreenTemplate
