@@ -39,6 +39,12 @@ export class AudioEngine implements AudioController {
 
   private isUnlockAttempted = false;
 
+  // Tracks the latest request ID per slot. Used to detect stale async completions.
+  private readonly loopRequestId: Record<'ambience' | 'music', number> = {
+    ambience: 0,
+    music: 0,
+  };
+
   private loopSlots: Record<'ambience' | 'music', LoopSlot> = {
     ambience: null,
     music: null,
@@ -272,6 +278,10 @@ export class AudioEngine implements AudioController {
     const volume = options?.volume === undefined ? null : clamp01(options.volume);
     const volumeOrDefault = volume ?? 1;
 
+    // Bump request ID so any in-flight async work becomes stale.
+    // This ensures "last call wins" even when setMusic(null) races with a pending setMusic(url).
+    const requestId = ++this.loopRequestId[slot];
+
     const start = async () => {
       const ctx = this.ensureContext();
       const channelGain = this.ensureChannelGains()[slot];
@@ -304,10 +314,9 @@ export class AudioEngine implements AudioController {
         }
       };
 
-      // Handle null case (stop music) - read existing immediately
+      // Stop request should invalidate earlier in-flight requests.
       if (!idOrUrl) {
-        const existing = this.loopSlots[slot];
-        stopExisting(existing);
+        stopExisting(this.loopSlots[slot]);
         this.loopSlots[slot] = null;
         return;
       }
@@ -315,8 +324,9 @@ export class AudioEngine implements AudioController {
       // Load buffer FIRST
       const buffer = await this.loadBuffer(idOrUrl);
 
-      // Read existing AFTER async.
-      // This prevents the race condition where rapid setMusic calls both see existing=null.
+      // If a newer request happened, do not commit.
+      if (this.loopRequestId[slot] !== requestId) return;
+
       const existing = this.loopSlots[slot];
 
       // If the requested loop is already playing, keep it running by default.
