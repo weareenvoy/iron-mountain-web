@@ -1,6 +1,11 @@
+import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import NextImage from 'next/image';
+import { memo, useEffect, useRef } from 'react';
 
+/**
+ * ModalContent - Content configuration for step detail modal
+ */
 export type ModalContent = {
   readonly body: string;
   readonly heading: string;
@@ -8,25 +13,69 @@ export type ModalContent = {
   readonly imageSrc?: string;
 };
 
+/**
+ * Animation configuration for modal entrance/exit
+ * Slides up from far below viewport on open, returns on close
+ */
+const MODAL_ANIMATION = {
+  DURATION: 0.6,
+  EASE: [0.3, 0, 0.4, 1] as const, // 30 out 60 in easing
+  START_Y: 4000, // Slides up from far below
+} as const;
+
 type StepModalProps = {
   readonly content: ModalContent | null;
   readonly onClose: () => void;
 };
 
+/**
+ * StepModal - Full-screen modal displaying step details
+ * Features slide-up animation and escape key support
+ */
 const StepModal = ({ content, onClose }: StepModalProps) => {
+  // Store latest onClose in ref to avoid recreating event listener
+  const onCloseRef = useRef(onClose);
+
+  // Update ref when onClose changes
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
+
+  // Add escape key support - uses ref to avoid memory leak
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onCloseRef.current();
+      }
+    };
+
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, []); // Empty deps - listener never recreated
+
   if (!content) return null;
 
   return (
-    <div className="pointer-events-auto absolute inset-0 z-200 flex items-center justify-center">
-      <div className="pointer-events-auto absolute inset-0 bg-black/60 backdrop-blur-[50px]" onClick={onClose} />
-      <div className="pointer-events-auto relative z-201 flex h-[2800px] max-h-[90vh] w-[1920px] flex-col overflow-hidden rounded-[48px] bg-[#97e9ff] p-[80px] text-[#14477d] shadow-[0_40px_120px_rgba(0,0,0,0.45)]">
+    <div className="absolute inset-0 z-200 flex items-center justify-center">
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-[50px]" onClick={() => onCloseRef.current()} />
+      <motion.div
+        animate={{ y: 0 }}
+        className="relative z-201 flex h-[2800px] max-h-[90vh] w-[1920px] flex-col overflow-hidden rounded-[48px] bg-[#97e9ff] p-[80px] text-[#14477d] shadow-[0_40px_120px_rgba(0,0,0,0.45)]"
+        exit={{ y: MODAL_ANIMATION.START_Y }}
+        initial={{ y: MODAL_ANIMATION.START_Y }}
+        onClick={e => e.stopPropagation()}
+        transition={{
+          duration: MODAL_ANIMATION.DURATION,
+          ease: MODAL_ANIMATION.EASE,
+        }}
+      >
         <div className="flex items-center justify-between">
           <button
-            className="group pointer-events-auto relative top-[45px] left-[60px] flex h-[200px] items-center gap-[24px] rounded-[1000px] bg-[#ededed] px-[90px] py-[60] pr-[100px] text-[55px] leading-[1.4] font-normal tracking-[-2.7px] text-[#14477d] transition hover:scale-[1.02] active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.4,0,0.2,1)]"
-            onClick={onClose}
+            className="group pointer-events-auto relative top-[45px] left-[60px] flex h-[200px] items-center gap-[24px] rounded-[1000px] bg-[#ededed] px-[90px] py-[60] pr-[100px] text-[55px] leading-[1.4] font-normal tracking-[-2.7px] text-[#14477d] transition hover:scale-[1.02] active:opacity-70 active:transition-opacity active:duration-60 active:ease-in-out"
+            onClick={() => onCloseRef.current()}
             type="button"
           >
-            <span className="flex items-center justify-center group-active:opacity-40 group-active:transition-opacity group-active:duration-[60ms] group-active:ease-[cubic-bezier(0.4,0,0.2,1)]">
+            <span className="flex items-center justify-center group-active:opacity-40 group-active:transition-opacity group-active:duration-60 group-active:ease-in-out">
               <ArrowLeft aria-hidden className="mr-[30px] h-[52px] w-[52px]" color="#14477d" strokeWidth={2} />
             </span>
             Back
@@ -56,9 +105,10 @@ const StepModal = ({ content, onClose }: StepModalProps) => {
             </div>
           ) : null}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
 
-export default StepModal;
+const MemoizedStepModal = memo(StepModal);
+export { MemoizedStepModal as StepModal };
