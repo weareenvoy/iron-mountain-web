@@ -10,10 +10,18 @@ import {
   useState,
   type PropsWithChildren,
 } from 'react';
-import { parseBasecampBeatId } from '@/app/(tablets)/docent/_utils';
+import { useAudio } from '@/components/providers/audio-provider';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getBasecampData } from '@/lib/internal/data/get-basecamp';
-import { type BasecampBeatId, type BasecampData, type ExhibitNavigationState, type Locale } from '@/lib/internal/types';
+import {
+  type BasecampBeatId,
+  type BasecampData,
+  type BasecampSection,
+  type ExhibitNavigationState,
+  type Locale,
+} from '@/lib/internal/types';
+import { parseBasecampBeatId } from '@/lib/internal/utils/parse-beat-id';
+import { useExhibitSetVolume } from '@/lib/mqtt/utils/use-exhibit-set-volume';
 import type { ExhibitMqttStateBase } from '@/lib/mqtt/types';
 
 interface BasecampContextType {
@@ -41,6 +49,8 @@ export const useBasecamp = () => {
 };
 
 export const BasecampProvider = ({ children }: BasecampProviderProps) => {
+  const audio = useAudio();
+
   const { client } = useMqtt();
 
   // Which beat's video is ready. Foreground compares its beatId to this.
@@ -52,6 +62,10 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     'volume-level': 1.0,
     'volume-muted': false,
   });
+
+  // Wait for actual MQTT state before playing music.
+  // We don't want default 'ambient' music to play before we receive actual beat.
+  const [hasReceivedMqttState, setHasReceivedMqttState] = useState(false);
 
   // Ref to access latest mqttState without causing dependency changes. Avoids re-subscription.
   const mqttStateRef = useRef(mqttState);
@@ -71,6 +85,31 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
   }, [beatId]);
 
   const [data, setData] = useState<BasecampData | null>(null);
+
+  // Background music. 1 music per moment.
+  const currentMusicUrlRef = useRef<null | string>(null);
+
+  useEffect(() => {
+    // Wait for actual MQTT state before playing music
+    if (!hasReceivedMqttState) return;
+    // Wait for data to load before playing music
+    if (!data?.music) return;
+
+    const momentId = exhibitState.momentId as BasecampSection;
+    const musicUrl = data.music[momentId];
+
+    // Only call setMusic if URL changed
+    if (musicUrl === currentMusicUrlRef.current) return;
+
+    currentMusicUrlRef.current = musicUrl ?? null;
+    if (musicUrl) {
+      console.info(`[Music] Playing: ${momentId}`);
+      audio.setMusic(musicUrl, { fadeMs: 1000 });
+    } else {
+      audio.setMusic(null, { fadeMs: 1000 });
+    }
+  }, [audio, data?.music, exhibitState.momentId, hasReceivedMqttState]);
+
   const [locale, setLocale] = useState<Locale>('en');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<null | string>(null);
@@ -125,6 +164,15 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
   const reportStateRef = useRef(reportState);
   reportStateRef.current = reportState;
 
+  // Shared hook for handling set-volume commands
+  useExhibitSetVolume({
+    appId: 'basecamp',
+    audio,
+    client,
+    reportStateRef,
+    stateRef: mqttStateRef,
+  });
+
   // Subscribe to GEC commands (broadcasts to ALL exhibits)
   useEffect(() => {
     if (!client) return;
@@ -137,17 +185,12 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
         console.info('Basecamp received load-tour command:', tourId);
 
         if (tourId) {
-          // Fetch tour-specific data for this tour
-          // For now, just fetch the generic basecamp data
           const success = await fetchDataRef.current(tourId);
 
           if (success) {
-            // Only report loaded state after data is fetched
-            reportStateRef.current({
-              'beat-id': 'ambient-1',
-              'volume-level': 1.0,
-              'volume-muted': false,
-            });
+            // Docent will send set-volume cmd after load tour cmd, so we only need to focus on beat here.
+            reportStateRef.current({ 'beat-id': 'ambient-1' });
+            setHasReceivedMqttState(true);
           } else {
             console.error('Basecamp: Failed to fetch tour data for tour:', tourId);
           }
@@ -162,11 +205,8 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
       console.info('Basecamp received end-tour command');
 
       // Reset to ambient state with no tour
-      reportStateRef.current({
-        'beat-id': 'ambient-1',
-        'volume-level': 0.0,
-        'volume-muted': false,
-      });
+      reportStateRef.current({ 'beat-id': 'ambient-1' });
+      setHasReceivedMqttState(true);
     };
 
     // 3. Goto beat command (direct from Docent)
@@ -186,6 +226,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
 
           // Report updated state with new beat-id - exhibitState will be derived from this
           reportStateRef.current({ 'beat-id': beatId });
+          setHasReceivedMqttState(true);
         }
       } catch (error) {
         console.error('Basecamp: Error parsing goto-beat command:', error);
@@ -195,7 +236,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     // Subscribe to broadcast commands (all exhibits listen to same topics)
     client.subscribeToTopic('cmd/dev/all/load-tour', handleLoadTour);
     client.subscribeToTopic('cmd/dev/all/end-tour', handleEndTour);
-    // Also subscribe to basecamp-specific goto-beat (direct from Docent)
+    // Subscribe to basecamp-specific commands (direct from Docent)
     client.subscribeToTopic('cmd/dev/basecamp/goto-beat', handleGotoBeat);
 
     return () => {
@@ -203,7 +244,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
       client.unsubscribeFromTopic('cmd/dev/all/end-tour', handleEndTour);
       client.unsubscribeFromTopic('cmd/dev/basecamp/goto-beat', handleGotoBeat);
     };
-  }, [client]);
+  }, [audio, client]);
 
   // Subscribe to own state for restart/recovery
   useEffect(() => {
@@ -215,9 +256,14 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
         const state: ExhibitMqttStateBase = msg.body;
         console.info('Basecamp: Received own state on boot:', state);
 
+        // Apply retained volume/mute to audio engine
+        audio.setMasterMuted(state['volume-muted']);
+        audio.setMasterVolume(state['volume-level']);
+
         // Update internal MQTT state - exhibitState will be derived from this
         mqttStateRef.current = state;
         setMqttState(state);
+        setHasReceivedMqttState(true);
 
         // Fetch content if we have a tour loaded
         fetchData();
@@ -234,7 +280,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     return () => {
       client.unsubscribeFromTopic('state/basecamp', handleOwnState);
     };
-  }, [client, fetchData]);
+  }, [audio, client, fetchData]);
 
   const contextValue = {
     data,
