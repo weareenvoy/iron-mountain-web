@@ -10,8 +10,8 @@ type Props = {
 };
 
 const ScaleWrapper = ({ background = 'black', children, targetHeight, targetWidth }: Props) => {
-  const scale = 0.415;
-  // const scale = 1;
+  // const scale = 0.415;
+  const scale = 1;
   // For dev in chrome current value is 0.415. Remove for production.
 
   // This file scales the build down to a size that is compatible with xScope when screenshots of Figma are taken at 10% zoom. For context it is compatible when the 0.415 scale is used and the custom Kiosk viewport is 2160x5120 at 50% zoom.
@@ -27,10 +27,10 @@ const ScaleWrapper = ({ background = 'black', children, targetHeight, targetWidt
 
   return (
     <div
-      className="grid w-screen place-items-center"
+      className="grid w-screen place-items-center overflow-visible"
       style={{ '--background': background, 'background': 'var(--background)' } as CSSProperties}
     >
-      <div className="origin-top-left will-change-transform" style={innerStyle}>
+      <div className="origin-top-left overflow-visible will-change-transform" style={innerStyle}>
         {children}
       </div>
       {/* Inline approach here since arbitrary values in tailwind like scale([${scale}]) don't work with runtime values. targetHeight, targetWidth, and scale are calculated from config and won't be known at buildtime. (kiosk.config.json)*/}
