@@ -1,7 +1,7 @@
 'use client';
 
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export type CarouselSlide = {
   readonly bullets: string[];
@@ -17,18 +17,42 @@ export type CarouselSlide = {
 };
 
 type CircularCarouselProps = {
-  readonly children: (props: { current: CarouselSlide; index: number; total: number }) => React.ReactNode;
+  readonly children: (props: {
+    current: CarouselSlide;
+    index: number;
+    isExiting: boolean;
+    total: number;
+  }) => React.ReactNode;
   readonly slides: readonly CarouselSlide[];
 };
 
 const CircularCarousel = ({ children, slides }: CircularCarouselProps) => {
   const [index, setIndex] = useState(0);
+  const [isExiting, setIsExiting] = useState(false);
+  const prevIndexRef = useRef(0);
   const total = slides.length;
   const currentIndex = total > 0 ? index % total : 0;
   const current = slides[currentIndex];
 
-  const goNext = () => setIndex(i => (i + 1) % total);
-  const goPrev = () => setIndex(i => (i - 1 + total) % total);
+  const goNext = () => {
+    setIsExiting(true);
+    setTimeout(() => {
+      setIndex(i => (i + 1) % total);
+      setIsExiting(false);
+    }, 400); // Exit animation duration
+  };
+
+  const goPrev = () => {
+    setIsExiting(true);
+    setTimeout(() => {
+      setIndex(i => (i - 1 + total) % total);
+      setIsExiting(false);
+    }, 400); // Exit animation duration
+  };
+
+  useEffect(() => {
+    prevIndexRef.current = currentIndex;
+  }, [currentIndex]);
 
   if (!current) {
     return null;
@@ -36,7 +60,7 @@ const CircularCarousel = ({ children, slides }: CircularCarouselProps) => {
 
   return (
     <div className="relative h-full w-full">
-      {children({ current, index, total })}
+      {children({ current, index, isExiting, total })}
 
       {/* Circle carousel control */}
       <div className="absolute top-[1670px] right-[120px] z-[1] h-[520px] w-[520px]">
