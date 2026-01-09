@@ -72,7 +72,7 @@ const CircularCarousel = ({ children, slides }: CircularCarouselProps) => {
           {/* Arrows */}
           <button
             aria-label="Previous slide"
-            className="absolute top-1/2 left-[100px] flex h-[102px] w-[102px] -translate-y-1/2 items-center justify-center transition hover:opacity-80"
+            className="group absolute top-1/2 left-[100px] flex h-[102px] w-[102px] -translate-y-1/2 items-center justify-center transition hover:opacity-80 active:opacity-40 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
             onClick={goPrev}
             type="button"
           >
@@ -80,7 +80,7 @@ const CircularCarousel = ({ children, slides }: CircularCarouselProps) => {
           </button>
           <button
             aria-label="Next slide"
-            className="absolute top-1/2 right-[70px] flex h-[102px] w-[102px] -translate-y-1/2 items-center justify-center transition hover:opacity-80"
+            className="group absolute top-1/2 right-[70px] flex h-[102px] w-[102px] -translate-y-1/2 items-center justify-center transition hover:opacity-80 active:opacity-40 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
             onClick={goNext}
             type="button"
           >

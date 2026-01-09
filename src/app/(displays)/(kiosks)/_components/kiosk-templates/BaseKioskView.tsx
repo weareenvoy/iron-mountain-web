@@ -44,11 +44,12 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
   });
 
   // Carousel delegation (wraps navigation handlers)
-  const { handleNavigateDown, handleNavigateUp, handleRegisterCarouselHandlers } = useCarouselDelegation({
-    baseHandleNavigateDown,
-    baseHandleNavigateUp,
-    currentScrollTarget,
-  });
+  const { handleNavigateDown, handleNavigateUp, handleRegisterCarouselHandlers, handleRegisterListHandlers } =
+    useCarouselDelegation({
+      baseHandleNavigateDown,
+      baseHandleNavigateUp,
+      currentScrollTarget,
+    });
 
   // Get store action directly to avoid double hook call
   const handleButtonClick = useKioskArrowStore(state => state.handleButtonClick);
@@ -68,6 +69,7 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
       },
       handleInitialButtonClick,
       handleRegisterCarouselHandlers,
+      handleRegisterListHandlers,
       scrollToSectionById,
     },
     usesAccordion,
@@ -157,7 +159,7 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
           >
             <div
               aria-label="Previous"
-              className="flex cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95"
+              className="flex cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95 active:opacity-40 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
               onPointerDown={handleNavigateUp}
               role="button"
               style={{
@@ -176,7 +178,7 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
             </div>
             <div
               aria-label="Next"
-              className="flex cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95"
+              className="flex cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95 active:opacity-40 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
               onPointerDown={handleNavigateDown}
               role="button"
               style={{

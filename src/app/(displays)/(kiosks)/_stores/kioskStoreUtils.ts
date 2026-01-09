@@ -49,7 +49,7 @@ export const getStoreKey = (kioskId: KioskId): 'kiosk1' | 'kiosk2' | 'kiosk3' =>
     case 'kiosk-3':
       return 'kiosk3';
     default:
-      // This should never happen due to KioskId type, but provides runtime safety
+      // Unreachable if kioskId is correctly typed, but kept as a runtime guard
       throw new Error(`Invalid kioskId: ${kioskId}. Expected 'kiosk-1', 'kiosk-2', or 'kiosk-3'.`);
   }
 };
