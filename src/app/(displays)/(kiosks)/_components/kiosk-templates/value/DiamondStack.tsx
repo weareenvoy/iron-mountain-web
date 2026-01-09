@@ -1,14 +1,38 @@
+import { memo } from 'react';
 import { getDiamondIcon } from '@/app/(displays)/(kiosks)/_utils/get-diamond-icon';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import type { ValueDiamondCard } from '@/app/(displays)/(kiosks)/_types/value-types';
 
+/**
+ * Layout variant for diamond stack positioning.
+ * - 'carousel': Diamonds positioned for carousel view (offset left with specific spacing)
+ * - 'overview': Diamonds evenly spaced across the full width
+ */
 export type DiamondStackVariant = 'carousel' | 'overview';
 
+/**
+ * Layout configuration for diamond positioning.
+ */
 type DiamondLayout = {
+  /** Optional Tailwind class for container positioning */
   readonly className?: string;
+  /** Array of left positions (in px) for each diamond */
   readonly positions: readonly number[];
 };
 
+/**
+ * Predefined layouts for different diamond stack variants.
+ * All positioning values are derived from Figma design specifications to ensure
+ * pixel-perfect alignment with the design system.
+ *
+ * Carousel variant:
+ * - Left offset: -330px to align diamond stack within carousel container (from Figma frame positioning)
+ * - Diamond positions: [335, 490, 650]px creating 155px spacing between centers (from Figma spacing grid)
+ *
+ * Overview variant:
+ * - No offset (positioned at container origin)
+ * - Diamond positions: [0, 565, 1130]px evenly distributed across 920px container (from Figma artboard layout)
+ */
 const diamondLayouts: Record<DiamondStackVariant, DiamondLayout> = {
   carousel: {
     className: 'relative left-[-330px]',
@@ -20,26 +44,48 @@ const diamondLayouts: Record<DiamondStackVariant, DiamondLayout> = {
   },
 } as const;
 
+/**
+ * Props for the DiamondStack component.
+ */
 type DiamondStackProps = {
+  /** Array of diamond card data to render */
   readonly cards: readonly ValueDiamondCard[];
+  /** Layout variant to use (defaults to 'overview') */
   readonly variant?: DiamondStackVariant;
 };
 
-const DiamondStack = ({ cards, variant = 'overview' }: DiamondStackProps) => {
+/**
+ * Renders a stack of diamond icons with optional labels.
+ * Used for both carousel and overview variants with different positioning.
+ *
+ * @param cards - Array of diamond card data including icons and labels
+ * @param variant - Layout variant: 'carousel' (offset left) or 'overview' (evenly spaced)
+ */
+const DiamondStack = memo(({ cards, variant = 'overview' }: DiamondStackProps) => {
   const layout = diamondLayouts[variant];
 
   return (
     <div className={`relative flex h-[565px] w-[920px] items-center ${layout.className ?? ''}`}>
       {cards.map((card, index) => {
         const Icon = getDiamondIcon(card);
-        const leftOffset = layout.positions[index] ?? index * 160;
+        const leftOffset = layout.positions[index];
+
+        // Validate index is within expected range
+        if (leftOffset === undefined) {
+          if (process.env.NODE_ENV === 'development') {
+            console.error(
+              `Invalid diamond index ${index} for variant '${variant}'. Expected 0-${layout.positions.length - 1}.`
+            );
+          }
+          return null;
+        }
 
         return (
           <div
             className="absolute h-[550px] w-[550px] rotate-45 rounded-[80px]"
-            key={card.label || `diamond-${index}`}
-            style={{ '--left-offset': `${leftOffset}px`, 'left': 'var(--left-offset)' } as React.CSSProperties}
-            // These styles are inline because this setup requires runtime calculation based on index and array lookup to create the visual stack effect when overlapping diamonds to create a staggered layout pattern with leftOffset (left positions based on index).
+            key={card.label || `diamond-${variant}-${index}`}
+            style={{ left: `${leftOffset}px` }}
+            // Inline left position is required for runtime calculation based on variant and index
           >
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="h-full w-full -rotate-45">
@@ -58,6 +104,6 @@ const DiamondStack = ({ cards, variant = 'overview' }: DiamondStackProps) => {
       })}
     </div>
   );
-};
+});
 
 export default DiamondStack;

@@ -500,7 +500,7 @@ export const useKioskSlides = ({
         onRegisterListHandlers: handleRegisterListHandlers,
       }),
       ...buildValueSlides(values, kioskId, globalHandlers, {
-        onRegisterCarouselHandlers: handleRegisterCarouselHandlers,
+        registerCarouselHandlers: handleRegisterCarouselHandlers,
       }),
       ...buildCustomInteractiveSlides(customInteractive, kioskId, scrollToSectionById),
     ];

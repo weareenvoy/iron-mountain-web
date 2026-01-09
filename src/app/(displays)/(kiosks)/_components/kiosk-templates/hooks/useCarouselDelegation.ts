@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { SCROLL_SECTION_VALUE_DESCRIPTION } from '@/app/(displays)/(kiosks)/_constants/scroll-sections';
+import { SCROLL_SECTION_VALUE_CAROUSEL } from '@/app/(displays)/(kiosks)/_constants/scroll-sections';
 import type { CarouselHandlers } from '@/app/(displays)/(kiosks)/_types/carousel-types';
 
 // This hook decides when the carousels and lists should use their own navigation instead of global paragraph navigation since they're both tied to the main navigation arrows.
@@ -64,7 +64,7 @@ export const useCarouselDelegation = ({
 
     // Check if we should delegate to carousel (value section)
     const shouldDelegateToCarousel =
-      currentScrollTarget === SCROLL_SECTION_VALUE_DESCRIPTION &&
+      currentScrollTarget === SCROLL_SECTION_VALUE_CAROUSEL &&
       carouselHandlers !== null &&
       carouselHandlers.canScrollNext();
 
@@ -89,7 +89,7 @@ export const useCarouselDelegation = ({
 
     // Check if carousel can handle the navigation (value section)
     const shouldDelegateToCarousel =
-      currentScrollTarget === SCROLL_SECTION_VALUE_DESCRIPTION &&
+      currentScrollTarget === SCROLL_SECTION_VALUE_CAROUSEL &&
       carouselHandlers !== null &&
       carouselHandlers.canScrollPrev();
 
