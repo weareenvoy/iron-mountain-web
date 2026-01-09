@@ -10,7 +10,7 @@ const Home = ({}: PageProps<'/'>) => {
         <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
           <h1 className="scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance">Apps:</h1>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
+        <div className="flex max-w-4xl flex-col gap-4 text-base font-medium sm:flex-row sm:flex-wrap">
           {APPS.map((app, index) => (
             <Button asChild className="h-12 md:w-[158px]" key={index} size="xl">
               <Link href={app.route}>{app.title}</Link>
