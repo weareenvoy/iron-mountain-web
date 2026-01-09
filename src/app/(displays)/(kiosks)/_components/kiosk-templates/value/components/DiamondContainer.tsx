@@ -40,8 +40,16 @@ const DiamondContainer = memo(
     return (
       <div className="relative flex h-[565px] w-[920px] items-center">
         {Array.from({ length: diamondCount }).map((_, index) => {
-          const diamondIcon = diamondIcons[index] ?? null;
-          const diamondLabel = diamondLabels[index] ?? '';
+          const diamondIcon = diamondIcons[index];
+          const diamondLabel = diamondLabels[index];
+
+          if (!diamondIcon) {
+            throw new Error(`[DiamondContainer] Missing diamond icon for index ${index}. Fix CMS data.`);
+          }
+          if (diamondLabel === undefined) {
+            throw new Error(`[DiamondContainer] Missing diamond label for index ${index}. Fix CMS data.`);
+          }
+          // Note: diamondLabel can be an empty string by design - only the featured diamond shows text
 
           const targetPosition = getDiamondPositionForSlide(currentSlideIndex, index);
           const zIndexClass = getDiamondZIndex(currentSlideIndex, index);

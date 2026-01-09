@@ -44,21 +44,6 @@ export const TEXT_VISIBILITY_MAP: ReadonlyArray<readonly [boolean, boolean, bool
 ] as const;
 
 /**
- * Index within each slide's diamondCards array where the label is stored.
- * All slides store their featured label at this index.
- */
-export const DIAMOND_LABEL_INDEX = 2;
-
-/**
- * Default diamond labels used when CMS data is unavailable.
- */
-export const DEFAULT_LABELS = {
-  ECONOMIC: 'Economic benefits',
-  OPERATIONAL: 'Operational benefits',
-  STRATEGIC: 'Strategic benefits',
-} as const;
-
-/**
  * Key prefix for diamond elements in the carousel.
  * Used to generate stable React keys for diamond components.
  */

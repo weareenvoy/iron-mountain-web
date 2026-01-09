@@ -6,7 +6,6 @@ import { getDiamondIcon } from '@/app/(displays)/(kiosks)/_utils/get-diamond-ico
 import { cn } from '@/lib/tailwind/utils/cn';
 import BulletList from './BulletList';
 import { CAROUSEL_VISIBILITY_THRESHOLD, DIAMONDS_SETTLE_TIME } from '../constants/animation';
-import { DEFAULT_LABELS } from '../constants/layout';
 import DiamondContainer from './DiamondContainer';
 import { getBulletItems } from '../utils/helpers';
 import type { ValueCarouselSlide } from '@/app/(displays)/(kiosks)/_types/value-types';
@@ -64,23 +63,47 @@ const AnimatedValueCarousel = ({ hasCarouselSlides, registerCarouselHandlers, sl
   const observerRef = useRef<IntersectionObserver | null>(null);
   const slideIndexRef = useRef(0);
 
-  // Memoize diamond icons to avoid recalculating on every render
-  const diamondIcons = useMemo(
-    () => slides[0]?.diamondCards?.map(card => getDiamondIcon(card) ?? null) ?? [],
-    [slides]
-  );
-
-  // Memoize diamond labels - validate CMS provides all required labels
-  const diamondLabels = useMemo(() => {
-    const labels = slides[0]?.diamondCards?.map(card => card.label).filter(Boolean) ?? [];
-    if (labels.length !== 3) {
-      // Fall back to default labels if CMS data is incomplete
-      if (process.env.NODE_ENV === 'development') {
-        console.warn('[AnimatedValueCarousel] Expected 3 diamond labels from CMS, got:', labels.length);
-      }
-      return [DEFAULT_LABELS.STRATEGIC, DEFAULT_LABELS.ECONOMIC, DEFAULT_LABELS.OPERATIONAL];
+  // Memoize diamond icons - fail fast if CMS data is missing
+  const diamondIcons = useMemo(() => {
+    const cards = slides[0]?.diamondCards;
+    if (!cards || cards.length !== 3) {
+      throw new Error(
+        `[AnimatedValueCarousel] Expected 3 diamond cards from CMS, got ${cards?.length ?? 0}. Fix CMS data.`
+      );
     }
-    return labels as string[];
+    const icons = cards.map(card => getDiamondIcon(card));
+    if (icons.some(icon => !icon)) {
+      throw new Error('[AnimatedValueCarousel] Missing diamond icons in CMS data. All cards must have valid icons.');
+    }
+    return icons as Array<React.ComponentType<React.SVGProps<SVGSVGElement>>>;
+  }, [slides]);
+
+  // Memoize diamond labels - extract featured label from each slide and map to correct diamond index
+  const diamondLabels = useMemo(() => {
+    if (slides.length !== 3) {
+      throw new Error(`[AnimatedValueCarousel] Expected 3 slides from CMS, got ${slides.length}. Fix CMS data.`);
+    }
+
+    // Extract featured labels from each slide
+    const slideLabels = slides.map((slide, slideIndex) => {
+      const featuredCard = slide.diamondCards?.[2];
+      if (!featuredCard?.label) {
+        throw new Error(
+          `[AnimatedValueCarousel] Missing featured diamond label for slide ${slideIndex}. Fix CMS data.`
+        );
+      }
+      return featuredCard.label;
+    });
+
+    // Map labels to correct diamond indices based on TEXT_VISIBILITY_MAP
+    // Slide 0: Diamond 2 shows text → slideLabels[0] goes to Diamond 2
+    // Slide 1: Diamond 1 shows text → slideLabels[1] goes to Diamond 1
+    // Slide 2: Diamond 0 shows text → slideLabels[2] goes to Diamond 0
+    return [
+      slideLabels[2]!, // Diamond 0 gets Strategic benefits (shows on slide 2)
+      slideLabels[1]!, // Diamond 1 gets Economic benefits (shows on slide 1)
+      slideLabels[0]!, // Diamond 2 gets Operational benefits (shows on slide 0)
+    ] as const;
   }, [slides]);
 
   // Sync ref with state for stable handler callbacks
@@ -175,7 +198,7 @@ const AnimatedValueCarousel = ({ hasCarouselSlides, registerCarouselHandlers, sl
             {/* Render diamonds once - they rotate to new positions on slide change */}
             <DiamondContainer
               currentSlideIndex={currentSlideIndex}
-              diamondCount={slides[0]?.diamondCards?.length ?? 0}
+              diamondCount={3}
               diamondIcons={diamondIcons}
               diamondLabels={diamondLabels}
               diamondsSettled={diamondsSettled}

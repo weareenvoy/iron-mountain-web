@@ -26,21 +26,29 @@ export const buildValueSlides = (
     }) => void;
   }
 ): Slide[] => {
-  const valueScreens = values.valueScreens ?? [];
+  if (!values.valueScreens || values.valueScreens.length === 0) {
+    throw new Error('[buildValueSlides] No value screens provided from CMS. Fix CMS data.');
+  }
 
-  return valueScreens.map((config, idx) => ({
-    id: `value-${idx}`,
-    render: () => (
-      <SectionSlide>
-        <ValueCarouselTemplate
-          {...config}
-          carouselId={config.carouselId ?? `${kioskId}-value-${idx}`}
-          onNavigateDown={handlers.onNavigateDown}
-          onNavigateUp={handlers.onNavigateUp}
-          registerCarouselHandlers={options?.registerCarouselHandlers}
-        />
-      </SectionSlide>
-    ),
-    title: config.headline ?? config.labelText ?? `Value ${idx + 1}`,
-  }));
+  return values.valueScreens.map((config, idx) => {
+    if (!config.headline && !config.labelText) {
+      throw new Error(`[buildValueSlides] Value screen ${idx} missing both headline and labelText. Fix CMS data.`);
+    }
+
+    return {
+      id: `value-${idx}`,
+      render: () => (
+        <SectionSlide>
+          <ValueCarouselTemplate
+            {...config}
+            carouselId={config.carouselId ?? `${kioskId}-value-${idx}`}
+            onNavigateDown={handlers.onNavigateDown}
+            onNavigateUp={handlers.onNavigateUp}
+            registerCarouselHandlers={options?.registerCarouselHandlers}
+          />
+        </SectionSlide>
+      ),
+      title: config.headline ?? config.labelText!,
+    };
+  });
 };
