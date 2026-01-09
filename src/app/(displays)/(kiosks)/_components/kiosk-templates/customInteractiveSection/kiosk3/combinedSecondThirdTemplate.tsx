@@ -111,18 +111,26 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
             key="morphing-diamond"
             transition={{ duration: 0.6, ease: [0.3, 0, 0.4, 1] }}
           >
-            <div className="absolute inset-0 h-full w-full -rotate-45">
-              <video
+            <motion.div
+              animate={{ left: showCarousel ? 0 : 480 }}
+              className="absolute inset-0 h-full w-full -rotate-45"
+              initial={{ left: showCarousel ? 0 : 480 }}
+              transition={{ duration: 0.6, ease: [0.3, 0, 0.4, 1] }}
+            >
+              <motion.video
+                animate={{ scale: showCarousel ? 1.4 : 1.7 }}
                 autoPlay
-                className="relative left-[480px] h-full w-full origin-center scale-[1.45] object-cover"
+                className="h-full w-full origin-center object-cover"
+                initial={{ scale: showCarousel ? 1.4 : 1.7 }}
                 loop
                 muted
                 playsInline
                 poster={backgroundImageSrc}
                 src={videoAsset}
+                transition={{ duration: 0.6, ease: [0.3, 0, 0.4, 1] }}
               />
               <div className="absolute inset-0 bg-linear-to-t from-black/25 via-transparent to-transparent" />
-            </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
