@@ -32,20 +32,18 @@ export const mapCustomInteractiveKiosk3 = (
     secondaryCtaLabel: customInteractive.secondaryCTA,
   },
   kiosk3SecondScreen: {
-    // Initial state (rings, dots, tap to begin) props
     backLabel: customInteractive.backCTA,
     demoIframeSrc: demo?.iframeLink,
     description: customInteractive.body,
     eyebrow: ambient.title,
-    // Carousel state props
     headline: customInteractive.headline2,
-    // Demo overlay props
-    overlayCardLabel: demo?.demoText,
-    overlayEndTourLabel: demo?.mainCTA,
-    overlayHeadline: demo?.headline,
-    overlayHeroImageAlt: '',
-    overlayHeroImageSrc: customInteractive.image,
-    // Carousel slides
+    overlay: {
+      cardLabel: demo?.demoText,
+      endTourLabel: demo?.mainCTA,
+      headline: demo?.headline,
+      heroImageAlt: '',
+      heroImageSrc: customInteractive.image,
+    },
     slides:
       customInteractive.tapCarousel?.map((item, index) => ({
         bullets: item.bullets ? [...item.bullets] : [],

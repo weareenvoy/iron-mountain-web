@@ -6,7 +6,7 @@ import {
   type CustomInteractiveKiosk1SecondScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/kiosk1/secondScreenTemplate';
 import CustomInteractiveKiosk3SecondScreenTemplate, {
-  type CustomInteractiveKiosk3SecondScreenTemplateProps,
+  type Kiosk3SecondScreenProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/kiosk3/secondScreenTemplate';
 import { SectionSlide, type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
 import type { CustomInteractiveDemoScreenTemplateProps } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
@@ -17,7 +17,7 @@ import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 export type CustomInteractiveScreens = {
   readonly demoScreen?: CustomInteractiveDemoScreenTemplateProps;
   readonly firstScreen?: CustomInteractiveKiosk1FirstScreenTemplateProps;
-  readonly kiosk3SecondScreen?: CustomInteractiveKiosk3SecondScreenTemplateProps;
+  readonly kiosk3SecondScreen?: Kiosk3SecondScreenProps;
   readonly kiosk3ThirdScreen?: CustomInteractiveDemoScreenTemplateProps;
   readonly secondScreen?: CustomInteractiveKiosk1SecondScreenTemplateProps;
   readonly thirdScreen?: CustomInteractiveDemoScreenTemplateProps;
