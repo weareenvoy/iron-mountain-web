@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useMemo, useState, type PropsWith
 import { AudioEngine } from '@/lib/audio/audio-engine';
 import type { AudioController, AudioSettings } from '@/lib/audio/types';
 
-type ExhibitDeviceId = 'basecamp' | 'overlook' | 'summit';
+type ExhibitDeviceId = 'basecamp' | 'kiosk-01' | 'kiosk-02' | 'kiosk-03' | 'overlook' | 'summit';
 
 interface AudioContextValue {
   readonly controller: AudioController;
