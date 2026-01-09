@@ -71,11 +71,11 @@ const StepModal = ({ content, onClose }: StepModalProps) => {
       >
         <div className="flex items-center justify-between">
           <button
-            className="group pointer-events-auto relative top-[45px] left-[60px] flex h-[200px] items-center gap-[24px] rounded-[1000px] bg-[#ededed] px-[90px] py-[60] pr-[100px] text-[55px] leading-[1.4] font-normal tracking-[-2.7px] text-[#14477d] transition hover:scale-[1.02] active:opacity-70 active:transition-opacity active:duration-60 active:ease-in-out"
+            className="group pointer-events-auto relative top-[45px] left-[60px] flex h-[200px] items-center gap-[24px] rounded-[1000px] bg-[#ededed] px-[90px] py-[60] pr-[100px] text-[55px] leading-[1.4] font-normal tracking-[-2.7px] text-[#14477d] transition hover:scale-[1.02] active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
             onClick={() => onCloseRef.current()}
             type="button"
           >
-            <span className="flex items-center justify-center group-active:opacity-40 group-active:transition-opacity group-active:duration-60 group-active:ease-in-out">
+            <span className="flex items-center justify-center">
               <ArrowLeft aria-hidden className="mr-[30px] h-[52px] w-[52px]" color="#14477d" strokeWidth={2} />
             </span>
             Back
