@@ -1,7 +1,8 @@
 import CustomInteractiveFirstScreenTemplate, {
   type CustomInteractiveKiosk1FirstScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/firstScreenTemplate';
-import CustomInteractiveKiosk1SecondScreenTemplate, {
+import {
+  CustomInteractiveKiosk1SecondScreenTemplate,
   type CustomInteractiveKiosk1SecondScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/kiosk1/secondScreenTemplate';
 import CustomInteractiveKiosk3SecondScreenTemplate, {
