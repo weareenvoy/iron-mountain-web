@@ -9,7 +9,7 @@ type MorphingDiamondProps = {
   readonly isCarouselExiting: boolean;
   /** Whether carousel is visible */
   readonly showCarousel: boolean;
-  /** Video asset URL (S3 URL with + encoding converted to %20) */
+  /** Video asset URL from CMS */
   readonly videoAsset: string;
 };
 
@@ -25,13 +25,13 @@ type MorphingDiamondProps = {
  * 3. **Exit (Slide Change):** Moves diagonally off-screen when user navigates away
  *
  * ## Technical Details
- * - Video URL is normalized (+ → %20) for browser compatibility
+ * - Video URL used directly from CMS (no normalization needed)
  * - Inner video counter-scales to maintain visual consistency
  * - Only renders when carousel is hidden OR when showing slide index 0
  * - Uses AnimatePresence for smooth mount/unmount transitions
  *
  * ## Performance
- * - Video src normalized and memoized
+ * - Video src memoized to prevent unnecessary recalculation
  * - Video element paused and src cleared on unmount (prevents memory leaks)
  * - Console logging gated behind NODE_ENV check
  *
@@ -41,14 +41,12 @@ const MorphingDiamond = memo(({ carouselIndex, isCarouselExiting, showCarousel, 
   const diamondAnimation = getMorphingDiamondAnimation(showCarousel, carouselIndex, isCarouselExiting);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Normalize URL: S3 URLs sometimes have + instead of %20 for spaces
-  // Memoized to avoid recalculating on every render
+  // Use videoAsset directly - URL normalization not needed as carousel videos work with the same format
   const normalizedVideoSrc = useMemo(() => {
     if (process.env.NODE_ENV === 'development') {
-      console.info('[MorphingDiamond] Raw videoAsset:', videoAsset);
-      console.info('[MorphingDiamond] Normalized:', videoAsset.replace(/\+/g, '%20'));
+      console.info('[MorphingDiamond] Video source:', videoAsset);
     }
-    return videoAsset.replace(/\+/g, '%20');
+    return videoAsset;
   }, [videoAsset]);
 
   // Cleanup: pause video on unmount to prevent memory leaks
