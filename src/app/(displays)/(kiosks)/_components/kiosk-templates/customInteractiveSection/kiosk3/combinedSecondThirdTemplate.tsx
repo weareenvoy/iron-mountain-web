@@ -15,7 +15,6 @@ import HCHollowGreenDiamond from '@/components/ui/icons/Kiosks/CustomInteractive
 import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowOrangeDiamond';
 import InnerRing from '@/components/ui/icons/Kiosks/CustomInteractive/InnerRing';
 import OuterRing from '@/components/ui/icons/Kiosks/CustomInteractive/OuterRing';
-import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import CircularCarousel, { type CarouselSlide } from './components/CircularCarousel';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
@@ -187,7 +186,7 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
                 </h1>
 
                 {/* Data configuration + bullets */}
-                <div className="absolute top-[1120px] left-[240px] text-white">
+                <div className="absolute top-[1600px] left-[240px] text-white w-[1000px]">
                   <AnimatePresence mode="wait">
                     <motion.div
                       animate={{ opacity: 1 }}
@@ -197,14 +196,14 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
                       key={current.id}
                       transition={{ delay: 0.2, duration: 0.4, ease: [0.3, 0, 0.6, 1] }}
                     >
-                      <div className="text-[57px] leading-normal font-normal tracking-[-1.8px]">
+                      <div className="text-[80px] leading-normal font-normal tracking-[-4px]">
                         {renderRegisteredMark(sectionTitle)}
                       </div>
                       <ul className="space-y-6">
                         {current.bullets.map((bullet, bulletIndex) => (
                           <motion.li
                             animate={{ opacity: 1 }}
-                            className="flex items-start text-[44px] leading-[1.3] font-normal tracking-[-1.3px]"
+                            className="flex items-start text-[60px] leading-[1.4] font-normal tracking-[-3px]"
                             exit={{ opacity: 0 }}
                             initial={{ opacity: 0 }}
                             key={`${current.id}-bullet-${bulletIndex}`}
@@ -525,22 +524,19 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
       </motion.div>
 
       {/* Demo overlay */}
-      <div
-        className={cn(
-          'absolute inset-0 z-9999 transition-opacity duration-700',
-          showOverlay ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
-        )}
-      >
-        <CustomInteractiveDemoScreenTemplate
-          cardLabel={overlayCardLabel}
-          demoIframeSrc={demoIframeSrc}
-          endTourLabel={overlayEndTourLabel}
-          headline={overlayHeadline}
-          heroImageAlt={overlayHeroImageAlt}
-          heroImageSrc={overlayHeroImageSrc}
-          onEndTour={handleHideOverlay}
-        />
-      </div>
+      {showOverlay && (
+        <div className="absolute inset-0 z-9999 animate-in duration-700 fade-in">
+          <CustomInteractiveDemoScreenTemplate
+            cardLabel={overlayCardLabel}
+            demoIframeSrc={demoIframeSrc}
+            endTourLabel={overlayEndTourLabel}
+            headline={overlayHeadline}
+            heroImageAlt={overlayHeroImageAlt}
+            heroImageSrc={overlayHeroImageSrc}
+            onEndTour={handleHideOverlay}
+          />
+        </div>
+      )}
     </div>
   );
 };
