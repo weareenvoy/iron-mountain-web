@@ -11,6 +11,7 @@ import {
   type MqttServiceConfig,
   type PublishArgsConfig,
   type VolumeControllableExhibit,
+  type WelcomeWallMqttState,
 } from '../types';
 import type { ExhibitBeatId, OverlookBeatId } from '@/lib/internal/types';
 
@@ -259,9 +260,7 @@ export class MqttService {
 
   public reportWelcomeWallState(
     exhibit: 'welcome-wall',
-    state: {
-      state: string;
-    },
+    state: WelcomeWallMqttState,
     config?: PublishArgsConfig
   ): void {
     const message = createMqttMessage(exhibit, state);

@@ -66,6 +66,8 @@ export interface ExhibitMqttStateOverlook extends ExhibitMqttState {
   'presentation-mode'?: boolean;
 }
 
+export type WelcomeWallState = 'idle' | 'tour';
+
 export interface WelcomeWallMqttState {
-  state: string;
+  readonly state: WelcomeWallState;
 }

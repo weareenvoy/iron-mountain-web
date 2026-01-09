@@ -38,8 +38,8 @@ export const WelcomeWallProvider = ({ children }: WelcomeWallProviderProps) => {
   const [showTour, setShowTour] = useState<boolean>(false);
 
   // Fetch content data
-  const fetchData = useCallback(async (id?: null | string) => {
-    console.info('Fetching welcome wall data for tour:', id);
+  const fetchData = useCallback(async () => {
+    console.info('Fetching welcome wall data for tour');
     setLoading(true);
 
     try {
@@ -78,28 +78,23 @@ export const WelcomeWallProvider = ({ children }: WelcomeWallProviderProps) => {
     if (!client) return;
 
     // 1. Load tour command from GEC (broadcast to all exhibits)
-    const handleLoadTour = async (message: Buffer) => {
+    const handleLoadTour = async () => {
       try {
-        const msg = JSON.parse(message.toString());
-        const tourId = msg.body?.['tour-id'];
-        console.info('Welcome Wall: received load-tour command:', tourId);
+        console.info('Welcome Wall: received load-tour command');
 
-        if (tourId) {
-          // Fetch tour-specific data for this tour
-          // For now, just fetch the generic basecamp data
-          const success = await fetchData(tourId);
+        // Fetch tour-specific data for this tour
+        const success = await fetchData();
 
-          if (success) {
-            // Tour content loaded successfully - show tour state
-            setShowTour(true);
+        if (success) {
+          // Tour content loaded successfully - show tour state
+          setShowTour(true);
 
-            // Only report loaded state after data is fetched
-            reportState({
-              state: 'tour',
-            });
-          } else {
-            console.error('Welcome Wall: Failed to fetch tour data for tour:', tourId);
-          }
+          // Only report loaded state after data is fetched
+          reportState({
+            state: 'tour',
+          });
+        } else {
+          console.error('Welcome Wall: Failed to fetch tour data');
         }
       } catch (error) {
         console.error('Welcome Wall: Error parsing load-tour command:', error);

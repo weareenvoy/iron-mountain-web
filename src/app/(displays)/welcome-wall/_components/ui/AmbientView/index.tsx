@@ -17,7 +17,7 @@ const AmbientView = () => {
   useEffect(() => {
     if (!data || !backgroundVideoRef.current) return;
 
-    // set the background video url based on the locale
+    // set the background video url based on the locale - This will likely change to only one version of ambient video
     const bgVideoUrl = dataRef.current?.videos[locale === 'en' ? 'ambientLoopEn' : 'ambientLoopPt'].url;
 
     if (!bgVideoUrl) return;
