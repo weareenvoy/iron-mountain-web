@@ -15,6 +15,7 @@ import HCHollowGreenDiamond from '@/components/ui/icons/Kiosks/CustomInteractive
 import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowOrangeDiamond';
 import InnerRing from '@/components/ui/icons/Kiosks/CustomInteractive/InnerRing';
 import OuterRing from '@/components/ui/icons/Kiosks/CustomInteractive/OuterRing';
+import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import CircularCarousel, { type CarouselSlide } from './components/CircularCarousel';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
@@ -141,9 +142,8 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
       {/* Carousel state - Always present but initially at opacity 0 */}
       <motion.div
         animate={{ opacity: showCarousel ? 1 : 0 }}
-        className="pointer-events-none absolute inset-0 z-10"
+        className={cn('absolute inset-0 z-10', showCarousel ? 'pointer-events-auto' : 'pointer-events-none')}
         initial={{ opacity: 0 }}
-        style={{ pointerEvents: showCarousel ? 'auto' : 'none' }}
         transition={{ duration: 0.6, ease: [0.3, 0, 0.6, 1] }}
       >
         <CircularCarousel
@@ -407,9 +407,8 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
       {/* Initial state - Rings, dots, "Tap to begin" - Fades to opacity 0 */}
       <motion.div
         animate={{ opacity: showCarousel ? 0 : 1 }}
-        className="absolute inset-0 z-10"
+        className={cn('absolute inset-0 z-10', showCarousel ? 'pointer-events-none' : 'pointer-events-auto')}
         initial={{ opacity: 1 }}
-        style={{ pointerEvents: showCarousel ? 'none' : 'auto' }}
         transition={{ duration: 0.5, ease: [0.3, 0, 0.6, 1] }}
       >
         <h2 className="absolute top-[240px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-white">
