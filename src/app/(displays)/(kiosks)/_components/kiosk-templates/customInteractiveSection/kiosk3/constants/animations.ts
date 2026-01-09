@@ -7,10 +7,12 @@
  * Use these constants to maintain consistent z-index hierarchy.
  */
 export const Z_INDEX = {
-  /** Background layer (morphing diamond video) */
-  BACKGROUND: 0,
+  /** Background layer (morphing diamond video) - must be above default stacking */
+  BACKGROUND: 1,
   /** Carousel content layer */
   CAROUSEL: 10,
+  /** Carousel CTA button (above carousel content) */
+  CAROUSEL_CTA: 11,
   /** Demo overlay (highest priority) */
   OVERLAY: 9999,
 } as const;
@@ -35,7 +37,7 @@ export type SlideId = (typeof SLIDE_ID)[keyof typeof SLIDE_ID];
  * Standardized easing curves and durations for consistent animations.
  */
 export const TRANSITIONS = {
-  /** Standard carousel transitions (slides, diamonds) */
+  /** Standard carousel transitions (slides, diamonds) - 600ms */
   CAROUSEL: { duration: 0.6, ease: [0.3, 0, 0.4, 1] as const },
   /** Fade transitions (initial state, overlays) */
   FADE: { duration: 0.5, ease: [0.3, 0, 0.6, 1] as const },
@@ -46,6 +48,15 @@ export const TRANSITIONS = {
 } as const;
 
 /**
+ * Animation timing constants (in milliseconds).
+ * Used for setTimeout and other timing-dependent logic.
+ */
+export const ANIMATION_DURATION_MS = {
+  /** Carousel slide transition duration - must match TRANSITIONS.CAROUSEL.duration */
+  CAROUSEL: 600,
+} as const;
+
+/**
  * Morphing diamond animation states.
  * The background video transforms from full-screen to a carousel slide diamond.
  *
@@ -53,6 +64,10 @@ export const TRANSITIONS = {
  * - x/y: Translate values in pixels (negative = left/up)
  * - scale: Size multiplier (1 = original, 0.332 = ~1/3 size)
  * - Video positioning: Counter-scales to maintain visual consistency
+ *
+ * WARNING: These pixel values are tightly coupled to the current 4K layout.
+ * If the design changes or viewport size changes, these values must be recalculated.
+ * Consider using CSS variables or viewport-relative units in future iterations.
  */
 export const MORPHING_DIAMOND = {
   /** Initial state: Full-screen centered background */
@@ -66,17 +81,17 @@ export const MORPHING_DIAMOND = {
   CAROUSEL: {
     opacity: 1,
     scale: 0.332,
-    x: -1095,
-    y: -875,
+    x: -1095, // Pixel value - coupled to 4K layout
+    y: -875, // Pixel value - coupled to 4K layout
   },
   /** Exit state: Moves diagonally off-screen with fade */
   EXIT: {
     opacity: 0,
     scale: 0.332,
-    x: -1116,
-    y: -896,
+    x: -1116, // Pixel value - coupled to 4K layout
+    y: -896, // Pixel value - coupled to 4K layout
   },
-  /** Video horizontal offset in background state (px) */
+  /** Video horizontal offset in background state (px) - coupled to 4K layout */
   VIDEO_LEFT_BACKGROUND: 480,
   /** Video horizontal offset in carousel state (px) */
   VIDEO_LEFT_CAROUSEL: 0,

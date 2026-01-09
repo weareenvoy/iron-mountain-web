@@ -26,7 +26,7 @@ type DecorativeSVGGroupProps = {
 const DecorativeSVGGroup = memo(({ index, isExiting, variant }: DecorativeSVGGroupProps) => {
   if (variant === 'slide-2-5') {
     return (
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="sync">
         <motion.div
           animate={isExiting ? SVG_ANIMATIONS.CONTAINER.exit : SVG_ANIMATIONS.CONTAINER.animate}
           className="absolute inset-0"
@@ -74,7 +74,7 @@ const DecorativeSVGGroup = memo(({ index, isExiting, variant }: DecorativeSVGGro
 
   if (variant === 'slide-3-6') {
     return (
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="sync">
         <motion.div
           animate={isExiting ? SVG_ANIMATIONS.CONTAINER.exit : SVG_ANIMATIONS.CONTAINER.animate}
           className="absolute inset-0"
@@ -114,7 +114,7 @@ const DecorativeSVGGroup = memo(({ index, isExiting, variant }: DecorativeSVGGro
 
   // Default variant for slides 1 & 4
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="sync">
       <motion.div
         animate={isExiting ? SVG_ANIMATIONS.CONTAINER.exit : SVG_ANIMATIONS.CONTAINER.animate}
         className="absolute inset-0"
@@ -143,7 +143,5 @@ const DecorativeSVGGroup = memo(({ index, isExiting, variant }: DecorativeSVGGro
     </AnimatePresence>
   );
 });
-
-DecorativeSVGGroup.displayName = 'DecorativeSVGGroup';
 
 export default DecorativeSVGGroup;

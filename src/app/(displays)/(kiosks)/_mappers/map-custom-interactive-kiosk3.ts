@@ -54,13 +54,13 @@ export const mapCustomInteractiveKiosk3 = (
     },
     slides:
       customInteractive.tapCarousel?.map((item, index) => ({
-        bullets: [...(item.bullets ?? [])],
-        eyebrow: ambient.title,
+        bullets: item.bullets ?? [],
+        eyebrow: ambient.title ?? '',
         headline: item.title ?? '',
         id: generateSlideId('slide', String(index + 1)),
         primaryImageAlt: '',
         primaryImageSrc: item.image ?? '',
-        primaryVideoSrc: item.video,
+        primaryVideoSrc: item.video ?? undefined,
         secondaryImageAlt: '',
         secondaryImageSrc: item.video && item.image ? item.image : undefined,
         sectionTitle: item.title ?? '',

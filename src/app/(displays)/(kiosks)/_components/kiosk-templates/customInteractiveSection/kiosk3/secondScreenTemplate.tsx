@@ -6,7 +6,7 @@ import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_comp
 import CarouselState from './components/CarouselState';
 import InitialState from './components/InitialState';
 import MorphingDiamond from './components/MorphingDiamond';
-import { SECTION_IDS } from './constants';
+import { IN_VIEW_THRESHOLD, SECTION_IDS } from './constants';
 import type { CarouselSlide } from './components/CircularCarousel';
 
 /**
@@ -91,35 +91,41 @@ const Kiosk3SecondScreenTemplate = memo(
     const [isButtonTransitioning, setIsButtonTransitioning] = useState(false);
 
     const safeSlides = slides ?? [];
+    const hasValidVideo = videoAsset && videoAsset.trim().length > 0;
 
     const ref = useRef(null);
-    const isInView = useInView(ref, { amount: 0.3, once: true });
+    const isInView = useInView(ref, { amount: IN_VIEW_THRESHOLD, once: true });
 
-    // Event handlers (memoized to prevent unnecessary re-renders)
-    // Empty dependency arrays are safe here as they only call setState functions
+    // Stable event handlers to prevent useEffect dependency issues
     const handleTapToBegin = useCallback(() => {
       setIsButtonTransitioning(true);
       setShowCarousel(true);
-    }, []); // setState functions are stable
+    }, []);
 
     const handleShowOverlay = useCallback(() => {
       setShowOverlay(true);
-    }, []); // setState functions are stable
+    }, []);
 
     const handleHideOverlay = useCallback(() => {
       setShowOverlay(false);
-    }, []); // setState functions are stable
+    }, []);
 
     const handleIndexChange = useCallback((index: number) => {
       setCarouselIndex(index);
-    }, []); // setState functions are stable
+    }, []);
 
     const handleIsExitingChange = useCallback((isExiting: boolean) => {
       setIsCarouselExiting(isExiting);
-    }, []); // setState functions are stable
+    }, []);
 
-    // Early return for invalid data
-    if (safeSlides.length === 0 || !headline || !videoAsset) {
+    // Early return for invalid data - no cleanup needed as component won't mount
+    if (safeSlides.length === 0 || !headline || !hasValidVideo) {
+      console.warn('[Kiosk3SecondScreen] Missing required data:', {
+        hasHeadline: !!headline,
+        hasSlides: safeSlides.length > 0,
+        hasValidVideo,
+        videoAsset,
+      });
       return null;
     }
 
@@ -136,18 +142,20 @@ const Kiosk3SecondScreenTemplate = memo(
           carouselIndex={carouselIndex}
           isCarouselExiting={isCarouselExiting}
           showCarousel={showCarousel}
-          videoAsset={videoAsset}
+          videoAsset={videoAsset!}
         />
 
-        {/* Carousel state - Always present but initially at opacity 0 */}
-        <CarouselState
-          headline={headline}
-          onIndexChange={handleIndexChange}
-          onIsExitingChange={handleIsExitingChange}
-          onShowOverlay={handleShowOverlay}
-          showCarousel={showCarousel}
-          slides={safeSlides}
-        />
+        {/* Carousel state - Lazy loaded when carousel is shown to prevent loading all videos on mount */}
+        {showCarousel && (
+          <CarouselState
+            headline={headline}
+            onIndexChange={handleIndexChange}
+            onIsExitingChange={handleIsExitingChange}
+            onShowOverlay={handleShowOverlay}
+            showCarousel={showCarousel}
+            slides={safeSlides}
+          />
+        )}
 
         {/* Initial state - Rings, dots, "Tap to begin" - Fades to opacity 0 */}
         <InitialState
@@ -181,7 +189,5 @@ const Kiosk3SecondScreenTemplate = memo(
     );
   }
 );
-
-Kiosk3SecondScreenTemplate.displayName = 'Kiosk3SecondScreenTemplate';
 
 export default Kiosk3SecondScreenTemplate;

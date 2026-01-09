@@ -61,7 +61,7 @@ const InitialState = memo(
 
         <div className="absolute top-[240px] right-[120px]">
           <button
-            className="group relative top-[1070px] flex h-[200px] items-center gap-[20px] rounded-[1000px] bg-[#ededed] px-[120px] text-[54px] leading-[1.4] font-normal tracking-[-2px] text-[#14477d] transition hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+            className="group relative top-[1070px] flex h-[200px] items-center gap-[20px] rounded-[999px] bg-[#ededed] px-[120px] text-[54px] leading-[1.4] font-normal tracking-[-2px] text-[#14477d] transition hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
             onClick={onBack}
             type="button"
           >
@@ -164,7 +164,5 @@ const InitialState = memo(
     );
   }
 );
-
-InitialState.displayName = 'InitialState';
 
 export default InitialState;

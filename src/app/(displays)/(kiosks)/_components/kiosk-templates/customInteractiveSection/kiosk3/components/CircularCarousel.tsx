@@ -1,10 +1,11 @@
 'use client';
 
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { ANIMATION_DURATION_MS } from '../constants';
 
 export type CarouselSlide = {
-  readonly bullets: string[];
+  readonly bullets: readonly string[];
   readonly eyebrow?: string;
   readonly headline?: string;
   readonly id: string;
@@ -31,10 +32,20 @@ type CircularCarouselProps = {
 const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }: CircularCarouselProps) => {
   const [index, setIndex] = useState(0);
   const [isExiting, setIsExiting] = useState(false);
-  const prevIndexRef = useRef(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const total = slides.length;
   const currentIndex = total > 0 ? index % total : 0;
   const current = slides[currentIndex];
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     onIndexChange?.(currentIndex);
@@ -44,25 +55,33 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
     onIsExitingChange?.(isExiting);
   }, [isExiting, onIsExitingChange]);
 
-  const goNext = () => {
+  const goNext = useCallback(() => {
+    // Prevent rapid clicks during transition
+    if (isTransitioning) return;
+
+    setIsTransitioning(true);
     setIsExiting(true);
-    setTimeout(() => {
+
+    timeoutRef.current = setTimeout(() => {
       setIndex(i => (i + 1) % total);
       setIsExiting(false);
-    }, 400); // Exit animation duration
-  };
+      setIsTransitioning(false);
+    }, ANIMATION_DURATION_MS.CAROUSEL);
+  }, [isTransitioning, total]);
 
-  const goPrev = () => {
+  const goPrev = useCallback(() => {
+    // Prevent rapid clicks during transition
+    if (isTransitioning) return;
+
+    setIsTransitioning(true);
     setIsExiting(true);
-    setTimeout(() => {
+
+    timeoutRef.current = setTimeout(() => {
       setIndex(i => (i - 1 + total) % total);
       setIsExiting(false);
-    }, 400); // Exit animation duration
-  };
-
-  useEffect(() => {
-    prevIndexRef.current = currentIndex;
-  }, [currentIndex]);
+      setIsTransitioning(false);
+    }, ANIMATION_DURATION_MS.CAROUSEL);
+  }, [isTransitioning, total]);
 
   if (!current) {
     return null;
@@ -106,7 +125,8 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
           {/* Arrows */}
           <button
             aria-label="Previous slide"
-            className="group absolute top-1/2 left-[100px] flex h-[102px] w-[102px] -translate-y-1/2 items-center justify-center transition hover:opacity-80 active:opacity-40 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+            className="group absolute top-1/2 left-[100px] flex h-[102px] w-[102px] -translate-y-1/2 items-center justify-center transition hover:opacity-80 active:opacity-40 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)] disabled:cursor-not-allowed disabled:opacity-30"
+            disabled={isTransitioning}
             onClick={goPrev}
             type="button"
           >
@@ -114,7 +134,8 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
           </button>
           <button
             aria-label="Next slide"
-            className="group absolute top-1/2 right-[70px] flex h-[102px] w-[102px] -translate-y-1/2 items-center justify-center transition hover:opacity-80 active:opacity-40 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+            className="group absolute top-1/2 right-[70px] flex h-[102px] w-[102px] -translate-y-1/2 items-center justify-center transition hover:opacity-80 active:opacity-40 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)] disabled:cursor-not-allowed disabled:opacity-30"
+            disabled={isTransitioning}
             onClick={goNext}
             type="button"
           >
