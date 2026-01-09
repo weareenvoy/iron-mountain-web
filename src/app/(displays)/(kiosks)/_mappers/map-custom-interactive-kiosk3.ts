@@ -19,7 +19,19 @@ export const mapCustomInteractiveKiosk3 = (
   ambient: Ambient,
   demo?: DemoConfig
 ): CustomInteractiveScreens => ({
-  combinedScreen: {
+  firstScreen: {
+    demoIframeSrc: demo?.iframeLink,
+    eyebrow: ambient.title,
+    headline: customInteractive.headline,
+    heroImageAlt: '',
+    heroImageSrc: customInteractive.image,
+    overlayCardLabel: demo?.demoText,
+    overlayEndTourLabel: demo?.mainCTA,
+    overlayHeadline: demo?.headline,
+    primaryCtaLabel: customInteractive.mainCTA,
+    secondaryCtaLabel: customInteractive.secondaryCTA,
+  },
+  kiosk3SecondScreen: {
     // Initial state (rings, dots, tap to begin) props
     backLabel: customInteractive.backCTA,
     demoIframeSrc: demo?.iframeLink,
@@ -50,19 +62,7 @@ export const mapCustomInteractiveKiosk3 = (
     tapToBeginLabel: customInteractive.tapCTA,
     videoAsset: customInteractive.video,
   },
-  firstScreen: {
-    demoIframeSrc: demo?.iframeLink,
-    eyebrow: ambient.title,
-    headline: customInteractive.headline,
-    heroImageAlt: '',
-    heroImageSrc: customInteractive.image,
-    overlayCardLabel: demo?.demoText,
-    overlayEndTourLabel: demo?.mainCTA,
-    overlayHeadline: demo?.headline,
-    primaryCtaLabel: customInteractive.mainCTA,
-    secondaryCtaLabel: customInteractive.secondaryCTA,
-  },
-  fourthScreen: {
+  kiosk3ThirdScreen: {
     cardLabel: demo?.demoText,
     demoIframeSrc: demo?.iframeLink,
     endTourLabel: demo?.mainCTA,

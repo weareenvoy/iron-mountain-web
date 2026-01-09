@@ -1,13 +1,13 @@
 import CustomInteractiveFirstScreenTemplate, {
   type CustomInteractiveKiosk1FirstScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/firstScreenTemplate';
-import CustomInteractiveKiosk3CombinedTemplate, {
-  type CustomInteractiveKiosk3CombinedTemplateProps,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/kiosk3/combinedSecondThirdTemplate';
 import {
   CustomInteractiveKiosk1SecondScreenTemplate,
   type CustomInteractiveKiosk1SecondScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/kiosk1/secondScreenTemplate';
+import CustomInteractiveKiosk3SecondScreenTemplate, {
+  type CustomInteractiveKiosk3SecondScreenTemplateProps,
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/kiosk3/secondScreenTemplate';
 import { SectionSlide, type Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
 import type { CustomInteractiveDemoScreenTemplateProps } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
@@ -15,10 +15,10 @@ import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 // This file builds the slides for the Custom Interactive section of the Kiosk setup and gives each one ids for use if needed.
 
 export type CustomInteractiveScreens = {
-  readonly combinedScreen?: CustomInteractiveKiosk3CombinedTemplateProps;
   readonly demoScreen?: CustomInteractiveDemoScreenTemplateProps;
   readonly firstScreen?: CustomInteractiveKiosk1FirstScreenTemplateProps;
-  readonly fourthScreen?: CustomInteractiveDemoScreenTemplateProps;
+  readonly kiosk3SecondScreen?: CustomInteractiveKiosk3SecondScreenTemplateProps;
+  readonly kiosk3ThirdScreen?: CustomInteractiveDemoScreenTemplateProps;
   readonly secondScreen?: CustomInteractiveKiosk1SecondScreenTemplateProps;
   readonly thirdScreen?: CustomInteractiveDemoScreenTemplateProps;
 };
@@ -31,7 +31,7 @@ export const buildCustomInteractiveSlides = (
   const slides: Slide[] = [];
 
   if (customInteractive.firstScreen) {
-    // Kiosk 1 uses thirdScreen for overlay, Kiosk 2 uses firstScreen props directly, Kiosk 3 uses fourthScreen
+    // Kiosk 1 uses thirdScreen for overlay, Kiosk 2 uses firstScreen props directly, Kiosk 3 uses kiosk3ThirdScreen
     let overlayCardLabel: string | undefined;
     let overlayHeadline: string | undefined;
 
@@ -41,14 +41,13 @@ export const buildCustomInteractiveSlides = (
     } else if (kioskId === 'kiosk-2') {
       overlayCardLabel = customInteractive.firstScreen.overlayCardLabel;
       overlayHeadline = customInteractive.firstScreen.overlayHeadline;
-    } else if (kioskId === 'kiosk-3' && customInteractive.fourthScreen) {
-      overlayCardLabel = customInteractive.fourthScreen.cardLabel;
-      overlayHeadline = customInteractive.fourthScreen.headline;
+    } else if (kioskId === 'kiosk-3' && customInteractive.kiosk3ThirdScreen) {
+      overlayCardLabel = customInteractive.kiosk3ThirdScreen.cardLabel;
+      overlayHeadline = customInteractive.kiosk3ThirdScreen.headline;
     }
 
     // Determine navigation target based on kiosk
-    const primaryCtaTarget =
-      kioskId === 'kiosk-3' ? 'customInteractive-combined-screen' : 'customInteractive-second-screen';
+    const primaryCtaTarget = 'customInteractive-second-screen';
 
     slides.push({
       id: 'customInteractive-first',
@@ -67,24 +66,21 @@ export const buildCustomInteractiveSlides = (
     });
   }
 
-  // Kiosk 3: Use combined template (second + third screen in one)
-  if (kioskId === 'kiosk-3' && customInteractive.combinedScreen) {
+  // Second screen: kiosk-3 has its own, kiosk-1 has its own
+  if (kioskId === 'kiosk-3' && customInteractive.kiosk3SecondScreen) {
     slides.push({
-      id: 'customInteractive-combined',
+      id: 'customInteractive-second',
       render: () => (
         <SectionSlide>
-          <CustomInteractiveKiosk3CombinedTemplate
-            {...customInteractive.combinedScreen}
+          <CustomInteractiveKiosk3SecondScreenTemplate
+            {...customInteractive.kiosk3SecondScreen}
             onBack={() => scrollToSection?.('customInteractive-first-screen')}
           />
         </SectionSlide>
       ),
-      title: 'CustomInteractive Combined',
+      title: 'CustomInteractive Second',
     });
-  }
-
-  // Second screen: only for kiosk-1 (kiosk-3 uses combined template above)
-  if (customInteractive.secondScreen && kioskId === 'kiosk-1') {
+  } else if (customInteractive.secondScreen && kioskId === 'kiosk-1') {
     slides.push({
       id: 'customInteractive-second',
       render: () => (
@@ -99,7 +95,7 @@ export const buildCustomInteractiveSlides = (
     });
   }
 
-  // Demo screens (thirdScreen for Kiosk 1, fourthScreen for Kiosk 3) are now overlay-only
+  // Demo screens (thirdScreen for Kiosk 1, kiosk3ThirdScreen for Kiosk 3) are now overlay-only
 
   // Keep navigation external: handled by slide order in view
   return slides;
