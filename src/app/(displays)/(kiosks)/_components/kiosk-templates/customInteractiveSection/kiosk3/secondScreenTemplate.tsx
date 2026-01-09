@@ -111,12 +111,12 @@ const CustomInteractiveKiosk3SecondScreenTemplate = ({
               >
                 {renderRegisteredMark(tapToBeginLabel)}
               </motion.span>
-              
+
               {/* Dot 1 - stays at 0deg (reference position, does not animate) */}
               <div className="absolute top-[48%] left-[50%] [transform:translate(-50%,-50%)_rotate(0deg)_translateY(-430px)]">
                 <BlueDot className="h-[60px] w-[60px]" />
               </div>
-              
+
               {/* Dot 2 - animates from 0deg to 60deg with opacity fade */}
               <motion.div
                 animate={{ opacity: 1, transform: 'translate(-50%, -50%) rotate(60deg) translateY(-430px)' }}
@@ -126,7 +126,7 @@ const CustomInteractiveKiosk3SecondScreenTemplate = ({
               >
                 <BlueDot className="h-[60px] w-[60px]" />
               </motion.div>
-              
+
               {/* Dot 3 - animates from 0deg to 120deg with opacity fade */}
               <motion.div
                 animate={{ opacity: 1, transform: 'translate(-50%, -50%) rotate(120deg) translateY(-430px)' }}
@@ -136,7 +136,7 @@ const CustomInteractiveKiosk3SecondScreenTemplate = ({
               >
                 <BlueDot className="h-[60px] w-[60px]" />
               </motion.div>
-              
+
               {/* Dot 4 - animates from 0deg to 180deg with opacity fade */}
               <motion.div
                 animate={{ opacity: 1, transform: 'translate(-50%, -50%) rotate(180deg) translateY(-430px)' }}
@@ -146,7 +146,7 @@ const CustomInteractiveKiosk3SecondScreenTemplate = ({
               >
                 <BlueDot className="h-[60px] w-[60px]" />
               </motion.div>
-              
+
               {/* Dot 5 - animates from 0deg to 240deg with opacity fade */}
               <motion.div
                 animate={{ opacity: 1, transform: 'translate(-50%, -50%) rotate(240deg) translateY(-430px)' }}
@@ -156,7 +156,7 @@ const CustomInteractiveKiosk3SecondScreenTemplate = ({
               >
                 <BlueDot className="h-[60px] w-[60px]" />
               </motion.div>
-              
+
               {/* Dot 6 - animates from 0deg to 300deg with opacity fade, finishes when InnerRing pathLength completes (2.0s) */}
               <motion.div
                 animate={{ opacity: 1, transform: 'translate(-50%, -50%) rotate(300deg) translateY(-430px)' }}
