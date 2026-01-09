@@ -76,9 +76,12 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
   const hasCarouselSlides = slidesWithDefaults.some(slide => getBulletItems(slide).length > 0);
   const useAnimatedCarousel = hasCarouselSlides && heroVideo;
 
+  // Enable delegation for any carousel variant that has slides
+  const shouldEnableCarouselDelegation = hasCarouselSlides;
+
   return (
     <div
-      {...(useAnimatedCarousel ? { 'data-scroll-section': 'value-carousel' } : {})}
+      {...(shouldEnableCarouselDelegation ? { 'data-scroll-section': 'value-carousel' } : {})}
       className="relative flex h-screen w-full flex-col overflow-visible bg-transparent"
       data-carousel-id={carouselId}
     >

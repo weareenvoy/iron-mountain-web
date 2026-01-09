@@ -15,8 +15,8 @@ export const DIAMOND_ANIMATION = {
   DURATION_FIRST_SLIDE: 0.8,
   /** Duration of diamond animations on subsequent slides (in seconds) */
   DURATION_OTHER_SLIDES: 0.6,
-  /** Easing function for smooth motion */
-  EASE: [0.4, 0, 0.2, 1] as const,
+  /** Easing function for smooth motion (30 out, 60 in) */
+  EASE: [0.3, 0, 0.6, 1] as const,
   /** Index of the last diamond (for calculating total animation time) */
   LAST_DIAMOND_INDEX: 2,
 } as const;
@@ -28,8 +28,8 @@ export const DIAMOND_ANIMATION = {
 export const DIAMOND_TEXT_ANIMATION = {
   /** Duration of text fade animation (in seconds) */
   DURATION: 0.4,
-  /** Easing function for text transitions */
-  EASE: 'easeInOut' as const,
+  /** Easing function for text transitions (30 out, 60 in) */
+  EASE: [0.3, 0, 0.6, 1] as const,
 } as const;
 
 /**
@@ -39,8 +39,8 @@ export const DIAMOND_TEXT_ANIMATION = {
 export const BULLET_ANIMATION = {
   /** Animation duration in seconds */
   DURATION: 0.6,
-  /** Cubic bezier easing curve for smooth motion */
-  EASE: [0.4, 0, 0.2, 1] as const,
+  /** Cubic bezier easing curve for smooth motion (30 out, 60 in) */
+  EASE: [0.3, 0, 0.6, 1] as const,
   /** Vertical offset (in px) for fade-in animation */
   Y_OFFSET: 40,
 } as const;

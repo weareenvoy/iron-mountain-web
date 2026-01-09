@@ -54,13 +54,26 @@ const Diamond = memo(
 
     // For first slide: start at spread position, animate to target when shouldAnimate is true
     // For other slides: always at target position
-    const animateLeft = isFirstSlide && !shouldAnimate ? initialSpreadPosition : targetPosition;
+    const targetX = isFirstSlide && !shouldAnimate ? initialSpreadPosition : targetPosition;
+
+    // Combine X and Y transforms to achieve horizontal movement in viewport space
+    // Since element is rotated 45deg, translateX/Y operate in rotated coordinate system
+    // To move horizontally (right) in viewport space, we need: x = D/√2, y = -D/√2
+    // Simplified: x and y with opposite signs for horizontal movement through 45° rotation
+    const animateX = targetX * Math.SQRT1_2; // SQRT1_2 = 1/√2 ≈ 0.707
+    const animateY = -targetX * Math.SQRT1_2;
+
+    const initialX = initialSpreadPosition * Math.SQRT1_2;
+    const initialY = -initialSpreadPosition * Math.SQRT1_2;
 
     return (
       <motion.div
-        animate={{ left: animateLeft }}
-        className={cn('absolute h-[550px] w-[550px] rotate-45 rounded-[80px]', zIndexClass)}
-        initial={{ left: initialSpreadPosition }}
+        animate={{ x: animateX, y: animateY }}
+        className={cn(
+          'absolute left-0 h-[550px] w-[550px] rotate-45 rounded-[80px] will-change-transform',
+          zIndexClass
+        )}
+        initial={{ x: initialX, y: initialY }}
         transition={{
           delay: isFirstSlide && shouldAnimate && !diamondsSettled ? index * DIAMOND_ANIMATION.DELAY_INCREMENT : 0,
           duration:
@@ -77,7 +90,7 @@ const Diamond = memo(
         </div>
         <motion.div
           animate={{ opacity: showText ? 1 : 0 }}
-          className="absolute inset-0 flex items-center justify-center"
+          className="will-change-opacity absolute inset-0 flex items-center justify-center"
           initial={{ opacity: isInitiallyVisible ? 1 : 0 }}
           transition={{
             duration: DIAMOND_TEXT_ANIMATION.DURATION,

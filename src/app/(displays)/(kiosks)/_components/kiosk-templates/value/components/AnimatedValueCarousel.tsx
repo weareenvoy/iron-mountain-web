@@ -6,7 +6,7 @@ import { getDiamondIcon } from '@/app/(displays)/(kiosks)/_utils/get-diamond-ico
 import { cn } from '@/lib/tailwind/utils/cn';
 import BulletList from './BulletList';
 import { CAROUSEL_VISIBILITY_THRESHOLD, DIAMONDS_SETTLE_TIME } from '../constants/animation';
-import { DEFAULT_LABELS, DIAMOND_LABEL_INDEX } from '../constants/layout';
+import { DEFAULT_LABELS } from '../constants/layout';
 import DiamondContainer from './DiamondContainer';
 import { getBulletItems } from '../utils/helpers';
 import type { ValueCarouselSlide } from '@/app/(displays)/(kiosks)/_types/value-types';
@@ -62,6 +62,7 @@ const AnimatedValueCarousel = ({ hasCarouselSlides, registerCarouselHandlers, sl
   const [shouldAnimate, setShouldAnimate] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const slideIndexRef = useRef(0);
 
   // Memoize diamond icons to avoid recalculating on every render
   const diamondIcons = useMemo(
@@ -69,18 +70,23 @@ const AnimatedValueCarousel = ({ hasCarouselSlides, registerCarouselHandlers, sl
     [slides]
   );
 
-  // Memoize diamond labels to avoid recalculating inside map loop
+  // Memoize diamond labels - validate CMS provides all required labels
   const diamondLabels = useMemo(() => {
-    const strategicCard = slides[2]?.diamondCards?.[DIAMOND_LABEL_INDEX];
-    const economicCard = slides[1]?.diamondCards?.[DIAMOND_LABEL_INDEX];
-    const operationalCard = slides[0]?.diamondCards?.[DIAMOND_LABEL_INDEX];
-
-    return [
-      strategicCard?.label ?? DEFAULT_LABELS.STRATEGIC,
-      economicCard?.label ?? DEFAULT_LABELS.ECONOMIC,
-      operationalCard?.label ?? DEFAULT_LABELS.OPERATIONAL,
-    ];
+    const labels = slides[0]?.diamondCards?.map(card => card.label).filter(Boolean) ?? [];
+    if (labels.length !== 3) {
+      // Fall back to default labels if CMS data is incomplete
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('[AnimatedValueCarousel] Expected 3 diamond labels from CMS, got:', labels.length);
+      }
+      return [DEFAULT_LABELS.STRATEGIC, DEFAULT_LABELS.ECONOMIC, DEFAULT_LABELS.OPERATIONAL];
+    }
+    return labels as string[];
   }, [slides]);
+
+  // Sync ref with state for stable handler callbacks
+  useEffect(() => {
+    slideIndexRef.current = currentSlideIndex;
+  }, [currentSlideIndex]);
 
   // Memoize current slide's bullet items to prevent unnecessary BulletList re-renders
   const currentBulletItems = useMemo(() => {
@@ -89,19 +95,15 @@ const AnimatedValueCarousel = ({ hasCarouselSlides, registerCarouselHandlers, sl
     return getBulletItems(currentSlide);
   }, [slides, currentSlideIndex]);
 
-  // Navigation handlers
-  const canScrollNext = useCallback(() => currentSlideIndex < slides.length - 1, [currentSlideIndex, slides.length]);
-  const canScrollPrev = useCallback(() => currentSlideIndex > 0, [currentSlideIndex]);
+  // Stable navigation handlers using ref to avoid handler churn
+  const canScrollNext = useCallback(() => slideIndexRef.current < slides.length - 1, [slides.length]);
+  const canScrollPrev = useCallback(() => slideIndexRef.current > 0, []);
   const scrollNext = useCallback(() => {
-    if (currentSlideIndex < slides.length - 1) {
-      setCurrentSlideIndex(prev => prev + 1);
-    }
-  }, [currentSlideIndex, slides.length]);
+    setCurrentSlideIndex(prev => (prev < slides.length - 1 ? prev + 1 : prev));
+  }, [slides.length]);
   const scrollPrev = useCallback(() => {
-    if (currentSlideIndex > 0) {
-      setCurrentSlideIndex(prev => prev - 1);
-    }
-  }, [currentSlideIndex]);
+    setCurrentSlideIndex(prev => (prev > 0 ? prev - 1 : prev));
+  }, []);
 
   /**
    * Detect when the component becomes visible using IntersectionObserver.
@@ -151,7 +153,7 @@ const AnimatedValueCarousel = ({ hasCarouselSlides, registerCarouselHandlers, sl
   /**
    * Trigger bullet fade-in after all diamonds have settled into position.
    * Uses calculated timing based on diamond animation configuration.
-   * Ensures cleanup on unmount to prevent memory leaks and state updates on unmounted components.
+   * Only clear timer on cleanup - do not set state during unmount.
    */
   useEffect(() => {
     if (!shouldAnimate) return;
@@ -162,7 +164,6 @@ const AnimatedValueCarousel = ({ hasCarouselSlides, registerCarouselHandlers, sl
 
     return () => {
       clearTimeout(timer);
-      setDiamondsSettled(false);
     };
   }, [shouldAnimate]);
 
@@ -196,13 +197,11 @@ const AnimatedValueCarousel = ({ hasCarouselSlides, registerCarouselHandlers, sl
                 // For other slides: animate immediately
                 const shouldShowBullets = !isFirstSlide || (shouldAnimate && diamondsSettled);
 
+                // Generate stable key even if slide.id is missing
+                const key = slide.id ?? `value-slide-${slideIndex}`;
+
                 return (
-                  <BulletList
-                    bulletItems={currentBulletItems}
-                    key={slide.id}
-                    shouldShow={shouldShowBullets}
-                    slideId={slide.id}
-                  />
+                  <BulletList bulletItems={currentBulletItems} key={key} shouldShow={shouldShowBullets} slideId={key} />
                 );
               })}
             </AnimatePresence>
