@@ -69,10 +69,7 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
 
   const handleTapToBegin = useCallback(() => {
     setIsButtonTransitioning(true);
-    // Delay showing carousel until after button transition
-    setTimeout(() => {
-      setShowCarousel(true);
-    }, 600); // Match the transition duration
+    setShowCarousel(true);
   }, []);
 
   const handleShowOverlay = useCallback(() => {
@@ -150,7 +147,7 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
         className="pointer-events-none absolute inset-0 z-10"
         initial={{ opacity: 0 }}
         style={{ pointerEvents: showCarousel ? 'auto' : 'none' }}
-        transition={{ delay: showCarousel ? 0.3 : 0, duration: 0.6, ease: [0.3, 0, 0.6, 1] }}
+        transition={{ duration: 0.6, ease: [0.3, 0, 0.6, 1] }}
       >
         <CircularCarousel
           onIndexChange={handleIndexChange}
