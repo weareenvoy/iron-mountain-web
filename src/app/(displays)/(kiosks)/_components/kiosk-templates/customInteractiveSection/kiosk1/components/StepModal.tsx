@@ -71,7 +71,7 @@ const StepModal = ({ content, onClose }: StepModalProps) => {
       >
         <div className="flex items-center justify-between">
           <button
-            className="relative top-[45px] left-[60px] flex h-[200px] items-center gap-[24px] rounded-[1000px] bg-[#ededed] px-[90px] py-[60] pr-[100px] text-[55px] leading-[1.4] font-normal tracking-[-2.7px] text-[#14477d] transition hover:scale-[1.02]"
+            className="group pointer-events-auto relative top-[45px] left-[60px] flex h-[200px] items-center gap-[24px] rounded-[1000px] bg-[#ededed] px-[90px] py-[60] pr-[100px] text-[55px] leading-[1.4] font-normal tracking-[-2.7px] text-[#14477d] transition hover:scale-[1.02] active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
             onClick={() => onCloseRef.current()}
             type="button"
           >

@@ -188,7 +188,7 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
 
         <AnimatedText
           as="button"
-          className="absolute top-[1330px] left-[1245px] z-0 flex h-[200px] items-center justify-between rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[70px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-transform duration-150 will-change-transform hover:scale-[1.01]"
+          className="group absolute top-[1330px] left-[1245px] z-0 flex h-[200px] items-center justify-between rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[70px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-transform duration-150 will-change-transform hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
           onClick={handleSecondaryClick}
           shouldAnimate={shouldAnimateText}
           type="button"
