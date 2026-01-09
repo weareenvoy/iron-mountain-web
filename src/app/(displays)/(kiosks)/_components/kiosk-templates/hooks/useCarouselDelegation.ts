@@ -29,7 +29,7 @@ type UseCarouselDelegationReturn = {
   readonly handleNavigateDown: () => void;
   readonly handleNavigateUp: () => void;
   readonly handleRegisterCarouselHandlers: (handlers: CarouselHandlers) => void;
-  readonly handleRegisterListHandlers: (handlers: ListHandlers) => void;
+  readonly handleRegisterListHandlers: (scrollSectionId: string, handlers: ListHandlers) => void;
 };
 
 export const useCarouselDelegation = ({
@@ -38,7 +38,7 @@ export const useCarouselDelegation = ({
   currentScrollTarget,
 }: UseCarouselDelegationConfig): UseCarouselDelegationReturn => {
   const [carouselHandlers, setCarouselHandlers] = useState<CarouselHandlers | null>(null);
-  const [listHandlers, setListHandlers] = useState<ListHandlers | null>(null);
+  const [listHandlersMap, setListHandlersMap] = useState<Map<string, ListHandlers>>(new Map());
 
   // Register carousel handlers (called by carousel component)
   const handleRegisterCarouselHandlers = useCallback((handlers: CarouselHandlers) => {
@@ -46,20 +46,20 @@ export const useCarouselDelegation = ({
   }, []);
 
   // Register list handlers (called by list component)
-  const handleRegisterListHandlers = useCallback((handlers: ListHandlers) => {
-    setListHandlers(handlers);
+  const handleRegisterListHandlers = useCallback((scrollSectionId: string, handlers: ListHandlers) => {
+    setListHandlersMap(prev => new Map(prev).set(scrollSectionId, handlers));
   }, []);
 
   // Navigation with list and carousel delegation
   const handleNavigateDown = useCallback(() => {
     // Check if we should delegate to list first (solution section)
     // Supports both legacy 'solution-second-group' and new pattern 'solution-second-group-{idx}'
-    const isSolutionList = Boolean(currentScrollTarget?.startsWith('solution-second-group'));
-    const shouldDelegateToList = isSolutionList && listHandlers !== null && listHandlers.canScrollNext();
-
-    if (shouldDelegateToList) {
-      listHandlers!.scrollNext();
-      return;
+    if (currentScrollTarget?.startsWith('solution-second-group')) {
+      const currentListHandlers = listHandlersMap.get(currentScrollTarget);
+      if (currentListHandlers && currentListHandlers.canScrollNext()) {
+        currentListHandlers.scrollNext();
+        return;
+      }
     }
 
     // Check if we should delegate to carousel (value section)
@@ -74,17 +74,17 @@ export const useCarouselDelegation = ({
     }
 
     baseHandleNavigateDown();
-  }, [baseHandleNavigateDown, carouselHandlers, currentScrollTarget, listHandlers]);
+  }, [baseHandleNavigateDown, carouselHandlers, currentScrollTarget, listHandlersMap]);
 
   const handleNavigateUp = useCallback(() => {
     // Check if list can handle the navigation (solution section)
     // Supports both legacy 'solution-second-group' and new pattern 'solution-second-group-{idx}'
-    const isSolutionList = Boolean(currentScrollTarget?.startsWith('solution-second-group'));
-    const shouldDelegateToList = isSolutionList && listHandlers !== null && listHandlers.canScrollPrev();
-
-    if (shouldDelegateToList) {
-      listHandlers!.scrollPrev();
-      return;
+    if (currentScrollTarget?.startsWith('solution-second-group')) {
+      const currentListHandlers = listHandlersMap.get(currentScrollTarget);
+      if (currentListHandlers && currentListHandlers.canScrollPrev()) {
+        currentListHandlers.scrollPrev();
+        return;
+      }
     }
 
     // Check if carousel can handle the navigation (value section)
@@ -99,7 +99,7 @@ export const useCarouselDelegation = ({
     }
 
     baseHandleNavigateUp();
-  }, [baseHandleNavigateUp, carouselHandlers, currentScrollTarget, listHandlers]);
+  }, [baseHandleNavigateUp, carouselHandlers, currentScrollTarget, listHandlersMap]);
 
   return {
     handleNavigateDown,

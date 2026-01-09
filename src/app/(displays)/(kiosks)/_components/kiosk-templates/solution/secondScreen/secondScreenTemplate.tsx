@@ -23,12 +23,15 @@ type SolutionSecondScreenCoreProps = {
   readonly numberedListHeadline?: string;
   readonly onNavigateDown?: () => void;
   readonly onNavigateUp?: () => void;
-  readonly onRegisterListHandlers?: (handlers: {
-    canScrollNext: () => boolean;
-    canScrollPrev: () => boolean;
-    scrollNext: () => void;
-    scrollPrev: () => void;
-  }) => void;
+  readonly onRegisterListHandlers?: (
+    scrollSectionId: string,
+    handlers: {
+      canScrollNext: () => boolean;
+      canScrollPrev: () => boolean;
+      scrollNext: () => void;
+      scrollPrev: () => void;
+    }
+  ) => void;
   readonly scrollSectionId?: string;
   readonly stepFourDescription?: string;
   readonly stepFourLabel?: string;
@@ -131,6 +134,7 @@ const SolutionSecondScreenTemplate = memo(
         <AnimatedNumberedList
           dividerHeights={dividerHeights}
           onRegisterHandlers={onRegisterListHandlers}
+          scrollSectionId={scrollSectionId ?? 'solution-second-group'}
           steps={timelineSteps}
         />
 

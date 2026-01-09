@@ -11,12 +11,16 @@ type StepConfig = {
 
 type AnimatedNumberedListProps = {
   readonly dividerHeights: number[];
-  readonly onRegisterHandlers?: (handlers: {
-    canScrollNext: () => boolean;
-    canScrollPrev: () => boolean;
-    scrollNext: () => void;
-    scrollPrev: () => void;
-  }) => void;
+  readonly onRegisterHandlers?: (
+    scrollSectionId: string,
+    handlers: {
+      canScrollNext: () => boolean;
+      canScrollPrev: () => boolean;
+      scrollNext: () => void;
+      scrollPrev: () => void;
+    }
+  ) => void;
+  readonly scrollSectionId: string;
   readonly steps: StepConfig[];
 };
 
@@ -25,7 +29,12 @@ type AnimatedNumberedListProps = {
  * Registers stable handlers with parent to control when navigation can advance.
  * Dynamically measures item heights for accurate positioning using useLayoutEffect to prevent first-frame jumps.
  */
-const AnimatedNumberedList = ({ dividerHeights, onRegisterHandlers, steps }: AnimatedNumberedListProps) => {
+const AnimatedNumberedList = ({
+  dividerHeights,
+  onRegisterHandlers,
+  scrollSectionId,
+  steps,
+}: AnimatedNumberedListProps) => {
   const [internalStepIndex, setInternalStepIndex] = useState(0);
   const [itemHeights, setItemHeights] = useState<number[]>([]);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -64,14 +73,14 @@ const AnimatedNumberedList = ({ dividerHeights, onRegisterHandlers, steps }: Ani
 
   useEffect(() => {
     if (onRegisterHandlers) {
-      onRegisterHandlers({
+      onRegisterHandlers(scrollSectionId, {
         canScrollNext,
         canScrollPrev,
         scrollNext,
         scrollPrev,
       });
     }
-  }, [canScrollNext, canScrollPrev, onRegisterHandlers, scrollNext, scrollPrev]);
+  }, [canScrollNext, canScrollPrev, onRegisterHandlers, scrollNext, scrollPrev, scrollSectionId]);
 
   // Calculate opacity based on distance from active index
   const getOpacity = (index: number) => {

@@ -33,12 +33,15 @@ export const buildSolutionSlides = (
   handlers: {
     onNavigateDown: () => void;
     onNavigateUp: () => void;
-    onRegisterListHandlers?: (handlers: {
-      canScrollNext: () => boolean;
-      canScrollPrev: () => boolean;
-      scrollNext: () => void;
-      scrollPrev: () => void;
-    }) => void;
+    onRegisterListHandlers?: (
+      scrollSectionId: string,
+      handlers: {
+        canScrollNext: () => boolean;
+        canScrollPrev: () => boolean;
+        scrollNext: () => void;
+        scrollPrev: () => void;
+      }
+    ) => void;
   }
 ): Slide[] => {
   const slides: Slide[] = [];

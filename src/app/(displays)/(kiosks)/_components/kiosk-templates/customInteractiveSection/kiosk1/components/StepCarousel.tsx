@@ -219,7 +219,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
 
       // Only update state if index actually changed
       if (nextIndex !== prevIndex) {
-      setSelectedIndex(nextIndex);
+        setSelectedIndex(nextIndex);
 
         // Mark as transitioning when selection changes
         isTransitioningRef.current = true;

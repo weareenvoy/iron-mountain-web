@@ -43,12 +43,15 @@ type SlideBuilders = {
   };
   readonly handleInitialButtonClick: () => void;
   readonly handleRegisterCarouselHandlers?: (handlers: CarouselHandlers) => void;
-  readonly handleRegisterListHandlers?: (handlers: {
-    canScrollNext: () => boolean;
-    canScrollPrev: () => boolean;
-    scrollNext: () => void;
-    scrollPrev: () => void;
-  }) => void;
+  readonly handleRegisterListHandlers?: (
+    scrollSectionId: string,
+    handlers: {
+      canScrollNext: () => boolean;
+      canScrollPrev: () => boolean;
+      scrollNext: () => void;
+      scrollPrev: () => void;
+    }
+  ) => void;
   readonly scrollToSectionById: (id: string) => void;
 };
 
