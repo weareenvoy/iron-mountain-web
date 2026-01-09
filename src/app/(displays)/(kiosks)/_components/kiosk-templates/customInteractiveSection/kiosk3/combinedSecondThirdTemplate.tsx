@@ -138,9 +138,12 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
       {/* Carousel state - Always present but initially at opacity 0 */}
       <motion.div
         animate={{ opacity: showCarousel ? 1 : 0 }}
-        className="pointer-events-none absolute inset-0 z-10"
+        className="pointer-events-none absolute inset-0"
         initial={{ opacity: 0 }}
-        style={{ pointerEvents: showCarousel ? 'auto' : 'none' }}
+        style={{
+          pointerEvents: showCarousel && !showOverlay ? 'auto' : 'none',
+          zIndex: showOverlay ? 1 : 10,
+        }}
         transition={{ delay: showCarousel ? 0.3 : 0, duration: 0.6, ease: [0.3, 0, 0.6, 1] }}
       >
         <CircularCarousel
@@ -522,13 +525,15 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
       {/* Demo overlay */}
       <AnimatePresence>
         {showOverlay && (
-          <CustomInteractiveDemoScreenTemplate
-            cardLabel={overlayCardLabel}
-            demoIframeSrc={demoIframeSrc}
-            endTourLabel={overlayEndTourLabel}
-            headline={overlayHeadline}
-            onEndTour={handleHideOverlay}
-          />
+          <div className="absolute inset-0 z-9999">
+            <CustomInteractiveDemoScreenTemplate
+              cardLabel={overlayCardLabel}
+              demoIframeSrc={demoIframeSrc}
+              endTourLabel={overlayEndTourLabel}
+              headline={overlayHeadline}
+              onEndTour={handleHideOverlay}
+            />
+          </div>
         )}
       </AnimatePresence>
     </div>
