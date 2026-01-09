@@ -46,6 +46,10 @@ export const buildCustomInteractiveSlides = (
       overlayHeadline = customInteractive.fourthScreen.headline;
     }
 
+    // Determine navigation target based on kiosk
+    const primaryCtaTarget =
+      kioskId === 'kiosk-3' ? 'customInteractive-combined-screen' : 'customInteractive-second-screen';
+
     slides.push({
       id: 'customInteractive-first',
       render: () => (
@@ -53,7 +57,7 @@ export const buildCustomInteractiveSlides = (
           <CustomInteractiveFirstScreenTemplate
             kioskId={kioskId}
             {...customInteractive.firstScreen}
-            onPrimaryCta={() => scrollToSection?.('customInteractive-second-screen')}
+            onPrimaryCta={() => scrollToSection?.(primaryCtaTarget)}
             overlayCardLabel={overlayCardLabel}
             overlayHeadline={overlayHeadline}
           />
