@@ -56,6 +56,7 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
   const [showCarousel, setShowCarousel] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
   const [carouselIndex, setCarouselIndex] = useState(0);
+  const [isCarouselExiting, setIsCarouselExiting] = useState(false);
   const safeSlides = slides ?? [];
 
   const ref = useRef(null);
@@ -77,6 +78,10 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
     setCarouselIndex(index);
   }, []);
 
+  const handleIsExitingChange = useCallback((isExiting: boolean) => {
+    setIsCarouselExiting(isExiting);
+  }, []);
+
   if (safeSlides.length === 0 || !headline) {
     return null;
   }
@@ -93,68 +98,31 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
       <AnimatePresence mode="wait">
         {(!showCarousel || carouselIndex === 0) && (
           <motion.div
-            animate={{
-              borderRadius: showCarousel ? 90 : 200,
-              bottom: showCarousel ? 1120 : -1000,
-              height: showCarousel ? 830 : 2500,
-              left: showCarousel ? 700 : 50,
-              opacity: 1,
-              scale: 1,
-              width: showCarousel ? 830 : 2500,
-              x: 0,
-              y: 0,
-            }}
-            className="pointer-events-none absolute z-0 rotate-45 overflow-hidden border border-white/10 shadow-[0_40px_120px_rgba(0,0,0,0.45)]"
-            exit={{ opacity: 0, scale: 1, x: -21, y: -21 }}
-            initial={
-              showCarousel
-                ? {
-                    borderRadius: 90,
-                    bottom: 1120,
-                    height: 830,
-                    left: 700,
-                    opacity: 0,
-                    scale: 0,
-                    width: 830,
-                    x: 0,
-                    y: 0,
-                  }
-                : { borderRadius: 200, bottom: -1000, height: 2500, left: 50, opacity: 1, scale: 1, width: 2500 }
+            animate={
+              carouselIndex === 0 && isCarouselExiting
+                ? { opacity: 0, scale: 0.332, x: -1116, y: -896 }
+                : showCarousel
+                  ? { opacity: 1, scale: 0.332, x: -1095, y: -875 }
+                  : { opacity: 1, scale: 1, x: 0, y: 0 }
             }
+            className="pointer-events-none absolute bottom-[-1000px] left-[50px] z-0 h-[2500px] w-[2500px] rotate-45 overflow-hidden rounded-[200px] border border-white/10 shadow-[0_40px_120px_rgba(0,0,0,0.45)]"
+            exit={{ opacity: 0, scale: 0.332, x: -1116, y: -896 }}
+            initial={showCarousel ? { opacity: 0, scale: 0, x: -1095, y: -875 } : { opacity: 1, scale: 1, x: 0, y: 0 }}
             key="morphing-diamond"
-            transition={{
-              borderRadius: { duration: 0.8, ease: [0.3, 0, 0.6, 1] },
-              bottom: { duration: 0.8, ease: [0.3, 0, 0.6, 1] },
-              default: { duration: 0.6, ease: [0.3, 0, 0.4, 1] },
-              height: { duration: 0.8, ease: [0.3, 0, 0.6, 1] },
-              left: { duration: 0.8, ease: [0.3, 0, 0.6, 1] },
-              opacity: { duration: 0.6, ease: [0.3, 0, 0.4, 1] },
-              scale: { duration: 0.6, ease: [0.3, 0, 0.4, 1] },
-              width: { duration: 0.8, ease: [0.3, 0, 0.6, 1] },
-              x: { duration: 0.6, ease: [0.3, 0, 0.4, 1] },
-              y: { duration: 0.6, ease: [0.3, 0, 0.4, 1] },
-            }}
+            transition={{ duration: 0.6, ease: [0.3, 0, 0.4, 1] }}
           >
-            <motion.div
-              animate={{ left: showCarousel ? 0 : 480 }}
-              className="absolute inset-0 h-full w-full -rotate-45"
-              initial={{ left: showCarousel ? 0 : 480 }}
-              transition={{ duration: 0.8, ease: [0.3, 0, 0.6, 1] }}
-            >
-              <motion.video
-                animate={{ scale: showCarousel ? 1.35 : 1.45 }}
+            <div className="absolute inset-0 h-full w-full -rotate-45">
+              <video
                 autoPlay
-                className="h-full w-full origin-center object-cover"
-                initial={{ scale: showCarousel ? 1.35 : 1.45 }}
+                className="relative left-[480px] h-full w-full origin-center scale-[1.45] object-cover"
                 loop
                 muted
                 playsInline
                 poster={backgroundImageSrc}
                 src={videoAsset}
-                transition={{ duration: 0.8, ease: [0.3, 0, 0.6, 1] }}
               />
               <div className="absolute inset-0 bg-linear-to-t from-black/25 via-transparent to-transparent" />
-            </motion.div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -167,7 +135,11 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
         style={{ pointerEvents: showCarousel ? 'auto' : 'none' }}
         transition={{ delay: showCarousel ? 0.3 : 0, duration: 0.6, ease: [0.3, 0, 0.6, 1] }}
       >
-        <CircularCarousel onIndexChange={handleIndexChange} slides={safeSlides}>
+        <CircularCarousel
+          onIndexChange={handleIndexChange}
+          onIsExitingChange={handleIsExitingChange}
+          slides={safeSlides}
+        >
           {({ current, index, isExiting }) => {
             const isSlide1 = current.id === 'slide-1';
             const isSlide2 = current.id === 'slide-2';

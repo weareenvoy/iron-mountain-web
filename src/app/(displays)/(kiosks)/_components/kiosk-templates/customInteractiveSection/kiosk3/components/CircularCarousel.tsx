@@ -24,10 +24,11 @@ type CircularCarouselProps = {
     total: number;
   }) => React.ReactNode;
   readonly onIndexChange?: (index: number) => void;
+  readonly onIsExitingChange?: (isExiting: boolean) => void;
   readonly slides: readonly CarouselSlide[];
 };
 
-const CircularCarousel = ({ children, onIndexChange, slides }: CircularCarouselProps) => {
+const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }: CircularCarouselProps) => {
   const [index, setIndex] = useState(0);
   const [isExiting, setIsExiting] = useState(false);
   const prevIndexRef = useRef(0);
@@ -38,6 +39,10 @@ const CircularCarousel = ({ children, onIndexChange, slides }: CircularCarouselP
   useEffect(() => {
     onIndexChange?.(currentIndex);
   }, [currentIndex, onIndexChange]);
+
+  useEffect(() => {
+    onIsExitingChange?.(isExiting);
+  }, [isExiting, onIsExitingChange]);
 
   const goNext = () => {
     setIsExiting(true);
