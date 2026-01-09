@@ -186,7 +186,7 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
                 </h1>
 
                 {/* Data configuration + bullets */}
-                <div className="absolute top-[1600px] left-[240px] text-white w-[1000px]">
+                <div className="absolute top-[1600px] left-[240px] w-[1000px] text-white">
                   <AnimatePresence mode="wait">
                     <motion.div
                       animate={{ opacity: 1 }}
@@ -199,11 +199,11 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
                       <div className="text-[80px] leading-normal font-normal tracking-[-4px]">
                         {renderRegisteredMark(sectionTitle)}
                       </div>
-                      <ul className="space-y-6">
+                      <ul className="mt-[110px] ml-[60px] space-y-[22px]">
                         {current.bullets.map((bullet, bulletIndex) => (
                           <motion.li
                             animate={{ opacity: 1 }}
-                            className="flex items-start text-[60px] leading-[1.4] font-normal tracking-[-3px]"
+                            className="flex w-[1100px] items-start gap-[16px] text-[64px]"
                             exit={{ opacity: 0 }}
                             initial={{ opacity: 0 }}
                             key={`${current.id}-bullet-${bulletIndex}`}
@@ -213,8 +213,8 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
                               ease: [0.3, 0, 0.6, 1],
                             }}
                           >
-                            <span className="mr-6 text-[#6DCFF6]">•</span>
-                            <span className="flex-1">{renderRegisteredMark(bullet)}</span>
+                            <span className="mt-[30px] mr-[40px] ml-[-50px] inline-block h-[32px] w-[32px] rotate-45 rounded-[4px] border-4 border-white/80" />
+                            <span>{renderRegisteredMark(bullet)}</span>
                           </motion.li>
                         ))}
                       </ul>
