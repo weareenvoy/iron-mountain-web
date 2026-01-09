@@ -234,7 +234,7 @@ export class MqttService {
   // This publishes the complete state to state/<exhibit>
   // Note: MQTT topics use 'overlook' but we accept 'overlook-wall' for consistency with other methods
   public reportExhibitState(
-    exhibit: 'basecamp' | 'overlook-wall' | 'summit',
+    exhibit: 'basecamp' | 'kiosk-01' | 'kiosk-02' | 'kiosk-03' | 'overlook-wall' | 'summit',
     state: {
       'beat-id': string;
       'playpause'?: boolean; // Only for overlook/summit

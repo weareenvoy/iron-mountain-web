@@ -9,12 +9,13 @@ import {
   useRef,
   useState,
   type PropsWithChildren,
+  type RefObject,
 } from 'react';
 import { useAudio } from '@/components/providers/audio-provider';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getKioskData } from '@/lib/internal/data/get-kiosk';
 import { useExhibitSetVolume } from '@/lib/mqtt/utils/use-exhibit-set-volume';
-import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
+import type { KioskId, KioskMqttState } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import type { KioskData } from '@/lib/internal/types';
 import type { ExhibitMqttStateBase } from '@/lib/mqtt/types';
 
@@ -50,8 +51,8 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
   const [error, setError] = useState<null | string>(null);
   const [loading, setLoading] = useState(true);
 
-  // MQTT state for volume control
-  const [mqttState, setMqttState] = useState<ExhibitMqttStateBase>({
+  // MQTT state for volume control and beat tracking
+  const [mqttState, setMqttState] = useState<KioskMqttState>({
     'beat-id': 'kiosk-idle',
     'volume-level': 1.0,
     'volume-muted': false,
@@ -60,28 +61,24 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
   const mqttStateRef = useRef(mqttState);
   mqttStateRef.current = mqttState;
 
+  // Get kiosk-specific app ID for MQTT (kiosk-1 → kiosk-01)
+  const appId = `kiosk-0${kioskId.replace('kiosk-', '')}` as 'kiosk-01' | 'kiosk-02' | 'kiosk-03';
+
   // Report state to MQTT
   const reportState = useCallback(
-    (next: Partial<ExhibitMqttStateBase>) => {
+    (next: Partial<KioskMqttState>) => {
       if (!client) return;
 
-      const updated = { ...mqttStateRef.current, ...next };
+      const updated = { ...mqttStateRef.current, ...next } as KioskMqttState;
       mqttStateRef.current = updated;
       setMqttState(updated);
 
-      // Publish state directly (kiosks not yet in reportExhibitState)
-      const message = {
-        body: updated,
-        source: `kiosk-${kioskId.replace('kiosk-', '')}`,
-        timestamp: Date.now(),
-      };
-
-      client.publish(`state/kiosk-${kioskId.replace('kiosk-', '')}`, JSON.stringify(message), {
-        qos: 1,
-        retain: true,
+      // Report state using the centralized method
+      client.reportExhibitState(appId, updated, {
+        onError: err => console.error(`${kioskId}: Failed to report state:`, err),
       });
     },
-    [client, kioskId]
+    [appId, client, kioskId]
   );
 
   const reportStateRef = useRef(reportState);
@@ -149,16 +146,13 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
     };
   }, [client, fetchData, kioskId]);
 
-  // Get kiosk-specific app ID for set-volume subscription
-  const appId = `kiosk-${kioskId.replace('kiosk-', '')}` as 'kiosk-01' | 'kiosk-02' | 'kiosk-03';
-
   // Shared hook for handling set-volume commands
   useExhibitSetVolume({
     appId,
     audio,
     client,
-    reportStateRef,
-    stateRef: mqttStateRef,
+    reportStateRef: reportStateRef as RefObject<(next: Partial<ExhibitMqttStateBase>) => void>,
+    stateRef: mqttStateRef as RefObject<ExhibitMqttStateBase>,
   });
 
   const contextValue = useMemo<KioskContextType>(
