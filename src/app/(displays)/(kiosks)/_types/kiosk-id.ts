@@ -7,6 +7,7 @@ export const DEFAULT_KIOSK_ID: KioskId = 'kiosk-1';
  * - 'kiosk-active': Kiosk is in active use (user is interacting)
  */
 export type KioskBeatId = 'kiosk-active' | 'kiosk-idle';
+export const DEFAULT_KIOSK_BEAT_ID: KioskBeatId = 'kiosk-idle'; // The type above follows alphabetization, but to make it clear that the idle state is the default state this constant is in place. The visual order can suggest that active is the default state, so this constatnt is for clarity.
 
 /**
  * Complete MQTT state structure for kiosks.

@@ -11,11 +11,11 @@ import {
   type PropsWithChildren,
   type RefObject,
 } from 'react';
+import { DEFAULT_KIOSK_BEAT_ID, type KioskId, type KioskMqttState } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import { useAudio } from '@/components/providers/audio-provider';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getKioskData } from '@/lib/internal/data/get-kiosk';
 import { useExhibitSetVolume } from '@/lib/mqtt/utils/use-exhibit-set-volume';
-import type { KioskId, KioskMqttState } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import type { KioskData } from '@/lib/internal/types';
 import type { ExhibitMqttStateBase } from '@/lib/mqtt/types';
 
@@ -53,7 +53,7 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
 
   // MQTT state for volume control and beat tracking
   const [mqttState, setMqttState] = useState<KioskMqttState>({
-    'beat-id': 'kiosk-idle',
+    'beat-id': DEFAULT_KIOSK_BEAT_ID,
     'volume-level': 1.0,
     'volume-muted': false,
   });
@@ -122,7 +122,7 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
         fetchData();
 
         // Report state with initial beat-id
-        reportStateRef.current({ 'beat-id': 'kiosk-idle' });
+        reportStateRef.current({ 'beat-id': DEFAULT_KIOSK_BEAT_ID });
       } catch (error) {
         console.error(`${kioskId}: Error parsing load-tour command:`, error);
       }
@@ -133,7 +133,7 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
       console.info(`${kioskId}: Received end-tour command`);
 
       // Reset to idle state
-      reportStateRef.current({ 'beat-id': 'kiosk-idle' });
+      reportStateRef.current({ 'beat-id': DEFAULT_KIOSK_BEAT_ID });
     };
 
     // Subscribe to broadcast commands (all exhibits listen to same topics)
