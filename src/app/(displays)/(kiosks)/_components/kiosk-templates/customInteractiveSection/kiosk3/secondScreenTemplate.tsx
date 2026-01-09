@@ -117,51 +117,51 @@ const CustomInteractiveKiosk3SecondScreenTemplate = ({
                 <BlueDot className="h-[60px] w-[60px]" />
               </div>
               
-              {/* Dot 2 - animates from 0deg to 60deg */}
+              {/* Dot 2 - animates from 0deg to 60deg with opacity fade */}
               <motion.div
-                animate={{ transform: 'translate(-50%, -50%) rotate(60deg) translateY(-430px)' }}
+                animate={{ opacity: 1, transform: 'translate(-50%, -50%) rotate(60deg) translateY(-430px)' }}
                 className="absolute top-[50%] left-[50%]"
-                initial={{ transform: 'translate(-50%, -50%) rotate(0deg) translateY(-430px)' }}
+                initial={{ opacity: 0, transform: 'translate(-50%, -50%) rotate(0deg) translateY(-430px)' }}
                 transition={{ delay: 0.8, duration: 0.8, ease: [0.3, 0, 0.4, 1] }}
               >
                 <BlueDot className="h-[60px] w-[60px]" />
               </motion.div>
               
-              {/* Dot 3 - animates from 0deg to 120deg */}
+              {/* Dot 3 - animates from 0deg to 120deg with opacity fade */}
               <motion.div
-                animate={{ transform: 'translate(-50%, -50%) rotate(120deg) translateY(-430px)' }}
+                animate={{ opacity: 1, transform: 'translate(-50%, -50%) rotate(120deg) translateY(-430px)' }}
                 className="absolute top-[50%] left-[50%]"
-                initial={{ transform: 'translate(-50%, -50%) rotate(0deg) translateY(-430px)' }}
+                initial={{ opacity: 0, transform: 'translate(-50%, -50%) rotate(0deg) translateY(-430px)' }}
                 transition={{ delay: 0.9, duration: 0.8, ease: [0.3, 0, 0.4, 1] }}
               >
                 <BlueDot className="h-[60px] w-[60px]" />
               </motion.div>
               
-              {/* Dot 4 - animates from 0deg to 180deg */}
+              {/* Dot 4 - animates from 0deg to 180deg with opacity fade */}
               <motion.div
-                animate={{ transform: 'translate(-50%, -50%) rotate(180deg) translateY(-430px)' }}
+                animate={{ opacity: 1, transform: 'translate(-50%, -50%) rotate(180deg) translateY(-430px)' }}
                 className="absolute top-[50%] left-[50%]"
-                initial={{ transform: 'translate(-50%, -50%) rotate(0deg) translateY(-430px)' }}
+                initial={{ opacity: 0, transform: 'translate(-50%, -50%) rotate(0deg) translateY(-430px)' }}
                 transition={{ delay: 1.0, duration: 0.8, ease: [0.3, 0, 0.4, 1] }}
               >
                 <BlueDot className="h-[60px] w-[60px]" />
               </motion.div>
               
-              {/* Dot 5 - animates from 0deg to 240deg */}
+              {/* Dot 5 - animates from 0deg to 240deg with opacity fade */}
               <motion.div
-                animate={{ transform: 'translate(-50%, -50%) rotate(240deg) translateY(-430px)' }}
+                animate={{ opacity: 1, transform: 'translate(-50%, -50%) rotate(240deg) translateY(-430px)' }}
                 className="absolute top-[50%] left-[50%]"
-                initial={{ transform: 'translate(-50%, -50%) rotate(0deg) translateY(-430px)' }}
+                initial={{ opacity: 0, transform: 'translate(-50%, -50%) rotate(0deg) translateY(-430px)' }}
                 transition={{ delay: 1.1, duration: 0.8, ease: [0.3, 0, 0.4, 1] }}
               >
                 <BlueDot className="h-[60px] w-[60px]" />
               </motion.div>
               
-              {/* Dot 6 - animates from 0deg to 300deg, finishes when InnerRing pathLength completes (2.0s) */}
+              {/* Dot 6 - animates from 0deg to 300deg with opacity fade, finishes when InnerRing pathLength completes (2.0s) */}
               <motion.div
-                animate={{ transform: 'translate(-50%, -50%) rotate(300deg) translateY(-430px)' }}
+                animate={{ opacity: 1, transform: 'translate(-50%, -50%) rotate(300deg) translateY(-430px)' }}
                 className="absolute top-[50%] left-[50%]"
-                initial={{ transform: 'translate(-50%, -50%) rotate(0deg) translateY(-430px)' }}
+                initial={{ opacity: 0, transform: 'translate(-50%, -50%) rotate(0deg) translateY(-430px)' }}
                 transition={{ delay: 1.2, duration: 0.8, ease: [0.3, 0, 0.4, 1] }}
               >
                 <BlueDot className="h-[60px] w-[60px]" />
