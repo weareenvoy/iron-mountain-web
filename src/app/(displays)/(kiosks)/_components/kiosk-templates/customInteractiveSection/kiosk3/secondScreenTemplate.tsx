@@ -78,7 +78,7 @@ const CustomInteractiveKiosk3SecondScreenTemplate = ({
 
       <div className="absolute top-[240px] right-[120px]">
         <button
-          className="relative top-[1070px] flex h-[200px] items-center gap-[20px] rounded-[1000px] bg-[#ededed] px-[120px] text-[54px] leading-[1.4] font-normal tracking-[-2px] text-[#14477d] transition hover:scale-[1.01]"
+          className="group relative top-[1070px] flex h-[200px] items-center gap-[20px] rounded-[1000px] bg-[#ededed] px-[120px] text-[54px] leading-[1.4] font-normal tracking-[-2px] text-[#14477d] transition hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
           onClick={onBack}
           type="button"
         >
@@ -89,7 +89,7 @@ const CustomInteractiveKiosk3SecondScreenTemplate = ({
 
       <div className="absolute top-[2266px] left-1/2 h-[1000px] w-[1000px] -translate-x-1/2 -translate-y-1/2">
         <button
-          className="relative flex h-full w-full items-center justify-center rounded-full transition hover:scale-[1.05]"
+          className="relative flex h-full w-full items-center justify-center rounded-full transition hover:scale-[1.05] active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
           onClick={onTapToBegin}
           type="button"
         >

@@ -15,3 +15,15 @@ export type ValueCarouselSlide = {
   readonly diamondCards?: readonly ValueDiamondCard[];
   readonly id?: string;
 };
+
+/**
+ * Valid slide indices for the value carousel (0-2).
+ * Used for type-safe array access to position, z-index, and visibility maps.
+ */
+export type SlideIndex = 0 | 1 | 2;
+
+/**
+ * Valid diamond indices within each slide (0-2).
+ * Used for type-safe array access to position, z-index, and visibility maps.
+ */
+export type DiamondIndex = 0 | 1 | 2;
