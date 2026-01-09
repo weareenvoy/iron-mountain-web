@@ -63,7 +63,12 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       )}
       data-scroll-section="customInteractive-first-screen"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-[#1b75bc] to-[#05254b] group-data-[kiosk=kiosk-1]/kiosk:h-[10530px] group-data-[kiosk=kiosk-3]/kiosk:h-[10430px]" />
+      <div
+        className="absolute inset-0 group-data-[kiosk=kiosk-1]/kiosk:h-[10530px] group-data-[kiosk=kiosk-3]/kiosk:h-[10430px]"
+        style={{
+          background: 'linear-gradient(170deg, #2481E3 -6.53%, #123E6C 85.02%, #0F355C 92.02%, #091E36 117.7%)',
+        }}
+      />
 
       {/* Overlay - Demo Screen */}
       <div
