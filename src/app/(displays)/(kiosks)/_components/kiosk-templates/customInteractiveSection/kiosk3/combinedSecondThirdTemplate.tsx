@@ -55,6 +55,7 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
 }: CustomInteractiveKiosk3CombinedTemplateProps) => {
   const [showCarousel, setShowCarousel] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
+  const [carouselIndex, setCarouselIndex] = useState(0);
   const safeSlides = slides ?? [];
 
   const ref = useRef(null);
@@ -72,6 +73,10 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
     setShowOverlay(false);
   }, []);
 
+  const handleIndexChange = useCallback((index: number) => {
+    setCarouselIndex(index);
+  }, []);
+
   if (safeSlides.length === 0 || !headline) {
     return null;
   }
@@ -85,39 +90,74 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
       <div className="absolute inset-0 bg-transparent" />
 
       {/* Diamond video background - Morphs into first carousel slide */}
-      <motion.div
-        animate={{
-          borderRadius: showCarousel ? 90 : 200,
-          bottom: showCarousel ? 1120 : -1000,
-          height: showCarousel ? 830 : 2500,
-          left: showCarousel ? 700 : 50,
-          width: showCarousel ? 830 : 2500,
-        }}
-        className="pointer-events-none absolute z-0 rotate-[45deg] overflow-hidden border border-white/10 shadow-[0_40px_120px_rgba(0,0,0,0.45)]"
-        initial={{ borderRadius: 200, bottom: -1000, height: 2500, left: 50, width: 2500 }}
-        transition={{ duration: 0.8, ease: [0.3, 0, 0.6, 1] }}
-      >
-        <motion.div
-          animate={{ left: showCarousel ? 0 : 480 }}
-          className="absolute inset-0 h-full w-full -rotate-[45deg]"
-          initial={{ left: 480 }}
-          transition={{ duration: 0.8, ease: [0.3, 0, 0.6, 1] }}
-        >
-          <motion.video
-            animate={{ scale: showCarousel ? 1.35 : 1.45 }}
-            autoPlay
-            className="h-full w-full origin-center object-cover"
-            initial={{ scale: 1.45 }}
-            loop
-            muted
-            playsInline
-            poster={backgroundImageSrc}
-            src={videoAsset}
-            transition={{ duration: 0.8, ease: [0.3, 0, 0.6, 1] }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
-        </motion.div>
-      </motion.div>
+      <AnimatePresence mode="wait">
+        {(!showCarousel || carouselIndex === 0) && (
+          <motion.div
+            animate={{
+              borderRadius: showCarousel ? 90 : 200,
+              bottom: showCarousel ? 1120 : -1000,
+              height: showCarousel ? 830 : 2500,
+              left: showCarousel ? 700 : 50,
+              opacity: 1,
+              scale: 1,
+              width: showCarousel ? 830 : 2500,
+              x: 0,
+              y: 0,
+            }}
+            className="pointer-events-none absolute z-0 rotate-45 overflow-hidden border border-white/10 shadow-[0_40px_120px_rgba(0,0,0,0.45)]"
+            exit={{ opacity: 0, scale: 1, x: -21, y: -21 }}
+            initial={
+              showCarousel
+                ? {
+                    borderRadius: 90,
+                    bottom: 1120,
+                    height: 830,
+                    left: 700,
+                    opacity: 0,
+                    scale: 0,
+                    width: 830,
+                    x: 0,
+                    y: 0,
+                  }
+                : { borderRadius: 200, bottom: -1000, height: 2500, left: 50, opacity: 1, scale: 1, width: 2500 }
+            }
+            key="morphing-diamond"
+            transition={{
+              borderRadius: { duration: 0.8, ease: [0.3, 0, 0.6, 1] },
+              bottom: { duration: 0.8, ease: [0.3, 0, 0.6, 1] },
+              default: { duration: 0.6, ease: [0.3, 0, 0.4, 1] },
+              height: { duration: 0.8, ease: [0.3, 0, 0.6, 1] },
+              left: { duration: 0.8, ease: [0.3, 0, 0.6, 1] },
+              opacity: { duration: 0.6, ease: [0.3, 0, 0.4, 1] },
+              scale: { duration: 0.6, ease: [0.3, 0, 0.4, 1] },
+              width: { duration: 0.8, ease: [0.3, 0, 0.6, 1] },
+              x: { duration: 0.6, ease: [0.3, 0, 0.4, 1] },
+              y: { duration: 0.6, ease: [0.3, 0, 0.4, 1] },
+            }}
+          >
+            <motion.div
+              animate={{ left: showCarousel ? 0 : 480 }}
+              className="absolute inset-0 h-full w-full -rotate-45"
+              initial={{ left: showCarousel ? 0 : 480 }}
+              transition={{ duration: 0.8, ease: [0.3, 0, 0.6, 1] }}
+            >
+              <motion.video
+                animate={{ scale: showCarousel ? 1.35 : 1.45 }}
+                autoPlay
+                className="h-full w-full origin-center object-cover"
+                initial={{ scale: showCarousel ? 1.35 : 1.45 }}
+                loop
+                muted
+                playsInline
+                poster={backgroundImageSrc}
+                src={videoAsset}
+                transition={{ duration: 0.8, ease: [0.3, 0, 0.6, 1] }}
+              />
+              <div className="absolute inset-0 bg-linear-to-t from-black/25 via-transparent to-transparent" />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Carousel state - Always present but initially at opacity 0 */}
       <motion.div
@@ -127,7 +167,7 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
         style={{ pointerEvents: showCarousel ? 'auto' : 'none' }}
         transition={{ delay: showCarousel ? 0.3 : 0, duration: 0.6, ease: [0.3, 0, 0.6, 1] }}
       >
-        <CircularCarousel slides={safeSlides}>
+        <CircularCarousel onIndexChange={handleIndexChange} slides={safeSlides}>
           {({ current, index, isExiting }) => {
             const isSlide1 = current.id === 'slide-1';
             const isSlide2 = current.id === 'slide-2';
@@ -373,7 +413,7 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
 
         {/* CTA - Only visible when carousel is shown */}
         <button
-          className="group absolute top-[2630px] left-[240px] z-10 flex h-[200px] items-center gap-[18px] rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[110px] text-[55px] leading-[1.1] font-semibold tracking-[2px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+          className="group absolute top-[2630px] left-[240px] z-10 flex h-[200px] items-center gap-[18px] rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[110px] text-[55px] leading-[1.1] font-semibold tracking-[2px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
           onClick={handleShowOverlay}
           type="button"
         >
@@ -405,7 +445,7 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
 
         <div className="absolute top-[240px] right-[120px]">
           <button
-            className="group relative top-[1070px] flex h-[200px] items-center gap-[20px] rounded-[1000px] bg-[#ededed] px-[120px] text-[54px] leading-[1.4] font-normal tracking-[-2px] text-[#14477d] transition hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+            className="group relative top-[1070px] flex h-[200px] items-center gap-[20px] rounded-[1000px] bg-[#ededed] px-[120px] text-[54px] leading-[1.4] font-normal tracking-[-2px] text-[#14477d] transition hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
             onClick={onBack}
             type="button"
           >
@@ -416,7 +456,7 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
 
         <div className="absolute top-[2266px] left-1/2 h-[1000px] w-[1000px] -translate-x-1/2 -translate-y-1/2">
           <button
-            className="relative flex h-full w-full items-center justify-center rounded-full transition hover:scale-[1.05] active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+            className="relative flex h-full w-full items-center justify-center rounded-full transition hover:scale-[1.05] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
             onClick={handleTapToBegin}
             type="button"
           >
@@ -440,7 +480,7 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
                 </motion.span>
 
                 {/* Dot 1 - stays at 0deg (reference position, does not animate) */}
-                <div className="absolute top-[48%] left-[50%] [transform:translate(-50%,-50%)_rotate(0deg)_translateY(-430px)]">
+                <div className="absolute top-[48%] left-[50%] transform-[translate(-50%,-50%)_rotate(0deg)_translateY(-430px)]">
                   <BlueDot className="h-[60px] w-[60px]" />
                 </div>
 
