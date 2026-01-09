@@ -24,22 +24,14 @@ export const AccordionTrigger = (props: AccordionTriggerProps) => {
   } = props;
 
   return (
-    <AccordionPrimitive.Header
-      className={cn(
-        'flex',
-        'data-[accordion-color=blue]:bg-[#1b75bc]',
-        'data-[accordion-color=lightBlue]:bg-[#6dcff6]',
-        'data-[accordion-color=navy]:bg-[#14477d]',
-        'data-[accordion-color=white]:bg-[#ededed]'
-      )}
-      data-accordion-color={accordionColor}
-    >
+    <AccordionPrimitive.Header className="flex">
       <AccordionPrimitive.Trigger
         className={cn(
           'group/accordion-trigger flex flex-1 items-center justify-between py-4 font-medium transition-all',
           '[&[data-state=open]>svg]:rotate-180',
           className
         )}
+        data-accordion-color={accordionColor}
         {...rest}
       >
         {children}

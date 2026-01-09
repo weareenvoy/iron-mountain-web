@@ -1,5 +1,5 @@
 import { generateSlideId } from '@/lib/utils/cms-helpers';
-import { buildDiamondCards, createOverviewDiamondCards } from '../_utils/value-diamond-logic';
+import { buildDiamondCards } from '../_utils/value-diamond-logic';
 import type { ValueScreens } from '../_components/kiosk-templates/value/valueSlides';
 import type { Ambient, ValueContent } from '../_types/content-types';
 import type { KioskId } from '../_types/kiosk-id';
@@ -21,29 +21,14 @@ export const mapValue = (value: ValueContent, ambient: Ambient, kioskId: KioskId
 
   return {
     valueScreens: [
-      // Overview screen showing all benefit types
-      {
-        body: value.body,
-        carouselId: `${kioskId}-value-overview`,
-        eyebrow: ambient.title,
-        headline: value.headline,
-        labelText: value.labelText ?? '',
-        mainVideo: value.mainVideo,
-        slides: [
-          {
-            badgeLabel: 'Operational · Economic · Strategic',
-            diamondCards: createOverviewDiamondCards(),
-            id: 'value-trio-overview',
-          },
-        ],
-      },
-      // Carousel screen with individual benefit slides
+      // Single animated carousel screen with diamonds animating into position on slide 1
       {
         body: value.body,
         carouselId: `${kioskId}-value-carousel`,
         eyebrow: ambient.title,
         headline: value.headline,
         labelText: value.labelText ?? '',
+        mainVideo: value.mainVideo,
         slides: carouselSlides,
       },
     ],

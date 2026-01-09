@@ -9,7 +9,7 @@ import type { ValueCarouselSlide, ValueDiamondCard } from '@/app/(displays)/(kio
 
 type ValueCarouselProps = {
   readonly hasCarouselSlides?: boolean;
-  readonly onRegisterCarouselHandlers?: (handlers: {
+  readonly registerCarouselHandlers?: (handlers: {
     canScrollNext: () => boolean;
     canScrollPrev: () => boolean;
     scrollNext: () => void;
@@ -18,15 +18,15 @@ type ValueCarouselProps = {
   readonly slides: readonly ValueCarouselSlide[];
 };
 
-const ValueCarousel = ({ hasCarouselSlides, onRegisterCarouselHandlers, slides }: ValueCarouselProps) => {
+const ValueCarousel = ({ hasCarouselSlides, registerCarouselHandlers, slides }: ValueCarouselProps) => {
   const [emblaRef, emblaApi] = useEmblaCarousel({ align: 'start', loop: false });
 
   const getBulletItems = (slide: ValueCarouselSlide) =>
     slide.bullets?.filter(entry => entry && entry.trim().length > 0) ?? [];
 
   useEffect(() => {
-    if (emblaApi && onRegisterCarouselHandlers) {
-      onRegisterCarouselHandlers({
+    if (emblaApi && registerCarouselHandlers) {
+      registerCarouselHandlers({
         canScrollNext: () => emblaApi.canScrollNext(),
         canScrollPrev: () => emblaApi.canScrollPrev(),
         scrollNext: () => emblaApi.scrollNext(),
@@ -38,7 +38,7 @@ const ValueCarousel = ({ hasCarouselSlides, onRegisterCarouselHandlers, slides }
     return () => {
       emblaApi?.destroy();
     };
-  }, [emblaApi, onRegisterCarouselHandlers]);
+  }, [emblaApi, registerCarouselHandlers]);
 
   return (
     <div

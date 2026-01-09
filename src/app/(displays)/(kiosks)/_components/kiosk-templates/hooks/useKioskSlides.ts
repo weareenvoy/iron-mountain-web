@@ -486,7 +486,7 @@ export const useKioskSlides = ({
       }),
       ...buildSolutionSlides(solutions, kioskId, globalHandlers),
       ...buildValueSlides(values, kioskId, globalHandlers, {
-        onRegisterCarouselHandlers: handleRegisterCarouselHandlers,
+        registerCarouselHandlers: handleRegisterCarouselHandlers,
       }),
       ...buildCustomInteractiveSlides(customInteractive, kioskId, scrollToSectionById),
     ];
