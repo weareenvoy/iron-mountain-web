@@ -87,7 +87,7 @@ const CustomInteractiveKiosk3SecondScreenTemplate = ({
     setIsCarouselExiting(isExiting);
   }, []);
 
-  if (safeSlides.length === 0 || !headline) {
+  if (safeSlides.length === 0 || !headline || !videoAsset) {
     return null;
   }
 
