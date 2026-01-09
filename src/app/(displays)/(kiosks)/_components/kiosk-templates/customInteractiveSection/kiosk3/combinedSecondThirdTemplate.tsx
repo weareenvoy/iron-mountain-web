@@ -15,6 +15,7 @@ import HCHollowGreenDiamond from '@/components/ui/icons/Kiosks/CustomInteractive
 import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowOrangeDiamond';
 import InnerRing from '@/components/ui/icons/Kiosks/CustomInteractive/InnerRing';
 import OuterRing from '@/components/ui/icons/Kiosks/CustomInteractive/OuterRing';
+import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import CircularCarousel, { type CarouselSlide } from './components/CircularCarousel';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
@@ -33,6 +34,8 @@ export type CustomInteractiveKiosk3CombinedTemplateProps = {
   readonly overlayCardLabel?: string;
   readonly overlayEndTourLabel?: string;
   readonly overlayHeadline?: string;
+  readonly overlayHeroImageAlt?: string;
+  readonly overlayHeroImageSrc?: string;
   readonly slides?: CarouselSlide[];
   readonly tapToBeginLabel?: string;
   readonly videoAsset?: string;
@@ -49,6 +52,8 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
   overlayCardLabel,
   overlayEndTourLabel,
   overlayHeadline,
+  overlayHeroImageAlt,
+  overlayHeroImageSrc,
   slides,
   tapToBeginLabel,
   videoAsset,
@@ -138,12 +143,9 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
       {/* Carousel state - Always present but initially at opacity 0 */}
       <motion.div
         animate={{ opacity: showCarousel ? 1 : 0 }}
-        className="pointer-events-none absolute inset-0"
+        className="pointer-events-none absolute inset-0 z-10"
         initial={{ opacity: 0 }}
-        style={{
-          pointerEvents: showCarousel && !showOverlay ? 'auto' : 'none',
-          zIndex: showOverlay ? 1 : 10,
-        }}
+        style={{ pointerEvents: showCarousel ? 'auto' : 'none' }}
         transition={{ delay: showCarousel ? 0.3 : 0, duration: 0.6, ease: [0.3, 0, 0.6, 1] }}
       >
         <CircularCarousel
@@ -523,19 +525,22 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
       </motion.div>
 
       {/* Demo overlay */}
-      <AnimatePresence>
-        {showOverlay && (
-          <div className="absolute inset-0 z-9999">
-            <CustomInteractiveDemoScreenTemplate
-              cardLabel={overlayCardLabel}
-              demoIframeSrc={demoIframeSrc}
-              endTourLabel={overlayEndTourLabel}
-              headline={overlayHeadline}
-              onEndTour={handleHideOverlay}
-            />
-          </div>
+      <div
+        className={cn(
+          'absolute inset-0 z-9999 transition-opacity duration-700',
+          showOverlay ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         )}
-      </AnimatePresence>
+      >
+        <CustomInteractiveDemoScreenTemplate
+          cardLabel={overlayCardLabel}
+          demoIframeSrc={demoIframeSrc}
+          endTourLabel={overlayEndTourLabel}
+          headline={overlayHeadline}
+          heroImageAlt={overlayHeroImageAlt}
+          heroImageSrc={overlayHeroImageSrc}
+          onEndTour={handleHideOverlay}
+        />
+      </div>
     </div>
   );
 };

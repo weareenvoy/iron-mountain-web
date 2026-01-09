@@ -32,6 +32,8 @@ export const mapCustomInteractiveKiosk3 = (
     overlayCardLabel: demo?.demoText,
     overlayEndTourLabel: demo?.mainCTA,
     overlayHeadline: demo?.headline,
+    overlayHeroImageAlt: '',
+    overlayHeroImageSrc: customInteractive.image,
     // Carousel slides
     slides:
       customInteractive.tapCarousel?.map((item, index) => ({
