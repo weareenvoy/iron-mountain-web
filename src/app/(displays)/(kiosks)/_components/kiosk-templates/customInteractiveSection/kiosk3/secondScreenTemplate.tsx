@@ -94,7 +94,7 @@ const CustomInteractiveKiosk3SecondScreenTemplate = ({
   return (
     <div
       className="relative flex h-screen w-full flex-col overflow-hidden"
-      data-scroll-section="customInteractive-combined-screen"
+      data-scroll-section="customInteractive-second-screen"
       ref={ref}
     >
       <div className="absolute inset-0 bg-transparent" />
