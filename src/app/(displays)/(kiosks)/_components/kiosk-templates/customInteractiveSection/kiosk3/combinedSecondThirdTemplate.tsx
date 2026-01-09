@@ -61,13 +61,18 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
   const [showOverlay, setShowOverlay] = useState(false);
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [isCarouselExiting, setIsCarouselExiting] = useState(false);
+  const [isButtonTransitioning, setIsButtonTransitioning] = useState(false);
   const safeSlides = slides ?? [];
 
   const ref = useRef(null);
   const isInView = useInView(ref, { amount: 0.3, once: true });
 
   const handleTapToBegin = useCallback(() => {
-    setShowCarousel(true);
+    setIsButtonTransitioning(true);
+    // Delay showing carousel until after button transition
+    setTimeout(() => {
+      setShowCarousel(true);
+    }, 600); // Match the transition duration
   }, []);
 
   const handleShowOverlay = useCallback(() => {
@@ -438,7 +443,14 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
           </button>
         </div>
 
-        <div className="absolute top-[2266px] left-1/2 h-[1000px] w-[1000px] -translate-x-1/2 -translate-y-1/2">
+        <motion.div
+          animate={
+            isButtonTransitioning ? { opacity: 0, scale: 0.52, x: 700, y: -336 } : { opacity: 1, scale: 1, x: 0, y: 0 }
+          }
+          className="absolute top-[2266px] left-1/2 h-[1000px] w-[1000px] -translate-x-1/2 -translate-y-1/2"
+          initial={{ opacity: 1, scale: 1, x: 0, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.3, 0, 0.6, 1] }}
+        >
           <button
             className="relative flex h-full w-full items-center justify-center rounded-full transition hover:scale-[1.05] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
             onClick={handleTapToBegin}
@@ -520,7 +532,7 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
               </>
             )}
           </button>
-        </div>
+        </motion.div>
       </motion.div>
 
       {/* Demo overlay */}
