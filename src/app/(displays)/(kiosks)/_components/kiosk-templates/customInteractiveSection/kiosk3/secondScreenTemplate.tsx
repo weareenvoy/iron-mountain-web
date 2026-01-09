@@ -1,12 +1,13 @@
 'use client';
 
 import { useInView } from 'framer-motion';
-import { memo, useCallback, useRef, useState } from 'react';
+import { memo, useMemo, useRef } from 'react';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
 import CarouselState from './components/CarouselState';
 import InitialState from './components/InitialState';
 import MorphingDiamond from './components/MorphingDiamond';
 import { IN_VIEW_THRESHOLD, SECTION_IDS } from './constants';
+import { useKiosk3SecondScreenState } from './hooks/useKiosk3SecondScreenState';
 import type { CarouselSlide } from './components/CircularCarousel';
 
 /**
@@ -83,49 +84,37 @@ const Kiosk3SecondScreenTemplate = memo(
     tapToBeginLabel,
     videoAsset,
   }: Kiosk3SecondScreenProps) => {
-    // State management for the complex animation flow
-    const [showCarousel, setShowCarousel] = useState(false);
-    const [showOverlay, setShowOverlay] = useState(false);
-    const [carouselIndex, setCarouselIndex] = useState(0);
-    const [isCarouselExiting, setIsCarouselExiting] = useState(false);
-    const [isButtonTransitioning, setIsButtonTransitioning] = useState(false);
-
-    const safeSlides = slides ?? [];
-    const hasValidVideo = videoAsset && videoAsset.trim().length > 0;
+    // State management extracted to custom hook
+    const {
+      carouselIndex,
+      handleHideOverlay,
+      handleIndexChange,
+      handleIsExitingChange,
+      handleShowOverlay,
+      handleTapToBegin,
+      isButtonTransitioning,
+      isCarouselExiting,
+      showCarousel,
+      showOverlay,
+    } = useKiosk3SecondScreenState();
 
     const ref = useRef(null);
     const isInView = useInView(ref, { amount: IN_VIEW_THRESHOLD, once: true });
 
-    // Stable event handlers to prevent useEffect dependency issues
-    const handleTapToBegin = useCallback(() => {
-      setIsButtonTransitioning(true);
-      setShowCarousel(true);
-    }, []);
-
-    const handleShowOverlay = useCallback(() => {
-      setShowOverlay(true);
-    }, []);
-
-    const handleHideOverlay = useCallback(() => {
-      setShowOverlay(false);
-    }, []);
-
-    const handleIndexChange = useCallback((index: number) => {
-      setCarouselIndex(index);
-    }, []);
-
-    const handleIsExitingChange = useCallback((isExiting: boolean) => {
-      setIsCarouselExiting(isExiting);
-    }, []);
+    // Memoize expensive computations to avoid recalculation on every render
+    const safeSlides = useMemo(() => slides ?? [], [slides]);
+    const hasValidVideo = useMemo(() => Boolean(videoAsset && videoAsset.trim().length > 0), [videoAsset]);
 
     // Early return for invalid data - no cleanup needed as component won't mount
-    if (safeSlides.length === 0 || !headline || !hasValidVideo) {
-      console.warn('[Kiosk3SecondScreen] Missing required data:', {
-        hasHeadline: !!headline,
-        hasSlides: safeSlides.length > 0,
-        hasValidVideo,
-        videoAsset,
-      });
+    if (safeSlides.length === 0 || !headline || !hasValidVideo || !videoAsset) {
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('[Kiosk3SecondScreen] Missing required data:', {
+          hasHeadline: !!headline,
+          hasSlides: safeSlides.length > 0,
+          hasValidVideo,
+          videoAsset,
+        });
+      }
       return null;
     }
 
@@ -142,7 +131,7 @@ const Kiosk3SecondScreenTemplate = memo(
           carouselIndex={carouselIndex}
           isCarouselExiting={isCarouselExiting}
           showCarousel={showCarousel}
-          videoAsset={videoAsset!}
+          videoAsset={videoAsset}
         />
 
         {/* Carousel state - Lazy loaded when carousel is shown to prevent loading all videos on mount */}

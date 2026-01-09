@@ -1,6 +1,7 @@
 import { generateSlideId } from '@/lib/utils/cms-helpers';
 import type { CustomInteractiveScreens } from '../_components/kiosk-templates/customInteractiveSection/customInteractiveSlides';
 import type { Ambient, CustomInteractiveContent } from '../_types/content-types';
+import type { SlideId } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/kiosk3/constants';
 
 /**
  * Maps CMS content for Custom Interactive Kiosk 3 to the Kiosk Custom Interactive structure.
@@ -53,18 +54,23 @@ export const mapCustomInteractiveKiosk3 = (
       heroImageSrc: customInteractive.image,
     },
     slides:
-      customInteractive.tapCarousel?.map((item, index) => ({
-        bullets: item.bullets ?? [],
-        eyebrow: ambient.title ?? '',
-        headline: item.title ?? '',
-        id: generateSlideId('slide', String(index + 1)),
-        primaryImageAlt: '',
-        primaryImageSrc: item.image ?? '',
-        primaryVideoSrc: item.video ?? undefined,
-        secondaryImageAlt: '',
-        secondaryImageSrc: item.video && item.image ? item.image : undefined,
-        sectionTitle: item.title ?? '',
-      })) ?? [],
+      customInteractive.tapCarousel?.map((item, index) => {
+        // When video exists, use image as secondary decorative element
+        const secondaryImageSrc = item.video && item.image ? item.image : undefined;
+
+        return {
+          bullets: item.bullets ?? [],
+          eyebrow: ambient.title ?? '',
+          headline: item.title ?? '',
+          id: generateSlideId('slide', String(index + 1)) as SlideId,
+          primaryImageAlt: '',
+          primaryImageSrc: item.image ?? '',
+          primaryVideoSrc: item.video ?? undefined,
+          secondaryImageAlt: '',
+          secondaryImageSrc,
+          sectionTitle: item.title ?? '',
+        };
+      }) ?? [],
     tapToBeginLabel: customInteractive.tapCTA,
     videoAsset: customInteractive.video,
   },

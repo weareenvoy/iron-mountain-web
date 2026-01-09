@@ -8,23 +8,60 @@ import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import { TRANSITIONS } from '../constants';
 
+// Configuration for animated dots around the "Tap to begin" button
+// Dots animate in sequence, rotating from 0deg to their target position
+const DOT_CONFIG = [
+  { delay: 0.8, rotation: 60 }, // Dot 2
+  { delay: 0.9, rotation: 120 }, // Dot 3
+  { delay: 1.0, rotation: 180 }, // Dot 4
+  { delay: 1.1, rotation: 240 }, // Dot 5
+  { delay: 1.2, rotation: 300 }, // Dot 6
+] as const;
+
 type InitialStateProps = {
+  /** Label for back button */
   readonly backLabel?: string;
+  /** Description text */
   readonly description?: string;
+  /** Eyebrow text */
   readonly eyebrow?: string;
+  /** Main headline */
   readonly headline?: string;
+  /** Whether "Tap to begin" button is transitioning/morphing */
   readonly isButtonTransitioning: boolean;
+  /** Whether content is in viewport (triggers animations) */
   readonly isInView: boolean;
+  /** Callback when back button is clicked */
   readonly onBack?: () => void;
+  /** Callback when "Tap to begin" is clicked */
   readonly onTapToBegin: () => void;
+  /** Whether carousel is visible (triggers fade-out) */
   readonly showCarousel: boolean;
+  /** Label for "Tap to begin" button */
   readonly tapToBeginLabel?: string;
 };
 
 /**
- * The initial state shown before the carousel is activated.
- * Contains the headline, description, back button, animated rings, dots,
- * and the "Tap to begin" button that morphs into the first carousel slide.
+ * Initial state component for Kiosk 3 Custom Interactive.
+ *
+ * Displays before carousel is activated. Contains:
+ * - Headline and description text
+ * - Back navigation button
+ * - Animated "Tap to begin" button with rings and dots
+ * - Sequential dot animations around the circle
+ *
+ * ## Animation Behavior
+ * - Fades out when `showCarousel` becomes true
+ * - "Tap to begin" button morphs/scales into first carousel slide position
+ * - Dots animate in sequence (0.8s - 1.2s delays)
+ * - Rings draw in with path animation
+ *
+ * ## Interaction
+ * - When `isInView` is true, animations trigger
+ * - Clicking "Tap to begin" calls `onTapToBegin` and starts morph animation
+ * - Pointer events disabled when carousel is shown
+ *
+ * @param props - Component props
  */
 const InitialState = memo(
   ({
@@ -107,55 +144,21 @@ const InitialState = memo(
                   <BlueDot className="h-[60px] w-[60px]" />
                 </div>
 
-                {/* Dot 2 - animates from 0deg to 60deg with opacity fade */}
-                <motion.div
-                  animate={{ opacity: 1, transform: 'translate(-50%, -50%) rotate(60deg) translateY(-430px)' }}
-                  className="absolute top-[50%] left-[50%]"
-                  initial={{ opacity: 0, transform: 'translate(-50%, -50%) rotate(0deg) translateY(-430px)' }}
-                  transition={{ delay: 0.8, duration: 0.8, ease: [0.3, 0, 0.6, 1] }}
-                >
-                  <BlueDot className="h-[60px] w-[60px]" />
-                </motion.div>
-
-                {/* Dot 3 - animates from 0deg to 120deg with opacity fade */}
-                <motion.div
-                  animate={{ opacity: 1, transform: 'translate(-50%, -50%) rotate(120deg) translateY(-430px)' }}
-                  className="absolute top-[50%] left-[50%]"
-                  initial={{ opacity: 0, transform: 'translate(-50%, -50%) rotate(0deg) translateY(-430px)' }}
-                  transition={{ delay: 0.9, duration: 0.8, ease: [0.3, 0, 0.6, 1] }}
-                >
-                  <BlueDot className="h-[60px] w-[60px]" />
-                </motion.div>
-
-                {/* Dot 4 - animates from 0deg to 180deg with opacity fade */}
-                <motion.div
-                  animate={{ opacity: 1, transform: 'translate(-50%, -50%) rotate(180deg) translateY(-430px)' }}
-                  className="absolute top-[50%] left-[50%]"
-                  initial={{ opacity: 0, transform: 'translate(-50%, -50%) rotate(0deg) translateY(-430px)' }}
-                  transition={{ delay: 1.0, duration: 0.8, ease: [0.3, 0, 0.6, 1] }}
-                >
-                  <BlueDot className="h-[60px] w-[60px]" />
-                </motion.div>
-
-                {/* Dot 5 - animates from 0deg to 240deg with opacity fade */}
-                <motion.div
-                  animate={{ opacity: 1, transform: 'translate(-50%, -50%) rotate(240deg) translateY(-430px)' }}
-                  className="absolute top-[50%] left-[50%]"
-                  initial={{ opacity: 0, transform: 'translate(-50%, -50%) rotate(0deg) translateY(-430px)' }}
-                  transition={{ delay: 1.1, duration: 0.8, ease: [0.3, 0, 0.6, 1] }}
-                >
-                  <BlueDot className="h-[60px] w-[60px]" />
-                </motion.div>
-
-                {/* Dot 6 - animates from 0deg to 300deg with opacity fade, finishes when InnerRing pathLength completes (2.0s) */}
-                <motion.div
-                  animate={{ opacity: 1, transform: 'translate(-50%, -50%) rotate(300deg) translateY(-430px)' }}
-                  className="absolute top-[50%] left-[50%]"
-                  initial={{ opacity: 0, transform: 'translate(-50%, -50%) rotate(0deg) translateY(-430px)' }}
-                  transition={{ delay: 1.2, duration: 0.8, ease: [0.3, 0, 0.6, 1] }}
-                >
-                  <BlueDot className="h-[60px] w-[60px]" />
-                </motion.div>
+                {/* Dots 2-6 - animate in sequence around the circle */}
+                {DOT_CONFIG.map(({ delay, rotation }, index) => (
+                  <motion.div
+                    animate={{
+                      opacity: 1,
+                      transform: `translate(-50%, -50%) rotate(${rotation}deg) translateY(-430px)`,
+                    }}
+                    className="absolute top-[50%] left-[50%]"
+                    initial={{ opacity: 0, transform: 'translate(-50%, -50%) rotate(0deg) translateY(-430px)' }}
+                    key={`dot-${index + 2}`}
+                    transition={{ delay, duration: 0.8, ease: [0.3, 0, 0.6, 1] }}
+                  >
+                    <BlueDot className="h-[60px] w-[60px]" />
+                  </motion.div>
+                ))}
               </>
             )}
           </button>

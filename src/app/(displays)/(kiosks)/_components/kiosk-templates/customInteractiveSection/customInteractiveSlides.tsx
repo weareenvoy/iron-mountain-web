@@ -88,7 +88,7 @@ export const buildCustomInteractiveSlides = (
         <SectionSlide>
           <CustomInteractiveKiosk1SecondScreenTemplate
             {...customInteractive.secondScreen}
-            onBack={() => scrollToSection?.('customInteractive-first-screen')}
+            onBack={() => scrollToSection?.(SECTION_IDS.FIRST_SCREEN)}
           />
         </SectionSlide>
       ),

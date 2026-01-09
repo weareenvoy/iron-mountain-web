@@ -65,9 +65,37 @@ export const ANIMATION_DURATION_MS = {
  * - scale: Size multiplier (1 = original, 0.332 = ~1/3 size)
  * - Video positioning: Counter-scales to maintain visual consistency
  *
- * WARNING: These pixel values are tightly coupled to the current 4K layout.
- * If the design changes or viewport size changes, these values must be recalculated.
- * Consider using CSS variables or viewport-relative units in future iterations.
+ * @warning **4K Display Coupling**
+ *
+ * **Current State:** All pixel values are hardcoded for 3840×2160 (4K) displays.
+ *
+ * **Problem:** Layout will break on:
+ * - 1920×1080 (1080p) displays - elements will be positioned incorrectly
+ * - Non-16:9 aspect ratios (ultrawide, portrait) - severe misalignment
+ * - 7680×4320 (8K) displays - elements too small/incorrectly positioned
+ *
+ * **Impact:** This component is currently unusable outside of 4K kiosk displays.
+ *
+ * **Recommended Solutions:**
+ * 1. **CSS Calc Approach:** Convert to `calc()` with CSS custom properties
+ *    ```css
+ *    --base-width: 3840px;
+ *    transform: translateX(calc(-1095px * (100vw / var(--base-width))));
+ *    ```
+ * 2. **JavaScript Scale Factor:** Calculate scale ratio at runtime
+ *    ```ts
+ *    const scaleFactor = window.innerWidth / 3840;
+ *    x: -1095 * scaleFactor
+ *    ```
+ * 3. **Viewport Units:** Convert all px to vw/vh (e.g., 1095px → 28.59vw)
+ *
+ * **Migration Path:**
+ * - Audit all MORPHING_DIAMOND, PRIMARY_DIAMOND_POSITIONS, SECONDARY_DIAMOND_POSITIONS
+ * - Test on multiple resolutions (1080p, 4K, 8K)
+ * - Consider design system tokens for responsive breakpoints
+ * - Document expected behavior at each resolution
+ *
+ * @see MORPHING_DIAMOND, PRIMARY_DIAMOND_POSITIONS, SECONDARY_DIAMOND_POSITIONS
  */
 export const MORPHING_DIAMOND = {
   /** Initial state: Full-screen centered background */
@@ -190,7 +218,7 @@ export function getMorphingDiamondAnimation(
  * @param slideId - Slide identifier (use SLIDE_ID constants)
  * @returns Tailwind CSS class string for positioning
  */
-export function getPrimaryDiamondClass(slideId: string): string {
+export function getPrimaryDiamondClass(slideId: SlideId): string {
   if (slideId === SLIDE_ID.SLIDE_2 || slideId === SLIDE_ID.SLIDE_5) {
     return PRIMARY_DIAMOND_POSITIONS.SLIDE_2_5;
   }
@@ -206,7 +234,7 @@ export function getPrimaryDiamondClass(slideId: string): string {
  * @param slideId - Slide identifier (use SLIDE_ID constants)
  * @returns Tailwind CSS class string for positioning
  */
-export function getSecondaryDiamondClass(slideId: string): string {
+export function getSecondaryDiamondClass(slideId: SlideId): string {
   if (slideId === SLIDE_ID.SLIDE_3 || slideId === SLIDE_ID.SLIDE_6) {
     return SECONDARY_DIAMOND_POSITIONS.SLIDE_3_6;
   }
@@ -220,7 +248,7 @@ export function getSecondaryDiamondClass(slideId: string): string {
  * @param slideId - Slide identifier (use SLIDE_ID constants)
  * @returns SVG variant identifier for DecorativeSVGGroup component
  */
-export function getDecorativeSVGVariant(slideId: string): 'default' | 'slide-2-5' | 'slide-3-6' {
+export function getDecorativeSVGVariant(slideId: SlideId): 'default' | 'slide-2-5' | 'slide-3-6' {
   if (slideId === SLIDE_ID.SLIDE_2 || slideId === SLIDE_ID.SLIDE_5) {
     return 'slide-2-5';
   }

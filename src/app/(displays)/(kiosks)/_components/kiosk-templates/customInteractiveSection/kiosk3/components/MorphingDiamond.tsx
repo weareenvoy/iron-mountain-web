@@ -1,28 +1,55 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { memo, useEffect, useRef } from 'react';
+import { memo, useEffect, useMemo, useRef } from 'react';
 import { getMorphingDiamondAnimation, MORPHING_DIAMOND, TRANSITIONS, Z_INDEX } from '../constants';
 
 type MorphingDiamondProps = {
+  /** Current carousel slide index (0-based) */
   readonly carouselIndex: number;
+  /** Whether current carousel slide is exiting */
   readonly isCarouselExiting: boolean;
+  /** Whether carousel is visible */
   readonly showCarousel: boolean;
+  /** Video asset URL (S3 URL with + encoding converted to %20) */
   readonly videoAsset: string;
 };
 
 /**
- * The morphing diamond video background that transitions from full-screen
- * to becoming the first carousel slide's primary diamond.
+ * Morphing diamond video background for Kiosk 3 Custom Interactive.
  *
- * Animation States:
- * 1. Initial: Full size (scale: 1) centered as background
- * 2. Carousel shown: Scales down (0.332) and moves to first slide position
- * 3. First slide exits: Moves diagonally off-screen with carousel animation
+ * This component creates the signature morphing effect where the background video
+ * scales down and repositions to become the first carousel slide's primary diamond.
  *
- * The video inside counter-scales to maintain consistent visual size.
+ * ## Animation States
+ * 1. **Background (Initial):** Full size (scale: 1), centered behind initial content
+ * 2. **Carousel (First Slide):** Scaled down (0.332), positioned as carousel slide
+ * 3. **Exit (Slide Change):** Moves diagonally off-screen when user navigates away
+ *
+ * ## Technical Details
+ * - Video URL is normalized (+ → %20) for browser compatibility
+ * - Inner video counter-scales to maintain visual consistency
+ * - Only renders when carousel is hidden OR when showing slide index 0
+ * - Uses AnimatePresence for smooth mount/unmount transitions
+ *
+ * ## Performance
+ * - Video src normalized and memoized
+ * - Video element paused and src cleared on unmount (prevents memory leaks)
+ * - Console logging gated behind NODE_ENV check
+ *
+ * @param props - Component props
  */
 const MorphingDiamond = memo(({ carouselIndex, isCarouselExiting, showCarousel, videoAsset }: MorphingDiamondProps) => {
   const diamondAnimation = getMorphingDiamondAnimation(showCarousel, carouselIndex, isCarouselExiting);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Normalize URL: S3 URLs sometimes have + instead of %20 for spaces
+  // Memoized to avoid recalculating on every render
+  const normalizedVideoSrc = useMemo(() => {
+    if (process.env.NODE_ENV === 'development') {
+      console.info('[MorphingDiamond] Raw videoAsset:', videoAsset);
+      console.info('[MorphingDiamond] Normalized:', videoAsset.replace(/\+/g, '%20'));
+    }
+    return videoAsset.replace(/\+/g, '%20');
+  }, [videoAsset]);
 
   // Cleanup: pause video on unmount to prevent memory leaks
   useEffect(() => {
@@ -41,20 +68,24 @@ const MorphingDiamond = memo(({ carouselIndex, isCarouselExiting, showCarousel, 
     if (!videoElement) return;
 
     const handleError = (e: Event) => {
-      console.error('[MorphingDiamond] Video failed to load:', {
-        error: e,
-        networkState: videoElement.networkState,
-        networkStateDescription:
-          videoElement.networkState === 3
-            ? 'NETWORK_NO_SOURCE - No suitable source found'
-            : `State ${videoElement.networkState}`,
-        readyState: videoElement.readyState,
-        src: videoAsset,
-      });
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[MorphingDiamond] Video failed to load:', {
+          error: e,
+          networkState: videoElement.networkState,
+          networkStateDescription:
+            videoElement.networkState === 3
+              ? 'NETWORK_NO_SOURCE - No suitable source found'
+              : `State ${videoElement.networkState}`,
+          readyState: videoElement.readyState,
+          src: normalizedVideoSrc,
+        });
+      }
     };
 
     const handleLoadedData = () => {
-      console.info('[MorphingDiamond] Video loaded successfully:', videoAsset);
+      if (process.env.NODE_ENV === 'development') {
+        console.info('[MorphingDiamond] Video loaded successfully:', normalizedVideoSrc);
+      }
     };
 
     videoElement.addEventListener('error', handleError);
@@ -64,7 +95,7 @@ const MorphingDiamond = memo(({ carouselIndex, isCarouselExiting, showCarousel, 
       videoElement.removeEventListener('error', handleError);
       videoElement.removeEventListener('loadeddata', handleLoadedData);
     };
-  }, [videoAsset]);
+  }, [normalizedVideoSrc]);
 
   return (
     <AnimatePresence mode="wait">
@@ -101,7 +132,7 @@ const MorphingDiamond = memo(({ carouselIndex, isCarouselExiting, showCarousel, 
               muted
               playsInline
               ref={videoRef}
-              src={videoAsset}
+              src={normalizedVideoSrc}
             />
             <div className="absolute inset-0 bg-linear-to-t from-black/25 via-transparent to-transparent" />
           </motion.div>

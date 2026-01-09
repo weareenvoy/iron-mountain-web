@@ -2,13 +2,13 @@
 
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ANIMATION_DURATION_MS } from '../constants';
+import { ANIMATION_DURATION_MS, type SlideId } from '../constants';
 
 export type CarouselSlide = {
   readonly bullets: readonly string[];
   readonly eyebrow?: string;
   readonly headline?: string;
-  readonly id: string;
+  readonly id: SlideId;
   readonly primaryImageAlt: string;
   readonly primaryImageSrc: string;
   readonly primaryVideoSrc?: string;
@@ -26,6 +26,11 @@ type CircularCarouselProps = {
   }) => React.ReactNode;
   readonly onIndexChange?: (index: number) => void;
   readonly onIsExitingChange?: (isExiting: boolean) => void;
+  /**
+   * Array of carousel slides to display.
+   * IMPORTANT: This prop must be stable (memoized) to prevent unnecessary re-renders
+   * and callback recreations. Use useMemo() in the parent component.
+   */
   readonly slides: readonly CarouselSlide[];
 };
 
@@ -33,7 +38,7 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
   const [index, setIndex] = useState(0);
   const [isExiting, setIsExiting] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const timeoutRef = useRef<number | undefined>(undefined);
   const total = slides.length;
   const currentIndex = total > 0 ? index % total : 0;
   const current = slides[currentIndex];
@@ -62,7 +67,7 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
     setIsTransitioning(true);
     setIsExiting(true);
 
-    timeoutRef.current = setTimeout(() => {
+    timeoutRef.current = window.setTimeout(() => {
       setIndex(i => (i + 1) % total);
       setIsExiting(false);
       setIsTransitioning(false);
@@ -76,7 +81,7 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
     setIsTransitioning(true);
     setIsExiting(true);
 
-    timeoutRef.current = setTimeout(() => {
+    timeoutRef.current = window.setTimeout(() => {
       setIndex(i => (i - 1 + total) % total);
       setIsExiting(false);
       setIsTransitioning(false);

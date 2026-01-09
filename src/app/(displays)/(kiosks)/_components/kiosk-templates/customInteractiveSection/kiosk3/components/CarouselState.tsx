@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { SquarePlay } from 'lucide-react';
 import Image from 'next/image';
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import CircularCarousel, { type CarouselSlide } from './CircularCarousel';
@@ -17,17 +17,42 @@ import {
 import DecorativeSVGGroup from './DecorativeSVGGroup';
 
 type CarouselStateProps = {
+  /** Main headline displayed across all carousel slides */
   readonly headline?: string;
+  /** Callback when carousel index changes */
   readonly onIndexChange: (index: number) => void;
+  /** Callback when slide exit animation state changes */
   readonly onIsExitingChange: (isExiting: boolean) => void;
+  /** Callback to show demo overlay */
   readonly onShowOverlay: () => void;
+  /** Whether carousel is visible (controls fade-in animation) */
   readonly showCarousel: boolean;
+  /** Array of slides to display in carousel */
   readonly slides: readonly CarouselSlide[];
 };
 
 /**
- * The carousel state that displays after "Tap to begin" is clicked.
- * Contains the circular carousel with slides, bullet points, and the "Launch demo" button.
+ * Carousel state component for Kiosk 3 Custom Interactive.
+ *
+ * Displays after "Tap to begin" is clicked. Contains:
+ * - Circular carousel navigation with slide counter
+ * - Primary diamond (video/image) for each slide
+ * - Secondary diamond (decorative image) for select slides
+ * - Decorative SVG backgrounds (varies by slide)
+ * - Bullet points with content
+ * - "Launch demo" CTA button
+ *
+ * ## Animation Behavior
+ * - Fades in when `showCarousel` becomes true
+ * - Memoizes class computations to prevent unnecessary recalculations
+ * - Coordinates with parent via `onIndexChange` and `onIsExitingChange`
+ *
+ * ## Performance
+ * - Helper functions (getPrimaryDiamondClass, etc.) are memoized
+ * - Component is wrapped in React.memo
+ * - Uses AnimatePresence for smooth transitions
+ *
+ * @param props - Component props
  */
 const CarouselState = memo(
   ({ headline, onIndexChange, onIsExitingChange, onShowOverlay, showCarousel, slides }: CarouselStateProps) => {
@@ -41,12 +66,13 @@ const CarouselState = memo(
       >
         <CircularCarousel onIndexChange={onIndexChange} onIsExitingChange={onIsExitingChange} slides={slides}>
           {({ current, index, isExiting }) => {
-            // Compute classes based on current slide
-            const primaryDiamondClass = getPrimaryDiamondClass(current.id);
-            const secondaryDiamondClass = getSecondaryDiamondClass(current.id);
-            const svgVariant = getDecorativeSVGVariant(current.id);
-
-            const isSlide1 = current.id === SLIDE_ID.SLIDE_1;
+            // Memoize class computations to prevent recalculation on parent re-renders
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            const primaryDiamondClass = useMemo(() => getPrimaryDiamondClass(current.id), [current.id]);
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            const secondaryDiamondClass = useMemo(() => getSecondaryDiamondClass(current.id), [current.id]);
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            const svgVariant = useMemo(() => getDecorativeSVGVariant(current.id), [current.id]);
 
             return (
               <>
@@ -98,7 +124,7 @@ const CarouselState = memo(
                 </div>
 
                 {/* Primary diamond (video or image) - Hidden for slide 1 since background morphs into it */}
-                {!isSlide1 && (
+                {current.id !== SLIDE_ID.SLIDE_1 && (
                   <AnimatePresence mode="wait">
                     <motion.div
                       animate={
@@ -117,7 +143,7 @@ const CarouselState = memo(
                       key={`primary-${index}`}
                       transition={TRANSITIONS.CAROUSEL}
                     >
-                      {current.primaryVideoSrc ? (
+                      {current.primaryVideoSrc && (
                         <video
                           autoPlay
                           className="h-full w-full origin-center scale-[1.35] -rotate-45 object-cover"
@@ -126,13 +152,13 @@ const CarouselState = memo(
                           playsInline
                           src={current.primaryVideoSrc}
                         />
-                      ) : null}
+                      )}
                     </motion.div>
                   </AnimatePresence>
                 )}
 
                 {/* Secondary diamond (decorative SVG or image) */}
-                {current.secondaryImageSrc ? (
+                {current.secondaryImageSrc && (
                   <AnimatePresence mode="wait">
                     <motion.div
                       animate={
@@ -160,7 +186,7 @@ const CarouselState = memo(
                       />
                     </motion.div>
                   </AnimatePresence>
-                ) : null}
+                )}
 
                 {/* Decorative SVG Diamonds - Different groups for different slides */}
                 <DecorativeSVGGroup index={index} isExiting={isExiting} variant={svgVariant} />
