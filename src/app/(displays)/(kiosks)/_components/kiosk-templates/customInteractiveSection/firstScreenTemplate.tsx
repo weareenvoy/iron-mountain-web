@@ -69,7 +69,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       <div
         className={cn(
           'absolute inset-0 transition-opacity duration-700',
-          showOverlay ? 'pointer-events-auto z-[999] opacity-100' : 'pointer-events-none opacity-0'
+          showOverlay ? 'pointer-events-auto z-[999] opacity-100' : 'pointer-events-none -z-10 opacity-0'
         )}
       >
         <CustomInteractiveDemoScreenTemplate
@@ -99,7 +99,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       {/* CTA buttons */}
       <div
         className={cn(
-          'absolute top-[2220px] left-[245px] flex flex-col gap-[90px] group-data-[kiosk=kiosk-3]/kiosk:top-[2350px]',
+          'absolute top-[2220px] left-[245px] z-10 flex flex-col gap-[90px] group-data-[kiosk=kiosk-3]/kiosk:top-[2350px]',
           ctaWidthClass
         )}
       >

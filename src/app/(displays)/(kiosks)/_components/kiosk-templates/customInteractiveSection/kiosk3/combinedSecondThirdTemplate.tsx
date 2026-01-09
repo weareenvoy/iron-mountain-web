@@ -20,7 +20,6 @@ import CircularCarousel, { type CarouselSlide } from './components/CircularCarou
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 export type CustomInteractiveKiosk3CombinedTemplateProps = {
-  readonly backgroundImageSrc?: string;
   readonly backLabel?: string;
   readonly demoIframeSrc?: string;
   readonly description?: string;
@@ -41,7 +40,6 @@ export type CustomInteractiveKiosk3CombinedTemplateProps = {
 };
 
 const CustomInteractiveKiosk3CombinedTemplate = ({
-  backgroundImageSrc,
   backLabel,
   demoIframeSrc,
   description,
@@ -131,7 +129,6 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
                 loop
                 muted
                 playsInline
-                poster={backgroundImageSrc}
                 src={videoAsset}
                 transition={{ duration: 0.6, ease: [0.3, 0, 0.4, 1] }}
               />
@@ -244,7 +241,6 @@ const CustomInteractiveKiosk3CombinedTemplate = ({
                           loop
                           muted
                           playsInline
-                          poster={current.primaryImageSrc}
                           src={current.primaryVideoSrc}
                         />
                       ) : null}

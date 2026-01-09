@@ -21,7 +21,6 @@ export const mapCustomInteractiveKiosk3 = (
 ): CustomInteractiveScreens => ({
   combinedScreen: {
     // Initial state (rings, dots, tap to begin) props
-    backgroundImageSrc: customInteractive.image,
     backLabel: customInteractive.backCTA,
     demoIframeSrc: demo?.iframeLink,
     description: customInteractive.body,
