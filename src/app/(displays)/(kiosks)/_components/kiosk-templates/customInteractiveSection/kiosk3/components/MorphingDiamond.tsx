@@ -32,7 +32,8 @@ type MorphingDiamondProps = {
  *
  * ## Performance
  * - Video src memoized to prevent unnecessary recalculation
- * - Video element paused and src cleared on unmount (prevents memory leaks)
+ * - Video element paused on cleanup (src preserved for React 18 Strict Mode compatibility)
+ * - Automatic src restoration if cleared during Strict Mode unmount/remount cycle
  * - Console logging gated behind NODE_ENV check
  *
  * @param props - Component props
@@ -49,21 +50,16 @@ const MorphingDiamond = memo(({ carouselIndex, isCarouselExiting, showCarousel, 
     return videoAsset;
   }, [videoAsset]);
 
-  // Cleanup: pause video on unmount to prevent memory leaks
-  useEffect(() => {
-    const videoElement = videoRef.current;
-    return () => {
-      if (videoElement) {
-        videoElement.pause();
-        videoElement.src = '';
-      }
-    };
-  }, []);
-
-  // Handle video load errors
+  // Ensure video loads and handle errors
   useEffect(() => {
     const videoElement = videoRef.current;
     if (!videoElement) return;
+
+    // Force video to load if src is empty (happens after Strict Mode unmount/remount)
+    if (!videoElement.src && normalizedVideoSrc) {
+      videoElement.src = normalizedVideoSrc;
+      videoElement.load();
+    }
 
     const handleError = (e: Event) => {
       if (process.env.NODE_ENV === 'development') {
@@ -92,6 +88,8 @@ const MorphingDiamond = memo(({ carouselIndex, isCarouselExiting, showCarousel, 
     return () => {
       videoElement.removeEventListener('error', handleError);
       videoElement.removeEventListener('loadeddata', handleLoadedData);
+      // Only pause on cleanup, don't clear src to avoid React 18 Strict Mode issues
+      videoElement.pause();
     };
   }, [normalizedVideoSrc]);
 
