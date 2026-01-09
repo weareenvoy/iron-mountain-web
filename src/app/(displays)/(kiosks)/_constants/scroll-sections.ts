@@ -17,7 +17,7 @@ export const SCROLL_SECTION_SOLUTION_THIRD_TITLE = 'solution-third-title';
 export const SCROLL_SECTION_SOLUTION_FOURTH_TITLE = 'solution-fourth-title';
 
 // Value section IDs
-export const SCROLL_SECTION_VALUE_DESCRIPTION = 'value-description';
+export const SCROLL_SECTION_VALUE_CAROUSEL = 'value-carousel';
 
 // Custom Interactive section IDs
 export const SCROLL_SECTION_CUSTOM_INTERACTIVE_FIRST = 'custom-interactive-first';
@@ -42,7 +42,7 @@ export type ScrollSectionId =
   | typeof SCROLL_SECTION_SOLUTION_FOURTH_TITLE
   | typeof SCROLL_SECTION_SOLUTION_SECOND_GROUP
   | typeof SCROLL_SECTION_SOLUTION_THIRD_TITLE
-  | typeof SCROLL_SECTION_VALUE_DESCRIPTION;
+  | typeof SCROLL_SECTION_VALUE_CAROUSEL;
 
 // Slide ID constants
 export const SLIDE_ID_CHALLENGE_INITIAL = 'challenge-initial';
