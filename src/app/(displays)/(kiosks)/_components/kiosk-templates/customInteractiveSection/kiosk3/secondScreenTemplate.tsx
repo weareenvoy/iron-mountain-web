@@ -6,7 +6,7 @@ import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_comp
 import CarouselState from './components/CarouselState';
 import InitialState from './components/InitialState';
 import MorphingDiamond from './components/MorphingDiamond';
-import { Z_INDEX } from './constants';
+import { SECTION_IDS } from './constants';
 import type { CarouselSlide } from './components/CircularCarousel';
 
 /**
@@ -96,26 +96,27 @@ const Kiosk3SecondScreenTemplate = memo(
     const isInView = useInView(ref, { amount: 0.3, once: true });
 
     // Event handlers (memoized to prevent unnecessary re-renders)
+    // Empty dependency arrays are safe here as they only call setState functions
     const handleTapToBegin = useCallback(() => {
       setIsButtonTransitioning(true);
       setShowCarousel(true);
-    }, []);
+    }, []); // setState functions are stable
 
     const handleShowOverlay = useCallback(() => {
       setShowOverlay(true);
-    }, []);
+    }, []); // setState functions are stable
 
     const handleHideOverlay = useCallback(() => {
       setShowOverlay(false);
-    }, []);
+    }, []); // setState functions are stable
 
     const handleIndexChange = useCallback((index: number) => {
       setCarouselIndex(index);
-    }, []);
+    }, []); // setState functions are stable
 
     const handleIsExitingChange = useCallback((isExiting: boolean) => {
       setIsCarouselExiting(isExiting);
-    }, []);
+    }, []); // setState functions are stable
 
     // Early return for invalid data
     if (safeSlides.length === 0 || !headline || !videoAsset) {
@@ -125,7 +126,7 @@ const Kiosk3SecondScreenTemplate = memo(
     return (
       <div
         className="relative flex h-screen w-full flex-col overflow-hidden"
-        data-scroll-section="customInteractive-second-screen"
+        data-scroll-section={SECTION_IDS.SECOND_SCREEN}
         ref={ref}
       >
         <div className="absolute inset-0 bg-transparent" />
@@ -164,7 +165,7 @@ const Kiosk3SecondScreenTemplate = memo(
 
         {/* Demo overlay */}
         {showOverlay && (
-          <div className="absolute inset-0 animate-in duration-700 fade-in" style={{ zIndex: Z_INDEX.OVERLAY }}>
+          <div className="absolute inset-0 z-[9999] animate-in duration-700 fade-in">
             <CustomInteractiveDemoScreenTemplate
               cardLabel={overlay?.cardLabel}
               demoIframeSrc={demoIframeSrc}

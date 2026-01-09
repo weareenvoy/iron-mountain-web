@@ -1,6 +1,7 @@
 import CustomInteractiveFirstScreenTemplate, {
   type CustomInteractiveKiosk1FirstScreenTemplateProps,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/firstScreenTemplate';
+import { SECTION_IDS } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/kiosk3/constants';
 import {
   CustomInteractiveKiosk1SecondScreenTemplate,
   type CustomInteractiveKiosk1SecondScreenTemplateProps,
@@ -17,8 +18,8 @@ import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 export type CustomInteractiveScreens = {
   readonly demoScreen?: CustomInteractiveDemoScreenTemplateProps;
   readonly firstScreen?: CustomInteractiveKiosk1FirstScreenTemplateProps;
+  readonly kiosk3OverlayConfig?: CustomInteractiveDemoScreenTemplateProps;
   readonly kiosk3SecondScreen?: Kiosk3SecondScreenProps;
-  readonly kiosk3ThirdScreen?: CustomInteractiveDemoScreenTemplateProps;
   readonly secondScreen?: CustomInteractiveKiosk1SecondScreenTemplateProps;
   readonly thirdScreen?: CustomInteractiveDemoScreenTemplateProps;
 };
@@ -31,7 +32,7 @@ export const buildCustomInteractiveSlides = (
   const slides: Slide[] = [];
 
   if (customInteractive.firstScreen) {
-    // Kiosk 1 uses thirdScreen for overlay, Kiosk 2 uses firstScreen props directly, Kiosk 3 uses kiosk3ThirdScreen
+    // Extract overlay configuration based on kiosk variant
     let overlayCardLabel: string | undefined;
     let overlayHeadline: string | undefined;
 
@@ -41,13 +42,13 @@ export const buildCustomInteractiveSlides = (
     } else if (kioskId === 'kiosk-2') {
       overlayCardLabel = customInteractive.firstScreen.overlayCardLabel;
       overlayHeadline = customInteractive.firstScreen.overlayHeadline;
-    } else if (kioskId === 'kiosk-3' && customInteractive.kiosk3ThirdScreen) {
-      overlayCardLabel = customInteractive.kiosk3ThirdScreen.cardLabel;
-      overlayHeadline = customInteractive.kiosk3ThirdScreen.headline;
+    } else if (kioskId === 'kiosk-3' && customInteractive.kiosk3OverlayConfig) {
+      overlayCardLabel = customInteractive.kiosk3OverlayConfig.cardLabel;
+      overlayHeadline = customInteractive.kiosk3OverlayConfig.headline;
     }
 
     // Determine navigation target based on kiosk
-    const primaryCtaTarget = 'customInteractive-second-screen';
+    const primaryCtaTarget = SECTION_IDS.SECOND_SCREEN;
 
     slides.push({
       id: 'customInteractive-first',
@@ -74,7 +75,7 @@ export const buildCustomInteractiveSlides = (
         <SectionSlide>
           <CustomInteractiveKiosk3SecondScreenTemplate
             {...customInteractive.kiosk3SecondScreen}
-            onBack={() => scrollToSection?.('customInteractive-first-screen')}
+            onBack={() => scrollToSection?.(SECTION_IDS.FIRST_SCREEN)}
           />
         </SectionSlide>
       ),
@@ -95,7 +96,7 @@ export const buildCustomInteractiveSlides = (
     });
   }
 
-  // Demo screens (thirdScreen for Kiosk 1, kiosk3ThirdScreen for Kiosk 3) are now overlay-only
+  // Demo screens (thirdScreen for Kiosk 1, kiosk3OverlayConfig for Kiosk 3) are overlay-only
 
   // Keep navigation external: handled by slide order in view
   return slides;

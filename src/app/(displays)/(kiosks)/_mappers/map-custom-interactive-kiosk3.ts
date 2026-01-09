@@ -31,6 +31,14 @@ export const mapCustomInteractiveKiosk3 = (
     primaryCtaLabel: customInteractive.mainCTA,
     secondaryCtaLabel: customInteractive.secondaryCTA,
   },
+  kiosk3OverlayConfig: {
+    cardLabel: demo?.demoText,
+    demoIframeSrc: demo?.iframeLink,
+    endTourLabel: demo?.mainCTA,
+    headline: demo?.headline,
+    heroImageAlt: '',
+    heroImageSrc: customInteractive.image,
+  },
   kiosk3SecondScreen: {
     backLabel: customInteractive.backCTA,
     demoIframeSrc: demo?.iframeLink,
@@ -46,7 +54,7 @@ export const mapCustomInteractiveKiosk3 = (
     },
     slides:
       customInteractive.tapCarousel?.map((item, index) => ({
-        bullets: item.bullets ? [...item.bullets] : [],
+        bullets: [...(item.bullets ?? [])],
         eyebrow: ambient.title,
         headline: item.title ?? '',
         id: generateSlideId('slide', String(index + 1)),
@@ -59,13 +67,5 @@ export const mapCustomInteractiveKiosk3 = (
       })) ?? [],
     tapToBeginLabel: customInteractive.tapCTA,
     videoAsset: customInteractive.video,
-  },
-  kiosk3ThirdScreen: {
-    cardLabel: demo?.demoText,
-    demoIframeSrc: demo?.iframeLink,
-    endTourLabel: demo?.mainCTA,
-    headline: demo?.headline,
-    heroImageAlt: '',
-    heroImageSrc: customInteractive.image,
   },
 });
