@@ -7,27 +7,45 @@ import { cn } from '@/lib/tailwind/utils/cn';
 import { getVideoMimeType } from '@/lib/utils/get-video-mime-type';
 import { normalizeMultiline } from '@/lib/utils/normalize-multiline';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
+import AnimatedValueCarousel from './components/AnimatedValueCarousel';
 import ValueCarousel from './components/ValueCarousel';
 import type { ValueCarouselSlide } from '@/app/(displays)/(kiosks)/_types/value-types';
 
+/**
+ * Props for the ValueCarouselTemplate component.
+ * Displays a value proposition carousel with animated diamonds and bullet points.
+ */
 export type ValueCarouselTemplateProps = {
+  /** Body text describing the value proposition */
   readonly body?: string;
+  /** Unique identifier for the carousel instance */
   readonly carouselId?: string;
+  /** Eyebrow text displayed above the main headline */
   readonly eyebrow?: string;
+  /** Main headline text */
   readonly headline?: string;
+  /** Alt text for hero image (when not using video) */
   readonly heroImageAlt?: string;
+  /** Source URL for hero image (when not using video) */
   readonly heroImageSrc?: string;
+  /** Poster image for video player */
   readonly heroVideoPosterSrc?: string;
+  /** Label text displayed with diamond icon */
   readonly labelText?: string;
+  /** Main video URL (enables animated carousel variant) */
   readonly mainVideo?: string;
+  /** Callback for downward navigation */
   readonly onNavigateDown?: () => void;
+  /** Callback for upward navigation */
   readonly onNavigateUp?: () => void;
-  readonly onRegisterCarouselHandlers?: (handlers: {
+  /** Callback to register carousel navigation handlers for parent control */
+  readonly registerCarouselHandlers?: (handlers: {
     canScrollNext: () => boolean;
     canScrollPrev: () => boolean;
     scrollNext: () => void;
     scrollPrev: () => void;
   }) => void;
+  /** Array of carousel slides with diamond cards and bullet points */
   readonly slides?: readonly ValueCarouselSlide[];
 };
 
@@ -40,11 +58,11 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
     heroVideoPosterSrc,
     labelText,
     mainVideo,
-    onRegisterCarouselHandlers,
+    registerCarouselHandlers,
     slides,
   } = props;
-  const isOverview = carouselId?.includes('overview');
-  const heroVideo = isOverview ? mainVideo : undefined;
+  // Show video background when mainVideo is provided (used in animated carousel variant)
+  const heroVideo = mainVideo;
 
   const slidesToRender = slides?.length ? slides : [];
   const slidesWithDefaults = slidesToRender.map(slide => ({
@@ -56,10 +74,14 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
     slide.bullets?.filter(entry => entry && entry.trim().length > 0) ?? [];
 
   const hasCarouselSlides = slidesWithDefaults.some(slide => getBulletItems(slide).length > 0);
+  const useAnimatedCarousel = hasCarouselSlides && heroVideo;
+
+  // Enable delegation for any carousel variant that has slides
+  const shouldEnableCarouselDelegation = hasCarouselSlides;
 
   return (
     <div
-      {...(isOverview ? { 'data-scroll-section': 'value-carousel' } : {})}
+      {...(shouldEnableCarouselDelegation ? { 'data-scroll-section': 'value-carousel' } : {})}
       className="relative flex h-screen w-full flex-col overflow-visible bg-transparent"
       data-carousel-id={carouselId}
     >
@@ -99,24 +121,29 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
       <div
         className={cn(
           'absolute top-[1060px] left-0 z-3 w-full rounded-t-[100px] px-[240px] pt-[200px] pb-[1166px]',
-          isOverview ? 'h-[9360px] bg-[#ededed]' : 'h-[4150px] bg-transparent'
+          useAnimatedCarousel ? 'h-[4150px] bg-[#ededed]' : 'h-[9360px] bg-[#ededed]'
         )}
       >
         <div className="relative top-[-10px] flex flex-col gap-[360px] text-[#8a0d71]">
           <div>
             <p className="text-[100px] leading-[1.3] font-normal tracking-[-5px]">{renderRegisteredMark(headline)}</p>
-            <p
-              {...(!isOverview ? { 'data-scroll-section': 'value-description' } : {})}
-              className="mt-[80px] w-[1480px] text-[60px] leading-[1.4] font-normal tracking-[-3px]"
-            >
+            <p className="mt-[80px] w-[1480px] text-[60px] leading-[1.4] font-normal tracking-[-3px]">
               {renderRegisteredMark(normalizeMultiline(body))}
             </p>
           </div>
-          <ValueCarousel
-            hasCarouselSlides={hasCarouselSlides}
-            onRegisterCarouselHandlers={onRegisterCarouselHandlers}
-            slides={slidesWithDefaults}
-          />
+          {useAnimatedCarousel ? (
+            <AnimatedValueCarousel
+              hasCarouselSlides={hasCarouselSlides}
+              registerCarouselHandlers={registerCarouselHandlers}
+              slides={slidesWithDefaults}
+            />
+          ) : (
+            <ValueCarousel
+              hasCarouselSlides={hasCarouselSlides}
+              registerCarouselHandlers={registerCarouselHandlers}
+              slides={slidesWithDefaults}
+            />
+          )}
         </div>
       </div>
     </div>
