@@ -19,6 +19,36 @@ export const mapCustomInteractiveKiosk3 = (
   ambient: Ambient,
   demo?: DemoConfig
 ): CustomInteractiveScreens => ({
+  combinedScreen: {
+    // Initial state (rings, dots, tap to begin) props
+    backgroundImageSrc: customInteractive.image,
+    backLabel: customInteractive.backCTA,
+    demoIframeSrc: demo?.iframeLink,
+    description: customInteractive.body,
+    eyebrow: ambient.title,
+    // Carousel state props
+    headline: customInteractive.headline2,
+    // Demo overlay props
+    overlayCardLabel: demo?.demoText,
+    overlayEndTourLabel: demo?.mainCTA,
+    overlayHeadline: demo?.headline,
+    // Carousel slides
+    slides:
+      customInteractive.tapCarousel?.map((item, index) => ({
+        bullets: item.bullets ? [...item.bullets] : [],
+        eyebrow: ambient.title,
+        headline: item.title ?? '',
+        id: generateSlideId('slide', String(index + 1)),
+        primaryImageAlt: '',
+        primaryImageSrc: item.image ?? '',
+        primaryVideoSrc: item.video,
+        secondaryImageAlt: '',
+        secondaryImageSrc: item.video && item.image ? item.image : undefined,
+        sectionTitle: item.title ?? '',
+      })) ?? [],
+    tapToBeginLabel: customInteractive.tapCTA,
+    videoAsset: customInteractive.video,
+  },
   firstScreen: {
     demoIframeSrc: demo?.iframeLink,
     eyebrow: ambient.title,
@@ -38,36 +68,5 @@ export const mapCustomInteractiveKiosk3 = (
     headline: demo?.headline,
     heroImageAlt: '',
     heroImageSrc: customInteractive.image,
-  },
-  secondScreen: {
-    backgroundImageSrc: customInteractive.image,
-    backLabel: customInteractive.backCTA,
-    description: customInteractive.body,
-    eyebrow: ambient.title,
-    headline: customInteractive.headline2,
-    tapToBeginLabel: customInteractive.tapCTA,
-    videoAsset: customInteractive.video,
-  },
-  thirdScreen: {
-    demoIframeSrc: demo?.iframeLink,
-    headline: customInteractive.headline,
-    heroImageAlt: '',
-    heroImageSrc: customInteractive.image,
-    overlayCardLabel: demo?.demoText,
-    overlayEndTourLabel: demo?.mainCTA,
-    overlayHeadline: demo?.headline,
-    slides:
-      customInteractive.tapCarousel?.map((item, index) => ({
-        bullets: item.bullets ? [...item.bullets] : [],
-        eyebrow: ambient.title,
-        headline: item.title ?? '',
-        id: generateSlideId('slide', String(index + 1)),
-        primaryImageAlt: '',
-        primaryImageSrc: item.image ?? '',
-        primaryVideoSrc: item.video,
-        secondaryImageAlt: '',
-        secondaryImageSrc: item.video && item.image ? item.image : undefined,
-        sectionTitle: item.title ?? '',
-      })) ?? [],
   },
 });
