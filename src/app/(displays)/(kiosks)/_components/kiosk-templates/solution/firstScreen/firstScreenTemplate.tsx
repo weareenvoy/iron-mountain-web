@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
 import BlueDiamondMain from '@/components/ui/icons/Kiosks/Solutions/BlueDiamondMain';
 import GreenDiamondMain from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondMain';
 import OrangeDiamondMain from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondMain';
@@ -25,6 +26,31 @@ const SolutionFirstScreenTemplate = ({
   mainVideo,
   subheadline,
 }: SolutionFirstScreenTemplateProps) => {
+  const [showStickyHeader, setShowStickyHeader] = useState(false);
+  const labelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!labelRef.current) return;
+
+      const labelRect = labelRef.current.getBoundingClientRect();
+      // Show sticky header when the original label scrolls past the top
+      const shouldShow = labelRect.bottom < 0;
+      setShowStickyHeader(shouldShow);
+    };
+
+    // Find the scrolling container (BaseKioskView)
+    const scrollContainer = document.querySelector('[data-kiosk]');
+    if (scrollContainer) {
+      scrollContainer.addEventListener('scroll', handleScroll);
+      handleScroll(); // Check initial state
+
+      return () => {
+        scrollContainer.removeEventListener('scroll', handleScroll);
+      };
+    }
+  }, []);
+
   return (
     <div className="relative flex h-screen w-full flex-col overflow-visible bg-black">
       {/* Background video */}
@@ -48,19 +74,49 @@ const SolutionFirstScreenTemplate = ({
       {/* Gradient body */}
       <div className="absolute top-[1058px] left-0 z-[1] h-[14575px] w-full rounded-[100px] bg-gradient-to-b from-[#A2115E] to-[#8A0D71] group-data-[kiosk=kiosk-2]/kiosk:top-[1110px] group-data-[kiosk=kiosk-3]/kiosk:top-[1060px]" />
 
-      {/* Subheadline */}
+      {/* Subheadline - Initial Position */}
       <h2 className="absolute top-[240px] left-[120px] z-[1] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:top-[290px] group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-2]/kiosk:w-[450px] group-data-[kiosk=kiosk-3]/kiosk:top-[300px] group-data-[kiosk=kiosk-3]/kiosk:left-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[330px]">
         {renderRegisteredMark(subheadline)}
       </h2>
 
-      {/* Solution label */}
-      <div className="absolute top-[790px] left-[140px] flex items-center gap-[41px] group-data-[kiosk=kiosk-2]/kiosk:top-[830px] group-data-[kiosk=kiosk-3]/kiosk:top-[860px] group-data-[kiosk=kiosk-3]/kiosk:left-[260px]">
+      {/* Solution label - Initial Position */}
+      <div 
+        ref={labelRef}
+        className="absolute top-[790px] left-[140px] flex items-center gap-[41px] group-data-[kiosk=kiosk-2]/kiosk:top-[830px] group-data-[kiosk=kiosk-3]/kiosk:top-[860px] group-data-[kiosk=kiosk-3]/kiosk:left-[260px]"
+      >
         <div className="relative top-[-25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
           <OutlinedDiamond aria-hidden="true" focusable="false" />
         </div>
         <h1 className="relative top-[-20px] left-[-100px] text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]">
           {labelText}
         </h1>
+      </div>
+
+      {/* Sticky Section Header - Fixed Position */}
+      <div 
+        className="fixed top-0 left-0 z-[100] w-full pointer-events-none transition-opacity duration-300"
+        data-solution-sticky-header
+        data-visible={showStickyHeader}
+        style={{
+          background: 'linear-gradient(180deg, rgba(162, 17, 94, 0.95) 0%, rgba(138, 13, 113, 0.85) 100%)',
+          backdropFilter: 'blur(8px)',
+          opacity: showStickyHeader ? 1 : 0,
+        }}
+      >
+        {/* Subheadline */}
+        <h2 className="px-[120px] pt-[20px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:w-[450px] group-data-[kiosk=kiosk-3]/kiosk:ml-[120px] group-data-[kiosk=kiosk-3]/kiosk:w-[330px]">
+          {renderRegisteredMark(subheadline)}
+        </h2>
+
+        {/* Solution label */}
+        <div className="flex items-center gap-[41px] px-[140px] pb-[20px] group-data-[kiosk=kiosk-3]/kiosk:ml-[120px]">
+          <div className="relative top-[-25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
+            <OutlinedDiamond aria-hidden="true" focusable="false" />
+          </div>
+          <h1 className="relative top-[-20px] left-[-100px] text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]">
+            {labelText}
+          </h1>
+        </div>
       </div>
 
       {/* Body copy */}

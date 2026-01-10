@@ -1,6 +1,6 @@
 'use client';
 
-import { memo } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { normalizeDiamondCards } from '@/app/(displays)/(kiosks)/_utils/normalize-diamond-cards';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
 import { cn } from '@/lib/tailwind/utils/cn';
@@ -61,6 +61,32 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
     registerCarouselHandlers,
     slides,
   } = props;
+  
+  const [showStickyHeader, setShowStickyHeader] = useState(false);
+  const labelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!labelRef.current) return;
+
+      const labelRect = labelRef.current.getBoundingClientRect();
+      // Show sticky header when the original label scrolls past the top
+      const shouldShow = labelRect.bottom < 0;
+      setShowStickyHeader(shouldShow);
+    };
+
+    // Find the scrolling container (BaseKioskView)
+    const scrollContainer = document.querySelector('[data-kiosk]');
+    if (scrollContainer) {
+      scrollContainer.addEventListener('scroll', handleScroll);
+      handleScroll(); // Check initial state
+
+      return () => {
+        scrollContainer.removeEventListener('scroll', handleScroll);
+      };
+    }
+  }, []);
+  
   // Show video background when mainVideo is provided (used in animated carousel variant)
   const heroVideo = mainVideo;
 
@@ -104,17 +130,47 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
         <div className="absolute inset-0 bg-black/20" />
       </div>
 
+      {/* Header Section - Initial Position */}
       <div className="absolute top-0 left-0 z-2 flex h-[1284px] w-full flex-col justify-between px-[120px] py-[240px]">
         <p className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
           {renderRegisteredMark(normalizeMultiline(eyebrow))}
         </p>
-        <div className="relative top-[-100px] left-[10px] flex items-center gap-[41px]">
+        <div 
+          ref={labelRef}
+          className="relative top-[-100px] left-[10px] flex items-center gap-[41px]"
+        >
           <div className="relative top-[25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
             <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
           </div>
           <h1 className="relative top-[30px] left-[-90px] text-[126px] leading-[1.3] font-normal tracking-[-6.3px] whitespace-nowrap text-[#ededed]">
             {renderRegisteredMark(labelText)}
           </h1>
+        </div>
+      </div>
+
+      {/* Sticky Section Header - Fixed Position */}
+      <div 
+        className="fixed top-0 left-0 z-[100] w-full pointer-events-none transition-opacity duration-300"
+        data-value-sticky-header
+        data-visible={showStickyHeader}
+        style={{
+          background: 'linear-gradient(180deg, rgba(138, 13, 113, 0.95) 0%, rgba(162, 17, 94, 0.85) 100%)',
+          backdropFilter: 'blur(8px)',
+          opacity: showStickyHeader ? 1 : 0,
+        }}
+      >
+        <div className="flex flex-col px-[120px] py-[20px]">
+          <p className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
+            {renderRegisteredMark(normalizeMultiline(eyebrow))}
+          </p>
+          <div className="flex items-center gap-[41px] mt-[20px]">
+            <div className="relative top-[25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
+              <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
+            </div>
+            <h1 className="relative top-[30px] left-[-90px] text-[126px] leading-[1.3] font-normal tracking-[-6.3px] whitespace-nowrap text-[#ededed]">
+              {renderRegisteredMark(labelText)}
+            </h1>
+          </div>
         </div>
       </div>
 
