@@ -32,7 +32,8 @@ export function useGlobalParagraphNavigation({
   containerRef,
   duration = PARAGRAPH_SCROLL_DURATION_MS,
 }: UseGlobalParagraphNavigationOptions): UseGlobalParagraphNavigationReturn {
-  const [currentIndex, setCurrentIndex] = useState(-1);
+  // Start at index 0 since the page loads already showing the first paragraph
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [allParagraphs, setAllParagraphs] = useState<HTMLElement[]>([]);
   const [isScrolling, setIsScrolling] = useState(false);
   const [currentScrollTarget, setCurrentScrollTarget] = useState<null | string>(null);
@@ -238,7 +239,7 @@ export function useGlobalParagraphNavigation({
   const scrollToSectionById = useCallback(
     (sectionId: string) => {
       const currentSectionId = allParagraphs[currentIndex]?.getAttribute('data-scroll-section');
-      
+
       console.info('[scrollToSectionById] Called with:', {
         allParagraphsCount: allParagraphs.length,
         availableSections: allParagraphs.map((el, idx) => ({
