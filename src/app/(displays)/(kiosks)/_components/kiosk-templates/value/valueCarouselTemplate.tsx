@@ -70,8 +70,11 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
       if (!labelRef.current) return;
 
       const labelRect = labelRef.current.getBoundingClientRect();
-      // Show sticky header when the original label scrolls past the top
-      const shouldShow = labelRect.bottom < 0;
+      const labelPastTop = labelRect.bottom < 0;
+
+      // Value section: show sticky header when label scrolls past top
+      // Could check for next section if there is one after Value
+      const shouldShow = labelPastTop;
       setShowStickyHeader(shouldShow);
     };
 
@@ -137,6 +140,7 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
         </p>
         <div 
           ref={labelRef}
+          data-section-label="value"
           className="relative top-[-100px] left-[10px] flex items-center gap-[41px]"
         >
           <div className="relative top-[25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">

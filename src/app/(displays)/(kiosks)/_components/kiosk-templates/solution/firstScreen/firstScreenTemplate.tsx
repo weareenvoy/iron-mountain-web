@@ -34,8 +34,16 @@ const SolutionFirstScreenTemplate = ({
       if (!labelRef.current) return;
 
       const labelRect = labelRef.current.getBoundingClientRect();
-      // Show sticky header when the original label scrolls past the top
-      const shouldShow = labelRect.bottom < 0;
+      const labelPastTop = labelRect.bottom < 0;
+
+      // Check if next section (Value) has become active
+      const nextSectionLabel = document.querySelector('[data-section-label="value"]');
+      const nextSectionPastTop = nextSectionLabel 
+        ? nextSectionLabel.getBoundingClientRect().bottom < 0 
+        : false;
+
+      // Show sticky header when this label scrolls past top BUT next section hasn't
+      const shouldShow = labelPastTop && !nextSectionPastTop;
       setShowStickyHeader(shouldShow);
     };
 
@@ -82,6 +90,7 @@ const SolutionFirstScreenTemplate = ({
       {/* Solution label - Initial Position */}
       <div 
         ref={labelRef}
+        data-section-label="solution"
         className="absolute top-[790px] left-[140px] flex items-center gap-[41px] group-data-[kiosk=kiosk-2]/kiosk:top-[830px] group-data-[kiosk=kiosk-3]/kiosk:top-[860px] group-data-[kiosk=kiosk-3]/kiosk:left-[260px]"
       >
         <div className="relative top-[-25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
