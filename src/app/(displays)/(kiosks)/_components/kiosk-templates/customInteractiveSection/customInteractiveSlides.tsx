@@ -50,6 +50,20 @@ export const buildCustomInteractiveSlides = (
     // Determine navigation target based on kiosk
     const primaryCtaTarget = SECTION_IDS.SECOND_SCREEN;
 
+    // Create stable handler outside of render to prevent double-click issues
+    const handlePrimaryCta = () => {
+      if (scrollToSection) {
+        console.info('[CustomInteractive] Primary CTA clicked, navigating to:', {
+          kioskId,
+          target: primaryCtaTarget,
+          timestamp: Date.now(),
+        });
+        scrollToSection(primaryCtaTarget);
+      } else {
+        console.warn('[CustomInteractive] scrollToSection is not defined');
+      }
+    };
+
     slides.push({
       id: 'customInteractive-first',
       render: () => (
@@ -57,7 +71,7 @@ export const buildCustomInteractiveSlides = (
           <CustomInteractiveFirstScreenTemplate
             kioskId={kioskId}
             {...customInteractive.firstScreen}
-            onPrimaryCta={() => scrollToSection?.(primaryCtaTarget)}
+            onPrimaryCta={handlePrimaryCta}
             overlayCardLabel={overlayCardLabel}
             overlayHeadline={overlayHeadline}
           />

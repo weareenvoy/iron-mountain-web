@@ -106,8 +106,17 @@ export function useGlobalParagraphNavigation({
 
   const scrollToParagraph = useCallback(
     (index: number) => {
+      console.info('[scrollToParagraph] Called with index:', index);
+
       const container = containerRef.current;
-      if (!container || index < -1 || index >= allParagraphs.length) return;
+      if (!container || index < -1 || index >= allParagraphs.length) {
+        console.warn('[scrollToParagraph] Early return - invalid state:', {
+          hasContainer: !!container,
+          index,
+          maxIndex: allParagraphs.length - 1,
+        });
+        return;
+      }
 
       // Clear any existing timeout before setting a new one
       if (scrollTimeoutRef.current) {
@@ -228,12 +237,44 @@ export function useGlobalParagraphNavigation({
 
   const scrollToSectionById = useCallback(
     (sectionId: string) => {
+      const currentSectionId = allParagraphs[currentIndex]?.getAttribute('data-scroll-section');
+      
+      console.info('[scrollToSectionById] Called with:', {
+        allParagraphsCount: allParagraphs.length,
+        availableSections: allParagraphs.map((el, idx) => ({
+          id: el.getAttribute('data-scroll-section'),
+          index: idx,
+        })),
+        currentIndex,
+        currentSectionId,
+        isScrolling: isScrollingRef.current,
+        sectionId,
+      });
+
+      // Don't scroll if we're already at the target
+      if (currentSectionId === sectionId) {
+        console.info('[scrollToSectionById] Already at target section, skipping');
+        return;
+      }
+
+      if (isScrollingRef.current) {
+        console.warn('[scrollToSectionById] Blocked: Already scrolling');
+        return;
+      }
+
       const index = allParagraphs.findIndex(el => el.getAttribute('data-scroll-section') === sectionId);
-      if (index !== -1) {
+
+      console.info('[scrollToSectionById] Found index:', index, 'for section:', sectionId);
+
+      if (index !== -1 && index !== currentIndex) {
         scrollToParagraph(index);
+      } else if (index === -1) {
+        console.warn('[scrollToSectionById] Section not found:', sectionId);
+      } else {
+        console.info('[scrollToSectionById] Already at index:', index);
       }
     },
-    [allParagraphs, scrollToParagraph]
+    [allParagraphs, currentIndex, scrollToParagraph]
   );
 
   // Cleanup scroll timeout on unmount

@@ -55,6 +55,15 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
     onSecondaryCta?.();
   };
 
+  const handlePrimaryClick = () => {
+    console.info('[FirstScreenTemplate] Primary button clicked', {
+      hasHandler: !!onPrimaryCta,
+      kioskId,
+      timestamp: Date.now(),
+    });
+    onPrimaryCta?.();
+  };
+
   return (
     <div
       className={cn(
@@ -110,7 +119,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       >
         <button
           className="group flex h-[200px] items-center justify-between rounded-[999px] bg-[#ededed] px-[100px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-[#14477d] shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-[19px] transition-transform duration-150 group-data-[kiosk=kiosk-2]/kiosk:hidden hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
-          onClick={onPrimaryCta}
+          onClick={handlePrimaryClick}
           type="button"
         >
           <span className="pt-[10px] pl-[10px]">{renderRegisteredMark(primaryCtaLabel)}</span>
