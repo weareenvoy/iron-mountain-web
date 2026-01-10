@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import NextImage from 'next/image';
-import { memo, useEffect, useRef } from 'react';
+import { memo, useCallback, useEffect, useRef } from 'react';
 
 /**
  * ModalContent - Content configuration for step detail modal
@@ -41,6 +41,11 @@ const StepModal = ({ content, onClose }: StepModalProps) => {
     onCloseRef.current = onClose;
   }, [onClose]);
 
+  // Stable backdrop click handler to prevent memory leaks
+  const handleBackdropClick = useCallback(() => {
+    onCloseRef.current();
+  }, []);
+
   // Add escape key support - uses ref to avoid memory leak
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
@@ -57,7 +62,7 @@ const StepModal = ({ content, onClose }: StepModalProps) => {
 
   return (
     <div className="absolute inset-0 z-200 flex items-center justify-center">
-      <div className="absolute inset-0 backdrop-blur-[50px]" onClick={() => onCloseRef.current()} />
+      <div className="absolute inset-0 backdrop-blur-[50px]" onClick={handleBackdropClick} />
       <motion.div
         animate={{ y: 0 }}
         className="relative z-201 flex h-[2800px] max-h-[90vh] w-[1920px] flex-col overflow-hidden rounded-[48px] bg-[#97e9ff] p-[80px] text-[#14477d] shadow-[0_40px_120px_rgba(0,0,0,0.45)]"
@@ -71,8 +76,8 @@ const StepModal = ({ content, onClose }: StepModalProps) => {
       >
         <div className="flex items-center justify-between">
           <button
-            className="group pointer-events-auto relative top-[45px] left-[60px] flex h-[200px] items-center gap-[24px] rounded-[1000px] bg-[#ededed] px-[90px] py-[60] pr-[100px] text-[55px] leading-[1.4] font-normal tracking-[-2.7px] text-[#14477d] transition hover:scale-[1.02] active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
-            onClick={() => onCloseRef.current()}
+            className="group pointer-events-auto relative top-[45px] left-[60px] flex h-[200px] items-center gap-[24px] rounded-[1000px] bg-[#ededed] px-[90px] py-[60] pr-[100px] text-[55px] leading-[1.4] font-normal tracking-[-2.7px] text-[#14477d] transition hover:scale-[1.02] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+            onClick={handleBackdropClick}
             type="button"
           >
             <span className="flex items-center justify-center">

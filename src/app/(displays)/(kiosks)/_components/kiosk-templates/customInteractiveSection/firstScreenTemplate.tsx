@@ -56,11 +56,6 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   };
 
   const handlePrimaryClick = () => {
-    console.info('[FirstScreenTemplate] Primary button clicked', {
-      hasHandler: !!onPrimaryCta,
-      kioskId,
-      timestamp: Date.now(),
-    });
     onPrimaryCta?.();
   };
 

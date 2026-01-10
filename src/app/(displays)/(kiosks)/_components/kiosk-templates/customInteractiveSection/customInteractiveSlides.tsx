@@ -53,14 +53,7 @@ export const buildCustomInteractiveSlides = (
     // Create stable handler outside of render to prevent double-click issues
     const handlePrimaryCta = () => {
       if (scrollToSection) {
-        console.info('[CustomInteractive] Primary CTA clicked, navigating to:', {
-          kioskId,
-          target: primaryCtaTarget,
-          timestamp: Date.now(),
-        });
         scrollToSection(primaryCtaTarget);
-      } else {
-        console.warn('[CustomInteractive] scrollToSection is not defined');
       }
     };
 

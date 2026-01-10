@@ -39,7 +39,7 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
   const [index, setIndex] = useState(0);
   const [isExiting, setIsExiting] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const timeoutRef = useRef<number | undefined>(undefined);
   const total = slides.length;
   const currentIndex = total > 0 ? index % total : 0;
   const current = slides[currentIndex];
@@ -68,14 +68,14 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
     setIsTransitioning(true);
     setIsExiting(true);
 
-    // Capture total in closure to prevent race condition if slides change during animation
-    const slideCount = total;
+    // Capture slides.length in closure to prevent race condition if slides change during animation
+    const slideCount = slides.length;
     timeoutRef.current = window.setTimeout(() => {
       setIndex(i => (i + 1) % slideCount);
       setIsExiting(false);
       setIsTransitioning(false);
     }, ANIMATION_DURATION_MS.CAROUSEL);
-  }, [isTransitioning, total]);
+  }, [isTransitioning, slides.length]);
 
   const goPrev = useCallback(() => {
     // Prevent rapid clicks during transition
@@ -84,14 +84,14 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
     setIsTransitioning(true);
     setIsExiting(true);
 
-    // Capture total in closure to prevent race condition if slides change during animation
-    const slideCount = total;
+    // Capture slides.length in closure to prevent race condition if slides change during animation
+    const slideCount = slides.length;
     timeoutRef.current = window.setTimeout(() => {
       setIndex(i => (i - 1 + slideCount) % slideCount);
       setIsExiting(false);
       setIsTransitioning(false);
     }, ANIMATION_DURATION_MS.CAROUSEL);
-  }, [isTransitioning, total]);
+  }, [isTransitioning, slides.length]);
 
   if (!current) {
     return null;
@@ -102,10 +102,10 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
       {children({ current, index, isExiting, total })}
 
       {/* Circle carousel control */}
-      <div className="absolute top-[1670px] right-[120px] z-[1] h-[520px] w-[520px]">
+      <div className="absolute top-[1670px] right-[120px] z-1 h-[520px] w-[520px]">
         <div className="relative h-full w-full">
-          <div className="absolute inset-0 rounded-full border-[8px] border-[#6dcff6]/20" />
-          <div className="absolute inset-[18px] rounded-full border-[12px] border-transparent" />
+          <div className="absolute inset-0 rounded-full border-8 border-[#6dcff6]/20" />
+          <div className="absolute inset-[18px] rounded-full border-12 border-transparent" />
           <div className="absolute inset-[44px] rounded-full border-[6px] border-transparent" />
 
           <div className="absolute inset-0 flex items-center justify-center text-[60px] leading-[1.4] font-semibold tracking-[-3px] text-white">
@@ -171,7 +171,7 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
           {/* Arrows */}
           <button
             aria-label="Previous slide"
-            className="group absolute top-1/2 left-[100px] flex h-[102px] w-[102px] -translate-y-1/2 items-center justify-center transition hover:opacity-80 active:opacity-40 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)] disabled:cursor-not-allowed disabled:opacity-30"
+            className="group absolute top-1/2 left-[100px] flex h-[102px] w-[102px] -translate-y-1/2 items-center justify-center transition hover:opacity-80 active:opacity-40 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)] disabled:cursor-not-allowed disabled:opacity-30"
             disabled={isTransitioning}
             onClick={goPrev}
             type="button"
@@ -180,7 +180,7 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
           </button>
           <button
             aria-label="Next slide"
-            className="group absolute top-1/2 right-[70px] flex h-[102px] w-[102px] -translate-y-1/2 items-center justify-center transition hover:opacity-80 active:opacity-40 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)] disabled:cursor-not-allowed disabled:opacity-30"
+            className="group absolute top-1/2 right-[70px] flex h-[102px] w-[102px] -translate-y-1/2 items-center justify-center transition hover:opacity-80 active:opacity-40 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)] disabled:cursor-not-allowed disabled:opacity-30"
             disabled={isTransitioning}
             onClick={goNext}
             type="button"
