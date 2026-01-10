@@ -14,7 +14,6 @@ import {
   getSecondaryDiamondClass,
   SLIDE_ID,
   TRANSITIONS,
-  Z_INDEX,
 } from '../constants';
 import DecorativeSVGGroup from './DecorativeSVGGroup';
 
@@ -61,9 +60,8 @@ const CarouselState = memo(
     return (
       <motion.div
         animate={{ opacity: showCarousel ? 1 : 0 }}
-        className={cn('absolute inset-0', showCarousel ? 'pointer-events-auto' : 'pointer-events-none')}
+        className={cn('absolute inset-0 z-10', showCarousel ? 'pointer-events-auto' : 'pointer-events-none')}
         initial={{ opacity: 0 }}
-        style={{ zIndex: Z_INDEX.CAROUSEL }}
         transition={TRANSITIONS.CAROUSEL}
       >
         <CircularCarousel onIndexChange={onIndexChange} onIsExitingChange={onIsExitingChange} slides={slides}>
@@ -145,12 +143,11 @@ const CarouselState = memo(
                       {current.primaryVideoSrc && (
                         <video
                           autoPlay
-                          className="h-full w-full origin-center -rotate-45 object-cover"
+                          className="h-full w-full origin-center -rotate-45 scale-[1.35] object-cover"
                           loop
                           muted
                           playsInline
                           src={current.primaryVideoSrc}
-                          style={{ transform: `scale(${ANIMATION_VALUES.DIAMOND_VIDEO_SCALE})` }}
                         />
                       )}
                     </motion.div>
@@ -179,11 +176,10 @@ const CarouselState = memo(
                     >
                       <Image
                         alt={current.secondaryImageAlt}
-                        className="origin-center -rotate-45 object-cover"
+                        className="origin-center -rotate-45 scale-[1.35] object-cover"
                         fill
                         sizes="880px"
                         src={current.secondaryImageSrc}
-                        style={{ transform: `scale(${ANIMATION_VALUES.DIAMOND_VIDEO_SCALE})` }}
                       />
                     </motion.div>
                   </AnimatePresence>
@@ -198,9 +194,8 @@ const CarouselState = memo(
 
         {/* CTA - Only visible when carousel is shown */}
         <button
-          className="group absolute top-[2630px] left-[240px] flex h-[200px] items-center gap-[18px] rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[110px] text-[55px] leading-[1.1] font-semibold tracking-[2px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+          className="group absolute top-[2630px] left-[240px] z-11 flex h-[200px] items-center gap-[18px] rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[110px] text-[55px] leading-[1.1] font-semibold tracking-[2px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
           onClick={onShowOverlay}
-          style={{ zIndex: Z_INDEX.CAROUSEL_CTA }}
           type="button"
         >
           Launch demo
