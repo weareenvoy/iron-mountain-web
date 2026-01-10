@@ -122,14 +122,9 @@ const SolutionFirstScreenTemplate = ({
       {/* Sticky Section Header - Fixed Position */}
       <div 
         ref={stickyHeaderRef}
-        className="fixed top-0 left-0 z-[100] w-full pointer-events-none transition-opacity duration-300"
+        className={`fixed top-0 left-0 z-[100] w-full pointer-events-none transition-opacity duration-300 bg-gradient-to-b from-[rgba(162,17,94,0.95)] to-[rgba(138,13,113,0.85)] backdrop-blur-[8px] ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
         data-solution-sticky-header
         data-visible={showStickyHeader}
-        style={{
-          background: 'linear-gradient(180deg, rgba(162, 17, 94, 0.95) 0%, rgba(138, 13, 113, 0.85) 100%)',
-          backdropFilter: 'blur(8px)',
-          opacity: showStickyHeader ? 1 : 0,
-        }}
       >
         {/* Subheadline */}
         <h2 className="px-[120px] pt-[20px] w-[700px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:w-[450px] group-data-[kiosk=kiosk-3]/kiosk:ml-[120px] group-data-[kiosk=kiosk-3]/kiosk:w-[330px]">

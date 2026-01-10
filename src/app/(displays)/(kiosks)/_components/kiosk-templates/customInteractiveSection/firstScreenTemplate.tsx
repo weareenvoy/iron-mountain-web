@@ -142,14 +142,9 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       {/* Sticky Section Header - Fixed Position */}
       <div 
         ref={stickyHeaderRef}
-        className="fixed top-0 left-0 z-[100] w-full pointer-events-none transition-opacity duration-300"
+        className={`fixed top-0 left-0 z-[100] w-full pointer-events-none transition-opacity duration-300 bg-gradient-to-b from-[rgba(27,117,188,0.95)] to-[rgba(20,71,125,0.85)] backdrop-blur-[8px] ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
         data-customInteractive-sticky-header
         data-visible={showStickyHeader}
-        style={{
-          background: 'linear-gradient(180deg, rgba(27, 117, 188, 0.95) 0%, rgba(20, 71, 125, 0.85) 100%)',
-          backdropFilter: 'blur(8px)',
-          opacity: showStickyHeader ? 1 : 0,
-        }}
       >
         {/* Eyebrow */}
         <h2 className="px-[120px] py-[20px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">

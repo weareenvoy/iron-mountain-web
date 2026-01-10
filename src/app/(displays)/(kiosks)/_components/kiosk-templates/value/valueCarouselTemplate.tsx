@@ -180,13 +180,9 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
       {/* Sticky Section Header - Fixed Position */}
       <div 
         ref={stickyHeaderRef}
-        className="fixed top-0 left-0 z-[100] w-full pointer-events-none transition-opacity duration-300"
+        className={`fixed top-0 left-0 z-[100] w-full pointer-events-none transition-opacity duration-300 bg-[#ededed] ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
         data-value-sticky-header
         data-visible={showStickyHeader}
-        style={{
-          background: '#ededed',
-          opacity: showStickyHeader ? 1 : 0,
-        }}
       >
         <div className="flex flex-col px-[120px] py-[20px]">
           <p className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#8a0d71]">
