@@ -167,7 +167,7 @@ const InitialState = memo(
                   className="absolute top-[48%] left-[50%]"
                   style={{
                     transform: `translate(-50%, -50%) rotate(0deg) translateY(-${ANIMATION_VALUES.DOT_ORBIT_RADIUS_PX}px)`,
-                  }}
+                  }} // Inline for consistency with animated dots - they all use the same orbit radius for their animation. The variable keeps this reference point updated in one place rather than 2 or more. Easier to maintain the animation this way.
                 >
                   <BlueDot className="h-[60px] w-[60px]" />
                 </div>
