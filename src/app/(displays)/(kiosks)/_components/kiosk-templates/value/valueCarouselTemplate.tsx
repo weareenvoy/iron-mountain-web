@@ -89,7 +89,7 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
       const lastScreenRect = lastScreen.getBoundingClientRect();
       const stickyHeaderHeight = stickyHeaderRef.current.offsetHeight;
       const stickyHeaderBottom = stickyHeaderHeight; // Since it's fixed at top: 0
-      const offset = 100; // Disappear 100px earlier
+      const offset = 1000; // Disappear 1000px earlier
       const sectionEndReached = lastScreenRect.bottom <= (stickyHeaderBottom + offset);
 
       // Show sticky header when label scrolls past top AND last screen bottom hasn't been reached
@@ -184,20 +184,19 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
         data-value-sticky-header
         data-visible={showStickyHeader}
         style={{
-          background: 'linear-gradient(180deg, rgba(138, 13, 113, 0.95) 0%, rgba(162, 17, 94, 0.85) 100%)',
-          backdropFilter: 'blur(8px)',
+          background: '#ededed',
           opacity: showStickyHeader ? 1 : 0,
         }}
       >
         <div className="flex flex-col px-[120px] py-[20px]">
-          <p className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
+          <p className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#8a0d71]">
             {renderRegisteredMark(normalizeMultiline(eyebrow))}
           </p>
           <div className="flex items-center gap-[41px] mt-[20px]">
             <div className="relative top-[25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
-              <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
+              <OutlinedDiamond aria-hidden="true" className="text-[#8a0d71]" focusable="false" />
             </div>
-            <h1 className="relative top-[30px] left-[-90px] text-[126px] leading-[1.3] font-normal tracking-[-6.3px] whitespace-nowrap text-[#ededed]">
+            <h1 className="relative top-[30px] left-[-90px] text-[126px] leading-[1.3] font-normal tracking-[-6.3px] whitespace-nowrap text-[#8a0d71]">
               {renderRegisteredMark(labelText)}
             </h1>
           </div>
