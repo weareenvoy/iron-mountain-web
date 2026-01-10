@@ -37,7 +37,10 @@ const SolutionFourthScreenTemplate = ({
   const entries = accordion?.length ? accordion : [];
 
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-hidden bg-transparent">
+    <div 
+      data-section-end="solution"
+      className="relative flex h-screen w-full flex-col overflow-hidden bg-transparent"
+    >
       {/* Background gradient (now transparent) */}
       <div className="absolute top-0 left-0 h-[5120px] w-full bg-transparent" />
 

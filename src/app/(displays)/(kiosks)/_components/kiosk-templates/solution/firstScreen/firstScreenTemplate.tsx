@@ -28,22 +28,32 @@ const SolutionFirstScreenTemplate = ({
 }: SolutionFirstScreenTemplateProps) => {
   const [showStickyHeader, setShowStickyHeader] = useState(false);
   const labelRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const stickyHeaderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (!labelRef.current) return;
+      if (!labelRef.current || !stickyHeaderRef.current) return;
 
       const labelRect = labelRef.current.getBoundingClientRect();
       const labelPastTop = labelRect.bottom < 0;
 
-      // Check if next section's video (Value) has reached the top
-      const nextSectionVideo = document.querySelector('[data-section-video="value"]');
-      const nextSectionVideoAtTop = nextSectionVideo 
-        ? nextSectionVideo.getBoundingClientRect().top <= 0 
-        : false;
+      // Find the last screen in the Solution section (thirdScreen or fourthScreen)
+      const lastScreen = document.querySelector('[data-section-end="solution"]');
+      if (!lastScreen) {
+        // Fallback to showing when label is past top if last screen not found
+        setShowStickyHeader(labelPastTop);
+        return;
+      }
 
-      // Show sticky header when this label scrolls past top BUT next section's video hasn't reached top
-      const shouldShow = labelPastTop && !nextSectionVideoAtTop;
+      // Check if sticky header's bottom would go past the last screen's bottom
+      const lastScreenRect = lastScreen.getBoundingClientRect();
+      const stickyHeaderHeight = stickyHeaderRef.current.offsetHeight;
+      const stickyHeaderBottom = stickyHeaderHeight; // Since it's fixed at top: 0
+      const sectionEndReached = lastScreenRect.bottom <= stickyHeaderBottom;
+
+      // Show sticky header when label scrolls past top AND last screen bottom hasn't been reached
+      const shouldShow = labelPastTop && !sectionEndReached;
       setShowStickyHeader(shouldShow);
     };
 
@@ -60,7 +70,11 @@ const SolutionFirstScreenTemplate = ({
   }, []);
 
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-visible bg-black">
+    <div 
+      ref={sectionRef}
+      data-section="solution"
+      className="relative flex h-screen w-full flex-col overflow-visible bg-black"
+    >
       {/* Background video */}
       <div 
         data-section-video="solution"
@@ -106,6 +120,7 @@ const SolutionFirstScreenTemplate = ({
 
       {/* Sticky Section Header - Fixed Position */}
       <div 
+        ref={stickyHeaderRef}
         className="fixed top-0 left-0 z-[100] w-full pointer-events-none transition-opacity duration-300"
         data-solution-sticky-header
         data-visible={showStickyHeader}

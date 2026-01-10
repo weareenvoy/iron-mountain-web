@@ -27,6 +27,7 @@ const ThirdScreenTemplate = ({
 }: ThirdScreenTemplateProps) => {
   return (
     <div
+      data-section-end="challenge"
       className="relative flex h-screen w-full flex-col overflow-x-hidden overflow-y-auto scroll-smooth bg-transparent"
       data-hero-image={item2Image}
     >

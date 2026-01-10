@@ -22,22 +22,32 @@ const FirstScreenTemplate = memo(
   ({ body, featuredStat1, featuredStat1Body, labelText, mainVideo, subheadline }: FirstScreenTemplateProps) => {
     const [showStickyHeader, setShowStickyHeader] = useState(false);
     const labelRef = useRef<HTMLDivElement>(null);
+    const sectionRef = useRef<HTMLDivElement>(null);
+    const stickyHeaderRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
       const handleScroll = () => {
-        if (!labelRef.current) return;
+        if (!labelRef.current || !stickyHeaderRef.current) return;
 
         const labelRect = labelRef.current.getBoundingClientRect();
         const labelPastTop = labelRect.bottom < 0;
 
-        // Check if next section's video (Solution) has reached the top
-        const nextSectionVideo = document.querySelector('[data-section-video="solution"]');
-        const nextSectionVideoAtTop = nextSectionVideo 
-          ? nextSectionVideo.getBoundingClientRect().top <= 0 
-          : false;
+        // Find the last screen in the Challenge section (thirdScreen)
+        const lastScreen = document.querySelector('[data-section-end="challenge"]');
+        if (!lastScreen) {
+          // Fallback to showing when label is past top if last screen not found
+          setShowStickyHeader(labelPastTop);
+          return;
+        }
 
-        // Show sticky header when this label scrolls past top BUT next section's video hasn't reached top
-        const shouldShow = labelPastTop && !nextSectionVideoAtTop;
+        // Check if sticky header's bottom would go past the last screen's bottom
+        const lastScreenRect = lastScreen.getBoundingClientRect();
+        const stickyHeaderHeight = stickyHeaderRef.current.offsetHeight;
+        const stickyHeaderBottom = stickyHeaderHeight; // Since it's fixed at top: 0
+        const sectionEndReached = lastScreenRect.bottom <= stickyHeaderBottom;
+
+        // Show sticky header when label scrolls past top AND last screen bottom hasn't been reached
+        const shouldShow = labelPastTop && !sectionEndReached;
         setShowStickyHeader(shouldShow);
       };
 
@@ -54,7 +64,11 @@ const FirstScreenTemplate = memo(
     }, []);
 
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-visible bg-black">
+    <div 
+      ref={sectionRef}
+      data-section="challenge"
+      className="relative flex h-screen w-full flex-col overflow-visible bg-black"
+    >
       {/* Background gradient - stays behind all content */}
       <div className="pointer-events-none absolute inset-0 top-[1290px] z-[1] h-[14400px] rounded-[100px] bg-[linear-gradient(180deg,#1B75BC_0.01%,#14477D_98%)] group-data-[kiosk=kiosk-2]/kiosk:top-[1240px] group-data-[kiosk=kiosk-2]/kiosk:h-[14450px]" />
 
@@ -100,6 +114,7 @@ const FirstScreenTemplate = memo(
 
       {/* Sticky Section Header - Fixed Position */}
       <div 
+        ref={stickyHeaderRef}
         className="fixed top-0 left-0 z-[100] w-full pointer-events-none transition-opacity duration-300"
         data-challenge-sticky-header
         data-visible={showStickyHeader}

@@ -30,10 +30,14 @@ export const buildValueSlides = (
     throw new Error('[buildValueSlides] No value screens provided from CMS. Fix CMS data.');
   }
 
+  const lastIndex = values.valueScreens.length - 1;
+
   return values.valueScreens.map((config, idx) => {
     if (!config.headline && !config.labelText) {
       throw new Error(`[buildValueSlides] Value screen ${idx} missing both headline and labelText. Fix CMS data.`);
     }
+
+    const isLastScreen = idx === lastIndex;
 
     return {
       id: `value-${idx}`,
@@ -42,6 +46,7 @@ export const buildValueSlides = (
           <ValueCarouselTemplate
             {...config}
             carouselId={config.carouselId ?? `${kioskId}-value-${idx}`}
+            isLastScreen={isLastScreen}
             onNavigateDown={handlers.onNavigateDown}
             onNavigateUp={handlers.onNavigateUp}
             registerCarouselHandlers={options?.registerCarouselHandlers}

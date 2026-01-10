@@ -140,6 +140,7 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
   return (
     <>
       <div
+        data-section-end="customInteractive"
         className="relative flex h-screen w-full flex-col overflow-visible bg-transparent"
         data-scroll-section="customInteractive-second-screen"
         ref={containerRef}

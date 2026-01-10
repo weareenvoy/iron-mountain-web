@@ -92,7 +92,10 @@ const SolutionThirdScreenTemplate = ({
   ];
 
   return (
-    <div className="relative z-1 flex h-screen w-full flex-col overflow-hidden bg-transparent">
+    <div 
+      data-section-end="solution"
+      className="relative z-1 flex h-screen w-full flex-col overflow-hidden bg-transparent"
+    >
       {/* Gradient backdrop */}
       <div className="absolute top-[-296px] left-0 h-[5416px] w-full rounded-t-[100px] bg-transparent" />
 

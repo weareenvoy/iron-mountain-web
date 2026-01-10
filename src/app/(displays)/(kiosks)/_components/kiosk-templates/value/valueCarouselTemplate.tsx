@@ -30,6 +30,8 @@ export type ValueCarouselTemplateProps = {
   readonly heroImageSrc?: string;
   /** Poster image for video player */
   readonly heroVideoPosterSrc?: string;
+  /** Whether this is the last screen in the Value section */
+  readonly isLastScreen?: boolean;
   /** Label text displayed with diamond icon */
   readonly labelText?: string;
   /** Main video URL (enables animated carousel variant) */
@@ -56,6 +58,7 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
     eyebrow,
     headline,
     heroVideoPosterSrc,
+    isLastScreen,
     labelText,
     mainVideo,
     registerCarouselHandlers,
@@ -64,17 +67,32 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
   
   const [showStickyHeader, setShowStickyHeader] = useState(false);
   const labelRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const stickyHeaderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (!labelRef.current) return;
+      if (!labelRef.current || !stickyHeaderRef.current) return;
 
       const labelRect = labelRef.current.getBoundingClientRect();
       const labelPastTop = labelRect.bottom < 0;
 
-      // Value section: show sticky header when label scrolls past top
-      // Could check for next section if there is one after Value
-      const shouldShow = labelPastTop;
+      // Find the last screen in the Value section
+      const lastScreen = document.querySelector('[data-section-end="value"]');
+      if (!lastScreen) {
+        // Fallback to showing when label is past top if last screen not found
+        setShowStickyHeader(labelPastTop);
+        return;
+      }
+
+      // Check if sticky header's bottom would go past the last screen's bottom
+      const lastScreenRect = lastScreen.getBoundingClientRect();
+      const stickyHeaderHeight = stickyHeaderRef.current.offsetHeight;
+      const stickyHeaderBottom = stickyHeaderHeight; // Since it's fixed at top: 0
+      const sectionEndReached = lastScreenRect.bottom <= stickyHeaderBottom;
+
+      // Show sticky header when label scrolls past top AND last screen bottom hasn't been reached
+      const shouldShow = labelPastTop && !sectionEndReached;
       setShowStickyHeader(shouldShow);
     };
 
@@ -111,6 +129,9 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
   return (
     <div
       {...(shouldEnableCarouselDelegation ? { 'data-scroll-section': 'value-carousel' } : {})}
+      {...(isLastScreen ? { 'data-section-end': 'value' } : {})}
+      ref={sectionRef}
+      data-section="value"
       className="relative flex h-screen w-full flex-col overflow-visible bg-transparent"
       data-carousel-id={carouselId}
     >
@@ -157,6 +178,7 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
 
       {/* Sticky Section Header - Fixed Position */}
       <div 
+        ref={stickyHeaderRef}
         className="fixed top-0 left-0 z-[100] w-full pointer-events-none transition-opacity duration-300"
         data-value-sticky-header
         data-visible={showStickyHeader}
