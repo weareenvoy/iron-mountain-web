@@ -89,7 +89,8 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
       const lastScreenRect = lastScreen.getBoundingClientRect();
       const stickyHeaderHeight = stickyHeaderRef.current.offsetHeight;
       const stickyHeaderBottom = stickyHeaderHeight; // Since it's fixed at top: 0
-      const sectionEndReached = lastScreenRect.bottom <= stickyHeaderBottom;
+      const offset = 100; // Disappear 100px earlier
+      const sectionEndReached = lastScreenRect.bottom <= (stickyHeaderBottom + offset);
 
       // Show sticky header when label scrolls past top AND last screen bottom hasn't been reached
       const shouldShow = labelPastTop && !sectionEndReached;

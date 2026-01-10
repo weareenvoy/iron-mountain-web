@@ -40,11 +40,12 @@ const FirstScreenTemplate = memo(
           return;
         }
 
-        // Check if sticky header's bottom would go past the last screen's bottom
-        const lastScreenRect = lastScreen.getBoundingClientRect();
-        const stickyHeaderHeight = stickyHeaderRef.current.offsetHeight;
-        const stickyHeaderBottom = stickyHeaderHeight; // Since it's fixed at top: 0
-        const sectionEndReached = lastScreenRect.bottom <= stickyHeaderBottom;
+      // Check if sticky header's bottom would go past the last screen's bottom
+      const lastScreenRect = lastScreen.getBoundingClientRect();
+      const stickyHeaderHeight = stickyHeaderRef.current.offsetHeight;
+      const stickyHeaderBottom = stickyHeaderHeight; // Since it's fixed at top: 0
+      const offset = 1000; // Disappear 1000px earlier
+      const sectionEndReached = lastScreenRect.bottom <= (stickyHeaderBottom + offset);
 
         // Show sticky header when label scrolls past top AND last screen bottom hasn't been reached
         const shouldShow = labelPastTop && !sectionEndReached;

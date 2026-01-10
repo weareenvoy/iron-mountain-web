@@ -50,7 +50,8 @@ const SolutionFirstScreenTemplate = ({
       const lastScreenRect = lastScreen.getBoundingClientRect();
       const stickyHeaderHeight = stickyHeaderRef.current.offsetHeight;
       const stickyHeaderBottom = stickyHeaderHeight; // Since it's fixed at top: 0
-      const sectionEndReached = lastScreenRect.bottom <= stickyHeaderBottom;
+      const offset = 1500; // Disappear 1500px earlier
+      const sectionEndReached = lastScreenRect.bottom <= (stickyHeaderBottom + offset);
 
       // Show sticky header when label scrolls past top AND last screen bottom hasn't been reached
       const shouldShow = labelPastTop && !sectionEndReached;
@@ -131,7 +132,7 @@ const SolutionFirstScreenTemplate = ({
         }}
       >
         {/* Subheadline */}
-        <h2 className="px-[120px] pt-[20px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:w-[450px] group-data-[kiosk=kiosk-3]/kiosk:ml-[120px] group-data-[kiosk=kiosk-3]/kiosk:w-[330px]">
+        <h2 className="px-[120px] pt-[20px] w-[700px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:w-[450px] group-data-[kiosk=kiosk-3]/kiosk:ml-[120px] group-data-[kiosk=kiosk-3]/kiosk:w-[330px]">
           {renderRegisteredMark(subheadline)}
         </h2>
 
