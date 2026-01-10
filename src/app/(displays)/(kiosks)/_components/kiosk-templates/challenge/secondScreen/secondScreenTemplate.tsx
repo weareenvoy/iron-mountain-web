@@ -38,24 +38,8 @@ const SecondScreenTemplate = ({ item1Body, item1Image, labelText, subheadline }:
         )}
       </div>
 
-      {/* Header Section */}
-      <div className="relative z-[2] px-[120px] pt-[300px] pb-[150px]">
-        <h2 className="mb-[200px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
-          {renderRegisteredMark(subheadline)}
-        </h2>
-
-        <div className="relative top-[180px] flex items-center gap-[41px]">
-          <div className="relative mr-[5px] flex h-[120px] w-[120px] items-center justify-center">
-            <Diamond aria-hidden="true" className="h-full w-full text-[#ededed]" focusable="false" strokeWidth={1.25} />
-          </div>
-          <h1 className="text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]">
-            {renderRegisteredMark(labelText)}
-          </h1>
-        </div>
-      </div>
-
       {/* Main Description - SCROLLABLE */}
-      <div className="relative top-[955px] left-[650px] z-[2] px-[120px] py-[250px] group-data-[kiosk=kiosk-3]/kiosk:top-[290px]">
+      <div className="relative top-[300px] left-[650px] z-[2] px-[120px] py-[250px] group-data-[kiosk=kiosk-3]/kiosk:top-[290px]">
         <p
           className="max-w-[1000px] text-[60px] leading-[1.3] font-normal tracking-[-3px] text-white group-data-[kiosk=kiosk-2]/kiosk:w-[1100px] group-data-[kiosk=kiosk-3]/kiosk:max-w-[1100px]"
           data-scroll-section="main-description"

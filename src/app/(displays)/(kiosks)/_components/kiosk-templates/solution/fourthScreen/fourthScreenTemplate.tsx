@@ -44,23 +44,8 @@ const SolutionFourthScreenTemplate = ({
       {/* Background gradient (now transparent) */}
       <div className="absolute top-0 left-0 h-[5120px] w-full bg-transparent" />
 
-      {/* Subheadline */}
-      <h2 className="absolute top-[400px] left-[120px] z-[1] w-[390px] -translate-y-full text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed]">
-        {renderRegisteredMark(subheadline)}
-      </h2>
-
-      {/* Solution label */}
-      <div className="absolute top-[790px] left-[140px] z-[1] flex items-center gap-[41px]">
-        <div className="relative top-[-25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
-          <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
-        </div>
-        <h1 className="relative top-[-20px] left-[-100px] text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]">
-          {labelText}
-        </h1>
-      </div>
-
       {/* Title */}
-      <div className="absolute top-[1260px] left-[240px] z-10 w-[1300px]">
+      <div className="absolute top-[230px] left-[240px] z-10 w-[1300px]">
         <p
           className="text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]"
           data-scroll-section="solution-fourth-title"

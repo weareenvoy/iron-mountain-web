@@ -48,24 +48,8 @@ const ThirdScreenTemplate = ({
         )}
       </div>
 
-      {/* Header Section */}
-      <div className="relative z-[2] px-[120px] pt-[300px] pb-[150px]">
-        <h2 className="mb-[200px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
-          {renderRegisteredMark(subheadline)}
-        </h2>
-
-        <div className="relative top-[180px] left-[20px] flex items-center gap-[41px]">
-          <div className="relative mr-0 flex h-[110px] w-[110px] items-center justify-center">
-            <Diamond aria-hidden="true" className="h-full w-full text-[#ededed]" focusable="false" strokeWidth={1.25} />
-          </div>
-          <h1 className="text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]">
-            {renderRegisteredMark(labelText)}
-          </h1>
-        </div>
-      </div>
-
       {/* Description Section - SCROLLABLE */}
-      <div className="relative top-[970px] z-[2] px-[120px] py-[250px] group-data-[kiosk=kiosk-3]/kiosk:top-[290px]">
+      <div className="relative top-[300px] z-[2] px-[120px] py-[250px] group-data-[kiosk=kiosk-3]/kiosk:top-[290px]">
         <p
           className="group-data-[kiosk=kiosk-3[/kiosk:leading-[1.3] max-w-[980px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white group-data-[kiosk=kiosk-2]/kiosk:w-[1070px] group-data-[kiosk=kiosk-3]/kiosk:max-w-[1070px]"
           data-scroll-section="description"
