@@ -154,7 +154,7 @@ const InitialState = memo(
                   className="relative top-[5px] z-10 text-[80px] leading-[1.3] font-normal tracking-[-4px] text-white"
                   transition={{
                     duration: 2,
-                    ease: 'easeInOut',
+                    ease: EASING.EASE_IN_OUT,
                     repeat: Infinity,
                     repeatType: 'loop',
                   }}

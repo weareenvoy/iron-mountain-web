@@ -4,6 +4,9 @@ import { motion, type SVGMotionProps } from 'framer-motion';
 
 type BlueDotProps = Omit<SVGMotionProps<SVGSVGElement>, 'children'>;
 
+// Standard easing curve matching kiosk animations
+const EASE_IN_OUT = [0.3, 0, 0.6, 1] as const;
+
 const BlueDot = (props: BlueDotProps) => (
   <motion.svg
     animate={{ opacity: [0.7, 1, 0.7], scale: [1, 1.2, 1] }}
@@ -11,7 +14,7 @@ const BlueDot = (props: BlueDotProps) => (
     height="59"
     transition={{
       duration: 2,
-      ease: 'easeInOut',
+      ease: EASE_IN_OUT,
       repeat: Infinity,
       repeatType: 'loop',
     }}

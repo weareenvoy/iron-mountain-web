@@ -14,14 +14,14 @@ export type SectionId = (typeof SECTION_IDS)[keyof typeof SECTION_IDS];
 export const IN_VIEW_CONFIG = {
   /**
    * Default threshold for 4K kiosk displays.
-   * Value represents the percentage of the element that must be visible.
-   *
+ * Value represents the percentage of the element that must be visible.
+ *
    * 0.3 (30%) chosen because:
-   * - Kiosk screens are 4K resolution with tall content
-   * - 30% ensures animations trigger when content is meaningfully visible
+ * - Kiosk screens are 4K resolution with tall content
+ * - 30% ensures animations trigger when content is meaningfully visible
    * - Lower values (e.g., 0.1) would trigger too early
-   * - Higher values (e.g., 0.5) might never trigger for below-fold content
-   */
+ * - Higher values (e.g., 0.5) might never trigger for below-fold content
+ */
   DEFAULT_THRESHOLD: 0.3,
 
   /**

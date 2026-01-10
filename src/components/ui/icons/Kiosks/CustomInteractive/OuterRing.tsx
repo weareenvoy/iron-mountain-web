@@ -4,6 +4,9 @@ import { motion, type SVGMotionProps } from 'framer-motion';
 
 type OuterRingProps = Omit<SVGMotionProps<SVGSVGElement>, 'children'>;
 
+// Standard easing curve matching kiosk animations
+const EASE_IN_OUT = [0.3, 0, 0.6, 1] as const;
+
 const OuterRing = (props: OuterRingProps) => (
   <motion.svg fill="none" height="916" viewBox="0 0 916 916" width="916" xmlns="http://www.w3.org/2000/svg" {...props}>
     <motion.circle
@@ -16,7 +19,7 @@ const OuterRing = (props: OuterRingProps) => (
       strokeWidth="17.791"
       style={{ originX: '50%', originY: '50%' }}
       transition={{
-        pathLength: { duration: 2, ease: 'easeInOut' },
+        pathLength: { duration: 2, ease: EASE_IN_OUT },
         rotate: { duration: 8, ease: 'linear', repeat: Infinity },
       }}
     />

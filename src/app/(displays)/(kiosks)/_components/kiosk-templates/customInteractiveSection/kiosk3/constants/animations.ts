@@ -64,11 +64,16 @@ export type SlideId = (typeof SLIDE_ID)[keyof typeof SLIDE_ID];
 /**
  * Standard easing curves for animations.
  * Extracted for reusability and consistency across all animations.
+ *
+ * All animations in this branch use the 30-60 easing curve [0.3, 0, 0.6, 1]
+ * for consistency, except:
+ * - Ring rotations use 'linear' for continuous spinning
+ * - Carousel indicator dots use 'easeIn'/'easeOut' for snappier UI feedback
  */
 export const EASING = {
-  /** Smooth ease in-out for general animations */
+  /** Smooth ease in-out for general animations - 30ms ease-in, 60ms ease-out */
   EASE_IN_OUT: [0.3, 0, 0.6, 1] as const,
-  /** Slightly snappier ease for carousel transitions */
+  /** Slightly snappier ease for carousel transitions - 30ms ease-in, 40ms ease-out */
   EASE_CAROUSEL: [0.3, 0, 0.4, 1] as const,
 } as const;
 
