@@ -1,6 +1,6 @@
 import { SquarePlay } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
 import ArrowIcon from '@/components/ui/icons/Kiosks/CustomInteractive/ArrowIcon';
 import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCFilledOrangeDiamond';
@@ -42,6 +42,10 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   secondaryCtaLabel,
 }: CustomInteractiveKiosk1FirstScreenTemplateProps) => {
   const [showOverlay, setShowOverlay] = useState(false);
+  const [showStickyHeader, setShowStickyHeader] = useState(false);
+  const eyebrowRef = useRef<HTMLHeadingElement>(null);
+  const stickyHeaderRef = useRef<HTMLDivElement>(null);
+  
   const isKiosk1 = kioskId === 'kiosk-1';
   const eyebrowText = eyebrow;
   const headlineText = headline;
@@ -49,6 +53,45 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   const ctaWidthClass = isKiosk3 ? 'w-[1360px]' : 'w-[1020px]';
   const secondaryLabelPadding = isKiosk3 ? 'pl-[320px]' : 'pl-[80px]';
   const secondaryIconOffset = isKiosk3 ? 'left-[-330px]' : 'left-[-70px]';
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!eyebrowRef.current || !stickyHeaderRef.current) return;
+
+      const eyebrowRect = eyebrowRef.current.getBoundingClientRect();
+      const eyebrowPastTop = eyebrowRect.bottom < 0;
+
+      // Find the last screen in the Custom Interactive section
+      const lastScreen = document.querySelector('[data-section-end="customInteractive"]');
+      if (!lastScreen) {
+        // Fallback to showing when eyebrow is past top if last screen not found
+        setShowStickyHeader(eyebrowPastTop);
+        return;
+      }
+
+      // Check if sticky header's bottom would go past the last screen's bottom
+      const lastScreenRect = lastScreen.getBoundingClientRect();
+      const stickyHeaderHeight = stickyHeaderRef.current.offsetHeight;
+      const stickyHeaderBottom = stickyHeaderHeight; // Since it's fixed at top: 0
+      const offset = 1000; // Disappear 1000px earlier
+      const sectionEndReached = lastScreenRect.bottom <= (stickyHeaderBottom + offset);
+
+      // Show sticky header when eyebrow scrolls past top AND last screen bottom hasn't been reached
+      const shouldShow = eyebrowPastTop && !sectionEndReached;
+      setShowStickyHeader(shouldShow);
+    };
+
+    // Find the scrolling container (BaseKioskView)
+    const scrollContainer = document.querySelector('[data-kiosk]');
+    if (scrollContainer) {
+      scrollContainer.addEventListener('scroll', handleScroll);
+      handleScroll(); // Check initial state
+
+      return () => {
+        scrollContainer.removeEventListener('scroll', handleScroll);
+      };
+    }
+  }, []);
 
   const handleSecondaryClick = () => {
     setShowOverlay(true);
@@ -89,9 +132,30 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       </div>
 
       {/* Eyebrow */}
-      <h2 className="absolute top-[200px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-3]/kiosk:top-[240px]">
+      <h2 
+        ref={eyebrowRef}
+        className="absolute top-[200px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-3]/kiosk:top-[240px]"
+      >
         {renderRegisteredMark(eyebrowText)}
       </h2>
+
+      {/* Sticky Section Header - Fixed Position */}
+      <div 
+        ref={stickyHeaderRef}
+        className="fixed top-0 left-0 z-[100] w-full pointer-events-none transition-opacity duration-300"
+        data-customInteractive-sticky-header
+        data-visible={showStickyHeader}
+        style={{
+          background: 'linear-gradient(180deg, rgba(27, 117, 188, 0.95) 0%, rgba(20, 71, 125, 0.85) 100%)',
+          backdropFilter: 'blur(8px)',
+          opacity: showStickyHeader ? 1 : 0,
+        }}
+      >
+        {/* Eyebrow */}
+        <h2 className="px-[120px] py-[20px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
+          {renderRegisteredMark(eyebrowText)}
+        </h2>
+      </div>
 
       {/* Headline */}
       <h1
