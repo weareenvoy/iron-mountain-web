@@ -116,20 +116,20 @@ const FirstScreenTemplate = memo(
       {/* Sticky Section Header - Fixed Position */}
       <div 
         ref={stickyHeaderRef}
-        className={`fixed top-0 left-0 z-[100] w-full pointer-events-none transition-opacity duration-300 bg-gradient-to-b from-[rgba(27,117,188,0.95)] to-[rgba(20,71,125,0.85)] backdrop-blur-[8px] ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
+        className={`fixed top-0 left-0 z-[100] w-full h-[1369px] pointer-events-none transition-opacity duration-300 bg-[linear-gradient(180deg,#155A95_65.52%,rgba(21,75,130,0)_99.31%)] backdrop-blur-[8px] ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
         data-challenge-sticky-header
         data-visible={showStickyHeader}
       >
         {/* Subheadline */}
-        <div className="px-[120px] pt-[20px]">
+        <div className="px-[120px] pt-[20px] pb-[375px] pl-[150px]">
           <h2 className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
             {renderRegisteredMark(subheadline)}
           </h2>
         </div>
 
         {/* Challenge Label */}
-        <div className="flex items-center gap-[41px] px-[128px] pb-[20px] group-data-[kiosk=kiosk-2]/kiosk:left-[10px] group-data-[kiosk=kiosk-3]/kiosk:left-[10px]">
-          <div className="relative mr-[5px] flex h-[110px] w-[110px] items-center justify-center">
+        <div className="flex items-center gap-[41px] px-[128px] pb-[20px] pl-[180px] group-data-[kiosk=kiosk-2]/kiosk:left-[10px] group-data-[kiosk=kiosk-3]/kiosk:left-[10px]">
+          <div className="relative mr-[5px] flex h-[86px] w-[86px] items-center justify-center">
             <Diamond aria-hidden="true" className="h-full w-full text-[#ededed]" focusable="false" strokeWidth={1.25} />
           </div>
           <h1 className="text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]">
