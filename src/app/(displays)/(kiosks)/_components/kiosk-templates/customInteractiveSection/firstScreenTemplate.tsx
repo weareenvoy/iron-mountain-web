@@ -72,18 +72,14 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       )}
       data-scroll-section="customInteractive-first-screen"
     >
-      <div
-        className="absolute inset-0 group-data-[kiosk=kiosk-1]/kiosk:h-[10530px] group-data-[kiosk=kiosk-3]/kiosk:h-[10430px]"
-        style={{
-          background: 'linear-gradient(170deg, #2481E3 -6.53%, #123E6C 85.02%, #0F355C 92.02%, #091E36 117.7%)',
-        }}
-      />
+      {/* Background gradient - defined in globals.css for readability and ease of future updates */}
+      <div className="absolute inset-0 bg-gradient-kiosk-blue group-data-[kiosk=kiosk-1]/kiosk:h-[10530px] group-data-[kiosk=kiosk-3]/kiosk:h-[10430px]" />
 
       {/* Overlay - Demo Screen */}
       <div
         className={cn(
           'absolute inset-0 transition-opacity duration-700',
-          showOverlay ? 'pointer-events-auto z-[999] opacity-100' : 'pointer-events-none -z-10 opacity-0'
+          showOverlay ? 'pointer-events-auto z-999 opacity-100' : 'pointer-events-none -z-10 opacity-0'
         )}
       >
         <CustomInteractiveDemoScreenTemplate
@@ -118,7 +114,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
         )}
       >
         <button
-          className="group flex h-[200px] items-center justify-between rounded-[999px] bg-[#ededed] px-[100px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-[#14477d] shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-[19px] transition-transform duration-150 group-data-[kiosk=kiosk-2]/kiosk:hidden hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+          className="group flex h-[200px] items-center justify-between rounded-[999px] bg-[#ededed] px-[100px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-[#14477d] shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-[19px] transition-transform duration-150 group-data-[kiosk=kiosk-2]/kiosk:hidden hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
           onClick={handlePrimaryClick}
           type="button"
         >
@@ -127,8 +123,9 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
             <ArrowIcon />
           </div>
         </button>
+        {/* CTA button gradient - defined in globals.css for readability and ease of future updates */}
         <button
-          className="group flex h-[200px] items-center justify-between rounded-[999px] bg-[linear-gradient(296deg,#A2115E_28.75%,#8A0D71_82.59%)] px-[100px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-transform duration-150 hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+          className="group flex h-[200px] items-center justify-between rounded-[999px] bg-gradient-kiosk-magenta px-[100px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-transform duration-150 hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
           onClick={handleSecondaryClick}
           type="button"
         >

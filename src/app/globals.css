@@ -152,4 +152,13 @@
       46% 3%
     );
   }
+
+  /* Kiosk background gradients */
+  .bg-gradient-kiosk-blue {
+    background: linear-gradient(170deg, #2481E3 -6.53%, #123E6C 125.02%, #0F355C 92.02%, #091E36 117.7%);
+  }
+
+  .bg-gradient-kiosk-magenta {
+    background: linear-gradient(296deg, #A2115E 28.75%, #8A0D71 82.59%);
+  }
 }
