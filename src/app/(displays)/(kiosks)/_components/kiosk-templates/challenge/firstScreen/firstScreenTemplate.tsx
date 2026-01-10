@@ -121,7 +121,7 @@ const FirstScreenTemplate = memo(
         data-visible={showStickyHeader}
       >
         {/* Subheadline */}
-        <div className="px-[120px] pt-[20px] pb-[375px] pl-[150px]">
+        <div className="px-[120px] pt-[240px] pb-[375px] pl-[150px]">
           <h2 className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
             {renderRegisteredMark(subheadline)}
           </h2>
