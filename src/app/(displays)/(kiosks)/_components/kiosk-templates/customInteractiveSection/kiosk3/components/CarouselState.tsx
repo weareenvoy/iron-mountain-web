@@ -106,7 +106,9 @@ const CarouselState = memo(
                             initial={{ opacity: 0 }}
                             key={`${current.id}-bullet-${bulletIndex}`}
                             transition={{
-                              delay: ANIMATION_VALUES.BULLET_STAGGER_START + bulletIndex * ANIMATION_VALUES.BULLET_STAGGER_DELAY,
+                              delay:
+                                ANIMATION_VALUES.BULLET_STAGGER_START +
+                                bulletIndex * ANIMATION_VALUES.BULLET_STAGGER_DELAY,
                               duration: 0.4,
                               ease: EASING.EASE_IN_OUT,
                             }}
@@ -143,7 +145,7 @@ const CarouselState = memo(
                       {current.primaryVideoSrc && (
                         <video
                           autoPlay
-                          className="h-full w-full origin-center -rotate-45 scale-[1.35] object-cover"
+                          className="h-full w-full origin-center scale-[1.35] -rotate-45 object-cover"
                           loop
                           muted
                           playsInline
@@ -176,7 +178,7 @@ const CarouselState = memo(
                     >
                       <Image
                         alt={current.secondaryImageAlt}
-                        className="origin-center -rotate-45 scale-[1.35] object-cover"
+                        className="origin-center scale-[1.35] -rotate-45 object-cover"
                         fill
                         sizes="880px"
                         src={current.secondaryImageSrc}
@@ -194,7 +196,7 @@ const CarouselState = memo(
 
         {/* CTA - Only visible when carousel is shown - gradient defined in globals.css for readability and ease of future updates */}
         <button
-          className="group absolute top-[2630px] left-[240px] z-11 flex h-[200px] items-center gap-[18px] rounded-[999px] bg-gradient-kiosk-magenta px-[110px] text-[55px] leading-[1.1] font-semibold tracking-[2px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+          className="group bg-gradient-kiosk-magenta absolute top-[2630px] left-[240px] z-11 flex h-[200px] items-center gap-[18px] rounded-[999px] px-[110px] text-[55px] leading-[1.1] font-semibold tracking-[2px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
           onClick={onShowOverlay}
           type="button"
         >

@@ -56,10 +56,10 @@ export type SlideId = (typeof SLIDE_ID)[keyof typeof SLIDE_ID];
  * - Carousel indicator dots use 'easeIn'/'easeOut' for snappier UI feedback
  */
 export const EASING = {
-  /** Smooth ease in-out for general animations - 30ms ease-in, 60ms ease-out */
-  EASE_IN_OUT: [0.3, 0, 0.6, 1] as const,
   /** Slightly snappier ease for carousel transitions - 30ms ease-in, 40ms ease-out */
   EASE_CAROUSEL: [0.3, 0, 0.4, 1] as const,
+  /** Smooth ease in-out for general animations - 30ms ease-in, 60ms ease-out */
+  EASE_IN_OUT: [0.3, 0, 0.6, 1] as const,
 } as const;
 
 /**

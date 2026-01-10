@@ -22,15 +22,15 @@ type Kiosk3SecondScreenState = {
  */
 type Kiosk3SecondScreenAction =
   /** User clicked "Tap to begin" button - triggers button morph and carousel reveal */
-  | { type: 'TAP_TO_BEGIN' }
-  /** Carousel index changed (user navigated slides) - updates current slide tracking */
   | { carouselIndex: number; type: 'SET_CAROUSEL_INDEX' }
-  /** Carousel slide exit animation state changed - coordinates morphing diamond exit */
+  /** Carousel index changed (user navigated slides) - updates current slide tracking */
   | { isExiting: boolean; type: 'SET_IS_EXITING' }
-  /** User dismissed demo overlay - returns to carousel view */
+  /** Carousel slide exit animation state changed - coordinates morphing diamond exit */
   | { type: 'HIDE_OVERLAY' }
+  /** User dismissed demo overlay - returns to carousel view */
+  | { type: 'SHOW_OVERLAY' }
   /** User clicked "Launch demo" button - shows fullscreen demo overlay */
-  | { type: 'SHOW_OVERLAY' };
+  | { type: 'TAP_TO_BEGIN' };
 
 const initialState: Kiosk3SecondScreenState = {
   carouselIndex: 0,
@@ -39,51 +39,6 @@ const initialState: Kiosk3SecondScreenState = {
   showCarousel: false,
   showOverlay: false,
 };
-
-/**
- * Reducer for Kiosk 3 Second Screen state machine.
- * Ensures state transitions are predictable and prevent impossible states.
- */
-function kiosk3SecondScreenReducer(
-  state: Kiosk3SecondScreenState,
-  action: Kiosk3SecondScreenAction
-): Kiosk3SecondScreenState {
-  switch (action.type) {
-    case 'TAP_TO_BEGIN':
-      return {
-        ...state,
-        isButtonTransitioning: true,
-        showCarousel: true,
-      };
-
-    case 'SET_CAROUSEL_INDEX':
-      return {
-        ...state,
-        carouselIndex: action.carouselIndex,
-      };
-
-    case 'SET_IS_EXITING':
-      return {
-        ...state,
-        isCarouselExiting: action.isExiting,
-      };
-
-    case 'SHOW_OVERLAY':
-      return {
-        ...state,
-        showOverlay: true,
-      };
-
-    case 'HIDE_OVERLAY':
-      return {
-        ...state,
-        showOverlay: false,
-      };
-
-    default:
-      return state;
-  }
-}
 
 /**
  * Custom hook that encapsulates the state management logic for Kiosk 3 Second Screen.
@@ -133,4 +88,49 @@ export function useKiosk3SecondScreenState() {
     showCarousel: state.showCarousel,
     showOverlay: state.showOverlay,
   };
+}
+
+/**
+ * Reducer for Kiosk 3 Second Screen state machine.
+ * Ensures state transitions are predictable and prevent impossible states.
+ */
+function kiosk3SecondScreenReducer(
+  state: Kiosk3SecondScreenState,
+  action: Kiosk3SecondScreenAction
+): Kiosk3SecondScreenState {
+  switch (action.type) {
+    case 'HIDE_OVERLAY':
+      return {
+        ...state,
+        showOverlay: false,
+      };
+
+    case 'SET_CAROUSEL_INDEX':
+      return {
+        ...state,
+        carouselIndex: action.carouselIndex,
+      };
+
+    case 'SET_IS_EXITING':
+      return {
+        ...state,
+        isCarouselExiting: action.isExiting,
+      };
+
+    case 'SHOW_OVERLAY':
+      return {
+        ...state,
+        showOverlay: true,
+      };
+
+    case 'TAP_TO_BEGIN':
+      return {
+        ...state,
+        isButtonTransitioning: true,
+        showCarousel: true,
+      };
+
+    default:
+      return state;
+  }
 }
