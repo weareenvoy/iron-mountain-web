@@ -8,6 +8,7 @@ import CircularCarousel, { type CarouselSlide } from './CircularCarousel';
 import {
   ANIMATION_VALUES,
   DIAMOND_ANIMATIONS,
+  EASING,
   getDecorativeSVGVariant,
   getPrimaryDiamondClass,
   getSecondaryDiamondClass,
@@ -109,7 +110,7 @@ const CarouselState = memo(
                             transition={{
                               delay: ANIMATION_VALUES.BULLET_STAGGER_START + bulletIndex * ANIMATION_VALUES.BULLET_STAGGER_DELAY,
                               duration: 0.4,
-                              ease: [0.3, 0, 0.6, 1],
+                              ease: EASING.EASE_IN_OUT,
                             }}
                           >
                             <span className="mt-[30px] mr-[40px] ml-[-50px] inline-block h-[32px] w-[32px] rotate-45 rounded-[4px] border-4 border-white/80" />
@@ -149,7 +150,7 @@ const CarouselState = memo(
                           muted
                           playsInline
                           src={current.primaryVideoSrc}
-                          style={{ scale: ANIMATION_VALUES.DIAMOND_VIDEO_SCALE }}
+                          style={{ transform: `scale(${ANIMATION_VALUES.DIAMOND_VIDEO_SCALE})` }}
                         />
                       )}
                     </motion.div>
@@ -182,7 +183,7 @@ const CarouselState = memo(
                         fill
                         sizes="880px"
                         src={current.secondaryImageSrc}
-                        style={{ scale: ANIMATION_VALUES.DIAMOND_VIDEO_SCALE }}
+                        style={{ transform: `scale(${ANIMATION_VALUES.DIAMOND_VIDEO_SCALE})` }}
                       />
                     </motion.div>
                   </AnimatePresence>

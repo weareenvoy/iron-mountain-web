@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { memo, useEffect, useMemo, useRef } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { getMorphingDiamondAnimation, MORPHING_DIAMOND, TRANSITIONS, Z_INDEX } from '../constants';
 
 type MorphingDiamondProps = {
@@ -42,34 +42,27 @@ const MorphingDiamond = memo(({ carouselIndex, isCarouselExiting, showCarousel, 
   const diamondAnimation = getMorphingDiamondAnimation(showCarousel, carouselIndex, isCarouselExiting);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Use videoAsset directly - URL normalization not needed as carousel videos work with the same format
-  const normalizedVideoSrc = useMemo(() => videoAsset, [videoAsset]);
-
   // Ensure video loads and handle errors
   useEffect(() => {
     const videoElement = videoRef.current;
     if (!videoElement) return;
 
-    // Force video to load if src is empty (happens after Strict Mode unmount/remount)
-    if (!videoElement.src && normalizedVideoSrc) {
-      videoElement.src = normalizedVideoSrc;
-      videoElement.load();
-    }
-
-    const handleError = (e: Event) => {
-      // Video load errors are handled silently in production
-      // In development, check network tab for detailed error information
-      void e;
+    const handleError = () => {
+      // Video load errors are handled silently
+      // Check network tab for detailed error information
     };
 
     videoElement.addEventListener('error', handleError);
 
     return () => {
       videoElement.removeEventListener('error', handleError);
-      // Only pause on cleanup, don't clear src to avoid React 18 Strict Mode issues
       videoElement.pause();
     };
-  }, [normalizedVideoSrc]);
+  }, [videoAsset]);
+
+  // Use unique key based on videoAsset to force remount on video change
+  // This properly handles React 18 Strict Mode instead of workarounds
+  const videoKey = `morphing-diamond-${videoAsset}`;
 
   return (
     <AnimatePresence mode="wait">
@@ -83,7 +76,7 @@ const MorphingDiamond = memo(({ carouselIndex, isCarouselExiting, showCarousel, 
               ? { opacity: 0, scale: 0, x: MORPHING_DIAMOND.CAROUSEL.x, y: MORPHING_DIAMOND.CAROUSEL.y }
               : MORPHING_DIAMOND.BACKGROUND
           }
-          key="morphing-diamond"
+          key={videoKey}
           style={{ zIndex: Z_INDEX.BACKGROUND }}
           transition={TRANSITIONS.CAROUSEL}
         >
@@ -102,11 +95,12 @@ const MorphingDiamond = memo(({ carouselIndex, isCarouselExiting, showCarousel, 
             <video
               autoPlay
               className="h-full w-full origin-center object-cover"
+              key={videoKey}
               loop
               muted
               playsInline
               ref={videoRef}
-              src={normalizedVideoSrc}
+              src={videoAsset}
             />
             <div className="absolute inset-0 bg-linear-to-t from-black/25 via-transparent to-transparent" />
           </motion.div>

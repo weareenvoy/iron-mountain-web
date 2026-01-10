@@ -1,14 +1,17 @@
 'use client';
 
 import { useInView } from 'framer-motion';
-import { memo, useMemo, useRef } from 'react';
+import { memo, useRef } from 'react';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
 import CarouselState from './components/CarouselState';
 import InitialState from './components/InitialState';
 import MorphingDiamond from './components/MorphingDiamond';
-import { IN_VIEW_THRESHOLD, SECTION_IDS, Z_INDEX } from './constants';
+import { IN_VIEW_CONFIG, SECTION_IDS, Z_INDEX } from './constants';
 import { useKiosk3SecondScreenState } from './hooks/useKiosk3SecondScreenState';
 import type { CarouselSlide } from './components/CircularCarousel';
+
+// Constant empty array to prevent unnecessary re-renders
+const EMPTY_SLIDES: readonly CarouselSlide[] = [];
 
 /**
  * Props for the combined second screen template for Kiosk 3.
@@ -99,11 +102,11 @@ const Kiosk3SecondScreenTemplate = memo(
     } = useKiosk3SecondScreenState();
 
     const ref = useRef(null);
-    const isInView = useInView(ref, { amount: IN_VIEW_THRESHOLD, once: true });
+    const isInView = useInView(ref, { amount: IN_VIEW_CONFIG.DEFAULT_THRESHOLD, once: true });
 
-    // Memoize expensive computations to avoid recalculation on every render
-    const safeSlides = useMemo(() => slides ?? [], [slides]);
-    const hasValidVideo = useMemo(() => Boolean(videoAsset && videoAsset.trim().length > 0), [videoAsset]);
+    // Use constant empty array to prevent unnecessary re-renders when slides is undefined
+    const safeSlides = slides ?? EMPTY_SLIDES;
+    const hasValidVideo = Boolean(videoAsset && videoAsset.trim().length > 0);
 
     // Early return for invalid data - no cleanup needed as component won't mount
     if (safeSlides.length === 0 || !headline || !hasValidVideo || !videoAsset) {

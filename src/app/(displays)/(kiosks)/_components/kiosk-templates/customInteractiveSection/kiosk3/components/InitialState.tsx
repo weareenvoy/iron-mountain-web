@@ -6,7 +6,7 @@ import InnerRing from '@/components/ui/icons/Kiosks/CustomInteractive/InnerRing'
 import OuterRing from '@/components/ui/icons/Kiosks/CustomInteractive/OuterRing';
 import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
-import { ANIMATION_VALUES, TRANSITIONS } from '../constants';
+import { ANIMATION_VALUES, EASING, TRANSITIONS } from '../constants';
 
 // Configuration for animated dots around the "Tap to begin" button
 // Dots animate in sequence, rotating from 0deg to their target position
@@ -185,7 +185,7 @@ const InitialState = memo(
                       transform: `translate(-50%, -50%) rotate(0deg) translateY(-${ANIMATION_VALUES.DOT_ORBIT_RADIUS_PX}px)`,
                     }}
                     key={`dot-${index + 2}`}
-                    transition={{ delay, duration: ANIMATION_VALUES.DOT_ANIMATION_DURATION, ease: [0.3, 0, 0.6, 1] }}
+                    transition={{ delay, duration: ANIMATION_VALUES.DOT_ANIMATION_DURATION, ease: EASING.EASE_IN_OUT }}
                   >
                     <BlueDot className="h-[60px] w-[60px]" />
                   </motion.div>

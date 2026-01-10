@@ -1,5 +1,34 @@
 /**
  * Animation constants for Kiosk 3 Custom Interactive screens
+ *
+ * ⚠️ **CRITICAL LIMITATION: 4K DISPLAY COUPLING**
+ *
+ * This component is designed exclusively for 3840×2160 (4K) kiosk displays.
+ * All pixel-based positioning will break on other resolutions.
+ *
+ * **Known Issues:**
+ * - Will not work on 1920×1080 (1080p) displays
+ * - Will not work on non-16:9 aspect ratios
+ * - Will not work on 8K or other higher resolutions
+ *
+ * **Affected Constants:**
+ * - MORPHING_DIAMOND.CAROUSEL.{x, y}
+ * - MORPHING_DIAMOND.EXIT.{x, y}
+ * - MORPHING_DIAMOND.VIDEO_LEFT_BACKGROUND
+ * - PRIMARY_DIAMOND_POSITIONS (all variants)
+ * - SECONDARY_DIAMOND_POSITIONS (all variants)
+ * - DecorativeSVGGroup positioning (see SVG_GROUP_CONFIG)
+ *
+ * **Future Work Required:**
+ * To make this responsive, convert to one of:
+ * 1. Viewport units (vw/vh)
+ * 2. CSS calc() with base resolution ratios
+ * 3. Runtime JavaScript scaling based on window dimensions
+ *
+ * **Deployment Requirement:**
+ * Only deploy to environments with confirmed 4K kiosk hardware.
+ *
+ * @see https://github.com/[org]/[repo]/issues/[number] for tracking
  */
 
 /**
@@ -33,18 +62,29 @@ export const SLIDE_ID = {
 export type SlideId = (typeof SLIDE_ID)[keyof typeof SLIDE_ID];
 
 /**
+ * Standard easing curves for animations.
+ * Extracted for reusability and consistency across all animations.
+ */
+export const EASING = {
+  /** Smooth ease in-out for general animations */
+  EASE_IN_OUT: [0.3, 0, 0.6, 1] as const,
+  /** Slightly snappier ease for carousel transitions */
+  EASE_CAROUSEL: [0.3, 0, 0.4, 1] as const,
+} as const;
+
+/**
  * Framer Motion transition configurations.
  * Standardized easing curves and durations for consistent animations.
  */
 export const TRANSITIONS = {
   /** Standard carousel transitions (slides, diamonds) - 600ms */
-  CAROUSEL: { duration: 0.6, ease: [0.3, 0, 0.4, 1] as const },
+  CAROUSEL: { duration: 0.6, ease: EASING.EASE_CAROUSEL },
   /** Fade transitions (initial state, overlays) */
-  FADE: { duration: 0.5, ease: [0.3, 0, 0.6, 1] as const },
+  FADE: { duration: 0.5, ease: EASING.EASE_IN_OUT },
   /** Slide content (text, bullets) with delay for stagger effect */
-  SLIDE_CONTENT: { delay: 0.2, duration: 0.4, ease: [0.3, 0, 0.6, 1] as const },
+  SLIDE_CONTENT: { delay: 0.2, duration: 0.4, ease: EASING.EASE_IN_OUT },
   /** SVG decorative elements scale animation */
-  SVG_SCALE: { duration: 0.6, ease: [0.3, 0, 0.6, 1] as const },
+  SVG_SCALE: { duration: 0.6, ease: EASING.EASE_IN_OUT },
 } as const;
 
 /**

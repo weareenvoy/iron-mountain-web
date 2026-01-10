@@ -68,8 +68,10 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
     setIsTransitioning(true);
     setIsExiting(true);
 
+    // Capture total in closure to prevent race condition if slides change during animation
+    const slideCount = total;
     timeoutRef.current = window.setTimeout(() => {
-      setIndex(i => (i + 1) % total);
+      setIndex(i => (i + 1) % slideCount);
       setIsExiting(false);
       setIsTransitioning(false);
     }, ANIMATION_DURATION_MS.CAROUSEL);
@@ -82,8 +84,10 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
     setIsTransitioning(true);
     setIsExiting(true);
 
+    // Capture total in closure to prevent race condition if slides change during animation
+    const slideCount = total;
     timeoutRef.current = window.setTimeout(() => {
-      setIndex(i => (i - 1 + total) % total);
+      setIndex(i => (i - 1 + slideCount) % slideCount);
       setIsExiting(false);
       setIsTransitioning(false);
     }, ANIMATION_DURATION_MS.CAROUSEL);

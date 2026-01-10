@@ -17,13 +17,19 @@ type Kiosk3SecondScreenState = {
 };
 
 /**
- * Actions for state machine transitions
+ * Actions for state machine transitions.
+ * Each action represents a specific user interaction or animation state change.
  */
 type Kiosk3SecondScreenAction =
+  /** User clicked "Tap to begin" button - triggers button morph and carousel reveal */
   | { type: 'TAP_TO_BEGIN' }
+  /** Carousel index changed (user navigated slides) - updates current slide tracking */
   | { carouselIndex: number; type: 'SET_CAROUSEL_INDEX' }
+  /** Carousel slide exit animation state changed - coordinates morphing diamond exit */
   | { isExiting: boolean; type: 'SET_IS_EXITING' }
+  /** User dismissed demo overlay - returns to carousel view */
   | { type: 'HIDE_OVERLAY' }
+  /** User clicked "Launch demo" button - shows fullscreen demo overlay */
   | { type: 'SHOW_OVERLAY' };
 
 const initialState: Kiosk3SecondScreenState = {
