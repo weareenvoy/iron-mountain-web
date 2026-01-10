@@ -1,4 +1,83 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useReducer } from 'react';
+
+/**
+ * State for Kiosk 3 Second Screen animation sequence
+ */
+type Kiosk3SecondScreenState = {
+  /** Current carousel slide index (0-based) */
+  carouselIndex: number;
+  /** Whether "Tap to begin" button is transitioning/morphing */
+  isButtonTransitioning: boolean;
+  /** Whether current carousel slide is exiting */
+  isCarouselExiting: boolean;
+  /** Whether carousel is visible (main animation state) */
+  showCarousel: boolean;
+  /** Whether demo overlay is visible */
+  showOverlay: boolean;
+};
+
+/**
+ * Actions for state machine transitions
+ */
+type Kiosk3SecondScreenAction =
+  | { type: 'TAP_TO_BEGIN' }
+  | { carouselIndex: number; type: 'SET_CAROUSEL_INDEX' }
+  | { isExiting: boolean; type: 'SET_IS_EXITING' }
+  | { type: 'HIDE_OVERLAY' }
+  | { type: 'SHOW_OVERLAY' };
+
+const initialState: Kiosk3SecondScreenState = {
+  carouselIndex: 0,
+  isButtonTransitioning: false,
+  isCarouselExiting: false,
+  showCarousel: false,
+  showOverlay: false,
+};
+
+/**
+ * Reducer for Kiosk 3 Second Screen state machine.
+ * Ensures state transitions are predictable and prevent impossible states.
+ */
+function kiosk3SecondScreenReducer(
+  state: Kiosk3SecondScreenState,
+  action: Kiosk3SecondScreenAction
+): Kiosk3SecondScreenState {
+  switch (action.type) {
+    case 'TAP_TO_BEGIN':
+      return {
+        ...state,
+        isButtonTransitioning: true,
+        showCarousel: true,
+      };
+
+    case 'SET_CAROUSEL_INDEX':
+      return {
+        ...state,
+        carouselIndex: action.carouselIndex,
+      };
+
+    case 'SET_IS_EXITING':
+      return {
+        ...state,
+        isCarouselExiting: action.isExiting,
+      };
+
+    case 'SHOW_OVERLAY':
+      return {
+        ...state,
+        showOverlay: true,
+      };
+
+    case 'HIDE_OVERLAY':
+      return {
+        ...state,
+        showOverlay: false,
+      };
+
+    default:
+      return state;
+  }
+}
 
 /**
  * Custom hook that encapsulates the state management logic for Kiosk 3 Second Screen.
@@ -8,48 +87,44 @@ import { useCallback, useState } from 'react';
  * 2. Carousel state (slides with media)
  * 3. Demo overlay state
  *
+ * Uses useReducer for better state transition management and prevention of impossible states.
+ *
  * @returns State values and stable event handlers
  */
 export function useKiosk3SecondScreenState() {
-  // Core animation states
-  const [showCarousel, setShowCarousel] = useState(false);
-  const [showOverlay, setShowOverlay] = useState(false);
-  const [carouselIndex, setCarouselIndex] = useState(0);
-  const [isCarouselExiting, setIsCarouselExiting] = useState(false);
-  const [isButtonTransitioning, setIsButtonTransitioning] = useState(false);
+  const [state, dispatch] = useReducer(kiosk3SecondScreenReducer, initialState);
 
-  // Stable event handlers (setState functions are stable, so empty deps are safe)
+  // Stable event handlers
   const handleTapToBegin = useCallback(() => {
-    setIsButtonTransitioning(true);
-    setShowCarousel(true);
+    dispatch({ type: 'TAP_TO_BEGIN' });
   }, []);
 
   const handleShowOverlay = useCallback(() => {
-    setShowOverlay(true);
+    dispatch({ type: 'SHOW_OVERLAY' });
   }, []);
 
   const handleHideOverlay = useCallback(() => {
-    setShowOverlay(false);
+    dispatch({ type: 'HIDE_OVERLAY' });
   }, []);
 
   const handleIndexChange = useCallback((index: number) => {
-    setCarouselIndex(index);
+    dispatch({ carouselIndex: index, type: 'SET_CAROUSEL_INDEX' });
   }, []);
 
   const handleIsExitingChange = useCallback((isExiting: boolean) => {
-    setIsCarouselExiting(isExiting);
+    dispatch({ isExiting, type: 'SET_IS_EXITING' });
   }, []);
 
   return {
-    carouselIndex,
+    carouselIndex: state.carouselIndex,
     handleHideOverlay,
     handleIndexChange,
     handleIsExitingChange,
     handleShowOverlay,
     handleTapToBegin,
-    isButtonTransitioning,
-    isCarouselExiting,
-    showCarousel,
-    showOverlay,
+    isButtonTransitioning: state.isButtonTransitioning,
+    isCarouselExiting: state.isCarouselExiting,
+    showCarousel: state.showCarousel,
+    showOverlay: state.showOverlay,
   };
 }

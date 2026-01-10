@@ -6,7 +6,7 @@ import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_comp
 import CarouselState from './components/CarouselState';
 import InitialState from './components/InitialState';
 import MorphingDiamond from './components/MorphingDiamond';
-import { IN_VIEW_THRESHOLD, SECTION_IDS } from './constants';
+import { IN_VIEW_THRESHOLD, SECTION_IDS, Z_INDEX } from './constants';
 import { useKiosk3SecondScreenState } from './hooks/useKiosk3SecondScreenState';
 import type { CarouselSlide } from './components/CircularCarousel';
 
@@ -162,7 +162,7 @@ const Kiosk3SecondScreenTemplate = memo(
 
         {/* Demo overlay */}
         {showOverlay && (
-          <div className="absolute inset-0 z-[9999] animate-in duration-700 fade-in">
+          <div className="absolute inset-0 animate-in duration-700 fade-in" style={{ zIndex: Z_INDEX.OVERLAY }}>
             <CustomInteractiveDemoScreenTemplate
               cardLabel={overlay?.cardLabel}
               demoIframeSrc={demoIframeSrc}

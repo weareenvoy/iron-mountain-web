@@ -6,16 +6,32 @@ import InnerRing from '@/components/ui/icons/Kiosks/CustomInteractive/InnerRing'
 import OuterRing from '@/components/ui/icons/Kiosks/CustomInteractive/OuterRing';
 import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
-import { TRANSITIONS } from '../constants';
+import { ANIMATION_VALUES, TRANSITIONS } from '../constants';
 
 // Configuration for animated dots around the "Tap to begin" button
 // Dots animate in sequence, rotating from 0deg to their target position
+// Each dot rotates 60° (360° / 6 dots) from the previous one
 const DOT_CONFIG = [
-  { delay: 0.8, rotation: 60 }, // Dot 2
-  { delay: 0.9, rotation: 120 }, // Dot 3
-  { delay: 1.0, rotation: 180 }, // Dot 4
-  { delay: 1.1, rotation: 240 }, // Dot 5
-  { delay: 1.2, rotation: 300 }, // Dot 6
+  {
+    delay: ANIMATION_VALUES.DOT_ANIMATION_BASE_DELAY,
+    rotation: ANIMATION_VALUES.DOT_ROTATION_INCREMENT,
+  }, // Dot 2
+  {
+    delay: ANIMATION_VALUES.DOT_ANIMATION_BASE_DELAY + ANIMATION_VALUES.DOT_ANIMATION_DELAY_INCREMENT,
+    rotation: ANIMATION_VALUES.DOT_ROTATION_INCREMENT * 2,
+  }, // Dot 3
+  {
+    delay: ANIMATION_VALUES.DOT_ANIMATION_BASE_DELAY + ANIMATION_VALUES.DOT_ANIMATION_DELAY_INCREMENT * 2,
+    rotation: ANIMATION_VALUES.DOT_ROTATION_INCREMENT * 3,
+  }, // Dot 4
+  {
+    delay: ANIMATION_VALUES.DOT_ANIMATION_BASE_DELAY + ANIMATION_VALUES.DOT_ANIMATION_DELAY_INCREMENT * 3,
+    rotation: ANIMATION_VALUES.DOT_ROTATION_INCREMENT * 4,
+  }, // Dot 5
+  {
+    delay: ANIMATION_VALUES.DOT_ANIMATION_BASE_DELAY + ANIMATION_VALUES.DOT_ANIMATION_DELAY_INCREMENT * 4,
+    rotation: ANIMATION_VALUES.DOT_ROTATION_INCREMENT * 5,
+  }, // Dot 6
 ] as const;
 
 type InitialStateProps = {
@@ -109,7 +125,14 @@ const InitialState = memo(
 
         <motion.div
           animate={
-            isButtonTransitioning ? { opacity: 0, scale: 0.52, x: 700, y: -336 } : { opacity: 1, scale: 1, x: 0, y: 0 }
+            isButtonTransitioning
+              ? {
+                  opacity: 0,
+                  scale: ANIMATION_VALUES.TAP_TO_BEGIN_MORPH_SCALE,
+                  x: ANIMATION_VALUES.TAP_TO_BEGIN_MORPH_X,
+                  y: ANIMATION_VALUES.TAP_TO_BEGIN_MORPH_Y,
+                }
+              : { opacity: 1, scale: 1, x: 0, y: 0 }
           }
           className="absolute top-[2266px] left-1/2 h-[1000px] w-[1000px] -translate-x-1/2 -translate-y-1/2"
           initial={{ opacity: 1, scale: 1, x: 0, y: 0 }}
@@ -140,7 +163,12 @@ const InitialState = memo(
                 </motion.span>
 
                 {/* Dot 1 - stays at 0deg (reference position, does not animate) */}
-                <div className="absolute top-[48%] left-[50%] transform-[translate(-50%,-50%)_rotate(0deg)_translateY(-430px)]">
+                <div
+                  className="absolute top-[48%] left-[50%]"
+                  style={{
+                    transform: `translate(-50%, -50%) rotate(0deg) translateY(-${ANIMATION_VALUES.DOT_ORBIT_RADIUS_PX}px)`,
+                  }}
+                >
                   <BlueDot className="h-[60px] w-[60px]" />
                 </div>
 
@@ -149,12 +177,15 @@ const InitialState = memo(
                   <motion.div
                     animate={{
                       opacity: 1,
-                      transform: `translate(-50%, -50%) rotate(${rotation}deg) translateY(-430px)`,
+                      transform: `translate(-50%, -50%) rotate(${rotation}deg) translateY(-${ANIMATION_VALUES.DOT_ORBIT_RADIUS_PX}px)`,
                     }}
                     className="absolute top-[50%] left-[50%]"
-                    initial={{ opacity: 0, transform: 'translate(-50%, -50%) rotate(0deg) translateY(-430px)' }}
+                    initial={{
+                      opacity: 0,
+                      transform: `translate(-50%, -50%) rotate(0deg) translateY(-${ANIMATION_VALUES.DOT_ORBIT_RADIUS_PX}px)`,
+                    }}
                     key={`dot-${index + 2}`}
-                    transition={{ delay, duration: 0.8, ease: [0.3, 0, 0.6, 1] }}
+                    transition={{ delay, duration: ANIMATION_VALUES.DOT_ANIMATION_DURATION, ease: [0.3, 0, 0.6, 1] }}
                   >
                     <BlueDot className="h-[60px] w-[60px]" />
                   </motion.div>

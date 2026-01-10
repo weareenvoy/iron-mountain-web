@@ -43,12 +43,7 @@ const MorphingDiamond = memo(({ carouselIndex, isCarouselExiting, showCarousel, 
   const videoRef = useRef<HTMLVideoElement>(null);
 
   // Use videoAsset directly - URL normalization not needed as carousel videos work with the same format
-  const normalizedVideoSrc = useMemo(() => {
-    if (process.env.NODE_ENV === 'development') {
-      console.info('[MorphingDiamond] Video source:', videoAsset);
-    }
-    return videoAsset;
-  }, [videoAsset]);
+  const normalizedVideoSrc = useMemo(() => videoAsset, [videoAsset]);
 
   // Ensure video loads and handle errors
   useEffect(() => {
@@ -62,32 +57,15 @@ const MorphingDiamond = memo(({ carouselIndex, isCarouselExiting, showCarousel, 
     }
 
     const handleError = (e: Event) => {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('[MorphingDiamond] Video failed to load:', {
-          error: e,
-          networkState: videoElement.networkState,
-          networkStateDescription:
-            videoElement.networkState === 3
-              ? 'NETWORK_NO_SOURCE - No suitable source found'
-              : `State ${videoElement.networkState}`,
-          readyState: videoElement.readyState,
-          src: normalizedVideoSrc,
-        });
-      }
-    };
-
-    const handleLoadedData = () => {
-      if (process.env.NODE_ENV === 'development') {
-        console.info('[MorphingDiamond] Video loaded successfully:', normalizedVideoSrc);
-      }
+      // Video load errors are handled silently in production
+      // In development, check network tab for detailed error information
+      void e;
     };
 
     videoElement.addEventListener('error', handleError);
-    videoElement.addEventListener('loadeddata', handleLoadedData);
 
     return () => {
       videoElement.removeEventListener('error', handleError);
-      videoElement.removeEventListener('loadeddata', handleLoadedData);
       // Only pause on cleanup, don't clear src to avoid React 18 Strict Mode issues
       videoElement.pause();
     };

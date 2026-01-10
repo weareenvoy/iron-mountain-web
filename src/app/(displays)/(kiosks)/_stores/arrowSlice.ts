@@ -48,20 +48,11 @@ export const createArrowActions = (get: () => { [K in 'kiosk1' | 'kiosk2' | 'kio
 
     // Never show arrows on initial or custom interactive
     if (currentSection === 'initial' || (currentSection === 'customInteractive' && isCustomInteractiveSection)) {
-      console.info('[calculateArrowShowDelay] Not showing arrows - on initial or custom interactive', {
-        currentScrollTarget,
-        currentSection,
-        isCustomInteractiveSection,
-      });
       return null;
     }
 
     // Only show if we were scrolling to video and arrows are allowed
     if (!state.wasScrollingToVideo || !state.allowArrowsToShow) {
-      console.info('[calculateArrowShowDelay] Not showing arrows - state check failed', {
-        allowArrowsToShow: state.allowArrowsToShow,
-        wasScrollingToVideo: state.wasScrollingToVideo,
-      });
       return null;
     }
 
@@ -74,19 +65,9 @@ export const createArrowActions = (get: () => { [K in 'kiosk1' | 'kiosk2' | 'kio
       // Longer delay for first appearance after initial screen
       const isFirstChallengeSlide =
         currentScrollTarget === 'challenge-first' || currentScrollTarget === 'challenge-first-video';
-      const delay = isFirstChallengeSlide ? 1500 : 300;
-      console.info('[calculateArrowShowDelay] Showing arrows with delay', {
-        currentScrollTarget,
-        currentSection,
-        delay,
-      });
-      return delay;
+      return isFirstChallengeSlide ? 1500 : 300;
     }
 
-    console.info('[calculateArrowShowDelay] Not showing arrows - section not supported', {
-      currentScrollTarget,
-      currentSection,
-    });
     return null;
   },
 
@@ -146,21 +127,6 @@ export const createArrowActions = (get: () => { [K in 'kiosk1' | 'kiosk2' | 'kio
       isEnteringInitial ||
       (isCrossingSectionBoundary && (isEnteringSolution || isEnteringValue || isEnteringChallenge)) ||
       isEnteringCustomInteractive;
-
-    console.info('[hideArrowsOnScrollStart]', {
-      currentScrollTarget,
-      currentSection,
-      isCrossingSectionBoundary,
-      isEnteringChallenge,
-      isEnteringCustomInteractive,
-      isEnteringInitial,
-      isEnteringSolution,
-      isEnteringValue,
-      kioskId,
-      previousScrollTarget,
-      previousSection,
-      shouldHideArrows,
-    });
 
     if (!shouldHideArrows) return null;
 

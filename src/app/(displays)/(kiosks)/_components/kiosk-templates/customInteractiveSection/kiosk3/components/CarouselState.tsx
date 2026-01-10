@@ -1,11 +1,12 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { SquarePlay } from 'lucide-react';
 import Image from 'next/image';
-import { memo, useMemo } from 'react';
+import { memo } from 'react';
 import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import CircularCarousel, { type CarouselSlide } from './CircularCarousel';
 import {
+  ANIMATION_VALUES,
   DIAMOND_ANIMATIONS,
   getDecorativeSVGVariant,
   getPrimaryDiamondClass,
@@ -44,11 +45,11 @@ type CarouselStateProps = {
  *
  * ## Animation Behavior
  * - Fades in when `showCarousel` becomes true
- * - Memoizes class computations to prevent unnecessary recalculations
+ * - Class computations happen in pure functions to avoid hooks violations
  * - Coordinates with parent via `onIndexChange` and `onIsExitingChange`
  *
  * ## Performance
- * - Helper functions (getPrimaryDiamondClass, etc.) are memoized
+ * - Helper functions are pure and don't require memoization
  * - Component is wrapped in React.memo
  * - Uses AnimatePresence for smooth transitions
  *
@@ -66,13 +67,10 @@ const CarouselState = memo(
       >
         <CircularCarousel onIndexChange={onIndexChange} onIsExitingChange={onIsExitingChange} slides={slides}>
           {({ current, index, isExiting }) => {
-            // Memoize class computations to prevent recalculation on parent re-renders
-            // eslint-disable-next-line react-hooks/rules-of-hooks
-            const primaryDiamondClass = useMemo(() => getPrimaryDiamondClass(current.id), [current.id]);
-            // eslint-disable-next-line react-hooks/rules-of-hooks
-            const secondaryDiamondClass = useMemo(() => getSecondaryDiamondClass(current.id), [current.id]);
-            // eslint-disable-next-line react-hooks/rules-of-hooks
-            const svgVariant = useMemo(() => getDecorativeSVGVariant(current.id), [current.id]);
+            // Pure function calls - no hooks needed since these are simple string returns
+            const primaryDiamondClass = getPrimaryDiamondClass(current.id);
+            const secondaryDiamondClass = getSecondaryDiamondClass(current.id);
+            const svgVariant = getDecorativeSVGVariant(current.id);
 
             return (
               <>
@@ -109,7 +107,7 @@ const CarouselState = memo(
                             initial={{ opacity: 0 }}
                             key={`${current.id}-bullet-${bulletIndex}`}
                             transition={{
-                              delay: 0.2 + bulletIndex * 0.1,
+                              delay: ANIMATION_VALUES.BULLET_STAGGER_START + bulletIndex * ANIMATION_VALUES.BULLET_STAGGER_DELAY,
                               duration: 0.4,
                               ease: [0.3, 0, 0.6, 1],
                             }}
@@ -146,11 +144,12 @@ const CarouselState = memo(
                       {current.primaryVideoSrc && (
                         <video
                           autoPlay
-                          className="h-full w-full origin-center scale-[1.35] -rotate-45 object-cover"
+                          className="h-full w-full origin-center -rotate-45 object-cover"
                           loop
                           muted
                           playsInline
                           src={current.primaryVideoSrc}
+                          style={{ scale: ANIMATION_VALUES.DIAMOND_VIDEO_SCALE }}
                         />
                       )}
                     </motion.div>
@@ -179,10 +178,11 @@ const CarouselState = memo(
                     >
                       <Image
                         alt={current.secondaryImageAlt}
-                        className="origin-center scale-[1.35] -rotate-45 object-cover"
+                        className="origin-center -rotate-45 object-cover"
                         fill
                         sizes="880px"
                         src={current.secondaryImageSrc}
+                        style={{ scale: ANIMATION_VALUES.DIAMOND_VIDEO_SCALE }}
                       />
                     </motion.div>
                   </AnimatePresence>

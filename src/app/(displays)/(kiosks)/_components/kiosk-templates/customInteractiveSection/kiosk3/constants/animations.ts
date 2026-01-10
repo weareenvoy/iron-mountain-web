@@ -57,6 +57,37 @@ export const ANIMATION_DURATION_MS = {
 } as const;
 
 /**
+ * Magic number constants for animations and positioning.
+ * Extracted for better maintainability and documentation.
+ */
+export const ANIMATION_VALUES = {
+  /** Button bullet animation stagger delay (seconds) */
+  BULLET_STAGGER_DELAY: 0.1,
+  /** Button bullet initial animation delay (seconds) */
+  BULLET_STAGGER_START: 0.2,
+  /** Dot animation base delay (seconds) - first animated dot */
+  DOT_ANIMATION_BASE_DELAY: 0.8,
+  /** Dot animation delay increment between dots (seconds) */
+  DOT_ANIMATION_DELAY_INCREMENT: 0.1,
+  /** Dot animation duration (seconds) */
+  DOT_ANIMATION_DURATION: 0.8,
+  /** Dot orbit radius around "Tap to begin" button (px) */
+  DOT_ORBIT_RADIUS_PX: 430,
+  /** Dot rotation angle increment (degrees) - 360° / 6 dots */
+  DOT_ROTATION_INCREMENT: 60,
+  /** Video scale multiplier for carousel diamonds */
+  DIAMOND_VIDEO_SCALE: 1.35,
+  /** Morphing diamond scale factor when transitioning to carousel (1/3 size) */
+  MORPHING_SCALE_FACTOR: 0.332,
+  /** "Tap to begin" button scale when morphing to carousel */
+  TAP_TO_BEGIN_MORPH_SCALE: 0.52,
+  /** "Tap to begin" button X translation when morphing (px) */
+  TAP_TO_BEGIN_MORPH_X: 700,
+  /** "Tap to begin" button Y translation when morphing (px) */
+  TAP_TO_BEGIN_MORPH_Y: -336,
+} as const;
+
+/**
  * Morphing diamond animation states.
  * The background video transforms from full-screen to a carousel slide diamond.
  *
@@ -108,14 +139,14 @@ export const MORPHING_DIAMOND = {
   /** Carousel state: Scaled down and positioned as first slide */
   CAROUSEL: {
     opacity: 1,
-    scale: 0.332,
+    scale: ANIMATION_VALUES.MORPHING_SCALE_FACTOR,
     x: -1095, // Pixel value - coupled to 4K layout
     y: -875, // Pixel value - coupled to 4K layout
   },
   /** Exit state: Moves diagonally off-screen with fade */
   EXIT: {
     opacity: 0,
-    scale: 0.332,
+    scale: ANIMATION_VALUES.MORPHING_SCALE_FACTOR,
     x: -1116, // Pixel value - coupled to 4K layout
     y: -896, // Pixel value - coupled to 4K layout
   },
