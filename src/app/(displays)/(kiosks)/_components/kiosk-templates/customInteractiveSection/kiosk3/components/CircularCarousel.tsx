@@ -1,5 +1,6 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ANIMATION_DURATION_MS, type SlideId } from '../constants';
@@ -99,7 +100,7 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
       {/* Circle carousel control */}
       <div className="absolute top-[1670px] right-[120px] z-[1] h-[520px] w-[520px]">
         <div className="relative h-full w-full">
-          <div className="absolute inset-0 rounded-full border-[8px] border-[#6dcff6]/70" />
+          <div className="absolute inset-0 rounded-full border-[8px] border-[#6dcff6]/20" />
           <div className="absolute inset-[18px] rounded-full border-[12px] border-transparent" />
           <div className="absolute inset-[44px] rounded-full border-[6px] border-transparent" />
 
@@ -107,24 +108,60 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
             {String(index + 1).padStart(2, '0')}
           </div>
 
-          {/* Dots */}
+          {/* Dots - Progressive opacity based on current slide */}
+          {/* Dot 1 - Top */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
-            <div className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]" />
+            <motion.div
+              animate={{ opacity: currentIndex >= 0 ? 1 : 0.2 }}
+              className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]"
+              initial={{ opacity: 0.2 }}
+              transition={{ duration: currentIndex >= 0 ? 0.06 : 0.03, ease: currentIndex >= 0 ? 'easeIn' : 'easeOut' }}
+            />
           </div>
+          {/* Dot 2 - Top Right */}
           <div className="absolute top-[28%] left-[95%] -translate-x-1/2 -translate-y-1/2">
-            <div className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]" />
+            <motion.div
+              animate={{ opacity: currentIndex >= 1 ? 1 : 0.2 }}
+              className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]"
+              initial={{ opacity: 0.2 }}
+              transition={{ duration: currentIndex >= 1 ? 0.06 : 0.03, ease: currentIndex >= 1 ? 'easeIn' : 'easeOut' }}
+            />
           </div>
+          {/* Dot 3 - Bottom Right */}
           <div className="absolute top-[73%] left-[94%] -translate-x-1/2 -translate-y-1/2">
-            <div className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]" />
+            <motion.div
+              animate={{ opacity: currentIndex >= 2 ? 1 : 0.2 }}
+              className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]"
+              initial={{ opacity: 0.2 }}
+              transition={{ duration: currentIndex >= 2 ? 0.06 : 0.03, ease: currentIndex >= 2 ? 'easeIn' : 'easeOut' }}
+            />
           </div>
+          {/* Dot 4 - Bottom */}
           <div className="absolute top-full left-[52%] -translate-x-1/2 -translate-y-1/2">
-            <div className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]" />
+            <motion.div
+              animate={{ opacity: currentIndex >= 3 ? 1 : 0.2 }}
+              className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]"
+              initial={{ opacity: 0.2 }}
+              transition={{ duration: currentIndex >= 3 ? 0.06 : 0.03, ease: currentIndex >= 3 ? 'easeIn' : 'easeOut' }}
+            />
           </div>
+          {/* Dot 5 - Bottom Left */}
           <div className="absolute top-[73%] left-[7%] -translate-x-1/2 -translate-y-1/2">
-            <div className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]" />
+            <motion.div
+              animate={{ opacity: currentIndex >= 4 ? 1 : 0.2 }}
+              className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]"
+              initial={{ opacity: 0.2 }}
+              transition={{ duration: currentIndex >= 4 ? 0.06 : 0.03, ease: currentIndex >= 4 ? 'easeIn' : 'easeOut' }}
+            />
           </div>
+          {/* Dot 6 - Top Left */}
           <div className="absolute top-[27%] left-[7%] -translate-x-1/2 -translate-y-1/2">
-            <div className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]" />
+            <motion.div
+              animate={{ opacity: currentIndex >= 5 ? 1 : 0.2 }}
+              className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]"
+              initial={{ opacity: 0.2 }}
+              transition={{ duration: currentIndex >= 5 ? 0.06 : 0.03, ease: currentIndex >= 5 ? 'easeIn' : 'easeOut' }}
+            />
           </div>
 
           {/* Arrows */}
