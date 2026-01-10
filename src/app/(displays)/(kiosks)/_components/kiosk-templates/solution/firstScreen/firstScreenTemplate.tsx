@@ -36,14 +36,14 @@ const SolutionFirstScreenTemplate = ({
       const labelRect = labelRef.current.getBoundingClientRect();
       const labelPastTop = labelRect.bottom < 0;
 
-      // Check if next section (Value) has become active
-      const nextSectionLabel = document.querySelector('[data-section-label="value"]');
-      const nextSectionPastTop = nextSectionLabel 
-        ? nextSectionLabel.getBoundingClientRect().bottom < 0 
+      // Check if next section's video (Value) has reached the top
+      const nextSectionVideo = document.querySelector('[data-section-video="value"]');
+      const nextSectionVideoAtTop = nextSectionVideo 
+        ? nextSectionVideo.getBoundingClientRect().top <= 0 
         : false;
 
-      // Show sticky header when this label scrolls past top BUT next section hasn't
-      const shouldShow = labelPastTop && !nextSectionPastTop;
+      // Show sticky header when this label scrolls past top BUT next section's video hasn't reached top
+      const shouldShow = labelPastTop && !nextSectionVideoAtTop;
       setShowStickyHeader(shouldShow);
     };
 
@@ -62,7 +62,10 @@ const SolutionFirstScreenTemplate = ({
   return (
     <div className="relative flex h-screen w-full flex-col overflow-visible bg-black">
       {/* Background video */}
-      <div className="absolute top-[-5px] left-0 h-[1545px] w-full">
+      <div 
+        data-section-video="solution"
+        className="absolute top-[-5px] left-0 h-[1545px] w-full"
+      >
         <div className="relative h-full w-full">
           <video
             autoPlay

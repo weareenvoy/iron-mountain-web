@@ -30,14 +30,14 @@ const FirstScreenTemplate = memo(
         const labelRect = labelRef.current.getBoundingClientRect();
         const labelPastTop = labelRect.bottom < 0;
 
-        // Check if next section (Solution) has become active
-        const nextSectionLabel = document.querySelector('[data-section-label="solution"]');
-        const nextSectionPastTop = nextSectionLabel 
-          ? nextSectionLabel.getBoundingClientRect().bottom < 0 
+        // Check if next section's video (Solution) has reached the top
+        const nextSectionVideo = document.querySelector('[data-section-video="solution"]');
+        const nextSectionVideoAtTop = nextSectionVideo 
+          ? nextSectionVideo.getBoundingClientRect().top <= 0 
           : false;
 
-        // Show sticky header when this label scrolls past top BUT next section hasn't
-        const shouldShow = labelPastTop && !nextSectionPastTop;
+        // Show sticky header when this label scrolls past top BUT next section's video hasn't reached top
+        const shouldShow = labelPastTop && !nextSectionVideoAtTop;
         setShowStickyHeader(shouldShow);
       };
 
@@ -59,7 +59,10 @@ const FirstScreenTemplate = memo(
       <div className="pointer-events-none absolute inset-0 top-[1290px] z-[1] h-[14400px] rounded-[100px] bg-[linear-gradient(180deg,#1B75BC_0.01%,#14477D_98%)] group-data-[kiosk=kiosk-2]/kiosk:top-[1240px] group-data-[kiosk=kiosk-2]/kiosk:h-[14450px]" />
 
       {/* Video Header Section */}
-      <div className="relative flex h-[1284px] w-full flex-col items-center justify-center px-[120px] py-[200px]">
+      <div 
+        data-section-video="challenge"
+        className="relative flex h-[1284px] w-full flex-col items-center justify-center px-[120px] py-[200px]"
+      >
         <video
           autoPlay
           className="absolute inset-0 top-[230px] h-full w-full object-cover object-center"
