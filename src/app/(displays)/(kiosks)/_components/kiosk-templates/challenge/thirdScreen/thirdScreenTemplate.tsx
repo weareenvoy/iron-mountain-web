@@ -36,7 +36,7 @@ const ThirdScreenTemplate = ({
       <div className="pointer-events-none absolute inset-0 z-[0] bg-transparent" />
 
       {/* Decorative background diamond */}
-      <div className="pointer-events-none absolute top-[2200px] left-[1050px] z-[1] h-[840px] w-[840px] -scale-x-100 group-data-[kiosk=kiosk-2]/kiosk:top-[2430px] group-data-[kiosk=kiosk-2]/kiosk:left-[1070px] group-data-[kiosk=kiosk-2]/kiosk:size-[800px] group-data-[kiosk=kiosk-3]/kiosk:top-[1740px] group-data-[kiosk=kiosk-3]/kiosk:left-[1080px] group-data-[kiosk=kiosk-3]/kiosk:size-[800px]"
+      <div className="pointer-events-none absolute top-[2200px] left-[1050px] z-[1] h-[840px] w-[840px] -scale-x-100 group-data-[kiosk=kiosk-2]/kiosk:top-[1860px] group-data-[kiosk=kiosk-2]/kiosk:left-[1070px] group-data-[kiosk=kiosk-2]/kiosk:size-[800px] group-data-[kiosk=kiosk-3]/kiosk:top-[1740px] group-data-[kiosk=kiosk-3]/kiosk:left-[1080px] group-data-[kiosk=kiosk-3]/kiosk:size-[800px]"
         data-scroll-section="challenge-third-diamond"
       >
         {item2Image && (
@@ -52,7 +52,7 @@ const ThirdScreenTemplate = ({
       </div>
 
       {/* Description Section - SCROLLABLE */}
-      <div className="relative top-[1740px] left-[-20px] z-[2] px-[120px] py-[250px] group-data-[kiosk=kiosk-3]/kiosk:top-[290px]"
+      <div className="relative top-[1740px] left-[-20px] z-[2] px-[120px] py-[250px] group-data-[kiosk=kiosk-2]/kiosk:top-[1410px] group-data-[kiosk=kiosk-2]/kiosk:left-0 group-data-[kiosk=kiosk-3]/kiosk:top-[290px]"
         data-scroll-section="challenge-third-description"
       >
         <p
@@ -63,7 +63,7 @@ const ThirdScreenTemplate = ({
       </div>
 
       {/* Metrics Section - SCROLLABLE */}
-      <div className="relative top-[2250px] left-[-460px] z-[2] flex w-full flex-col items-center px-[120px] py-[300px]  group-data-[kiosk=kiosk-2]/kiosk:top-[1450px] group-data-[kiosk=kiosk-2]/kiosk:left-[-560px] group-data-[kiosk=kiosk-3]/kiosk:top-[790px] group-data-[kiosk=kiosk-3]/kiosk:left-[-640px]">
+      <div className="relative top-[2250px] left-[-460px] z-[2] flex w-full flex-col items-center px-[120px] py-[300px]  group-data-[kiosk=kiosk-2]/kiosk:top-[1900px] group-data-[kiosk=kiosk-2]/kiosk:left-[-560px] group-data-[kiosk=kiosk-3]/kiosk:top-[790px] group-data-[kiosk=kiosk-3]/kiosk:left-[-640px]">
         <span className="text-center text-[400px] leading-[1.3] font-[300] tracking-[-20px] whitespace-nowrap text-[#6dcff6]">
           {renderRegisteredMark(featuredStat2)}
         </span>
