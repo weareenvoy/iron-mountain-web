@@ -165,10 +165,6 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
           />
         </div>
 
-        <h2 className="absolute top-[240px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
-          {renderRegisteredMark(eyebrowText)}
-        </h2>
-
         {/* Use AnimatedText component for consistent animation */}
         <AnimatedText
           as="h1"
