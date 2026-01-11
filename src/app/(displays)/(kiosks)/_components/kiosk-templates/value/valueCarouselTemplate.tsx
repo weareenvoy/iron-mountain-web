@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useRef } from 'react';
 import { normalizeDiamondCards } from '@/app/(displays)/(kiosks)/_utils/normalize-diamond-cards';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
 import { cn } from '@/lib/tailwind/utils/cn';
@@ -65,49 +65,8 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
     slides,
   } = props;
   
-  const [showStickyHeader, setShowStickyHeader] = useState(false);
   const labelRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
-  const stickyHeaderRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!labelRef.current || !stickyHeaderRef.current) return;
-
-      const labelRect = labelRef.current.getBoundingClientRect();
-      const labelPastTop = labelRect.bottom < 0;
-
-      // Find the last screen in the Value section
-      const lastScreen = document.querySelector('[data-section-end="value"]');
-      if (!lastScreen) {
-        // Fallback to showing when label is past top if last screen not found
-        setShowStickyHeader(labelPastTop);
-        return;
-      }
-
-      // Check if sticky header's bottom would go past the last screen's bottom
-      const lastScreenRect = lastScreen.getBoundingClientRect();
-      const stickyHeaderHeight = stickyHeaderRef.current.offsetHeight;
-      const stickyHeaderBottom = stickyHeaderHeight; // Since it's fixed at top: 0
-      const offset = 1000; // Disappear 1000px earlier
-      const sectionEndReached = lastScreenRect.bottom <= (stickyHeaderBottom + offset);
-
-      // Show sticky header when label scrolls past top AND last screen bottom hasn't been reached
-      const shouldShow = labelPastTop && !sectionEndReached;
-      setShowStickyHeader(shouldShow);
-    };
-
-    // Find the scrolling container (BaseKioskView)
-    const scrollContainer = document.querySelector('[data-kiosk]');
-    if (scrollContainer) {
-      scrollContainer.addEventListener('scroll', handleScroll);
-      handleScroll(); // Check initial state
-
-      return () => {
-        scrollContainer.removeEventListener('scroll', handleScroll);
-      };
-    }
-  }, []);
   
   // Show video background when mainVideo is provided (used in animated carousel variant)
   const heroVideo = mainVideo;
@@ -174,28 +133,6 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
           <h1 className="relative top-[30px] left-[-90px] text-[126px] leading-[1.3] font-normal tracking-[-6.3px] whitespace-nowrap text-[#ededed]">
             {renderRegisteredMark(labelText)}
           </h1>
-        </div>
-      </div>
-
-      {/* Sticky Section Header - Fixed Position */}
-      <div 
-        ref={stickyHeaderRef}
-        className={`fixed top-0 left-0 z-[100] w-full h-[1369px] pointer-events-none transition-opacity duration-300 bg-[linear-gradient(180deg,#ededed_65.52%,rgba(237,237,237,0)_99.31%)] ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
-        data-value-sticky-header
-        data-visible={showStickyHeader}
-      >
-        <div className="flex flex-col px-[120px] py-[20px]">
-          <p className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#8a0d71]">
-            {renderRegisteredMark(normalizeMultiline(eyebrow))}
-          </p>
-          <div className="flex items-center gap-[41px] mt-[20px]">
-            <div className="relative top-[25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
-              <OutlinedDiamond aria-hidden="true" className="text-[#8a0d71]" focusable="false" />
-            </div>
-            <h1 className="relative top-[30px] left-[-90px] text-[126px] leading-[1.3] font-normal tracking-[-6.3px] whitespace-nowrap text-[#8a0d71]">
-              {renderRegisteredMark(labelText)}
-            </h1>
-          </div>
         </div>
       </div>
 
