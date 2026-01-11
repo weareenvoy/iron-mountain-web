@@ -177,6 +177,28 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
         </div>
       </div>
 
+      {/* Sticky Section Header - Fixed Position (Top) */}
+      <div 
+        ref={stickyHeaderRef}
+        className={`fixed top-0 left-0 z-[100] w-full h-[1369px] pointer-events-none transition-opacity duration-300 bg-[linear-gradient(180deg,#ededed_65.52%,rgba(237,237,237,0)_99.31%)] ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
+        data-value-sticky-header
+        data-visible={showStickyHeader}
+      >
+        <div className="relative z-[2] px-[120px] pt-[240px] pb-[375px]">
+          <h2 className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#8a0d71]">
+            {renderRegisteredMark(normalizeMultiline(eyebrow))}
+          </h2>
+        </div>
+        <div className="relative top-[40px] flex items-center gap-[41px] px-[140px] pb-[20px]">
+          <div className="relative top-[25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
+            <OutlinedDiamond aria-hidden="true" className="text-[#8a0d71]" focusable="false" />
+          </div>
+          <h1 className="relative top-[30px] left-[-90px] text-[126px] leading-[1.3] font-normal tracking-[-6.3px] whitespace-nowrap text-[#8a0d71]">
+            {renderRegisteredMark(labelText)}
+          </h1>
+        </div>
+      </div>
+
       <div
         className={cn(
           'absolute top-[1060px] left-0 z-3 w-full rounded-t-[100px] px-[240px] pt-[200px] pb-[1166px]',

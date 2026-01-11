@@ -21,6 +21,7 @@ export type FirstScreenTemplateProps = {
 const FirstScreenTemplate = memo(
   ({ body, featuredStat1, featuredStat1Body, labelText, mainVideo, subheadline }: FirstScreenTemplateProps) => {
     const [showStickyHeader, setShowStickyHeader] = useState(false);
+    const [showBottomGradient, setShowBottomGradient] = useState(false);
     const labelRef = useRef<HTMLDivElement>(null);
     const sectionRef = useRef<HTMLDivElement>(null);
     const stickyHeaderRef = useRef<HTMLDivElement>(null);
@@ -37,19 +38,25 @@ const FirstScreenTemplate = memo(
         if (!lastScreen) {
           // Fallback to showing when label is past top if last screen not found
           setShowStickyHeader(labelPastTop);
+          setShowBottomGradient(labelPastTop);
           return;
         }
 
-      // Check if sticky header's bottom would go past the last screen's bottom
-      const lastScreenRect = lastScreen.getBoundingClientRect();
-      const stickyHeaderHeight = stickyHeaderRef.current.offsetHeight;
-      const stickyHeaderBottom = stickyHeaderHeight; // Since it's fixed at top: 0
-      const offset = 1000; // Disappear 1000px earlier
-      const sectionEndReached = lastScreenRect.bottom <= (stickyHeaderBottom + offset);
+        // Check if sticky header's bottom would go past the last screen's bottom (for top gradient)
+        const lastScreenRect = lastScreen.getBoundingClientRect();
+        const stickyHeaderHeight = stickyHeaderRef.current.offsetHeight;
+        const stickyHeaderBottom = stickyHeaderHeight; // Since it's fixed at top: 0
+        const offset = 1000; // Disappear 1000px earlier
+        const sectionEndReached = lastScreenRect.bottom <= (stickyHeaderBottom + offset);
 
         // Show sticky header when label scrolls past top AND last screen bottom hasn't been reached
-        const shouldShow = labelPastTop && !sectionEndReached;
-        setShowStickyHeader(shouldShow);
+        const shouldShowTop = labelPastTop && !sectionEndReached;
+        setShowStickyHeader(shouldShowTop);
+
+        // Bottom gradient: hide when last screen enters viewport (its top reaches screen top)
+        const lastScreenEntered = lastScreenRect.top <= 0;
+        const shouldShowBottom = labelPastTop && !lastScreenEntered;
+        setShowBottomGradient(shouldShowBottom);
       };
 
       // Find the scrolling container (BaseKioskView)
@@ -137,6 +144,13 @@ const FirstScreenTemplate = memo(
           </h1>
         </div>
       </div>
+
+      {/* Sticky Section Footer - Fixed Position (Bottom) */}
+      <div 
+        className={`fixed bottom-[-900px] left-0 z-[100] w-full h-[1369px] pointer-events-none transition-opacity duration-300 bg-[linear-gradient(180deg,#155A95_65.52%,rgba(21,75,130,0)_99.31%)] rotate-180 ${showBottomGradient ? 'opacity-100' : 'opacity-0'}`}
+        data-challenge-sticky-footer
+        data-visible={showBottomGradient}
+      />
 
         {/* Problem Description Section */}
         <div className="relative top-[-140px] left-[-10px] z-[2] px-[120px] group-data-[kiosk=kiosk-2]/kiosk:top-[-150px] group-data-[kiosk=kiosk-2]/kiosk:left-[10px] group-data-[kiosk=kiosk-3]/kiosk:top-[-210px] group-data-[kiosk=kiosk-3]/kiosk:left-[0]">
