@@ -127,7 +127,7 @@ const SolutionFirstScreenTemplate = ({
         data-visible={showStickyHeader}
       >
         {/* Subheadline */}
-        <h2 className="px-[120px] pt-[20px] w-[700px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:w-[450px] group-data-[kiosk=kiosk-3]/kiosk:ml-[120px] group-data-[kiosk=kiosk-3]/kiosk:w-[330px]">
+        <h2 className="px-[120px] pt-[240px] pb-[375px] pl-[150px] w-[700px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:w-[450px] group-data-[kiosk=kiosk-3]/kiosk:ml-[120px] group-data-[kiosk=kiosk-3]/kiosk:w-[330px]">
           {renderRegisteredMark(subheadline)}
         </h2>
 

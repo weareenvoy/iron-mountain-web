@@ -127,17 +127,27 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
 
   return (
     <div
-      className="group/kiosk relative h-screen w-full overflow-y-auto scroll-smooth"
+      className="group/kiosk relative h-screen w-full overflow-y-auto scroll-smooth bg-black"
       data-kiosk={kioskId}
       ref={containerRef}
     >
       <div className="flex w-full flex-col overflow-x-hidden">
         {/* Render ALL slides, always visible, stacked vertically */}
-        {slides.map((slide, idx) => (
-          <div className="h-screen w-full flex-shrink-0" data-slide-index={idx} key={slide.id}>
-            {slide.render()}
-          </div>
-        ))}
+        {slides.map((slide, idx) => {
+          let heightClass = 'h-screen';
+          if (slide.id === 'challenge-second') heightClass = 'h-[50vh]';
+          if (slide.id === 'challenge-third') heightClass = 'h-[150vh]';
+          
+          return (
+            <div 
+              className={`${heightClass} w-full flex-shrink-0`}
+              data-slide-index={idx} 
+              key={slide.id}
+            >
+              {slide.render()}
+            </div>
+          );
+        })}
       </div>
 
       {/* Global Navigation Arrows */}

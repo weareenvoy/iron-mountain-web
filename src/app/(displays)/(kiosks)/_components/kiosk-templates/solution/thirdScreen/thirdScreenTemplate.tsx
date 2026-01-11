@@ -95,22 +95,22 @@ const SolutionThirdScreenTemplate = ({
     <div 
       data-section-end="solution"
       className="relative z-1 flex h-screen w-full flex-col overflow-hidden bg-transparent"
+      data-scroll-section="solution-third-section"
     >
       {/* Gradient backdrop */}
       <div className="absolute top-[-296px] left-0 h-[5416px] w-full rounded-t-[100px] bg-transparent" />
 
       {/* Title */}
-      <div className="absolute top-[230px] left-[240px] w-[1300px] text-white group-data-[kiosk=kiosk-2]/kiosk:w-[1400px] group-data-[kiosk=kiosk-3]/kiosk:top-[400px]">
+      <div className="absolute top-[1390px] left-[240px] w-[1300px] text-white group-data-[kiosk=kiosk-2]/kiosk:w-[1400px] group-data-[kiosk=kiosk-3]/kiosk:top-[400px]">
         <p
           className="text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line"
-          data-scroll-section="solution-third-title"
         >
           {renderRegisteredMark(headline)}
         </p>
       </div>
 
       {/* Diamond cluster */}
-      <div className="absolute top-[1220px] left-[240px] h-[2800px] w-[1680px]">
+      <div className="absolute top-[1580px] left-[240px] h-[2800px] w-[1680px]">
         {textDiamonds.map(({ className, label, outline, sizeClass, textWrapperClassName }) =>
           label ? (
             <Diamond
