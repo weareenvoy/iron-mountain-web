@@ -101,7 +101,7 @@ const SolutionFirstScreenTemplate = ({
       <div className="absolute top-[1058px] left-0 z-[1] h-[14575px] w-full rounded-[100px] bg-gradient-to-b from-[#A2115E] to-[#8A0D71] group-data-[kiosk=kiosk-2]/kiosk:top-[1110px] group-data-[kiosk=kiosk-3]/kiosk:top-[1060px]" />
 
       {/* Subheadline - Initial Position */}
-      <h2 className="absolute top-[240px] left-[120px] z-[1] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:top-[290px] group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-2]/kiosk:w-[450px] group-data-[kiosk=kiosk-3]/kiosk:top-[300px] group-data-[kiosk=kiosk-3]/kiosk:left-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[330px]">
+      <h2 className="absolute top-[240px] left-[120px] z-[1] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:top-[290px] group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-2]/kiosk:w-[650px] group-data-[kiosk=kiosk-3]/kiosk:top-[300px] group-data-[kiosk=kiosk-3]/kiosk:left-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[330px]">
         {renderRegisteredMark(subheadline)}
       </h2>
 
@@ -127,7 +127,7 @@ const SolutionFirstScreenTemplate = ({
         data-visible={showStickyHeader}
       >
         {/* Subheadline */}
-        <h2 className="px-[120px] pt-[240px] pb-[375px] pl-[150px] w-[700px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:w-[450px] group-data-[kiosk=kiosk-3]/kiosk:ml-[120px] group-data-[kiosk=kiosk-3]/kiosk:w-[330px]">
+        <h2 className="px-[120px] pt-[240px] pb-[375px] pl-[150px] w-[700px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:w-[650px] group-data-[kiosk=kiosk-3]/kiosk:ml-[120px] group-data-[kiosk=kiosk-3]/kiosk:w-[630px]">
           {renderRegisteredMark(subheadline)}
         </h2>
 

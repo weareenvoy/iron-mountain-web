@@ -30,14 +30,12 @@ const ThirdScreenTemplate = ({
       data-section-end="challenge"
       className="relative flex h-screen w-full flex-col overflow-x-hidden overflow-y-auto scroll-smooth bg-transparent"
       data-hero-image={item2Image}
-      data-scroll-section="challenge-third-section"
     >
       {/* Background gradient layer */}
       <div className="pointer-events-none absolute inset-0 z-[0] bg-transparent" />
 
       {/* Decorative background diamond */}
       <div className="pointer-events-none absolute top-[2200px] left-[1050px] z-[1] h-[840px] w-[840px] -scale-x-100 group-data-[kiosk=kiosk-2]/kiosk:top-[1860px] group-data-[kiosk=kiosk-2]/kiosk:left-[1070px] group-data-[kiosk=kiosk-2]/kiosk:size-[800px] group-data-[kiosk=kiosk-3]/kiosk:top-[1740px] group-data-[kiosk=kiosk-3]/kiosk:left-[1080px] group-data-[kiosk=kiosk-3]/kiosk:size-[800px]"
-        data-scroll-section="challenge-third-diamond"
       >
         {item2Image && (
           <Image

@@ -45,7 +45,7 @@ const SolutionFourthScreenTemplate = ({
       <div className="absolute top-0 left-0 h-[5120px] w-full bg-transparent" />
 
       {/* Title */}
-      <div className="absolute top-[230px] left-[240px] z-10 w-[1300px]">
+      <div className="absolute top-[660px] left-[240px] z-10 w-[1300px]">
         <p
           className="text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]"
           data-scroll-section="solution-fourth-title"
@@ -55,7 +55,7 @@ const SolutionFourthScreenTemplate = ({
       </div>
 
       {/* Solution cards */}
-      <div className="absolute top-[1770px] left-[240px] w-[1379px] rounded-[80px] bg-[#ededed] shadow-[0_20px_80px_rgba(0,0,0,0.25)]">
+      <div className="absolute top-[1170px] left-[240px] w-[1379px] rounded-[80px] bg-[#ededed] shadow-[0_20px_80px_rgba(0,0,0,0.25)]">
         <Accordion
           className="space-y-0 overflow-hidden rounded-[80px]"
           collapsible
