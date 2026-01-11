@@ -30,6 +30,7 @@ const ThirdScreenTemplate = ({
       data-section-end="challenge"
       className="relative flex h-screen w-full flex-col overflow-x-hidden overflow-y-auto scroll-smooth bg-transparent"
       data-hero-image={item2Image}
+      data-scroll-section="challenge-third-section"
     >
       {/* Background gradient layer */}
       <div className="pointer-events-none absolute inset-0 z-[0] bg-transparent" />
@@ -52,7 +53,6 @@ const ThirdScreenTemplate = ({
       <div className="relative top-[300px] z-[2] px-[120px] py-[250px] group-data-[kiosk=kiosk-3]/kiosk:top-[290px]">
         <p
           className="group-data-[kiosk=kiosk-3[/kiosk:leading-[1.3] max-w-[980px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-white group-data-[kiosk=kiosk-2]/kiosk:w-[1070px] group-data-[kiosk=kiosk-3]/kiosk:max-w-[1070px]"
-          data-scroll-section="description"
         >
           {renderRegisteredMark(item2Body)}
         </p>

@@ -20,12 +20,13 @@ const SecondScreenTemplate = ({ item1Body, item1Image, labelText, subheadline }:
     <div
       className="relative flex h-screen w-full flex-col overflow-x-hidden overflow-y-auto scroll-smooth bg-transparent"
       data-hero-image={item1Image}
+      data-scroll-section="main-description"
     >
       {/* Background gradient layer */}
       <div className="pointer-events-none absolute inset-0 z-[0] bg-transparent" />
 
       {/* Decorative background diamond */}
-      <div className="pointer-events-none absolute top-[2320px] left-[-460px] z-[1] size-[1500px] group-data-[kiosk=kiosk-2]/kiosk:top-[2420px] group-data-[kiosk=kiosk-2]/kiosk:left-[-350px] group-data-[kiosk=kiosk-2]/kiosk:size-[1350px] group-data-[kiosk=kiosk-3]/kiosk:top-[1610px] group-data-[kiosk=kiosk-3]/kiosk:left-[-360px] group-data-[kiosk=kiosk-3]/kiosk:size-[1350px]">
+      <div className="pointer-events-none absolute top-[1520px] left-[-360px] z-[1] size-[1400px] group-data-[kiosk=kiosk-2]/kiosk:top-[2420px] group-data-[kiosk=kiosk-2]/kiosk:left-[-350px] group-data-[kiosk=kiosk-2]/kiosk:size-[1350px] group-data-[kiosk=kiosk-3]/kiosk:top-[1610px] group-data-[kiosk=kiosk-3]/kiosk:left-[-360px] group-data-[kiosk=kiosk-3]/kiosk:size-[1350px]">
         {item1Image && (
           <Image
             alt="Large decorative background diamond"
@@ -39,10 +40,9 @@ const SecondScreenTemplate = ({ item1Body, item1Image, labelText, subheadline }:
       </div>
 
       {/* Main Description - SCROLLABLE */}
-      <div className="relative top-[300px] left-[650px] z-[2] px-[120px] py-[250px] group-data-[kiosk=kiosk-3]/kiosk:top-[290px]">
+      <div className="relative top-[1210px] left-[670px] z-[2] px-[120px] py-[250px] group-data-[kiosk=kiosk-3]/kiosk:top-[290px]">
         <p
           className="max-w-[1000px] text-[60px] leading-[1.3] font-normal tracking-[-3px] text-white group-data-[kiosk=kiosk-2]/kiosk:w-[1100px] group-data-[kiosk=kiosk-3]/kiosk:max-w-[1100px]"
-          data-scroll-section="main-description"
         >
           {renderRegisteredMark(item1Body)}
         </p>

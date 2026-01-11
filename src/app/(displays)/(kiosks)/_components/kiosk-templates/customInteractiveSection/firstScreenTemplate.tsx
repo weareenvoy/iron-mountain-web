@@ -142,7 +142,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       {/* Sticky Section Header - Fixed Position */}
       <div 
         ref={stickyHeaderRef}
-        className={`fixed top-0 left-0 z-[100] w-full h-[1369px] pointer-events-none transition-opacity duration-300 bg-[linear-gradient(180deg,#155A95_65.52%,rgba(21,75,130,0)_99.31%)] backdrop-blur-[8px] ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
+        className={`fixed top-0 left-0 z-[100] w-full h-[1369px] pointer-events-none transition-opacity duration-300 bg-[linear-gradient(180deg,#155A95_65.52%,rgba(21,75,130,0)_99.31%)]  ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
         data-customInteractive-sticky-header
         data-visible={showStickyHeader}
       >
