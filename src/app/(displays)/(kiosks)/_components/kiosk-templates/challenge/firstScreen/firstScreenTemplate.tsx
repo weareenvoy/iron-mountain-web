@@ -22,6 +22,7 @@ const FirstScreenTemplate = memo(
   ({ body, featuredStat1, featuredStat1Body, labelText, mainVideo, subheadline }: FirstScreenTemplateProps) => {
     const [showStickyHeader, setShowStickyHeader] = useState(false);
     const [showBottomGradient, setShowBottomGradient] = useState(false);
+    const [bottomGradientPosition, setBottomGradientPosition] = useState(false);
     const labelRef = useRef<HTMLDivElement>(null);
     const sectionRef = useRef<HTMLDivElement>(null);
     const stickyHeaderRef = useRef<HTMLDivElement>(null);
@@ -39,6 +40,7 @@ const FirstScreenTemplate = memo(
           // Fallback to showing when label is past top if last screen not found
           setShowStickyHeader(labelPastTop);
           setShowBottomGradient(labelPastTop);
+          setBottomGradientPosition(labelPastTop);
           return;
         }
 
@@ -57,6 +59,11 @@ const FirstScreenTemplate = memo(
         const lastScreenEntered = lastScreenRect.top <= 0;
         const shouldShowBottom = labelPastTop && !lastScreenEntered;
         setShowBottomGradient(shouldShowBottom);
+        
+        // Update position immediately when showing, but delay when hiding
+        if (shouldShowBottom) {
+          setBottomGradientPosition(true);
+        }
       };
 
       // Find the scrolling container (BaseKioskView)
@@ -70,6 +77,16 @@ const FirstScreenTemplate = memo(
         };
       }
     }, []);
+
+    // Handle delayed position change when hiding bottom gradient
+    useEffect(() => {
+      if (!showBottomGradient) {
+        const timer = setTimeout(() => {
+          setBottomGradientPosition(false);
+        }, 300); // Match transition duration
+        return () => clearTimeout(timer);
+      }
+    }, [showBottomGradient]);
 
   return (
     <div 
@@ -147,7 +164,7 @@ const FirstScreenTemplate = memo(
 
       {/* Sticky Section Footer - Fixed Position (Bottom) */}
       <div 
-        className={`fixed bottom-[-900px] left-0 z-[100] w-full h-[1369px] pointer-events-none transition-opacity duration-300 bg-[linear-gradient(180deg,#155A95_65.52%,rgba(21,75,130,0)_99.31%)] rotate-180 ${showBottomGradient ? 'opacity-100' : 'opacity-0'}`}
+        className={`fixed left-0 z-[100] w-full h-[1369px] pointer-events-none transition-opacity duration-300 bg-[linear-gradient(180deg,#155A95_65.52%,rgba(21,75,130,0)_99.31%)] rotate-180 ${bottomGradientPosition ? 'bottom-[-900px]' : 'bottom-0'} ${showBottomGradient ? 'opacity-100' : 'opacity-0'}`}
         data-challenge-sticky-footer
         data-visible={showBottomGradient}
       />
