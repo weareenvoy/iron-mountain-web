@@ -166,7 +166,7 @@ const Kiosk3SecondScreenTemplate = memo(
 
         {/* Demo overlay */}
         {showOverlay && (
-          <div className="absolute inset-0 z-9999 animate-in duration-700 fade-in">
+          <div className="absolute inset-0 z-[9999] animate-in duration-700 fade-in">
             <CustomInteractiveDemoScreenTemplate
               cardLabel={overlay?.cardLabel}
               demoIframeSrc={demoIframeSrc}

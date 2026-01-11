@@ -117,7 +117,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       <div
         className={cn(
           'absolute inset-0 transition-opacity duration-700',
-          showOverlay ? 'pointer-events-auto z-999 opacity-100' : 'pointer-events-none -z-10 opacity-0'
+          showOverlay ? 'pointer-events-auto z-[9999] opacity-100' : 'pointer-events-none -z-10 opacity-0'
         )}
       >
         <CustomInteractiveDemoScreenTemplate
