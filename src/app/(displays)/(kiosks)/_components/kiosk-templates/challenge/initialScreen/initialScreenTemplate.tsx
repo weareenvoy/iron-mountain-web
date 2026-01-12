@@ -6,6 +6,7 @@ import { memo, useEffect, useRef, useState } from 'react';
 import ButtonArrow from '@/components/ui/icons/ButtonArrow';
 import WhiteLogoSimple from '@/components/ui/icons/WhiteLogoSimple';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
+import { SECTION_NAMES, useStickyHeader } from '../../hooks/useStickyHeader';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 export type InitialScreenTemplateProps = {
@@ -40,6 +41,15 @@ const InitialScreenTemplate = memo(
     const idleVideoSrcRef = useRef<string | undefined>(idleVideoSrc);
     const [dismissedIdleVideoSrc, setDismissedIdleVideoSrc] = useState<null | string>(null);
     const [idleCompleteVideoSrc, setIdleCompleteVideoSrc] = useState<null | string>(null);
+
+    // Sticky header for initial screen title
+    const {
+      labelRef: subheadlineRef,
+      showStickyHeader,
+      stickyHeaderRef,
+    } = useStickyHeader<HTMLHeadingElement>({
+      sectionName: SECTION_NAMES.INITIAL,
+    });
 
     /**
      * Animation trigger configuration:
@@ -91,6 +101,8 @@ const InitialScreenTemplate = memo(
       <div
         className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden"
         data-scroll-section="cover-ambient-initial"
+        data-section={SECTION_NAMES.INITIAL}
+        data-section-end={SECTION_NAMES.INITIAL}
         ref={ref}
       >
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -110,9 +122,26 @@ const InitialScreenTemplate = memo(
           </div>
         </div>
         <div className="absolute top-[970px] left-[244px] z-3 w-[980px] -translate-y-full">
-          <h2 className="text-[120px] leading-[1.3] font-normal tracking-[-6px] whitespace-pre-line text-[#ededed]">
+          <h2
+            className="text-[120px] leading-[1.3] font-normal tracking-[-6px] whitespace-pre-line text-[#ededed]"
+            ref={subheadlineRef}
+          >
             {renderRegisteredMark(subheadline)}
           </h2>
+        </div>
+
+        {/* Sticky Section Header - Fixed Position (Transparent Background) */}
+        <div
+          className={`pointer-events-none fixed top-0 left-0 z-[100] w-full transition-opacity duration-300 motion-reduce:transition-none ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
+          data-initial-sticky-header
+          data-visible={showStickyHeader}
+          ref={stickyHeaderRef}
+        >
+          <div className="px-[244px] pt-[100px]">
+            <h2 className="text-[120px] leading-[1.3] font-normal tracking-[-6px] whitespace-pre-line text-[#ededed]">
+              {renderRegisteredMark(subheadline)}
+            </h2>
+          </div>
         </div>
 
         {/* Logo - Not animated, positioned outside the animated container */}

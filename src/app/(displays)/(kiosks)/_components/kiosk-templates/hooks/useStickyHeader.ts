@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 export const SECTION_NAMES = {
   CHALLENGE: 'challenge',
   CUSTOM_INTERACTIVE: 'customInteractive',
+  INITIAL: 'initial',
   SOLUTION: 'solution',
 } as const;
 
@@ -27,6 +28,7 @@ export const STICKY_HEADER_DATA_ATTRS = {
 const STICKY_HEADER_OFFSET: Record<SectionName, number> = {
   [SECTION_NAMES.CHALLENGE]: 1000,
   [SECTION_NAMES.CUSTOM_INTERACTIVE]: 1000,
+  [SECTION_NAMES.INITIAL]: 1000,
   [SECTION_NAMES.SOLUTION]: 1500,
 } as const;
 
@@ -37,6 +39,7 @@ const STICKY_HEADER_OFFSET: Record<SectionName, number> = {
 const STICKY_HEADER_HEIGHT_FALLBACK: Record<SectionName, number> = {
   [SECTION_NAMES.CHALLENGE]: 1369,
   [SECTION_NAMES.CUSTOM_INTERACTIVE]: 769,
+  [SECTION_NAMES.INITIAL]: 200,
   [SECTION_NAMES.SOLUTION]: 1369,
 } as const;
 
@@ -80,7 +83,7 @@ export interface UseStickyHeaderReturn<TLabel extends HTMLElement = HTMLElement>
 }
 
 /**
- * Manages sticky header behavior for kiosk sections (Challenge, Solution, Custom Interactive).
+ * Manages sticky header behavior for kiosk sections (Initial, Challenge, Solution, Custom Interactive).
  *
  * When a user scrolls past a section's title, a fixed header appears at the top of the screen
  * showing that section's label. The header remains visible until the user scrolls to the end
