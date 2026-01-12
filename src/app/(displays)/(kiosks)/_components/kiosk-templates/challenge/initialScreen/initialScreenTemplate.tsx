@@ -3,6 +3,7 @@
 import { AnimatePresence, motion, useInView } from 'framer-motion';
 import Image from 'next/image';
 import { memo, useEffect, useRef, useState } from 'react';
+import { useMqtt } from '@/components/providers/mqtt-provider';
 import ButtonArrow from '@/components/ui/icons/ButtonArrow';
 import WhiteLogoSimple from '@/components/ui/icons/WhiteLogoSimple';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
@@ -31,10 +32,12 @@ const InitialScreenTemplate = memo(
     buttonText,
     headline,
     idleVideoSrc,
+    kioskId,
     onButtonClick,
     quote,
     subheadline,
   }: InitialScreenTemplateProps) => {
+    const { client } = useMqtt();
     const ref = useRef(null);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const idleVideoSrcRef = useRef<string | undefined>(idleVideoSrc);
@@ -72,6 +75,15 @@ const InitialScreenTemplate = memo(
       // Clear any existing timeout
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
+      }
+
+      // Trigger loadTour when idle screen is dismissed
+      if (client && kioskId) {
+        console.info(`${kioskId}: Idle screen dismissed, triggering loadTour`);
+        client.loadTour(kioskId, {
+          onError: (err: Error) => console.error(`${kioskId}: Failed to trigger loadTour:`, err),
+          onSuccess: () => console.info(`${kioskId}: Successfully triggered loadTour`),
+        });
       }
 
       // Wait for fade out animation to complete before triggering initial screen animations

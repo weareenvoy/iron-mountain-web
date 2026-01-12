@@ -130,10 +130,13 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
 
     // 2. End tour command
     const handleEndTour = () => {
-      console.info(`${kioskId}: Received end-tour command`);
+      console.info(`${kioskId}: Received end-tour command - refreshing kiosk`);
 
       // Reset to idle state
       reportStateRef.current({ 'beat-id': DEFAULT_KIOSK_BEAT_ID });
+
+      // Refresh the page to return to idle state
+      window.location.reload();
     };
 
     // Subscribe to broadcast commands (all exhibits listen to same topics)
