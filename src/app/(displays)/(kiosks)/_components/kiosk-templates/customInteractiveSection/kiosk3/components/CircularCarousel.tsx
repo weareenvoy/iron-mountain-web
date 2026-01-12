@@ -36,12 +36,21 @@ type CircularCarouselProps = {
 };
 
 const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }: CircularCarouselProps) => {
+  // Enforce 6-slide contract - UI is designed for exactly 6 dots in specific positions
+  if (slides.length !== 6) {
+    throw new Error(
+      '[CircularCarousel] Expected exactly 6 slides for circular dot layout, got ' +
+        `${slides.length}. Fix CMS data or update carousel UI to support dynamic slide counts.`
+    );
+  }
+
   const [index, setIndex] = useState(0);
   const [isExiting, setIsExiting] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const timeoutRef = useRef<number | undefined>(undefined);
   const total = slides.length;
-  const currentIndex = total > 0 ? index % total : 0;
+  // slides.length is validated to be 6 above, so total > 0 is always true
+  const currentIndex = index % total;
   const current = slides[currentIndex];
 
   // Cleanup timeout on unmount
@@ -112,7 +121,10 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
             {String(index + 1).padStart(2, '0')}
           </div>
 
-          {/* Dots - Progressive opacity based on current slide */}
+          {/* Dots - Progressive opacity based on current slide
+               NOTE: Positions are hardcoded for 6-slide circular layout (validated at component entry).
+               Each dot is positioned at specific coordinates around the circle for the design.
+               If you need dynamic dot counts, refactor to calculate positions programmatically. */}
           {/* Dot 1 - Top */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
             <motion.div
