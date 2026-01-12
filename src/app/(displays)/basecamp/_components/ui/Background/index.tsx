@@ -7,6 +7,9 @@ import { BasecampBeatId, isValidBasecampBeatId } from '@/lib/internal/types';
 
 const CROSSFADE_DURATION_MS = 800 as const;
 
+// Local fallback video for when API is down
+const FALLBACK_VIDEO_URL = '/videos/basecamp_fallback.webm';
+
 const Background = () => {
   const { data, exhibitState, setReadyBeatId } = useBasecamp();
   const { beatIdx, momentId } = exhibitState;
@@ -14,7 +17,7 @@ const Background = () => {
 
   // Derive URL outside effect. Only re-run effect when URL actually changes
   const beatId = isValidBasecampBeatId(rawBeatId) ? rawBeatId : null;
-  const url = beatId ? data?.beats[beatId].url : undefined;
+  const url = beatId && data ? data.beats[beatId].url : undefined;
 
   // Ref for data access inside effect without causing re-runs
   const dataRef = useRef(data);
@@ -30,7 +33,21 @@ const Background = () => {
   const lastBeat = useRef<BasecampBeatId | null>(null);
 
   useEffect(() => {
-    if (!beatId || !url || !a.current || !b.current) return;
+    if (!a.current || !b.current) return;
+
+    // If Offline / no API data, play local fallback on video A
+    if (!data) {
+      const video = a.current;
+      if (video.src !== FALLBACK_VIDEO_URL) {
+        video.src = FALLBACK_VIDEO_URL;
+        video.loop = true;
+        video.load();
+        video.play().catch(() => {});
+      }
+      return;
+    }
+
+    if (!beatId || !url) return;
 
     if (beatId === lastBeat.current) return;
 
@@ -141,7 +158,7 @@ const Background = () => {
     return () => {
       cleanupFns.forEach(fn => fn());
     };
-  }, [momentId, setReadyBeatId, url, beatId]);
+  }, [beatId, data, momentId, setReadyBeatId, url]);
 
   // For debugging only. Update display time
   const timeDisplayRef = useRef<HTMLSpanElement>(null);

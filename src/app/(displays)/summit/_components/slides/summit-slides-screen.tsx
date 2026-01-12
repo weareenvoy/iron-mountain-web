@@ -15,6 +15,9 @@ import type { SummitFuturescaping, SummitKioskAmbient, SummitPossibility } from 
 import type { SolutionItem } from '@/app/(displays)/summit/_utils';
 import type { ExhibitMqttStateSummit } from '@/lib/mqtt/types';
 
+// Local fallback video for when API is down
+const FALLBACK_VIDEO_URL = '/videos/summit_fallback.webm';
+
 type MetaLabelMap = {
   readonly company: string;
   readonly dateOfEngagement: string;
@@ -418,7 +421,24 @@ const SummitSlidesScreen = ({
     return <PlaceholderSlide description="" heading="Loading…" />;
   }
 
+  // If Offline / no API data, play fallback video for primary screen
   if (error || !data || slides.length === 0) {
+    if (screen === 'primary') {
+      return (
+        <div className="relative h-full w-full overflow-hidden bg-[#F3F5F7]">
+          <video
+            aria-hidden
+            autoPlay
+            className="absolute inset-0 z-0 h-full w-full object-cover"
+            loop
+            muted
+            playsInline
+            preload="auto"
+            src={FALLBACK_VIDEO_URL}
+          />
+        </div>
+      );
+    }
     return <PlaceholderSlide description="" heading="Unable to load slides" />;
   }
 
