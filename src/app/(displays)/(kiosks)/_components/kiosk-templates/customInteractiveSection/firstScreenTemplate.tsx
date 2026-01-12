@@ -1,6 +1,6 @@
 import { SquarePlay } from 'lucide-react';
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
 import ArrowIcon from '@/components/ui/icons/Kiosks/CustomInteractive/ArrowIcon';
 import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCFilledOrangeDiamond';
@@ -9,6 +9,10 @@ import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractiv
 import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
+import { 
+  useStickyHeader,
+  STICKY_HEADER_DATA_ATTRS,
+} from '../hooks/useStickyHeader';
 
 export interface CustomInteractiveKiosk1FirstScreenTemplateProps {
   readonly demoIframeSrc?: string;
@@ -42,9 +46,15 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   secondaryCtaLabel,
 }: CustomInteractiveKiosk1FirstScreenTemplateProps) => {
   const [showOverlay, setShowOverlay] = useState(false);
-  const [showStickyHeader, setShowStickyHeader] = useState(false);
-  const eyebrowRef = useRef<HTMLHeadingElement>(null);
-  const stickyHeaderRef = useRef<HTMLDivElement>(null);
+  
+  const {
+    showStickyHeader,
+    labelRef: eyebrowRef,
+    stickyHeaderRef,
+    sectionRef,
+  } = useStickyHeader({
+    sectionName: 'customInteractive',
+  });
   
   const isKiosk1 = kioskId === 'kiosk-1';
   const eyebrowText = eyebrow;
@@ -53,45 +63,6 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   const ctaWidthClass = isKiosk3 ? 'w-[1360px]' : 'w-[1020px]';
   const secondaryLabelPadding = isKiosk3 ? 'pl-[320px]' : 'pl-[80px]';
   const secondaryIconOffset = isKiosk3 ? 'left-[-330px]' : 'left-[-70px]';
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!eyebrowRef.current || !stickyHeaderRef.current) return;
-
-      const eyebrowRect = eyebrowRef.current.getBoundingClientRect();
-      const eyebrowPastTop = eyebrowRect.bottom < 0;
-
-      // Find the last screen in the Custom Interactive section
-      const lastScreen = document.querySelector('[data-section-end="customInteractive"]');
-      if (!lastScreen) {
-        // Fallback to showing when eyebrow is past top if last screen not found
-        setShowStickyHeader(eyebrowPastTop);
-        return;
-      }
-
-      // Check if sticky header's bottom would go past the last screen's bottom
-      const lastScreenRect = lastScreen.getBoundingClientRect();
-      const stickyHeaderHeight = stickyHeaderRef.current.offsetHeight;
-      const stickyHeaderBottom = stickyHeaderHeight; // Since it's fixed at top: 0
-      const offset = 1000; // Disappear 1000px earlier
-      const sectionEndReached = lastScreenRect.bottom <= (stickyHeaderBottom + offset);
-
-      // Show sticky header when eyebrow scrolls past top AND last screen bottom hasn't been reached
-      const shouldShow = eyebrowPastTop && !sectionEndReached;
-      setShowStickyHeader(shouldShow);
-    };
-
-    // Find the scrolling container (BaseKioskView)
-    const scrollContainer = document.querySelector('[data-kiosk]');
-    if (scrollContainer) {
-      scrollContainer.addEventListener('scroll', handleScroll);
-      handleScroll(); // Check initial state
-
-      return () => {
-        scrollContainer.removeEventListener('scroll', handleScroll);
-      };
-    }
-  }, []);
 
   const handleSecondaryClick = () => {
     setShowOverlay(true);
@@ -104,14 +75,16 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
 
   return (
     <div
+      ref={sectionRef}
       className={cn(
         'group/kiosk relative flex h-screen w-full flex-col',
         isKiosk1 || isKiosk3 ? 'overflow-visible' : 'overflow-hidden'
       )}
+      {...{ [STICKY_HEADER_DATA_ATTRS.SECTION]: 'customInteractive' }}
       data-scroll-section="customInteractive-first-screen"
     >
       {/* Background gradient - defined in globals.css for readability and ease of future updates */}
-      <div className="bg-gradient-kiosk-blue absolute inset-0 group-data-[kiosk=kiosk-1]/kiosk:h-[10530px] group-data-[kiosk=kiosk-3]/kiosk:h-[10430px]" />
+      <div className="bg-gradient-kiosk-blue absolute inset-0 z-0 group-data-[kiosk=kiosk-1]/kiosk:h-[10530px] group-data-[kiosk=kiosk-2]/kiosk:h-[10390px] group-data-[kiosk=kiosk-3]/kiosk:h-[10430px]" />
 
       {/* Overlay - Demo Screen */}
       <div
@@ -133,7 +106,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
 
       {/* Eyebrow */}
       <h2 
-        ref={eyebrowRef}
+        ref={eyebrowRef as React.RefObject<HTMLHeadingElement>}
         className="absolute top-[200px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-3]/kiosk:top-[240px]"
       >
         {renderRegisteredMark(eyebrowText)}
@@ -142,7 +115,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       {/* Sticky Section Header - Fixed Position */}
       <div 
         ref={stickyHeaderRef}
-        className={`fixed top-0 left-0 z-[100] w-full h-[769px] pointer-events-none transition-opacity duration-300 bg-[linear-gradient(180deg,#2481e3_65.52%,rgba(21,75,130,0)_99.31%)] ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
+        className={`fixed top-0 left-0 z-[100] w-full h-[1369px] pointer-events-none transition-opacity duration-300 motion-reduce:transition-none bg-[linear-gradient(180deg,#155A95_65.52%,rgba(21,75,130,0)_99.31%)] ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
         data-customInteractive-sticky-header
         data-visible={showStickyHeader}
       >

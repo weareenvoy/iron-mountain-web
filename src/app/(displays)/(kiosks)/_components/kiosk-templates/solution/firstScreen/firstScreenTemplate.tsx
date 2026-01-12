@@ -1,12 +1,15 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
 import BlueDiamondMain from '@/components/ui/icons/Kiosks/Solutions/BlueDiamondMain';
 import GreenDiamondMain from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondMain';
 import OrangeDiamondMain from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondMain';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
 import { getVideoMimeType } from '@/lib/utils/get-video-mime-type';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
+import { 
+  useStickyHeader,
+  STICKY_HEADER_DATA_ATTRS,
+} from '../../hooks/useStickyHeader';
 
 export type SolutionFirstScreenTemplateProps = {
   readonly body?: string;
@@ -26,54 +29,20 @@ const SolutionFirstScreenTemplate = ({
   mainVideo,
   subheadline,
 }: SolutionFirstScreenTemplateProps) => {
-  const [showStickyHeader, setShowStickyHeader] = useState(false);
-  const labelRef = useRef<HTMLDivElement>(null);
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const stickyHeaderRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!labelRef.current || !stickyHeaderRef.current) return;
-
-      const labelRect = labelRef.current.getBoundingClientRect();
-      const labelPastTop = labelRect.bottom < 0;
-
-      // Find the last screen in the Solution section (thirdScreen or fourthScreen)
-      const lastScreen = document.querySelector('[data-section-end="solution"]');
-      if (!lastScreen) {
-        // Fallback to showing when label is past top if last screen not found
-        setShowStickyHeader(labelPastTop);
-        return;
-      }
-
-      // Check if sticky header's bottom would go past the last screen's bottom
-      const lastScreenRect = lastScreen.getBoundingClientRect();
-      const stickyHeaderHeight = stickyHeaderRef.current.offsetHeight;
-      const stickyHeaderBottom = stickyHeaderHeight; // Since it's fixed at top: 0
-      const offset = 1500; // Disappear 1500px earlier
-      const sectionEndReached = lastScreenRect.bottom <= (stickyHeaderBottom + offset);
-
-      // Show sticky header when label scrolls past top AND last screen bottom hasn't been reached
-      const shouldShow = labelPastTop && !sectionEndReached;
-      setShowStickyHeader(shouldShow);
-    };
-
-    // Find the scrolling container (BaseKioskView)
-    const scrollContainer = document.querySelector('[data-kiosk]');
-    if (scrollContainer) {
-      scrollContainer.addEventListener('scroll', handleScroll);
-      handleScroll(); // Check initial state
-
-      return () => {
-        scrollContainer.removeEventListener('scroll', handleScroll);
-      };
-    }
-  }, []);
+  const {
+    showStickyHeader,
+    labelRef,
+    stickyHeaderRef,
+    sectionRef,
+  } = useStickyHeader({
+    sectionName: 'solution',
+    offset: 1500,
+  });
 
   return (
     <div 
       ref={sectionRef}
-      data-section="solution"
+      {...{ [STICKY_HEADER_DATA_ATTRS.SECTION]: 'solution' }}
       className="relative flex h-screen w-full flex-col overflow-visible bg-black"
     >
       {/* Background video */}
@@ -107,7 +76,7 @@ const SolutionFirstScreenTemplate = ({
 
       {/* Solution label - Initial Position */}
       <div 
-        ref={labelRef}
+        ref={labelRef as React.RefObject<HTMLDivElement>}
         data-section-label="solution"
         className="absolute top-[790px] left-[140px] flex items-center gap-[41px] group-data-[kiosk=kiosk-2]/kiosk:top-[830px] group-data-[kiosk=kiosk-3]/kiosk:top-[860px] group-data-[kiosk=kiosk-3]/kiosk:left-[260px]"
       >
@@ -122,7 +91,7 @@ const SolutionFirstScreenTemplate = ({
       {/* Sticky Section Header - Fixed Position */}
       <div 
         ref={stickyHeaderRef}
-        className={`fixed top-0 left-0 z-[100] w-full h-[1369px] pointer-events-none transition-opacity duration-300 bg-[linear-gradient(180deg,#9F1060_65.52%,rgba(159,17,97,0)_99.31%)]  ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
+        className={`fixed top-0 left-0 z-[100] w-full h-[1369px] pointer-events-none transition-opacity duration-300 motion-reduce:transition-none bg-[linear-gradient(180deg,#9F1060_65.52%,rgba(159,17,97,0)_99.31%)] ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
         data-solution-sticky-header
         data-visible={showStickyHeader}
       >

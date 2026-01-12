@@ -1,10 +1,14 @@
 'use client';
 
 import { Diamond } from 'lucide-react';
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo } from 'react';
 import { getVideoMimeType } from '@/lib/utils/get-video-mime-type';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
+import { 
+  useStickyHeader,
+  STICKY_HEADER_DATA_ATTRS,
+} from '../../hooks/useStickyHeader';
 
 export type FirstScreenTemplateProps = {
   readonly body?: string;
@@ -20,78 +24,22 @@ export type FirstScreenTemplateProps = {
 
 const FirstScreenTemplate = memo(
   ({ body, featuredStat1, featuredStat1Body, labelText, mainVideo, subheadline }: FirstScreenTemplateProps) => {
-    const [showStickyHeader, setShowStickyHeader] = useState(false);
-    const [showBottomGradient, setShowBottomGradient] = useState(false);
-    const [bottomGradientPosition, setBottomGradientPosition] = useState(false);
-    const labelRef = useRef<HTMLDivElement>(null);
-    const sectionRef = useRef<HTMLDivElement>(null);
-    const stickyHeaderRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-      const handleScroll = () => {
-        if (!labelRef.current || !stickyHeaderRef.current) return;
-
-        const labelRect = labelRef.current.getBoundingClientRect();
-        const labelPastTop = labelRect.bottom < 0;
-
-        // Find the last screen in the Challenge section (thirdScreen)
-        const lastScreen = document.querySelector('[data-section-end="challenge"]');
-        if (!lastScreen) {
-          // Fallback to showing when label is past top if last screen not found
-          setShowStickyHeader(labelPastTop);
-          setShowBottomGradient(labelPastTop);
-          setBottomGradientPosition(labelPastTop);
-          return;
-        }
-
-        // Check if sticky header's bottom would go past the last screen's bottom (for top gradient)
-        const lastScreenRect = lastScreen.getBoundingClientRect();
-        const stickyHeaderHeight = stickyHeaderRef.current.offsetHeight;
-        const stickyHeaderBottom = stickyHeaderHeight; // Since it's fixed at top: 0
-        const offset = 1000; // Disappear 1000px earlier
-        const sectionEndReached = lastScreenRect.bottom <= (stickyHeaderBottom + offset);
-
-        // Show sticky header when label scrolls past top AND last screen bottom hasn't been reached
-        const shouldShowTop = labelPastTop && !sectionEndReached;
-        setShowStickyHeader(shouldShowTop);
-
-        // Bottom gradient: hide when last screen enters viewport (its top reaches screen top)
-        const lastScreenEntered = lastScreenRect.top <= 0;
-        const shouldShowBottom = labelPastTop && !lastScreenEntered;
-        setShowBottomGradient(shouldShowBottom);
-        
-        // Update position immediately when showing, but delay when hiding
-        if (shouldShowBottom) {
-          setBottomGradientPosition(true);
-        }
-      };
-
-      // Find the scrolling container (BaseKioskView)
-      const scrollContainer = document.querySelector('[data-kiosk]');
-      if (scrollContainer) {
-        scrollContainer.addEventListener('scroll', handleScroll);
-        handleScroll(); // Check initial state
-
-        return () => {
-          scrollContainer.removeEventListener('scroll', handleScroll);
-        };
-      }
-    }, []);
-
-    // Handle delayed position change when hiding bottom gradient
-    useEffect(() => {
-      if (!showBottomGradient) {
-        const timer = setTimeout(() => {
-          setBottomGradientPosition(false);
-        }, 300); // Match transition duration
-        return () => clearTimeout(timer);
-      }
-    }, [showBottomGradient]);
+    const {
+      showStickyHeader,
+      showBottomGradient,
+      bottomGradientPosition,
+      labelRef,
+      stickyHeaderRef,
+      sectionRef,
+    } = useStickyHeader({
+      sectionName: 'challenge',
+      hasBottomGradient: true,
+    });
 
   return (
     <div 
       ref={sectionRef}
-      data-section="challenge"
+      {...{ [STICKY_HEADER_DATA_ATTRS.SECTION]: 'challenge' }}
       className="relative flex h-screen w-full flex-col overflow-visible bg-black"
     >
       {/* Background gradient - stays behind all content */}
@@ -125,7 +73,7 @@ const FirstScreenTemplate = memo(
 
       {/* Challenge Label Section - Initial Position */}
       <div 
-        ref={labelRef}
+        ref={labelRef as React.RefObject<HTMLDivElement>}
         data-section-label="challenge"
         className="relative top-[-260px] z-[2] flex items-center gap-[41px] px-[128px] pb-[200px] group-data-[kiosk=kiosk-2]/kiosk:top-[-260px] group-data-[kiosk=kiosk-2]/kiosk:left-[10px] group-data-[kiosk=kiosk-3]/kiosk:top-[-320px] group-data-[kiosk=kiosk-3]/kiosk:left-[10px]"
       >
@@ -140,7 +88,7 @@ const FirstScreenTemplate = memo(
       {/* Sticky Section Header - Fixed Position */}
       <div 
         ref={stickyHeaderRef}
-        className={`fixed top-0 left-0 z-[100] w-full h-[1369px] pointer-events-none transition-opacity duration-300 bg-[linear-gradient(180deg,#155A95_65.52%,rgba(21,75,130,0)_99.31%)] ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
+        className={`fixed top-0 left-0 z-[100] w-full h-[1369px] pointer-events-none transition-opacity duration-300 motion-reduce:transition-none bg-[linear-gradient(180deg,#155A95_65.52%,rgba(21,75,130,0)_99.31%)] ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
         data-challenge-sticky-header
         data-visible={showStickyHeader}
       >
@@ -164,7 +112,7 @@ const FirstScreenTemplate = memo(
 
       {/* Sticky Section Footer - Fixed Position (Bottom) */}
       <div 
-        className={`fixed left-0 z-[100] w-full h-[1369px] pointer-events-none transition-opacity duration-300 bg-[linear-gradient(180deg,#155A95_65.52%,rgba(21,75,130,0)_99.31%)] rotate-180 ${bottomGradientPosition ? 'bottom-[-900px]' : 'bottom-0'} ${showBottomGradient ? 'opacity-100' : 'opacity-0'}`}
+        className={`fixed left-0 z-[100] w-full h-[1369px] pointer-events-none transition-opacity duration-300 motion-reduce:transition-none bg-[linear-gradient(180deg,#155A95_65.52%,rgba(21,75,130,0)_99.31%)] rotate-180 ${bottomGradientPosition ? 'bottom-[-900px]' : 'bottom-0'} ${showBottomGradient ? 'opacity-100' : 'opacity-0'}`}
         data-challenge-sticky-footer
         data-visible={showBottomGradient}
       />
