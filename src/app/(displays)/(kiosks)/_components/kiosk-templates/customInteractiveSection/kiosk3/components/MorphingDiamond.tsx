@@ -81,13 +81,13 @@ const MorphingDiamond = memo(({ carouselIndex, isCarouselExiting, showCarousel, 
         >
           <motion.div
             animate={{
-              left: showCarousel ? MORPHING_DIAMOND.VIDEO_LEFT_CAROUSEL : MORPHING_DIAMOND.VIDEO_LEFT_BACKGROUND,
               scale: showCarousel ? MORPHING_DIAMOND.VIDEO_SCALE_CAROUSEL : MORPHING_DIAMOND.VIDEO_SCALE_BACKGROUND,
+              x: showCarousel ? MORPHING_DIAMOND.VIDEO_LEFT_CAROUSEL : MORPHING_DIAMOND.VIDEO_LEFT_BACKGROUND,
             }}
             className="absolute inset-0 h-full w-full -rotate-45"
             initial={{
-              left: showCarousel ? MORPHING_DIAMOND.VIDEO_LEFT_CAROUSEL : MORPHING_DIAMOND.VIDEO_LEFT_BACKGROUND,
               scale: showCarousel ? MORPHING_DIAMOND.VIDEO_SCALE_CAROUSEL : MORPHING_DIAMOND.VIDEO_SCALE_BACKGROUND,
+              x: showCarousel ? MORPHING_DIAMOND.VIDEO_LEFT_CAROUSEL : MORPHING_DIAMOND.VIDEO_LEFT_BACKGROUND,
             }}
             transition={TRANSITIONS.CAROUSEL}
           >
