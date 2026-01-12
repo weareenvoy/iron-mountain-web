@@ -1,12 +1,24 @@
-import { generateSlideId } from '@/lib/utils/cms-helpers';
+import {
+  SLIDE_ID,
+  type SlideId,
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/kiosk3/constants';
 import type { CustomInteractiveScreens } from '../_components/kiosk-templates/customInteractiveSection/customInteractiveSlides';
 import type { Ambient, CustomInteractiveContent } from '../_types/content-types';
-import type { SlideId } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/kiosk3/constants';
 
 /**
  * Maps CMS content for Custom Interactive Kiosk 3 to the Kiosk Custom Interactive structure.
  * Contains transformation logic for carousel slides including ID generation and conditional image logic.
  */
+
+// Known slide IDs for Kiosk 3 - ensures type safety without runtime assertions
+const SLIDE_IDS: readonly SlideId[] = [
+  SLIDE_ID.SLIDE_1,
+  SLIDE_ID.SLIDE_2,
+  SLIDE_ID.SLIDE_3,
+  SLIDE_ID.SLIDE_4,
+  SLIDE_ID.SLIDE_5,
+  SLIDE_ID.SLIDE_6,
+] as const;
 
 type DemoConfig = {
   readonly demoText?: string;
@@ -58,11 +70,20 @@ export const mapCustomInteractiveKiosk3 = (
         // When video exists, use image as secondary decorative element
         const secondaryImageSrc = item.video && item.image ? item.image : undefined;
 
+        // Validate slide index against known slide IDs
+        const id = SLIDE_IDS[index];
+        if (!id) {
+          throw new Error(
+            `[mapCustomInteractiveKiosk3] Unexpected slide index: ${index}. ` +
+              `Expected 0-${SLIDE_IDS.length - 1}. Fix CMS data or add more SLIDE_IDS.`
+          );
+        }
+
         return {
           bullets: item.bullets ?? [],
           eyebrow: ambient.title ?? '',
           headline: item.title ?? '',
-          id: generateSlideId('slide', String(index + 1)) as SlideId,
+          id,
           primaryImageAlt: '',
           primaryImageSrc: item.image ?? '',
           primaryVideoSrc: item.video ?? undefined,

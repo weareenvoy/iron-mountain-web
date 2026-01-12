@@ -6,7 +6,6 @@ import CarouselContentSection from './CarouselContentSection';
 import CarouselCTA from './CarouselCTA';
 import CarouselDiamond from './CarouselDiamond';
 import CircularCarousel, { type CarouselSlide } from './CircularCarousel';
-import DecorativeSVGGroup from './DecorativeSVGGroup';
 import {
   getDecorativeSVGVariant,
   getPrimaryDiamondClass,
@@ -14,6 +13,7 @@ import {
   SLIDE_ID,
   TRANSITIONS,
 } from '../constants';
+import DecorativeSVGGroup from './DecorativeSVGGroup';
 
 type CarouselStateProps = {
   /** Main headline displayed across all carousel slides */

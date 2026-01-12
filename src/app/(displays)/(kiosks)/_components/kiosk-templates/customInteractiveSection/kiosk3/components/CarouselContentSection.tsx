@@ -1,8 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { memo } from 'react';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
-import type { CarouselSlide } from './CircularCarousel';
 import { ANIMATION_VALUES, EASING, TRANSITIONS } from '../constants';
+import type { CarouselSlide } from './CircularCarousel';
 
 type CarouselContentSectionProps = {
   /** Current slide data */
@@ -43,8 +43,7 @@ const CarouselContentSection = memo(({ current }: CarouselContentSectionProps) =
                 initial={{ opacity: 0 }}
                 key={`${current.id}-bullet-${bulletIndex}`}
                 transition={{
-                  delay:
-                    ANIMATION_VALUES.BULLET_STAGGER_START + bulletIndex * ANIMATION_VALUES.BULLET_STAGGER_DELAY,
+                  delay: ANIMATION_VALUES.BULLET_STAGGER_START + bulletIndex * ANIMATION_VALUES.BULLET_STAGGER_DELAY,
                   duration: 0.4,
                   ease: EASING.EASE_IN_OUT,
                 }}
@@ -63,4 +62,3 @@ const CarouselContentSection = memo(({ current }: CarouselContentSectionProps) =
 CarouselContentSection.displayName = 'CarouselContentSection';
 
 export default CarouselContentSection;
-
