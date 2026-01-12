@@ -64,10 +64,10 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
     registerCarouselHandlers,
     slides,
   } = props;
-  
+
   const labelRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
-  
+
   // Show video background when mainVideo is provided (used in animated carousel variant)
   const heroVideo = mainVideo;
 
@@ -90,15 +90,12 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
     <div
       {...(shouldEnableCarouselDelegation ? { 'data-scroll-section': 'value-carousel' } : {})}
       {...(isLastScreen ? { 'data-section-end': 'value' } : {})}
-      ref={sectionRef}
-      data-section="value"
       className="relative flex h-screen w-full flex-col overflow-visible bg-transparent"
       data-carousel-id={carouselId}
+      data-section="value"
+      ref={sectionRef}
     >
-      <div 
-        data-section-video="value"
-        className="absolute top-0 left-0 z-0 h-[1284px] w-full overflow-hidden"
-      >
+      <div className="absolute top-0 left-0 z-0 h-[1284px] w-full overflow-hidden" data-section-video="value">
         {heroVideo ? (
           <video
             autoPlay
@@ -122,10 +119,10 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
         <p className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
           {renderRegisteredMark(normalizeMultiline(eyebrow))}
         </p>
-        <div 
-          ref={labelRef}
-          data-section-label="value"
+        <div
           className="relative top-[-100px] left-[10px] flex items-center gap-[41px]"
+          data-section-label="value"
+          ref={labelRef}
         >
           <div className="relative top-[25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
             <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />

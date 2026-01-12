@@ -123,9 +123,9 @@ const Kiosk3SecondScreenTemplate = memo(
 
     return (
       <div
-        data-section-end="customInteractive"
         className="relative flex h-screen w-full flex-col overflow-hidden"
         data-scroll-section={SECTION_IDS.SECOND_SCREEN}
+        data-section-end="customInteractive"
         ref={ref}
       >
         <div className="absolute inset-0 bg-transparent" />

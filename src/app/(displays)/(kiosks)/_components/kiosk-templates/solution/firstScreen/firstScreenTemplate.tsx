@@ -26,26 +26,18 @@ const SolutionFirstScreenTemplate = ({
   mainVideo,
   subheadline,
 }: SolutionFirstScreenTemplateProps) => {
-  const {
-    showStickyHeader,
-    labelRef,
-    stickyHeaderRef,
-    sectionRef,
-  } = useStickyHeader<HTMLDivElement>({
+  const { labelRef, sectionRef, showStickyHeader, stickyHeaderRef } = useStickyHeader<HTMLDivElement>({
     sectionName: 'solution',
   });
 
   return (
-    <div 
-      ref={sectionRef}
-      data-section="solution"
+    <div
       className="relative flex h-screen w-full flex-col overflow-visible bg-black"
+      data-section="solution"
+      ref={sectionRef}
     >
       {/* Background video */}
-      <div 
-        data-section-video="solution"
-        className="absolute top-[-5px] left-0 h-[1545px] w-full"
-      >
+      <div className="absolute top-[-5px] left-0 h-[1545px] w-full" data-section-video="solution">
         <div className="relative h-full w-full">
           <video
             autoPlay
@@ -71,10 +63,10 @@ const SolutionFirstScreenTemplate = ({
       </h2>
 
       {/* Solution label - Initial Position */}
-      <div 
-        ref={labelRef}
-        data-section-label="solution"
+      <div
         className="absolute top-[790px] left-[140px] flex items-center gap-[41px] group-data-[kiosk=kiosk-2]/kiosk:top-[830px] group-data-[kiosk=kiosk-3]/kiosk:top-[860px] group-data-[kiosk=kiosk-3]/kiosk:left-[260px]"
+        data-section-label="solution"
+        ref={labelRef}
       >
         <div className="relative top-[-25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
           <OutlinedDiamond aria-hidden="true" focusable="false" />
@@ -85,14 +77,14 @@ const SolutionFirstScreenTemplate = ({
       </div>
 
       {/* Sticky Section Header - Fixed Position */}
-      <div 
-        ref={stickyHeaderRef}
-        className={`fixed top-0 left-0 z-[100] w-full h-[1369px] pointer-events-none transition-opacity duration-300 motion-reduce:transition-none bg-[linear-gradient(180deg,#9F1060_65.52%,rgba(159,17,97,0)_99.31%)] ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
+      <div
+        className={`pointer-events-none fixed top-0 left-0 z-[100] h-[1369px] w-full bg-[linear-gradient(180deg,#9F1060_65.52%,rgba(159,17,97,0)_99.31%)] transition-opacity duration-300 motion-reduce:transition-none ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
         data-solution-sticky-header
         data-visible={showStickyHeader}
+        ref={stickyHeaderRef}
       >
         {/* Subheadline */}
-        <h2 className="px-[120px] pt-[240px] pb-[375px] pl-[150px] w-[700px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:w-[650px] group-data-[kiosk=kiosk-3]/kiosk:ml-[120px] group-data-[kiosk=kiosk-3]/kiosk:w-[630px]">
+        <h2 className="w-[700px] px-[120px] pt-[240px] pb-[375px] pl-[150px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:w-[650px] group-data-[kiosk=kiosk-3]/kiosk:ml-[120px] group-data-[kiosk=kiosk-3]/kiosk:w-[630px]">
           {renderRegisteredMark(subheadline)}
         </h2>
 

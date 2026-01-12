@@ -83,7 +83,6 @@ const InitialState = memo(
   ({
     backLabel,
     description,
-    eyebrow,
     headline,
     isButtonTransitioning,
     isInView,

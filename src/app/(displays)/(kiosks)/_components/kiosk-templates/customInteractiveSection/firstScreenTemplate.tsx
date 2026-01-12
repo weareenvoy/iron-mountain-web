@@ -8,8 +8,8 @@ import HCHollowBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/
 import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowOrangeDiamond';
 import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
-import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import { useStickyHeader } from '../hooks/useStickyHeader';
+import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 export interface CustomInteractiveKiosk1FirstScreenTemplateProps {
   readonly demoIframeSrc?: string;
@@ -43,16 +43,16 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   secondaryCtaLabel,
 }: CustomInteractiveKiosk1FirstScreenTemplateProps) => {
   const [showOverlay, setShowOverlay] = useState(false);
-  
+
   const {
-    showStickyHeader,
     labelRef: eyebrowRef,
-    stickyHeaderRef,
     sectionRef,
+    showStickyHeader,
+    stickyHeaderRef,
   } = useStickyHeader<HTMLHeadingElement>({
     sectionName: 'customInteractive',
   });
-  
+
   const isKiosk1 = kioskId === 'kiosk-1';
   const eyebrowText = eyebrow;
   const headlineText = headline;
@@ -72,13 +72,13 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
 
   return (
     <div
-      ref={sectionRef}
       className={cn(
         'group/kiosk relative flex h-screen w-full flex-col',
         isKiosk1 || isKiosk3 ? 'overflow-visible' : 'overflow-hidden'
       )}
-      data-section="customInteractive"
       data-scroll-section="customInteractive-first-screen"
+      data-section="customInteractive"
+      ref={sectionRef}
     >
       {/* Background gradient - defined in globals.css for readability and ease of future updates */}
       <div className="bg-gradient-kiosk-blue absolute inset-0 z-0 group-data-[kiosk=kiosk-1]/kiosk:h-[10530px] group-data-[kiosk=kiosk-2]/kiosk:h-[10390px] group-data-[kiosk=kiosk-3]/kiosk:h-[10430px]" />
@@ -102,19 +102,19 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       </div>
 
       {/* Eyebrow */}
-      <h2 
-        ref={eyebrowRef}
+      <h2
         className="absolute top-[200px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-3]/kiosk:top-[240px]"
+        ref={eyebrowRef}
       >
         {renderRegisteredMark(eyebrowText)}
       </h2>
 
       {/* Sticky Section Header - Fixed Position */}
-      <div 
-        ref={stickyHeaderRef}
-        className={`fixed top-0 left-0 z-[100] w-full h-[769px] pointer-events-none transition-opacity duration-300 motion-reduce:transition-none bg-[linear-gradient(180deg,#2481e3_65.52%,rgba(21,75,130,0)_99.31%)] ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
+      <div
+        className={`pointer-events-none fixed top-0 left-0 z-[100] h-[769px] w-full bg-[linear-gradient(180deg,#2481e3_65.52%,rgba(21,75,130,0)_99.31%)] transition-opacity duration-300 motion-reduce:transition-none ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
         data-customInteractive-sticky-header
         data-visible={showStickyHeader}
+        ref={stickyHeaderRef}
       >
         {/* Eyebrow */}
         <h2 className="px-[120px] pt-[240px] pb-[375px] pl-[150px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">

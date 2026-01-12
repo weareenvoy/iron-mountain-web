@@ -137,13 +137,9 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
           let heightClass = 'h-screen';
           if (slide.id === 'challenge-second') heightClass = 'h-[50vh]';
           if (slide.id === 'challenge-third') heightClass = 'h-[150vh]';
-          
+
           return (
-            <div 
-              className={`${heightClass} w-full flex-shrink-0`}
-              data-slide-index={idx} 
-              key={slide.id}
-            >
+            <div className={`${heightClass} w-full flex-shrink-0`} data-slide-index={idx} key={slide.id}>
               {slide.render()}
             </div>
           );

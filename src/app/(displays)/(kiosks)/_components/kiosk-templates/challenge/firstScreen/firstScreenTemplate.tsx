@@ -4,8 +4,8 @@ import { Diamond } from 'lucide-react';
 import { memo } from 'react';
 import { getVideoMimeType } from '@/lib/utils/get-video-mime-type';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
-import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import { useStickyHeader } from '../../hooks/useStickyHeader';
+import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 export type FirstScreenTemplateProps = {
   readonly body?: string;
@@ -22,99 +22,104 @@ export type FirstScreenTemplateProps = {
 const FirstScreenTemplate = memo(
   ({ body, featuredStat1, featuredStat1Body, labelText, mainVideo, subheadline }: FirstScreenTemplateProps) => {
     const {
-      showStickyHeader,
-      showBottomGradient,
       bottomGradientPosition,
-      labelRef,
-      stickyHeaderRef,
-      sectionRef,
       bottomGradientRef,
+      labelRef,
+      sectionRef,
+      showBottomGradient,
+      showStickyHeader,
+      stickyHeaderRef,
     } = useStickyHeader<HTMLDivElement>({
-      sectionName: 'challenge',
       hasBottomGradient: true,
+      sectionName: 'challenge',
     });
 
-  return (
-    <div 
-      ref={sectionRef}
-      data-section="challenge"
-      className="relative flex h-screen w-full flex-col overflow-visible bg-black"
-    >
-      {/* Background gradient - stays behind all content */}
-      <div className="pointer-events-none absolute inset-0 top-[1290px] z-[1] h-[14400px] rounded-[100px] bg-[linear-gradient(180deg,#1B75BC_0.01%,#14477D_98%)] group-data-[kiosk=kiosk-2]/kiosk:top-[1240px] group-data-[kiosk=kiosk-2]/kiosk:h-[14450px]" />
-
-      {/* Video Header Section */}
-      <div 
-        data-section-video="challenge"
-        className="relative flex h-[1284px] w-full flex-col items-center justify-center px-[120px] py-[200px]"
+    return (
+      <div
+        className="relative flex h-screen w-full flex-col overflow-visible bg-black"
+        data-section="challenge"
+        ref={sectionRef}
       >
-        <video
-          autoPlay
-          className="absolute inset-0 top-[230px] h-full w-full object-cover object-center"
-          controlsList="nodownload"
-          data-scroll-section="challenge-first-video"
-          loop
-          muted
-          playsInline
+        {/* Background gradient - stays behind all content */}
+        <div className="pointer-events-none absolute inset-0 top-[1290px] z-[1] h-[14400px] rounded-[100px] bg-[linear-gradient(180deg,#1B75BC_0.01%,#14477D_98%)] group-data-[kiosk=kiosk-2]/kiosk:top-[1240px] group-data-[kiosk=kiosk-2]/kiosk:h-[14450px]" />
+
+        {/* Video Header Section */}
+        <div
+          className="relative flex h-[1284px] w-full flex-col items-center justify-center px-[120px] py-[200px]"
+          data-section-video="challenge"
         >
-          <source src={mainVideo} type={getVideoMimeType(mainVideo)} />
-        </video>
-        <div className="pointer-events-none absolute inset-0 top-[230px] bg-black/20" />
+          <video
+            autoPlay
+            className="absolute inset-0 top-[230px] h-full w-full object-cover object-center"
+            controlsList="nodownload"
+            data-scroll-section="challenge-first-video"
+            loop
+            muted
+            playsInline
+          >
+            <source src={mainVideo} type={getVideoMimeType(mainVideo)} />
+          </video>
+          <div className="pointer-events-none absolute inset-0 top-[230px] bg-black/20" />
 
-        {/* Subheadline - Initial Position */}
-        <div className="relative top-[120px] left-[-760px] z-[2] px-[120px] pb-[400px] group-data-[kiosk=kiosk-3]/kiosk:top-[50px] group-data-[kiosk=kiosk-3]/kiosk:left-[-800px]">
-          <h2 className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
-            {renderRegisteredMark(subheadline)}
-          </h2>
-        </div>
-      </div>
-
-      {/* Challenge Label Section - Initial Position */}
-      <div 
-        ref={labelRef}
-        data-section-label="challenge"
-        className="relative top-[-260px] z-[2] flex items-center gap-[41px] px-[128px] pb-[200px] group-data-[kiosk=kiosk-2]/kiosk:top-[-260px] group-data-[kiosk=kiosk-2]/kiosk:left-[10px] group-data-[kiosk=kiosk-3]/kiosk:top-[-320px] group-data-[kiosk=kiosk-3]/kiosk:left-[10px]"
-      >
-        <div className="relative mr-[5px] flex h-[110px] w-[110px] items-center justify-center">
-          <Diamond aria-hidden="true" className="h-full w-full text-[#ededed]" focusable="false" strokeWidth={1.25} />
-        </div>
-        <h1 className="text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]">
-          {renderRegisteredMark(labelText)}
-        </h1>
-      </div>
-
-      {/* Sticky Section Header - Fixed Position */}
-      <div 
-        ref={stickyHeaderRef}
-        className={`fixed top-0 left-0 z-[100] w-full h-[1369px] pointer-events-none transition-opacity duration-300 motion-reduce:transition-none bg-[linear-gradient(180deg,#155A95_65.52%,rgba(21,75,130,0)_99.31%)] ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
-        data-challenge-sticky-header
-        data-visible={showStickyHeader}
-      >
-        {/* Subheadline */}
-        <div className="px-[120px] pt-[240px] pb-[375px] pl-[150px]">
-          <h2 className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
-            {renderRegisteredMark(subheadline)}
-          </h2>
+          {/* Subheadline - Initial Position */}
+          <div className="relative top-[120px] left-[-760px] z-[2] px-[120px] pb-[400px] group-data-[kiosk=kiosk-3]/kiosk:top-[50px] group-data-[kiosk=kiosk-3]/kiosk:left-[-800px]">
+            <h2 className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
+              {renderRegisteredMark(subheadline)}
+            </h2>
+          </div>
         </div>
 
-        {/* Challenge Label */}
-        <div className="flex items-center gap-[41px] px-[128px] pb-[20px] pl-[180px] group-data-[kiosk=kiosk-2]/kiosk:left-[10px] group-data-[kiosk=kiosk-3]/kiosk:left-[10px]">
-          <div className="relative mr-[5px] flex h-[86px] w-[86px] items-center justify-center">
+        {/* Challenge Label Section - Initial Position */}
+        <div
+          className="relative top-[-260px] z-[2] flex items-center gap-[41px] px-[128px] pb-[200px] group-data-[kiosk=kiosk-2]/kiosk:top-[-260px] group-data-[kiosk=kiosk-2]/kiosk:left-[10px] group-data-[kiosk=kiosk-3]/kiosk:top-[-320px] group-data-[kiosk=kiosk-3]/kiosk:left-[10px]"
+          data-section-label="challenge"
+          ref={labelRef}
+        >
+          <div className="relative mr-[5px] flex h-[110px] w-[110px] items-center justify-center">
             <Diamond aria-hidden="true" className="h-full w-full text-[#ededed]" focusable="false" strokeWidth={1.25} />
           </div>
           <h1 className="text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]">
             {renderRegisteredMark(labelText)}
           </h1>
         </div>
-      </div>
 
-      {/* Sticky Section Footer - Fixed Position (Bottom) */}
-      <div 
-        ref={bottomGradientRef}
-        className={`fixed left-0 z-[100] w-full h-[1369px] pointer-events-none transition-opacity duration-300 motion-reduce:transition-none bg-[linear-gradient(180deg,#155A95_65.52%,rgba(21,75,130,0)_99.31%)] rotate-180 ${bottomGradientPosition ? 'bottom-[-900px]' : 'bottom-0'} ${showBottomGradient ? 'opacity-100' : 'opacity-0'}`}
-        data-challenge-sticky-footer
-        data-visible={showBottomGradient}
-      />
+        {/* Sticky Section Header - Fixed Position */}
+        <div
+          className={`pointer-events-none fixed top-0 left-0 z-[100] h-[1369px] w-full bg-[linear-gradient(180deg,#155A95_65.52%,rgba(21,75,130,0)_99.31%)] transition-opacity duration-300 motion-reduce:transition-none ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
+          data-challenge-sticky-header
+          data-visible={showStickyHeader}
+          ref={stickyHeaderRef}
+        >
+          {/* Subheadline */}
+          <div className="px-[120px] pt-[240px] pb-[375px] pl-[150px]">
+            <h2 className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
+              {renderRegisteredMark(subheadline)}
+            </h2>
+          </div>
+
+          {/* Challenge Label */}
+          <div className="flex items-center gap-[41px] px-[128px] pb-[20px] pl-[180px] group-data-[kiosk=kiosk-2]/kiosk:left-[10px] group-data-[kiosk=kiosk-3]/kiosk:left-[10px]">
+            <div className="relative mr-[5px] flex h-[86px] w-[86px] items-center justify-center">
+              <Diamond
+                aria-hidden="true"
+                className="h-full w-full text-[#ededed]"
+                focusable="false"
+                strokeWidth={1.25}
+              />
+            </div>
+            <h1 className="text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]">
+              {renderRegisteredMark(labelText)}
+            </h1>
+          </div>
+        </div>
+
+        {/* Sticky Section Footer - Fixed Position (Bottom) */}
+        <div
+          className={`pointer-events-none fixed left-0 z-[100] h-[1369px] w-full rotate-180 bg-[linear-gradient(180deg,#155A95_65.52%,rgba(21,75,130,0)_99.31%)] transition-opacity duration-300 motion-reduce:transition-none ${bottomGradientPosition ? 'bottom-[-900px]' : 'bottom-0'} ${showBottomGradient ? 'opacity-100' : 'opacity-0'}`}
+          data-challenge-sticky-footer
+          data-visible={showBottomGradient}
+          ref={bottomGradientRef}
+        />
 
         {/* Problem Description Section */}
         <div className="relative top-[-140px] left-[-10px] z-[2] px-[120px] group-data-[kiosk=kiosk-2]/kiosk:top-[-150px] group-data-[kiosk=kiosk-2]/kiosk:left-[10px] group-data-[kiosk=kiosk-3]/kiosk:top-[-210px] group-data-[kiosk=kiosk-3]/kiosk:left-[0]">

@@ -54,7 +54,6 @@ export type CustomInteractiveKiosk1SecondScreenTemplateProps = {
 const CustomInteractiveKiosk1SecondScreenTemplate = ({
   bodyText,
   demoIframeSrc,
-  eyebrow,
   headline,
   heroImageAlt,
   heroImageSrc,
@@ -66,7 +65,6 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
   secondaryCtaLabel,
   steps,
 }: CustomInteractiveKiosk1SecondScreenTemplateProps) => {
-  const eyebrowText: string = normalizeText(eyebrow);
   const headlineText: string = normalizeText(headline);
   const normalizedBodyText =
     bodyText ?? 'Explore each section to learn how Iron Mountain can transform your enterprise';
@@ -140,9 +138,9 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
   return (
     <>
       <div
-        data-section-end="customInteractive"
         className="relative flex h-screen w-full flex-col overflow-visible bg-transparent"
         data-scroll-section="customInteractive-second-screen"
+        data-section-end="customInteractive"
         ref={containerRef}
       >
         <div className="absolute inset-0 bg-transparent" />

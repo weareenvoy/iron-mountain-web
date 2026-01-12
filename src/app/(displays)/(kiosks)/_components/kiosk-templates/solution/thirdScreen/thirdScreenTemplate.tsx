@@ -6,7 +6,6 @@ import GreenDiamondThird from '@/components/ui/icons/Kiosks/Solutions/GreenDiamo
 import GreenDiamondThird2 from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondThird2';
 import OrangeDiamondThird from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondThird';
 import OrangeDiamondThird2 from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondThird2';
-import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import Diamond from './components/Diamond';
 import FilledDiamond from './components/FilledDiamond';
@@ -38,10 +37,8 @@ const SolutionThirdScreenTemplate = ({
   centerLabel,
   headline,
   kioskId,
-  labelText,
   mediaDiamondLeftSrc,
   mediaDiamondRightSrc,
-  subheadline,
   topLeftLabel,
   topRightLabel,
 }: SolutionThirdScreenTemplateProps) => {
@@ -92,19 +89,17 @@ const SolutionThirdScreenTemplate = ({
   ];
 
   return (
-    <div 
-      data-section-end="solution"
+    <div
       className="relative z-1 flex h-screen w-full flex-col overflow-hidden bg-transparent"
       data-scroll-section="solution-third-section"
+      data-section-end="solution"
     >
       {/* Gradient backdrop */}
       <div className="absolute top-[-296px] left-0 h-[5416px] w-full rounded-t-[100px] bg-transparent" />
 
       {/* Title */}
       <div className="absolute top-[1390px] left-[240px] w-[1300px] text-white group-data-[kiosk=kiosk-2]/kiosk:w-[1400px] group-data-[kiosk=kiosk-3]/kiosk:top-[400px]">
-        <p
-          className="text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line"
-        >
+        <p className="text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line">
           {renderRegisteredMark(headline)}
         </p>
       </div>

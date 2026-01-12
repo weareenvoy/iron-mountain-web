@@ -6,7 +6,6 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import GreenDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondFourth';
 import OrangeDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondFourth';
 import OrangeGradientDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/OrangeGradientDiamondFourth';
-import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
 import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import PhotoDiamond from './PhotoDiamond';
@@ -29,27 +28,23 @@ const SolutionFourthScreenTemplate = ({
   accentDiamondSrc,
   accordion,
   headline,
-  labelText,
   mediaDiamondOutlineSrc,
   mediaDiamondSolidSrc,
-  subheadline,
 }: SolutionFourthScreenTemplateProps) => {
   const entries = accordion?.length ? accordion : [];
 
   return (
-    <div 
-      data-section-end="solution"
+    <div
       className="relative flex h-screen w-full flex-col overflow-hidden bg-transparent"
       data-scroll-section="solution-fourth-section"
+      data-section-end="solution"
     >
       {/* Background gradient (now transparent) */}
       <div className="absolute top-0 left-0 h-[5120px] w-full bg-transparent" />
 
       {/* Title */}
       <div className="absolute top-[1240px] left-[240px] z-10 w-[1300px]">
-        <p
-          className="text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]"
-        >
+        <p className="text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]">
           {renderRegisteredMark(headline)}
         </p>
       </div>
