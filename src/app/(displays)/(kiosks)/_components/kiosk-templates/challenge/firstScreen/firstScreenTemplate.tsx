@@ -1,7 +1,8 @@
 'use client';
 
+import { motion, useInView } from 'framer-motion';
 import { Diamond } from 'lucide-react';
-import { memo } from 'react';
+import { memo, useRef } from 'react';
 import { getVideoMimeType } from '@/lib/utils/get-video-mime-type';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import { SECTION_NAMES, useStickyHeader } from '../../hooks/useStickyHeader';
@@ -21,6 +22,9 @@ export type FirstScreenTemplateProps = {
 
 const FirstScreenTemplate = memo(
   ({ body, featuredStat1, featuredStat1Body, labelText, mainVideo, subheadline }: FirstScreenTemplateProps) => {
+    const animationTriggerRef = useRef(null);
+    const isInView = useInView(animationTriggerRef, { amount: 1, once: true }); // amount 1 is in use to make sure 100% of the template is in use before this animation kicks off. This keeps it from animating early when part of the template is in view.
+
     const {
       bottomGradientPosition,
       bottomGradientRef,
@@ -62,25 +66,35 @@ const FirstScreenTemplate = memo(
           <div className="pointer-events-none absolute inset-0 top-[230px] bg-black/20" />
 
           {/* Subheadline - Initial Position */}
-          <div className="relative top-[120px] left-[-760px] z-[2] px-[120px] pb-[400px] group-data-[kiosk=kiosk-3]/kiosk:top-[50px] group-data-[kiosk=kiosk-3]/kiosk:left-[-800px]">
+          <motion.div
+            animate={isInView ? { opacity: 1, y: 0 } : undefined}
+            className="relative top-[120px] left-[-760px] z-[2] px-[120px] pb-[400px] will-change-[transform,opacity] group-data-[kiosk=kiosk-3]/kiosk:top-[50px] group-data-[kiosk=kiosk-3]/kiosk:left-[-800px]"
+            initial={{ opacity: 0, y: -450 }}
+            transition={{ delay: 0, duration: 0.6, ease: [0.3, 0, 0.6, 1] }}
+          >
             <h2 className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
               {renderRegisteredMark(subheadline)}
             </h2>
-          </div>
+          </motion.div>
         </div>
 
         {/* Challenge Label Section - Initial Position */}
-        <div
-          className="relative top-[-260px] z-[2] flex items-center gap-[41px] px-[128px] pb-[200px] group-data-[kiosk=kiosk-2]/kiosk:top-[-260px] group-data-[kiosk=kiosk-2]/kiosk:left-[10px] group-data-[kiosk=kiosk-3]/kiosk:top-[-320px] group-data-[kiosk=kiosk-3]/kiosk:left-[10px]"
-          data-section-label="challenge"
-          ref={labelRef}
-        >
-          <div className="relative mr-[5px] flex h-[110px] w-[110px] items-center justify-center">
-            <Diamond aria-hidden="true" className="h-full w-full text-[#ededed]" focusable="false" strokeWidth={1.25} />
-          </div>
-          <h1 className="text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]">
-            {renderRegisteredMark(labelText)}
-          </h1>
+        <div ref={animationTriggerRef}>
+          <motion.div
+            animate={isInView ? { opacity: 1, y: 0 } : undefined}
+            className="relative top-[-260px] z-[2] flex items-center gap-[41px] px-[128px] pb-[200px] will-change-[transform,opacity] group-data-[kiosk=kiosk-2]/kiosk:top-[-260px] group-data-[kiosk=kiosk-2]/kiosk:left-[10px] group-data-[kiosk=kiosk-3]/kiosk:top-[-320px] group-data-[kiosk=kiosk-3]/kiosk:left-[10px]"
+            data-section-label="challenge"
+            initial={{ opacity: 0, y: 610 }}
+            ref={labelRef}
+            transition={{ delay: 0.2, duration: 0.6, ease: [0.3, 0, 0.6, 1] }}
+          >
+            <div className="relative mr-[5px] flex h-[110px] w-[110px] items-center justify-center">
+              <Diamond aria-hidden="true" className="h-full w-full text-[#ededed]" focusable="false" strokeWidth={1.25} />
+            </div>
+            <h1 className="text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]">
+              {renderRegisteredMark(labelText)}
+            </h1>
+          </motion.div>
         </div>
 
         {/* Sticky Section Header - Fixed Position */}

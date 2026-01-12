@@ -1,5 +1,6 @@
 'use client';
 
+import { motion, useInView } from 'framer-motion';
 import { memo, useRef } from 'react';
 import { normalizeDiamondCards } from '@/app/(displays)/(kiosks)/_utils/normalize-diamond-cards';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
@@ -65,6 +66,9 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
     slides,
   } = props;
 
+  const animationTriggerRef = useRef(null);
+  const isInView = useInView(animationTriggerRef, { amount: 1, once: true }); // amount 1 is in use to make sure 100% of the template is in use before this animation kicks off. This keeps it from animating early when part of the template is in view.
+
   const labelRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
 
@@ -115,21 +119,31 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
       </div>
 
       {/* Header Section - Initial Position */}
-      <div className="absolute top-0 left-0 z-2 flex h-[1284px] w-full flex-col justify-between px-[120px] py-[240px]">
-        <p className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
-          {renderRegisteredMark(normalizeMultiline(eyebrow))}
-        </p>
-        <div
-          className="relative top-[-100px] left-[10px] flex items-center gap-[41px]"
-          data-section-label="value"
-          ref={labelRef}
+      <div className="absolute top-0 left-0 flex h-[1284px] w-full flex-col justify-between px-[120px] py-[240px]">
+        <motion.p
+          animate={isInView ? { y: 0 } : undefined}
+          className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] will-change-transform"
+          initial={{ y: -1100 }}
+          transition={{ delay: 0, duration: 0.6, ease: [0.3, 0, 0.6, 1] }}
         >
-          <div className="relative top-[25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
-            <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
-          </div>
-          <h1 className="relative top-[30px] left-[-90px] text-[126px] leading-[1.3] font-normal tracking-[-6.3px] whitespace-nowrap text-[#ededed]">
-            {renderRegisteredMark(labelText)}
-          </h1>
+          {renderRegisteredMark(normalizeMultiline(eyebrow))}
+        </motion.p>
+        <div ref={animationTriggerRef}>
+          <motion.div
+            animate={isInView ? { opacity: 1, y: 0 } : undefined}
+            className="relative top-[-100px] left-[10px] flex items-center gap-[41px] will-change-[transform,opacity]"
+            data-section-label="value"
+            initial={{ opacity: 0, y: -1100 }}
+            ref={labelRef}
+            transition={{ delay: 0.2, duration: 0.6, ease: [0.3, 0, 0.6, 1] }}
+          >
+            <div className="relative top-[25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
+              <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
+            </div>
+            <h1 className="relative top-[30px] left-[-90px] text-[126px] leading-[1.3] font-normal tracking-[-6.3px] whitespace-nowrap text-[#ededed]">
+              {renderRegisteredMark(labelText)}
+            </h1>
+          </motion.div>
         </div>
       </div>
 

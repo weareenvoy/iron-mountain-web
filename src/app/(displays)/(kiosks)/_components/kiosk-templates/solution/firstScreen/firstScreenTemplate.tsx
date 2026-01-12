@@ -1,5 +1,7 @@
 'use client';
 
+import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
 import BlueDiamondMain from '@/components/ui/icons/Kiosks/Solutions/BlueDiamondMain';
 import GreenDiamondMain from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondMain';
 import OrangeDiamondMain from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondMain';
@@ -26,6 +28,9 @@ const SolutionFirstScreenTemplate = ({
   mainVideo,
   subheadline,
 }: SolutionFirstScreenTemplateProps) => {
+  const animationTriggerRef = useRef(null);
+  const isInView = useInView(animationTriggerRef, { amount: 1, once: true }); // amount 1 is in use to make sure 100% of the template is in use before this animation kicks off. This keeps it from animating early when part of the template is in view.
+
   const { labelRef, sectionRef, showStickyHeader, stickyHeaderRef } = useStickyHeader<HTMLDivElement>({
     sectionName: SECTION_NAMES.SOLUTION,
   });
@@ -58,22 +63,32 @@ const SolutionFirstScreenTemplate = ({
       <div className="absolute top-[1058px] left-0 z-[1] h-[14575px] w-full rounded-[100px] bg-gradient-to-b from-[#A2115E] to-[#8A0D71] group-data-[kiosk=kiosk-2]/kiosk:top-[1110px] group-data-[kiosk=kiosk-3]/kiosk:top-[1060px]" />
 
       {/* Subheadline - Initial Position */}
-      <h2 className="absolute top-[240px] left-[120px] z-[1] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:top-[290px] group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-2]/kiosk:w-[650px] group-data-[kiosk=kiosk-3]/kiosk:top-[300px] group-data-[kiosk=kiosk-3]/kiosk:left-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[330px]">
+      <motion.h2
+        animate={isInView ? { y: 0 } : undefined}
+        className="absolute top-[240px] left-[120px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] will-change-transform group-data-[kiosk=kiosk-2]/kiosk:top-[290px] group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-2]/kiosk:w-[650px] group-data-[kiosk=kiosk-3]/kiosk:top-[300px] group-data-[kiosk=kiosk-3]/kiosk:left-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[330px]"
+        initial={{ y: -1100 }}
+        transition={{ delay: 0, duration: 0.6, ease: [0.3, 0, 0.6, 1] }}
+      >
         {renderRegisteredMark(subheadline)}
-      </h2>
+      </motion.h2>
 
       {/* Solution label - Initial Position */}
-      <div
-        className="absolute top-[790px] left-[140px] flex items-center gap-[41px] group-data-[kiosk=kiosk-2]/kiosk:top-[830px] group-data-[kiosk=kiosk-3]/kiosk:top-[860px] group-data-[kiosk=kiosk-3]/kiosk:left-[260px]"
-        data-section-label="solution"
-        ref={labelRef}
-      >
-        <div className="relative top-[-25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
-          <OutlinedDiamond aria-hidden="true" focusable="false" />
-        </div>
-        <h1 className="relative top-[-20px] left-[-100px] text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]">
-          {labelText}
-        </h1>
+      <div ref={animationTriggerRef}>
+        <motion.div
+          animate={isInView ? { opacity: 1, y: 0 } : undefined}
+          className="absolute top-[790px] left-[140px] flex items-center gap-[41px] will-change-[transform,opacity] group-data-[kiosk=kiosk-2]/kiosk:top-[830px] group-data-[kiosk=kiosk-3]/kiosk:top-[860px] group-data-[kiosk=kiosk-3]/kiosk:left-[260px]"
+          data-section-label="solution"
+          initial={{ opacity: 0, y: -1100 }}
+          ref={labelRef}
+          transition={{ delay: 0.2, duration: 0.6, ease: [0.3, 0, 0.6, 1] }}
+        >
+          <div className="relative top-[-25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
+            <OutlinedDiamond aria-hidden="true" focusable="false" />
+          </div>
+          <h1 className="relative top-[-20px] left-[-100px] text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]">
+            {labelText}
+          </h1>
+        </motion.div>
       </div>
 
       {/* Sticky Section Header - Fixed Position */}
