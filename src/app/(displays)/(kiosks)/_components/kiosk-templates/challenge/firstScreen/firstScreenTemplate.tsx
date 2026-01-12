@@ -5,10 +5,7 @@ import { memo } from 'react';
 import { getVideoMimeType } from '@/lib/utils/get-video-mime-type';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
-import { 
-  useStickyHeader,
-  STICKY_HEADER_DATA_ATTRS,
-} from '../../hooks/useStickyHeader';
+import { useStickyHeader } from '../../hooks/useStickyHeader';
 
 export type FirstScreenTemplateProps = {
   readonly body?: string;
@@ -32,7 +29,7 @@ const FirstScreenTemplate = memo(
       stickyHeaderRef,
       sectionRef,
       bottomGradientRef,
-    } = useStickyHeader({
+    } = useStickyHeader<HTMLDivElement>({
       sectionName: 'challenge',
       hasBottomGradient: true,
     });
@@ -40,7 +37,7 @@ const FirstScreenTemplate = memo(
   return (
     <div 
       ref={sectionRef}
-      {...{ [STICKY_HEADER_DATA_ATTRS.SECTION]: 'challenge' }}
+      data-section="challenge"
       className="relative flex h-screen w-full flex-col overflow-visible bg-black"
     >
       {/* Background gradient - stays behind all content */}
@@ -74,7 +71,7 @@ const FirstScreenTemplate = memo(
 
       {/* Challenge Label Section - Initial Position */}
       <div 
-        ref={labelRef as React.RefObject<HTMLDivElement>}
+        ref={labelRef}
         data-section-label="challenge"
         className="relative top-[-260px] z-[2] flex items-center gap-[41px] px-[128px] pb-[200px] group-data-[kiosk=kiosk-2]/kiosk:top-[-260px] group-data-[kiosk=kiosk-2]/kiosk:left-[10px] group-data-[kiosk=kiosk-3]/kiosk:top-[-320px] group-data-[kiosk=kiosk-3]/kiosk:left-[10px]"
       >

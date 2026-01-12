@@ -10,31 +10,14 @@ export const STICKY_HEADER_DATA_ATTRS = {
 } as const;
 
 /**
- * Z-index values for layering system
- */
-export const Z_INDEX = {
-  STICKY_HEADER: 100,
-  DEMO_OVERLAY: 9999,
-} as const;
-
-/**
  * Sticky header offset configuration (distance before disappearance)
+ * Used internally by the hook for auto-selecting appropriate offset per section.
  */
-export const STICKY_HEADER_OFFSET = {
+const STICKY_HEADER_OFFSET = {
   CHALLENGE: 1000,
   SOLUTION: 1500,
   CUSTOM_INTERACTIVE: 1000,
 } as const;
-
-/**
- * Sticky header height (used for gradient size)
- */
-export const STICKY_HEADER_HEIGHT = 1369;
-
-/**
- * Challenge bottom gradient offset
- */
-export const CHALLENGE_BOTTOM_GRADIENT_OFFSET = -900;
 
 /**
  * Throttle scroll events to this interval (ms)
@@ -43,6 +26,7 @@ const SCROLL_THROTTLE_MS = 16; // ~60fps
 
 /**
  * Transition duration for fade effects (ms)
+ * Used for coordinating opacity transitions with position changes
  */
 export const TRANSITION_DURATION_MS = 300;
 
@@ -62,20 +46,29 @@ export interface UseStickyHeaderOptions {
   hasBottomGradient?: boolean;
 }
 
-export interface UseStickyHeaderReturn {
+export interface UseStickyHeaderReturn<TLabel extends HTMLElement = HTMLElement> {
   /** Whether the top sticky header should be visible */
   showStickyHeader: boolean;
-  /** Whether the bottom gradient should be visible */
+  /** 
+   * Whether the bottom gradient should be visible (Challenge only)
+   * Unused by Solution & Custom Interactive - kept for consistent return type
+   */
   showBottomGradient: boolean;
-  /** Whether the bottom gradient should be in its offset position */
+  /** 
+   * Whether the bottom gradient should be in its offset position (Challenge only)
+   * Unused by Solution & Custom Interactive - kept for consistent return type
+   */
   bottomGradientPosition: boolean;
-  /** Ref for the label/eyebrow element that triggers visibility (accepts any HTML element) */
-  labelRef: React.RefObject<HTMLElement>;
+  /** Ref for the label/eyebrow element that triggers visibility */
+  labelRef: React.RefObject<TLabel>;
   /** Ref for the sticky header element */
   stickyHeaderRef: React.RefObject<HTMLDivElement>;
   /** Ref for the section container */
   sectionRef: React.RefObject<HTMLDivElement>;
-  /** Ref for the bottom gradient element (Challenge only) */
+  /** 
+   * Ref for the bottom gradient element (Challenge only)
+   * Unused by Solution & Custom Interactive - kept for consistent return type
+   */
   bottomGradientRef: React.RefObject<HTMLDivElement>;
 }
 
@@ -89,24 +82,31 @@ export interface UseStickyHeaderReturn {
  * - Reduced motion support
  * - Memory leak prevention
  * - TypeScript type safety
+ * - Generic label ref type for proper type inference
  * 
+ * @template TLabel - The HTML element type for the label/eyebrow ref
  * @param options - Configuration for sticky header behavior
  * @returns Refs and state for sticky header implementation
  */
-export function useStickyHeader({
+export function useStickyHeader<TLabel extends HTMLElement = HTMLElement>({
   sectionName,
   offset,
   enabled = true,
   hasBottomGradient = false,
-}: UseStickyHeaderOptions): UseStickyHeaderReturn {
+}: UseStickyHeaderOptions): UseStickyHeaderReturn<TLabel> {
   // Auto-select offset based on section if not provided
-  const finalOffset = offset ?? STICKY_HEADER_OFFSET[sectionName.toUpperCase() as keyof typeof STICKY_HEADER_OFFSET] ?? STICKY_HEADER_OFFSET.CHALLENGE;
+  const OFFSET_MAP: Record<SectionName, number> = {
+    challenge: STICKY_HEADER_OFFSET.CHALLENGE,
+    solution: STICKY_HEADER_OFFSET.SOLUTION,
+    customInteractive: STICKY_HEADER_OFFSET.CUSTOM_INTERACTIVE,
+  };
+  const finalOffset = offset ?? OFFSET_MAP[sectionName];
   
   const [showStickyHeader, setShowStickyHeader] = useState(false);
   const [showBottomGradient, setShowBottomGradient] = useState(false);
   const [bottomGradientPosition, setBottomGradientPosition] = useState(false);
   
-  const labelRef = useRef<HTMLElement>(null);
+  const labelRef = useRef<TLabel>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
   const stickyHeaderRef = useRef<HTMLDivElement>(null);
   const bottomGradientRef = useRef<HTMLDivElement>(null);
@@ -151,7 +151,7 @@ export function useStickyHeader({
     const handleScroll = () => {
       if (!labelRef.current || !stickyHeaderRef.current || !isMountedRef.current) return;
 
-      // Throttle scroll events for performance
+      // Throttle scroll events for performance (~60fps)
       const now = Date.now();
       if (now - lastScrollTimeRef.current < SCROLL_THROTTLE_MS) {
         // Schedule delayed update if not already scheduled
@@ -165,6 +165,18 @@ export function useStickyHeader({
       }
       lastScrollTimeRef.current = now;
 
+      /**
+       * PERFORMANCE NOTE: getBoundingClientRect() forces layout recalculation
+       * 
+       * Current approach uses getBoundingClientRect() for precise positioning.
+       * This is acceptable for kiosk displays with predictable hardware, but
+       * could be optimized using IntersectionObserver for better performance
+       * on lower-end devices.
+       * 
+       * Future optimization: Replace scroll + getBoundingClientRect with
+       * IntersectionObserver for more efficient visibility detection without
+       * forcing synchronous layout calculations.
+       */
       const labelRect = labelRef.current.getBoundingClientRect();
       const labelPastTop = labelRect.bottom < 0;
 

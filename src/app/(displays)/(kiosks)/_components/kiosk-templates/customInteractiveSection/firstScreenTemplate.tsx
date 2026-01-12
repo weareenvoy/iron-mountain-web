@@ -9,10 +9,7 @@ import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractiv
 import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
-import { 
-  useStickyHeader,
-  STICKY_HEADER_DATA_ATTRS,
-} from '../hooks/useStickyHeader';
+import { useStickyHeader } from '../hooks/useStickyHeader';
 
 export interface CustomInteractiveKiosk1FirstScreenTemplateProps {
   readonly demoIframeSrc?: string;
@@ -52,7 +49,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
     labelRef: eyebrowRef,
     stickyHeaderRef,
     sectionRef,
-  } = useStickyHeader({
+  } = useStickyHeader<HTMLHeadingElement>({
     sectionName: 'customInteractive',
   });
   
@@ -80,7 +77,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
         'group/kiosk relative flex h-screen w-full flex-col',
         isKiosk1 || isKiosk3 ? 'overflow-visible' : 'overflow-hidden'
       )}
-      {...{ [STICKY_HEADER_DATA_ATTRS.SECTION]: 'customInteractive' }}
+      data-section="customInteractive"
       data-scroll-section="customInteractive-first-screen"
     >
       {/* Background gradient - defined in globals.css for readability and ease of future updates */}
@@ -106,7 +103,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
 
       {/* Eyebrow */}
       <h2 
-        ref={eyebrowRef as React.RefObject<HTMLHeadingElement>}
+        ref={eyebrowRef}
         className="absolute top-[200px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-3]/kiosk:top-[240px]"
       >
         {renderRegisteredMark(eyebrowText)}

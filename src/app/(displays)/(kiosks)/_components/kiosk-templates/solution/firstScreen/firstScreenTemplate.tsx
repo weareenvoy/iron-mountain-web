@@ -6,10 +6,7 @@ import OrangeDiamondMain from '@/components/ui/icons/Kiosks/Solutions/OrangeDiam
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
 import { getVideoMimeType } from '@/lib/utils/get-video-mime-type';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
-import { 
-  useStickyHeader,
-  STICKY_HEADER_DATA_ATTRS,
-} from '../../hooks/useStickyHeader';
+import { useStickyHeader } from '../../hooks/useStickyHeader';
 
 export type SolutionFirstScreenTemplateProps = {
   readonly body?: string;
@@ -34,14 +31,14 @@ const SolutionFirstScreenTemplate = ({
     labelRef,
     stickyHeaderRef,
     sectionRef,
-  } = useStickyHeader({
+  } = useStickyHeader<HTMLDivElement>({
     sectionName: 'solution',
   });
 
   return (
     <div 
       ref={sectionRef}
-      {...{ [STICKY_HEADER_DATA_ATTRS.SECTION]: 'solution' }}
+      data-section="solution"
       className="relative flex h-screen w-full flex-col overflow-visible bg-black"
     >
       {/* Background video */}
@@ -75,7 +72,7 @@ const SolutionFirstScreenTemplate = ({
 
       {/* Solution label - Initial Position */}
       <div 
-        ref={labelRef as React.RefObject<HTMLDivElement>}
+        ref={labelRef}
         data-section-label="solution"
         className="absolute top-[790px] left-[140px] flex items-center gap-[41px] group-data-[kiosk=kiosk-2]/kiosk:top-[830px] group-data-[kiosk=kiosk-3]/kiosk:top-[860px] group-data-[kiosk=kiosk-3]/kiosk:left-[260px]"
       >
