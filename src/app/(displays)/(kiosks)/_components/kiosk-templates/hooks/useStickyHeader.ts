@@ -69,12 +69,14 @@ export interface UseStickyHeaderReturn {
   showBottomGradient: boolean;
   /** Whether the bottom gradient should be in its offset position */
   bottomGradientPosition: boolean;
-  /** Ref for the label/eyebrow element that triggers visibility */
+  /** Ref for the label/eyebrow element that triggers visibility (accepts any HTML element) */
   labelRef: React.RefObject<HTMLElement>;
   /** Ref for the sticky header element */
   stickyHeaderRef: React.RefObject<HTMLDivElement>;
   /** Ref for the section container */
   sectionRef: React.RefObject<HTMLDivElement>;
+  /** Ref for the bottom gradient element (Challenge only) */
+  bottomGradientRef: React.RefObject<HTMLDivElement>;
 }
 
 /**
@@ -93,10 +95,13 @@ export interface UseStickyHeaderReturn {
  */
 export function useStickyHeader({
   sectionName,
-  offset = STICKY_HEADER_OFFSET.CHALLENGE,
+  offset,
   enabled = true,
   hasBottomGradient = false,
 }: UseStickyHeaderOptions): UseStickyHeaderReturn {
+  // Auto-select offset based on section if not provided
+  const finalOffset = offset ?? STICKY_HEADER_OFFSET[sectionName.toUpperCase() as keyof typeof STICKY_HEADER_OFFSET] ?? STICKY_HEADER_OFFSET.CHALLENGE;
+  
   const [showStickyHeader, setShowStickyHeader] = useState(false);
   const [showBottomGradient, setShowBottomGradient] = useState(false);
   const [bottomGradientPosition, setBottomGradientPosition] = useState(false);
@@ -104,6 +109,7 @@ export function useStickyHeader({
   const labelRef = useRef<HTMLElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
   const stickyHeaderRef = useRef<HTMLDivElement>(null);
+  const bottomGradientRef = useRef<HTMLDivElement>(null);
   
   // Track if component is mounted to prevent state updates after unmount
   const isMountedRef = useRef(true);
@@ -182,7 +188,7 @@ export function useStickyHeader({
       const lastScreenRect = lastScreen.getBoundingClientRect();
       const stickyHeaderHeight = stickyHeaderRef.current.offsetHeight;
       const stickyHeaderBottom = stickyHeaderHeight;
-      const sectionEndReached = lastScreenRect.bottom <= (stickyHeaderBottom + offset);
+      const sectionEndReached = lastScreenRect.bottom <= (stickyHeaderBottom + finalOffset);
 
       // Update top sticky header visibility
       const shouldShowTop = labelPastTop && !sectionEndReached;
@@ -223,7 +229,7 @@ export function useStickyHeader({
         scrollTimeoutRef.current = null;
       }
     };
-  }, [sectionName, offset, enabled, hasBottomGradient, bottomGradientPosition]);
+  }, [sectionName, finalOffset, enabled, hasBottomGradient, bottomGradientPosition]);
 
   return {
     showStickyHeader,
@@ -232,6 +238,7 @@ export function useStickyHeader({
     labelRef,
     stickyHeaderRef,
     sectionRef,
+    bottomGradientRef,
   };
 }
 

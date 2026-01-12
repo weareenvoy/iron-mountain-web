@@ -36,7 +36,6 @@ const SolutionFirstScreenTemplate = ({
     sectionRef,
   } = useStickyHeader({
     sectionName: 'solution',
-    offset: 1500,
   });
 
   return (

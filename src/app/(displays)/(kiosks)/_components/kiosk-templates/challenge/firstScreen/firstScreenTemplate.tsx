@@ -31,6 +31,7 @@ const FirstScreenTemplate = memo(
       labelRef,
       stickyHeaderRef,
       sectionRef,
+      bottomGradientRef,
     } = useStickyHeader({
       sectionName: 'challenge',
       hasBottomGradient: true,
@@ -112,6 +113,7 @@ const FirstScreenTemplate = memo(
 
       {/* Sticky Section Footer - Fixed Position (Bottom) */}
       <div 
+        ref={bottomGradientRef}
         className={`fixed left-0 z-[100] w-full h-[1369px] pointer-events-none transition-opacity duration-300 motion-reduce:transition-none bg-[linear-gradient(180deg,#155A95_65.52%,rgba(21,75,130,0)_99.31%)] rotate-180 ${bottomGradientPosition ? 'bottom-[-900px]' : 'bottom-0'} ${showBottomGradient ? 'opacity-100' : 'opacity-0'}`}
         data-challenge-sticky-footer
         data-visible={showBottomGradient}
