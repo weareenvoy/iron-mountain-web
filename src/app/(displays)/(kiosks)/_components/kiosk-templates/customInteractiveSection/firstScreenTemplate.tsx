@@ -1,7 +1,7 @@
-import { motion, useInView } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { SquarePlay } from 'lucide-react';
 import Image from 'next/image';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
 import ArrowIcon from '@/components/ui/icons/Kiosks/CustomInteractive/ArrowIcon';
 import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCFilledOrangeDiamond';
@@ -9,6 +9,8 @@ import HCHollowBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/
 import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowOrangeDiamond';
 import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
+import { TITLE_ANIMATION_TRANSFORMS } from '../constants/animations';
+import { SCROLL_ANIMATION_CONFIG, useScrollAnimation } from '../hooks/useScrollAnimation';
 import { SECTION_NAMES, useStickyHeader } from '../hooks/useStickyHeader';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
@@ -43,8 +45,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   primaryCtaLabel,
   secondaryCtaLabel,
 }: CustomInteractiveKiosk1FirstScreenTemplateProps) => {
-  const animationTriggerRef = useRef(null);
-  const isInView = useInView(animationTriggerRef, { amount: 1, once: true }); // amount 1 is in use to make sure 100% of the template is in use before this animation kicks off. This keeps it from animating early when part of the template is in view.
+  const { shouldAnimate, triggerRef: animationTriggerRef } = useScrollAnimation<HTMLHeadingElement>();
 
   const [showOverlay, setShowOverlay] = useState(false);
 
@@ -107,11 +108,11 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
 
       {/* Eyebrow */}
       <motion.h2
-        animate={isInView ? { y: 0 } : undefined}
+        animate={shouldAnimate ? { y: 0 } : undefined}
         className="absolute top-[200px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] will-change-transform group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-3]/kiosk:top-[240px]"
-        initial={{ y: -1100 }}
+        initial={{ y: TITLE_ANIMATION_TRANSFORMS.SECTION_HEADER }}
         ref={eyebrowRef}
-        transition={{ delay: 0, duration: 0.6, ease: [0.3, 0, 0.6, 1] }}
+        transition={{ delay: 0, duration: SCROLL_ANIMATION_CONFIG.DURATION, ease: SCROLL_ANIMATION_CONFIG.EASING }}
       >
         {renderRegisteredMark(eyebrowText)}
       </motion.h2>

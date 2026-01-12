@@ -1,13 +1,14 @@
 'use client';
 
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { motion } from 'framer-motion';
 import BlueDiamondMain from '@/components/ui/icons/Kiosks/Solutions/BlueDiamondMain';
 import GreenDiamondMain from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondMain';
 import OrangeDiamondMain from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondMain';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
 import { getVideoMimeType } from '@/lib/utils/get-video-mime-type';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
+import { TITLE_ANIMATION_TRANSFORMS } from '../../constants/animations';
+import { SCROLL_ANIMATION_CONFIG, useScrollAnimation } from '../../hooks/useScrollAnimation';
 import { SECTION_NAMES, useStickyHeader } from '../../hooks/useStickyHeader';
 
 export type SolutionFirstScreenTemplateProps = {
@@ -28,8 +29,7 @@ const SolutionFirstScreenTemplate = ({
   mainVideo,
   subheadline,
 }: SolutionFirstScreenTemplateProps) => {
-  const animationTriggerRef = useRef(null);
-  const isInView = useInView(animationTriggerRef, { amount: 1, once: true }); // amount 1 is in use to make sure 100% of the template is in use before this animation kicks off. This keeps it from animating early when part of the template is in view.
+  const { shouldAnimate, triggerRef: animationTriggerRef } = useScrollAnimation<HTMLDivElement>();
 
   const { labelRef, sectionRef, showStickyHeader, stickyHeaderRef } = useStickyHeader<HTMLDivElement>({
     sectionName: SECTION_NAMES.SOLUTION,
@@ -64,10 +64,10 @@ const SolutionFirstScreenTemplate = ({
 
       {/* Subheadline - Initial Position */}
       <motion.h2
-        animate={isInView ? { y: 0 } : undefined}
+        animate={shouldAnimate ? { y: 0 } : undefined}
         className="absolute top-[240px] left-[120px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] will-change-transform group-data-[kiosk=kiosk-2]/kiosk:top-[290px] group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-2]/kiosk:w-[650px] group-data-[kiosk=kiosk-3]/kiosk:top-[300px] group-data-[kiosk=kiosk-3]/kiosk:left-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[330px]"
-        initial={{ y: -1100 }}
-        transition={{ delay: 0, duration: 0.6, ease: [0.3, 0, 0.6, 1] }}
+        initial={{ y: TITLE_ANIMATION_TRANSFORMS.SECTION_HEADER }}
+        transition={{ delay: 0, duration: SCROLL_ANIMATION_CONFIG.DURATION, ease: SCROLL_ANIMATION_CONFIG.EASING }}
       >
         {renderRegisteredMark(subheadline)}
       </motion.h2>
@@ -75,12 +75,12 @@ const SolutionFirstScreenTemplate = ({
       {/* Solution label - Initial Position */}
       <div ref={animationTriggerRef}>
         <motion.div
-          animate={isInView ? { opacity: 1, y: 0 } : undefined}
+          animate={shouldAnimate ? { opacity: 1, y: 0 } : undefined}
           className="absolute top-[790px] left-[140px] flex items-center gap-[41px] will-change-[transform,opacity] group-data-[kiosk=kiosk-2]/kiosk:top-[830px] group-data-[kiosk=kiosk-3]/kiosk:top-[860px] group-data-[kiosk=kiosk-3]/kiosk:left-[260px]"
           data-section-label="solution"
-          initial={{ opacity: 0, y: -1100 }}
+          initial={{ opacity: 0, y: TITLE_ANIMATION_TRANSFORMS.SECTION_HEADER }}
           ref={labelRef}
-          transition={{ delay: 0.2, duration: 0.6, ease: [0.3, 0, 0.6, 1] }}
+          transition={{ delay: SCROLL_ANIMATION_CONFIG.SECONDARY_DELAY, duration: SCROLL_ANIMATION_CONFIG.DURATION, ease: SCROLL_ANIMATION_CONFIG.EASING }}
         >
           <div className="relative top-[-25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
             <OutlinedDiamond aria-hidden="true" focusable="false" />

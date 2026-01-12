@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useInView } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { memo, useRef } from 'react';
 import { normalizeDiamondCards } from '@/app/(displays)/(kiosks)/_utils/normalize-diamond-cards';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
@@ -8,6 +8,8 @@ import { cn } from '@/lib/tailwind/utils/cn';
 import { getVideoMimeType } from '@/lib/utils/get-video-mime-type';
 import { normalizeMultiline } from '@/lib/utils/normalize-multiline';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
+import { TITLE_ANIMATION_TRANSFORMS } from '../constants/animations';
+import { SCROLL_ANIMATION_CONFIG, useScrollAnimation } from '../hooks/useScrollAnimation';
 import AnimatedValueCarousel from './components/AnimatedValueCarousel';
 import ValueCarousel from './components/ValueCarousel';
 import type { ValueCarouselSlide } from '@/app/(displays)/(kiosks)/_types/value-types';
@@ -66,8 +68,7 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
     slides,
   } = props;
 
-  const animationTriggerRef = useRef(null);
-  const isInView = useInView(animationTriggerRef, { amount: 1, once: true }); // amount 1 is in use to make sure 100% of the template is in use before this animation kicks off. This keeps it from animating early when part of the template is in view.
+  const { shouldAnimate, triggerRef: animationTriggerRef } = useScrollAnimation<HTMLDivElement>();
 
   const labelRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -121,21 +122,21 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
       {/* Header Section - Initial Position */}
       <div className="absolute top-0 left-0 flex h-[1284px] w-full flex-col justify-between px-[120px] py-[240px]">
         <motion.p
-          animate={isInView ? { y: 0 } : undefined}
+          animate={shouldAnimate ? { y: 0 } : undefined}
           className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] will-change-transform"
-          initial={{ y: -1100 }}
-          transition={{ delay: 0, duration: 0.6, ease: [0.3, 0, 0.6, 1] }}
+          initial={{ y: TITLE_ANIMATION_TRANSFORMS.SECTION_HEADER }}
+          transition={{ delay: 0, duration: SCROLL_ANIMATION_CONFIG.DURATION, ease: SCROLL_ANIMATION_CONFIG.EASING }}
         >
           {renderRegisteredMark(normalizeMultiline(eyebrow))}
         </motion.p>
         <div ref={animationTriggerRef}>
           <motion.div
-            animate={isInView ? { opacity: 1, y: 0 } : undefined}
+            animate={shouldAnimate ? { opacity: 1, y: 0 } : undefined}
             className="relative top-[-100px] left-[10px] flex items-center gap-[41px] will-change-[transform,opacity]"
             data-section-label="value"
-            initial={{ opacity: 0, y: -1100 }}
+            initial={{ opacity: 0, y: TITLE_ANIMATION_TRANSFORMS.SECTION_HEADER }}
             ref={labelRef}
-            transition={{ delay: 0.2, duration: 0.6, ease: [0.3, 0, 0.6, 1] }}
+            transition={{ delay: SCROLL_ANIMATION_CONFIG.SECONDARY_DELAY, duration: SCROLL_ANIMATION_CONFIG.DURATION, ease: SCROLL_ANIMATION_CONFIG.EASING }}
           >
             <div className="relative top-[25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
               <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />

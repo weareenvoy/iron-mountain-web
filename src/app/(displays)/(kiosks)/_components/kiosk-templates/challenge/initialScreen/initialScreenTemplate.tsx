@@ -6,6 +6,8 @@ import { memo, useEffect, useRef, useState } from 'react';
 import ButtonArrow from '@/components/ui/icons/ButtonArrow';
 import WhiteLogoSimple from '@/components/ui/icons/WhiteLogoSimple';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
+import { TITLE_ANIMATION_TRANSFORMS } from '../../constants/animations';
+import { SCROLL_ANIMATION_CONFIG } from '../../hooks/useScrollAnimation';
 import { SECTION_NAMES, useStickyHeader } from '../../hooks/useStickyHeader';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
@@ -146,10 +148,10 @@ const InitialScreenTemplate = memo(
         >
           <div className="px-[244px] pt-[100px]">
             <motion.h2
-              animate={showStickyHeader ? { scale: 0.5, x: -540 } : { scale: 1, x: 0 }}
+              animate={showStickyHeader ? { scale: TITLE_ANIMATION_TRANSFORMS.INITIAL_SCALE, x: TITLE_ANIMATION_TRANSFORMS.INITIAL_X } : { scale: 1, x: 0 }}
               className="text-[120px] leading-[1.3] font-normal tracking-[-6px] whitespace-pre-line text-[#ededed] will-change-transform"
               initial={{ scale: 1, x: 0 }}
-              transition={{ delay: 0.2, duration: 0.3, ease: [0.3, 0, 0.6, 1] }}
+              transition={{ delay: SCROLL_ANIMATION_CONFIG.SECONDARY_DELAY, duration: 0.3, ease: SCROLL_ANIMATION_CONFIG.EASING }}
             >
               {renderRegisteredMark(subheadline)}
             </motion.h2>
