@@ -145,9 +145,14 @@ const InitialScreenTemplate = memo(
           ref={stickyHeaderRef}
         >
           <div className="px-[244px] pt-[100px]">
-            <h2 className="text-[120px] leading-[1.3] font-normal tracking-[-6px] whitespace-pre-line text-[#ededed]">
+            <motion.h2
+              animate={showStickyHeader ? { scale: 0.5, x: -540 } : { scale: 1, x: 0 }}
+              className="text-[120px] leading-[1.3] font-normal tracking-[-6px] whitespace-pre-line text-[#ededed] will-change-transform"
+              initial={{ scale: 1, x: 0 }}
+              transition={{ delay: 0.2, duration: 0.3, ease: [0.3, 0, 0.6, 1] }}
+            >
               {renderRegisteredMark(subheadline)}
-            </h2>
+            </motion.h2>
           </div>
         </div>
 
