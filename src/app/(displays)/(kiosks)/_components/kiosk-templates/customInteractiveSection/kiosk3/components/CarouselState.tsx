@@ -73,11 +73,6 @@ const CarouselState = memo(
 
             return (
               <>
-                {/* Eyebrow */}
-                <h2 className="absolute top-[240px] left-[120px] text-[57px] leading-normal font-normal tracking-[-1.8px] whitespace-pre-line text-[#ededed]">
-                  {renderRegisteredMark(current.eyebrow)}
-                </h2>
-
                 {/* Main headline */}
                 <h1 className="absolute top-[830px] left-[240px] max-w-[1200px] text-[100px] leading-[1.3] tracking-[-5px] whitespace-pre-line text-white">
                   {renderRegisteredMark(headline)}
