@@ -1,21 +1,19 @@
-import { AnimatePresence, motion } from 'framer-motion';
-import { SquarePlay } from 'lucide-react';
-import Image from 'next/image';
+import { motion } from 'framer-motion';
 import { memo } from 'react';
 import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
+import CarouselContentSection from './CarouselContentSection';
+import CarouselCTA from './CarouselCTA';
+import CarouselDiamond from './CarouselDiamond';
 import CircularCarousel, { type CarouselSlide } from './CircularCarousel';
+import DecorativeSVGGroup from './DecorativeSVGGroup';
 import {
-  ANIMATION_VALUES,
-  DIAMOND_ANIMATIONS,
-  EASING,
   getDecorativeSVGVariant,
   getPrimaryDiamondClass,
   getSecondaryDiamondClass,
   SLIDE_ID,
   TRANSITIONS,
 } from '../constants';
-import DecorativeSVGGroup from './DecorativeSVGGroup';
 
 type CarouselStateProps = {
   /** Main headline displayed across all carousel slides */
@@ -84,107 +82,30 @@ const CarouselState = memo(
                 </h1>
 
                 {/* Data configuration + bullets */}
-                <div className="absolute top-[1600px] left-[240px] w-[1000px] text-white">
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      animate={{ opacity: 1 }}
-                      className="space-y-6"
-                      exit={{ opacity: 0 }}
-                      initial={{ opacity: 0 }}
-                      key={current.id}
-                      transition={TRANSITIONS.SLIDE_CONTENT}
-                    >
-                      <div className="text-[80px] leading-normal font-normal tracking-[-4px]">
-                        {renderRegisteredMark(current.sectionTitle)}
-                      </div>
-                      <ul className="mt-[110px] ml-[60px] space-y-[22px]">
-                        {current.bullets.map((bullet, bulletIndex) => (
-                          <motion.li
-                            animate={{ opacity: 1 }}
-                            className="flex w-[1100px] items-start gap-[16px] text-[64px]"
-                            exit={{ opacity: 0 }}
-                            initial={{ opacity: 0 }}
-                            key={`${current.id}-bullet-${bulletIndex}`}
-                            transition={{
-                              delay:
-                                ANIMATION_VALUES.BULLET_STAGGER_START +
-                                bulletIndex * ANIMATION_VALUES.BULLET_STAGGER_DELAY,
-                              duration: 0.4,
-                              ease: EASING.EASE_IN_OUT,
-                            }}
-                          >
-                            <span className="mt-[30px] mr-[40px] ml-[-50px] inline-block h-[32px] w-[32px] rotate-45 rounded-[4px] border-4 border-white/80" />
-                            <span>{renderRegisteredMark(bullet)}</span>
-                          </motion.li>
-                        ))}
-                      </ul>
-                    </motion.div>
-                  </AnimatePresence>
-                </div>
+                <CarouselContentSection current={current} />
 
                 {/* Primary diamond (video or image) - Hidden for slide 1 since background morphs into it */}
                 {current.id !== SLIDE_ID.SLIDE_1 && (
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      animate={
-                        isExiting
-                          ? {
-                              opacity: DIAMOND_ANIMATIONS.ENTRY.exit.opacity,
-                              scale: DIAMOND_ANIMATIONS.ENTRY.exit.scale,
-                              x: DIAMOND_ANIMATIONS.ENTRY.exit.x,
-                              y: DIAMOND_ANIMATIONS.ENTRY.exit.y,
-                            }
-                          : DIAMOND_ANIMATIONS.ENTRY.animate
-                      }
-                      className={primaryDiamondClass}
-                      exit={DIAMOND_ANIMATIONS.ENTRY.exit}
-                      initial={DIAMOND_ANIMATIONS.ENTRY.initial}
-                      key={`primary-${index}`}
-                      transition={TRANSITIONS.CAROUSEL}
-                    >
-                      {current.primaryVideoSrc && (
-                        <video
-                          autoPlay
-                          className="h-full w-full origin-center scale-[1.35] -rotate-45 object-cover"
-                          loop
-                          muted
-                          playsInline
-                          src={current.primaryVideoSrc}
-                        />
-                      )}
-                    </motion.div>
-                  </AnimatePresence>
+                  <CarouselDiamond
+                    className={primaryDiamondClass}
+                    index={index}
+                    isExiting={isExiting}
+                    variant="primary"
+                    videoSrc={current.primaryVideoSrc}
+                  />
                 )}
 
                 {/* Secondary diamond (decorative SVG or image) */}
                 {current.secondaryImageSrc && (
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      animate={
-                        isExiting
-                          ? {
-                              opacity: DIAMOND_ANIMATIONS.ENTRY.exit.opacity,
-                              scale: DIAMOND_ANIMATIONS.ENTRY.exit.scale,
-                              x: DIAMOND_ANIMATIONS.ENTRY.exit.x,
-                              y: DIAMOND_ANIMATIONS.ENTRY.exit.y,
-                            }
-                          : DIAMOND_ANIMATIONS.ENTRY.animate
-                      }
-                      className={secondaryDiamondClass}
-                      exit={DIAMOND_ANIMATIONS.ENTRY.exit}
-                      initial={DIAMOND_ANIMATIONS.ENTRY.initial}
-                      key={`secondary-${index}`}
-                      transition={{ delay: 0.1, ...TRANSITIONS.CAROUSEL }}
-                    >
-                      <Image
-                        alt={current.secondaryImageAlt}
-                        className="origin-center scale-[1.35] -rotate-45 object-cover"
-                        fill
-                        sizes="880px"
-                        src={current.secondaryImageSrc}
-                      />
-                    </motion.div>
-                  </AnimatePresence>
+                  <CarouselDiamond
+                    className={secondaryDiamondClass}
+                    imageAlt={current.secondaryImageAlt}
+                    imageSrc={current.secondaryImageSrc}
+                    index={index}
+                    isExiting={isExiting}
+                    transitionDelay={0.1}
+                    variant="secondary"
+                  />
                 )}
 
                 {/* Decorative SVG Diamonds - Different groups for different slides */}
@@ -195,17 +116,12 @@ const CarouselState = memo(
         </CircularCarousel>
 
         {/* CTA - Only visible when carousel is shown - gradient defined in globals.css for readability and ease of future updates */}
-        <button
-          className="group bg-gradient-kiosk-magenta absolute top-[2630px] left-[240px] z-11 flex h-[200px] items-center gap-[18px] rounded-[999px] px-[110px] text-[55px] leading-[1.1] font-semibold tracking-[2px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
-          onClick={onShowOverlay}
-          type="button"
-        >
-          Launch demo
-          <SquarePlay aria-hidden className="ml-[40px] h-[90px] w-[90px]" strokeWidth={2} />
-        </button>
+        <CarouselCTA onClick={onShowOverlay} />
       </motion.div>
     );
   }
 );
+
+CarouselState.displayName = 'CarouselState';
 
 export default CarouselState;
