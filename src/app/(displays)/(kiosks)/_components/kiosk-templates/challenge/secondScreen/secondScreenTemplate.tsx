@@ -17,7 +17,7 @@ export type SecondScreenTemplateProps = {
 const SecondScreenTemplate = ({ item1Body, item1Image }: SecondScreenTemplateProps) => {
   return (
     <div
-      className="relative flex h-screen w-full flex-col overflow-x-hidden overflow-y-auto scroll-smooth bg-transparent"
+      className="relative flex h-screen w-full flex-col overflow-x-hidden overflow-y-auto bg-transparent"
       data-hero-image={item1Image}
       data-scroll-section="main-description"
     >

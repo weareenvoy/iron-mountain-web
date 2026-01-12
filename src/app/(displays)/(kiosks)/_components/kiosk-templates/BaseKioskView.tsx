@@ -127,7 +127,7 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
 
   return (
     <div
-      className="group/kiosk relative h-screen w-full overflow-y-auto scroll-smooth bg-black"
+      className="group/kiosk relative h-screen w-full overflow-y-auto bg-black"
       data-kiosk={kioskId}
       ref={containerRef}
     >

@@ -7,12 +7,11 @@
 // ========== Scroll Navigation ==========
 
 /**
- * Timeout duration after initiating a scroll before resetting the isScrolling flag.
- * Note: This does NOT control the actual scroll animation speed, which is controlled
- * by the browser's native smooth scrolling (~300-500ms). This value should be set
- * long enough to allow the scroll animation to complete.
+ * Duration of the scroll animation when navigating between sections using arrow keys
+ * or navigation buttons. Powered by Framer Motion's animate() for precise control.
+ * Value in milliseconds (e.g., 1200 = 1.2 second scroll animation).
  */
-export const SCROLL_DURATION_MS = 1200;
+export const SCROLL_DURATION_MS = 1500;
 
 /**
  * Vertical offset from viewport top for text elements (paragraphs, headings)

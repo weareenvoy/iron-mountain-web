@@ -20,7 +20,7 @@ export type ThirdScreenTemplateProps = {
 const ThirdScreenTemplate = ({ featuredStat2, featuredStat2Body, item2Body, item2Image }: ThirdScreenTemplateProps) => {
   return (
     <div
-      className="relative flex h-screen w-full flex-col overflow-x-hidden overflow-y-auto scroll-smooth bg-transparent"
+      className="relative flex h-screen w-full flex-col overflow-x-hidden overflow-y-auto bg-transparent"
       data-hero-image={item2Image}
       data-section-end={SECTION_NAMES.CHALLENGE}
     >
