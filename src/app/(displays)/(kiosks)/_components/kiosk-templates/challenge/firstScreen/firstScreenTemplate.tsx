@@ -45,8 +45,8 @@ const FirstScreenTemplate = memo(
         data-section={SECTION_NAMES.CHALLENGE}
         ref={sectionRef}
       >
-        {/* Background gradient - stays behind all content */}
-        <div className="pointer-events-none absolute inset-0 top-[1290px] z-[1] h-[14400px] rounded-[100px] bg-[linear-gradient(180deg,#1B75BC_0.01%,#14477D_98%)] group-data-[kiosk=kiosk-2]/kiosk:top-[1240px] group-data-[kiosk=kiosk-2]/kiosk:h-[14450px]" />
+        {/* Background gradient - defined in globals.css for readability and ease of future updates */}
+        <div className="bg-gradient-challenge-section pointer-events-none absolute inset-0 top-[1290px] z-[1] h-[14400px] rounded-[100px] group-data-[kiosk=kiosk-2]/kiosk:top-[1240px] group-data-[kiosk=kiosk-2]/kiosk:h-[14450px]" />
 
         {/* Video Header Section */}
         <div
@@ -107,9 +107,9 @@ const FirstScreenTemplate = memo(
           </motion.div>
         </div>
 
-        {/* Sticky Section Header - Fixed Position */}
+        {/* Sticky Section Header - Fixed Position - gradient defined in globals.css for readability and ease of future updates */}
         <div
-          className={`pointer-events-none fixed top-0 left-0 z-[100] h-[1369px] w-full bg-[linear-gradient(180deg,#155A95_65.52%,rgba(21,75,130,0)_99.31%)] transition-opacity duration-300 motion-reduce:transition-none ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
+          className={`bg-gradient-sticky-challenge pointer-events-none fixed top-0 left-0 z-[100] h-[1369px] w-full transition-opacity duration-300 motion-reduce:transition-none ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
           data-challenge-sticky-header
           data-visible={showStickyHeader}
           ref={stickyHeaderRef}
@@ -138,8 +138,9 @@ const FirstScreenTemplate = memo(
         </div>
 
         {/* Sticky Section Footer - Fixed Position (Bottom) */}
+        {/* Bottom Fixed Gradient - Rotated 180 degrees for fade effect at bottom - gradient defined in globals.css for readability and ease of future updates */}
         <div
-          className={`pointer-events-none fixed left-0 z-[100] h-[1369px] w-full rotate-180 bg-[linear-gradient(180deg,#155A95_65.52%,rgba(21,75,130,0)_99.31%)] transition-opacity duration-300 motion-reduce:transition-none ${bottomGradientPosition ? 'bottom-[-900px]' : 'bottom-0'} ${showBottomGradient ? 'opacity-100' : 'opacity-0'}`}
+          className={`bg-gradient-sticky-challenge pointer-events-none fixed left-0 z-[100] h-[1369px] w-full rotate-180 transition-opacity duration-300 motion-reduce:transition-none ${bottomGradientPosition ? 'bottom-[-900px]' : 'bottom-0'} ${showBottomGradient ? 'opacity-100' : 'opacity-0'}`}
           data-challenge-sticky-footer
           data-visible={showBottomGradient}
           ref={bottomGradientRef}

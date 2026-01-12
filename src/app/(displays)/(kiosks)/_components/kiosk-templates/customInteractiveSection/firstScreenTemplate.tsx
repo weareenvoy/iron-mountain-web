@@ -117,9 +117,9 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
         {renderRegisteredMark(eyebrowText)}
       </motion.h2>
 
-      {/* Sticky Section Header - Fixed Position */}
+      {/* Sticky Section Header - Fixed Position - gradient defined in globals.css for readability and ease of future updates */}
       <div
-        className={`pointer-events-none fixed top-0 left-0 z-[100] h-[769px] w-full bg-[linear-gradient(180deg,#2481e3_65.52%,rgba(21,75,130,0)_99.31%)] transition-opacity duration-300 motion-reduce:transition-none ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
+        className={`bg-gradient-sticky-custom-interactive pointer-events-none fixed top-0 left-0 z-[100] h-[769px] w-full transition-opacity duration-300 motion-reduce:transition-none ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
         data-customInteractive-sticky-header
         data-visible={showStickyHeader}
         ref={stickyHeaderRef}

@@ -95,9 +95,9 @@ const SolutionFirstScreenTemplate = ({
         </motion.div>
       </div>
 
-      {/* Sticky Section Header - Fixed Position */}
+      {/* Sticky Section Header - Fixed Position - gradient defined in globals.css for readability and ease of future updates */}
       <div
-        className={`pointer-events-none fixed top-0 left-0 z-[100] h-[1369px] w-full bg-[linear-gradient(180deg,#9F1060_65.52%,rgba(159,17,97,0)_99.31%)] transition-opacity duration-300 motion-reduce:transition-none ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
+        className={`bg-gradient-sticky-solution pointer-events-none fixed top-0 left-0 z-[100] h-[1369px] w-full transition-opacity duration-300 motion-reduce:transition-none ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
         data-solution-sticky-header
         data-visible={showStickyHeader}
         ref={stickyHeaderRef}
