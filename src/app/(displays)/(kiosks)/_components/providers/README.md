@@ -144,6 +144,85 @@ The `meta` wrapper is automatically added by `MqttService` when publishing.
 
 This ensures kiosks always recover to their last known state, providing a seamless experience even after interruptions.
 
+## Tour Lifecycle (MQTT Commands)
+
+Kiosks are **standalone exhibits** with their own content. Each kiosk (kiosk-1, kiosk-2, kiosk-3) operates
+independently and only responds to tour commands meant for itself.
+
+### Starting a Tour
+
+**When**: User dismisses the idle screen overlay on the `InitialScreenTemplate`
+
+**Flow**:
+
+1. `InitialScreenTemplate` detects idle screen tap
+2. Calls `client.loadTour(kioskId)` (e.g., `'kiosk-1'`)
+3. Message broadcasts to `cmd/dev/all/load-tour` with `tour-id: 'kiosk-1'`
+4. This kiosk receives its own broadcast → fetches fresh data
+5. Other kiosks receive broadcast → ignore it (different tour-id)
+
+**Why fetch data?** Even though kiosks have static content, fetching ensures the latest data is loaded if the kiosk has
+been idle for an extended period.
+
+```typescript
+// In InitialScreenTemplate
+if (client && isConnected && kioskId) {
+  client.loadTour(kioskId, {
+    onError: err => console.error(`${kioskId}: Failed to trigger loadTour:`, err),
+    onSuccess: () => console.info(`${kioskId}: Successfully triggered loadTour`),
+  });
+}
+```
+
+### Ending a Tour
+
+**When**: Tour ends (broadcast from GEC or Docent)
+
+**Flow**:
+
+1. All kiosks receive `cmd/dev/all/end-tour` broadcast
+2. Each kiosk reports idle state to MQTT: `{ 'beat-id': 'kiosk-idle' }`
+3. After 100ms delay (ensures MQTT message is sent), kiosk refreshes: `window.location.reload()`
+
+**Why refresh?** Kiosks need a complete state reset to return to pristine idle screen:
+
+- Idle overlay state is restored
+- Scroll position returns to top
+- Navigation resets
+- All nested component state (carousels, accordions, animations) is cleared
+- Memory is freed (videos, images, etc.)
+- Next user gets a fresh, clean experience
+
+This is intentional and preferred over stateful resets, which can miss edge cases or leave stale state.
+
+```typescript
+// In kiosk-provider.tsx
+const handleEndTour = () => {
+  reportStateRef.current({ 'beat-id': DEFAULT_KIOSK_BEAT_ID });
+  setTimeout(() => window.location.reload(), 100);
+};
+```
+
+### Key Differences from Other Exhibits
+
+| Behavior              | Kiosks                             | Basecamp/Summit                  |
+| --------------------- | ---------------------------------- | -------------------------------- |
+| **Tour Identity**     | kioskId is the tour-id             | Receives actual tour-id          |
+| **Content**           | Static per kiosk                   | Dynamic based on tour            |
+| **load-tour**         | Only responds to own kioskId       | Responds to all tour-ids         |
+| **end-tour**          | Full page refresh                  | Stateful reset (no refresh)      |
+| **Idle Screen**       | Integrated into initial screen     | Separate idle state              |
+| **Self-broadcasting** | Triggers loadTour on idle dismiss  | Never self-triggers tours        |
+
+### MQTT Topics
+
+- **Subscriptions**:
+  - `cmd/dev/all/load-tour` - Tour start commands (filtered by tour-id)
+  - `cmd/dev/all/end-tour` - Tour end commands (all kiosks respond)
+- **Publications**:
+  - `cmd/dev/gec/load-tour` - Triggered when idle dismissed
+  - `state/kiosk-XX` - State reporting for persistence
+
 ## Data Structure
 
 `getKioskData(kioskId)` follows the same convention as the other `get-*` utilities and returns:

@@ -109,16 +109,27 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
   }, [fetchData]);
 
   // Subscribe to MQTT commands (load-tour, end-tour)
+  // Note: Kiosks are standalone exhibits - each kioskId is treated as its own tour-id
   useEffect(() => {
     if (!client) return;
 
     // 1. Load tour command
+    // Triggered when idle screen is dismissed (broadcasts to all, filtered by tour-id)
     const handleLoadTour = (message: Buffer) => {
       try {
         const msg = JSON.parse(message.toString());
+        const tourId = msg.body?.['tour-id'];
+
+        // Each kiosk is a separate exhibit - only respond to our own load-tour commands
+        // This prevents kiosk-1 from responding to kiosk-2's tour start, etc.
+        if (tourId !== kioskId) {
+          console.info(`${kioskId}: Ignoring load-tour for different exhibit: ${tourId}`);
+          return;
+        }
+
         console.info(`${kioskId}: Received load-tour command:`, msg);
 
-        // Fetch new tour data
+        // Fetch new tour data (ensures fresh content even if idle for extended period)
         fetchData();
 
         // Report state with initial beat-id
@@ -129,14 +140,18 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
     };
 
     // 2. End tour command
+    // Full page refresh returns kiosk to pristine idle state (vs stateful reset)
+    // This ensures: idle overlay restored, scroll position reset, all nested state cleared
     const handleEndTour = () => {
-      console.info(`${kioskId}: Received end-tour command - refreshing kiosk`);
+      console.info(`${kioskId}: Received end-tour command - resetting kiosk`);
 
-      // Reset to idle state
+      // Report state before refresh
       reportStateRef.current({ 'beat-id': DEFAULT_KIOSK_BEAT_ID });
 
-      // Refresh the page to return to idle state
-      window.location.reload();
+      // Brief delay to ensure MQTT message is sent before refresh interrupts connection
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
     };
 
     // Subscribe to broadcast commands (all exhibits listen to same topics)

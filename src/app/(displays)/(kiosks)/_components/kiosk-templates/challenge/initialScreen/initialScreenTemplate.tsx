@@ -37,7 +37,7 @@ const InitialScreenTemplate = memo(
     quote,
     subheadline,
   }: InitialScreenTemplateProps) => {
-    const { client } = useMqtt();
+    const { client, isConnected } = useMqtt();
     const ref = useRef(null);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const idleVideoSrcRef = useRef<string | undefined>(idleVideoSrc);
@@ -78,12 +78,16 @@ const InitialScreenTemplate = memo(
       }
 
       // Trigger loadTour when idle screen is dismissed
-      if (client && kioskId) {
+      // Each kiosk is a standalone exhibit - broadcasts its kioskId as the tour-id
+      // This signals to GEC and other systems that a tour has started at this kiosk
+      if (client && isConnected && kioskId) {
         console.info(`${kioskId}: Idle screen dismissed, triggering loadTour`);
         client.loadTour(kioskId, {
           onError: (err: Error) => console.error(`${kioskId}: Failed to trigger loadTour:`, err),
           onSuccess: () => console.info(`${kioskId}: Successfully triggered loadTour`),
         });
+      } else if (!isConnected) {
+        console.warn(`${kioskId}: Cannot trigger loadTour - MQTT not connected`);
       }
 
       // Wait for fade out animation to complete before triggering initial screen animations
