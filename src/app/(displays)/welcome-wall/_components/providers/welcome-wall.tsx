@@ -4,7 +4,8 @@ import { createContext, useCallback, useContext, useEffect, useState, type Props
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getWelcomeWallData } from '@/lib/internal/data/get-welcome-wall';
 import { type Locale, type WelcomeWallData } from '@/lib/internal/types';
-import type { WelcomeWallMqttState } from '@/lib/mqtt/types';
+import { mqttCommands } from '@/lib/mqtt/constants';
+import type { WelcomeWallMqttState, WelcomeWallState } from '@/lib/mqtt/types';
 
 interface WelcomeWallContextType {
   data: null | WelcomeWallData;
@@ -63,12 +64,15 @@ export const WelcomeWallProvider = ({ children }: WelcomeWallProviderProps) => {
 
   // Helper to report full exhibit state to MQTT
   const reportState = useCallback(
-    (newState: Partial<WelcomeWallMqttState>) => {
+    (state: WelcomeWallState) => {
       if (!client) return;
-
-      client.reportWelcomeWallState('welcome-wall', newState as WelcomeWallMqttState, {
-        onError: err => console.error('Welcome Wall: Failed to report state:', err),
-      });
+      client.reportWelcomeWallState(
+        'welcome-wall',
+        { state },
+        {
+          onError: err => console.error('Welcome Wall: Failed to report state:', err),
+        }
+      );
     },
     [client]
   );
@@ -90,9 +94,7 @@ export const WelcomeWallProvider = ({ children }: WelcomeWallProviderProps) => {
           setShowTour(true);
 
           // Only report loaded state after data is fetched
-          reportState({
-            state: 'tour',
-          });
+          reportState('tour');
         } else {
           console.error('Welcome Wall: Failed to fetch tour data');
         }
@@ -107,19 +109,17 @@ export const WelcomeWallProvider = ({ children }: WelcomeWallProviderProps) => {
       setShowTour(false);
 
       // Reset to ambient state
-      reportState({
-        state: 'idle',
-      });
+      reportState('idle');
     };
 
     // Subscribe to broadcast commands (all exhibits listen to same topics)
     // TODO Confirm with Lucas. Currently not receiving anything from these topics.
-    client.subscribeToTopic('cmd/dev/all/load-tour', handleLoadTour);
-    client.subscribeToTopic('cmd/dev/all/end-tour', handleEndTour);
+    client.subscribeToTopic(mqttCommands.welcomeWall.loadTour, handleLoadTour);
+    client.subscribeToTopic(mqttCommands.welcomeWall.endTour, handleEndTour);
 
     return () => {
-      client.unsubscribeFromTopic('cmd/dev/all/load-tour', handleLoadTour);
-      client.unsubscribeFromTopic('cmd/dev/all/end-tour', handleEndTour);
+      client.unsubscribeFromTopic(mqttCommands.welcomeWall.loadTour, handleLoadTour);
+      client.unsubscribeFromTopic(mqttCommands.welcomeWall.endTour, handleEndTour);
     };
   }, [client, fetchData, reportState]);
 
