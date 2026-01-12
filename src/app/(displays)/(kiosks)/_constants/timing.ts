@@ -4,32 +4,15 @@
  * Timing constants for kiosk navigation and UI transitions
  */
 
-// ========== Arrow Navigation Delays ==========
-
-/**
- * Delay before showing navigation arrows after the initial button click
- * on the welcome screen. Provides a brief pause for user orientation.
- */
-export const ARROW_INITIAL_DELAY_MS = 1500;
-
-/**
- * Delay before showing navigation arrows when transitioning between major
- * sections (Challenge → Solution → Value). Shorter delay for smoother UX.
- */
-export const ARROW_TRANSITION_DELAY_MS = 300;
-
 // ========== Scroll Navigation ==========
 
 /**
- * Duration of smooth scroll animations when navigating between sections
- * using arrow keys or navigation buttons.
+ * Timeout duration after initiating a scroll before resetting the isScrolling flag.
+ * Note: This does NOT control the actual scroll animation speed, which is controlled
+ * by the browser's native smooth scrolling (~300-500ms). This value should be set
+ * long enough to allow the scroll animation to complete.
  */
 export const SCROLL_DURATION_MS = 1200;
-
-/**
- * Default scroll duration for paragraph navigation hook.
- */
-export const PARAGRAPH_SCROLL_DURATION_MS = 150;
 
 /**
  * Vertical offset from viewport top for text elements (paragraphs, headings)

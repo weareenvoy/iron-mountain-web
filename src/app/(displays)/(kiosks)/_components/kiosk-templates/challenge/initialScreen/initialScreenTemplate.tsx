@@ -161,7 +161,7 @@ const InitialScreenTemplate = memo(
           className="absolute top-[1130px] left-[120px] z-2 flex w-[1920px] flex-col gap-[200px] rounded-[60px] bg-[#F7931E] px-[120px] py-[240px] pb-[430px] backdrop-blur-[30px] will-change-[transform,opacity] group-data-[kiosk=kiosk-2]/kiosk:bg-[#8DC13F] group-data-[kiosk=kiosk-2]/kiosk:py-[220px] group-data-[kiosk=kiosk-2]/kiosk:pb-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[1920px] group-data-[kiosk=kiosk-3]/kiosk:bg-[#00A88E] group-data-[kiosk=kiosk-3]/kiosk:pb-0"
           data-name="Challenge Initial Screen Content Box"
           initial={{ opacity: 0, y: 200 }}
-          transition={{ delay: 0, duration: 0.8, ease: [0.3, 0, 0.6, 1] }}
+          transition={{ delay: 0, duration: 0.5, ease: [0.3, 0, 0.6, 1] }}
         >
           <motion.h1
             animate={shouldFadeOut ? { opacity: 0 } : shouldAnimate ? { opacity: 1, y: 0 } : { opacity: 0, y: 150 }}

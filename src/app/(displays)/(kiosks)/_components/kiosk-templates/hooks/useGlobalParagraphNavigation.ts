@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState, type RefObject } from 'react'
 import {
   OBSERVER_SETUP_RETRY_MS,
   PARAGRAPH_DETECTION_RETRY_MS,
-  PARAGRAPH_SCROLL_DURATION_MS,
+  SCROLL_DURATION_MS,
   TEXT_ELEMENT_SCROLL_OFFSET_PX,
 } from '@/app/(displays)/(kiosks)/_constants/timing';
 
@@ -30,7 +30,7 @@ export interface UseGlobalParagraphNavigationReturn {
  */
 export function useGlobalParagraphNavigation({
   containerRef,
-  duration = PARAGRAPH_SCROLL_DURATION_MS,
+  duration = SCROLL_DURATION_MS,
 }: UseGlobalParagraphNavigationOptions): UseGlobalParagraphNavigationReturn {
   // Start at index 0 since the page loads already showing the first paragraph
   const [currentIndex, setCurrentIndex] = useState(0);
