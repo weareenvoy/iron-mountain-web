@@ -130,11 +130,17 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
         </h2>
       </div>
 
+      {/* Animation trigger - positioned to trigger when section is fully in view */}
+      <div
+        ref={animationTriggerRef}
+        className="pointer-events-none absolute top-[900px] h-[100px] w-full"
+        aria-hidden="true"
+      />
+
       {/* Headline */}
       <h1
         className="absolute top-[1250px] left-[250px] w-full text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed] group-data-[kiosk=kiosk-3]/kiosk:top-[830px]"
         data-scroll-section="customInteractive-headline"
-        ref={animationTriggerRef}
       >
         {renderRegisteredMark(headlineText)}
       </h1>
