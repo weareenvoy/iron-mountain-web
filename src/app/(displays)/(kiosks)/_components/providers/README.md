@@ -146,8 +146,8 @@ This ensures kiosks always recover to their last known state, providing a seamle
 
 ## Tour Lifecycle (MQTT Commands)
 
-Kiosks are **standalone exhibits** with their own content. Each kiosk (kiosk-1, kiosk-2, kiosk-3) operates
-independently and only responds to tour commands meant for itself.
+Kiosks are **standalone exhibits** with their own content. Each kiosk (kiosk-1, kiosk-2, kiosk-3) operates independently
+and only responds to tour commands meant for itself.
 
 ### Starting a Tour
 
@@ -205,14 +205,14 @@ const handleEndTour = () => {
 
 ### Key Differences from Other Exhibits
 
-| Behavior              | Kiosks                             | Basecamp/Summit                  |
-| --------------------- | ---------------------------------- | -------------------------------- |
-| **Tour Identity**     | kioskId is the tour-id             | Receives actual tour-id          |
-| **Content**           | Static per kiosk                   | Dynamic based on tour            |
-| **load-tour**         | Only responds to own kioskId       | Responds to all tour-ids         |
-| **end-tour**          | Full page refresh                  | Stateful reset (no refresh)      |
-| **Idle Screen**       | Integrated into initial screen     | Separate idle state              |
-| **Self-broadcasting** | Triggers loadTour on idle dismiss  | Never self-triggers tours        |
+| Behavior              | Kiosks                            | Basecamp/Summit             |
+| --------------------- | --------------------------------- | --------------------------- |
+| **Tour Identity**     | kioskId is the tour-id            | Receives actual tour-id     |
+| **Content**           | Static per kiosk                  | Dynamic based on tour       |
+| **load-tour**         | Only responds to own kioskId      | Responds to all tour-ids    |
+| **end-tour**          | Full page refresh                 | Stateful reset (no refresh) |
+| **Idle Screen**       | Integrated into initial screen    | Separate idle state         |
+| **Self-broadcasting** | Triggers loadTour on idle dismiss | Never self-triggers tours   |
 
 ### MQTT Topics
 
