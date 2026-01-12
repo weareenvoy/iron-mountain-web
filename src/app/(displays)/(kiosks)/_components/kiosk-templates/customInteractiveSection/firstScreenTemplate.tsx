@@ -8,7 +8,7 @@ import HCHollowBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/
 import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowOrangeDiamond';
 import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
-import { useStickyHeader } from '../hooks/useStickyHeader';
+import { SECTION_NAMES, useStickyHeader } from '../hooks/useStickyHeader';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 export interface CustomInteractiveKiosk1FirstScreenTemplateProps {
@@ -50,7 +50,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
     showStickyHeader,
     stickyHeaderRef,
   } = useStickyHeader<HTMLHeadingElement>({
-    sectionName: 'customInteractive',
+    sectionName: SECTION_NAMES.CUSTOM_INTERACTIVE,
   });
 
   const isKiosk1 = kioskId === 'kiosk-1';
@@ -77,11 +77,11 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
         isKiosk1 || isKiosk3 ? 'overflow-visible' : 'overflow-hidden'
       )}
       data-scroll-section="customInteractive-first-screen"
-      data-section="customInteractive"
+      data-section={SECTION_NAMES.CUSTOM_INTERACTIVE}
       ref={sectionRef}
     >
       {/* Background gradient - defined in globals.css for readability and ease of future updates */}
-      <div className="bg-gradient-kiosk-blue absolute inset-0 z-0 group-data-[kiosk=kiosk-1]/kiosk:h-[10530px] group-data-[kiosk=kiosk-2]/kiosk:h-[10390px] group-data-[kiosk=kiosk-3]/kiosk:h-[10430px]" />
+      <div className="bg-gradient-kiosk-blue pointer-events-none absolute inset-0 z-[1] group-data-[kiosk=kiosk-1]/kiosk:h-[10530px] group-data-[kiosk=kiosk-2]/kiosk:h-[10390px] group-data-[kiosk=kiosk-3]/kiosk:h-[10430px]" />
 
       {/* Overlay - Demo Screen */}
       <div

@@ -11,6 +11,7 @@ import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import { AnimatedText } from './components/AnimatedText';
 import { StepCarousel, type Step } from './components/StepCarousel';
 import { StepModal, type ModalContent } from './components/StepModal';
+import { SECTION_NAMES } from '../../hooks/useStickyHeader';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 /**
@@ -140,7 +141,7 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
       <div
         className="relative flex h-screen w-full flex-col overflow-visible bg-transparent"
         data-scroll-section="customInteractive-second-screen"
-        data-section-end="customInteractive"
+        data-section-end={SECTION_NAMES.CUSTOM_INTERACTIVE}
         ref={containerRef}
       >
         <div className="absolute inset-0 bg-transparent" />

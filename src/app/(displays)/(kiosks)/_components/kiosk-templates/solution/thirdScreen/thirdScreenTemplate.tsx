@@ -10,6 +10,7 @@ import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import Diamond from './components/Diamond';
 import FilledDiamond from './components/FilledDiamond';
 import MediaDiamond from './components/MediaDiamond';
+import { SECTION_NAMES } from '../../hooks/useStickyHeader';
 
 export type SolutionThirdScreenTemplateProps = {
   readonly accentDiamondSrc?: string;
@@ -92,7 +93,7 @@ const SolutionThirdScreenTemplate = ({
     <div
       className="relative z-1 flex h-screen w-full flex-col overflow-hidden bg-transparent"
       data-scroll-section="solution-third-section"
-      data-section-end="solution"
+      data-section-end={SECTION_NAMES.SOLUTION}
     >
       {/* Gradient backdrop */}
       <div className="absolute top-[-296px] left-0 h-[5416px] w-full rounded-t-[100px] bg-transparent" />

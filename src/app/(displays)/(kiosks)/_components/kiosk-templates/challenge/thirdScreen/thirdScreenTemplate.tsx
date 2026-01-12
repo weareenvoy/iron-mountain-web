@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
+import { SECTION_NAMES } from '../../hooks/useStickyHeader';
 import type { KioskId } from '../../../../_types/kiosk-id';
 
 export type ThirdScreenTemplateProps = {
@@ -21,7 +22,7 @@ const ThirdScreenTemplate = ({ featuredStat2, featuredStat2Body, item2Body, item
     <div
       className="relative flex h-screen w-full flex-col overflow-x-hidden overflow-y-auto scroll-smooth bg-transparent"
       data-hero-image={item2Image}
-      data-section-end="challenge"
+      data-section-end={SECTION_NAMES.CHALLENGE}
     >
       {/* Background gradient layer */}
       <div className="pointer-events-none absolute inset-0 z-[0] bg-transparent" />

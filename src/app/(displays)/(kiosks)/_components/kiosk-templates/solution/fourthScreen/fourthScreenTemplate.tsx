@@ -8,6 +8,7 @@ import OrangeDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/OrangeDi
 import OrangeGradientDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/OrangeGradientDiamondFourth';
 import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
+import { SECTION_NAMES } from '../../hooks/useStickyHeader';
 import PhotoDiamond from './PhotoDiamond';
 import PlusMinusIcon from './PlusMinusIcon';
 
@@ -37,7 +38,7 @@ const SolutionFourthScreenTemplate = ({
     <div
       className="relative flex h-screen w-full flex-col overflow-hidden bg-transparent"
       data-scroll-section="solution-fourth-section"
-      data-section-end="solution"
+      data-section-end={SECTION_NAMES.SOLUTION}
     >
       {/* Background gradient (now transparent) */}
       <div className="absolute top-0 left-0 h-[5120px] w-full bg-transparent" />

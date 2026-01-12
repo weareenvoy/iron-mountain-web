@@ -6,7 +6,7 @@ import OrangeDiamondMain from '@/components/ui/icons/Kiosks/Solutions/OrangeDiam
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
 import { getVideoMimeType } from '@/lib/utils/get-video-mime-type';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
-import { useStickyHeader } from '../../hooks/useStickyHeader';
+import { SECTION_NAMES, useStickyHeader } from '../../hooks/useStickyHeader';
 
 export type SolutionFirstScreenTemplateProps = {
   readonly body?: string;
@@ -27,13 +27,13 @@ const SolutionFirstScreenTemplate = ({
   subheadline,
 }: SolutionFirstScreenTemplateProps) => {
   const { labelRef, sectionRef, showStickyHeader, stickyHeaderRef } = useStickyHeader<HTMLDivElement>({
-    sectionName: 'solution',
+    sectionName: SECTION_NAMES.SOLUTION,
   });
 
   return (
     <div
       className="relative flex h-screen w-full flex-col overflow-visible bg-black"
-      data-section="solution"
+      data-section={SECTION_NAMES.SOLUTION}
       ref={sectionRef}
     >
       {/* Background video */}

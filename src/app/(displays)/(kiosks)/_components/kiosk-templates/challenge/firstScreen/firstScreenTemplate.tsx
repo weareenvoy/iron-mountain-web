@@ -4,7 +4,7 @@ import { Diamond } from 'lucide-react';
 import { memo } from 'react';
 import { getVideoMimeType } from '@/lib/utils/get-video-mime-type';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
-import { useStickyHeader } from '../../hooks/useStickyHeader';
+import { SECTION_NAMES, useStickyHeader } from '../../hooks/useStickyHeader';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 export type FirstScreenTemplateProps = {
@@ -31,13 +31,13 @@ const FirstScreenTemplate = memo(
       stickyHeaderRef,
     } = useStickyHeader<HTMLDivElement>({
       hasBottomGradient: true,
-      sectionName: 'challenge',
+      sectionName: SECTION_NAMES.CHALLENGE,
     });
 
     return (
       <div
         className="relative flex h-screen w-full flex-col overflow-visible bg-black"
-        data-section="challenge"
+        data-section={SECTION_NAMES.CHALLENGE}
         ref={sectionRef}
       >
         {/* Background gradient - stays behind all content */}

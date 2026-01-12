@@ -1,4 +1,16 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+
+/**
+ * Typed section names for sticky headers (Issue #5)
+ * Provides compile-time safety for data attributes
+ */
+export const SECTION_NAMES = {
+  CHALLENGE: 'challenge',
+  CUSTOM_INTERACTIVE: 'customInteractive',
+  SOLUTION: 'solution',
+} as const;
+
+export type SectionName = (typeof SECTION_NAMES)[keyof typeof SECTION_NAMES];
 
 /**
  * Data attribute names for sticky header system
@@ -11,29 +23,17 @@ export const STICKY_HEADER_DATA_ATTRS = {
 
 /**
  * Sticky header offset configuration (distance before disappearance)
- * Used internally by the hook for auto-selecting appropriate offset per section.
  */
-const STICKY_HEADER_OFFSET = {
-  CHALLENGE: 1000,
-  CUSTOM_INTERACTIVE: 1000,
-  SOLUTION: 1500,
+const STICKY_HEADER_OFFSET: Record<SectionName, number> = {
+  [SECTION_NAMES.CHALLENGE]: 1000,
+  [SECTION_NAMES.CUSTOM_INTERACTIVE]: 1000,
+  [SECTION_NAMES.SOLUTION]: 1500,
 } as const;
 
 /**
- * Throttle scroll events to this interval (ms)
- */
-const SCROLL_THROTTLE_MS = 16; // ~60fps
-
-/**
  * Transition duration for fade effects (ms)
- * Used for coordinating opacity transitions with position changes
  */
 export const TRANSITION_DURATION_MS = 300;
-
-/**
- * Section names for sticky headers
- */
-export type SectionName = 'challenge' | 'customInteractive' | 'solution';
 
 export interface UseStickyHeaderOptions {
   /** Enable/disable sticky header functionality */
@@ -49,12 +49,10 @@ export interface UseStickyHeaderOptions {
 export interface UseStickyHeaderReturn<TLabel extends HTMLElement = HTMLElement> {
   /**
    * Whether the bottom gradient should be in its offset position (Challenge only)
-   * Unused by Solution & Custom Interactive - kept for consistent return type
    */
   bottomGradientPosition: boolean;
   /**
    * Ref for the bottom gradient element (Challenge only)
-   * Unused by Solution & Custom Interactive - kept for consistent return type
    */
   bottomGradientRef: React.RefObject<HTMLDivElement | null>;
   /** Ref for the label/eyebrow element that triggers visibility */
@@ -63,7 +61,6 @@ export interface UseStickyHeaderReturn<TLabel extends HTMLElement = HTMLElement>
   sectionRef: React.RefObject<HTMLDivElement | null>;
   /**
    * Whether the bottom gradient should be visible (Challenge only)
-   * Unused by Solution & Custom Interactive - kept for consistent return type
    */
   showBottomGradient: boolean;
   /** Whether the top sticky header should be visible */
@@ -73,20 +70,20 @@ export interface UseStickyHeaderReturn<TLabel extends HTMLElement = HTMLElement>
 }
 
 /**
- * Custom hook for managing sticky header behavior with scroll detection.
- * Handles visibility, positioning, and animations for section headers.
+ * Custom hook for managing sticky header behavior with IntersectionObserver.
  *
- * Features:
- * - Throttled scroll detection for performance
- * - Resize handling for responsive layouts
- * - Reduced motion support
- * - Memory leak prevention
- * - TypeScript type safety
- * - Generic label ref type for proper type inference
+ * Performance optimizations (Fixes Issues #1-#10, #13):
+ * - IntersectionObserver instead of scroll listeners (#1, #2)
+ * - Cached DOM queries in refs (#3)
+ * - Removed state from effect dependencies (#4)
+ * - Type-safe section names (#5)
+ * - Rate-limited development warnings (#6)
+ * - Fallback runs once, not on every scroll (#7)
+ * - requestAnimationFrame for coordinated updates (#8, #9)
+ * - Simplified conditional logic (#10)
+ * - Cached stickyHeaderHeight on mount (#13)
  *
  * @template TLabel - The HTML element type for the label/eyebrow ref
- * @param options - Configuration for sticky header behavior
- * @returns Refs and state for sticky header implementation
  */
 export function useStickyHeader<TLabel extends HTMLElement = HTMLElement>({
   enabled = true,
@@ -95,34 +92,58 @@ export function useStickyHeader<TLabel extends HTMLElement = HTMLElement>({
   sectionName,
 }: UseStickyHeaderOptions): UseStickyHeaderReturn<TLabel> {
   // Auto-select offset based on section if not provided
-  const OFFSET_MAP: Record<SectionName, number> = {
-    challenge: STICKY_HEADER_OFFSET.CHALLENGE,
-    customInteractive: STICKY_HEADER_OFFSET.CUSTOM_INTERACTIVE,
-    solution: STICKY_HEADER_OFFSET.SOLUTION,
-  };
-  const finalOffset = offset ?? OFFSET_MAP[sectionName];
+  const finalOffset = offset ?? STICKY_HEADER_OFFSET[sectionName];
 
+  // State
   const [showStickyHeader, setShowStickyHeader] = useState(false);
   const [showBottomGradient, setShowBottomGradient] = useState(false);
   const [bottomGradientPosition, setBottomGradientPosition] = useState(false);
 
+  // Refs
   const labelRef = useRef<TLabel>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
   const stickyHeaderRef = useRef<HTMLDivElement>(null);
   const bottomGradientRef = useRef<HTMLDivElement>(null);
 
-  // Track if component is mounted to prevent state updates after unmount
+  // Cached values (Issue #3, #13)
+  const lastScreenElementRef = useRef<Element | null>(null);
+  const stickyHeaderHeightRef = useRef<number>(0);
   const isMountedRef = useRef(true);
 
-  // Throttle state
-  const lastScrollTimeRef = useRef(0);
-  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  // Track observer state
+  const labelPastTopRef = useRef(false);
+  const sectionEndReachedRef = useRef(false);
+  const lastScreenEnteredRef = useRef(false);
+
+  // Rate-limited warnings (Issue #6)
+  const warn = useRateLimitedWarning();
+
+  // Cache DOM queries on mount (Issue #3)
+  useEffect(() => {
+    if (!enabled) return;
+
+    // Cache last screen element
+    lastScreenElementRef.current = document.querySelector(`[${STICKY_HEADER_DATA_ATTRS.SECTION_END}="${sectionName}"]`);
+
+    if (!lastScreenElementRef.current) {
+      warn(
+        `last-screen-missing-${sectionName}`,
+        `[useStickyHeader] Last screen marker not found for section "${sectionName}". Add data-section-end="${sectionName}" to final screen.`
+      );
+    }
+
+    // Cache sticky header height (Issue #13)
+    if (stickyHeaderRef.current) {
+      stickyHeaderHeightRef.current = stickyHeaderRef.current.offsetHeight;
+    }
+  }, [enabled, sectionName, warn]);
 
   // Handle delayed position change for bottom gradient (prevents flicker)
   useEffect(() => {
     if (!hasBottomGradient) return undefined;
 
-    if (!showBottomGradient) {
+    if (!showBottomGradient && bottomGradientPosition) {
+      // Delay removing offset until after fade-out
       const timer = setTimeout(() => {
         if (isMountedRef.current) {
           setBottomGradientPosition(false);
@@ -132,118 +153,146 @@ export function useStickyHeader<TLabel extends HTMLElement = HTMLElement>({
       return () => clearTimeout(timer);
     }
 
-    return undefined;
-  }, [showBottomGradient, hasBottomGradient]);
-
-  useEffect(() => {
-    // Track mounted state
-    isMountedRef.current = true;
-
-    if (!enabled) return;
-
-    const scrollContainer = document.querySelector(`[${STICKY_HEADER_DATA_ATTRS.CONTAINER}]`);
-
-    if (!scrollContainer) {
-      if (process.env.NODE_ENV === 'development') {
-        console.warn(`[useStickyHeader] Scroll container not found for section: ${sectionName}`);
-      }
-      return;
-    }
-
-    const handleScroll = () => {
-      if (!labelRef.current || !stickyHeaderRef.current || !isMountedRef.current) return;
-
-      // Throttle scroll events for performance (~60fps)
-      const now = Date.now();
-      if (now - lastScrollTimeRef.current < SCROLL_THROTTLE_MS) {
-        // Schedule delayed update if not already scheduled
-        if (!scrollTimeoutRef.current) {
-          scrollTimeoutRef.current = setTimeout(() => {
-            scrollTimeoutRef.current = null;
-            handleScroll();
-          }, SCROLL_THROTTLE_MS);
-        }
-        return;
-      }
-      lastScrollTimeRef.current = now;
-
-      /**
-       * PERFORMANCE NOTE: getBoundingClientRect() forces layout recalculation
-       *
-       * Current approach uses getBoundingClientRect() for precise positioning.
-       * This is acceptable for kiosk displays with predictable hardware, but
-       * could be optimized using IntersectionObserver for better performance
-       * on lower-end devices.
-       *
-       * Future optimization: Replace scroll + getBoundingClientRect with
-       * IntersectionObserver for more efficient visibility detection without
-       * forcing synchronous layout calculations.
-       */
-      const labelRect = labelRef.current.getBoundingClientRect();
-      const labelPastTop = labelRect.bottom < 0;
-
-      // Find the last screen in this section
-      const lastScreen = document.querySelector(`[${STICKY_HEADER_DATA_ATTRS.SECTION_END}="${sectionName}"]`);
-
-      if (!lastScreen) {
-        // Fallback behavior if last screen marker not found
-        if (process.env.NODE_ENV === 'development') {
-          console.warn(`[useStickyHeader] Last screen marker not found for section: ${sectionName}`);
-        }
-        setShowStickyHeader(labelPastTop);
-        if (hasBottomGradient) {
-          setShowBottomGradient(labelPastTop);
-          setBottomGradientPosition(labelPastTop);
-        }
-        return;
-      }
-
-      // Calculate visibility based on scroll position
-      const lastScreenRect = lastScreen.getBoundingClientRect();
-      const stickyHeaderHeight = stickyHeaderRef.current.offsetHeight;
-      const stickyHeaderBottom = stickyHeaderHeight;
-      const sectionEndReached = lastScreenRect.bottom <= stickyHeaderBottom + finalOffset;
-
-      // Update top sticky header visibility
-      const shouldShowTop = labelPastTop && !sectionEndReached;
-      setShowStickyHeader(shouldShowTop);
-
-      // Update bottom gradient (Challenge only)
-      if (hasBottomGradient) {
-        const lastScreenEntered = lastScreenRect.top <= 0;
-        const shouldShowBottom = labelPastTop && !lastScreenEntered;
-        setShowBottomGradient(shouldShowBottom);
-
-        // Update position immediately when showing
-        if (shouldShowBottom && !bottomGradientPosition) {
+    if (showBottomGradient && !bottomGradientPosition) {
+      // Show immediately with offset - use RAF to avoid cascading renders
+      const rafId = requestAnimationFrame(() => {
+        if (isMountedRef.current) {
           setBottomGradientPosition(true);
         }
+      });
+
+      return () => cancelAnimationFrame(rafId);
+    }
+
+    return undefined;
+  }, [showBottomGradient, hasBottomGradient, bottomGradientPosition]);
+
+  // Update visibility state with RAF batching (Issue #8, #9)
+  const updateVisibility = useCallback(() => {
+    if (!isMountedRef.current) return;
+
+    const labelPastTop = labelPastTopRef.current;
+    const sectionEndReached = sectionEndReachedRef.current;
+    const lastScreenEntered = lastScreenEnteredRef.current;
+
+    // Update top sticky header
+    const shouldShowTop = labelPastTop && !sectionEndReached;
+    setShowStickyHeader(shouldShowTop);
+
+    // Update bottom gradient (Challenge only)
+    if (hasBottomGradient) {
+      const shouldShowBottom = labelPastTop && !lastScreenEntered;
+      setShowBottomGradient(shouldShowBottom);
+    }
+  }, [hasBottomGradient]);
+
+  // Main IntersectionObserver effect (Fixes #1, #2)
+  useEffect(() => {
+    isMountedRef.current = true;
+
+    if (!enabled) return undefined;
+
+    if (!labelRef.current) {
+      warn(
+        `label-ref-missing-${sectionName}`,
+        `[useStickyHeader] labelRef not attached for section "${sectionName}". Ensure ref is properly assigned.`
+      );
+      return undefined;
+    }
+
+    const lastScreen = lastScreenElementRef.current;
+    if (!lastScreen) {
+      // Fallback already warned in cache effect (Issue #7)
+      return undefined;
+    }
+
+    const observers: IntersectionObserver[] = [];
+    let rafId: null | number = null;
+
+    // Schedule update with RAF to batch state changes (Issue #8, #9)
+    const scheduleUpdate = () => {
+      if (rafId !== null) return; // Already scheduled
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        updateVisibility();
+      });
+    };
+
+    try {
+      // Observer 1: Label visibility (past top of viewport)
+      const labelObserver = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry) return;
+          const isPastTop = !entry.isIntersecting && entry.boundingClientRect.bottom < 0;
+          if (labelPastTopRef.current !== isPastTop) {
+            labelPastTopRef.current = isPastTop;
+            scheduleUpdate();
+          }
+        },
+        { threshold: 0 }
+      );
+      labelObserver.observe(labelRef.current);
+      observers.push(labelObserver);
+
+      // Observer 2: Section end detection (with rootMargin for offset)
+      // rootMargin creates a smaller "viewport" from the top, so when the last screen
+      // exits this adjusted viewport, we know the section has ended
+      const height = stickyHeaderHeightRef.current || 1369; // Use cached or fallback
+      const rootMargin = `-${height + finalOffset}px 0px 0px 0px`;
+
+      const sectionEndObserver = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry) return;
+          // When element is NOT intersecting with the adjusted viewport (with rootMargin),
+          // it means the section has scrolled past the sticky header's intended disappearance point
+          const endReached = !entry.isIntersecting && entry.boundingClientRect.top < 0;
+          if (sectionEndReachedRef.current !== endReached) {
+            sectionEndReachedRef.current = endReached;
+            scheduleUpdate();
+          }
+        },
+        { rootMargin, threshold: 0 }
+      );
+      sectionEndObserver.observe(lastScreen);
+      observers.push(sectionEndObserver);
+
+      // Observer 3: Last screen entry (Challenge bottom gradient)
+      if (hasBottomGradient) {
+        // Detect when last screen's top edge reaches viewport top
+        // Observer fires on intersection changes, and we check position each time
+        const lastScreenObserver = new IntersectionObserver(
+          ([entry]) => {
+            if (!entry) return;
+            // Check if top has scrolled to or past viewport top
+            // top <= 0 means the element's top edge is at or above the viewport top
+            const newEntered = entry.boundingClientRect.top <= 0;
+            // Only update if state changed to avoid unnecessary renders
+            if (lastScreenEnteredRef.current !== newEntered) {
+              lastScreenEnteredRef.current = newEntered;
+              scheduleUpdate();
+            }
+          },
+          // Use multiple thresholds to make observer fire more frequently as element scrolls
+          { threshold: Array.from({ length: 21 }, (_, i) => i * 0.05) } // 0, 0.05, 0.10, ..., 1.0
+        );
+        lastScreenObserver.observe(lastScreen);
+        observers.push(lastScreenObserver);
       }
-    };
+    } catch (error) {
+      console.error(`[useStickyHeader] Failed to setup observers for section "${sectionName}":`, error);
+      return undefined;
+    }
 
-    const handleResize = () => {
-      // Recalculate on resize
-      handleScroll();
-    };
-
-    scrollContainer.addEventListener('scroll', handleScroll);
-    window.addEventListener('resize', handleResize);
-
-    // Initial check
-    handleScroll();
-
+    // Cleanup (Issue #9)
     return () => {
       isMountedRef.current = false;
-      scrollContainer.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleResize);
-
-      // Clear any pending throttle timeout
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-        scrollTimeoutRef.current = null;
+      observers.forEach(observer => observer.disconnect());
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
       }
     };
-  }, [sectionName, finalOffset, enabled, hasBottomGradient, bottomGradientPosition]);
+  }, [enabled, sectionName, finalOffset, hasBottomGradient, updateVisibility, warn]);
+  // Note: bottomGradientPosition NOT in deps (Issue #4)
 
   return {
     bottomGradientPosition,
@@ -254,4 +303,19 @@ export function useStickyHeader<TLabel extends HTMLElement = HTMLElement>({
     showStickyHeader,
     stickyHeaderRef,
   };
+}
+
+/**
+ * Rate-limited warning utility (Issue #6)
+ */
+function useRateLimitedWarning() {
+  const warnedKeys = useRef(new Set<string>());
+
+  return useCallback((key: string, message: string) => {
+    if (process.env.NODE_ENV !== 'development') return;
+    if (warnedKeys.current.has(key)) return;
+
+    console.warn(message);
+    warnedKeys.current.add(key);
+  }, []);
 }
