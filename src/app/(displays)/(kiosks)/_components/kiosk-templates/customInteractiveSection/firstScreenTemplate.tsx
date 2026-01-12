@@ -1,6 +1,7 @@
+import { motion, useInView } from 'framer-motion';
 import { SquarePlay } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
 import ArrowIcon from '@/components/ui/icons/Kiosks/CustomInteractive/ArrowIcon';
 import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCFilledOrangeDiamond';
@@ -42,6 +43,9 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   primaryCtaLabel,
   secondaryCtaLabel,
 }: CustomInteractiveKiosk1FirstScreenTemplateProps) => {
+  const animationTriggerRef = useRef(null);
+  const isInView = useInView(animationTriggerRef, { amount: 1, once: true }); // amount 1 is in use to make sure 100% of the template is in use before this animation kicks off. This keeps it from animating early when part of the template is in view.
+
   const [showOverlay, setShowOverlay] = useState(false);
 
   const {
@@ -102,12 +106,15 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       </div>
 
       {/* Eyebrow */}
-      <h2
-        className="absolute top-[200px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-3]/kiosk:top-[240px]"
+      <motion.h2
+        animate={isInView ? { y: 0 } : undefined}
+        className="absolute top-[200px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] will-change-transform group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-3]/kiosk:top-[240px]"
+        initial={{ y: -1100 }}
         ref={eyebrowRef}
+        transition={{ delay: 0, duration: 0.6, ease: [0.3, 0, 0.6, 1] }}
       >
         {renderRegisteredMark(eyebrowText)}
-      </h2>
+      </motion.h2>
 
       {/* Sticky Section Header - Fixed Position */}
       <div
@@ -126,6 +133,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       <h1
         className="absolute top-[1250px] left-[250px] w-full text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed] group-data-[kiosk=kiosk-3]/kiosk:top-[830px]"
         data-scroll-section="customInteractive-headline"
+        ref={animationTriggerRef}
       >
         {renderRegisteredMark(headlineText)}
       </h1>
