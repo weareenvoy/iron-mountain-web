@@ -132,9 +132,9 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
 
       {/* Animation trigger - positioned to trigger when section is fully in view */}
       <div
-        ref={animationTriggerRef}
-        className="pointer-events-none absolute top-[900px] h-[100px] w-full"
         aria-hidden="true"
+        className="pointer-events-none absolute top-[900px] h-[100px] w-full"
+        ref={animationTriggerRef}
       />
 
       {/* Headline */}
