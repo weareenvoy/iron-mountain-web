@@ -87,10 +87,19 @@ const FirstScreenTemplate = memo(
             data-section-label="challenge"
             initial={{ opacity: 0, y: TITLE_ANIMATION_TRANSFORMS.CHALLENGE_LABEL }}
             ref={labelRef}
-            transition={{ delay: SCROLL_ANIMATION_CONFIG.SECONDARY_DELAY, duration: SCROLL_ANIMATION_CONFIG.DURATION, ease: SCROLL_ANIMATION_CONFIG.EASING }}
+            transition={{
+              delay: SCROLL_ANIMATION_CONFIG.SECONDARY_DELAY,
+              duration: SCROLL_ANIMATION_CONFIG.DURATION,
+              ease: SCROLL_ANIMATION_CONFIG.EASING,
+            }}
           >
             <div className="relative mr-[5px] flex h-[110px] w-[110px] items-center justify-center">
-              <Diamond aria-hidden="true" className="h-full w-full text-[#ededed]" focusable="false" strokeWidth={1.25} />
+              <Diamond
+                aria-hidden="true"
+                className="h-full w-full text-[#ededed]"
+                focusable="false"
+                strokeWidth={1.25}
+              />
             </div>
             <h1 className="text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]">
               {renderRegisteredMark(labelText)}

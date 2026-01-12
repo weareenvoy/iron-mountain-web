@@ -42,7 +42,7 @@ export function useGlobalParagraphNavigation({
   // Track scroll timeout for cleanup
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   // Track current animation for cancellation
-  const animationControlsRef = useRef<{ stop: () => void } | null>(null);
+  const animationControlsRef = useRef<null | { stop: () => void }>(null);
 
   // Detect ALL paragraph sections in the entire container
   useEffect(() => {
@@ -135,15 +135,15 @@ export function useGlobalParagraphNavigation({
         animationControlsRef.current = animate(container.scrollTop, 0, {
           duration: duration / 1000, // Convert ms to seconds
           ease: [0.3, 0, 0.6, 1], // Smooth easing curve
-          onUpdate: (value) => {
-            container.scrollTop = value;
-          },
           onComplete: () => {
             isScrollingRef.current = false;
             setIsScrolling(false);
             setCurrentScrollTarget(null);
             setCurrentIndex(-1);
             animationControlsRef.current = null;
+          },
+          onUpdate: value => {
+            container.scrollTop = value;
           },
         });
         return;
@@ -197,14 +197,14 @@ export function useGlobalParagraphNavigation({
       animationControlsRef.current = animate(container.scrollTop, targetScroll, {
         duration: duration / 1000, // Convert ms to seconds
         ease: [0.3, 0, 0.6, 1], // Smooth easing curve
-        onUpdate: (value) => {
-          container.scrollTop = value;
-        },
         onComplete: () => {
           isScrollingRef.current = false;
           setIsScrolling(false);
           setCurrentIndex(index);
           animationControlsRef.current = null;
+        },
+        onUpdate: value => {
+          container.scrollTop = value;
         },
       });
     },

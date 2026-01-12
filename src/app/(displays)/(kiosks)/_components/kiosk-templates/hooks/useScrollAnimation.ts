@@ -21,14 +21,14 @@ export const SCROLL_ANIMATION_CONFIG = {
 
 /**
  * Hook for scroll-triggered animations on kiosk templates.
- * 
+ *
  * Manages animation state with proper accessibility support, type safety,
  * and cleanup. Uses IntersectionObserver to detect when elements scroll into view.
- * 
+ *
  * @example
  * ```tsx
  * const { shouldAnimate, triggerRef } = useScrollAnimation();
- * 
+ *
  * <div ref={triggerRef}>
  *   <motion.h2
  *     animate={shouldAnimate ? { y: 0 } : undefined}
@@ -39,12 +39,18 @@ export const SCROLL_ANIMATION_CONFIG = {
  */
 export function useScrollAnimation<T extends HTMLElement = HTMLDivElement>() {
   const triggerRef = useRef<T>(null);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
-  // Check for prefers-reduced-motion preference
+  // Initialize state with media query check (lazy initializer avoids cascading renders)
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+    return false;
+  });
+
+  // Listen for changes to prefers-reduced-motion
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReducedMotion(mediaQuery.matches);
 
     const handleChange = (event: MediaQueryListEvent) => {
       setPrefersReducedMotion(event.matches);
@@ -74,4 +80,3 @@ export function useScrollAnimation<T extends HTMLElement = HTMLDivElement>() {
     triggerRef,
   };
 }
-

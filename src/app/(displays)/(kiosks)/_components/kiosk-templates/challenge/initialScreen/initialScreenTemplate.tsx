@@ -148,10 +148,18 @@ const InitialScreenTemplate = memo(
         >
           <div className="px-[244px] pt-[100px]">
             <motion.h2
-              animate={showStickyHeader ? { scale: TITLE_ANIMATION_TRANSFORMS.INITIAL_SCALE, x: TITLE_ANIMATION_TRANSFORMS.INITIAL_X } : { scale: 1, x: 0 }}
+              animate={
+                showStickyHeader
+                  ? { scale: TITLE_ANIMATION_TRANSFORMS.INITIAL_SCALE, x: TITLE_ANIMATION_TRANSFORMS.INITIAL_X }
+                  : { scale: 1, x: 0 }
+              }
               className="text-[120px] leading-[1.3] font-normal tracking-[-6px] whitespace-pre-line text-[#ededed] will-change-transform"
               initial={{ scale: 1, x: 0 }}
-              transition={{ delay: SCROLL_ANIMATION_CONFIG.SECONDARY_DELAY, duration: 0.3, ease: SCROLL_ANIMATION_CONFIG.EASING }}
+              transition={{
+                delay: SCROLL_ANIMATION_CONFIG.SECONDARY_DELAY,
+                duration: 0.3,
+                ease: SCROLL_ANIMATION_CONFIG.EASING,
+              }}
             >
               {renderRegisteredMark(subheadline)}
             </motion.h2>

@@ -8,10 +8,10 @@ import { cn } from '@/lib/tailwind/utils/cn';
 import { getVideoMimeType } from '@/lib/utils/get-video-mime-type';
 import { normalizeMultiline } from '@/lib/utils/normalize-multiline';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
-import { TITLE_ANIMATION_TRANSFORMS } from '../constants/animations';
-import { SCROLL_ANIMATION_CONFIG, useScrollAnimation } from '../hooks/useScrollAnimation';
 import AnimatedValueCarousel from './components/AnimatedValueCarousel';
 import ValueCarousel from './components/ValueCarousel';
+import { TITLE_ANIMATION_TRANSFORMS } from '../constants/animations';
+import { SCROLL_ANIMATION_CONFIG, useScrollAnimation } from '../hooks/useScrollAnimation';
 import type { ValueCarouselSlide } from '@/app/(displays)/(kiosks)/_types/value-types';
 
 /**
@@ -136,7 +136,11 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
             data-section-label="value"
             initial={{ opacity: 0, y: TITLE_ANIMATION_TRANSFORMS.SECTION_HEADER }}
             ref={labelRef}
-            transition={{ delay: SCROLL_ANIMATION_CONFIG.SECONDARY_DELAY, duration: SCROLL_ANIMATION_CONFIG.DURATION, ease: SCROLL_ANIMATION_CONFIG.EASING }}
+            transition={{
+              delay: SCROLL_ANIMATION_CONFIG.SECONDARY_DELAY,
+              duration: SCROLL_ANIMATION_CONFIG.DURATION,
+              ease: SCROLL_ANIMATION_CONFIG.EASING,
+            }}
           >
             <div className="relative top-[25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
               <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
