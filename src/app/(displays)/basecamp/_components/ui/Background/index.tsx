@@ -11,9 +11,13 @@ const CROSSFADE_DURATION_MS = 800 as const;
 const FALLBACK_VIDEO_URL = '/videos/basecamp_fallback.webm';
 
 const Background = () => {
-  const { data, exhibitState, setReadyBeatId } = useBasecamp();
+  const { data, error, exhibitState, loading, setReadyBeatId } = useBasecamp();
   const { beatIdx, momentId } = exhibitState;
   const rawBeatId = `${momentId}-${beatIdx + 1}`;
+
+  // Derive fallback state: only show fallback after loading completes and there's an error or no data
+  // This prevents flashing the fallback during normal initial load
+  const shouldUseFallback = !loading && (error || !data);
 
   // Derive URL outside effect. Only re-run effect when URL actually changes
   const beatId = isValidBasecampBeatId(rawBeatId) ? rawBeatId : null;
@@ -35,14 +39,21 @@ const Background = () => {
   useEffect(() => {
     if (!a.current || !b.current) return;
 
-    // If Offline / no API data, play local fallback on video A
-    if (!data) {
+    // We check shouldUseFallback to avoid flashing fallback during normal load
+    if (shouldUseFallback) {
       const video = a.current;
-      if (video.src !== FALLBACK_VIDEO_URL) {
+      // Use getAttribute('src') for comparison
+      const currentSrc = video.getAttribute('src');
+      if (currentSrc !== FALLBACK_VIDEO_URL) {
         video.src = FALLBACK_VIDEO_URL;
         video.loop = true;
         video.load();
         video.play().catch(() => {});
+
+        // Reset ping-pong state to ensure fallback is visible on video A
+        active.current = 'a';
+        a.current.style.opacity = '1';
+        b.current.style.opacity = '0';
       }
       return;
     }
@@ -158,7 +169,7 @@ const Background = () => {
     return () => {
       cleanupFns.forEach(fn => fn());
     };
-  }, [beatId, data, momentId, setReadyBeatId, url]);
+  }, [beatId, momentId, setReadyBeatId, shouldUseFallback, url]);
 
   // For debugging only. Update display time
   const timeDisplayRef = useRef<HTMLSpanElement>(null);

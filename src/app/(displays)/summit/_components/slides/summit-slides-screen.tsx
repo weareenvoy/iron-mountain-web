@@ -421,8 +421,13 @@ const SummitSlidesScreen = ({
     return <PlaceholderSlide description="" heading="Loading…" />;
   }
 
-  // If Offline / no API data, play fallback video for primary screen
-  if (error || !data || slides.length === 0) {
+  // Determine failure states
+  const isOfflineOrError = error || !data;
+  const hasNoSlides = slides.length === 0;
+
+  // Primary screen: show fallback video for ANY failure (offline, error, or no slides)
+  // Secondary screen: show specific text placeholders for debugging
+  if (isOfflineOrError || hasNoSlides) {
     if (screen === 'primary') {
       return (
         <div className="relative h-full w-full overflow-hidden bg-[#F3F5F7]">
@@ -439,7 +444,9 @@ const SummitSlidesScreen = ({
         </div>
       );
     }
-    return <PlaceholderSlide description="" heading="Unable to load slides" />;
+    // Secondary screen: show specific error message
+    const heading = isOfflineOrError ? 'Unable to load data' : 'No slides available';
+    return <PlaceholderSlide description="" heading={heading} />;
   }
 
   const requiredMeta = (label: string) => {
