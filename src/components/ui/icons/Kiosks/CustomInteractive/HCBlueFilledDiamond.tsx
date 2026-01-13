@@ -13,8 +13,8 @@ const HCBlueFilledDiamond = (props: React.SVGProps<SVGSVGElement>) => (
         y1="117.66"
         y2="380.671"
       >
-        <stop stop-color="#6DCFF6" />
-        <stop offset="0.98" stop-color="#1B75BC" />
+        <stop stopColor="#6DCFF6" />
+        <stop offset="0.98" stopColor="#1B75BC" />
       </linearGradient>
     </defs>
   </svg>
