@@ -32,7 +32,8 @@ export function useGlobalParagraphNavigation({
   containerRef,
   duration = PARAGRAPH_SCROLL_DURATION_MS,
 }: UseGlobalParagraphNavigationOptions): UseGlobalParagraphNavigationReturn {
-  const [currentIndex, setCurrentIndex] = useState(-1);
+  // Start at index 0 since the page loads already showing the first paragraph
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [allParagraphs, setAllParagraphs] = useState<HTMLElement[]>([]);
   const [isScrolling, setIsScrolling] = useState(false);
   const [currentScrollTarget, setCurrentScrollTarget] = useState<null | string>(null);
@@ -107,7 +108,9 @@ export function useGlobalParagraphNavigation({
   const scrollToParagraph = useCallback(
     (index: number) => {
       const container = containerRef.current;
-      if (!container || index < -1 || index >= allParagraphs.length) return;
+      if (!container || index < -1 || index >= allParagraphs.length) {
+        return;
+      }
 
       // Clear any existing timeout before setting a new one
       if (scrollTimeoutRef.current) {
@@ -167,9 +170,6 @@ export function useGlobalParagraphNavigation({
         if (!isHTMLElement(parent)) {
           // Edge case: offsetParent is not HTMLElement (e.g., SVGElement)
           // This shouldn't happen in HTML context, but handle gracefully
-          if (process.env.NODE_ENV === 'development') {
-            console.warn('[useGlobalParagraphNavigation] offsetParent is not HTMLElement:', parent);
-          }
           break;
         }
         currentElement = parent;
@@ -228,12 +228,24 @@ export function useGlobalParagraphNavigation({
 
   const scrollToSectionById = useCallback(
     (sectionId: string) => {
+      const currentSectionId = allParagraphs[currentIndex]?.getAttribute('data-scroll-section');
+
+      // Don't scroll if we're already at the target
+      if (currentSectionId === sectionId) {
+        return;
+      }
+
+      if (isScrollingRef.current) {
+        return;
+      }
+
       const index = allParagraphs.findIndex(el => el.getAttribute('data-scroll-section') === sectionId);
-      if (index !== -1) {
+
+      if (index !== -1 && index !== currentIndex) {
         scrollToParagraph(index);
       }
     },
-    [allParagraphs, scrollToParagraph]
+    [allParagraphs, currentIndex, scrollToParagraph]
   );
 
   // Cleanup scroll timeout on unmount
