@@ -1,0 +1,27 @@
+/* Displays → Welcome-wall scoped variables */
+[data-app='displays-welcome-wall'] {
+  /* Overrides of root variables (Welcome-wall) */
+  /* e.g. --foreground: oklch(...); */
+
+  /* Custom (Welcome-wall-only) */
+  /* e.g. --welcome-accent: #...; */
+  --IM-dark-blue: #14477d;
+  --primary-bg-grey: #ededed;
+}
+
+[data-theme='dark'] [data-app='displays-welcome-wall'],
+.dark [data-app='displays-welcome-wall'] {
+  /* Overrides of root variables (Welcome-wall, dark) */
+  /* e.g. --foreground: oklch(...); */
+
+  /* Custom (Welcome-wall-only, dark) */
+  /* e.g. --welcome-wall-accent: #...; */
+}
+
+@source '../**/**/**/*.{ts,tsx}';
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+.welcome-container {
+  background-color: var(--primary-bg-grey);
+}

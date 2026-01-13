@@ -1,120 +1,185 @@
 'use client';
 
-import { ArrowLeft } from 'lucide-react';
-import BlueDot from '@/components/ui/icons/Kiosks/CustomInteractive/BlueDot';
-import InnerRing from '@/components/ui/icons/Kiosks/CustomInteractive/InnerRing';
-import OuterRing from '@/components/ui/icons/Kiosks/CustomInteractive/OuterRing';
-import renderRegisteredMark from '@/lib/utils/render-registered-mark';
+import { useInView } from 'framer-motion';
+import { memo, useRef } from 'react';
+import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
+import CarouselState from './components/CarouselState';
+import InitialState from './components/InitialState';
+import MorphingDiamond from './components/MorphingDiamond';
+import { IN_VIEW_CONFIG, SECTION_IDS } from './constants';
+import { useKiosk3SecondScreenState } from './hooks/useKiosk3SecondScreenState';
+import type { CarouselSlide } from './components/CircularCarousel';
 
-export interface CustomInteractiveKiosk3SecondScreenTemplateProps {
-  readonly backgroundImageSrc?: string;
+// Constant empty array to prevent unnecessary re-renders
+const EMPTY_SLIDES: readonly CarouselSlide[] = [];
+
+/**
+ * Props for the combined second screen template for Kiosk 3.
+ * This template combines what were originally separate "tap to begin" and "carousel" screens
+ * into a single, seamless experience with morphing animations.
+ */
+export type Kiosk3SecondScreenProps = {
+  /** Label for the back button */
   readonly backLabel?: string;
+  /** URL for the demo iframe */
+  readonly demoIframeSrc?: string;
+  /** Description text shown in initial state */
   readonly description?: string;
+  /** Eyebrow text */
   readonly eyebrow?: string;
+  /** Main headline */
   readonly headline?: string;
+  /** Callback when back button is clicked */
   readonly onBack?: () => void;
-  readonly onTapToBegin?: () => void;
+  /** Demo overlay configuration */
+  readonly overlay?: {
+    readonly cardLabel?: string;
+    readonly endTourLabel?: string;
+    readonly headline?: string;
+    readonly heroImageAlt?: string;
+    readonly heroImageSrc?: string;
+  };
+  /** Array of carousel slides */
+  readonly slides?: CarouselSlide[];
+  /** Label for the "Tap to begin" button */
   readonly tapToBeginLabel?: string;
+  /** Video asset for the morphing background */
   readonly videoAsset?: string;
-}
-
-const CustomInteractiveKiosk3SecondScreenTemplate = ({
-  backgroundImageSrc,
-  backLabel,
-  description,
-  eyebrow,
-  headline,
-  onBack,
-  onTapToBegin,
-  tapToBeginLabel,
-  videoAsset,
-}: CustomInteractiveKiosk3SecondScreenTemplateProps) => {
-  const eyebrowText = eyebrow;
-  const headlineText = headline;
-  const descriptionText = description;
-
-  return (
-    <div
-      className="relative flex h-screen w-full flex-col overflow-hidden"
-      data-scroll-section="customInteractive-second-screen"
-    >
-      <div className="absolute inset-0 bg-transparent" />
-
-      {/* Diamond video */}
-      <div className="pointer-events-none absolute bottom-[-1000px] left-[50px] h-[2500px] w-[2500px] rotate-[45deg] overflow-hidden rounded-[200px] border border-white/10 shadow-[0_40px_120px_rgba(0,0,0,0.45)]">
-        <div className="absolute inset-0 h-full w-full -rotate-[45deg]">
-          <video
-            autoPlay
-            className="relative left-[480px] h-full w-full origin-center scale-[1.45] object-cover"
-            loop
-            muted
-            playsInline
-            poster={backgroundImageSrc}
-            src={videoAsset}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
-        </div>
-      </div>
-
-      <h2 className="absolute top-[240px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-white">
-        {renderRegisteredMark(eyebrowText)}
-      </h2>
-
-      <div className="absolute top-[820px] left-[240px] max-w-[1200px] text-white">
-        <h1 className="mb-[40px] text-[100px] leading-[1.3] tracking-[-5px] whitespace-pre-line">
-          {renderRegisteredMark(headlineText)}
-        </h1>
-        <p className="relative top-[190px] text-[52px] leading-[1.4] font-normal tracking-[-2.6px] whitespace-pre-line text-white/90">
-          {renderRegisteredMark(descriptionText)}
-        </p>
-      </div>
-
-      <div className="absolute top-[240px] right-[120px]">
-        <button
-          className="group relative top-[1070px] flex h-[200px] items-center gap-[20px] rounded-[1000px] bg-[#ededed] px-[120px] text-[54px] leading-[1.4] font-normal tracking-[-2px] text-[#14477d] transition hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
-          onClick={onBack}
-          type="button"
-        >
-          <ArrowLeft aria-hidden className="h-[32px] w-[32px]" color="#14477d" strokeWidth={2} />
-          {renderRegisteredMark(backLabel)}
-        </button>
-      </div>
-
-      <div className="absolute top-[2266px] left-1/2 h-[1000px] w-[1000px] -translate-x-1/2 -translate-y-1/2">
-        <button
-          className="relative flex h-full w-full items-center justify-center rounded-full transition hover:scale-[1.05] active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
-          onClick={onTapToBegin}
-          type="button"
-        >
-          <OuterRing className="absolute top-1/2 left-1/2 h-[900px] w-[900px] -translate-x-1/2 -translate-y-1/2" />
-          <InnerRing className="absolute top-1/2 left-1/2 h-[730px] w-[730px] -translate-x-1/2 -translate-y-1/2" />
-          <div className="absolute inset-0 rounded-full bg-transparent" />
-          <div className="absolute inset-[20px] rounded-full bg-transparent" />
-          <span className="relative top-[5px] z-10 text-[80px] leading-[1.3] font-normal tracking-[-4px] text-white">
-            {renderRegisteredMark(tapToBeginLabel)}
-          </span>
-          <div className="absolute top-[48%] left-[50%] [transform:translate(-50%,-50%)_rotate(0deg)_translateY(-430px)]">
-            <BlueDot className="h-[60px] w-[60px]" />
-          </div>
-          <div className="absolute top-[50%] left-[53%] [transform:translate(-50%,-50%)_rotate(60deg)_translateY(-430px)]">
-            <BlueDot className="h-[60px] w-[60px]" />
-          </div>
-          <div className="absolute top-[49%] left-[53%] [transform:translate(-50%,-50%)_rotate(120deg)_translateY(-430px)]">
-            <BlueDot className="h-[60px] w-[60px]" />
-          </div>
-          <div className="absolute top-[52%] left-[50%] [transform:translate(-50%,-50%)_rotate(180deg)_translateY(-430px)]">
-            <BlueDot className="h-[60px] w-[60px]" />
-          </div>
-          <div className="absolute top-[50%] left-[47%] [transform:translate(-50%,-50%)_rotate(240deg)_translateY(-430px)]">
-            <BlueDot className="h-[60px] w-[60px]" />
-          </div>
-          <div className="absolute top-[50%] left-[47%] [transform:translate(-50%,-50%)_rotate(300deg)_translateY(-430px)]">
-            <BlueDot className="h-[60px] w-[60px]" />
-          </div>
-        </button>
-      </div>
-    </div>
-  );
 };
 
-export default CustomInteractiveKiosk3SecondScreenTemplate;
+/**
+ * Combined second and third screen template for Kiosk 3 Custom Interactive.
+ *
+ * ## Animation Flow
+ * 1. **Initial State**: Shows headline, description, rings, dots, and "Tap to begin" button
+ * 2. **Transition**: When button is clicked, the background video morphs from full-screen
+ *    into the first carousel slide's primary diamond
+ * 3. **Carousel State**: Displays carousel content with slides, bullets, and "Launch demo" button
+ * 4. **Overlay**: Demo overlay can be shown on top of carousel
+ *
+ * ## State Machine
+ * - `showCarousel`: false → true (one-way transition, triggered by "Tap to begin")
+ * - `showOverlay`: toggles demo overlay on/off
+ * - `carouselIndex`: tracks current slide (0-based)
+ * - `isCarouselExiting`: tracks if current slide is exiting (for morphing diamond exit animation)
+ * - `isButtonTransitioning`: triggers "Tap to begin" button morph animation
+ *
+ * ## Performance Optimizations
+ * - Main component wrapped in memo
+ * - Child components (InitialState, CarouselState, MorphingDiamond, etc.) also memoized
+ * - Event handlers wrapped in useCallback
+ * - CSS class computations memoized in child components
+ *
+ * @see InitialState - The pre-carousel state
+ * @see CarouselState - The carousel and content display
+ * @see MorphingDiamond - The transitioning background video
+ */
+const Kiosk3SecondScreenTemplate = memo(
+  ({
+    backLabel,
+    demoIframeSrc,
+    description,
+    eyebrow,
+    headline,
+    onBack,
+    overlay,
+    slides,
+    tapToBeginLabel,
+    videoAsset,
+  }: Kiosk3SecondScreenProps) => {
+    // State management extracted to custom hook
+    const {
+      carouselIndex,
+      handleHideOverlay,
+      handleIndexChange,
+      handleIsExitingChange,
+      handleShowOverlay,
+      handleTapToBegin,
+      isButtonTransitioning,
+      isCarouselExiting,
+      showCarousel,
+      showOverlay,
+    } = useKiosk3SecondScreenState();
+
+    const ref = useRef(null);
+    const isInView = useInView(ref, { amount: IN_VIEW_CONFIG.DEFAULT_THRESHOLD, once: true });
+
+    // Use constant empty array to prevent unnecessary re-renders when slides is undefined
+    const safeSlides = slides ?? EMPTY_SLIDES;
+    const hasValidVideo = Boolean(videoAsset && videoAsset.trim().length > 0);
+
+    // Early return for invalid data - no cleanup needed as component won't mount
+    if (safeSlides.length === 0 || !headline || !hasValidVideo || !videoAsset) {
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('[Kiosk3SecondScreen] Missing required data:', {
+          hasHeadline: !!headline,
+          hasSlides: safeSlides.length > 0,
+          hasValidVideo,
+          videoAsset,
+        });
+      }
+      return null;
+    }
+
+    return (
+      <div
+        className="relative flex h-screen w-full flex-col overflow-hidden"
+        data-scroll-section={SECTION_IDS.SECOND_SCREEN}
+        ref={ref}
+      >
+        <div className="absolute inset-0 bg-transparent" />
+
+        {/* Diamond video background - Morphs into first carousel slide */}
+        <MorphingDiamond
+          carouselIndex={carouselIndex}
+          isCarouselExiting={isCarouselExiting}
+          showCarousel={showCarousel}
+          videoAsset={videoAsset}
+        />
+
+        {/* Carousel state - Lazy loaded when carousel is shown to prevent loading all videos on mount */}
+        {showCarousel && (
+          <CarouselState
+            headline={headline}
+            onIndexChange={handleIndexChange}
+            onIsExitingChange={handleIsExitingChange}
+            onShowOverlay={handleShowOverlay}
+            showCarousel={showCarousel}
+            slides={safeSlides}
+          />
+        )}
+
+        {/* Initial state - Rings, dots, "Tap to begin" - Fades to opacity 0 */}
+        <InitialState
+          backLabel={backLabel}
+          description={description}
+          eyebrow={eyebrow}
+          headline={headline}
+          isButtonTransitioning={isButtonTransitioning}
+          isInView={isInView}
+          onBack={onBack}
+          onTapToBegin={handleTapToBegin}
+          showCarousel={showCarousel}
+          tapToBeginLabel={tapToBeginLabel}
+        />
+
+        {/* Demo overlay */}
+        {showOverlay && (
+          <div className="absolute inset-0 z-[9999] animate-in duration-700 fade-in">
+            <CustomInteractiveDemoScreenTemplate
+              cardLabel={overlay?.cardLabel}
+              demoIframeSrc={demoIframeSrc}
+              endTourLabel={overlay?.endTourLabel}
+              headline={overlay?.headline}
+              heroImageAlt={overlay?.heroImageAlt}
+              heroImageSrc={overlay?.heroImageSrc}
+              onEndTour={handleHideOverlay}
+            />
+          </div>
+        )}
+      </div>
+    );
+  }
+);
+
+export default Kiosk3SecondScreenTemplate;
