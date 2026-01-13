@@ -4,8 +4,8 @@ import './_styles/globals.css';
 
 const OverlookLayout = ({ children }: LayoutProps<'/overlook'>) => {
   return (
-    <MqttProvider topic="overlook">
-      <AudioProvider appId="overlook">
+    <MqttProvider topic="overlook-wall">
+      <AudioProvider appId="overlook-wall">
         <div data-app="displays-overlook">{children}</div>
       </AudioProvider>
     </MqttProvider>

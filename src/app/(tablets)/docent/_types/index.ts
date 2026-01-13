@@ -5,6 +5,9 @@ export interface DocentAppState {
   readonly 'ebc-lights': boolean;
   readonly 'exhibits': {
     readonly 'basecamp': ExhibitMqttState;
+    readonly 'kiosk-01'?: ExhibitMqttState;
+    readonly 'kiosk-02'?: ExhibitMqttState;
+    readonly 'kiosk-03'?: ExhibitMqttState;
     readonly 'overlook-wall'?: ExhibitMqttStateOverlook;
     readonly 'summit'?: ExhibitMqttStateSummit;
   };

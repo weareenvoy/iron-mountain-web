@@ -18,80 +18,79 @@ import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import { Switch } from '@/app/(tablets)/docent/_components/ui/Switch';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { cn } from '@/lib/tailwind/utils/cn';
-import type { ExhibitControl } from '@/lib/internal/types';
 
 interface SettingsDrawerProps {
   readonly isOpen: boolean;
   readonly onClose: () => void;
 }
 
-// Hardcoded exhibit IDs - these match the dictionary keys
-const EXHIBIT_IDS: readonly ('basecamp' | 'entry-way' | 'overlook' | 'solution-pathways' | 'summit')[] = [
-  'basecamp',
-  'entry-way',
-  'overlook',
-  'solution-pathways',
-  'summit',
+// Exhibit configuration: id, nameKey, and whether it has a mute button
+const EXHIBITS = [
+  { hasMuteButton: true, id: 'basecamp', nameKey: 'basecamp' },
+  { hasMuteButton: false, id: 'welcome-wall', nameKey: 'entryWay' },
+  { hasMuteButton: true, id: 'overlook-wall', nameKey: 'overlook' },
+  { hasMuteButton: true, id: 'solution-pathways', nameKey: 'solutionPathways' },
+  { hasMuteButton: false, id: 'summit', nameKey: 'summitRoom' },
 ] as const;
 
-// Map exhibit IDs to their display name keys in data
-const EXHIBIT_NAME_MAP = {
-  'basecamp': 'basecamp',
-  'entry-way': 'entryWay',
-  'overlook': 'overlook',
-  'solution-pathways': 'solutionPathways',
-  'summit': 'summitRoom',
-} as const satisfies Record<(typeof EXHIBIT_IDS)[number], string>;
-
-// Map exhibit IDs to GEC state keys
-// TODO: 1.Entry Way is not in GEC state yet. 2.Solution Pathways is 3 kiosks. If 1 kiosk is down, is Solution Pathways considered down?
-const GEC_EXHIBIT_KEY_MAP = {
-  'basecamp': 'basecamp',
-  'entry-way': null,
-  'overlook': 'overlook-wall',
-  'solution-pathways': null,
-  'summit': 'summit',
-} as const satisfies Record<(typeof EXHIBIT_IDS)[number], 'basecamp' | 'overlook-wall' | 'summit' | null>;
+type ExhibitId = (typeof EXHIBITS)[number]['id'];
 
 const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
   const { client } = useMqtt();
   const { data, docentAppState } = useDocent();
   const router = useRouter();
 
-  // Build exhibit controls from dictionary
-  const exhibitControls: ExhibitControl[] = useMemo(() => {
-    return EXHIBIT_IDS.map(id => {
-      const nameKey = EXHIBIT_NAME_MAP[id];
-      const name = data?.settings.exhibits[nameKey as keyof typeof data.settings.exhibits] ?? id;
+  // Build exhibit controls
+  const exhibitControls = useMemo(() => {
+    return EXHIBITS.map(({ hasMuteButton, id, nameKey }) => {
+      const name = data?.settings.exhibits[nameKey as keyof typeof data.settings.exhibits] ?? nameKey;
 
-      const gecExhibitKey = GEC_EXHIBIT_KEY_MAP[id];
+      // Special handling for solution-pathways: aggregate kiosk-01, kiosk-02, kiosk-03
+      if (id === 'solution-pathways') {
+        const kiosk01 = docentAppState?.exhibits['kiosk-01'];
+        const kiosk02 = docentAppState?.exhibits['kiosk-02'];
+        const kiosk03 = docentAppState?.exhibits['kiosk-03'];
 
-      // Get state from GEC if available
-      const exhibitState = gecExhibitKey ? docentAppState?.exhibits[gecExhibitKey] : null;
-      const isOn = exhibitState?.available ?? false;
-      const isMuted = exhibitState?.['volume-muted'] ?? false;
-      const hasError = !isOn;
+        // All 3 must be available to show "online"
+        const isOn = Boolean(kiosk01?.available && kiosk02?.available && kiosk03?.available);
+        // If any is muted, show as muted
+        const isMuted = Boolean(kiosk01?.['volume-muted'] || kiosk02?.['volume-muted'] || kiosk03?.['volume-muted']);
+
+        return { hasMuteButton, id, isMuted, isOn, name };
+      }
+
+      // Standard exhibits
+      const gecKey = id as 'basecamp' | 'overlook-wall' | 'summit';
+      const exhibitState =
+        id === 'welcome-wall' ? null : docentAppState?.exhibits[gecKey as keyof typeof docentAppState.exhibits];
 
       return {
-        errorMessage: hasError ? (data?.settings.status.offline ?? 'Offline') : undefined,
-        hasError,
+        hasMuteButton,
         id,
-        isMuted,
-        isOn,
+        isMuted: exhibitState?.['volume-muted'] ?? false,
+        isOn: exhibitState?.available ?? false,
         name,
       };
     });
   }, [data, docentAppState]);
 
-  const handleToggleMute = (exhibitId: string) => () => {
+  const handleToggleMute = (exhibitId: ExhibitId, currentMuted: boolean) => () => {
     if (!client) return;
 
-    // Find current muted state
-    const exhibit = exhibitControls.find(c => c.id === exhibitId);
-    if (!exhibit) return;
+    const newMuted = !currentMuted;
 
-    // Send setVolume command to GEC
-    client.setVolume(exhibitId as 'basecamp' | 'overlook-wall' | 'summit', !exhibit.isMuted, {
+    // Special handling for solution-pathways: send to all 3 kiosks
+    if (exhibitId === 'solution-pathways') {
+      (['kiosk-01', 'kiosk-02', 'kiosk-03'] as const).forEach(kioskId => {
+        client.setVolume(kioskId, newMuted, {
+          onError: (err: Error) => console.error(`Failed to toggle mute for ${kioskId}:`, err),
+          onSuccess: () => console.info(`Successfully toggled mute for ${kioskId}`),
+        });
+      });
+      return;
+    }
+
+    client.setVolume(exhibitId as 'basecamp' | 'overlook-wall', newMuted, {
       onError: (err: Error) => console.error(`Failed to toggle mute for ${exhibitId}:`, err),
       onSuccess: () => console.info(`Successfully toggled mute for ${exhibitId}`),
     });
@@ -139,39 +138,38 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
 
         {/* Controls List */}
         <div className="space-y-8">
-          {exhibitControls.map(control => (
-            <div className="flex h-15 items-center justify-between" key={control.id}>
+          {exhibitControls.map(({ hasMuteButton, id, isMuted, isOn, name }) => (
+            <div className="flex h-15 items-center justify-between" key={id}>
               <div className="flex flex-col gap-1">
                 {/* Status Icon and control name*/}
                 <div className="flex items-center gap-2.5">
-                  {control.isOn ? (
+                  {isOn ? (
                     <CircleCheck className="size-[32px] fill-[#6dcff6] stroke-[#2e2e2e]" />
                   ) : (
                     <CircleAlert className="size-[32px] fill-[#f7931e] stroke-[#2e2e2e]" />
                   )}
-                  <span
-                    className={cn('text-2xl', control.isOn ? 'text-primary-im-light-blue' : 'text-secondary-im-orange')}
-                  >
-                    {control.name}
+                  <span className={cn('text-2xl', isOn ? 'text-primary-im-light-blue' : 'text-secondary-im-orange')}>
+                    {name}
                   </span>
                 </div>
 
-                {/* Error message */}
-                {control.hasError && (
-                  <span className="text-primary-im-grey ml-11 text-[16px]">{control.errorMessage}</span>
-                )}
+                {/* Offline message */}
+                {!isOn && <span className="text-primary-im-grey ml-11 text-[16px]">Offline</span>}
               </div>
 
-              {/* Mute/Unmute Icon Button */}
-              <button
-                className={cn(
-                  'flex h-12 w-12 items-center justify-center rounded-full transition-colors',
-                  control.isMuted ? 'text-primary-im-grey' : 'text-primary-im-light-blue'
-                )}
-                onClick={handleToggleMute(control.id)}
-              >
-                {control.isMuted ? <VolumeX className="size-[24px]" /> : <Volume2 className="size-[24px]" />}
-              </button>
+              {/* Mute/Unmute Icon Button - only for exhibits with mute support, disabled when offline */}
+              {hasMuteButton && (
+                <button
+                  className={cn(
+                    'flex h-12 w-12 items-center justify-center rounded-full transition-colors',
+                    isOn && !isMuted ? 'text-primary-im-light-blue' : 'text-primary-im-grey'
+                  )}
+                  disabled={!isOn}
+                  onClick={handleToggleMute(id, isMuted)}
+                >
+                  {isMuted ? <VolumeX className="size-[24px]" /> : <Volume2 className="size-[24px]" />}
+                </button>
+              )}
             </div>
           ))}
         </div>
