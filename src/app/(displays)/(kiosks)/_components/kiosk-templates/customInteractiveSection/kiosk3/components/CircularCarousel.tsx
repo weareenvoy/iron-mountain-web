@@ -1,13 +1,15 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { ANIMATION_DURATION_MS, type SlideId } from '../constants';
 
 export type CarouselSlide = {
-  readonly bullets: string[];
+  readonly bullets: readonly string[];
   readonly eyebrow?: string;
   readonly headline?: string;
-  readonly id: string;
+  readonly id: SlideId;
   readonly primaryImageAlt: string;
   readonly primaryImageSrc: string;
   readonly primaryVideoSrc?: string;
@@ -17,18 +19,88 @@ export type CarouselSlide = {
 };
 
 type CircularCarouselProps = {
-  readonly children: (props: { current: CarouselSlide; index: number; total: number }) => React.ReactNode;
+  readonly children: (props: {
+    current: CarouselSlide;
+    index: number;
+    isExiting: boolean;
+    total: number;
+  }) => React.ReactNode;
+  readonly onIndexChange?: (index: number) => void;
+  readonly onIsExitingChange?: (isExiting: boolean) => void;
+  /**
+   * Array of carousel slides to display.
+   * IMPORTANT: This prop must be stable (memoized) to prevent unnecessary re-renders
+   * and callback recreations. Use useMemo() in the parent component.
+   */
   readonly slides: readonly CarouselSlide[];
 };
 
-const CircularCarousel = ({ children, slides }: CircularCarouselProps) => {
+const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }: CircularCarouselProps) => {
+  // Enforce 6-slide contract - UI is designed for exactly 6 dots in specific positions
+  if (slides.length !== 6) {
+    throw new Error(
+      '[CircularCarousel] Expected exactly 6 slides for circular dot layout, got ' +
+        `${slides.length}. Fix CMS data or update carousel UI to support dynamic slide counts.`
+    );
+  }
+
   const [index, setIndex] = useState(0);
+  const [isExiting, setIsExiting] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const timeoutRef = useRef<number | undefined>(undefined);
   const total = slides.length;
-  const currentIndex = total > 0 ? index % total : 0;
+  // slides.length is validated to be 6 above, so total > 0 is always true
+  const currentIndex = index % total;
   const current = slides[currentIndex];
 
-  const goNext = () => setIndex(i => (i + 1) % total);
-  const goPrev = () => setIndex(i => (i - 1 + total) % total);
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    onIndexChange?.(currentIndex);
+  }, [currentIndex, onIndexChange]);
+
+  useEffect(() => {
+    onIsExitingChange?.(isExiting);
+  }, [isExiting, onIsExitingChange]);
+
+  const goNext = useCallback(() => {
+    // Prevent rapid clicks during transition
+    if (isTransitioning) return;
+
+    setIsTransitioning(true);
+    setIsExiting(true);
+
+    // Capture slides.length in closure to prevent race condition if slides change during animation
+    const slideCount = slides.length;
+    timeoutRef.current = window.setTimeout(() => {
+      setIndex(i => (i + 1) % slideCount);
+      setIsExiting(false);
+      setIsTransitioning(false);
+    }, ANIMATION_DURATION_MS.CAROUSEL);
+  }, [isTransitioning, slides.length]);
+
+  const goPrev = useCallback(() => {
+    // Prevent rapid clicks during transition
+    if (isTransitioning) return;
+
+    setIsTransitioning(true);
+    setIsExiting(true);
+
+    // Capture slides.length in closure to prevent race condition if slides change during animation
+    const slideCount = slides.length;
+    timeoutRef.current = window.setTimeout(() => {
+      setIndex(i => (i - 1 + slideCount) % slideCount);
+      setIsExiting(false);
+      setIsTransitioning(false);
+    }, ANIMATION_DURATION_MS.CAROUSEL);
+  }, [isTransitioning, slides.length]);
 
   if (!current) {
     return null;
@@ -36,43 +108,83 @@ const CircularCarousel = ({ children, slides }: CircularCarouselProps) => {
 
   return (
     <div className="relative h-full w-full">
-      {children({ current, index, total })}
+      {children({ current, index, isExiting, total })}
 
       {/* Circle carousel control */}
-      <div className="absolute top-[1670px] right-[120px] z-[1] h-[520px] w-[520px]">
+      <div className="absolute top-[1670px] right-[120px] z-1 h-[520px] w-[520px]">
         <div className="relative h-full w-full">
-          <div className="absolute inset-0 rounded-full border-[8px] border-[#6dcff6]/70" />
-          <div className="absolute inset-[18px] rounded-full border-[12px] border-transparent" />
+          <div className="absolute inset-0 rounded-full border-8 border-[#6dcff6]/20" />
+          <div className="absolute inset-[18px] rounded-full border-12 border-transparent" />
           <div className="absolute inset-[44px] rounded-full border-[6px] border-transparent" />
 
           <div className="absolute inset-0 flex items-center justify-center text-[60px] leading-[1.4] font-semibold tracking-[-3px] text-white">
             {String(index + 1).padStart(2, '0')}
           </div>
 
-          {/* Dots */}
+          {/* Dots - Progressive opacity based on current slide
+               NOTE: Positions are hardcoded for 6-slide circular layout (validated at component entry).
+               Each dot is positioned at specific coordinates around the circle for the design.
+               If you need dynamic dot counts, refactor to calculate positions programmatically. */}
+          {/* Dot 1 - Top */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
-            <div className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]" />
+            <motion.div
+              animate={{ opacity: currentIndex >= 0 ? 1 : 0.2 }}
+              className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]"
+              initial={{ opacity: 0.2 }}
+              transition={{ duration: currentIndex >= 0 ? 0.06 : 0.03, ease: currentIndex >= 0 ? 'easeIn' : 'easeOut' }}
+            />
           </div>
+          {/* Dot 2 - Top Right */}
           <div className="absolute top-[28%] left-[95%] -translate-x-1/2 -translate-y-1/2">
-            <div className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]" />
+            <motion.div
+              animate={{ opacity: currentIndex >= 1 ? 1 : 0.2 }}
+              className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]"
+              initial={{ opacity: 0.2 }}
+              transition={{ duration: currentIndex >= 1 ? 0.06 : 0.03, ease: currentIndex >= 1 ? 'easeIn' : 'easeOut' }}
+            />
           </div>
+          {/* Dot 3 - Bottom Right */}
           <div className="absolute top-[73%] left-[94%] -translate-x-1/2 -translate-y-1/2">
-            <div className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]" />
+            <motion.div
+              animate={{ opacity: currentIndex >= 2 ? 1 : 0.2 }}
+              className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]"
+              initial={{ opacity: 0.2 }}
+              transition={{ duration: currentIndex >= 2 ? 0.06 : 0.03, ease: currentIndex >= 2 ? 'easeIn' : 'easeOut' }}
+            />
           </div>
+          {/* Dot 4 - Bottom */}
           <div className="absolute top-full left-[52%] -translate-x-1/2 -translate-y-1/2">
-            <div className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]" />
+            <motion.div
+              animate={{ opacity: currentIndex >= 3 ? 1 : 0.2 }}
+              className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]"
+              initial={{ opacity: 0.2 }}
+              transition={{ duration: currentIndex >= 3 ? 0.06 : 0.03, ease: currentIndex >= 3 ? 'easeIn' : 'easeOut' }}
+            />
           </div>
+          {/* Dot 5 - Bottom Left */}
           <div className="absolute top-[73%] left-[7%] -translate-x-1/2 -translate-y-1/2">
-            <div className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]" />
+            <motion.div
+              animate={{ opacity: currentIndex >= 4 ? 1 : 0.2 }}
+              className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]"
+              initial={{ opacity: 0.2 }}
+              transition={{ duration: currentIndex >= 4 ? 0.06 : 0.03, ease: currentIndex >= 4 ? 'easeIn' : 'easeOut' }}
+            />
           </div>
+          {/* Dot 6 - Top Left */}
           <div className="absolute top-[27%] left-[7%] -translate-x-1/2 -translate-y-1/2">
-            <div className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]" />
+            <motion.div
+              animate={{ opacity: currentIndex >= 5 ? 1 : 0.2 }}
+              className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]"
+              initial={{ opacity: 0.2 }}
+              transition={{ duration: currentIndex >= 5 ? 0.06 : 0.03, ease: currentIndex >= 5 ? 'easeIn' : 'easeOut' }}
+            />
           </div>
 
           {/* Arrows */}
           <button
             aria-label="Previous slide"
-            className="group absolute top-1/2 left-[100px] flex h-[102px] w-[102px] -translate-y-1/2 items-center justify-center transition hover:opacity-80 active:opacity-40 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+            className="group absolute top-1/2 left-[100px] flex h-[102px] w-[102px] -translate-y-1/2 items-center justify-center transition hover:opacity-80 active:opacity-40 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)] disabled:cursor-not-allowed disabled:opacity-30"
+            disabled={isTransitioning}
             onClick={goPrev}
             type="button"
           >
@@ -80,7 +192,8 @@ const CircularCarousel = ({ children, slides }: CircularCarouselProps) => {
           </button>
           <button
             aria-label="Next slide"
-            className="group absolute top-1/2 right-[70px] flex h-[102px] w-[102px] -translate-y-1/2 items-center justify-center transition hover:opacity-80 active:opacity-40 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+            className="group absolute top-1/2 right-[70px] flex h-[102px] w-[102px] -translate-y-1/2 items-center justify-center transition hover:opacity-80 active:opacity-40 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)] disabled:cursor-not-allowed disabled:opacity-30"
+            disabled={isTransitioning}
             onClick={goNext}
             type="button"
           >

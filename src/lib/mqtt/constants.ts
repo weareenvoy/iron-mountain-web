@@ -37,4 +37,14 @@ export const mqttCommands = {
     republishSettings: 'cmd/dev/gec/republish-settings',
     sync: 'cmd/dev/gec/sync',
   },
+  overlook: {
+    gotoBeat: 'cmd/dev/overlook/goto-beat',
+  },
+  summit: {
+    gotoBeat: 'cmd/dev/summit/goto-beat',
+  },
+  welcomeWall: {
+    endTour: 'cmd/dev/all/end-tour',
+    loadTour: 'cmd/dev/all/load-tour',
+  },
 } as const;

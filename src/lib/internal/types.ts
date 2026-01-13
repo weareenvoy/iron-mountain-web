@@ -390,6 +390,26 @@ export interface SummitTourSummary {
   readonly name: string;
 }
 
+export interface WelcomeWallData {
+  readonly clientTourLogo: {
+    readonly url: string;
+  };
+  readonly videos: {
+    readonly ambientLoopEn: {
+      readonly url: string;
+    };
+    readonly ambientLoopPt: {
+      readonly url: string;
+    };
+    readonly tourLoopEn: {
+      readonly url: string;
+    };
+    readonly tourLoopPt: {
+      readonly url: string;
+    };
+  };
+}
+
 export type Locale = 'en' | 'pt';
 
 // Generic API response structure
@@ -404,6 +424,7 @@ export type ApiResponse<T> = readonly ApiResponseItem<T>[];
 export type BasecampApiResponse = ApiResponse<BasecampData>;
 export type DocentApiResponse = ApiResponse<DocentData>;
 export type SummitApiResponse = ApiResponse<SummitData>;
+export type WelcomeWallApiResponse = ApiResponse<WelcomeWallData>;
 export type KioskApiResponse = ApiResponse<KioskData>;
 
 // Function return types (transformed from API responses)
@@ -421,6 +442,11 @@ export interface BasecampDataResponse {
 
 export interface SummitDataResponse {
   readonly data: SummitData;
+  readonly locale: Locale;
+}
+
+export interface WelcomeWallDataResponse {
+  readonly data: WelcomeWallData;
   readonly locale: Locale;
 }
 
