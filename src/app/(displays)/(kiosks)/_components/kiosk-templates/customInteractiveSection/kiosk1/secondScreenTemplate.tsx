@@ -18,6 +18,8 @@ import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
  * Props for Custom Interactive Kiosk 1 Second Screen Template
  */
 export type CustomInteractiveKiosk1SecondScreenTemplateProps = {
+  /** Label for the back button in step modal */
+  readonly backLabel?: string;
   /** Body text below headline (extracted from hardcoded string) */
   readonly bodyText?: string;
   /** URL for demo iframe content */
@@ -53,6 +55,7 @@ export type CustomInteractiveKiosk1SecondScreenTemplateProps = {
  * Features animated headline/body/button and diamond carousel with modal details
  */
 const CustomInteractiveKiosk1SecondScreenTemplate = ({
+  backLabel,
   bodyText,
   demoIframeSrc,
   headline,
@@ -67,8 +70,7 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
   steps,
 }: CustomInteractiveKiosk1SecondScreenTemplateProps) => {
   const headlineText: string = normalizeText(headline);
-  const normalizedBodyText =
-    bodyText ?? 'Explore each section to learn how Iron Mountain can transform your enterprise';
+  const normalizedBodyText = bodyText ?? '';
   const normalizedSteps = steps ?? [];
   const isKiosk3 = kioskId === 'kiosk-3';
   const secondaryIconOffset = isKiosk3 ? 'left-[-330px]' : 'left-[-70px]';
@@ -210,7 +212,12 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
         ? createPortal(
             <AnimatePresence>
               {activeModalContent ? (
-                <StepModal content={activeModalContent} key="step-modal" onClose={handleModalClose} />
+                <StepModal
+                  backLabel={backLabel}
+                  content={activeModalContent}
+                  key="step-modal"
+                  onClose={handleModalClose}
+                />
               ) : null}
             </AnimatePresence>,
             portalTarget
