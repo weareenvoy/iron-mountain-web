@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useBasecamp } from '@/app/(displays)/basecamp/_components/providers/basecamp';
 import { getNextBeatId, isBackgroundSeamlessTransition } from '@/app/(displays)/basecamp/_utils';
 import { BasecampBeatId, isValidBasecampBeatId } from '@/lib/internal/types';
@@ -31,10 +31,18 @@ const Background = () => {
 
   // 2 videos "ping pong" between, 1 visible, 1 invisible.
   const a = useRef<HTMLVideoElement>(null);
-  const b = useRef<HTMLVideoElement>(null);
   const active = useRef<'a' | 'b'>('a');
-  const [activeDisplay, setActiveDisplay] = useState<'a' | 'b'>('a');
+  const activeDisplayRef = useRef<HTMLSpanElement>(null);
+  const b = useRef<HTMLVideoElement>(null);
   const lastBeat = useRef<BasecampBeatId | null>(null);
+
+  // Helper to update active video and sync debug display
+  const updateActiveDisplay = (value: 'a' | 'b') => {
+    active.current = value;
+    if (activeDisplayRef.current) {
+      activeDisplayRef.current.textContent = value.toUpperCase();
+    }
+  };
 
   useEffect(() => {
     if (!a.current || !b.current) return;
@@ -49,12 +57,15 @@ const Background = () => {
         video.loop = true;
         video.load();
         video.play().catch(() => {});
-
-        // Reset ping-pong state to ensure fallback is visible on video A
-        active.current = 'a';
-        a.current.style.opacity = '1';
-        b.current.style.opacity = '0';
       }
+
+      // Reset state so recovery works when data comes back.
+      a.current.style.opacity = '1';
+      b.current.style.opacity = '0';
+      lastBeat.current = null;
+      setReadyBeatId(null);
+      updateActiveDisplay('a');
+
       return;
     }
 
@@ -101,7 +112,7 @@ const Background = () => {
     if (isFirstLoad) {
       // First load: use video A directly
       setupIncomingVideo(a.current!);
-      active.current = 'a';
+      updateActiveDisplay('a');
 
       const handleCanPlayThrough = () => startPlaybackAndSignalReady(a.current!);
       a.current!.addEventListener('canplaythrough', handleCanPlayThrough, { once: true });
@@ -127,8 +138,7 @@ const Background = () => {
         }
 
         startPlaybackAndSignalReady(hidden);
-        active.current = active.current === 'a' ? 'b' : 'a';
-        setActiveDisplay(active.current);
+        updateActiveDisplay(active.current === 'a' ? 'b' : 'a');
       };
 
       if (hidden.readyState >= 3) {
@@ -203,7 +213,9 @@ const Background = () => {
 
       <div className="pointer-events-none absolute top-4 left-4 rounded bg-black/60 px-3 py-2 font-mono text-sm text-white">
         <div>{beatId}</div>
-        <div>Active: {activeDisplay.toUpperCase()}</div>
+        <div>
+          Active: <span ref={activeDisplayRef}>A</span>
+        </div>
         <p>
           Time: <span ref={timeDisplayRef}>0.0s</span>
         </p>
