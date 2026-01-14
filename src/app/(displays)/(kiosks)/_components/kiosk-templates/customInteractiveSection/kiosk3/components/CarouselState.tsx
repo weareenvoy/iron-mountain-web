@@ -20,6 +20,8 @@ import DecorativeSVGGroup from './DecorativeSVGGroup';
 type CarouselStateProps = {
   /** Main headline displayed across all carousel slides */
   readonly headline?: string;
+  /** Label for the "Launch demo" CTA button */
+  readonly launchDemoLabel?: string;
   /** Callback when carousel index changes */
   readonly onIndexChange: (index: number) => void;
   /** Callback when slide exit animation state changes */
@@ -56,7 +58,15 @@ type CarouselStateProps = {
  * @param props - Component props
  */
 const CarouselState = memo(
-  ({ headline, onIndexChange, onIsExitingChange, onShowOverlay, showCarousel, slides }: CarouselStateProps) => {
+  ({
+    headline,
+    launchDemoLabel,
+    onIndexChange,
+    onIsExitingChange,
+    onShowOverlay,
+    showCarousel,
+    slides,
+  }: CarouselStateProps) => {
     return (
       <motion.div
         animate={{ opacity: showCarousel ? 1 : 0 }}
@@ -195,7 +205,7 @@ const CarouselState = memo(
           onClick={onShowOverlay}
           type="button"
         >
-          Launch demo
+          {renderRegisteredMark(launchDemoLabel)}
           <SquarePlay aria-hidden className="ml-[40px] h-[90px] w-[90px]" strokeWidth={2} />
         </button>
       </motion.div>

@@ -30,6 +30,8 @@ export type Kiosk3SecondScreenProps = {
   readonly eyebrow?: string;
   /** Main headline */
   readonly headline?: string;
+  /** Label for the "Launch demo" CTA button in carousel state */
+  readonly launchDemoLabel?: string;
   /** Callback when back button is clicked */
   readonly onBack?: () => void;
   /** Demo overlay configuration */
@@ -82,6 +84,7 @@ const Kiosk3SecondScreenTemplate = memo(
     description,
     eyebrow,
     headline,
+    launchDemoLabel,
     onBack,
     overlay,
     slides,
@@ -143,6 +146,7 @@ const Kiosk3SecondScreenTemplate = memo(
         {showCarousel && (
           <CarouselState
             headline={headline}
+            launchDemoLabel={launchDemoLabel}
             onIndexChange={handleIndexChange}
             onIsExitingChange={handleIsExitingChange}
             onShowOverlay={handleShowOverlay}

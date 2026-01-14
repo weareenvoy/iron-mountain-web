@@ -88,6 +88,7 @@ export const mapCustomInteractiveKiosk3 = (
       description: customInteractive.body,
       eyebrow: ambient.title,
       headline: customInteractive.headline2,
+      launchDemoLabel: customInteractive.secondaryCTA,
       overlay: {
         cardLabel: demo?.demoText,
         endTourLabel: demo?.mainCTA,
