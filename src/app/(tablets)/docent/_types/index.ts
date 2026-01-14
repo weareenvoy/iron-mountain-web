@@ -10,6 +10,7 @@ export interface DocentAppState {
     readonly 'kiosk-03'?: ExhibitMqttState;
     readonly 'overlook-wall'?: ExhibitMqttStateOverlook;
     readonly 'summit'?: ExhibitMqttStateSummit;
+    readonly 'welcome-wall'?: ExhibitMqttState;
   };
   readonly 'tour-id': null | string;
 }
