@@ -91,9 +91,11 @@ const InitialScreenTemplate = memo(
           // Wait for fade out animation to complete before triggering initial screen animations
           const videoSrcAtDismiss = idleVideoSrc;
           timeoutRef.current = setTimeout(() => {
-            if (idleVideoSrcRef.current !== videoSrcAtDismiss) return;
-            setIdleCompleteVideoSrc(videoSrcAtDismiss);
-            timeoutRef.current = null;
+            // Fix #10: Always clear timeout ref, even if condition fails
+            if (idleVideoSrcRef.current === videoSrcAtDismiss) {
+              setIdleCompleteVideoSrc(videoSrcAtDismiss);
+            }
+            timeoutRef.current = null; // Always clear, not just on success path
           }, IDLE_FADE_OUT_DURATION_MS);
         } catch (error) {
           console.error(`${kioskId}: Error handling loadTour for idle dismissal:`, error);

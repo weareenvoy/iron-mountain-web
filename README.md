@@ -64,6 +64,11 @@ Create a `.env.local` file in the root directory:
 # Required: MQTT broker WebSocket URL for real-time communication
 NEXT_PUBLIC_MQTT_BROKER_URL=wss://...
 
+# Optional: Use GEC (Global Experience Controller) relay for MQTT messages
+# - true: Send to GEC, which relays to exhibits (production)
+# - false: Direct broadcast to exhibits (development, default)
+NEXT_PUBLIC_USE_GEC=false
+
 # Optional: API and CDN configuration
 NEXT_PUBLIC_API_BASE_URL=https://...
 NEXT_PUBLIC_CDN_HOST_NAME=https://...
