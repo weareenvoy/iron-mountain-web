@@ -125,8 +125,8 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
         // Fetch fresh kiosk data
         fetchData();
 
-        // Report state with initial beat-id
-        reportStateRef.current({ 'beat-id': DEFAULT_KIOSK_BEAT_ID });
+        // Report active state (kiosk is now in use)
+        reportStateRef.current({ 'beat-id': 'kiosk-active' });
       } catch (error) {
         console.error(`${kioskId}: Error parsing load-tour command:`, error);
       }
@@ -138,8 +138,8 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
     const handleEndTour = () => {
       console.info(`${kioskId}: Received end-tour command - resetting kiosk`);
 
-      // Report state before refresh
-      reportStateRef.current({ 'beat-id': DEFAULT_KIOSK_BEAT_ID });
+      // Report idle state before refresh (tour has ended, returning to attract screen)
+      reportStateRef.current({ 'beat-id': DEFAULT_KIOSK_BEAT_ID }); // 'kiosk-idle'
 
       // Brief delay to ensure MQTT message is sent before refresh interrupts connection
       setTimeout(() => {
