@@ -146,32 +146,44 @@ This ensures kiosks always recover to their last known state, providing a seamle
 
 ## Tour Lifecycle (MQTT Commands)
 
-Kiosks are **standalone exhibits** with their own content. Each kiosk (kiosk-1, kiosk-2, kiosk-3) operates independently
-and only responds to tour commands meant for itself.
+Kiosks are **standalone exhibits** with their own content. Each kiosk (kiosk-1, kiosk-2, kiosk-3) operates
+independently, but **all kiosks activate when any tour starts** to provide a synchronized experience.
 
 ### Starting a Tour
 
-**When**: User dismisses the idle screen overlay on the `InitialScreenTemplate`
+**When**: User clicks the "Load" button in the Docent app to start a tour
 
 **Flow**:
 
-1. `InitialScreenTemplate` detects idle screen tap
-2. Calls `client.loadTour(kioskId)` (e.g., `'kiosk-1'`)
-3. Message broadcasts to `cmd/dev/all/load-tour` with `tour-id: 'kiosk-1'`
-4. This kiosk receives its own broadcast → fetches fresh data
-5. Other kiosks receive broadcast → ignore it (different tour-id)
+1. Docent app calls `client.loadTour(tourId)` with the selected tour ID (e.g., `'tour-001'`)
+2. Message broadcasts to:
+   - `cmd/dev/gec/load-tour` (for GEC in production)
+   - `cmd/dev/all/load-tour` (direct to exhibits for development)
+3. **All kiosks** receive the broadcast (regardless of tour ID)
+4. Each kiosk's idle screen dismisses with fade-out animation
+5. Each kiosk fetches fresh data and reports initial state
+
+**Why all kiosks respond?** Even though tours have different IDs, all kiosks are part of the same physical experience
+and should activate together when any tour starts. Kiosks display their own static content regardless of which tour is
+loaded.
 
 **Why fetch data?** Even though kiosks have static content, fetching ensures the latest data is loaded if the kiosk has
 been idle for an extended period.
 
 ```typescript
-// In InitialScreenTemplate
-if (client && isConnected && kioskId) {
-  client.loadTour(kioskId, {
-    onError: err => console.error(`${kioskId}: Failed to trigger loadTour:`, err),
-    onSuccess: () => console.info(`${kioskId}: Successfully triggered loadTour`),
-  });
-}
+// In InitialScreenTemplate - subscribes to loadTour for idle dismissal
+useEffect(() => {
+  if (!client || !isConnected || !idleVideoSrc) return;
+
+  const handleLoadTour = (message: Buffer) => {
+    // Dismiss idle screen (all kiosks respond to any tour)
+    setDismissedIdleVideoSrc(idleVideoSrc);
+    // ... trigger fade-out animation
+  };
+
+  client.subscribeToTopic('cmd/dev/all/load-tour', handleLoadTour);
+  return () => client.unsubscribeFromTopic('cmd/dev/all/load-tour', handleLoadTour);
+}, [client, isConnected, idleVideoSrc]);
 ```
 
 ### Ending a Tour
@@ -205,23 +217,23 @@ const handleEndTour = () => {
 
 ### Key Differences from Other Exhibits
 
-| Behavior              | Kiosks                            | Basecamp/Summit             |
-| --------------------- | --------------------------------- | --------------------------- |
-| **Tour Identity**     | kioskId is the tour-id            | Receives actual tour-id     |
-| **Content**           | Static per kiosk                  | Dynamic based on tour       |
-| **load-tour**         | Only responds to own kioskId      | Responds to all tour-ids    |
-| **end-tour**          | Full page refresh                 | Stateful reset (no refresh) |
-| **Idle Screen**       | Integrated into initial screen    | Separate idle state         |
-| **Self-broadcasting** | Triggers loadTour on idle dismiss | Never self-triggers tours   |
+| Behavior          | Kiosks                                 | Basecamp/Summit              |
+| ----------------- | -------------------------------------- | ---------------------------- |
+| **Tour Identity** | Kiosk ID is separate from tour ID      | Tour ID determines content   |
+| **Content**       | Static per kiosk (same for all tours)  | Dynamic based on tour        |
+| **load-tour**     | All kiosks respond to any tour         | Responds to specific tour-id |
+| **end-tour**      | Full page refresh                      | Stateful reset (no refresh)  |
+| **Idle Screen**   | Integrated into initial screen         | Separate idle state          |
+| **Tour Trigger**  | Controlled by Docent app "Load" button | Controlled by Docent app     |
+| **Activation**    | Synchronized (all activate together)   | Independent per exhibit      |
 
 ### MQTT Topics
 
 - **Subscriptions**:
-  - `cmd/dev/all/load-tour` - Tour start commands (filtered by tour-id)
+  - `cmd/dev/all/load-tour` - Tour start commands (all kiosks respond to any tour)
   - `cmd/dev/all/end-tour` - Tour end commands (all kiosks respond)
 - **Publications**:
-  - `cmd/dev/gec/load-tour` - Triggered when idle dismissed
-  - `state/kiosk-XX` - State reporting for persistence
+  - `state/kiosk-XX` - State reporting for persistence and availability
 
 ## Data Structure
 
