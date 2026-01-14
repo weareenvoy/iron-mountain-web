@@ -72,11 +72,12 @@ const SettingsDrawer = ({ isOpen, onClose }: SettingsDrawerProps) => {
         let offlineMessage: string | undefined;
         if (offlineKiosks.length > 0 && offlineKiosks.length < 3) {
           // Some but not all kiosks are offline - show specific kiosk numbers
+          // Using CMS offline text to support en/pt without hardcoded verbs
           const kioskList =
             offlineKiosks.length === 1
               ? `Kiosk ${offlineKiosks[0]}`
               : `Kiosk ${offlineKiosks.slice(0, -1).join(', ')} & ${offlineKiosks[offlineKiosks.length - 1]}`;
-          offlineMessage = `${kioskList} ${offlineKiosks.length === 1 ? 'is' : 'are'} offline`;
+          offlineMessage = `${kioskList} ${data.settings.status.offline}`;
         }
         // If all 3 are offline, offlineMessage stays undefined and we use the generic CMS "Offline" text
 
