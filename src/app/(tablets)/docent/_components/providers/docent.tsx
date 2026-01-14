@@ -13,7 +13,7 @@ import {
   type PropsWithChildren,
 } from 'react';
 import { type DocentAppState, type SyncState } from '@/app/(tablets)/docent/_types';
-import { getTourIdFromGecState, isDocentRoute } from '@/app/(tablets)/docent/_utils';
+import { getTourIdFromGecState, isDocentRoute, requireDocentData } from '@/app/(tablets)/docent/_utils';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getDocentData } from '@/lib/internal/data/get-docent';
 import type { DocentData, Locale, Tour } from '@/lib/internal/types';
@@ -83,9 +83,15 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     setIsTourDataLoading(true);
     try {
       const docentData = await getDocentData();
+
+      // Validate CMS data at the boundary - fail fast if required fields are missing
+      // This ensures components can trust data is complete without optional chaining
+      const validatedEn = requireDocentData(docentData.data.en);
+      const validatedPt = requireDocentData(docentData.data.pt);
+
       setDataByLocale({
-        en: docentData.data.en,
-        pt: docentData.data.pt,
+        en: validatedEn,
+        pt: validatedPt,
       });
       setLastUpdated(new Date());
 
