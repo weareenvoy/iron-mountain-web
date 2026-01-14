@@ -1,34 +1,5 @@
 /**
  * Animation constants for Kiosk 3 Custom Interactive screens
- *
- * ⚠️ **CRITICAL LIMITATION: 4K DISPLAY COUPLING**
- *
- * This component is designed exclusively for 3840×2160 (4K) kiosk displays.
- * All pixel-based positioning will break on other resolutions.
- *
- * **Known Issues:**
- * - Will not work on 1920×1080 (1080p) displays
- * - Will not work on non-16:9 aspect ratios
- * - Will not work on 8K or other higher resolutions
- *
- * **Affected Constants:**
- * - MORPHING_DIAMOND.CAROUSEL.{x, y}
- * - MORPHING_DIAMOND.EXIT.{x, y}
- * - MORPHING_DIAMOND.VIDEO_LEFT_BACKGROUND
- * - PRIMARY_DIAMOND_POSITIONS (all variants)
- * - SECONDARY_DIAMOND_POSITIONS (all variants)
- * - DecorativeSVGGroup positioning (see SVG_GROUP_CONFIG)
- *
- * **Future Work Required:**
- * To make this responsive, convert to one of:
- * 1. Viewport units (vw/vh)
- * 2. CSS calc() with base resolution ratios
- * 3. Runtime JavaScript scaling based on window dimensions
- *
- * **Deployment Requirement:**
- * Only deploy to environments with confirmed 4K kiosk hardware.
- *
- * @see https://github.com/[org]/[repo]/issues/[number] for tracking
  */
 
 /**
@@ -123,38 +94,6 @@ export const ANIMATION_VALUES = {
  * - x/y: Translate values in pixels (negative = left/up)
  * - scale: Size multiplier (1 = original, 0.332 = ~1/3 size)
  * - Video positioning: Counter-scales to maintain visual consistency
- *
- * @warning **4K Display Coupling**
- *
- * **Current State:** All pixel values are hardcoded for 3840×2160 (4K) displays.
- *
- * **Problem:** Layout will break on:
- * - 1920×1080 (1080p) displays - elements will be positioned incorrectly
- * - Non-16:9 aspect ratios (ultrawide, portrait) - severe misalignment
- * - 7680×4320 (8K) displays - elements too small/incorrectly positioned
- *
- * **Impact:** This component is currently unusable outside of 4K kiosk displays.
- *
- * **Recommended Solutions:**
- * 1. **CSS Calc Approach:** Convert to `calc()` with CSS custom properties
- *    ```css
- *    --base-width: 3840px;
- *    transform: translateX(calc(-1095px * (100vw / var(--base-width))));
- *    ```
- * 2. **JavaScript Scale Factor:** Calculate scale ratio at runtime
- *    ```ts
- *    const scaleFactor = window.innerWidth / 3840;
- *    x: -1095 * scaleFactor
- *    ```
- * 3. **Viewport Units:** Convert all px to vw/vh (e.g., 1095px → 28.59vw)
- *
- * **Migration Path:**
- * - Audit all MORPHING_DIAMOND, PRIMARY_DIAMOND_POSITIONS, SECONDARY_DIAMOND_POSITIONS
- * - Test on multiple resolutions (1080p, 4K, 8K)
- * - Consider design system tokens for responsive breakpoints
- * - Document expected behavior at each resolution
- *
- * @see MORPHING_DIAMOND, PRIMARY_DIAMOND_POSITIONS, SECONDARY_DIAMOND_POSITIONS
  */
 export const MORPHING_DIAMOND = {
   /** Initial state: Full-screen centered background */
@@ -168,17 +107,17 @@ export const MORPHING_DIAMOND = {
   CAROUSEL: {
     opacity: 1,
     scale: ANIMATION_VALUES.MORPHING_SCALE_FACTOR,
-    x: -1095, // Pixel value - coupled to 4K layout
-    y: -875, // Pixel value - coupled to 4K layout
+    x: -1095,
+    y: -875,
   },
   /** Exit state: Moves diagonally off-screen with fade */
   EXIT: {
     opacity: 0,
     scale: ANIMATION_VALUES.MORPHING_SCALE_FACTOR,
-    x: -1116, // Pixel value - coupled to 4K layout
-    y: -896, // Pixel value - coupled to 4K layout
+    x: -1116,
+    y: -896,
   },
-  /** Video horizontal offset in background state (px) - coupled to 4K layout */
+  /** Video horizontal offset in background state (px) */
   VIDEO_LEFT_BACKGROUND: 480,
   /** Video horizontal offset in carousel state (px) */
   VIDEO_LEFT_CAROUSEL: 0,
