@@ -294,7 +294,12 @@ export function useStickyHeader<TLabel extends HTMLElement = HTMLElement>({
             }
           },
           // Use 3 thresholds for better detection while maintaining performance
-          { threshold: [0, 0.01, 0.5] } // Fires when entering, just after entering, and at midpoint
+          // Use negative top rootMargin to trigger earlier (before element actually reaches viewport top)
+          // This accounts for large top offsets in Challenge third screen layout
+          {
+            rootMargin: '-800px 0px 0px 0px', // Trigger 800px before top edge reaches viewport top
+            threshold: [0, 0.01, 0.5],
+          } // Fires when entering, just after entering, and at midpoint
         );
         lastScreenObserver.observe(lastScreen);
         observers.push(lastScreenObserver);
