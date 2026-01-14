@@ -13,7 +13,7 @@ export type DeviceId =
   | 'kiosk-01'
   | 'kiosk-02'
   | 'kiosk-03'
-  | 'overlook'
+  | 'overlook-wall'
   | 'summit'
   | 'welcome-wall';
 
