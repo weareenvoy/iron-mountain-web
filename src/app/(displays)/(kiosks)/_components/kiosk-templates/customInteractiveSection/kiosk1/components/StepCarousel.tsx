@@ -1,13 +1,10 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
-import { Carousel, CarouselContent, CarouselItem } from '@/components/shadcn/carousel';
-import HCBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCBlueDiamond';
-import HCWhiteDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCWhiteDiamond';
-import { cn } from '@/lib/tailwind/utils/cn';
-import renderRegisteredMark from '@/lib/utils/render-registered-mark';
+import { Carousel, CarouselContent } from '@/components/shadcn/carousel';
+import CarouselNavigation from './CarouselNavigation';
+import DiamondCarouselItem from './DiamondCarouselItem';
+import { useDiamondScaling } from '../hooks/useDiamondScaling';
 import type { UseEmblaCarouselType } from 'embla-carousel-react';
 
 /**
@@ -37,75 +34,24 @@ type StepCarouselProps = {
 };
 
 /**
- * Layout constants derived from Figma designs
- * @see https://www.figma.com/design/o8KgGrIbWc0tdC32VpZ8gO/-i--Iron-Mountain-EIC-Production?node-id=5893-7489&m=dev (Custom Interactive Section)
+ * Layout constants
  */
 const LAYOUT = {
-  /** Size of active diamond in center */
-  DIAMOND_SIZE_ACTIVE: 880,
-  /** Size of diamonds at left/right edges (±2 from center) */
   DIAMOND_SIZE_EDGE: 440,
-  /** Size of diamonds adjacent to center (±1 from center) */
   DIAMOND_SIZE_MIDDLE: 640,
-  /** Offset to push edge diamonds toward center for overlap effect */
-  EDGE_TRANSFORM_X: 240,
-  /** Starting carousel index (0-based) */
   INITIAL_CENTER_INDEX: 2,
 } as const;
 
 /**
- * Animation configuration for staggered diamond entrance
- * Diamonds animate from high Y positions (off-screen above) to their natural positions
- */
-const DIAMOND_ANIMATION = {
-  /** Center diamond: minimal movement, shortest delay */
-  CENTER: { delay: 0.3, startY: -120 },
-  /** Animation duration for all diamonds */
-  DURATION: 0.8,
-  /** Cubic bezier easing (30 out 60 in) */
-  EASE: [0.3, 0, 0.4, 1] as const,
-  /** Middle pair (±1): medium starting Y, medium delay */
-  MIDDLE: { delay: 0.15, startY: -350 },
-  /** Outermost diamonds (±2): highest starting Y, longest delay */
-  OUTER: { delay: 0, startY: -550 },
-} as const;
-
-/**
- * Animation configuration for diamond color/size transitions (active/inactive)
+ * Animation configuration for diamond transitions
  */
 const DIAMOND_TRANSITION = {
-  /** Duration for diamond size/color/opacity transitions */
   DURATION: 0.5,
-  /** Cubic bezier easing (30 out 60 in) */
   EASE: [0.3, 0, 0.4, 1] as const,
-} as const;
-
-/**
- * Diamond color palette
- */
-const DIAMOND_COLORS = {
-  /** Active state (when pressed/clicked) */
-  ACTIVE_PRESSED: '#78d5f7',
-  /** Inactive state */
-  INACTIVE: '#EDEDED',
-  /** Active text color */
-  TEXT_ACTIVE: '#14477d',
-  /** Inactive text color */
-  TEXT_INACTIVE: '#ededed',
-} as const;
-
-/**
- * Font size configuration for diamond labels
- * Using scale transform instead of fontSize for better performance
- */
-const LABEL_SCALE = {
-  ACTIVE: 1, // 61px equivalent (base font is 61px)
-  INACTIVE: 0.7049, // 43px equivalent (43/61 ≈ 0.7049)
 } as const;
 
 /**
  * Distance from center to identify edge slides
- * With 5 total items, edge offset of 2 catches items at ±2 positions
  */
 const EDGE_OFFSET = 2;
 
@@ -125,85 +71,8 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
   const isTransitioningRef = useRef(false);
   const totalSlides = steps.length;
 
-  /**
-   * Applies transform to edge diamonds to create overlap effect
-   * Operates on actual DOM (including Embla's cloned slides) for loop consistency
-   */
-  const applyEdgeTransforms = useCallback(
-    (currentIndex: number) => {
-      if (!emblaApi?.rootNode || totalSlides === 0) {
-        return;
-      }
-
-      const root = emblaApi.rootNode();
-      // Query fresh on each call - no caching needed for consistency
-      const slides = root.querySelectorAll<HTMLElement>('[data-slide-index], .embla__slide');
-      const half = Math.floor(totalSlides / 2);
-      const rootRect = root.getBoundingClientRect();
-      const rootCenter = rootRect.left + rootRect.width / 2;
-
-      let activeSlide: HTMLElement | null = null;
-      let activeDistance = Number.POSITIVE_INFINITY;
-
-      // Find the active slide closest to center (handles clones)
-      slides.forEach((slide: HTMLElement) => {
-        const indexAttr =
-          slide.dataset.slideIndex ??
-          slide.getAttribute('data-embla-slide-index') ??
-          slide.getAttribute('data-embla-index');
-        const rawIndex = Number(indexAttr);
-        if (Number.isNaN(rawIndex)) {
-          return;
-        }
-        const normalizedIndex = ((rawIndex % totalSlides) + totalSlides) % totalSlides;
-        if (normalizedIndex !== currentIndex) return;
-        const slideRect = slide.getBoundingClientRect();
-        const slideCenter = slideRect.left + slideRect.width / 2;
-        const distance = Math.abs(slideCenter - rootCenter);
-        if (distance < activeDistance) {
-          activeDistance = distance;
-          activeSlide = slide;
-        }
-      });
-
-      // Apply transforms to push edge diamonds toward center
-      slides.forEach((slide: HTMLElement) => {
-        const indexAttr =
-          slide.dataset.slideIndex ??
-          slide.getAttribute('data-embla-slide-index') ??
-          slide.getAttribute('data-embla-index');
-        const rawIndex = Number(indexAttr);
-        if (Number.isNaN(rawIndex)) {
-          slide.style.transform = '';
-          return;
-        }
-        const normalizedIndex = ((rawIndex % totalSlides) + totalSlides) % totalSlides;
-        let delta = normalizedIndex - currentIndex;
-
-        if (normalizedIndex === currentIndex && slide !== activeSlide) {
-          const slideRect = slide.getBoundingClientRect();
-          const slideCenter = slideRect.left + slideRect.width / 2;
-          delta = slideCenter < rootCenter ? -EDGE_OFFSET : EDGE_OFFSET;
-        }
-
-        if (delta > half) {
-          delta -= totalSlides;
-        }
-        if (delta < -half) {
-          delta += totalSlides;
-        }
-
-        const transform =
-          delta === -EDGE_OFFSET
-            ? `translate3d(${LAYOUT.EDGE_TRANSFORM_X}px, 0px, 0px)`
-            : delta === EDGE_OFFSET
-              ? `translate3d(-${LAYOUT.EDGE_TRANSFORM_X}px, 0px, 0px)`
-              : '';
-        slide.style.transform = transform;
-      });
-    },
-    [emblaApi, totalSlides]
-  );
+  // Use diamond scaling hook for edge transforms
+  const applyEdgeTransforms = useDiamondScaling(emblaApi, totalSlides);
 
   // Keep selectedIndexRef in sync
   useEffect(() => {
@@ -251,34 +120,6 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
       }
     };
   }, [emblaApi]);
-
-  // Apply transforms continuously during scroll using RAF throttling
-  // This keeps layout consistent while dragging without triggering React re-renders
-  useEffect(() => {
-    if (!emblaApi) return undefined;
-
-    let raf = 0;
-    let isRunning = false;
-
-    const tick = () => {
-      isRunning = false;
-      const nextSnap = emblaApi.selectedScrollSnap();
-      applyEdgeTransforms(nextSnap);
-    };
-
-    const onScroll = () => {
-      if (isRunning) return;
-      isRunning = true;
-      raf = requestAnimationFrame(tick);
-    };
-
-    emblaApi.on('scroll', onScroll);
-
-    return () => {
-      emblaApi.off('scroll', onScroll);
-      if (raf) cancelAnimationFrame(raf);
-    };
-  }, [applyEdgeTransforms, emblaApi]);
 
   // Initial alignment and transform application
   useEffect(() => {
@@ -409,134 +250,29 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
             const isMiddle = idx === leftMiddleIndex || idx === rightMiddleIndex;
             const isOuter = isLeftEdge || isRightEdge;
 
-            const animConfig = isOuter
-              ? DIAMOND_ANIMATION.OUTER
-              : isMiddle
-                ? DIAMOND_ANIMATION.MIDDLE
-                : DIAMOND_ANIMATION.CENTER;
-
             return (
-              <CarouselItem
-                className={cn('shrink-0 grow-0 basis-[560px] pl-0', isActive && 'z-10')}
-                data-slide-index={idx}
+              <DiamondCarouselItem
+                idx={idx}
+                inactiveSize={inactiveSize}
+                isActive={isActive}
+                isLeftEdge={isLeftEdge}
+                isMiddle={isMiddle}
+                isOuter={isOuter}
+                isRightEdge={isRightEdge}
                 key={`${idx}-${step.label}`}
-              >
-                <motion.div
-                  animate={shouldAnimate ? { y: 0 } : { y: animConfig.startY }}
-                  className="flex flex-col items-center gap-[28px] will-change-transform"
-                  initial={{ y: animConfig.startY }}
-                  transition={{
-                    delay: animConfig.delay,
-                    duration: DIAMOND_ANIMATION.DURATION,
-                    ease: DIAMOND_ANIMATION.EASE,
-                  }}
-                >
-                  <div className="relative flex h-[880px] w-[880px] items-center justify-center">
-                    <button
-                      aria-label={isActive ? 'Open details' : `Select ${step.label}`}
-                      className="relative z-[1] flex cursor-pointer items-center justify-center"
-                      data-idx={idx}
-                      onClick={handleDiamondClickOrOpen}
-                      onPointerCancel={() => setPressedIndex(null)}
-                      onPointerDown={() => isActive && setPressedIndex(idx)}
-                      onPointerLeave={() => setPressedIndex(null)}
-                      onPointerUp={() => setPressedIndex(null)}
-                      type="button"
-                    >
-                      {/* Fixed outer container prevents layout shift, inner container animates size */}
-                      <div className="flex h-[880px] w-[880px] items-center justify-center">
-                        <motion.div
-                          animate={{
-                            height: isActive ? LAYOUT.DIAMOND_SIZE_ACTIVE : inactiveSize,
-                            width: isActive ? LAYOUT.DIAMOND_SIZE_ACTIVE : inactiveSize,
-                          }}
-                          className="relative flex items-center justify-center"
-                          initial={{
-                            height: isActive ? LAYOUT.DIAMOND_SIZE_ACTIVE : inactiveSize,
-                            width: isActive ? LAYOUT.DIAMOND_SIZE_ACTIVE : inactiveSize,
-                          }}
-                          transition={{
-                            duration: DIAMOND_TRANSITION.DURATION,
-                            ease: DIAMOND_TRANSITION.EASE,
-                          }}
-                        >
-                          {/* Use HCWhiteDiamond component instead of inline SVG */}
-                          {/* White Diamond (Active) - cross-fades in when active, color changes when pressed */}
-                          <motion.div
-                            animate={{ opacity: isActive ? 1 : 0 }}
-                            className="absolute inset-0 flex items-center justify-center"
-                            initial={{ opacity: isActive ? 1 : 0 }}
-                            transition={{
-                              duration: DIAMOND_TRANSITION.DURATION,
-                              ease: DIAMOND_TRANSITION.EASE,
-                            }}
-                          >
-                            <HCWhiteDiamond
-                              aria-hidden="true"
-                              className="h-full w-full"
-                              fill={pressedIndex === idx ? DIAMOND_COLORS.ACTIVE_PRESSED : DIAMOND_COLORS.INACTIVE}
-                              focusable="false"
-                            />
-                          </motion.div>
-                          {/* Blue Diamond (Inactive) - cross-fades in when inactive */}
-                          <motion.div
-                            animate={{ opacity: isActive ? 0 : 1 }}
-                            className="absolute inset-0 flex items-center justify-center"
-                            initial={{ opacity: isActive ? 0 : 1 }}
-                            transition={{
-                              duration: DIAMOND_TRANSITION.DURATION,
-                              ease: DIAMOND_TRANSITION.EASE,
-                            }}
-                          >
-                            <HCBlueDiamond aria-hidden="true" className="h-full w-full" focusable="false" />
-                          </motion.div>
-                        </motion.div>
-                      </div>
-                      <div className="absolute inset-0 flex items-center justify-center px-8 text-center">
-                        {/* Use scale transform instead of fontSize animation. origin-center controls the scale animation anchor point for diamond labels */}
-                        <motion.span
-                          animate={{
-                            color: isActive ? DIAMOND_COLORS.TEXT_ACTIVE : DIAMOND_COLORS.TEXT_INACTIVE,
-                            scale: isActive ? LABEL_SCALE.ACTIVE : LABEL_SCALE.INACTIVE,
-                          }}
-                          className={
-                            isActive
-                              ? 'w-[340px] origin-center text-[61px] leading-[1.3] tracking-[-3px]'
-                              : 'w-[300px] origin-center text-[61px] leading-[1.3] tracking-[-2.1px]'
-                          }
-                          transition={{
-                            duration: DIAMOND_TRANSITION.DURATION,
-                            ease: DIAMOND_TRANSITION.EASE,
-                          }}
-                        >
-                          {renderRegisteredMark(step.label)}
-                        </motion.span>
-                      </div>
-                    </button>
-                  </div>
-                </motion.div>
-              </CarouselItem>
+                onClick={handleDiamondClickOrOpen}
+                onPointerCancel={() => setPressedIndex(null)}
+                onPointerDown={() => isActive && setPressedIndex(idx)}
+                onPointerLeave={() => setPressedIndex(null)}
+                onPointerUp={() => setPressedIndex(null)}
+                pressedIndex={pressedIndex}
+                shouldAnimate={shouldAnimate}
+                step={step}
+              />
             );
           })}
         </CarouselContent>
-        <div className="pointer-events-none absolute inset-x-0 bottom-[-290px] flex items-center justify-center gap-[48px]">
-          <button
-            aria-label="Previous"
-            className="group pointer-events-auto mr-[25px] flex h-[102px] w-[102px] items-center justify-center text-white transition-transform duration-150 hover:scale-110 active:opacity-40 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
-            onClick={handlePrev}
-            type="button"
-          >
-            <ChevronLeft className="h-[102px] w-[102px]" />
-          </button>
-          <button
-            aria-label="Next"
-            className="group pointer-events-auto ml-[25px] flex h-[102px] w-[102px] items-center justify-center text-white transition-transform duration-150 hover:scale-110 active:opacity-40 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
-            onClick={handleNext}
-            type="button"
-          >
-            <ChevronRight className="h-[102px] w-[102px]" />
-          </button>
-        </div>
+        <CarouselNavigation onNext={handleNext} onPrev={handlePrev} />
       </Carousel>
     </div>
   );
