@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 
 /**
  * Animation configuration matching motion comp specifications.
- * These exact values are specified in the design motion comps and should not be changed
+ * Thes values match the design motion comps and should not be changed
  * without design approval.
  */
 export const SCROLL_ANIMATION_CONFIG = {
