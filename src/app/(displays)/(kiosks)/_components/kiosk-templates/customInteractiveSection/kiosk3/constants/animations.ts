@@ -1,5 +1,6 @@
 /**
- * Animation constants for Kiosk 3 Custom Interactive screens
+ * Animation constants for Kiosk 3 Custom Interactive screens.
+ * All positioning values are in pixels relative to the kiosk dimensions defined in kiosk.config.json.
  */
 
 /**
