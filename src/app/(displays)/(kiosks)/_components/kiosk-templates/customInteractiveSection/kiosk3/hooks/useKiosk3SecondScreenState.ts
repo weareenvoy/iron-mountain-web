@@ -1,4 +1,4 @@
-import { useCallback, useReducer } from 'react';
+import { useCallback, useEffect, useReducer } from 'react';
 
 /**
  * State for Kiosk 3 Second Screen animation sequence
@@ -21,15 +21,17 @@ type Kiosk3SecondScreenState = {
  * Each action represents a specific user interaction or animation state change.
  */
 type Kiosk3SecondScreenAction =
-  /** User clicked "Tap to begin" button - triggers button morph and carousel reveal */
+  /** Button morph animation completed - finalizes transition state */
   | { carouselIndex: number; type: 'SET_CAROUSEL_INDEX' }
-  /** Carousel index changed (user navigated slides) - updates current slide tracking */
-  | { isExiting: boolean; type: 'SET_IS_EXITING' }
   /** Carousel slide exit animation state changed - coordinates morphing diamond exit */
-  | { type: 'HIDE_OVERLAY' }
+  | { isExiting: boolean; type: 'SET_IS_EXITING' }
+  /** Carousel index changed (user navigated slides) - updates current slide tracking */
+  | { type: 'BUTTON_TRANSITION_COMPLETE' }
   /** User dismissed demo overlay - returns to carousel view */
-  | { type: 'SHOW_OVERLAY' }
+  | { type: 'HIDE_OVERLAY' }
   /** User clicked "Launch demo" button - shows fullscreen demo overlay */
+  | { type: 'SHOW_OVERLAY' }
+  /** User clicked "Tap to begin" button - triggers button morph and carousel reveal */
   | { type: 'TAP_TO_BEGIN' };
 
 const initialState: Kiosk3SecondScreenState = {
@@ -39,6 +41,12 @@ const initialState: Kiosk3SecondScreenState = {
   showCarousel: false,
   showOverlay: false,
 };
+
+/**
+ * Button transition animation duration (ms)
+ * Matches TRANSITIONS.FADE duration from constants
+ */
+const BUTTON_TRANSITION_DURATION_MS = 500;
 
 /**
  * Custom hook that encapsulates the state management logic for Kiosk 3 Second Screen.
@@ -54,6 +62,17 @@ const initialState: Kiosk3SecondScreenState = {
  */
 export function useKiosk3SecondScreenState() {
   const [state, dispatch] = useReducer(kiosk3SecondScreenReducer, initialState);
+
+  // Complete button transition after animation duration
+  useEffect(() => {
+    if (!state.isButtonTransitioning) return undefined;
+
+    const timer = setTimeout(() => {
+      dispatch({ type: 'BUTTON_TRANSITION_COMPLETE' });
+    }, BUTTON_TRANSITION_DURATION_MS);
+
+    return () => clearTimeout(timer);
+  }, [state.isButtonTransitioning]);
 
   // Stable event handlers
   const handleTapToBegin = useCallback(() => {
@@ -99,6 +118,12 @@ function kiosk3SecondScreenReducer(
   action: Kiosk3SecondScreenAction
 ): Kiosk3SecondScreenState {
   switch (action.type) {
+    case 'BUTTON_TRANSITION_COMPLETE':
+      return {
+        ...state,
+        isButtonTransitioning: false,
+      };
+
     case 'HIDE_OVERLAY':
       return {
         ...state,

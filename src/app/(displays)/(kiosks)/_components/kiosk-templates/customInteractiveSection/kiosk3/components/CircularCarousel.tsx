@@ -35,6 +35,21 @@ type CircularCarouselProps = {
   readonly slides: readonly CarouselSlide[];
 };
 
+/**
+ * Error fallback component for carousel configuration issues
+ */
+const CarouselConfigError = ({ slideCount }: { readonly slideCount: number }) => (
+  <div className="flex h-full w-full items-center justify-center">
+    <div className="max-w-[800px] rounded-lg bg-red-900/20 p-8 text-center">
+      <h3 className="mb-4 text-[48px] font-semibold text-red-400">Configuration Error</h3>
+      <p className="mb-2 text-[32px] text-white">
+        Expected exactly 6 slides for circular carousel layout, but received {slideCount}.
+      </p>
+      <p className="text-[24px] text-white/70">Please check CMS content configuration.</p>
+    </div>
+  </div>
+);
+
 const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }: CircularCarouselProps) => {
   const [index, setIndex] = useState(0);
   const [isExiting, setIsExiting] = useState(false);
@@ -92,6 +107,20 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
       setIsTransitioning(false);
     }, ANIMATION_DURATION_MS.CAROUSEL);
   }, [isTransitioning, slides.length]);
+
+  // Enforce 6-slide contract - UI is designed for exactly 6 dots in specific positions
+  // NOTE: Positions are hardcoded for 6-slide circular layout.
+  // Each dot is positioned at specific coordinates around the circle for the design.
+  // If you need dynamic dot counts, refactor to calculate positions programmatically.
+  // Validation after hooks to comply with Rules of Hooks
+  if (slides.length !== 6) {
+    console.error(
+      '[CircularCarousel] Expected exactly 6 slides for circular dot layout, got',
+      slides.length,
+      '. Fix CMS data or update carousel UI to support dynamic slide counts.'
+    );
+    return <CarouselConfigError slideCount={slides.length} />;
+  }
 
   if (!current) {
     return null;
