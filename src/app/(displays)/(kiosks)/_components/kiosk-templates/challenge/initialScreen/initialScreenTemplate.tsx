@@ -68,36 +68,45 @@ const InitialScreenTemplate = memo(
       idleVideoSrcRef.current = idleVideoSrc;
     }, [idleVideoSrc]);
 
-    const handleIdleTap = () => {
-      if (!idleVideoSrc) return;
-      setDismissedIdleVideoSrc(idleVideoSrc);
+    // Listen for loadTour command from Docent app (via GEC) to dismiss idle screen
+    // ALL kiosks dismiss their idle screens when ANY tour starts
+    useEffect(() => {
+      if (!client || !isConnected || !idleVideoSrc || !kioskId) return undefined;
 
-      // Clear any existing timeout
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
+      const handleLoadTour = (message: Buffer) => {
+        try {
+          const msg = JSON.parse(message.toString());
+          const tourId = msg.body?.['tour-id'];
 
-      // Trigger loadTour when idle screen is dismissed
-      // Each kiosk is a standalone exhibit - broadcasts its kioskId as the tour-id
-      // This signals to GEC and other systems that a tour has started at this kiosk
-      if (client && isConnected && kioskId) {
-        console.info(`${kioskId}: Idle screen dismissed, triggering loadTour`);
-        client.loadTour(kioskId, {
-          onError: (err: Error) => console.error(`${kioskId}: Failed to trigger loadTour:`, err),
-          onSuccess: () => console.info(`${kioskId}: Successfully triggered loadTour`),
-        });
-      } else if (!isConnected) {
-        console.warn(`${kioskId}: Cannot trigger loadTour - MQTT not connected`);
-      }
+          console.info(`${kioskId}: Received loadTour command (tour: ${tourId}) - dismissing idle screen`);
 
-      // Wait for fade out animation to complete before triggering initial screen animations
-      const videoSrcAtTap = idleVideoSrc;
-      timeoutRef.current = setTimeout(() => {
-        if (idleVideoSrcRef.current !== videoSrcAtTap) return;
-        setIdleCompleteVideoSrc(videoSrcAtTap);
-        timeoutRef.current = null;
-      }, IDLE_FADE_OUT_DURATION_MS);
-    };
+          // Dismiss the idle video overlay (all kiosks respond to any tour start)
+          setDismissedIdleVideoSrc(idleVideoSrc);
+
+          // Clear any existing timeout
+          if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+          }
+
+          // Wait for fade out animation to complete before triggering initial screen animations
+          const videoSrcAtDismiss = idleVideoSrc;
+          timeoutRef.current = setTimeout(() => {
+            if (idleVideoSrcRef.current !== videoSrcAtDismiss) return;
+            setIdleCompleteVideoSrc(videoSrcAtDismiss);
+            timeoutRef.current = null;
+          }, IDLE_FADE_OUT_DURATION_MS);
+        } catch (error) {
+          console.error(`${kioskId}: Error handling loadTour for idle dismissal:`, error);
+        }
+      };
+
+      // Subscribe to broadcast loadTour commands from GEC
+      client.subscribeToTopic('cmd/dev/all/load-tour', handleLoadTour);
+
+      return () => {
+        client.unsubscribeFromTopic('cmd/dev/all/load-tour', handleLoadTour);
+      };
+    }, [client, isConnected, idleVideoSrc, kioskId]);
 
     const idleComplete = !idleVideoSrc || idleCompleteVideoSrc === idleVideoSrc;
     const showIdle = Boolean(idleVideoSrc) && dismissedIdleVideoSrc !== idleVideoSrc;
@@ -205,23 +214,14 @@ const InitialScreenTemplate = memo(
           </motion.div>
         </motion.div>
 
-        {/* Idle Screen Overlay */}
+        {/* Idle Screen Overlay - Dismisses via MQTT loadTour command from Docent app */}
         <AnimatePresence>
           {showIdle && idleVideoSrc && (
             <motion.div
               animate={{ opacity: 1 }}
-              className="absolute inset-0 z-50 flex cursor-pointer items-center justify-center bg-black"
+              className="absolute inset-0 z-50 flex items-center justify-center bg-black"
               exit={{ opacity: 0 }}
               initial={{ opacity: 1 }}
-              onClick={handleIdleTap}
-              onKeyDown={e => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  handleIdleTap();
-                }
-              }}
-              role="button"
-              tabIndex={0}
               transition={{ duration: IDLE_FADE_OUT_DURATION_MS / 1000, ease: [0.3, 0, 0.6, 1] }}
             >
               <video

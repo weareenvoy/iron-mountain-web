@@ -114,22 +114,15 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
     if (!client) return;
 
     // 1. Load tour command
-    // Triggered when idle screen is dismissed (broadcasts to all, filtered by tour-id)
+    // When Docent loads ANY tour, ALL kiosks activate (fetch data, report state)
     const handleLoadTour = (message: Buffer) => {
       try {
         const msg = JSON.parse(message.toString());
         const tourId = msg.body?.['tour-id'];
 
-        // Each kiosk is a separate exhibit - only respond to our own load-tour commands
-        // This prevents kiosk-1 from responding to kiosk-2's tour start, etc.
-        if (tourId !== kioskId) {
-          console.info(`${kioskId}: Ignoring load-tour for different exhibit: ${tourId}`);
-          return;
-        }
+        console.info(`${kioskId}: Received load-tour command (tour: ${tourId}) - activating kiosk`);
 
-        console.info(`${kioskId}: Received load-tour command:`, msg);
-
-        // Fetch new tour data (ensures fresh content even if idle for extended period)
+        // Fetch fresh kiosk data
         fetchData();
 
         // Report state with initial beat-id

@@ -200,8 +200,13 @@ export class MqttService {
       'tour-id': tourId,
     });
 
-    console.info('Sending load-tour command to GEC:', tourId);
+    console.info('Sending load-tour command:', tourId);
+
+    // Send to GEC (for production)
     this.publish(mqttCommands.docent.loadTour, JSON.stringify(message), { qos: 1, retain: false }, config);
+
+    // Also broadcast directly to all exhibits (for development without GEC)
+    this.publish('cmd/dev/all/load-tour', JSON.stringify(message), { qos: 1, retain: false }, config);
 
     // Unmute all exhibits on load-tour
     this.allExhibitsUnmute();
