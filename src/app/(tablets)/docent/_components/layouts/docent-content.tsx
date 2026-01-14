@@ -33,7 +33,7 @@ const DocentContent = ({ children }: PropsWithChildren) => {
       {children}
 
       {/* Global Settings Button - Show on all pages except home */}
-      {isConnected && !isHomePage && (
+      {data && isConnected && !isHomePage && (
         <div className="absolute top-42 right-2 z-50">
           <Button
             className="h-7 gap-2 border-none px-3"
@@ -42,14 +42,14 @@ const DocentContent = ({ children }: PropsWithChildren) => {
             variant="outline-light-grey"
           >
             {/* When someone clicks it, asks for data (each exhibit's status) */}
-            <span className="h-6.25 text-lg">{data?.settings.title ?? 'Settings'}</span>
+            <span className="h-6.25 text-lg">{data.settings.title}</span>
             <Settings className="size-[24px]" />
           </Button>
         </div>
       )}
 
       {/* Settings Drawer */}
-      <SettingsDrawer isOpen={isSettingsOpen} onClose={closeSettingsDrawer} />
+      {data && <SettingsDrawer isOpen={isSettingsOpen} onClose={closeSettingsDrawer} />}
     </div>
   );
 };
