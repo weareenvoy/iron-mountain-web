@@ -11,6 +11,7 @@ import {
   type MqttServiceConfig,
   type PublishArgsConfig,
   type VolumeControllableExhibit,
+  type WelcomeWallMqttState,
 } from '../types';
 import type { ExhibitBeatId, OverlookBeatId } from '@/lib/internal/types';
 
@@ -251,6 +252,22 @@ export class MqttService {
     console.info(`${exhibit} reporting full state:`, state);
     this.publish(
       `state/${topicExhibit}`,
+      JSON.stringify(message),
+      { qos: 1, retain: true }, // Retained
+      config
+    );
+  }
+
+  public reportWelcomeWallState(
+    exhibit: 'welcome-wall',
+    state: WelcomeWallMqttState,
+    config?: PublishArgsConfig
+  ): void {
+    const message = createMqttMessage(exhibit, state);
+
+    console.info(`${exhibit} reporting full state:`, state);
+    this.publish(
+      `state/${exhibit}`,
       JSON.stringify(message),
       { qos: 1, retain: true }, // Retained
       config
