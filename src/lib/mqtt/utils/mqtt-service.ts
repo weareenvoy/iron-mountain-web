@@ -194,25 +194,14 @@ export class MqttService {
     this.publish(`cmd/dev/${exhibit}/goto-beat`, JSON.stringify(message), { qos: 1, retain: false }, config);
   }
 
-  // Docent App → GEC or Broadcast: Load tour
+  // Docent App → GEC: Load tour
   public loadTour(tourId: string, config?: PublishArgsConfig): void {
     const message = createMqttMessage('docent-app', {
       'tour-id': tourId,
     });
 
-    // Use GEC relay in production, direct broadcast in development
-    // GEC mode prevents duplicate message delivery when GEC is running
-    const useGEC = process.env.NEXT_PUBLIC_USE_GEC === 'true';
-
-    if (useGEC) {
-      // Production: Send to GEC, which relays to cmd/dev/all/load-tour
-      console.info('[GEC Mode] Sending load-tour to GEC:', tourId);
-      this.publish(mqttCommands.docent.loadTour, JSON.stringify(message), { qos: 1, retain: false }, config);
-    } else {
-      // Development: Direct broadcast to all exhibits (no GEC relay)
-      console.info('[Direct Mode] Broadcasting load-tour to all exhibits:', tourId);
-      this.publish(mqttCommands.broadcast.loadTour, JSON.stringify(message), { qos: 1, retain: false }, config);
-    }
+    console.info('Sending load-tour command to GEC:', tourId);
+    this.publish(mqttCommands.docent.loadTour, JSON.stringify(message), { qos: 1, retain: false }, config);
 
     // Unmute all exhibits on load-tour
     this.allExhibitsUnmute();
@@ -246,7 +235,7 @@ export class MqttService {
   // This publishes the complete state to state/<exhibit>
   // Note: MQTT topics use 'overlook' but we accept 'overlook-wall' for consistency with other methods
   public reportExhibitState(
-    exhibit: 'basecamp' | 'kiosk-01' | 'kiosk-02' | 'kiosk-03' | 'overlook-wall' | 'summit',
+    exhibit: 'basecamp' | 'overlook-wall' | 'summit',
     state: {
       'beat-id': string;
       'playpause'?: boolean; // Only for overlook/summit

@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowDown, ArrowUp } from 'lucide-react';
-import { useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useCarouselDelegation } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useCarouselDelegation';
 import { useGlobalParagraphNavigation } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useGlobalParagraphNavigation';
 import { useKioskArrowState } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useKioskArrowState';
@@ -10,7 +10,9 @@ import { useKioskSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-temp
 import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers/kiosk-provider';
 import { SCROLL_DURATION_MS } from '@/app/(displays)/(kiosks)/_constants/timing';
 import { useKioskArrowStore } from '@/app/(displays)/(kiosks)/_stores/useKioskArrowStore';
+import { KIOSK_SECTION_MUSIC, KIOSK_SFX } from '@/app/(displays)/(kiosks)/_utils/audio-constants';
 import { determineCurrentSection } from '@/app/(displays)/(kiosks)/_utils/section-utils';
+import { useMusic, useSfx } from '@/components/providers/audio-provider';
 import type { KioskConfig } from '@/app/(displays)/(kiosks)/_types/kiosk-config';
 
 // Base component shared by all three kiosks. Accepts a config object that defines kiosk-specific settings (diamond mapping, arrow positioning, etc.)
@@ -30,6 +32,8 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
   const { arrowConfig, diamondMapping, kioskId, usesAccordion } = config;
   const { data: kioskData } = useKiosk();
   const containerRef = useRef<HTMLDivElement>(null);
+  const { playSfx } = useSfx();
+  const { setMusic } = useMusic();
 
   // Global paragraph navigation
   const {
@@ -51,6 +55,19 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
       currentScrollTarget,
     });
 
+  // Wrap navigation handlers with sound effects
+  const handleNavigateUpWithSound = useCallback(() => {
+    console.info('[Audio] Playing back sound:', KIOSK_SFX.back);
+    playSfx(KIOSK_SFX.back);
+    handleNavigateUp();
+  }, [handleNavigateUp, playSfx]);
+
+  const handleNavigateDownWithSound = useCallback(() => {
+    console.info('[Audio] Playing next sound:', KIOSK_SFX.next);
+    playSfx(KIOSK_SFX.next);
+    handleNavigateDown();
+  }, [handleNavigateDown, playSfx]);
+
   // Get store action directly to avoid double hook call
   const handleButtonClick = useKioskArrowStore(state => state.handleButtonClick);
 
@@ -64,8 +81,8 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
     kioskId,
     slideBuilders: {
       globalHandlers: {
-        onNavigateDown: handleNavigateDown,
-        onNavigateUp: handleNavigateUp,
+        onNavigateDown: handleNavigateDownWithSound,
+        onNavigateUp: handleNavigateUpWithSound,
       },
       handleInitialButtonClick,
       handleRegisterCarouselHandlers,
@@ -92,6 +109,50 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
     isValueSection,
     kioskId,
   });
+
+  // Section-based background music
+  useEffect(() => {
+    // Determine which music to play based on current section
+    let musicUrl: null | string = null;
+    let sectionName = '';
+
+    console.info('[Audio Debug] Current state:', {
+      currentScrollTarget,
+      isCustomInteractiveSection,
+      isInitialScreen,
+      isValueSection,
+    });
+
+    // Prioritize actual scroll target over boolean flags to ensure music changes as you scroll
+    if (!currentScrollTarget || currentScrollTarget === 'cover-ambient-initial') {
+      // Only play initial music if we're actually on the initial screen or no target yet
+      musicUrl = KIOSK_SECTION_MUSIC.initial;
+      sectionName = 'Initial';
+    } else if (currentScrollTarget.startsWith('customInteractive')) {
+      // Custom Interactive sections
+      musicUrl = KIOSK_SECTION_MUSIC.customInteractive;
+      sectionName = 'Custom Interactive';
+    } else if (currentScrollTarget.startsWith('value') || currentScrollTarget === 'value-carousel') {
+      // Value section and carousel
+      musicUrl = KIOSK_SECTION_MUSIC.value;
+      sectionName = 'Value';
+    } else if (currentScrollTarget.startsWith('solution')) {
+      // Solution sections
+      musicUrl = KIOSK_SECTION_MUSIC.solution;
+      sectionName = 'Solution';
+    } else if (currentScrollTarget.startsWith('challenge') || currentScrollTarget === 'main-description') {
+      // Challenge sections
+      musicUrl = KIOSK_SECTION_MUSIC.challenge;
+      sectionName = 'Challenge';
+    }
+
+    if (musicUrl) {
+      console.info(`[Audio] Setting music for ${sectionName} section:`, musicUrl);
+      setMusic(musicUrl, { fadeMs: 1000 });
+    } else {
+      console.warn('[Audio] No music mapped for section:', currentScrollTarget);
+    }
+  }, [currentScrollTarget, isCustomInteractiveSection, isInitialScreen, isValueSection, setMusic]);
 
   // Improved empty slides state handling
   if (slides.length === 0) {
@@ -139,7 +200,7 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
           if (slide.id === 'challenge-third') heightClass = 'h-[150vh]';
 
           return (
-            <div className={`${heightClass} w-full flex-shrink-0`} data-slide-index={idx} key={slide.id}>
+            <div className={`${heightClass} w-full shrink-0`} data-slide-index={idx} key={slide.id}>
               {slide.render()}
             </div>
           );
@@ -151,7 +212,7 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
         {shouldShowArrows && (
           <motion.div
             animate={{ opacity: 1, scale: 1 }}
-            className="fixed z-[50] flex -translate-y-1/2 flex-col"
+            className="fixed z-50 flex -translate-y-1/2 flex-col"
             data-arrow-theme={arrowTheme}
             exit={{ opacity: 0, scale: 0.9 }}
             initial={{ opacity: 0, scale: 0.9 }}
@@ -165,8 +226,8 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
           >
             <div
               aria-label="Previous"
-              className="flex cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95 active:opacity-40 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
-              onPointerDown={handleNavigateUp}
+              className="flex cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95 active:opacity-40 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+              onPointerDown={handleNavigateUpWithSound}
               role="button"
               style={{
                 // Inline because Tailwind will not include styles from runtime config
@@ -184,8 +245,8 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
             </div>
             <div
               aria-label="Next"
-              className="flex cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95 active:opacity-40 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
-              onPointerDown={handleNavigateDown}
+              className="flex cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95 active:opacity-40 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+              onPointerDown={handleNavigateDownWithSound}
               role="button"
               style={{
                 // Inline because Tailwind will not include styles from runtime config

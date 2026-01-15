@@ -36,21 +36,21 @@ export const useAudioSettings = (): AudioSettings => {
 export const useAmbience = () => {
   const audio = useAudio();
   return {
-    setAmbience: audio.setAmbience,
+    setAmbience: audio.setAmbience.bind(audio),
   };
 };
 
 export const useMusic = () => {
   const audio = useAudio();
   return {
-    setMusic: audio.setMusic,
+    setMusic: audio.setMusic.bind(audio),
   };
 };
 
 export const useSfx = () => {
   const audio = useAudio();
   return {
-    playSfx: audio.playSfx,
+    playSfx: audio.playSfx.bind(audio),
   };
 };
 

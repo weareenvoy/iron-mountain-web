@@ -3,7 +3,6 @@
 import { AnimatePresence, motion, useInView } from 'framer-motion';
 import Image from 'next/image';
 import { memo, useEffect, useRef, useState } from 'react';
-import { useMqtt } from '@/components/providers/mqtt-provider';
 import ButtonArrow from '@/components/ui/icons/ButtonArrow';
 import WhiteLogoSimple from '@/components/ui/icons/WhiteLogoSimple';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
@@ -35,12 +34,10 @@ const InitialScreenTemplate = memo(
     buttonText,
     headline,
     idleVideoSrc,
-    kioskId,
     onButtonClick,
     quote,
     subheadline,
   }: InitialScreenTemplateProps) => {
-    const { client, isConnected } = useMqtt();
     const ref = useRef(null);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const idleVideoSrcRef = useRef<string | undefined>(idleVideoSrc);
@@ -81,47 +78,23 @@ const InitialScreenTemplate = memo(
       idleVideoSrcRef.current = idleVideoSrc;
     }, [idleVideoSrc]);
 
-    // Listen for loadTour command from Docent app (via GEC) to dismiss idle screen
-    // ALL kiosks dismiss their idle screens when ANY tour starts
-    useEffect(() => {
-      if (!client || !isConnected || !idleVideoSrc || !kioskId) return undefined;
+    const handleIdleTap = () => {
+      if (!idleVideoSrc) return;
+      setDismissedIdleVideoSrc(idleVideoSrc);
 
-      const handleLoadTour = (message: Buffer) => {
-        try {
-          const msg = JSON.parse(message.toString());
-          const tourId = msg.body?.['tour-id'];
+      // Clear any existing timeout
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
 
-          console.info(`${kioskId}: Received loadTour command (tour: ${tourId}) - dismissing idle screen`);
-
-          // Dismiss the idle video overlay (all kiosks respond to any tour start)
-          setDismissedIdleVideoSrc(idleVideoSrc);
-
-          // Clear any existing timeout
-          if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current);
-          }
-
-          // Wait for fade out animation to complete before triggering initial screen animations
-          const videoSrcAtDismiss = idleVideoSrc;
-          timeoutRef.current = setTimeout(() => {
-            // Fix #10: Always clear timeout ref, even if condition fails
-            if (idleVideoSrcRef.current === videoSrcAtDismiss) {
-              setIdleCompleteVideoSrc(videoSrcAtDismiss);
-            }
-            timeoutRef.current = null; // Always clear, not just on success path
-          }, IDLE_FADE_OUT_DURATION_MS);
-        } catch (error) {
-          console.error(`${kioskId}: Error handling loadTour for idle dismissal:`, error);
-        }
-      };
-
-      // Subscribe to broadcast loadTour commands from GEC
-      client.subscribeToTopic('cmd/dev/all/load-tour', handleLoadTour);
-
-      return () => {
-        client.unsubscribeFromTopic('cmd/dev/all/load-tour', handleLoadTour);
-      };
-    }, [client, isConnected, idleVideoSrc, kioskId]);
+      // Wait for fade out animation to complete before triggering initial screen animations
+      const videoSrcAtTap = idleVideoSrc;
+      timeoutRef.current = setTimeout(() => {
+        if (idleVideoSrcRef.current !== videoSrcAtTap) return;
+        setIdleCompleteVideoSrc(videoSrcAtTap);
+        timeoutRef.current = null;
+      }, IDLE_FADE_OUT_DURATION_MS);
+    };
 
     const idleComplete = !idleVideoSrc || idleCompleteVideoSrc === idleVideoSrc;
     const showIdle = Boolean(idleVideoSrc) && dismissedIdleVideoSrc !== idleVideoSrc;
@@ -267,14 +240,23 @@ const InitialScreenTemplate = memo(
           </motion.div>
         </motion.div>
 
-        {/* Idle Screen Overlay - Dismisses via MQTT loadTour command from Docent app */}
+        {/* Idle Screen Overlay */}
         <AnimatePresence>
           {showIdle && idleVideoSrc && (
             <motion.div
               animate={{ opacity: 1 }}
-              className="absolute inset-0 z-50 flex items-center justify-center bg-black"
+              className="absolute inset-0 z-50 flex cursor-pointer items-center justify-center bg-black"
               exit={{ opacity: 0 }}
               initial={{ opacity: 1 }}
+              onClick={handleIdleTap}
+              onKeyDown={e => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleIdleTap();
+                }
+              }}
+              role="button"
+              tabIndex={0}
               transition={{ duration: IDLE_FADE_OUT_DURATION_MS / 1000, ease: [0.3, 0, 0.6, 1] }}
             >
               <video

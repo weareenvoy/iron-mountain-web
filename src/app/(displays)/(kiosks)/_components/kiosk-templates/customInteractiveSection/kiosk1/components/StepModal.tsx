@@ -2,6 +2,8 @@ import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import NextImage from 'next/image';
 import { memo, useCallback, useEffect, useRef } from 'react';
+import { KIOSK_SFX } from '@/app/(displays)/(kiosks)/_utils/audio-constants';
+import { useSfx } from '@/components/providers/audio-provider';
 
 /**
  * ModalContent - Content configuration for step detail modal
@@ -39,6 +41,7 @@ type StepModalProps = {
 const StepModal = ({ backLabel, content, onClose }: StepModalProps) => {
   // Store latest onClose in ref to avoid recreating event listener
   const onCloseRef = useRef(onClose);
+  const { playSfx } = useSfx();
 
   // Update ref when onClose changes
   useEffect(() => {
@@ -47,8 +50,9 @@ const StepModal = ({ backLabel, content, onClose }: StepModalProps) => {
 
   // Stable backdrop click handler to prevent memory leaks
   const handleBackdropClick = useCallback(() => {
+    playSfx(KIOSK_SFX.close);
     onCloseRef.current();
-  }, []);
+  }, [playSfx]);
 
   // Add escape key support - uses ref to avoid memory leak
   useEffect(() => {

@@ -3,6 +3,8 @@ import { SquarePlay } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
+import { KIOSK_SFX } from '@/app/(displays)/(kiosks)/_utils/audio-constants';
+import { useSfx } from '@/components/providers/audio-provider';
 import ArrowIcon from '@/components/ui/icons/Kiosks/CustomInteractive/ArrowIcon';
 import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCFilledOrangeDiamond';
 import HCHollowBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowBlueDiamond';
@@ -46,6 +48,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   secondaryCtaLabel,
 }: CustomInteractiveKiosk1FirstScreenTemplateProps) => {
   const { shouldAnimate, triggerRef: animationTriggerRef } = useScrollAnimation<HTMLHeadingElement>();
+  const { playSfx } = useSfx();
 
   const [showOverlay, setShowOverlay] = useState(false);
 
@@ -67,12 +70,18 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   const secondaryIconOffset = isKiosk3 ? 'left-[-330px]' : 'left-[-70px]';
 
   const handleSecondaryClick = () => {
+    playSfx(KIOSK_SFX.open);
     setShowOverlay(true);
     onSecondaryCta?.();
   };
 
   const handlePrimaryClick = () => {
     onPrimaryCta?.();
+  };
+
+  const handleCloseOverlay = () => {
+    playSfx(KIOSK_SFX.close);
+    setShowOverlay(false);
   };
 
   return (
@@ -102,7 +111,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
           headline={overlayHeadline}
           heroImageAlt={heroImageAlt}
           heroImageSrc={heroImageSrc}
-          onEndTour={() => setShowOverlay(false)}
+          onEndTour={handleCloseOverlay}
         />
       </div>
 
