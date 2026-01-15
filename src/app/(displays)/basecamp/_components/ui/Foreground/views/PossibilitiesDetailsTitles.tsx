@@ -1,16 +1,21 @@
 'use client';
 
+import { useAppearSfx } from '@/app/(displays)/basecamp/_hooks/use-appear-sfx';
+
 type Props = {
   readonly data: readonly string[];
 };
 
-// Animation timing constants
+// Animation timing constants (single source of truth for CSS + SFX)
 const BLOCK_DELAYS_MS = [2000, 3400, 4800] as const;
 const WORD_STAGGER_MS = 100 as const;
 
 // 3 blocks of text. First shows up in left, second in center, third in right
 
 const PossibilitiesDetailsTitles = ({ data }: Props) => {
+  // Play appear SFX at same timing as CSS animations
+  useAppearSfx(BLOCK_DELAYS_MS);
+
   return (
     <div className="absolute inset-0 flex">
       {data.map((title, index) => {

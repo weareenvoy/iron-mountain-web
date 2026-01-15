@@ -1,13 +1,14 @@
 'use client';
 
 import Image from 'next/image';
+import { useAppearSfx } from '@/app/(displays)/basecamp/_hooks/use-appear-sfx';
 import type { BasecampData } from '@/lib/internal/types';
 
 type Props = {
   readonly data: BasecampData['problem3'];
 };
 
-// Animation timing constants
+// Animation timing constants (single source of truth for CSS + SFX)
 const TIMING = {
   blocks: {
     duration: 2000,
@@ -18,26 +19,30 @@ const TIMING = {
     },
     startDelay: 500,
   },
-  mainTitle: {
-    wordStagger: 100,
-  },
+  mainTitle: { wordStagger: 100 },
 } as const;
 
 // Helper functions for calculating delays
 const getBlockStartDelay = (blockIndex: number): number =>
   TIMING.blocks.startDelay + blockIndex * TIMING.blocks.duration;
 
-const getCardTitleDelay = (blockStart: number, wordIndex: number): number =>
-  blockStart + TIMING.blocks.phases.title.delay + wordIndex * TIMING.blocks.phases.title.wordStagger;
+const getCardBodyDelay = (blockStart: number, wordIndex: number): number =>
+  blockStart + TIMING.blocks.phases.body.delay + wordIndex * TIMING.blocks.phases.body.wordStagger;
 
 const getCardIconDelay = (blockStart: number): number => blockStart + TIMING.blocks.phases.icon.delay;
 
-const getCardBodyDelay = (blockStart: number, wordIndex: number): number =>
-  blockStart + TIMING.blocks.phases.body.delay + wordIndex * TIMING.blocks.phases.body.wordStagger;
+const getCardTitleDelay = (blockStart: number, wordIndex: number): number =>
+  blockStart + TIMING.blocks.phases.title.delay + wordIndex * TIMING.blocks.phases.title.wordStagger;
+
+// Generate block start delays for SFX (derived from TIMING constants)
+const BLOCK_START_DELAYS: readonly number[] = [0, 1, 2, 3].map(getBlockStartDelay);
 
 const Problem4 = ({ data }: Props) => {
   const challenges = [data.challenge1, data.challenge2, data.challenge3, data.challenge4];
   const mainTitleWords = data.title.split(' ');
+
+  // Play appear SFX at same timing as CSS animations
+  useAppearSfx(BLOCK_START_DELAYS);
 
   return (
     <div className="text-primary-im-grey flex h-full w-full flex-row items-center justify-between px-20">
