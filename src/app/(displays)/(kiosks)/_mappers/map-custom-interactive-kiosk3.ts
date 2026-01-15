@@ -62,63 +62,63 @@ export const mapCustomInteractiveKiosk3 = (
   }
 
   return {
-  firstScreen: {
-    demoIframeSrc: demo?.iframeLink,
-    eyebrow: ambient.title,
-    headline: customInteractive.headline,
-    heroImageAlt: '',
-    heroImageSrc: customInteractive.image,
-    overlayCardLabel: demo?.demoText,
-    overlayEndTourLabel: demo?.mainCTA,
-    overlayHeadline: demo?.headline,
-    primaryCtaLabel: customInteractive.mainCTA,
-    secondaryCtaLabel: customInteractive.secondaryCTA,
-  },
-  kiosk3OverlayConfig: {
-    cardLabel: demo?.demoText,
-    demoIframeSrc: demo?.iframeLink,
-    endTourLabel: demo?.mainCTA,
-    headline: demo?.headline,
-    heroImageAlt: '',
-    heroImageSrc: customInteractive.image,
-  },
-  kiosk3SecondScreen: {
-    backLabel: customInteractive.backCTA,
-    demoIframeSrc: demo?.iframeLink,
-    description: customInteractive.body,
-    eyebrow: ambient.title,
-    headline: customInteractive.headline2,
-      launchDemoLabel: customInteractive.secondaryCTA,
-    overlay: {
+    firstScreen: {
+      demoIframeSrc: demo?.iframeLink,
+      eyebrow: ambient.title,
+      headline: customInteractive.headline,
+      heroImageAlt: '',
+      heroImageSrc: customInteractive.image,
+      overlayCardLabel: demo?.demoText,
+      overlayEndTourLabel: demo?.mainCTA,
+      overlayHeadline: demo?.headline,
+      primaryCtaLabel: customInteractive.mainCTA,
+      secondaryCtaLabel: customInteractive.secondaryCTA,
+    },
+    kiosk3OverlayConfig: {
       cardLabel: demo?.demoText,
+      demoIframeSrc: demo?.iframeLink,
       endTourLabel: demo?.mainCTA,
       headline: demo?.headline,
       heroImageAlt: '',
       heroImageSrc: customInteractive.image,
     },
-    slides:
-      customInteractive.tapCarousel?.map((item, index) => {
-        // When video exists, use image as secondary decorative element
-        const secondaryImageSrc = item.video && item.image ? item.image : undefined;
+    kiosk3SecondScreen: {
+      backLabel: customInteractive.backCTA,
+      demoIframeSrc: demo?.iframeLink,
+      description: customInteractive.body,
+      eyebrow: ambient.title,
+      headline: customInteractive.headline2,
+      launchDemoLabel: customInteractive.secondaryCTA,
+      overlay: {
+        cardLabel: demo?.demoText,
+        endTourLabel: demo?.mainCTA,
+        headline: demo?.headline,
+        heroImageAlt: '',
+        heroImageSrc: customInteractive.image,
+      },
+      slides:
+        customInteractive.tapCarousel?.map((item, index) => {
+          // When video exists, use image as secondary decorative element
+          const secondaryImageSrc = item.video && item.image ? item.image : undefined;
 
           // Map index to known slide ID (validated above, so safe to index)
           const id = SLIDE_IDS[index]!;
 
-        return {
-          bullets: item.bullets ?? [],
-          eyebrow: ambient.title ?? '',
-          headline: item.title ?? '',
+          return {
+            bullets: item.bullets ?? [],
+            eyebrow: ambient.title ?? '',
+            headline: item.title ?? '',
             id,
-          primaryImageAlt: '',
-          primaryImageSrc: item.image ?? '',
-          primaryVideoSrc: item.video ?? undefined,
-          secondaryImageAlt: '',
-          secondaryImageSrc,
-          sectionTitle: item.title ?? '',
-        };
-      }) ?? [],
-    tapToBeginLabel: customInteractive.tapCTA,
-    videoAsset: customInteractive.video,
-  },
+            primaryImageAlt: '',
+            primaryImageSrc: item.image ?? '',
+            primaryVideoSrc: item.video ?? undefined,
+            secondaryImageAlt: '',
+            secondaryImageSrc,
+            sectionTitle: item.title ?? '',
+          };
+        }) ?? [],
+      tapToBeginLabel: customInteractive.tapCTA,
+      videoAsset: customInteractive.video,
+    },
   };
 };
