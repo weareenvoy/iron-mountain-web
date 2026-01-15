@@ -33,8 +33,6 @@ export type ValueCarouselTemplateProps = {
   readonly heroImageSrc?: string;
   /** Poster image for video player */
   readonly heroVideoPosterSrc?: string;
-  /** Whether this is the last screen in the Value section */
-  readonly isLastScreen?: boolean;
   /** Label text displayed with diamond icon */
   readonly labelText?: string;
   /** Main video URL (enables animated carousel variant) */
@@ -61,7 +59,6 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
     eyebrow,
     headline,
     heroVideoPosterSrc,
-    isLastScreen,
     labelText,
     mainVideo,
     registerCarouselHandlers,
@@ -91,13 +88,13 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
   // Enable delegation for any carousel variant that has slides
   const shouldEnableCarouselDelegation = hasCarouselSlides;
 
+  // Value section intentionally has no sticky header (per motion comp)
+  // Only data-scroll-section is needed for arrow navigation delegation
   return (
     <div
       {...(shouldEnableCarouselDelegation ? { 'data-scroll-section': 'value-carousel' } : {})}
-      {...(isLastScreen ? { 'data-section-end': 'value' } : {})}
       className="relative flex h-screen w-full flex-col overflow-visible bg-transparent"
       data-carousel-id={carouselId}
-      data-section="value"
       ref={sectionRef}
     >
       <div className="absolute top-0 left-0 z-0 h-[1284px] w-full overflow-hidden" data-section-video="value">
@@ -133,7 +130,6 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
           <motion.div
             animate={shouldAnimate ? { opacity: 1, y: 0 } : undefined}
             className="relative top-[-100px] left-[10px] flex items-center gap-[41px] will-change-[transform,opacity]"
-            data-section-label="value"
             initial={{ opacity: 0, y: TITLE_ANIMATION_TRANSFORMS.SECTION_HEADER }}
             ref={labelRef}
             transition={{
