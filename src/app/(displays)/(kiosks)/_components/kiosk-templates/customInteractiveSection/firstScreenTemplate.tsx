@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { SquarePlay } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -8,6 +9,9 @@ import HCHollowBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/
 import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowOrangeDiamond';
 import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
+import { TITLE_ANIMATION_TRANSFORMS } from '../constants/animations';
+import { SCROLL_ANIMATION_CONFIG, useScrollAnimation } from '../hooks/useScrollAnimation';
+import { SECTION_NAMES, useStickyHeader } from '../hooks/useStickyHeader';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 export interface CustomInteractiveKiosk1FirstScreenTemplateProps {
@@ -41,7 +45,19 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   primaryCtaLabel,
   secondaryCtaLabel,
 }: CustomInteractiveKiosk1FirstScreenTemplateProps) => {
+  const { shouldAnimate, triggerRef: animationTriggerRef } = useScrollAnimation<HTMLHeadingElement>();
+
   const [showOverlay, setShowOverlay] = useState(false);
+
+  const {
+    labelRef: eyebrowRef,
+    sectionRef,
+    showStickyHeader,
+    stickyHeaderRef,
+  } = useStickyHeader<HTMLHeadingElement>({
+    sectionName: SECTION_NAMES.CUSTOM_INTERACTIVE,
+  });
+
   const isKiosk1 = kioskId === 'kiosk-1';
   const eyebrowText = eyebrow;
   const headlineText = headline;
@@ -66,9 +82,11 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
         isKiosk1 || isKiosk3 ? 'overflow-visible' : 'overflow-hidden'
       )}
       data-scroll-section="customInteractive-first-screen"
+      data-section={SECTION_NAMES.CUSTOM_INTERACTIVE}
+      ref={sectionRef}
     >
       {/* Background gradient - defined in globals.css for readability and ease of future updates */}
-      <div className="bg-gradient-kiosk-blue absolute inset-0 group-data-[kiosk=kiosk-1]/kiosk:h-[10530px] group-data-[kiosk=kiosk-3]/kiosk:h-[10430px]" />
+      <div className="bg-gradient-kiosk-blue pointer-events-none absolute inset-0 group-data-[kiosk=kiosk-1]/kiosk:h-[10530px] group-data-[kiosk=kiosk-2]/kiosk:h-[10390px] group-data-[kiosk=kiosk-3]/kiosk:h-[10430px]" />
 
       {/* Overlay - Demo Screen */}
       <div
@@ -89,9 +107,35 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       </div>
 
       {/* Eyebrow */}
-      <h2 className="absolute top-[200px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-3]/kiosk:top-[240px]">
+      <motion.h2
+        animate={shouldAnimate ? { y: 0 } : undefined}
+        className="absolute top-[200px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] will-change-transform group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-3]/kiosk:top-[240px]"
+        initial={{ y: TITLE_ANIMATION_TRANSFORMS.SECTION_HEADER }}
+        ref={eyebrowRef}
+        transition={{ delay: 0, duration: SCROLL_ANIMATION_CONFIG.DURATION, ease: SCROLL_ANIMATION_CONFIG.EASING }}
+      >
         {renderRegisteredMark(eyebrowText)}
-      </h2>
+      </motion.h2>
+
+      {/* Sticky Section Header - Fixed Position - gradient defined in globals.css for readability and ease of future updates */}
+      <div
+        className={`bg-gradient-sticky-custom-interactive pointer-events-none fixed top-0 left-0 z-[100] h-[769px] w-full transition-opacity duration-300 motion-reduce:transition-none ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
+        data-custominteractive-sticky-header
+        data-visible={showStickyHeader}
+        ref={stickyHeaderRef}
+      >
+        {/* Eyebrow */}
+        <h2 className="px-[120px] pt-[240px] pb-[375px] pl-[150px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
+          {renderRegisteredMark(eyebrowText)}
+        </h2>
+      </div>
+
+      {/* Animation trigger - positioned to trigger when section is fully in view */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-[900px] h-[100px] w-full"
+        ref={animationTriggerRef}
+      />
 
       {/* Headline */}
       <h1

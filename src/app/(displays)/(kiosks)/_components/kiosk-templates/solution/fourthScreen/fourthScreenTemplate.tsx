@@ -6,9 +6,9 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import GreenDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondFourth';
 import OrangeDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondFourth';
 import OrangeGradientDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/OrangeGradientDiamondFourth';
-import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
 import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
+import { SECTION_NAMES } from '../../hooks/useStickyHeader';
 import PhotoDiamond from './PhotoDiamond';
 import PlusMinusIcon from './PlusMinusIcon';
 
@@ -29,45 +29,29 @@ const SolutionFourthScreenTemplate = ({
   accentDiamondSrc,
   accordion,
   headline,
-  labelText,
   mediaDiamondOutlineSrc,
   mediaDiamondSolidSrc,
-  subheadline,
 }: SolutionFourthScreenTemplateProps) => {
   const entries = accordion?.length ? accordion : [];
 
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-hidden bg-transparent">
+    <div
+      className="relative flex h-screen w-full flex-col overflow-hidden bg-transparent"
+      data-scroll-section="solution-fourth-section"
+      data-section-end={SECTION_NAMES.SOLUTION}
+    >
       {/* Background gradient (now transparent) */}
       <div className="absolute top-0 left-0 h-[5120px] w-full bg-transparent" />
 
-      {/* Subheadline */}
-      <h2 className="absolute top-[400px] left-[120px] z-[1] w-[390px] -translate-y-full text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed]">
-        {renderRegisteredMark(subheadline)}
-      </h2>
-
-      {/* Solution label */}
-      <div className="absolute top-[790px] left-[140px] z-[1] flex items-center gap-[41px]">
-        <div className="relative top-[-25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
-          <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
-        </div>
-        <h1 className="relative top-[-20px] left-[-100px] text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]">
-          {labelText}
-        </h1>
-      </div>
-
       {/* Title */}
-      <div className="absolute top-[1260px] left-[240px] z-10 w-[1300px]">
-        <p
-          className="text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]"
-          data-scroll-section="solution-fourth-title"
-        >
+      <div className="absolute top-[1240px] left-[240px] z-10 w-[1300px]">
+        <p className="text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed]">
           {renderRegisteredMark(headline)}
         </p>
       </div>
 
       {/* Solution cards */}
-      <div className="absolute top-[1770px] left-[240px] w-[1379px] rounded-[80px] bg-[#ededed] shadow-[0_20px_80px_rgba(0,0,0,0.25)]">
+      <div className="absolute top-[1740px] left-[240px] w-[1379px] rounded-[80px] bg-[#ededed] shadow-[0_20px_80px_rgba(0,0,0,0.25)]">
         <Accordion
           className="space-y-0 overflow-hidden rounded-[80px]"
           collapsible

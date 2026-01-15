@@ -1,6 +1,7 @@
 'use client';
 
-import { memo } from 'react';
+import { motion } from 'framer-motion';
+import { memo, useRef } from 'react';
 import { normalizeDiamondCards } from '@/app/(displays)/(kiosks)/_utils/normalize-diamond-cards';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
 import { cn } from '@/lib/tailwind/utils/cn';
@@ -9,6 +10,8 @@ import { normalizeMultiline } from '@/lib/utils/normalize-multiline';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import AnimatedValueCarousel from './components/AnimatedValueCarousel';
 import ValueCarousel from './components/ValueCarousel';
+import { TITLE_ANIMATION_TRANSFORMS } from '../constants/animations';
+import { SCROLL_ANIMATION_CONFIG, useScrollAnimation } from '../hooks/useScrollAnimation';
 import type { ValueCarouselSlide } from '@/app/(displays)/(kiosks)/_types/value-types';
 
 /**
@@ -61,6 +64,12 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
     registerCarouselHandlers,
     slides,
   } = props;
+
+  const { shouldAnimate, triggerRef: animationTriggerRef } = useScrollAnimation<HTMLDivElement>();
+
+  const labelRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
   // Show video background when mainVideo is provided (used in animated carousel variant)
   const heroVideo = mainVideo;
 
@@ -79,13 +88,16 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
   // Enable delegation for any carousel variant that has slides
   const shouldEnableCarouselDelegation = hasCarouselSlides;
 
+  // Value section intentionally has no sticky header (per motion comp)
+  // Only data-scroll-section is needed for arrow navigation delegation
   return (
     <div
       {...(shouldEnableCarouselDelegation ? { 'data-scroll-section': 'value-carousel' } : {})}
       className="relative flex h-screen w-full flex-col overflow-visible bg-transparent"
       data-carousel-id={carouselId}
+      ref={sectionRef}
     >
-      <div className="absolute top-0 left-0 z-0 h-[1284px] w-full overflow-hidden">
+      <div className="absolute top-0 left-0 z-0 h-[1284px] w-full overflow-hidden" data-section-video="value">
         {heroVideo ? (
           <video
             autoPlay
@@ -104,17 +116,35 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
         <div className="absolute inset-0 bg-black/20" />
       </div>
 
-      <div className="absolute top-0 left-0 z-2 flex h-[1284px] w-full flex-col justify-between px-[120px] py-[240px]">
-        <p className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
+      {/* Header Section - Initial Position */}
+      <div className="absolute top-0 left-0 flex h-[1284px] w-full flex-col justify-between px-[120px] py-[240px]">
+        <motion.p
+          animate={shouldAnimate ? { y: 0 } : undefined}
+          className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] will-change-transform"
+          initial={{ y: TITLE_ANIMATION_TRANSFORMS.SECTION_HEADER }}
+          transition={{ delay: 0, duration: SCROLL_ANIMATION_CONFIG.DURATION, ease: SCROLL_ANIMATION_CONFIG.EASING }}
+        >
           {renderRegisteredMark(normalizeMultiline(eyebrow))}
-        </p>
-        <div className="relative top-[-100px] left-[10px] flex items-center gap-[41px]">
-          <div className="relative top-[25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
-            <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
-          </div>
-          <h1 className="relative top-[30px] left-[-90px] text-[126px] leading-[1.3] font-normal tracking-[-6.3px] whitespace-nowrap text-[#ededed]">
-            {renderRegisteredMark(labelText)}
-          </h1>
+        </motion.p>
+        <div ref={animationTriggerRef}>
+          <motion.div
+            animate={shouldAnimate ? { opacity: 1, y: 0 } : undefined}
+            className="relative top-[-100px] left-[10px] flex items-center gap-[41px] will-change-[transform,opacity]"
+            initial={{ opacity: 0, y: TITLE_ANIMATION_TRANSFORMS.SECTION_HEADER }}
+            ref={labelRef}
+            transition={{
+              delay: SCROLL_ANIMATION_CONFIG.SECONDARY_DELAY,
+              duration: SCROLL_ANIMATION_CONFIG.DURATION,
+              ease: SCROLL_ANIMATION_CONFIG.EASING,
+            }}
+          >
+            <div className="relative top-[25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
+              <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
+            </div>
+            <h1 className="relative top-[30px] left-[-90px] text-[126px] leading-[1.3] font-normal tracking-[-6.3px] whitespace-nowrap text-[#ededed]">
+              {renderRegisteredMark(labelText)}
+            </h1>
+          </motion.div>
         </div>
       </div>
 

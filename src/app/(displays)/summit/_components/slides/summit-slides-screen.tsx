@@ -15,6 +15,9 @@ import type { SummitFuturescaping, SummitKioskAmbient, SummitPossibility } from 
 import type { SolutionItem } from '@/app/(displays)/summit/_utils';
 import type { ExhibitMqttStateSummit } from '@/lib/mqtt/types';
 
+// Local fallback video for when API is down
+const FALLBACK_VIDEO_URL = '/videos/summit_fallback.webm';
+
 type MetaLabelMap = {
   readonly company: string;
   readonly dateOfEngagement: string;
@@ -418,8 +421,32 @@ const SummitSlidesScreen = ({
     return <PlaceholderSlide description="" heading="Loading…" />;
   }
 
-  if (error || !data || slides.length === 0) {
-    return <PlaceholderSlide description="" heading="Unable to load slides" />;
+  // Determine failure states
+  const isOfflineOrError = error || !data;
+  const hasNoSlides = slides.length === 0;
+
+  // Primary screen: show fallback video for ANY failure (offline, error, or no slides)
+  // Secondary screen: show specific text placeholders for debugging
+  if (isOfflineOrError || hasNoSlides) {
+    if (screen === 'primary') {
+      return (
+        <div className="relative h-full w-full overflow-hidden bg-[#F3F5F7]">
+          <video
+            aria-hidden
+            autoPlay
+            className="absolute inset-0 z-0 h-full w-full object-cover"
+            loop
+            muted
+            playsInline
+            preload="auto"
+            src={FALLBACK_VIDEO_URL}
+          />
+        </div>
+      );
+    }
+    // Secondary screen: show specific error message
+    const heading = isOfflineOrError ? 'Unable to load data' : 'No slides available';
+    return <PlaceholderSlide description="" heading={heading} />;
   }
 
   const requiredMeta = (label: string) => {

@@ -8,6 +8,7 @@ import InitialState from './components/InitialState';
 import MorphingDiamond from './components/MorphingDiamond';
 import { IN_VIEW_CONFIG, SECTION_IDS } from './constants';
 import { useKiosk3SecondScreenState } from './hooks/useKiosk3SecondScreenState';
+import { SECTION_NAMES } from '../../hooks/useStickyHeader';
 import type { CarouselSlide } from './components/CircularCarousel';
 
 // Constant empty array to prevent unnecessary re-renders
@@ -29,6 +30,8 @@ export type Kiosk3SecondScreenProps = {
   readonly eyebrow?: string;
   /** Main headline */
   readonly headline?: string;
+  /** Label for the "Launch demo" CTA button in carousel state */
+  readonly launchDemoLabel?: string;
   /** Callback when back button is clicked */
   readonly onBack?: () => void;
   /** Demo overlay configuration */
@@ -81,6 +84,7 @@ const Kiosk3SecondScreenTemplate = memo(
     description,
     eyebrow,
     headline,
+    launchDemoLabel,
     onBack,
     overlay,
     slides,
@@ -125,6 +129,7 @@ const Kiosk3SecondScreenTemplate = memo(
       <div
         className="relative flex h-screen w-full flex-col overflow-hidden"
         data-scroll-section={SECTION_IDS.SECOND_SCREEN}
+        data-section-end={SECTION_NAMES.CUSTOM_INTERACTIVE}
         ref={ref}
       >
         <div className="absolute inset-0 bg-transparent" />
@@ -141,6 +146,7 @@ const Kiosk3SecondScreenTemplate = memo(
         {showCarousel && (
           <CarouselState
             headline={headline}
+            launchDemoLabel={launchDemoLabel}
             onIndexChange={handleIndexChange}
             onIsExitingChange={handleIsExitingChange}
             onShowOverlay={handleShowOverlay}

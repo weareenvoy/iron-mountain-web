@@ -59,6 +59,8 @@ export const mapCustomInteractiveKiosk1 = (
     secondaryCtaLabel: customInteractive.secondaryCTA,
   },
   secondScreen: {
+    backLabel: customInteractive.backCTA,
+    bodyText: customInteractive.body2,
     demoIframeSrc: demo?.iframeLink,
     eyebrow: ambient.title,
     headline: customInteractive.headline2,
