@@ -1,11 +1,15 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import BlueDiamondMain from '@/components/ui/icons/Kiosks/Solutions/BlueDiamondMain';
 import GreenDiamondMain from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondMain';
 import OrangeDiamondMain from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondMain';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
 import { getVideoMimeType } from '@/lib/utils/get-video-mime-type';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
+import { TITLE_ANIMATION_TRANSFORMS } from '../../constants/animations';
+import { SCROLL_ANIMATION_CONFIG, useScrollAnimation } from '../../hooks/useScrollAnimation';
+import { SECTION_NAMES, useStickyHeader } from '../../hooks/useStickyHeader';
 
 export type SolutionFirstScreenTemplateProps = {
   readonly body?: string;
@@ -25,10 +29,20 @@ const SolutionFirstScreenTemplate = ({
   mainVideo,
   subheadline,
 }: SolutionFirstScreenTemplateProps) => {
+  const { shouldAnimate, triggerRef: animationTriggerRef } = useScrollAnimation<HTMLDivElement>();
+
+  const { labelRef, sectionRef, showStickyHeader, stickyHeaderRef } = useStickyHeader<HTMLDivElement>({
+    sectionName: SECTION_NAMES.SOLUTION,
+  });
+
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-visible bg-black">
+    <div
+      className="relative flex h-screen w-full flex-col overflow-visible bg-black"
+      data-section={SECTION_NAMES.SOLUTION}
+      ref={sectionRef}
+    >
       {/* Background video */}
-      <div className="absolute top-[-5px] left-0 h-[1545px] w-full">
+      <div className="absolute top-[-5px] left-0 h-[1545px] w-full" data-section-video="solution">
         <div className="relative h-full w-full">
           <video
             autoPlay
@@ -48,19 +62,60 @@ const SolutionFirstScreenTemplate = ({
       {/* Gradient body */}
       <div className="absolute top-[1058px] left-0 z-[1] h-[14575px] w-full rounded-[100px] bg-gradient-to-b from-[#A2115E] to-[#8A0D71] group-data-[kiosk=kiosk-2]/kiosk:top-[1110px] group-data-[kiosk=kiosk-3]/kiosk:top-[1060px]" />
 
-      {/* Subheadline */}
-      <h2 className="absolute top-[240px] left-[120px] z-[1] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:top-[290px] group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-2]/kiosk:w-[450px] group-data-[kiosk=kiosk-3]/kiosk:top-[300px] group-data-[kiosk=kiosk-3]/kiosk:left-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[330px]">
+      {/* Subheadline - Initial Position */}
+      <motion.h2
+        animate={shouldAnimate ? { y: 0 } : undefined}
+        className="absolute top-[240px] left-[120px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] will-change-transform group-data-[kiosk=kiosk-2]/kiosk:top-[290px] group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-2]/kiosk:w-[450px] group-data-[kiosk=kiosk-3]/kiosk:top-[300px] group-data-[kiosk=kiosk-3]/kiosk:left-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[330px]"
+        initial={{ y: TITLE_ANIMATION_TRANSFORMS.SECTION_HEADER }}
+        transition={{ delay: 0, duration: SCROLL_ANIMATION_CONFIG.DURATION, ease: SCROLL_ANIMATION_CONFIG.EASING }}
+      >
         {renderRegisteredMark(subheadline)}
-      </h2>
+      </motion.h2>
 
-      {/* Solution label */}
-      <div className="absolute top-[790px] left-[140px] flex items-center gap-[41px] group-data-[kiosk=kiosk-2]/kiosk:top-[830px] group-data-[kiosk=kiosk-3]/kiosk:top-[860px] group-data-[kiosk=kiosk-3]/kiosk:left-[260px]">
-        <div className="relative top-[-25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
-          <OutlinedDiamond aria-hidden="true" focusable="false" />
+      {/* Solution label - Initial Position */}
+      <div ref={animationTriggerRef}>
+        <motion.div
+          animate={shouldAnimate ? { opacity: 1, y: 0 } : undefined}
+          className="absolute top-[790px] left-[140px] flex items-center gap-[41px] will-change-[transform,opacity] group-data-[kiosk=kiosk-2]/kiosk:top-[830px] group-data-[kiosk=kiosk-3]/kiosk:top-[860px] group-data-[kiosk=kiosk-3]/kiosk:left-[260px]"
+          data-section-label="solution"
+          initial={{ opacity: 0, y: TITLE_ANIMATION_TRANSFORMS.SECTION_HEADER }}
+          ref={labelRef}
+          transition={{
+            delay: SCROLL_ANIMATION_CONFIG.SECONDARY_DELAY,
+            duration: SCROLL_ANIMATION_CONFIG.DURATION,
+            ease: SCROLL_ANIMATION_CONFIG.EASING,
+          }}
+        >
+          <div className="relative top-[-25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
+            <OutlinedDiamond aria-hidden="true" focusable="false" />
+          </div>
+          <h1 className="relative top-[-20px] left-[-100px] text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]">
+            {labelText}
+          </h1>
+        </motion.div>
+      </div>
+
+      {/* Sticky Section Header - Fixed Position - gradient defined in globals.css for readability and ease of future updates */}
+      <div
+        className={`bg-gradient-sticky-solution pointer-events-none fixed top-0 left-0 z-[100] h-[1369px] w-full transition-opacity duration-300 motion-reduce:transition-none ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
+        data-solution-sticky-header
+        data-visible={showStickyHeader}
+        ref={stickyHeaderRef}
+      >
+        {/* Subheadline */}
+        <h2 className="w-[700px] px-[120px] pt-[240px] pb-[375px] pl-[150px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:w-[650px] group-data-[kiosk=kiosk-3]/kiosk:ml-[120px] group-data-[kiosk=kiosk-3]/kiosk:w-[630px]">
+          {renderRegisteredMark(subheadline)}
+        </h2>
+
+        {/* Solution label */}
+        <div className="flex items-center gap-[41px] px-[140px] pb-[20px] group-data-[kiosk=kiosk-3]/kiosk:ml-[120px]">
+          <div className="relative top-[-25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
+            <OutlinedDiamond aria-hidden="true" focusable="false" />
+          </div>
+          <h1 className="relative top-[-20px] left-[-100px] text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]">
+            {labelText}
+          </h1>
         </div>
-        <h1 className="relative top-[-20px] left-[-100px] text-[126.031px] leading-[1.3] font-normal tracking-[-6.3015px] whitespace-nowrap text-[#ededed]">
-          {labelText}
-        </h1>
       </div>
 
       {/* Body copy */}

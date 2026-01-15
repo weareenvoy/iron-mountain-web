@@ -11,12 +11,15 @@ import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import { AnimatedText } from './components/AnimatedText';
 import { StepCarousel, type Step } from './components/StepCarousel';
 import { StepModal, type ModalContent } from './components/StepModal';
+import { SECTION_NAMES } from '../../hooks/useStickyHeader';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 /**
  * Props for Custom Interactive Kiosk 1 Second Screen Template
  */
 export type CustomInteractiveKiosk1SecondScreenTemplateProps = {
+  /** Label for the back button in step modal */
+  readonly backLabel?: string;
   /** Body text below headline (extracted from hardcoded string) */
   readonly bodyText?: string;
   /** URL for demo iframe content */
@@ -52,9 +55,9 @@ export type CustomInteractiveKiosk1SecondScreenTemplateProps = {
  * Features animated headline/body/button and diamond carousel with modal details
  */
 const CustomInteractiveKiosk1SecondScreenTemplate = ({
+  backLabel,
   bodyText,
   demoIframeSrc,
-  eyebrow,
   headline,
   heroImageAlt,
   heroImageSrc,
@@ -66,10 +69,8 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
   secondaryCtaLabel,
   steps,
 }: CustomInteractiveKiosk1SecondScreenTemplateProps) => {
-  const eyebrowText: string = normalizeText(eyebrow);
   const headlineText: string = normalizeText(headline);
-  const normalizedBodyText =
-    bodyText ?? 'Explore each section to learn how Iron Mountain can transform your enterprise';
+  const normalizedBodyText = bodyText ?? '';
   const normalizedSteps = steps ?? [];
   const isKiosk3 = kioskId === 'kiosk-3';
   const secondaryIconOffset = isKiosk3 ? 'left-[-330px]' : 'left-[-70px]';
@@ -142,6 +143,7 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
       <div
         className="relative flex h-screen w-full flex-col overflow-visible bg-transparent"
         data-scroll-section="customInteractive-second-screen"
+        data-section-end={SECTION_NAMES.CUSTOM_INTERACTIVE}
         ref={containerRef}
       >
         <div className="absolute inset-0 bg-transparent" />
@@ -150,7 +152,7 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
         <div
           className={cn(
             'absolute inset-0 transition-opacity duration-700',
-            showOverlay ? 'pointer-events-auto z-50 opacity-100' : 'pointer-events-none opacity-0'
+            showOverlay ? 'pointer-events-auto z-[9999] opacity-100' : 'pointer-events-none opacity-0'
           )}
         >
           <CustomInteractiveDemoScreenTemplate
@@ -163,10 +165,6 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
             onEndTour={handleEndTour}
           />
         </div>
-
-        <h2 className="absolute top-[240px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
-          {renderRegisteredMark(eyebrowText)}
-        </h2>
 
         {/* Use AnimatedText component for consistent animation */}
         <AnimatedText
@@ -214,7 +212,12 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
         ? createPortal(
             <AnimatePresence>
               {activeModalContent ? (
-                <StepModal content={activeModalContent} key="step-modal" onClose={handleModalClose} />
+                <StepModal
+                  backLabel={backLabel}
+                  content={activeModalContent}
+                  key="step-modal"
+                  onClose={handleModalClose}
+                />
               ) : null}
             </AnimatePresence>,
             portalTarget

@@ -1,10 +1,11 @@
 'use client';
 
+import { animate } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState, type RefObject } from 'react';
 import {
   OBSERVER_SETUP_RETRY_MS,
   PARAGRAPH_DETECTION_RETRY_MS,
-  PARAGRAPH_SCROLL_DURATION_MS,
+  SCROLL_DURATION_MS,
   TEXT_ELEMENT_SCROLL_OFFSET_PX,
 } from '@/app/(displays)/(kiosks)/_constants/timing';
 
@@ -30,7 +31,7 @@ export interface UseGlobalParagraphNavigationReturn {
  */
 export function useGlobalParagraphNavigation({
   containerRef,
-  duration = PARAGRAPH_SCROLL_DURATION_MS,
+  duration = SCROLL_DURATION_MS,
 }: UseGlobalParagraphNavigationOptions): UseGlobalParagraphNavigationReturn {
   // Start at index 0 since the page loads already showing the first paragraph
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -40,6 +41,8 @@ export function useGlobalParagraphNavigation({
   const isScrollingRef = useRef(false);
   // Track scroll timeout for cleanup
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  // Track current animation for cancellation
+  const animationControlsRef = useRef<null | { stop: () => void }>(null);
 
   // Detect ALL paragraph sections in the entire container
   useEffect(() => {
@@ -112,10 +115,14 @@ export function useGlobalParagraphNavigation({
         return;
       }
 
-      // Clear any existing timeout before setting a new one
+      // Clear any existing timeout and animation before setting a new one
       if (scrollTimeoutRef.current) {
         clearTimeout(scrollTimeoutRef.current);
         scrollTimeoutRef.current = null;
+      }
+      if (animationControlsRef.current) {
+        animationControlsRef.current.stop();
+        animationControlsRef.current = null;
       }
 
       // If scrolling to -1, scroll to top
@@ -124,19 +131,21 @@ export function useGlobalParagraphNavigation({
         setIsScrolling(true);
         setCurrentScrollTarget(null);
 
-        container.scrollTo({
-          behavior: 'smooth',
-          top: 0,
+        // Use Framer Motion animate for controllable duration
+        animationControlsRef.current = animate(container.scrollTop, 0, {
+          duration: duration / 1000, // Convert ms to seconds
+          ease: [0.3, 0, 0.6, 1], // Smooth easing curve
+          onComplete: () => {
+            isScrollingRef.current = false;
+            setIsScrolling(false);
+            setCurrentScrollTarget(null);
+            setCurrentIndex(-1);
+            animationControlsRef.current = null;
+          },
+          onUpdate: value => {
+            container.scrollTop = value;
+          },
         });
-
-        // Wait for scroll to complete
-        scrollTimeoutRef.current = setTimeout(() => {
-          isScrollingRef.current = false;
-          setIsScrolling(false);
-          setCurrentScrollTarget(null);
-          setCurrentIndex(-1);
-          scrollTimeoutRef.current = null;
-        }, duration);
         return;
       }
 
@@ -184,19 +193,20 @@ export function useGlobalParagraphNavigation({
       // Target scroll position = element's position in content - desired offset from top
       const targetScroll = elementOffsetTop - topOffset;
 
-      // Use native smooth scrolling
-      container.scrollTo({
-        behavior: 'smooth',
-        top: targetScroll,
+      // Use Framer Motion animate for controllable duration
+      animationControlsRef.current = animate(container.scrollTop, targetScroll, {
+        duration: duration / 1000, // Convert ms to seconds
+        ease: [0.3, 0, 0.6, 1], // Smooth easing curve
+        onComplete: () => {
+          isScrollingRef.current = false;
+          setIsScrolling(false);
+          setCurrentIndex(index);
+          animationControlsRef.current = null;
+        },
+        onUpdate: value => {
+          container.scrollTop = value;
+        },
       });
-
-      // Wait for scroll to complete
-      scrollTimeoutRef.current = setTimeout(() => {
-        isScrollingRef.current = false;
-        setIsScrolling(false);
-        setCurrentIndex(index);
-        scrollTimeoutRef.current = null;
-      }, duration);
     },
     [allParagraphs, containerRef, duration]
   );
@@ -248,11 +258,14 @@ export function useGlobalParagraphNavigation({
     [allParagraphs, currentIndex, scrollToParagraph]
   );
 
-  // Cleanup scroll timeout on unmount
+  // Cleanup scroll timeout and animation on unmount
   useEffect(() => {
     return () => {
       if (scrollTimeoutRef.current) {
         clearTimeout(scrollTimeoutRef.current);
+      }
+      if (animationControlsRef.current) {
+        animationControlsRef.current.stop();
       }
     };
   }, []);

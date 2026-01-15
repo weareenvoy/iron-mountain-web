@@ -3,7 +3,6 @@ import { memo } from 'react';
 import AnimatedNumberedList from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/secondScreen/AnimatedNumberedList';
 import BlueDiamondSecond from '@/components/ui/icons/Kiosks/Solutions/BlueDiamondSecond';
 import GreenDiamondSecond from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondSecond';
-import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
@@ -59,7 +58,6 @@ const SolutionSecondScreenTemplate = memo(
   ({
     heroImageAlt,
     heroImageSrc,
-    labelText,
     numberedListHeadline,
     onRegisterListHandlers,
     scrollSectionId,
@@ -73,7 +71,6 @@ const SolutionSecondScreenTemplate = memo(
     stepThreeLabel,
     stepTwoDescription,
     stepTwoLabel,
-    subheadline,
   }: SolutionSecondScreenTemplateProps) => {
     const legacySteps: StepConfig[] = [
       { description: stepOneDescription, label: stepOneLabel },
@@ -108,21 +105,6 @@ const SolutionSecondScreenTemplate = memo(
         </div>
         <div className="pointer-events-none absolute top-[970px] left-[1270px] z-[1] h-[890px] w-[890px] group-data-[kiosk=kiosk-2]/kiosk:top-[1040px] group-data-[kiosk=kiosk-2]/kiosk:left-[1330px] group-data-[kiosk=kiosk-2]/kiosk:size-[800px] group-data-[kiosk=kiosk-3]/kiosk:top-[1050px] group-data-[kiosk=kiosk-3]/kiosk:left-[1330px] group-data-[kiosk=kiosk-3]/kiosk:size-[810px]">
           <GreenDiamondSecond aria-hidden="true" className="h-full w-full" focusable="false" />
-        </div>
-
-        {/* Subheadline */}
-        <h2 className="absolute top-[230px] left-[120px] z-[1] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
-          {renderRegisteredMark(subheadline)}
-        </h2>
-
-        {/* Solution label */}
-        <div className="absolute top-[710px] left-[150px] z-1 flex group-data-[kiosk=kiosk-3]/kiosk:top-[720px] group-data-[kiosk=kiosk-3]/kiosk:left-[140px]">
-          <div className="relative top-[25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
-            <OutlinedDiamond aria-hidden="true" className="text-[#ededed]" focusable="false" />
-          </div>
-          <h1 className="relative top-[55px] left-[-50px] text-[126px] leading-[1.3] font-normal tracking-[-6.3px] whitespace-nowrap text-[#ededed]">
-            {renderRegisteredMark(labelText)}
-          </h1>
         </div>
 
         {/* Title */}
