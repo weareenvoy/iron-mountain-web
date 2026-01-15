@@ -138,7 +138,7 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
     } finally {
       // Don't update loading state if aborted
       if (!abortController.signal.aborted) {
-        setLoading(false);
+      setLoading(false);
       }
       // Clean up controller reference
       if (abortControllerRef.current === abortController) {

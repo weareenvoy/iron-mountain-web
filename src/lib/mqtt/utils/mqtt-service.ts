@@ -207,7 +207,7 @@ export class MqttService {
     if (useGEC) {
       // Production: Send to GEC, which relays to cmd/dev/all/load-tour
       console.info('[GEC Mode] Sending load-tour to GEC:', tourId);
-      this.publish(mqttCommands.docent.loadTour, JSON.stringify(message), { qos: 1, retain: false }, config);
+    this.publish(mqttCommands.docent.loadTour, JSON.stringify(message), { qos: 1, retain: false }, config);
     } else {
       // Development: Direct broadcast to all exhibits (no GEC relay)
       console.info('[Direct Mode] Broadcasting load-tour to all exhibits:', tourId);
