@@ -6,6 +6,7 @@ import { memo, useEffect, useRef, useState } from 'react';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import ButtonArrow from '@/components/ui/icons/ButtonArrow';
 import WhiteLogoSimple from '@/components/ui/icons/WhiteLogoSimple';
+import { mqttCommands } from '@/lib/mqtt/constants';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import { TITLE_ANIMATION_TRANSFORMS } from '../../constants/animations';
 import { SCROLL_ANIMATION_CONFIG } from '../../hooks/useScrollAnimation';
@@ -116,10 +117,10 @@ const InitialScreenTemplate = memo(
       };
 
       // Subscribe to broadcast loadTour commands from GEC
-      client.subscribeToTopic('cmd/dev/all/load-tour', handleLoadTour);
+      client.subscribeToTopic(mqttCommands.broadcast.loadTour, handleLoadTour);
 
       return () => {
-        client.unsubscribeFromTopic('cmd/dev/all/load-tour', handleLoadTour);
+        client.unsubscribeFromTopic(mqttCommands.broadcast.loadTour, handleLoadTour);
       };
     }, [client, isConnected, idleVideoSrc, kioskId]);
 

@@ -15,6 +15,7 @@ import { DEFAULT_KIOSK_BEAT_ID, type KioskId, type KioskMqttState } from '@/app/
 import { useAudio } from '@/components/providers/audio-provider';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getKioskData } from '@/lib/internal/data/get-kiosk';
+import { mqttCommands } from '@/lib/mqtt/constants';
 import { useExhibitSetVolume } from '@/lib/mqtt/utils/use-exhibit-set-volume';
 import type { KioskData } from '@/lib/internal/types';
 import type { ExhibitMqttStateBase } from '@/lib/mqtt/types';
@@ -73,6 +74,9 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
 
   // AbortController for cancellable fetch operations (Fix #4)
   const abortControllerRef = useRef<AbortController | null>(null);
+
+  // Track endTour polling interval for cleanup
+  const endTourIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Get kiosk-specific app ID for MQTT (kiosk-1 → kiosk-01)
   const appId = `kiosk-0${kioskId.replace('kiosk-', '')}` as 'kiosk-01' | 'kiosk-02' | 'kiosk-03';
@@ -197,10 +201,18 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
       if (isLoadingTourRef.current) {
         console.warn(`${kioskId}: Delaying endTour - tour is still loading`);
 
+        // Clear any existing interval before creating a new one
+        if (endTourIntervalRef.current) {
+          clearInterval(endTourIntervalRef.current);
+        }
+
         // Wait for load to complete before ending tour
-        const checkInterval = setInterval(() => {
+        endTourIntervalRef.current = setInterval(() => {
           if (!isLoadingTourRef.current) {
-            clearInterval(checkInterval);
+            if (endTourIntervalRef.current) {
+              clearInterval(endTourIntervalRef.current);
+              endTourIntervalRef.current = null;
+            }
             performEndTour();
           }
         }, 50);
@@ -225,12 +237,18 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
     };
 
     // Subscribe to broadcast commands (all exhibits listen to same topics)
-    client.subscribeToTopic('cmd/dev/all/load-tour', handleLoadTour);
-    client.subscribeToTopic('cmd/dev/all/end-tour', handleEndTour);
+    client.subscribeToTopic(mqttCommands.broadcast.loadTour, handleLoadTour);
+    client.subscribeToTopic(mqttCommands.broadcast.endTour, handleEndTour);
 
     return () => {
-      client.unsubscribeFromTopic('cmd/dev/all/load-tour', handleLoadTour);
-      client.unsubscribeFromTopic('cmd/dev/all/end-tour', handleEndTour);
+      client.unsubscribeFromTopic(mqttCommands.broadcast.loadTour, handleLoadTour);
+      client.unsubscribeFromTopic(mqttCommands.broadcast.endTour, handleEndTour);
+
+      // Clear endTour polling interval if active
+      if (endTourIntervalRef.current) {
+        clearInterval(endTourIntervalRef.current);
+        endTourIntervalRef.current = null;
+      }
 
       // Cancel any in-flight fetch on unmount (Fix #4)
       if (abortControllerRef.current) {
