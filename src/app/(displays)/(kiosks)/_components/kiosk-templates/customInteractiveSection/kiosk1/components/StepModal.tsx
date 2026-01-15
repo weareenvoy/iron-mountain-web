@@ -23,7 +23,11 @@ const MODAL_ANIMATION = {
   START_Y: 4000, // Slides up from far below
 } as const;
 
+/**
+ * StepModalProps - Props for the step detail modal
+ */
 type StepModalProps = {
+  readonly backLabel?: string;
   readonly content: ModalContent | null;
   readonly onClose: () => void;
 };
@@ -32,7 +36,7 @@ type StepModalProps = {
  * StepModal - Full-screen modal displaying step details
  * Features slide-up animation and escape key support
  */
-const StepModal = ({ content, onClose }: StepModalProps) => {
+const StepModal = ({ backLabel, content, onClose }: StepModalProps) => {
   // Store latest onClose in ref to avoid recreating event listener
   const onCloseRef = useRef(onClose);
 
@@ -61,11 +65,11 @@ const StepModal = ({ content, onClose }: StepModalProps) => {
   if (!content) return null;
 
   return (
-    <div className="absolute inset-0 z-[200] flex items-center justify-center">
+    <div className="absolute inset-0 z-200 flex items-center justify-center">
       <div className="absolute inset-0 backdrop-blur-[50px]" onClick={handleBackdropClick} />
       <motion.div
         animate={{ y: 0 }}
-        className="relative z-[201] flex h-[2800px] max-h-[90vh] w-[1920px] flex-col overflow-hidden rounded-[48px] bg-[#97e9ff] p-[80px] text-[#14477d] shadow-[0_40px_120px_rgba(0,0,0,0.45)]"
+        className="relative z-201 flex h-[2800px] max-h-[90vh] w-[1920px] flex-col overflow-hidden rounded-[48px] bg-[#97e9ff] p-[80px] text-[#14477d] shadow-[0_40px_120px_rgba(0,0,0,0.45)]"
         exit={{ y: MODAL_ANIMATION.START_Y }}
         initial={{ y: MODAL_ANIMATION.START_Y }}
         onClick={e => e.stopPropagation()}
@@ -83,7 +87,7 @@ const StepModal = ({ content, onClose }: StepModalProps) => {
             <span className="flex items-center justify-center">
               <ArrowLeft aria-hidden className="mr-[30px] h-[52px] w-[52px]" color="#14477d" strokeWidth={2} />
             </span>
-            Back
+            {backLabel}
           </button>
         </div>
 

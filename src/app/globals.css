@@ -161,4 +161,22 @@
   .bg-gradient-kiosk-magenta {
     background: linear-gradient(296deg, #a2115e 28.75%, #8a0d71 82.59%);
   }
+
+  /* Kiosk section background gradient - Challenge section */
+  .bg-gradient-challenge-section {
+    background: linear-gradient(180deg, #1b75bc 0.01%, #14477d 98%);
+  }
+
+  /* Kiosk sticky header gradients - fade from solid color to transparent */
+  .bg-gradient-sticky-challenge {
+    background: linear-gradient(180deg, #155a95 65.52%, rgba(21, 75, 130, 0) 99.31%);
+  }
+
+  .bg-gradient-sticky-solution {
+    background: linear-gradient(180deg, #9f1060 65.52%, rgba(159, 17, 97, 0) 99.31%);
+  }
+
+  .bg-gradient-sticky-custom-interactive {
+    background: linear-gradient(180deg, #2481e3 65.52%, rgba(21, 75, 130, 0) 99.31%);
+  }
 }
