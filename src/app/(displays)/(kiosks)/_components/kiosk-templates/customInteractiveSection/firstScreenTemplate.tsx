@@ -59,12 +59,9 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   });
 
   const isKiosk1 = kioskId === 'kiosk-1';
+  const isKiosk3 = kioskId === 'kiosk-3';
   const eyebrowText = eyebrow;
   const headlineText = headline;
-  const isKiosk3 = kioskId === 'kiosk-3';
-  const ctaWidthClass = isKiosk3 ? 'w-[1360px]' : 'w-[1020px]';
-  const secondaryLabelPadding = isKiosk3 ? 'pl-[320px]' : 'pl-[80px]';
-  const secondaryIconOffset = isKiosk3 ? 'left-[-330px]' : 'left-[-70px]';
 
   const handleSecondaryClick = () => {
     setShowOverlay(true);
@@ -148,8 +145,9 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       {/* CTA buttons */}
       <div
         className={cn(
-          'absolute top-[2220px] left-[245px] z-10 flex flex-col gap-[90px] group-data-[kiosk=kiosk-3]/kiosk:top-[2350px]',
-          ctaWidthClass
+          'absolute top-[2220px] left-[245px] z-10 flex flex-col gap-[90px]',
+          'w-[1020px] group-data-[kiosk=kiosk-2]/kiosk:w-[720px] group-data-[kiosk=kiosk-3]/kiosk:w-[1360px]',
+          'group-data-[kiosk=kiosk-3]/kiosk:top-[2350px]'
         )}
       >
         <button
@@ -164,15 +162,17 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
         </button>
         {/* CTA button gradient - defined in globals.css for readability and ease of future updates */}
         <button
-          className="group bg-gradient-kiosk-magenta flex h-[200px] items-center justify-between rounded-[999px] px-[100px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white backdrop-blur-[19px] transition-transform duration-150 hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+          className="group bg-gradient-kiosk-magenta flex h-[200px] items-center justify-between rounded-[999px] px-[30px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white backdrop-blur-[19px] transition-transform duration-150 hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
           onClick={handleSecondaryClick}
           type="button"
         >
-          <span className={secondaryLabelPadding}>{renderRegisteredMark(secondaryCtaLabel)}</span>
+          <span className="pl-[80px] group-data-[kiosk=kiosk-3]/kiosk:pl-[320px]">
+            {renderRegisteredMark(secondaryCtaLabel)}
+          </span>
           <div className="flex items-center justify-center">
             <SquarePlay
               aria-hidden
-              className={cn('relative h-[90px] w-[90px]', secondaryIconOffset)}
+              className="relative left-[-70px] h-[90px] w-[90px] group-data-[kiosk=kiosk-3]/kiosk:left-[-330px]"
               color="#ededed"
               strokeWidth={2}
             />
