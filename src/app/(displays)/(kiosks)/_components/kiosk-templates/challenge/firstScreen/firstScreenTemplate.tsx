@@ -46,7 +46,7 @@ const FirstScreenTemplate = memo(
         ref={sectionRef}
       >
         {/* Background gradient - defined in globals.css for readability and ease of future updates */}
-        <div className="bg-gradient-challenge-section pointer-events-none absolute inset-0 top-[1290px] z-[1] h-[14400px] rounded-[100px] group-data-[kiosk=kiosk-2]/kiosk:top-[1240px] group-data-[kiosk=kiosk-2]/kiosk:h-[14450px]" />
+        <div className="bg-gradient-challenge-section pointer-events-none absolute inset-0 top-[1290px] z-[1] h-[14340px] rounded-[100px] group-data-[kiosk=kiosk-2]/kiosk:top-[1240px] group-data-[kiosk=kiosk-2]/kiosk:h-[14390px]" />
 
         {/* Video Header Section */}
         <div
