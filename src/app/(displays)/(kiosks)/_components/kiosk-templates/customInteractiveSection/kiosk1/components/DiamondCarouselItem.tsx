@@ -176,8 +176,8 @@ const DiamondCarouselItem = ({
                 }}
                 className={
                   isActive
-                    ? 'w-[340px] origin-center text-[61px] leading-[1.3] tracking-[-3px]'
-                    : 'w-[300px] origin-center text-[61px] leading-[1.3] tracking-[-2.1px]'
+                    ? 'w-[420px] origin-center text-[61px] leading-[1.3] tracking-[-3px]'
+                    : 'w-[420px] origin-center text-[61px] leading-[1.3] tracking-[-2.1px]'
                 }
                 transition={{
                   duration: DIAMOND_TRANSITION.DURATION,
