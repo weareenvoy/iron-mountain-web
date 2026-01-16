@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { CirclePlus } from 'lucide-react';
 import { memo } from 'react';
 import { CarouselItem } from '@/components/shadcn/carousel';
 import HCBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCBlueDiamond';
@@ -188,6 +189,17 @@ const DiamondCarouselItem = ({
               </motion.span>
             </div>
           </button>
+          {/* CirclePlus icon for active diamond - indicates clickability */}
+          {isActive && (
+            <div className="pointer-events-none absolute bottom-[160px] right-[390px] z-[100] flex items-center justify-center">
+              <CirclePlus
+                aria-hidden="true"
+                className="h-[100px] w-[100px]"
+                color="#14477d"
+                strokeWidth={2}
+              />
+            </div>
+          )}
         </div>
       </motion.div>
     </CarouselItem>
