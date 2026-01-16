@@ -51,7 +51,7 @@ const SolutionFourthScreenTemplate = ({
       </div>
 
       {/* Solution cards */}
-      <div className="absolute top-[1740px] left-[240px] w-[1379px] rounded-[80px] bg-[#ededed] shadow-[0_20px_80px_rgba(0,0,0,0.25)]">
+      <div className="absolute top-[1740px] left-[240px] w-[1379px] rounded-[80px] bg-[#ededed]">
         <Accordion
           className="space-y-0 overflow-hidden rounded-[80px]"
           collapsible

@@ -60,7 +60,7 @@ const CustomInteractiveDemoScreenTemplate = ({
         <LogOut aria-hidden className="h-[54.55px] w-[54.55px]" color="#14477d" strokeWidth={2} />
       </button>
 
-      <div className="absolute top-[1290px] left-[120px] z-[10] h-[1080px] w-[1920px] rounded-[20px] bg-[#e0e0e0] shadow-[0_40px_120px_rgba(0,0,0,0.45)]">
+      <div className="absolute top-[1290px] left-[120px] z-[10] h-[1080px] w-[1920px] rounded-[20px] bg-[#e0e0e0]">
         {autoplayUrl ? (
           <iframe
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

@@ -69,7 +69,7 @@ const StepModal = ({ backLabel, content, onClose }: StepModalProps) => {
       <div className="absolute inset-0 backdrop-blur-[50px]" onClick={handleBackdropClick} />
       <motion.div
         animate={{ y: 0 }}
-        className="relative z-201 flex h-[2800px] max-h-[90vh] w-[1920px] flex-col overflow-hidden rounded-[48px] bg-[#97e9ff] p-[80px] text-[#14477d] shadow-[0_40px_120px_rgba(0,0,0,0.45)]"
+        className="relative z-201 flex h-[2800px] max-h-[90vh] w-[1920px] flex-col overflow-hidden rounded-[48px] bg-[#97e9ff] p-[80px] text-[#14477d]"
         exit={{ y: MODAL_ANIMATION.START_Y }}
         initial={{ y: MODAL_ANIMATION.START_Y }}
         onClick={e => e.stopPropagation()}

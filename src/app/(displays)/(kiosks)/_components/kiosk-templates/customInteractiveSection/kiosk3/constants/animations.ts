@@ -135,13 +135,13 @@ export const MORPHING_DIAMOND = {
 export const PRIMARY_DIAMOND_POSITIONS = {
   /** Default position for slides 1 & 4 */
   DEFAULT:
-    'absolute left-[700px] bottom-[1120px] h-[830px] w-[830px] rotate-45 overflow-hidden rounded-[90px] shadow-[0_30px_90px_rgba(0,0,0,0.35)]',
+    'absolute left-[700px] bottom-[1120px] h-[830px] w-[830px] rotate-45 overflow-hidden rounded-[90px]',
   /** Larger, repositioned for slides 2 & 5 */
   SLIDE_2_5:
-    'absolute left-[510px] bottom-[670px] h-[1200px] w-[1200px] rotate-45 overflow-hidden rounded-[90px] shadow-[0_30px_90px_rgba(0,0,0,0.35)]',
+    'absolute left-[510px] bottom-[670px] h-[1200px] w-[1200px] rotate-45 overflow-hidden rounded-[90px]',
   /** Lower position for slides 3 & 6 */
   SLIDE_3_6:
-    'absolute left-[340px] bottom-[340px] h-[1130px] w-[1130px] rotate-45 overflow-hidden rounded-[90px] shadow-[0_30px_90px_rgba(0,0,0,0.35)]',
+    'absolute left-[340px] bottom-[340px] h-[1130px] w-[1130px] rotate-45 overflow-hidden rounded-[90px]',
 } as const;
 
 /**
@@ -150,10 +150,10 @@ export const PRIMARY_DIAMOND_POSITIONS = {
 export const SECONDARY_DIAMOND_POSITIONS = {
   /** Default position for most slides */
   DEFAULT:
-    'absolute left-[1380px] bottom-[400px] h-[880px] w-[880px] rotate-45 overflow-hidden rounded-[80px] shadow-[0_24px_70px_rgba(0,0,0,0.32)]',
+    'absolute left-[1380px] bottom-[400px] h-[880px] w-[880px] rotate-45 overflow-hidden rounded-[80px]',
   /** Higher position for slides 3 & 6 */
   SLIDE_3_6:
-    'absolute left-[1390px] bottom-[1150px] h-[800px] w-[800px] rotate-45 overflow-hidden rounded-[80px] shadow-[0_24px_70px_rgba(0,0,0,0.32)]',
+    'absolute left-[1390px] bottom-[1150px] h-[800px] w-[800px] rotate-45 overflow-hidden rounded-[80px]',
 } as const;
 
 /**
