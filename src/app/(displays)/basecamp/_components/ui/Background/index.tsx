@@ -1,27 +1,20 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useBasecamp } from '@/app/(displays)/basecamp/_components/providers/basecamp';
 import { getNextBeatId, isBackgroundSeamlessTransition } from '@/app/(displays)/basecamp/_utils';
 import { BasecampBeatId, isValidBasecampBeatId } from '@/lib/internal/types';
 
 const CROSSFADE_DURATION_MS = 800 as const;
 
-// Local fallback video for when API is down
-const FALLBACK_VIDEO_URL = '/videos/basecamp_fallback.webm';
-
 const Background = () => {
-  const { data, error, exhibitState, loading, setReadyBeatId } = useBasecamp();
+  const { data, exhibitState, readyBeatId, setReadyBeatId } = useBasecamp();
   const { beatIdx, momentId } = exhibitState;
   const rawBeatId = `${momentId}-${beatIdx + 1}`;
 
-  // Derive fallback state: only show fallback after loading completes and there's an error or no data
-  // This prevents flashing the fallback during normal initial load
-  const shouldUseFallback = !loading && (error || !data);
-
   // Derive URL outside effect. Only re-run effect when URL actually changes
   const beatId = isValidBasecampBeatId(rawBeatId) ? rawBeatId : null;
-  const url = beatId && data ? data.beats[beatId].url : undefined;
+  const url = beatId ? data?.beats[beatId].url : undefined;
 
   // Ref for data access inside effect without causing re-runs
   const dataRef = useRef(data);
@@ -31,45 +24,13 @@ const Background = () => {
 
   // 2 videos "ping pong" between, 1 visible, 1 invisible.
   const a = useRef<HTMLVideoElement>(null);
-  const active = useRef<'a' | 'b'>('a');
-  const activeDisplayRef = useRef<HTMLSpanElement>(null);
   const b = useRef<HTMLVideoElement>(null);
+  const active = useRef<'a' | 'b'>('a');
+  const [activeDisplay, setActiveDisplay] = useState<'a' | 'b'>('a');
   const lastBeat = useRef<BasecampBeatId | null>(null);
 
-  // Helper to update active video and sync debug display
-  const updateActiveDisplay = (value: 'a' | 'b') => {
-    active.current = value;
-    if (activeDisplayRef.current) {
-      activeDisplayRef.current.textContent = value.toUpperCase();
-    }
-  };
-
   useEffect(() => {
-    if (!a.current || !b.current) return;
-
-    // We check shouldUseFallback to avoid flashing fallback during normal load
-    if (shouldUseFallback) {
-      const video = a.current;
-      // Use getAttribute('src') for comparison
-      const currentSrc = video.getAttribute('src');
-      if (currentSrc !== FALLBACK_VIDEO_URL) {
-        video.src = FALLBACK_VIDEO_URL;
-        video.loop = true;
-        video.load();
-        video.play().catch(() => {});
-      }
-
-      // Reset state so recovery works when data comes back.
-      a.current.style.opacity = '1';
-      b.current.style.opacity = '0';
-      lastBeat.current = null;
-      setReadyBeatId(null);
-      updateActiveDisplay('a');
-
-      return;
-    }
-
-    if (!beatId || !url) return;
+    if (!beatId || !url || !a.current || !b.current) return;
 
     if (beatId === lastBeat.current) return;
 
@@ -79,6 +40,7 @@ const Background = () => {
     // First beat after page reload → force into A
     const isFirstLoad = lastBeatId === null;
     const isAmbient = momentId === 'ambient';
+    const seamless = !isFirstLoad && isBackgroundSeamlessTransition(lastBeatId, beatId);
 
     // Determine visible and invisible
     const visible = active.current === 'a' ? a.current : b.current;
@@ -92,10 +54,15 @@ const Background = () => {
 
     // Configure the incoming video
     const setupIncomingVideo = (video: HTMLVideoElement) => {
-      video.src = url;
       video.currentTime = 0;
       video.loop = isAmbient;
-      video.load();
+
+      // Only set src and load if URL is different
+      // If URL matches, the video is already loading/loaded from preload - don't restart
+      if (video.getAttribute('src') !== url) {
+        video.src = url;
+        video.load();
+      }
     };
 
     const startPlaybackAndSignalReady = (video: HTMLVideoElement) => {
@@ -109,18 +76,30 @@ const Background = () => {
       cleanupFns.push(() => video.removeEventListener('playing', handlePlaying));
     };
 
+    // Preload next beat into the video that will be hidden after current switch
+    const preloadNextBeat = (target: HTMLVideoElement) => {
+      const nextBeatId = getNextBeatId(beatId, isAmbient);
+      if (nextBeatId && dataRef.current?.beats[nextBeatId].url) {
+        if (lastBeat.current === beatId) {
+          target.src = dataRef.current.beats[nextBeatId].url;
+        }
+      }
+    };
+
     if (isFirstLoad) {
       // First load: use video A directly
       setupIncomingVideo(a.current!);
-      updateActiveDisplay('a');
+      active.current = 'a';
 
       const handleCanPlayThrough = () => startPlaybackAndSignalReady(a.current!);
       a.current!.addEventListener('canplaythrough', handleCanPlayThrough, { once: true });
       cleanupFns.push(() => a.current?.removeEventListener('canplaythrough', handleCanPlayThrough));
+
+      // Preload next beat into B (hidden)
+      preloadNextBeat(b.current!);
     } else {
       // Subsequent beats
       setupIncomingVideo(hidden);
-      const seamless = isBackgroundSeamlessTransition(lastBeatId, beatId);
 
       const performSwitch = () => {
         if (lastBeat.current !== beatId) return;
@@ -138,7 +117,15 @@ const Background = () => {
         }
 
         startPlaybackAndSignalReady(hidden);
-        updateActiveDisplay(active.current === 'a' ? 'b' : 'a');
+        active.current = active.current === 'a' ? 'b' : 'a';
+        setActiveDisplay(active.current);
+
+        // Preload next beat AFTER switch (visible is now hidden)
+        // NOTE: For seamless (0ms) transitions, CSS `transitionend` event may not fire.
+        // We preload immediately here instead of waiting for transitionend.
+        if (seamless) {
+          preloadNextBeat(visible);
+        }
       };
 
       if (hidden.readyState >= 3) {
@@ -148,24 +135,12 @@ const Background = () => {
         hidden.addEventListener('canplaythrough', performSwitch, { once: true });
         cleanupFns.push(() => hidden.removeEventListener('canplaythrough', performSwitch));
       }
-    }
 
-    // Preload next beat into the now-visible (soon-to-be-hidden) video
-    const nextBeatId = getNextBeatId(beatId, isAmbient);
-
-    if (nextBeatId && dataRef.current?.beats[nextBeatId].url) {
-      // For first load: preload into B immediately
-      // For transitions: preload into the video that will be hidden next (i.e. current visible)
-      const preloadTarget = isFirstLoad ? b.current! : visible;
-
-      if (isFirstLoad) {
-        preloadTarget.src = dataRef.current.beats[nextBeatId].url;
-      } else {
-        // Wait until crossfade ends
+      // Non-seamless: wait for crossfade to complete before preloading.
+      // NOTE: transitionend reliably fires for non-zero duration transitions,
+      if (!seamless) {
         const handleTransitionEnd = () => {
-          if (lastBeat.current === beatId) {
-            preloadTarget.src = dataRef.current!.beats[nextBeatId].url;
-          }
+          preloadNextBeat(visible);
         };
         visible.addEventListener('transitionend', handleTransitionEnd, { once: true });
         cleanupFns.push(() => visible.removeEventListener('transitionend', handleTransitionEnd));
@@ -179,7 +154,7 @@ const Background = () => {
     return () => {
       cleanupFns.forEach(fn => fn());
     };
-  }, [beatId, momentId, setReadyBeatId, shouldUseFallback, url]);
+  }, [momentId, setReadyBeatId, url, beatId]);
 
   // For debugging only. Update display time
   const timeDisplayRef = useRef<HTMLSpanElement>(null);
@@ -211,11 +186,13 @@ const Background = () => {
         style={{ opacity: 0, transition: `opacity ${CROSSFADE_DURATION_MS}ms ease` }}
       />
 
+      {/* For debugging only */}
       <div className="pointer-events-none absolute top-4 left-4 rounded bg-black/60 px-3 py-2 font-mono text-sm text-white">
-        <div>{beatId}</div>
         <div>
-          Active: <span ref={activeDisplayRef}>A</span>
+          {beatId}
+          {beatId !== readyBeatId && <span className="ml-2 text-yellow-400">(loading)</span>}
         </div>
+        <div>Active: {activeDisplay.toUpperCase()}</div>
         <p>
           Time: <span ref={timeDisplayRef}>0.0s</span>
         </p>

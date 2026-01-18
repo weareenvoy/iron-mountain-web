@@ -1,12 +1,13 @@
 'use client';
 
+import { useAppearSfx } from '@/app/(displays)/basecamp/_hooks/use-appear-sfx';
 import type { BasecampData } from '@/lib/internal/types';
 
 type Props = {
   readonly data: BasecampData['problem2'];
 };
 
-// Animation timing constants
+// Animation timing constants (single source of truth for CSS + SFX)
 const BLOCK_DELAYS_MS = [3900, 5400, 6900] as const;
 const WORD_STAGGER_MS = 100 as const;
 const LAST_BLOCK_OFFSET_PX = -50 as const;
@@ -14,6 +15,9 @@ const LAST_BLOCK_OFFSET_PX = -50 as const;
 // 3 locks of text. First shows up in left, second in center, third in right
 
 const Problem3 = ({ data }: Props) => {
+  // Play appear SFX at same timing as CSS animations
+  useAppearSfx(BLOCK_DELAYS_MS);
+
   return (
     <div className="absolute inset-0 flex">
       {data.map((item, index) => {
