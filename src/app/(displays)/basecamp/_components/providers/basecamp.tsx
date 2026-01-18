@@ -21,6 +21,7 @@ import {
   type Locale,
 } from '@/lib/internal/types';
 import { parseBasecampBeatId } from '@/lib/internal/utils/parse-beat-id';
+import { mqttCommands } from '@/lib/mqtt/constants';
 import { useExhibitSetVolume } from '@/lib/mqtt/utils/use-exhibit-set-volume';
 import type { ExhibitMqttStateBase } from '@/lib/mqtt/types';
 
@@ -234,15 +235,15 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     };
 
     // Subscribe to broadcast commands (all exhibits listen to same topics)
-    client.subscribeToTopic('cmd/dev/all/load-tour', handleLoadTour);
-    client.subscribeToTopic('cmd/dev/all/end-tour', handleEndTour);
+    client.subscribeToTopic(mqttCommands.broadcast.loadTour, handleLoadTour);
+    client.subscribeToTopic(mqttCommands.broadcast.endTour, handleEndTour);
     // Subscribe to basecamp-specific commands (direct from Docent)
-    client.subscribeToTopic('cmd/dev/basecamp/goto-beat', handleGotoBeat);
+    client.subscribeToTopic(mqttCommands.basecamp.gotoBeat, handleGotoBeat);
 
     return () => {
-      client.unsubscribeFromTopic('cmd/dev/all/load-tour', handleLoadTour);
-      client.unsubscribeFromTopic('cmd/dev/all/end-tour', handleEndTour);
-      client.unsubscribeFromTopic('cmd/dev/basecamp/goto-beat', handleGotoBeat);
+      client.unsubscribeFromTopic(mqttCommands.broadcast.loadTour, handleLoadTour);
+      client.unsubscribeFromTopic(mqttCommands.broadcast.endTour, handleEndTour);
+      client.unsubscribeFromTopic(mqttCommands.basecamp.gotoBeat, handleGotoBeat);
     };
   }, [audio, client]);
 
