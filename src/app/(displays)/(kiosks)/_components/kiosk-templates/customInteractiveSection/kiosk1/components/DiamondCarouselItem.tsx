@@ -23,7 +23,7 @@ const LAYOUT = {
 const DIAMOND_ANIMATION = {
   CENTER: { delay: 0.3, startY: -120 },
   DURATION: 0.8,
-  EASE: [0.3, 0, 0.4, 1] as const,
+  EASE: [0.3, 0, 0.6, 1] as const,
   MIDDLE: { delay: 0.15, startY: -350 },
   OUTER: { delay: 0, startY: -550 },
 } as const;
@@ -33,7 +33,7 @@ const DIAMOND_ANIMATION = {
  */
 const DIAMOND_TRANSITION = {
   DURATION: 0.5,
-  EASE: [0.3, 0, 0.4, 1] as const,
+  EASE: [0.3, 0, 0.6, 1] as const,
 } as const;
 
 /**

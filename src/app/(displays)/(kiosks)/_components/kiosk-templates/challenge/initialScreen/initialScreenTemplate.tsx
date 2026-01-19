@@ -222,7 +222,7 @@ const InitialScreenTemplate = memo(
           >
             <button
               aria-label={buttonText}
-              className="group flex h-[200px] items-center justify-center gap-[60px] rounded-[999px] bg-[#ededed] px-[100px] py-[70px] text-left backdrop-blur-[19px] transition-all duration-300 ease-out group-data-[kiosk=kiosk-2]/kiosk:px-[110px] hover:scale-[1.05] active:scale-[0.98] active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+              className="group flex h-[200px] items-center justify-center gap-[60px] rounded-[999px] bg-[#ededed] px-[100px] py-[70px] text-left backdrop-blur-[19px] transition-all duration-300 ease-[cubic-bezier(0.3,0,0.6,1)] group-data-[kiosk=kiosk-2]/kiosk:px-[110px] hover:scale-[1.05] active:scale-[0.98] active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
               data-name="button_default"
               onClick={handleButtonClick}
             >

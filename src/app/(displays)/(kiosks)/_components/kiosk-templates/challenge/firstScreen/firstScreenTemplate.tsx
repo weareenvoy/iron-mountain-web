@@ -83,7 +83,7 @@ const FirstScreenTemplate = memo(
         <div ref={animationTriggerRef}>
           <motion.div
             animate={shouldAnimate ? { opacity: 1, y: 0 } : undefined}
-            className="relative top-[-260px] z-[2] flex items-center gap-[41px] px-[128px] pb-[200px] will-change-[transform,opacity] group-data-[kiosk=kiosk-2]/kiosk:top-[-260px] group-data-[kiosk=kiosk-2]/kiosk:left-[10px] group-data-[kiosk=kiosk-3]/kiosk:top-[-320px] group-data-[kiosk=kiosk-3]/kiosk:left-[10px]"
+            className="relative top-[-260px] z-[0] flex items-center gap-[41px] px-[128px] pb-[200px] will-change-[transform,opacity] group-data-[kiosk=kiosk-2]/kiosk:top-[-260px] group-data-[kiosk=kiosk-2]/kiosk:left-[10px] group-data-[kiosk=kiosk-3]/kiosk:top-[-320px] group-data-[kiosk=kiosk-3]/kiosk:left-[10px]"
             data-section-label="challenge"
             initial={{ opacity: 0, y: TITLE_ANIMATION_TRANSFORMS.CHALLENGE_LABEL }}
             ref={labelRef}

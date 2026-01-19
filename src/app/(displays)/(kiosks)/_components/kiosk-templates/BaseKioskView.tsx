@@ -161,7 +161,7 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
               right: arrowConfig.positionRight,
               top: arrowConfig.positionTop,
             }}
-            transition={{ duration: arrowConfig.fadeDuration, ease: 'easeOut' }}
+            transition={{ duration: arrowConfig.fadeDuration, ease: [0.3, 0, 0.6, 1] }}
           >
             <div
               aria-label="Previous"

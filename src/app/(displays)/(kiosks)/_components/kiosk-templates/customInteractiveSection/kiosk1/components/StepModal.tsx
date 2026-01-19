@@ -19,7 +19,7 @@ export type ModalContent = {
  */
 const MODAL_ANIMATION = {
   DURATION: 0.6,
-  EASE: [0.3, 0, 0.4, 1] as const, // 30 out 60 in easing
+  EASE: [0.3, 0, 0.6, 1] as const, // 30 out 60 in easing
   START_Y: 4000, // Slides up from far below
 } as const;
 

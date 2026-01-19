@@ -42,7 +42,7 @@ const LAYOUT = {
  */
 const DIAMOND_TRANSITION = {
   DURATION: 0.5,
-  EASE: [0.3, 0, 0.4, 1] as const,
+  EASE: [0.3, 0, 0.6, 1] as const,
 } as const;
 
 /**
@@ -202,7 +202,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                   opacity: relativePos >= -2 && relativePos <= 2 ? 1 : 0,
                   pointerEvents: relativePos >= -2 && relativePos <= 2 ? 'auto' : 'none',
                   transform: `translateX(calc(-50% + ${getOffset()}px))`,
-                  transition: 'transform 0.5s ease-out, opacity 0.5s ease-out',
+                  transition: 'transform 0.5s cubic-bezier(0.3, 0, 0.6, 1), opacity 0.5s cubic-bezier(0.3, 0, 0.6, 1)',
                   zIndex: isActive ? 10 : isMiddle ? 5 : 1,
                 }}
               >
