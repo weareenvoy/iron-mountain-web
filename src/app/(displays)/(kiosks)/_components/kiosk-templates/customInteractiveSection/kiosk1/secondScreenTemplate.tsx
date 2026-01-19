@@ -36,6 +36,8 @@ export type CustomInteractiveKiosk1SecondScreenTemplateProps = {
   readonly kioskId?: KioskId;
   /** Callback when back button is pressed */
   readonly onBack?: () => void;
+  /** Callback when demo ends */
+  readonly onEndTour?: () => void;
   /** Callback when secondary CTA is clicked */
   readonly onSecondaryCta?: () => void;
   /** Label for overlay card */
@@ -62,6 +64,7 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
   heroImageAlt,
   heroImageSrc,
   kioskId,
+  onEndTour,
   onSecondaryCta,
   overlayCardLabel,
   overlayEndTourLabel,
@@ -99,7 +102,8 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
 
   const handleEndTour = useCallback(() => {
     setShowOverlay(false);
-  }, []);
+    onEndTour?.();
+  }, [onEndTour]);
 
   const handleModalClose = useCallback(() => {
     setOpenModalIndex(null);

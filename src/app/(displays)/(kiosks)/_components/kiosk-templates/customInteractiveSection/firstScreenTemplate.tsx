@@ -21,6 +21,7 @@ export interface CustomInteractiveKiosk1FirstScreenTemplateProps {
   readonly heroImageAlt?: string;
   readonly heroImageSrc?: string;
   readonly kioskId?: KioskId;
+  readonly onEndTour?: () => void;
   readonly onPrimaryCta?: () => void;
   readonly onSecondaryCta?: () => void;
   readonly overlayCardLabel?: string;
@@ -37,6 +38,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   heroImageAlt,
   heroImageSrc,
   kioskId,
+  onEndTour,
   onPrimaryCta,
   onSecondaryCta,
   overlayCardLabel,
@@ -72,6 +74,11 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
     onPrimaryCta?.();
   };
 
+  const handleDemoEndTour = () => {
+    setShowOverlay(false);
+    onEndTour?.();
+  };
+
   return (
     <div
       className={cn(
@@ -99,7 +106,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
           headline={overlayHeadline}
           heroImageAlt={heroImageAlt}
           heroImageSrc={heroImageSrc}
-          onEndTour={() => setShowOverlay(false)}
+          onEndTour={handleDemoEndTour}
         />
       </div>
 

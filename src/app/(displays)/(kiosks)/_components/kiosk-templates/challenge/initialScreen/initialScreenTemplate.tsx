@@ -65,6 +65,19 @@ const InitialScreenTemplate = memo(
      */
     const isInView = useInView(ref, { amount: 0.3, once: true });
 
+    // Check for skip idle video flag on mount (set when closing demo)
+    useEffect(() => {
+      if (typeof window !== 'undefined') {
+        const shouldSkip = sessionStorage.getItem('skipIdleVideo');
+        if (shouldSkip === 'true' && idleVideoSrc) {
+          sessionStorage.removeItem('skipIdleVideo');
+          // Immediately skip idle video
+          setDismissedIdleVideoSrc(idleVideoSrc);
+          setIdleCompleteVideoSrc(idleVideoSrc);
+        }
+      }
+    }, [idleVideoSrc]);
+
     // Cleanup timeout on unmount
     useEffect(() => {
       return () => {
