@@ -92,6 +92,7 @@ export type CustomInteractiveContent = {
   readonly secondaryCTA?: string;
   readonly tapCarousel?: readonly {
     readonly bullets?: readonly string[];
+    readonly id?: string;
     readonly image?: string;
     readonly title?: string;
     readonly video?: string;

@@ -13,86 +13,64 @@ type DemoConfig = {
   readonly mainCTA?: string;
 };
 
-/**
- * Type-safe accessor for modal properties with runtime validation
- */
-const getModalProperty = (
-  customInteractive: CustomInteractiveContent,
-  property: 'Body' | 'Headline' | 'Image',
-  index: number
-): string | undefined => {
-  const key = `Modal${property}${index + 1}` as keyof CustomInteractiveContent;
-
-  // Check if key exists
-  if (!(key in customInteractive)) {
-    return undefined;
-  }
-
-  const value = customInteractive[key];
-
-  // Validate value is string or undefined
-  if (value !== undefined && typeof value !== 'string') {
-    if (process.env.NODE_ENV === 'development') {
-      console.warn(`Modal${property}${index + 1} is not a string:`, value);
-    }
-    return undefined;
-  }
-
-  return value;
-};
-
 export const mapCustomInteractiveKiosk1 = (
   customInteractive: CustomInteractiveContent,
   ambient: Ambient,
   demo?: DemoConfig
-): CustomInteractiveScreens => ({
-  firstScreen: {
-    demoIframeSrc: demo?.iframeLink,
-    eyebrow: ambient.title,
-    headline: customInteractive.headline,
-    heroImageAlt: '',
-    heroImageSrc: customInteractive.image,
-    overlayCardLabel: demo?.demoText,
-    overlayEndTourLabel: demo?.mainCTA,
-    overlayHeadline: demo?.headline,
-    primaryCtaLabel: customInteractive.mainCTA,
-    secondaryCtaLabel: customInteractive.secondaryCTA,
-  },
-  secondScreen: {
-    backLabel: customInteractive.backCTA,
-    bodyText: customInteractive.body2,
-    demoIframeSrc: demo?.iframeLink,
-    eyebrow: ambient.title,
-    headline: customInteractive.headline2,
-    heroImageAlt: '',
-    heroImageSrc: customInteractive.image,
-    overlayCardLabel: demo?.demoText,
-    overlayEndTourLabel: demo?.mainCTA,
-    overlayHeadline: demo?.headline,
-    secondaryCtaLabel: customInteractive.secondaryCTA,
-    steps: customInteractive.diamondCarouselItems?.map((item, index) => {
-      // Use type-safe accessor with validation
-      const modalBody = getModalProperty(customInteractive, 'Body', index);
-      const modalHeadline = getModalProperty(customInteractive, 'Headline', index);
-      const modalImage = getModalProperty(customInteractive, 'Image', index);
+): CustomInteractiveScreens => {
+  // Map steps - diamondCarouselItems is an array of strings (labels only)
+  // Modal data is stored in root-level properties: ModalHeadline1, ModalBody1, etc.
+  const mappedSteps = customInteractive.diamondCarouselItems?.map((label, index) => {
+    const modalKey = `Modal${index + 1}` as const;
+    const headlineKey = `ModalHeadline${index + 1}` as keyof CustomInteractiveContent;
+    const bodyKey = `ModalBody${index + 1}` as keyof CustomInteractiveContent;
+    const imageKey = `ModalImage${index + 1}` as keyof CustomInteractiveContent;
+    
+    return {
+      label: typeof label === 'string' ? label : '',
+      modal: {
+        body: (customInteractive[bodyKey] as string) ?? '',
+        heading: (customInteractive[headlineKey] as string) ?? '',
+        imageAlt: '',
+        imageSrc: (customInteractive[imageKey] as string) ?? '',
+      },
+    };
+  });
 
-      return {
-        label: item,
-        modal: {
-          body: modalBody ?? '',
-          heading: modalHeadline ?? '',
-          imageAlt: '',
-          imageSrc: modalImage,
-        },
-      };
-    }),
-  },
-  thirdScreen: {
-    cardLabel: demo?.demoText,
-    demoIframeSrc: demo?.iframeLink,
-    endTourLabel: demo?.mainCTA,
-    headline: demo?.headline,
-    heroImageAlt: '',
-    heroImageSrc: customInteractive.image,
-  },
-});
+  return {
+    firstScreen: {
+      demoIframeSrc: demo?.iframeLink,
+      eyebrow: ambient.title,
+      headline: customInteractive.headline,
+      heroImageAlt: '',
+      heroImageSrc: customInteractive.image,
+      overlayCardLabel: demo?.demoText,
+      overlayEndTourLabel: demo?.mainCTA,
+      overlayHeadline: demo?.headline,
+      primaryCtaLabel: customInteractive.mainCTA,
+      secondaryCtaLabel: customInteractive.secondaryCTA,
+    },
+    secondScreen: {
+      backLabel: customInteractive.backCTA,
+      bodyText: customInteractive.body2,
+      demoIframeSrc: demo?.iframeLink,
+      eyebrow: ambient.title,
+      headline: customInteractive.headline2,
+      heroImageAlt: '',
+      heroImageSrc: customInteractive.image,
+      overlayCardLabel: demo?.demoText,
+      overlayEndTourLabel: demo?.mainCTA,
+      overlayHeadline: demo?.headline,
+      secondaryCtaLabel: customInteractive.secondaryCTA,
+      steps: mappedSteps,
+    },
+    thirdScreen: {
+      cardLabel: demo?.demoText,
+      demoIframeSrc: demo?.iframeLink,
+      endTourLabel: demo?.mainCTA,
+      headline: demo?.headline,
+      heroImageAlt: '',
+      heroImageSrc: customInteractive.image,
+    },
+  };
+};
