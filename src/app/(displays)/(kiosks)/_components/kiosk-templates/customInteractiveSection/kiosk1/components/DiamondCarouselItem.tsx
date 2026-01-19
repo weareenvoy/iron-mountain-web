@@ -94,7 +94,12 @@ const DiamondCarouselItem = ({
 
   return (
     <CarouselItem
-      className={cn('shrink-0 grow-0 basis-[560px] pl-0', isActive && 'z-10')}
+      className={cn(
+        'shrink-0 grow-0 basis-[560px] pl-0',
+        isActive && 'z-10',
+        isOuter && !isActive && 'z-[5]',
+        !isActive && !isOuter && 'z-[1]'
+      )}
       data-slide-index={idx}
       key={`${idx}-${step.label}`}
     >
