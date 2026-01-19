@@ -201,7 +201,7 @@ const CarouselState = memo(
 
         {/* CTA - Only visible when carousel is shown - gradient defined in globals.css for readability and ease of future updates */}
         <button
-          className="group bg-gradient-kiosk-magenta absolute top-[2630px] left-[240px] z-11 flex h-[200px] items-center gap-[18px] rounded-[999px] px-[110px] text-[55px] leading-[1.1] font-semibold tracking-[2px] text-white active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+          className="group bg-gradient-kiosk-solution absolute top-[2630px] left-[240px] z-11 flex h-[200px] items-center gap-[18px] rounded-[999px] px-[110px] text-[55px] leading-[1.1] font-semibold tracking-[2px] text-white active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
           onClick={onShowOverlay}
           type="button"
         >

@@ -83,7 +83,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       ref={sectionRef}
     >
       {/* Background gradient - defined in globals.css for readability and ease of future updates */}
-      <div className="bg-gradient-kiosk-blue pointer-events-none absolute inset-0 group-data-[kiosk=kiosk-1]/kiosk:h-[10530px] group-data-[kiosk=kiosk-2]/kiosk:h-[10390px] group-data-[kiosk=kiosk-3]/kiosk:h-[10430px]" />
+      <div className="bg-gradient-kiosk-custom-interactive pointer-events-none absolute inset-0 group-data-[kiosk=kiosk-1]/kiosk:h-[10530px] group-data-[kiosk=kiosk-2]/kiosk:h-[10390px] group-data-[kiosk=kiosk-3]/kiosk:h-[10430px]" />
 
       {/* Overlay - Demo Screen */}
       <div
@@ -162,7 +162,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
         </button>
         {/* CTA button gradient - defined in globals.css for readability and ease of future updates */}
         <button
-          className="group bg-gradient-kiosk-magenta flex h-[200px] items-center justify-between rounded-[999px] px-[30px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white backdrop-blur-[19px] transition-transform duration-150 hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+          className="group bg-gradient-kiosk-solution flex h-[200px] items-center justify-between rounded-[999px] px-[30px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white backdrop-blur-[19px] transition-transform duration-150 hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
           onClick={handleSecondaryClick}
           type="button"
         >

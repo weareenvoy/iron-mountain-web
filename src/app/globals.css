@@ -154,11 +154,15 @@
   }
 
   /* Kiosk background gradients */
-  .bg-gradient-kiosk-blue {
-    background: linear-gradient(170deg, #2481e3 -6.53%, #123e6c 125.02%, #0f355c 92.02%, #091e36 117.7%);
+
+  /* Kiosk background gradients - Custom Interactive section */
+  /* Gradient value changed from Figma value to match Loris' requests. Original caused background color blending issues with Custom Interactive 3 "Tap to Begin" inner ring. */
+  .bg-gradient-kiosk-custom-interactive {
+    background: linear-gradient(170deg, #2481e3 -6.53%, #123e6c 220.02%); 
   }
 
-  .bg-gradient-kiosk-magenta {
+  /* Kiosk background gradients - Solution section */
+  .bg-gradient-kiosk-solution {
     background: linear-gradient(296deg, #a2115e 28.75%, #8a0d71 82.59%);
   }
 
