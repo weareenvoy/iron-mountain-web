@@ -90,6 +90,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
         'group/kiosk relative flex h-screen w-full flex-col',
         isKiosk1 || isKiosk3 ? 'overflow-visible' : 'overflow-hidden'
       )}
+      data-kiosk={kioskId}
       data-scroll-section="customInteractive-first-screen"
       data-section={SECTION_NAMES.CUSTOM_INTERACTIVE}
       ref={sectionRef}
