@@ -203,7 +203,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                   pointerEvents: relativePos >= -2 && relativePos <= 2 ? 'auto' : 'none',
                   transform: `translateX(calc(-50% + ${getOffset()}px))`,
                   transition: 'transform 0.5s cubic-bezier(0.3, 0, 0.6, 1), opacity 0.5s cubic-bezier(0.3, 0, 0.6, 1)',
-                  zIndex: isActive ? 10 : isMiddle ? 5 : 1,
+                  zIndex: isActive ? 10 : isOuter ? 5 : 1,
                 }}
               >
                 <DiamondCarouselItem
