@@ -373,9 +373,9 @@ export interface KioskAudio {
 }
 
 export interface KioskData {
-  readonly audio?: KioskAudio;
   // Kiosk 2/3 flat structure
   readonly ambient?: unknown;
+  readonly audio?: KioskAudio;
   readonly challenge?: unknown;
   readonly challenges?: unknown;
   // Kiosk 1 nested structure
@@ -388,7 +388,7 @@ export interface KioskData {
     readonly value?: unknown;
   };
   readonly locale?: string;
-  // Allow any other properties
+  // Allow any other properties - must come last per perfectionist/sort-interfaces
   readonly [key: string]: unknown;
   readonly solutions?: unknown;
   readonly value?: unknown;

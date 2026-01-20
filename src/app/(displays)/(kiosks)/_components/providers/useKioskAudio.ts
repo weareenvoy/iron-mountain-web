@@ -44,10 +44,6 @@ export const useKioskAudio = (): KioskAudioUrls => {
   return useMemo<KioskAudioUrls>(() => {
     const audio: KioskAudio | undefined = data?.audio;
 
-    // Debug logging
-    console.log('[useKioskAudio] Data:', data);
-    console.log('[useKioskAudio] Audio field:', audio);
-
     // Log warning if audio data is missing
     if (!audio) {
       console.warn('[useKioskAudio] Audio data not available in kiosk data. Audio will not play until data is loaded.');
@@ -55,7 +51,7 @@ export const useKioskAudio = (): KioskAudioUrls => {
     }
 
     // Return URLs from data or empty strings as fallback
-    const result = {
+    return {
       music: {
         ambient: audio?.ambient ?? '',
         challenge: audio?.challenge ?? '',
@@ -70,9 +66,5 @@ export const useKioskAudio = (): KioskAudioUrls => {
         open: audio?.open ?? '',
       },
     };
-
-    console.log('[useKioskAudio] Returning audio URLs:', result);
-    return result;
-  }, [data?.audio]);
+  }, [data]);
 };
-

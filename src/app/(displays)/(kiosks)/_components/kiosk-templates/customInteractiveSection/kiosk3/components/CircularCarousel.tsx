@@ -112,7 +112,7 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
       setIsExiting(false);
       setIsTransitioning(false);
     }, ANIMATION_DURATION_MS.CAROUSEL);
-  }, [isTransitioning, playSfx, slides.length]);
+  }, [isTransitioning, playSfx, sfx.back, slides.length]);
 
   // Enforce 6-slide contract - UI is designed for exactly 6 dots in specific positions
   // NOTE: Positions are hardcoded for 6-slide circular layout.
