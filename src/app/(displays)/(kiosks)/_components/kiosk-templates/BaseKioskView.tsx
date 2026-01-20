@@ -117,8 +117,13 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
     let musicUrl: null | string = null;
     let sectionName = '';
 
+    // Check if idle video is complete before playing music
+    const initialScreenElement = containerRef.current?.querySelector('[data-scroll-section="cover-ambient-initial"]');
+    const idleComplete = initialScreenElement?.getAttribute('data-idle-complete') === 'true';
+
     console.info('[Audio Debug] Current state:', {
       currentScrollTarget,
+      idleComplete,
       isCustomInteractiveSection,
       isInitialScreen,
       isValueSection,
@@ -126,9 +131,11 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
 
     // Prioritize actual scroll target over boolean flags to ensure music changes as you scroll
     if (!currentScrollTarget || currentScrollTarget === 'cover-ambient-initial') {
-      // Only play initial music if we're actually on the initial screen or no target yet
-      musicUrl = music.ambient;
-      sectionName = 'Initial';
+      // Only play initial music if we're on the initial screen AND idle video is complete
+      if (idleComplete) {
+        musicUrl = music.ambient;
+        sectionName = 'Initial';
+      }
     } else if (currentScrollTarget.startsWith('customInteractive')) {
       // Custom Interactive sections
       musicUrl = music.customInteractive;
