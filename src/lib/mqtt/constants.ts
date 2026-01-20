@@ -31,6 +31,14 @@ export const MQTT_BASE_OPTIONS: Readonly<Omit<IClientOptions, 'clientId' | 'will
 } as const;
 
 export const mqttCommands = {
+  basecamp: {
+    gotoBeat: 'cmd/dev/basecamp/goto-beat',
+  },
+  broadcast: {
+    endTour: 'cmd/dev/all/end-tour',
+    goIdle: 'cmd/dev/all/go-idle',
+    loadTour: 'cmd/dev/all/load-tour',
+  },
   docent: {
     endTour: 'cmd/dev/all/end-tour',
     loadTour: 'cmd/dev/gec/load-tour',
