@@ -3,7 +3,7 @@
     "locale": "en",
     "data": {
       "idle": {
-        "videoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/SP-Ambient-Kiosk.webm"
+        "videoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/Idle-General.webm"
       },
 
       "ambient": {

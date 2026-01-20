@@ -60,7 +60,7 @@ const SolutionFirstScreenTemplate = ({
       </div>
 
       {/* Gradient body */}
-      <div className="absolute top-[1058px] left-0 z-[1] h-[14575px] w-full rounded-[100px] bg-gradient-kiosk-solution group-data-[kiosk=kiosk-2]/kiosk:h-[14515px] group-data-[kiosk=kiosk-2]/kiosk:top-[1110px] group-data-[kiosk=kiosk-3]/kiosk:top-[1060px]" />
+      <div className="bg-gradient-kiosk-solution absolute top-[1058px] left-0 z-[1] h-[14575px] w-full rounded-[100px] group-data-[kiosk=kiosk-2]/kiosk:top-[1110px] group-data-[kiosk=kiosk-2]/kiosk:h-[14515px] group-data-[kiosk=kiosk-3]/kiosk:top-[1060px]" />
 
       {/* Subheadline - Initial Position */}
       <motion.h2

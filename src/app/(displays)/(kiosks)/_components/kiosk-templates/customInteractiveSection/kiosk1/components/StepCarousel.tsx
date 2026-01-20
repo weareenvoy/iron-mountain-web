@@ -170,34 +170,40 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
           {steps.map((step, idx) => {
             // Calculate circular position relative to selected index
             let relativePos = idx - selectedIndex;
-            
+
             // Wrap around: normalize to range -2 to +2
             if (relativePos > 2) relativePos -= totalSlides;
             if (relativePos < -2) relativePos += totalSlides;
-            
+
             const isActive = relativePos === 0;
             const isLeftEdge = relativePos === -2;
             const isRightEdge = relativePos === 2;
             const isMiddle = relativePos === -1 || relativePos === 1;
             const inactiveSize = isLeftEdge || isRightEdge ? LAYOUT.DIAMOND_SIZE_EDGE : LAYOUT.DIAMOND_SIZE_MIDDLE;
             const isOuter = isLeftEdge || isRightEdge;
-            
+
             // Calculate horizontal offset based on position
             const getOffset = () => {
               switch (relativePos) {
-                case -2: return -1000;
-                case -1: return -600;
-                case 0: return 0;
-                case 1: return 600;
-                case 2: return 1000;
-                default: return 0;
+                case -2:
+                  return -1000;
+                case -1:
+                  return -600;
+                case 0:
+                  return 0;
+                case 1:
+                  return 600;
+                case 2:
+                  return 1000;
+                default:
+                  return 0;
               }
             };
 
             return (
               <div
-                key={`${idx}-${step.label}`}
                 className="absolute left-1/2"
+                key={`${idx}-${step.label}`}
                 style={{
                   opacity: relativePos >= -2 && relativePos <= 2 ? 1 : 0,
                   pointerEvents: relativePos >= -2 && relativePos <= 2 ? 'auto' : 'none',

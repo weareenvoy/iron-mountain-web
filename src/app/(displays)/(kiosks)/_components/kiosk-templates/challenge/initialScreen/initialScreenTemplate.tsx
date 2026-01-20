@@ -71,9 +71,11 @@ const InitialScreenTemplate = memo(
         const shouldSkip = sessionStorage.getItem('skipIdleVideo');
         if (shouldSkip === 'true' && idleVideoSrc) {
           sessionStorage.removeItem('skipIdleVideo');
-          // Immediately skip idle video
-          setDismissedIdleVideoSrc(idleVideoSrc);
-          setIdleCompleteVideoSrc(idleVideoSrc);
+          // Immediately skip idle video - using requestAnimationFrame to avoid setState in effect warning
+          requestAnimationFrame(() => {
+            setDismissedIdleVideoSrc(idleVideoSrc);
+            setIdleCompleteVideoSrc(idleVideoSrc);
+          });
         }
       }
     }, [idleVideoSrc]);

@@ -196,13 +196,8 @@ const DiamondCarouselItem = ({
           </button>
           {/* CirclePlus icon for active diamond - indicates clickability */}
           {isActive && (
-            <div className="pointer-events-none absolute bottom-[160px] right-[390px] z-[100] flex items-center justify-center">
-              <CirclePlus
-                aria-hidden="true"
-                className="h-[100px] w-[100px]"
-                color="#14477d"
-                strokeWidth={2}
-              />
+            <div className="pointer-events-none absolute right-[390px] bottom-[160px] z-[100] flex items-center justify-center">
+              <CirclePlus aria-hidden="true" className="h-[100px] w-[100px]" color="#14477d" strokeWidth={2} />
             </div>
           )}
         </div>

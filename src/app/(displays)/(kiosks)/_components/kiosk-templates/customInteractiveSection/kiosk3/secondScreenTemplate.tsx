@@ -26,8 +26,6 @@ export type Kiosk3SecondScreenProps = {
   readonly demoIframeSrc?: string;
   /** Description text shown in initial state */
   readonly description?: string;
-  /** Callback when demo is closed */
-  readonly onEndTour?: () => void;
   /** Eyebrow text */
   readonly eyebrow?: string;
   /** Main headline */
@@ -36,6 +34,8 @@ export type Kiosk3SecondScreenProps = {
   readonly launchDemoLabel?: string;
   /** Callback when back button is clicked */
   readonly onBack?: () => void;
+  /** Callback when demo is closed */
+  readonly onEndTour?: () => void;
   /** Demo overlay configuration */
   readonly overlay?: {
     readonly cardLabel?: string;

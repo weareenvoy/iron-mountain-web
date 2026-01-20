@@ -21,18 +21,17 @@ export const mapCustomInteractiveKiosk1 = (
   // Map steps - diamondCarouselItems is an array of strings (labels only)
   // Modal data is stored in root-level properties: ModalHeadline1, ModalBody1, etc.
   const mappedSteps = customInteractive.diamondCarouselItems?.map((label, index) => {
-    const modalKey = `Modal${index + 1}` as const;
     const headlineKey = `ModalHeadline${index + 1}` as keyof CustomInteractiveContent;
     const bodyKey = `ModalBody${index + 1}` as keyof CustomInteractiveContent;
     const imageKey = `ModalImage${index + 1}` as keyof CustomInteractiveContent;
-    
+
     return {
       label: typeof label === 'string' ? label : '',
       modal: {
-        body: (customInteractive[bodyKey] as string) ?? '',
-        heading: (customInteractive[headlineKey] as string) ?? '',
+        body: (customInteractive[bodyKey] as string) || '',
+        heading: (customInteractive[headlineKey] as string) || '',
         imageAlt: '',
-        imageSrc: (customInteractive[imageKey] as string) ?? '',
+        imageSrc: (customInteractive[imageKey] as string) || '',
       },
     };
   });
