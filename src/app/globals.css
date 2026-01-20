@@ -162,6 +162,11 @@
     background: linear-gradient(296deg, #a2115e 28.75%, #8a0d71 82.59%);
   }
 
+  /* Kiosk background gradients - Solution section */
+  .bg-gradient-kiosk-solution {
+    background: linear-gradient(180deg, #a2115e 0.02%, #8a0d71 99.01%);
+  }
+
   /* Kiosk section background gradient - Challenge section */
   .bg-gradient-challenge-section {
     background: linear-gradient(180deg, #1b75bc 0.01%, #14477d 98%);
