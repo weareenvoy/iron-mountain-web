@@ -113,7 +113,7 @@ const isValueContent = (value: unknown): value is ValueContent => {
 export type ParsedKioskData = {
   readonly ambient?: Ambient;
   readonly challengeMain?: ChallengeContent;
-  readonly customInteractive1Main?: CustomInteractiveContent;
+  readonly customInteractive1?: CustomInteractiveContent;
   readonly customInteractive2?: CustomInteractiveContent;
   readonly customInteractive3?: CustomInteractiveContent;
   readonly demoMain?: DemoConfig;
@@ -168,11 +168,11 @@ export const parseKioskData = (kioskData: null | Record<string, unknown> | undef
       return validated;
     });
 
-    const customInteractive1Main = getOptionalProperty(obj, 'customInteractive1Main', val => {
-      const validated = validateObject(val, 'customInteractive1Main', c => c);
+    const customInteractive1 = getOptionalProperty(obj, 'customInteractive1', val => {
+      const validated = validateObject(val, 'customInteractive1', c => c);
       if (!isCustomInteractiveContent(validated)) {
         if (process.env.NODE_ENV === 'development') {
-          console.warn('[parseKioskData] customInteractive1Main object has invalid shape:', validated);
+          console.warn('[parseKioskData] customInteractive1 object has invalid shape:', validated);
         }
         return undefined;
       }
@@ -259,7 +259,7 @@ export const parseKioskData = (kioskData: null | Record<string, unknown> | undef
     return {
       ambient,
       challengeMain,
-      customInteractive1Main,
+      customInteractive1,
       customInteractive2,
       customInteractive3,
       demoMain,

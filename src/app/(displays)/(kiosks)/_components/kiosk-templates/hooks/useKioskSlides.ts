@@ -123,7 +123,7 @@ export const useKioskSlides = ({
 
     const customInteractiveKey =
       kioskId === 'kiosk-1'
-        ? 'customInteractive1Main'
+        ? 'customInteractive1'
         : kioskId === 'kiosk-2'
           ? 'customInteractive2'
           : 'customInteractive3';
