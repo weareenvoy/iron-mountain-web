@@ -2,10 +2,6 @@
   {
     "locale": "en",
     "data": {
-      "idle": {
-        "videoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/Idle-General.webm"
-      },
-
       "ambient": {
       "backgroundImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/Cover.webp",
       "body": "\"It's been a pleasure working with Iron Mountain. We feel very confident that the GRAMMY Museum's physical artifacts and digital content is safely protected. Smart Vault also provides significant reassurance that our iconic artist performances and interviews will remain preserved and accessible which is a huge benefit to the GRAMMY Museum.\"",
@@ -15,6 +11,10 @@
       "subheader": "It's been a pleasure working with...",
       "title": "Rich media & \ncultural heritage"
     },
+
+      "idle": {
+        "videoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/Idle-General.webm"
+      },
 
     "challengeMain": {
       "body": "The Museum needed a secure, off-site, cloud-accessible, and easily managed solution to protect its one-of-a-kind, irreplaceable footage. Storing the only master copy locally presented a high risk of losing all assets in the event of a data failure or system crash.",

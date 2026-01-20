@@ -2,10 +2,6 @@
   {
     "locale": "en",
     "data": {
-      "idle": {
-        "videoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/Idle-General.webm"
-      },
-
       "ambient": {
       "backgroundImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/Cover.webp",
       "body": "A global healthcare company optimizes IT asset management, improves transparency, and boosts remarketing returns by partnering with Iron Mountain Asset Lifecycle Management.",
@@ -14,6 +10,10 @@
       "quoteSource": "",
       "title": "IT assets &\n data centers"
     },
+
+      "idle": {
+        "videoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/Idle-General.webm"
+      },
 
     "challengeMain": {
       "body": "When seeking a new partner to help manage their extensive IT hardware fleet of assets, the customer's primary pain points were logistical costs and a lack of granularity in reporting, reducing overall transparency.",

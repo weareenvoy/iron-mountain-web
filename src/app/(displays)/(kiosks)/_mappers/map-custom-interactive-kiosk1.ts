@@ -6,6 +6,12 @@ import type { Ambient, CustomInteractiveContent } from '../_types/content-types'
  * Extracts carousel labels and modal content from diamondCarouselItems array.
  */
 
+/**
+ * Expected carousel item count for Kiosk 1
+ * UI diamond carousel is designed for exactly 5 steps
+ */
+const EXPECTED_CAROUSEL_ITEM_COUNT = 5;
+
 type DemoConfig = {
   readonly demoText?: string;
   readonly headline?: string;
@@ -18,6 +24,22 @@ export const mapCustomInteractiveKiosk1 = (
   ambient: Ambient,
   demo?: DemoConfig
 ): CustomInteractiveScreens => {
+  // Validate carousel item count upfront (fail fast before rendering)
+  const itemCount = customInteractive.diamondCarouselItems?.length ?? 0;
+  if (itemCount !== EXPECTED_CAROUSEL_ITEM_COUNT) {
+    const error = new Error(
+      `[mapCustomInteractiveKiosk1] Invalid carousel item count: expected ${EXPECTED_CAROUSEL_ITEM_COUNT}, got ${itemCount}. ` +
+        `Kiosk 1 diamond carousel UI requires exactly ${EXPECTED_CAROUSEL_ITEM_COUNT} items. ` +
+        'Fix CMS data or update StepCarousel component to support dynamic item counts.'
+    );
+    console.error(error.message, {
+      ambient: ambient.title,
+      expected: EXPECTED_CAROUSEL_ITEM_COUNT,
+      received: itemCount,
+    });
+    throw error;
+  }
+
   // Map steps - diamondCarouselItems is an array of objects containing label and modal data
   const mappedSteps = customInteractive.diamondCarouselItems?.map(item => {
     return {
