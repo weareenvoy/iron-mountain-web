@@ -90,3 +90,10 @@ export type CustomInteractiveContent = {
   readonly tapCTA?: string;
   readonly video?: string;
 };
+
+export type DemoConfig = {
+  readonly demoText?: string;
+  readonly headline?: string;
+  readonly iframeLink?: string;
+  readonly mainCTA?: string;
+};

@@ -33,6 +33,4 @@ const CarouselCTA = memo(({ label, onClick }: CarouselCTAProps) => {
   );
 });
 
-CarouselCTA.displayName = 'CarouselCTA';
-
 export default CarouselCTA;

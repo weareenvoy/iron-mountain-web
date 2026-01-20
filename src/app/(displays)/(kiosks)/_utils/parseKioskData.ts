@@ -3,22 +3,13 @@ import type {
   Ambient,
   ChallengeContent,
   CustomInteractiveContent,
+  DemoConfig,
   IdleContent,
   SolutionsAccordion,
   SolutionsGrid,
   SolutionsMain,
   ValueContent,
 } from '@/app/(displays)/(kiosks)/_types/content-types';
-
-/**
- * Demo configuration type
- */
-type DemoConfig = {
-  readonly demoText?: string;
-  readonly headline?: string;
-  readonly iframeLink?: string;
-  readonly mainCTA?: string;
-};
 
 /**
  * Type guard for Ambient - validates required properties exist and have correct types
@@ -46,19 +37,32 @@ const isIdleContent = (value: unknown): value is IdleContent => {
 };
 
 /**
- * Type guard for ChallengeContent
+ * Type guard for ChallengeContent - validates critical properties
  */
 const isChallengeContent = (value: unknown): value is ChallengeContent => {
   if (typeof value !== 'object' || value === null) return false;
-  return true; // Basic check - add more specific validation if needed
+  const obj = value as Record<string, unknown>;
+  // Validate at least one of the expected properties exists with correct type
+  return (
+    (obj.body === undefined || typeof obj.body === 'string') &&
+    (obj.labelText === undefined || typeof obj.labelText === 'string') &&
+    (obj.mainVideo === undefined || typeof obj.mainVideo === 'string')
+  );
 };
 
 /**
- * Type guard for CustomInteractiveContent
+ * Type guard for CustomInteractiveContent - validates structure
  */
 const isCustomInteractiveContent = (value: unknown): value is CustomInteractiveContent => {
   if (typeof value !== 'object' || value === null) return false;
-  return true; // Basic check - add more specific validation if needed
+  const obj = value as Record<string, unknown>;
+  return (
+    (obj.headline === undefined || typeof obj.headline === 'string') &&
+    (obj.mainCTA === undefined || typeof obj.mainCTA === 'string') &&
+    (obj.secondaryCTA === undefined || typeof obj.secondaryCTA === 'string') &&
+    (obj.diamondCarouselItems === undefined || Array.isArray(obj.diamondCarouselItems)) &&
+    (obj.tapCarousel === undefined || Array.isArray(obj.tapCarousel))
+  );
 };
 
 /**
@@ -76,35 +80,58 @@ const isDemoConfig = (value: unknown): value is DemoConfig => {
 };
 
 /**
- * Type guard for SolutionsAccordion
+ * Type guard for SolutionsAccordion - validates structure
  */
 const isSolutionsAccordion = (value: unknown): value is SolutionsAccordion => {
   if (typeof value !== 'object' || value === null) return false;
-  return true; // Basic check
+  const obj = value as Record<string, unknown>;
+  return (
+    (obj.accordion === undefined || Array.isArray(obj.accordion)) &&
+    (obj.headline === undefined || typeof obj.headline === 'string')
+  );
 };
 
 /**
- * Type guard for SolutionsGrid
+ * Type guard for SolutionsGrid - validates structure
  */
 const isSolutionsGrid = (value: unknown): value is SolutionsGrid => {
   if (typeof value !== 'object' || value === null) return false;
-  return true; // Basic check
+  const obj = value as Record<string, unknown>;
+  return (
+    (obj.diamondList === undefined || Array.isArray(obj.diamondList)) &&
+    (obj.headline === undefined || typeof obj.headline === 'string') &&
+    (obj.images === undefined || Array.isArray(obj.images))
+  );
 };
 
 /**
- * Type guard for SolutionsMain
+ * Type guard for SolutionsMain - validates structure
  */
 const isSolutionsMain = (value: unknown): value is SolutionsMain => {
   if (typeof value !== 'object' || value === null) return false;
-  return true; // Basic check
+  const obj = value as Record<string, unknown>;
+  return (
+    (obj.body === undefined || typeof obj.body === 'string') &&
+    (obj.headline === undefined || typeof obj.headline === 'string') &&
+    (obj.labelText === undefined || typeof obj.labelText === 'string') &&
+    (obj.mainVideo === undefined || typeof obj.mainVideo === 'string') &&
+    (obj.numberedList === undefined || Array.isArray(obj.numberedList))
+  );
 };
 
 /**
- * Type guard for ValueContent
+ * Type guard for ValueContent - validates structure
  */
 const isValueContent = (value: unknown): value is ValueContent => {
   if (typeof value !== 'object' || value === null) return false;
-  return true; // Basic check
+  const obj = value as Record<string, unknown>;
+  return (
+    (obj.body === undefined || typeof obj.body === 'string') &&
+    (obj.headline === undefined || typeof obj.headline === 'string') &&
+    (obj.labelText === undefined || typeof obj.labelText === 'string') &&
+    (obj.mainVideo === undefined || typeof obj.mainVideo === 'string') &&
+    (obj.diamondBenefits === undefined || Array.isArray(obj.diamondBenefits))
+  );
 };
 
 /**
@@ -113,7 +140,7 @@ const isValueContent = (value: unknown): value is ValueContent => {
 export type ParsedKioskData = {
   readonly ambient?: Ambient;
   readonly challengeMain?: ChallengeContent;
-  readonly customInteractive1Main?: CustomInteractiveContent;
+  readonly customInteractive1?: CustomInteractiveContent;
   readonly customInteractive2?: CustomInteractiveContent;
   readonly customInteractive3?: CustomInteractiveContent;
   readonly demoMain?: DemoConfig;
@@ -168,11 +195,11 @@ export const parseKioskData = (kioskData: null | Record<string, unknown> | undef
       return validated;
     });
 
-    const customInteractive1Main = getOptionalProperty(obj, 'customInteractive1Main', val => {
-      const validated = validateObject(val, 'customInteractive1Main', c => c);
+    const customInteractive1 = getOptionalProperty(obj, 'customInteractive1', val => {
+      const validated = validateObject(val, 'customInteractive1', c => c);
       if (!isCustomInteractiveContent(validated)) {
         if (process.env.NODE_ENV === 'development') {
-          console.warn('[parseKioskData] customInteractive1Main object has invalid shape:', validated);
+          console.warn('[parseKioskData] customInteractive1 object has invalid shape:', validated);
         }
         return undefined;
       }
@@ -259,7 +286,7 @@ export const parseKioskData = (kioskData: null | Record<string, unknown> | undef
     return {
       ambient,
       challengeMain,
-      customInteractive1Main,
+      customInteractive1,
       customInteractive2,
       customInteractive3,
       demoMain,

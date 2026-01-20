@@ -3,7 +3,7 @@ import {
   type SlideId,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/kiosk3/constants';
 import type { CustomInteractiveScreens } from '../_components/kiosk-templates/customInteractiveSection/customInteractiveSlides';
-import type { Ambient, CustomInteractiveContent } from '../_types/content-types';
+import type { Ambient, CustomInteractiveContent, DemoConfig } from '../_types/content-types';
 
 /**
  * Maps CMS content for Custom Interactive Kiosk 3 to the Kiosk Custom Interactive structure.
@@ -32,13 +32,6 @@ const SLIDE_IDS: readonly SlideId[] = [
  * UI is hardcoded for 6 dots in circular layout
  */
 const EXPECTED_SLIDE_COUNT = 6;
-
-type DemoConfig = {
-  readonly demoText?: string;
-  readonly headline?: string;
-  readonly iframeLink?: string;
-  readonly mainCTA?: string;
-};
 
 export const mapCustomInteractiveKiosk3 = (
   customInteractive: CustomInteractiveContent,

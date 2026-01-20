@@ -1,5 +1,5 @@
 import type { CustomInteractiveScreens } from '../_components/kiosk-templates/customInteractiveSection/customInteractiveSlides';
-import type { Ambient, CustomInteractiveContent } from '../_types/content-types';
+import type { Ambient, CustomInteractiveContent, DemoConfig } from '../_types/content-types';
 
 /**
  * Maps CMS content for Custom Interactive Kiosk 1 to the Kiosk Custom Interactive structure.
@@ -11,13 +11,6 @@ import type { Ambient, CustomInteractiveContent } from '../_types/content-types'
  * UI diamond carousel is designed for exactly 5 steps
  */
 const EXPECTED_CAROUSEL_ITEM_COUNT = 5;
-
-type DemoConfig = {
-  readonly demoText?: string;
-  readonly headline?: string;
-  readonly iframeLink?: string;
-  readonly mainCTA?: string;
-};
 
 export const mapCustomInteractiveKiosk1 = (
   customInteractive: CustomInteractiveContent,
