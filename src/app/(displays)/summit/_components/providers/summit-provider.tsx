@@ -6,6 +6,7 @@ import { getLocaleForTesting } from '@/flags/flags';
 import { getSummitData } from '@/lib/internal/data/get-summit';
 import { getSlideIndexFromBeatId, type Locale, type SummitRoomBeatId } from '@/lib/internal/types';
 import { parseSummitBeatId } from '@/lib/internal/utils/parse-beat-id';
+import { mqttCommands } from '@/lib/mqtt/constants';
 import type { SummitData } from '@/app/(displays)/summit/_types';
 import type { ExhibitMqttStateBase, ExhibitMqttStateSummit } from '@/lib/mqtt/types';
 
@@ -172,14 +173,14 @@ export const SummitProvider = ({ children }: PropsWithChildren) => {
       }
     };
 
-    client.subscribeToTopic('cmd/dev/all/load-tour', handleLoadTour);
-    client.subscribeToTopic('cmd/dev/all/go-idle', handleGoIdle);
-    client.subscribeToTopic('cmd/dev/summit/goto-beat', handleGotoBeat);
+    client.subscribeToTopic(mqttCommands.broadcast.loadTour, handleLoadTour);
+    client.subscribeToTopic(mqttCommands.broadcast.goIdle, handleGoIdle);
+    client.subscribeToTopic(mqttCommands.summit.gotoBeat, handleGotoBeat);
 
     return () => {
-      client.unsubscribeFromTopic('cmd/dev/all/load-tour');
-      client.unsubscribeFromTopic('cmd/dev/all/go-idle');
-      client.unsubscribeFromTopic('cmd/dev/summit/goto-beat');
+      client.unsubscribeFromTopic(mqttCommands.broadcast.loadTour, handleLoadTour);
+      client.unsubscribeFromTopic(mqttCommands.broadcast.goIdle, handleGoIdle);
+      client.unsubscribeFromTopic(mqttCommands.summit.gotoBeat, handleGotoBeat);
     };
   }, [client]);
 
