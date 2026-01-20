@@ -69,26 +69,16 @@ export type CustomInteractiveContent = {
   readonly backCTA?: string;
   readonly body?: string;
   readonly body2?: string;
-  readonly diamondCarouselItems?: readonly string[];
+  readonly diamondCarouselItems?: readonly {
+    readonly id?: string;
+    readonly ModalBody?: string;
+    readonly ModalHeadline?: string;
+    readonly ModalImage?: string;
+  }[];
   readonly headline?: string;
   readonly headline2?: string;
   readonly image?: string;
   readonly mainCTA?: string;
-  readonly ModalBody1?: string;
-  readonly ModalBody2?: string;
-  readonly ModalBody3?: string;
-  readonly ModalBody4?: string;
-  readonly ModalBody5?: string;
-  readonly ModalHeadline1?: string;
-  readonly ModalHeadline2?: string;
-  readonly ModalHeadline3?: string;
-  readonly ModalHeadline4?: string;
-  readonly ModalHeadline5?: string;
-  readonly ModalImage1?: string;
-  readonly ModalImage2?: string;
-  readonly ModalImage3?: string;
-  readonly ModalImage4?: string;
-  readonly ModalImage5?: string;
   readonly secondaryCTA?: string;
   readonly tapCarousel?: readonly {
     readonly bullets?: readonly string[];

@@ -3,7 +3,7 @@ import type { Ambient, CustomInteractiveContent } from '../_types/content-types'
 
 /**
  * Maps CMS content for Custom Interactive Kiosk 1 to the Kiosk Custom Interactive structure.
- * Handles dynamic modal content access using index-based keys (ModalHeadline1, ModalBody1, ModalImage1, etc.)
+ * Extracts carousel labels and modal content from diamondCarouselItems array.
  */
 
 type DemoConfig = {
@@ -18,20 +18,15 @@ export const mapCustomInteractiveKiosk1 = (
   ambient: Ambient,
   demo?: DemoConfig
 ): CustomInteractiveScreens => {
-  // Map steps - diamondCarouselItems is an array of strings (labels only)
-  // Modal data is stored in root-level properties: ModalHeadline1, ModalBody1, etc.
-  const mappedSteps = customInteractive.diamondCarouselItems?.map((label, index) => {
-    const headlineKey = `ModalHeadline${index + 1}` as keyof CustomInteractiveContent;
-    const bodyKey = `ModalBody${index + 1}` as keyof CustomInteractiveContent;
-    const imageKey = `ModalImage${index + 1}` as keyof CustomInteractiveContent;
-
+  // Map steps - diamondCarouselItems is an array of objects containing label and modal data
+  const mappedSteps = customInteractive.diamondCarouselItems?.map(item => {
     return {
-      label: typeof label === 'string' ? label : '',
+      label: item.ModalHeadline || '',
       modal: {
-        body: (customInteractive[bodyKey] as string) || '',
-        heading: (customInteractive[headlineKey] as string) || '',
+        body: item.ModalBody || '',
+        heading: item.ModalHeadline || '',
         imageAlt: '',
-        imageSrc: (customInteractive[imageKey] as string) || '',
+        imageSrc: item.ModalImage || '',
       },
     };
   });
