@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { Diamond } from 'lucide-react';
 import { memo } from 'react';
+import { cn } from '@/lib/tailwind/utils/cn';
 import { getVideoMimeType } from '@/lib/utils/get-video-mime-type';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import { TITLE_ANIMATION_TRANSFORMS } from '../../constants/animations';
@@ -109,7 +110,10 @@ const FirstScreenTemplate = memo(
 
         {/* Sticky Section Header - Fixed Position - gradient defined in globals.css for readability and ease of future updates */}
         <div
-          className={`bg-gradient-sticky-challenge pointer-events-none fixed top-0 left-0 z-[100] h-[1369px] w-full transition-opacity duration-300 motion-reduce:transition-none ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
+          className={cn(
+            'bg-gradient-sticky-challenge pointer-events-none fixed top-0 left-0 z-[100] h-[1369px] w-full transition-opacity duration-300 motion-reduce:transition-none',
+            showStickyHeader ? 'opacity-100' : 'opacity-0'
+          )}
           data-challenge-sticky-header
           data-visible={showStickyHeader}
           ref={stickyHeaderRef}
@@ -140,7 +144,11 @@ const FirstScreenTemplate = memo(
         {/* Sticky Section Footer - Fixed Position (Bottom) */}
         {/* Bottom Fixed Gradient - Rotated 180 degrees for fade effect at bottom - gradient defined in globals.css for readability and ease of future updates */}
         <div
-          className={`bg-gradient-sticky-challenge pointer-events-none fixed left-0 z-[100] h-[1369px] w-full rotate-180 transition-opacity duration-300 motion-reduce:transition-none ${bottomGradientPosition ? 'bottom-[-900px]' : 'bottom-0'} ${showBottomGradient ? 'opacity-100' : 'opacity-0'}`}
+          className={cn(
+            'bg-gradient-sticky-challenge pointer-events-none fixed left-0 z-[100] h-[1369px] w-full rotate-180 transition-opacity duration-300 motion-reduce:transition-none',
+            bottomGradientPosition ? 'bottom-[-900px]' : 'bottom-0',
+            showBottomGradient ? 'opacity-100' : 'opacity-0'
+          )}
           data-challenge-sticky-footer
           data-visible={showBottomGradient}
           ref={bottomGradientRef}

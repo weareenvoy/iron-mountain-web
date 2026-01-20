@@ -7,6 +7,7 @@ import { useMqtt } from '@/components/providers/mqtt-provider';
 import ButtonArrow from '@/components/ui/icons/ButtonArrow';
 import WhiteLogoSimple from '@/components/ui/icons/WhiteLogoSimple';
 import { mqttCommands } from '@/lib/mqtt/constants';
+import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import { TITLE_ANIMATION_TRANSFORMS } from '../../constants/animations';
 import { SCROLL_ANIMATION_CONFIG } from '../../hooks/useScrollAnimation';
@@ -184,7 +185,10 @@ const InitialScreenTemplate = memo(
 
         {/* Sticky Section Header - Fixed Position (Transparent Background) */}
         <div
-          className={`pointer-events-none fixed top-0 left-0 z-[100] w-full transition-opacity duration-300 motion-reduce:transition-none ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
+          className={cn(
+            'pointer-events-none fixed top-0 left-0 z-[100] w-full transition-opacity duration-300 motion-reduce:transition-none',
+            showStickyHeader ? 'opacity-100' : 'opacity-0'
+          )}
           data-initial-sticky-header
           data-visible={showStickyHeader}
           ref={stickyHeaderRef}
