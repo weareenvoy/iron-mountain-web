@@ -46,11 +46,13 @@ export const mapCustomInteractiveKiosk3 = (
         `Kiosk 3 carousel UI requires exactly ${EXPECTED_SLIDE_COUNT} slides. ` +
         'Fix CMS data or update CircularCarousel component to support dynamic slide counts.'
     );
-    console.error(error.message, {
-      ambient: ambient.title,
-      expected: EXPECTED_SLIDE_COUNT,
-      received: slideCount,
-    });
+    if (process.env.NODE_ENV === 'development') {
+      console.error(error.message, {
+        ambient: ambient.title,
+        expected: EXPECTED_SLIDE_COUNT,
+        received: slideCount,
+      });
+    }
     throw error;
   }
 

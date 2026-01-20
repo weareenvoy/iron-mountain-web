@@ -3,24 +3,21 @@
     "locale": "en",
     "data": {
       "ambient": {
-        "backgroundImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/Cover.webp",
-        "body": "A global healthcare company optimizes IT asset management, improves transparency, and boosts remarketing returns by partnering with Iron Mountain Asset Lifecycle Management.",
-        "headline": "",
-        "mainCTA": "Touch to explore",
-        "quoteSource": "",
-        "title": "IT assets &\n data centers"
-      },
-      "challengeMain": {
+      "backgroundImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/Cover.webp",
+      "body": "A global healthcare company optimizes IT asset management, improves transparency, and boosts remarketing returns by partnering with Iron Mountain Asset Lifecycle Management.",
+      "headline": "",
+      "mainCTA": "Touch to explore",
+      "quoteSource": "",
+      "title": "IT assets &\n data centers"
+    },
+    "challengeMain": {
       "body": "When seeking a new partner to help manage their extensive IT hardware fleet of assets, the customer's primary pain points were logistical costs and a lack of granularity in reporting, reducing overall transparency.",
-
       "featuredStat1": "200K+",
       "featuredStat1Body": "assets collected and processed each year, with retrieval and redeployment of more than 50k remote workforce devices annually.",
-
       "featuredStat2": "20+",
       "featuredStat2Body": "data centers requiring expert support for asset refresh and decommissioning projects.",
       "item1Body": "A large bank acquired a competitor, which resulted in redundant and costly data center operations.",
       "item1Image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/01+-+Challenge/Challenge-Image1-Diamond.webp",
-
       "item2Body": "Prior to partnering with Iron Mountain, the enterprise also faced challenges in optimizing remarketing potential across end-user devices and data center assets.",
       "item2Image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/01+-+Challenge/Challenge-Image2-Full.webp",
       "labelText": "Challenge",
@@ -142,7 +139,6 @@
     },
     "valueMain": {
       "body": "Through its collaboration with Iron Mountain, a global healthcare customer improved compliance, visibility, and consistency in IT asset disposition across worldwide locations, while maximizing value recovery from retired end-user devices and data center components.",
-
       "diamondBenefits": [
         {
           "bullets": [

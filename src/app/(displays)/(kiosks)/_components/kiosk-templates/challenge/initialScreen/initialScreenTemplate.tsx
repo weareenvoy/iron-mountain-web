@@ -108,7 +108,9 @@ const InitialScreenTemplate = memo(
           const msg = JSON.parse(message.toString());
           const tourId = msg.body?.['tour-id'];
 
-          console.info(`${kioskId}: Received loadTour command (tour: ${tourId}) - dismissing idle screen`);
+          if (process.env.NODE_ENV === 'development') {
+            console.info(`${kioskId}: Received loadTour command (tour: ${tourId}) - dismissing idle screen`);
+          }
 
           // Dismiss the idle video overlay (all kiosks respond to any tour start)
           setDismissedIdleVideoSrc(idleVideoSrc);
@@ -128,7 +130,9 @@ const InitialScreenTemplate = memo(
             timeoutRef.current = null; // Always clear, not just on success path
           }, IDLE_FADE_OUT_DURATION_MS);
         } catch (error) {
-          console.error(`${kioskId}: Error handling loadTour for idle dismissal:`, error);
+          if (process.env.NODE_ENV === 'development') {
+            console.error(`${kioskId}: Error handling loadTour for idle dismissal:`, error);
+          }
         }
       };
 

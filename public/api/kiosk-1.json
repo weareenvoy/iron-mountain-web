@@ -3,27 +3,24 @@
     "locale": "en",
     "data": {
       "ambient": {
-        "backgroundImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/Cover.webp",
-        "body": "\"It's been a pleasure working with Iron Mountain. We feel very confident that the GRAMMY Museum's physical artifacts and digital content is safely protected. Smart Vault also provides significant reassurance that our iconic artist performances and interviews will remain preserved and accessible which is a huge benefit to the GRAMMY Museum.\"",
-        "headline": "The GRAMMY Museum (R) preserves the soundtrack of history.",
-        "mainCTA": "Touch to explore",
-        "quoteSource": "- Michael Rohrabacher, Technical Director at the GRAMMY Museum",
-        "subheader": "It's been a pleasure working with...",
-        "title": "Rich media & \ncultural heritage"
-      },
-      "challengeMain": {
+      "backgroundImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/Cover.webp",
+      "body": "\"It's been a pleasure working with Iron Mountain. We feel very confident that the GRAMMY Museum's physical artifacts and digital content is safely protected. Smart Vault also provides significant reassurance that our iconic artist performances and interviews will remain preserved and accessible which is a huge benefit to the GRAMMY Museum.\"",
+      "headline": "The GRAMMY Museum (R) preserves the soundtrack of history.",
+      "mainCTA": "Touch to explore",
+      "quoteSource": "- Michael Rohrabacher, Technical Director at the GRAMMY Museum",
+      "subheader": "It's been a pleasure working with...",
+      "title": "Rich media & \ncultural heritage"
+    },
+    "challengeMain": {
       "body": "The Museum needed a secure, off-site, cloud-accessible, and easily managed solution to protect its one-of-a-kind, irreplaceable footage. Storing the only master copy locally presented a high risk of losing all assets in the event of a data failure or system crash.",
       "featuredStat1": "120 TB",
       "featuredStat1Body": "of data is safely stored and accessible for the Museum.",
-
-      "item1Body": "The Museum also needed assistance with physical storage for a collection of historical music artifacts.",
-      "item1Image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/01+-+Challenge/Challenge-Image1-Full.webp",
-
-      "item2Body": "The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.",
-      "item2Image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/01+-+Challenge/Challenge-Image2-Full.webp",
-
       "featuredStat2": "40 TB",
       "featuredStat2Body": "of existing footage of data migration from physical drives into Smart Vault.",
+      "item1Body": "The Museum also needed assistance with physical storage for a collection of historical music artifacts.",
+      "item1Image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/01+-+Challenge/Challenge-Image1-Full.webp",
+      "item2Body": "The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.",
+      "item2Image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/01+-+Challenge/Challenge-Image2-Full.webp",
       "labelText": "Challenge",
       "mainVideo": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/01+-+Challenge/Challenge-Header.webm"
     },
@@ -32,34 +29,34 @@
       "body2": "Explore each section to learn how Iron Mountain can transform your enterprise",
       "diamondCarouselItems": [
         {
-          "id": "1",
           "ModalBody": "Assets, whether film, audio, digital, or physical, are logged, evaluated for condition and risk, and prioritized based on preservation and activation potential.",
           "ModalHeadline": "Intake and assessment",
-          "ModalImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Intake+and+assessment.webp"
+          "ModalImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Intake+and+assessment.webp",
+          "id": "1"
         },
         {
-          "id": "2",
           "ModalBody": "Physical media is digitized to archival standards, with restoration applied as needed and metadata extracted to ensure assets are searchable, playable, and accessible.",
           "ModalHeadline": "Digitization and remediation",
-          "ModalImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Digitization+and+remediation.webp"
+          "ModalImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Digitization+and+remediation.webp",
+          "id": "2"
         },
         {
-          "id": "3",
           "ModalBody": "Iron Mountain's digital preservation platform provides a fully managed digital repository with triple-redundant geo-distributed storage, secure access, and intuitive navigation.",
           "ModalHeadline": "Digital preservation",
-          "ModalImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Digital+preservation.webp"
+          "ModalImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Digital+preservation.webp",
+          "id": "3"
         },
         {
-          "id": "4",
           "ModalBody": "The entire archive becomes searchable through AI-powered metadata, custom filters, and integrated preview tools, enabling fast discovery from any location.",
           "ModalHeadline": "Search and discover",
-          "ModalImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Search+and+discover.webp"
+          "ModalImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Search+and+discover.webp",
+          "id": "4"
         },
         {
-          "id": "5",
           "ModalBody": "Digitized content is ready for licensing, streaming, and storytelling, unlocking new value across platforms while maintaining archival integrity.",
           "ModalHeadline": "Share, stream and monetize",
-          "ModalImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Share%2C+stream+and+monetize.webp"
+          "ModalImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Share%2C+stream+and+monetize.webp",
+          "id": "5"
         }
       ],
       "headline": "Learn more about how we unlocked new possibilities for our partners",
@@ -91,7 +88,6 @@
     },
     "solutionMain": {
       "body": "With a focus on physical storage and a secure digital archive, Iron Mountain provided climate-controlled, private vaults for physical artifacts and implemented Smart Vault for digital preservation.",
-
       "headline": "A partnership with Iron Mountain",
       "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Image1-Full.webp",
       "labelText": "Solution",
@@ -106,7 +102,6 @@
     },
     "valueMain": {
       "body": "The partnership with Iron Mountain secured the Museum's legacy, dramatically improving its preservation workflow and content accessibility for future generations.",
-
       "diamondBenefits": [
         {
           "bullets": [

@@ -3,24 +3,21 @@
     "locale": "en",
     "data": {
       "ambient": {
-        "backgroundImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/Cover.webp",
-        "body": "Our digital solutions centralized this healthcare organization's unstructured \"dark data.\" This enterprise-wide visibility prevented erroneous pension payments, elevated records management, and created a searchable, compliant digital core for ongoing operational improvement.",
-        "headline": "A global healthcare company mitigates risk and saves millions by finding certainty and clarity in its pension administration.",
-        "mainCTA": "Touch to explore",
-        "quoteSource": "",
-        "title": "Information \n& data lifecycle"
-      },
-      "challengeMain": {
+      "backgroundImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/Cover.webp",
+      "body": "Our digital solutions centralized this healthcare organization's unstructured \"dark data.\" This enterprise-wide visibility prevented erroneous pension payments, elevated records management, and created a searchable, compliant digital core for ongoing operational improvement.",
+      "headline": "A global healthcare company mitigates risk and saves millions by finding certainty and clarity in its pension administration.",
+      "mainCTA": "Touch to explore",
+      "quoteSource": "",
+      "title": "Information \n& data lifecycle"
+    },
+    "challengeMain": {
       "body": "A large healthcare organization faced significant financial risk because it could not locate the appropriate documentation to confirm the eligibility of employee pension claims. The legal system ruled the organization liable to pay claims without evidence to disprove eligibility, resulting in millions of dollars paid in ineligible pension benefits.",
-
       "featuredStat1": "$2M+",
       "featuredStat1Body": "saved annually through the identification of \"duplicate\" pension payments",
-
       "featuredStat2": "2.5M",
       "featuredStat2Body": "paper images are being digitized.",
       "item1Body": "Disparate, unstructured records across various locations and legacy systems—including paper, microfilm, CD, and digital formats—created costly, risk-laden pension administration.",
       "item1Image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/01+-+Challenge/Challenge-Image1-Full.webp",
-
       "item2Body": "After multiple acquisitions with antiquated and disordered records, finding the required regulatory documentation was difficult to impossible.",
       "item2Image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/01+-+Challenge/Challenge-Image2-Full.webp",
       "labelText": "Challenge",
@@ -55,7 +52,6 @@
     },
     "solutionMain": {
       "body": "The organization turned to Iron Mountain for help, implementing InSightⓇ DXP. This created a unified platform for newly digitized documents and digitally-native records gathered from various departments and prior acquisitions.",
-
       "headline": "A partnership with Iron Mountain",
       "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image1-Full.webp",
       "labelText": "Solution",
@@ -69,7 +65,6 @@
     },
     "valueMain": {
       "body": "The partnership with Iron Mountain and implementation of InSight DXP transitioned the organization from unknown to certainty and clarity in pension administration.",
-
       "diamondBenefits": [
         {
           "bullets": [

@@ -114,11 +114,13 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
   // If you need dynamic dot counts, refactor to calculate positions programmatically.
   // Validation after hooks to comply with Rules of Hooks
   if (slides.length !== 6) {
-    console.error(
-      '[CircularCarousel] Expected exactly 6 slides for circular dot layout, got',
-      slides.length,
-      '. Fix CMS data or update carousel UI to support dynamic slide counts.'
-    );
+    if (process.env.NODE_ENV === 'development') {
+      console.error(
+        '[CircularCarousel] Expected exactly 6 slides for circular dot layout, got',
+        slides.length,
+        '. Fix CMS data or update carousel UI to support dynamic slide counts.'
+      );
+    }
     return <CarouselConfigError slideCount={slides.length} />;
   }
 

@@ -40,6 +40,14 @@ export const mapSolutionsWithGrid = (
   const diamondList = validateDiamondList(solutionsGrid.diamondList);
   const diamondPositions = mapArrayToPositions<string>(diamondList, diamondMapping);
 
+  // Validate numbered list has required items
+  const numberedList = solutionsMain.numberedList ?? [];
+  if (numberedList.length < 4) {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn(`[mapSolutionsWithGrid] numberedList should have at least 4 items, got ${numberedList.length}`);
+    }
+  }
+
   return {
     firstScreen: {
       body: solutionsMain.body,
@@ -53,13 +61,13 @@ export const mapSolutionsWithGrid = (
       image: solutionsMain.image,
       labelText: solutionsMain.labelText,
       numberedListHeadline: solutionsMain.numberedListHeadline,
-      stepFourDescription: solutionsMain.numberedList?.[3],
+      stepFourDescription: numberedList[3],
       stepFourLabel: '04.',
-      stepOneDescription: solutionsMain.numberedList?.[0],
+      stepOneDescription: numberedList[0],
       stepOneLabel: '01.',
-      stepThreeDescription: solutionsMain.numberedList?.[2],
+      stepThreeDescription: numberedList[2],
       stepThreeLabel: '03.',
-      stepTwoDescription: solutionsMain.numberedList?.[1],
+      stepTwoDescription: numberedList[1],
       stepTwoLabel: '02.',
       subheadline: ambient.title,
     },

@@ -124,7 +124,9 @@ export function useBottomGradient({
         lastScreenObserver.disconnect();
       };
     } catch (error) {
-      console.error(`[useBottomGradient] Failed to setup observer for section "${sectionName}":`, error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error(`[useBottomGradient] Failed to setup observer for section "${sectionName}":`, error);
+      }
       return undefined;
     }
   }, [bottomGradientTriggerOffset, enabled, lastScreenElementRef, sectionName]);

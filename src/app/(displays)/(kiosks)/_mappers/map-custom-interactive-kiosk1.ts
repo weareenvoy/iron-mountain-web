@@ -25,23 +25,25 @@ export const mapCustomInteractiveKiosk1 = (
         `Kiosk 1 diamond carousel UI requires exactly ${EXPECTED_CAROUSEL_ITEM_COUNT} items. ` +
         'Fix CMS data or update StepCarousel component to support dynamic item counts.'
     );
-    console.error(error.message, {
-      ambient: ambient.title,
-      expected: EXPECTED_CAROUSEL_ITEM_COUNT,
-      received: itemCount,
-    });
+    if (process.env.NODE_ENV === 'development') {
+      console.error(error.message, {
+        ambient: ambient.title,
+        expected: EXPECTED_CAROUSEL_ITEM_COUNT,
+        received: itemCount,
+      });
+    }
     throw error;
   }
 
   // Map steps - diamondCarouselItems is an array of objects containing label and modal data
   const mappedSteps = customInteractive.diamondCarouselItems?.map(item => {
     return {
-      label: item.ModalHeadline || '',
+      label: item.ModalHeadline ?? '',
       modal: {
-        body: item.ModalBody || '',
-        heading: item.ModalHeadline || '',
+        body: item.ModalBody ?? '',
+        heading: item.ModalHeadline ?? '',
         imageAlt: '',
-        imageSrc: item.ModalImage || '',
+        imageSrc: item.ModalImage ?? '',
       },
     };
   });

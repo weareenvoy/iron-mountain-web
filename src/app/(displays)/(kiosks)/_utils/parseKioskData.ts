@@ -18,7 +18,10 @@ const isAmbient = (value: unknown): value is Ambient => {
   if (typeof value !== 'object' || value === null) return false;
   const obj = value as Record<string, unknown>;
   return (
-    (obj.title === undefined || typeof obj.title === 'string') &&
+    // Required field: title is used as subheadline/eyebrow throughout
+    typeof obj.title === 'string' &&
+    obj.title.length > 0 &&
+    // Optional fields
     (obj.headline === undefined || typeof obj.headline === 'string') &&
     (obj.body === undefined || typeof obj.body === 'string') &&
     (obj.mainCTA === undefined || typeof obj.mainCTA === 'string') &&
@@ -42,9 +45,16 @@ const isIdleContent = (value: unknown): value is IdleContent => {
 const isChallengeContent = (value: unknown): value is ChallengeContent => {
   if (typeof value !== 'object' || value === null) return false;
   const obj = value as Record<string, unknown>;
-  // Validate at least one of the expected properties exists with correct type
   return (
     (obj.body === undefined || typeof obj.body === 'string') &&
+    (obj.featuredStat1 === undefined || typeof obj.featuredStat1 === 'string') &&
+    (obj.featuredStat1Body === undefined || typeof obj.featuredStat1Body === 'string') &&
+    (obj.featuredStat2 === undefined || typeof obj.featuredStat2 === 'string') &&
+    (obj.featuredStat2Body === undefined || typeof obj.featuredStat2Body === 'string') &&
+    (obj.item1Body === undefined || typeof obj.item1Body === 'string') &&
+    (obj.item1Image === undefined || typeof obj.item1Image === 'string') &&
+    (obj.item2Body === undefined || typeof obj.item2Body === 'string') &&
+    (obj.item2Image === undefined || typeof obj.item2Image === 'string') &&
     (obj.labelText === undefined || typeof obj.labelText === 'string') &&
     (obj.mainVideo === undefined || typeof obj.mainVideo === 'string')
   );
@@ -113,9 +123,11 @@ const isSolutionsMain = (value: unknown): value is SolutionsMain => {
   return (
     (obj.body === undefined || typeof obj.body === 'string') &&
     (obj.headline === undefined || typeof obj.headline === 'string') &&
+    (obj.image === undefined || typeof obj.image === 'string') &&
     (obj.labelText === undefined || typeof obj.labelText === 'string') &&
     (obj.mainVideo === undefined || typeof obj.mainVideo === 'string') &&
-    (obj.numberedList === undefined || Array.isArray(obj.numberedList))
+    (obj.numberedList === undefined || Array.isArray(obj.numberedList)) &&
+    (obj.numberedListHeadline === undefined || typeof obj.numberedListHeadline === 'string')
   );
 };
 
@@ -127,10 +139,10 @@ const isValueContent = (value: unknown): value is ValueContent => {
   const obj = value as Record<string, unknown>;
   return (
     (obj.body === undefined || typeof obj.body === 'string') &&
+    (obj.diamondBenefits === undefined || Array.isArray(obj.diamondBenefits)) &&
     (obj.headline === undefined || typeof obj.headline === 'string') &&
     (obj.labelText === undefined || typeof obj.labelText === 'string') &&
-    (obj.mainVideo === undefined || typeof obj.mainVideo === 'string') &&
-    (obj.diamondBenefits === undefined || Array.isArray(obj.diamondBenefits))
+    (obj.mainVideo === undefined || typeof obj.mainVideo === 'string')
   );
 };
 
