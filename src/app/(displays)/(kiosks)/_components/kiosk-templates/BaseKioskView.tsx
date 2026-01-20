@@ -93,6 +93,9 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
     kioskId,
   });
 
+  // Disable up arrow when on challenge first video
+  const canNavigateUp = currentScrollTarget !== 'challenge-first-video';
+
   // Improved empty slides state handling
   if (slides.length === 0) {
     if (!kioskData) {
@@ -164,9 +167,14 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
             transition={{ duration: arrowConfig.fadeDuration, ease: [0.3, 0, 0.6, 1] }}
           >
             <div
+              aria-disabled={!canNavigateUp}
               aria-label="Previous"
-              className="flex cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95 active:opacity-40 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
-              onPointerDown={handleNavigateUp}
+              className={`flex items-center justify-center transition-transform ${
+                canNavigateUp
+                  ? 'cursor-pointer hover:scale-110 active:scale-95 active:opacity-40 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]'
+                  : 'cursor-not-allowed opacity-30'
+              }`}
+              onPointerDown={canNavigateUp ? handleNavigateUp : undefined}
               role="button"
               style={{
                 // Inline because Tailwind will not include styles from runtime config
