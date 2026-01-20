@@ -12,7 +12,11 @@ import type { BasecampBeatId } from '@/lib/internal/types';
 export const useTransitionSfx = (displayedBeatId: BasecampBeatId | null): void => {
   const audio = useAudio();
   const { data } = useBasecamp();
-  const sfx = data?.sfx;
+
+  // Extract URLs to prevent effect re-runs
+  const beatSfxUrl = data?.sfx.beat;
+  const momentSfxUrl = data?.sfx.moment;
+
   const prevBeatIdRef = useRef<BasecampBeatId | null>(null);
 
   useEffect(() => {
@@ -28,11 +32,11 @@ export const useTransitionSfx = (displayedBeatId: BasecampBeatId | null): void =
 
     // Moment changed, play moment sfx
     if (prevMoment !== currentMoment) {
-      if (sfx?.moment) audio.playSfx(sfx.moment);
+      if (momentSfxUrl) audio.playSfx(momentSfxUrl);
     }
     // Beat changed within same moment, play beat sfx
     else {
-      if (sfx?.beat) audio.playSfx(sfx.beat);
+      if (beatSfxUrl) audio.playSfx(beatSfxUrl);
     }
-  }, [audio, displayedBeatId, sfx]);
+  }, [audio, beatSfxUrl, displayedBeatId, momentSfxUrl]);
 };

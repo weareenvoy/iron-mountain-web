@@ -1,13 +1,14 @@
 'use client';
 
-import { useAppearSfx } from '@/app/(displays)/basecamp/_hooks/use-appear-sfx';
+import { useRef } from 'react';
+import { useAnimationStartSfx } from '@/app/(displays)/basecamp/_hooks/use-animation-start-sfx';
 import type { BasecampData } from '@/lib/internal/types';
 
 type Props = {
   readonly data: BasecampData['problem2'];
 };
 
-// Animation timing constants (single source of truth for CSS + SFX)
+// Animation timing constants (single source of truth for CSS)
 const BLOCK_DELAYS_MS = [3900, 5400, 6900] as const;
 const WORD_STAGGER_MS = 100 as const;
 const LAST_BLOCK_OFFSET_PX = -50 as const;
@@ -15,11 +16,13 @@ const LAST_BLOCK_OFFSET_PX = -50 as const;
 // 3 locks of text. First shows up in left, second in center, third in right
 
 const Problem3 = ({ data }: Props) => {
-  // Play appear SFX at same timing as CSS animations
-  useAppearSfx(BLOCK_DELAYS_MS);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Play SFX when elements with data-sfx="appear" start animating
+  useAnimationStartSfx({ containerRef, selector: '[data-sfx="appear"]' });
 
   return (
-    <div className="absolute inset-0 flex">
+    <div className="absolute inset-0 flex" ref={containerRef}>
       {data.map((item, index) => {
         const baseDelay = BLOCK_DELAYS_MS[index] ?? 0;
         const isLastBlock = index === data.length - 1;
@@ -34,9 +37,10 @@ const Problem3 = ({ data }: Props) => {
               className="mt-10 space-y-1 text-center"
               style={isLastBlock ? { marginLeft: `${LAST_BLOCK_OFFSET_PX}px` } : undefined}
             >
-              {/* Percent fades in */}
+              {/* Percent fades in - this is the "lead" element that triggers SFX */}
               <div
                 className="animate-fade-in h-28 text-[86px] tracking-[-4.3px] opacity-0"
+                data-sfx="appear"
                 style={{ animationDelay: `${baseDelay}ms` }}
               >
                 {item.percent}

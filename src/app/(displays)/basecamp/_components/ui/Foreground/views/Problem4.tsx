@@ -1,14 +1,15 @@
 'use client';
 
 import Image from 'next/image';
-import { useAppearSfx } from '@/app/(displays)/basecamp/_hooks/use-appear-sfx';
+import { useRef } from 'react';
+import { useAnimationStartSfx } from '@/app/(displays)/basecamp/_hooks/use-animation-start-sfx';
 import type { BasecampData } from '@/lib/internal/types';
 
 type Props = {
   readonly data: BasecampData['problem3'];
 };
 
-// Animation timing constants (single source of truth for CSS + SFX)
+// Animation timing constants (single source of truth for CSS)
 const TIMING = {
   blocks: {
     duration: 2000,
@@ -34,18 +35,19 @@ const getCardIconDelay = (blockStart: number): number => blockStart + TIMING.blo
 const getCardTitleDelay = (blockStart: number, wordIndex: number): number =>
   blockStart + TIMING.blocks.phases.title.delay + wordIndex * TIMING.blocks.phases.title.wordStagger;
 
-// Generate block start delays for SFX (derived from TIMING constants)
-const BLOCK_START_DELAYS: readonly number[] = [0, 1, 2, 3].map(getBlockStartDelay);
-
 const Problem4 = ({ data }: Props) => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const challenges = [data.challenge1, data.challenge2, data.challenge3, data.challenge4];
   const mainTitleWords = data.title.split(' ');
 
-  // Play appear SFX at same timing as CSS animations
-  useAppearSfx(BLOCK_START_DELAYS);
+  // Play SFX when elements with data-sfx="appear" start animating
+  useAnimationStartSfx({ containerRef, selector: '[data-sfx="appear"]' });
 
   return (
-    <div className="text-primary-im-grey flex h-full w-full flex-row items-center justify-between px-20">
+    <div
+      className="text-primary-im-grey flex h-full w-full flex-row items-center justify-between px-20"
+      ref={containerRef}
+    >
       {/* Main title: word by word */}
       <div className="mt-60 h-full w-140 font-geometria text-[66px] leading-[1.3]">
         {mainTitleWords.map((word, i) => (
@@ -71,6 +73,7 @@ const Problem4 = ({ data }: Props) => {
               {/* Blue background grows horizontally - fits content width */}
               <div
                 className="animate-grow-x bg-primary-im-dark-blue inline-flex items-center justify-center rounded-full px-6.5 py-2"
+                data-sfx="appear"
                 style={{ animationDelay: `${blockStart}ms` }}
               >
                 {/* Title text: show up word by word */}

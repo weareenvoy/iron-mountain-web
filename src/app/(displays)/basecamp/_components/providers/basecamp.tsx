@@ -122,6 +122,13 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
 
     try {
       const basecampData = await getBasecampData();
+
+      // Runtime validation
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      if (!basecampData.data.music || !basecampData.data.sfx) {
+        throw new Error('[basecamp] Missing music/sfx data. Populate CMS.');
+      }
+
       setData(basecampData.data);
       setLocale(basecampData.locale);
       setError(null);
