@@ -767,9 +767,6 @@
             },
             {
               "handle": "activate-2"
-            },
-            {
-              "handle": "activate-3"
             }
           ]
         },
@@ -788,6 +785,9 @@
             },
             {
               "handle": "insightdxp-4"
+            },
+            {
+              "handle": "insightdxp-5"
             }
           ]
         },
