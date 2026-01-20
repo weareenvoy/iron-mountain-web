@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { KIOSK_SFX } from '@/app/(displays)/(kiosks)/_utils/audio-constants';
+import { useKioskAudio } from '@/app/(displays)/(kiosks)/_components/providers/useKioskAudio';
 import { useSfx } from '@/components/providers/audio-provider';
 import { ANIMATION_DURATION_MS, type SlideId } from '../constants';
 
@@ -57,6 +57,7 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
   const [isExiting, setIsExiting] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const timeoutRef = useRef<number | undefined>(undefined);
+  const { sfx } = useKioskAudio();
   const { playSfx } = useSfx();
   const total = slides.length;
   const currentIndex = total > 0 ? index % total : 0;
@@ -83,7 +84,7 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
     // Prevent rapid clicks during transition
     if (isTransitioning) return;
 
-    playSfx(KIOSK_SFX.next);
+    playSfx(sfx.next);
     setIsTransitioning(true);
     setIsExiting(true);
 
@@ -94,13 +95,13 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
       setIsExiting(false);
       setIsTransitioning(false);
     }, ANIMATION_DURATION_MS.CAROUSEL);
-  }, [isTransitioning, playSfx, slides.length]);
+  }, [isTransitioning, playSfx, sfx.next, slides.length]);
 
   const goPrev = useCallback(() => {
     // Prevent rapid clicks during transition
     if (isTransitioning) return;
 
-    playSfx(KIOSK_SFX.back);
+    playSfx(sfx.back);
     setIsTransitioning(true);
     setIsExiting(true);
 

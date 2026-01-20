@@ -5,7 +5,7 @@ import { SquarePlay } from 'lucide-react';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
-import { KIOSK_SFX } from '@/app/(displays)/(kiosks)/_utils/audio-constants';
+import { useKioskAudio } from '@/app/(displays)/(kiosks)/_components/providers/useKioskAudio';
 import { useSfx } from '@/components/providers/audio-provider';
 import { cn } from '@/lib/tailwind/utils/cn';
 import { normalizeText } from '@/lib/utils/normalize-text';
@@ -76,6 +76,7 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
   const normalizedSteps = steps ?? [];
   const isKiosk3 = kioskId === 'kiosk-3';
   const secondaryIconOffset = isKiosk3 ? 'left-[-330px]' : 'left-[-70px]';
+  const { sfx } = useKioskAudio();
   const { playSfx } = useSfx();
 
   const [openModalIndex, setOpenModalIndex] = useState<null | number>(null);
@@ -96,27 +97,27 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
     : null;
 
   const handleSecondaryClick = useCallback(() => {
-    playSfx(KIOSK_SFX.open);
+    playSfx(sfx.open);
     setShowOverlay(true);
     onSecondaryCta?.();
-  }, [onSecondaryCta, playSfx]);
+  }, [onSecondaryCta, playSfx, sfx.open]);
 
   const handleEndTour = useCallback(() => {
-    playSfx(KIOSK_SFX.close);
+    playSfx(sfx.close);
     setShowOverlay(false);
-  }, [playSfx]);
+  }, [playSfx, sfx.close]);
 
   const handleModalClose = useCallback(() => {
-    playSfx(KIOSK_SFX.close);
+    playSfx(sfx.close);
     setOpenModalIndex(null);
-  }, [playSfx]);
+  }, [playSfx, sfx.close]);
 
   const handleModalOpen = useCallback(
     (index: number) => {
-      playSfx(KIOSK_SFX.open);
+      playSfx(sfx.open);
       setOpenModalIndex(index);
     },
-    [playSfx]
+    [playSfx, sfx.open]
   );
 
   useEffect(() => {

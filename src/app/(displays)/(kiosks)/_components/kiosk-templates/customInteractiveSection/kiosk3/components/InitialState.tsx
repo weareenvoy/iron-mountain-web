@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import { memo } from 'react';
-import { KIOSK_SFX } from '@/app/(displays)/(kiosks)/_utils/audio-constants';
+import { useKioskAudio } from '@/app/(displays)/(kiosks)/_components/providers/useKioskAudio';
 import { useSfx } from '@/components/providers/audio-provider';
 import BlueDot from '@/components/ui/icons/Kiosks/CustomInteractive/BlueDot';
 import InnerRing from '@/components/ui/icons/Kiosks/CustomInteractive/InnerRing';
@@ -93,10 +93,11 @@ const InitialState = memo(
     showCarousel,
     tapToBeginLabel,
   }: InitialStateProps) => {
+    const { sfx } = useKioskAudio();
     const { playSfx } = useSfx();
 
     const handleBackClick = () => {
-      playSfx(KIOSK_SFX.back);
+      playSfx(sfx.back);
       onBack?.();
     };
 

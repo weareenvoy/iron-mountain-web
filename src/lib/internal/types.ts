@@ -360,7 +360,20 @@ export interface DocentData {
   };
 }
 
+export interface KioskAudio {
+  readonly ambient?: string;
+  readonly back?: string;
+  readonly challenge?: string;
+  readonly close?: string;
+  readonly customInteractive?: string;
+  readonly next?: string;
+  readonly open?: string;
+  readonly solution?: string;
+  readonly value?: string;
+}
+
 export interface KioskData {
+  readonly audio?: KioskAudio;
   // Kiosk 2/3 flat structure
   readonly ambient?: unknown;
   readonly challenge?: unknown;

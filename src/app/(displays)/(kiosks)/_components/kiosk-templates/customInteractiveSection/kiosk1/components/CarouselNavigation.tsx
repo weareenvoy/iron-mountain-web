@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { memo } from 'react';
-import { KIOSK_SFX } from '@/app/(displays)/(kiosks)/_utils/audio-constants';
+import { useKioskAudio } from '@/app/(displays)/(kiosks)/_components/providers/useKioskAudio';
 import { useSfx } from '@/components/providers/audio-provider';
 
 type CarouselNavigationProps = {
@@ -13,15 +13,16 @@ type CarouselNavigationProps = {
  * Features prev/next buttons with hover/active states
  */
 const CarouselNavigation = ({ onNext, onPrev }: CarouselNavigationProps) => {
+  const { sfx } = useKioskAudio();
   const { playSfx } = useSfx();
 
   const handlePrev = () => {
-    playSfx(KIOSK_SFX.back);
+    playSfx(sfx.back);
     onPrev();
   };
 
   const handleNext = () => {
-    playSfx(KIOSK_SFX.next);
+    playSfx(sfx.next);
     onNext();
   };
 

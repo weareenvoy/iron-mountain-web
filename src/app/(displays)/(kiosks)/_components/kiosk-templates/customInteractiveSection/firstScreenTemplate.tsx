@@ -3,7 +3,7 @@ import { SquarePlay } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
-import { KIOSK_SFX } from '@/app/(displays)/(kiosks)/_utils/audio-constants';
+import { useKioskAudio } from '@/app/(displays)/(kiosks)/_components/providers/useKioskAudio';
 import { useSfx } from '@/components/providers/audio-provider';
 import ArrowIcon from '@/components/ui/icons/Kiosks/CustomInteractive/ArrowIcon';
 import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCFilledOrangeDiamond';
@@ -48,6 +48,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   secondaryCtaLabel,
 }: CustomInteractiveKiosk1FirstScreenTemplateProps) => {
   const { shouldAnimate, triggerRef: animationTriggerRef } = useScrollAnimation<HTMLHeadingElement>();
+  const { sfx } = useKioskAudio();
   const { playSfx } = useSfx();
 
   const [showOverlay, setShowOverlay] = useState(false);
@@ -70,7 +71,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   const secondaryIconOffset = isKiosk3 ? 'left-[-330px]' : 'left-[-70px]';
 
   const handleSecondaryClick = () => {
-    playSfx(KIOSK_SFX.open);
+    playSfx(sfx.open);
     setShowOverlay(true);
     onSecondaryCta?.();
   };
@@ -80,7 +81,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   };
 
   const handleCloseOverlay = () => {
-    playSfx(KIOSK_SFX.close);
+    playSfx(sfx.close);
     setShowOverlay(false);
   };
 

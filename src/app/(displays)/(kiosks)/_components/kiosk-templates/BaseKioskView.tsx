@@ -8,9 +8,9 @@ import { useGlobalParagraphNavigation } from '@/app/(displays)/(kiosks)/_compone
 import { useKioskArrowState } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useKioskArrowState';
 import { useKioskSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useKioskSlides';
 import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers/kiosk-provider';
+import { useKioskAudio } from '@/app/(displays)/(kiosks)/_components/providers/useKioskAudio';
 import { SCROLL_DURATION_MS } from '@/app/(displays)/(kiosks)/_constants/timing';
 import { useKioskArrowStore } from '@/app/(displays)/(kiosks)/_stores/useKioskArrowStore';
-import { KIOSK_SECTION_MUSIC, KIOSK_SFX } from '@/app/(displays)/(kiosks)/_utils/audio-constants';
 import { determineCurrentSection } from '@/app/(displays)/(kiosks)/_utils/section-utils';
 import { useMusic, useSfx } from '@/components/providers/audio-provider';
 import type { KioskConfig } from '@/app/(displays)/(kiosks)/_types/kiosk-config';
@@ -31,6 +31,7 @@ type BaseKioskViewProps = {
 export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
   const { arrowConfig, diamondMapping, kioskId, usesAccordion } = config;
   const { data: kioskData } = useKiosk();
+  const { music, sfx } = useKioskAudio();
   const containerRef = useRef<HTMLDivElement>(null);
   const { playSfx } = useSfx();
   const { setMusic } = useMusic();
@@ -57,16 +58,16 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
 
   // Wrap navigation handlers with sound effects
   const handleNavigateUpWithSound = useCallback(() => {
-    console.info('[Audio] Playing back sound:', KIOSK_SFX.back);
-    playSfx(KIOSK_SFX.back);
+    console.info('[Audio] Playing back sound:', sfx.back);
+    playSfx(sfx.back);
     handleNavigateUp();
-  }, [handleNavigateUp, playSfx]);
+  }, [handleNavigateUp, playSfx, sfx.back]);
 
   const handleNavigateDownWithSound = useCallback(() => {
-    console.info('[Audio] Playing next sound:', KIOSK_SFX.next);
-    playSfx(KIOSK_SFX.next);
+    console.info('[Audio] Playing next sound:', sfx.next);
+    playSfx(sfx.next);
     handleNavigateDown();
-  }, [handleNavigateDown, playSfx]);
+  }, [handleNavigateDown, playSfx, sfx.next]);
 
   // Get store action directly to avoid double hook call
   const handleButtonClick = useKioskArrowStore(state => state.handleButtonClick);
@@ -126,23 +127,23 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
     // Prioritize actual scroll target over boolean flags to ensure music changes as you scroll
     if (!currentScrollTarget || currentScrollTarget === 'cover-ambient-initial') {
       // Only play initial music if we're actually on the initial screen or no target yet
-      musicUrl = KIOSK_SECTION_MUSIC.initial;
+      musicUrl = music.ambient;
       sectionName = 'Initial';
     } else if (currentScrollTarget.startsWith('customInteractive')) {
       // Custom Interactive sections
-      musicUrl = KIOSK_SECTION_MUSIC.customInteractive;
+      musicUrl = music.customInteractive;
       sectionName = 'Custom Interactive';
     } else if (currentScrollTarget.startsWith('value') || currentScrollTarget === 'value-carousel') {
       // Value section and carousel
-      musicUrl = KIOSK_SECTION_MUSIC.value;
+      musicUrl = music.value;
       sectionName = 'Value';
     } else if (currentScrollTarget.startsWith('solution')) {
       // Solution sections
-      musicUrl = KIOSK_SECTION_MUSIC.solution;
+      musicUrl = music.solution;
       sectionName = 'Solution';
     } else if (currentScrollTarget.startsWith('challenge') || currentScrollTarget === 'main-description') {
       // Challenge sections
-      musicUrl = KIOSK_SECTION_MUSIC.challenge;
+      musicUrl = music.challenge;
       sectionName = 'Challenge';
     }
 
@@ -152,7 +153,7 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
     } else {
       console.warn('[Audio] No music mapped for section:', currentScrollTarget);
     }
-  }, [currentScrollTarget, isCustomInteractiveSection, isInitialScreen, isValueSection, setMusic]);
+  }, [currentScrollTarget, isCustomInteractiveSection, isInitialScreen, isValueSection, music, setMusic]);
 
   // Improved empty slides state handling
   if (slides.length === 0) {
