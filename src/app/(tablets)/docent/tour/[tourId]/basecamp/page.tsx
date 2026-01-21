@@ -77,7 +77,7 @@ const BasecampPage = ({ params }: PageProps<'/docent/tour/[tourId]/basecamp'>) =
         <div className="mx-5 flex flex-col items-start gap-2 border-b border-[rgba(255,255,255,0.5)] pb-12.5">
           <h1 className="text-primary-bg-grey text-center text-[36px] leading-loose tracking-[-1.8px]">Basecamp</h1>
           <p className="text-primary-bg-grey text-center text-xl leading-loose tracking-[-1px]">
-            {currentTour?.guestName || 'Tour'}
+            {currentTour?.name || 'Tour'}
           </p>
         </div>
 

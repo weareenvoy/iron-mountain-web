@@ -1,0 +1,37 @@
+{
+  "_meta": {
+    "total": 3
+  },
+  "tours": [
+    {
+      "date": "2026-01-15T00:00:00+00:00",
+      "day_formatted_EN": "1-15-2026",
+      "day_formatted_PT": "15-1-2026",
+      "day_formatted_plain_language_EN": "January 15, 2026",
+      "day_formatted_plain_language_PT": "15 de Janeiro de 2026",
+      "id": 2,
+      "name": "test tour 1",
+      "time": "22:32:17.37318"
+    },
+    {
+      "date": "2026-01-15T00:00:00+00:00",
+      "day_formatted_EN": "1-15-2026",
+      "day_formatted_PT": "15-1-2026",
+      "day_formatted_plain_language_EN": "January 15, 2026",
+      "day_formatted_plain_language_PT": "15 de Janeiro de 2026",
+      "id": 6,
+      "name": "test tour 2",
+      "time": "22:32:17.37318"
+    },
+    {
+      "date": "2026-01-21T00:00:00+00:00",
+      "day_formatted_EN": "1-21-2026",
+      "day_formatted_PT": "21-1-2026",
+      "day_formatted_plain_language_EN": "January 21, 2026",
+      "day_formatted_plain_language_PT": "21 de Janeiro de 2026",
+      "id": 7,
+      "name": "test tour 3",
+      "time": "14:00:00.000000"
+    }
+  ]
+}

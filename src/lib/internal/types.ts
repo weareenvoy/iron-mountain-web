@@ -162,16 +162,24 @@ export interface Moment {
   readonly title: string; // e.g., "Ambient", "Welcome"
 }
 
-// Mock data structure.
-export interface Tour {
-  // date and startTime are 1 field or 2 fields?
-  readonly date: string;
-  readonly endTime: string; // We might not have endTime.
-  readonly guestLogo: null | string;
-  readonly guestName: string;
-  readonly id: string;
-  readonly startTime: string;
-  readonly title: string; // Is this needed?
+// New API tour structure
+export interface ApiTour {
+  readonly date: string; // ISO datetime e.g., "2026-01-15T00:00:00+00:00"
+  readonly day_formatted_EN: string; // e.g., "1-15-2026"
+  readonly day_formatted_plain_language_EN: string; // e.g., "January 15, 2026"
+  readonly day_formatted_plain_language_PT: string; // e.g., "15 de Janeiro de 2026"
+  readonly day_formatted_PT: string; // e.g., "15-1-2026"
+  readonly id: number;
+  readonly name: string;
+  readonly time: string; // e.g., "22:32:17.37318"
+}
+
+// Tours API response structure (from /api/docent/tours endpoint)
+export interface ToursApiResponse {
+  readonly _meta: {
+    readonly total: number;
+  };
+  readonly tours: readonly ApiTour[];
 }
 
 export interface BasecampData {
@@ -348,7 +356,7 @@ export interface DocentData {
     };
   };
   readonly summitSlides: readonly SummitSlide[];
-  readonly tours: readonly Tour[];
+  // tours are now fetched from separate /api/tours endpoint - see ApiTour and ToursApiResponse
   readonly ui: {
     readonly display: string;
     readonly off: string;
@@ -422,13 +430,17 @@ export type ApiResponse<T> = readonly ApiResponseItem<T>[];
 
 // Specific API response types
 export type BasecampApiResponse = ApiResponse<BasecampData>;
-export type DocentApiResponse = ApiResponse<DocentData>;
+// DocentInitialApiResponse is the data-wrapped locale response from /api/docent-initial
+// Format: { data: [{ locale: "en", data: {...} }, { locale: "pt", data: {...} }] }
+export interface DocentInitialApiResponse {
+  readonly data: ApiResponse<DocentData>;
+}
 export type SummitApiResponse = ApiResponse<SummitData>;
 export type WelcomeWallApiResponse = ApiResponse<WelcomeWallData>;
 export type KioskApiResponse = ApiResponse<KioskData>;
 
 // Function return types (transformed from API responses)
-export interface DocentDataResponse {
+export interface DocentInitialDataResponse {
   readonly data: {
     readonly en: DocentData;
     readonly pt: DocentData;

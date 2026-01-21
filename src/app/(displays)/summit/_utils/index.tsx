@@ -4,6 +4,7 @@ import type {
   SummitMapLocations,
   SummitPossibility,
 } from '@/app/(displays)/summit/_types';
+import type { SummitTourSummary, ToursApiResponse } from '@/lib/internal/types';
 
 // 1 type defined here for solutions. This is not a direct JSON mapping
 export type SolutionItem = { readonly locations: SummitMapLocations; readonly title: string };
@@ -40,3 +41,12 @@ export const renderStory = (item: SummitKioskAmbient) => (
     {item.attribution && <p className="mt-2 italic">{item.attribution}</p>}
   </>
 );
+
+// Transforms ToursApiResponse to SummitTourSummary format
+export const transformToSummitTours = (toursResponse: ToursApiResponse): readonly SummitTourSummary[] => {
+  return toursResponse.tours.map(tour => ({
+    date: tour.date.split('T')[0] ?? tour.date, // Extract YYYY-MM-DD from ISO datetime
+    id: String(tour.id), // Convert number to string
+    name: tour.name,
+  }));
+};

@@ -15,12 +15,15 @@ import {
 import { type DocentAppState, type SyncState } from '@/app/(tablets)/docent/_types';
 import { getTourIdFromGecState, isDocentRoute, requireDocentData } from '@/app/(tablets)/docent/_utils';
 import { useMqtt } from '@/components/providers/mqtt-provider';
-import { getDocentData } from '@/lib/internal/data/get-docent';
-import type { DocentData, Locale, Tour } from '@/lib/internal/types';
+import { getBasecampData } from '@/lib/internal/data/get-basecamp';
+import { getDocentInitialData, getToursData } from '@/lib/internal/data/get-docent';
+import type { ApiTour, BasecampData, DocentData, Locale } from '@/lib/internal/types';
 
 export interface DocentContextType {
-  // Derived from tourId + data.tours
-  readonly currentTour: null | Tour;
+  // Basecamp data (for summit room journey-1 title)
+  readonly basecampData: BasecampData | null;
+  // Derived from tourId + tours
+  readonly currentTour: ApiTour | null;
   readonly data: DocentData | null;
   // Full state from GEC (combines tour, UI mode, exhibit settings)
   readonly docentAppState: DocentAppState | null;
@@ -35,6 +38,8 @@ export interface DocentContextType {
   readonly setLocale: (locale: Locale) => void;
   // Tour ID from GEC - source of truth
   readonly tourId: null | string;
+  // Tours from /api/tours endpoint
+  readonly tours: readonly ApiTour[];
 }
 
 export const DocentContext = createContext<DocentContextType | undefined>(undefined);
@@ -60,7 +65,11 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     pt: null,
   });
   const [locale, setLocale] = useState<Locale>('en');
-  // Tour ID from GEC - source of truth
+  // Tours from separate endpoint (not locale-dependent)
+  const [tours, setTours] = useState<readonly ApiTour[]>([]);
+  // Basecamp data (for summit room journey-1 title)
+  const [basecampData, setBasecampData] = useState<BasecampData | null>(null);
+  // Tour ID from GEC - source of truth (string for GEC compatibility)
   const [tourId, setTourId] = useState<null | string>(null);
   const [isTourDataLoading, setIsTourDataLoading] = useState(true);
   const [isGecStateLoading, setIsGecStateLoading] = useState(true);
@@ -78,26 +87,33 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     pathnameRef.current = pathname;
   }, [pathname]);
 
-  // Fetch all docent data (includes tours and slides)
+  // Fetch all docent data (initial config + tours + basecamp from separate endpoints)
   const fetchDocentData = useCallback(async () => {
     setIsTourDataLoading(true);
     try {
-      const docentData = await getDocentData();
+      // Fetch all endpoints in parallel
+      const [basecampResponse, initialData, toursData] = await Promise.all([
+        getBasecampData(),
+        getDocentInitialData(),
+        getToursData(),
+      ]);
 
       // Validate CMS data at the boundary - fail fast if required fields are missing
       // This ensures components can trust data is complete without optional chaining
-      const validatedEn = requireDocentData(docentData.data.en);
-      const validatedPt = requireDocentData(docentData.data.pt);
+      const validatedEn = requireDocentData(initialData.data.en);
+      const validatedPt = requireDocentData(initialData.data.pt);
 
       setDataByLocale({
         en: validatedEn,
         pt: validatedPt,
       });
+      setTours(toursData.tours);
+      setBasecampData(basecampResponse.data);
       setLastUpdated(new Date());
 
       // Clear tourId if the tour no longer exists in the data
-      const currentData = docentData.data[locale];
-      if (tourId && !currentData.tours.find(tour => tour.id === tourId)) {
+      // Tour IDs from API are numbers, but GEC uses strings - compare as strings
+      if (tourId && !toursData.tours.find(tour => String(tour.id) === tourId)) {
         console.info(`Tour ${tourId} no longer exists in data, clearing...`);
         setTourId(null);
       }
@@ -106,7 +122,7 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     } finally {
       setIsTourDataLoading(false);
     }
-  }, [locale, tourId]);
+  }, [tourId]);
 
   useEffect(() => {
     fetchDocentData();
@@ -192,11 +208,12 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
   // Get current locale's data
   const data = dataByLocale[locale];
 
-  // Derive currentTour from tourId + data.tours
+  // Derive currentTour from tourId + tours
+  // Tour IDs from API are numbers, but GEC uses strings - compare as strings
   const currentTour = useMemo(() => {
-    if (!tourId || !data?.tours) return null;
-    return data.tours.find(t => t.id === tourId) ?? null;
-  }, [data?.tours, tourId]);
+    if (!tourId || tours.length === 0) return null;
+    return tours.find(t => String(t.id) === tourId) ?? null;
+  }, [tourId, tours]);
 
   // Track previous tourId for navigation
   const prevTourIdRef = useRef<null | string>(null);
@@ -210,7 +227,8 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     }
 
     // Validate tour exists in data
-    if (!data?.tours.find(t => t.id === tourId)) {
+    // Tour IDs from API are numbers, but GEC uses strings - compare as strings
+    if (!tours.find(t => String(t.id) === tourId)) {
       console.warn(`Tour ${tourId} not found in data, skipping navigation`);
       prevTourIdRef.current = tourId;
       return;
@@ -237,9 +255,10 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     }
 
     prevTourIdRef.current = tourId;
-  }, [data?.tours, router, tourId]);
+  }, [router, tourId, tours]);
 
   const contextValue = {
+    basecampData,
     currentTour,
     data,
     docentAppState,
@@ -253,6 +272,7 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
     setIsSettingsOpen,
     setLocale,
     tourId,
+    tours,
   };
 
   return <DocentContext.Provider value={contextValue}>{children}</DocentContext.Provider>;

@@ -10,11 +10,11 @@ import RecapPrintSection from '@/app/(displays)/summit/_components/sections/reca
 import RecapSection, { type RecapTone } from '@/app/(displays)/summit/_components/sections/recap-section';
 import StrategiesSection from '@/app/(displays)/summit/_components/sections/strategies-section';
 import SummitPrintableDocument from '@/app/(displays)/summit/_components/summit-printable-document';
+import { transformToSummitTours, type SolutionItem } from '@/app/(displays)/summit/_utils';
 import PrintIcon from '@/components/ui/icons/PrintIcon';
 import { getSummitData } from '@/lib/internal/data/get-summit';
-import { getSummitTours } from '@/lib/internal/data/get-summit-tours';
+import { getToursData } from '@/lib/internal/data/get-tours';
 import type { SummitFuturescaping, SummitKioskAmbient, SummitPossibility } from '@/app/(displays)/summit/_types';
-import type { SolutionItem } from '@/app/(displays)/summit/_utils';
 import type { SummitTourSummary } from '@/lib/internal/types';
 
 const PAGE_CONTAINER_CLASS = 'flex flex-col gap-14 py-10';
@@ -102,7 +102,8 @@ const SummitWebContent = () => {
       setToursLoading(true);
       setToursError(null);
       try {
-        const tourList = await getSummitTours();
+        const toursData = await getToursData();
+        const tourList = transformToSummitTours(toursData);
         if (!isMounted) return;
         setTours(tourList);
         if (tourList.length > 0) {
