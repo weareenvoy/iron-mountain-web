@@ -156,7 +156,7 @@ const SchedulePageClient = () => {
         <div className="bg-primary-bg-grey relative flex w-full flex-col gap-[87px] rounded-t-[20px] px-6 py-11">
           <div className="text-primary-im-dark-blue relative flex items-center justify-between">
             <Button
-              className="border-primary-im-dark-blue text-primary-im-dark-blue h-13 min-w-24.5 text-xl leading-[1.4] tracking-[-1px]"
+              className="border-primary-im-dark-blue text-primary-im-dark-blue h-13 min-w-24.5 text-xl leading-snug tracking-[-1px]"
               onClick={handleToday}
               size="sm"
               variant="outline"
@@ -237,7 +237,7 @@ const SchedulePageClient = () => {
                           </div>
                           {isSelected && (
                             <Button
-                              className="h-[52px] w-[97px] text-xl tracking-[-1px]"
+                              className="h-[52px] w-[97px] text-xl leading-snug tracking-[-1px]"
                               onClick={handleLoadButtonClick(tourIdStr)}
                               size="sm"
                               variant="secondary"
