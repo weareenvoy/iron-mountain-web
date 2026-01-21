@@ -133,6 +133,22 @@
   }
 }
 
+/* WelcomeView location details: Same timing, but smaller % */
+@keyframes location-details-sequence {
+  0% {
+    opacity: 1;
+    transform: translateX(1%);
+  }
+  70% {
+    opacity: 1;
+    transform: translateX(1%);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-15%);
+  }
+}
+
 .animate-char-in {
   animation: char-in 0.4s ease-out both;
   opacity: 0;
@@ -165,4 +181,39 @@
 
 .animate-welcome {
   animation: welcome-sequence 7s ease-in-out forwards;
+}
+
+.animate-location-details {
+  animation: location-details-sequence 7s ease-in-out forwards;
+}
+
+/* WelcomeView exit animations (no hold phase) for welcome-2 beat */
+@keyframes welcome-exit {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-110%);
+  }
+}
+
+@keyframes location-details-exit {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-16%);
+  }
+}
+
+.animate-welcome-exit {
+  animation: welcome-exit 3s ease-in-out forwards;
+}
+
+.animate-location-details-exit {
+  animation: location-details-exit 3s ease-in-out forwards;
 }

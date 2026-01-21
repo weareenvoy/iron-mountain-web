@@ -30,7 +30,20 @@ const VIEWS: Partial<Record<BasecampBeatId, ViewRenderer>> = {
   'problem-2': (data, beatId) => <ProblemIntro beatId={beatId as 'problem-1' | 'problem-2'} data={data.problem1} />,
   'problem-3': data => <Problem3 data={data.problem2} />,
   'problem-4': data => <Problem4 data={data.problem3} />,
-  'welcome-1': data => <WelcomeView data={data.welcome} />,
+  'welcome-1': (data, beatId) => (
+    <WelcomeView
+      beatId={beatId as 'welcome-1' | 'welcome-2'}
+      locationDetails={data.locationDetails}
+      welcome={data.welcome}
+    />
+  ),
+  'welcome-2': (data, beatId) => (
+    <WelcomeView
+      beatId={beatId as 'welcome-1' | 'welcome-2'}
+      locationDetails={data.locationDetails}
+      welcome={data.welcome}
+    />
+  ),
 };
 
 const Foreground = () => {
