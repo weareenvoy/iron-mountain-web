@@ -28,14 +28,14 @@
       "body": "Explore each section to learn how Iron Mountain can transform your enterprise",
       "headline": "Learn more about how we unlocked new possibilities for our partners",
       "headline2": "Centralized management of services via API",
-      "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image1-Diamond.webp",
+      "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image1-Full.webp",
       "mainCTA": "Centralized management of services",
       "secondaryCTA": "Launch demo",
       "tapCarousel": [
         {
           "bullets": ["Decommissioning services", "Packaging / logistics / transportation", "Data sanitization", "Lease returns", "ITAD"],
           "id": "1",
-          "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image2-Diamond.webp",
+          "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image2-Full.webp",
           "title": "Data configuration"
         },
         {
@@ -47,14 +47,14 @@
         {
           "bullets": ["Kitting", "Cleaning", "Planning/scheduling", "Imaging", "Required upgrades"],
           "id": "3",
-          "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image3-Diamond.webp",
+          "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image3-Full.webp",
           "title": "Device configuration",
           "video": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video3-Full.webm"
         },
         {
           "bullets": ["Shipment of PC and peripherals", "Advanced exchange for repair or refresh"],
           "id": "4",
-          "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image4-Diamond.webp",
+          "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image4-Full.webp",
           "title": "Device deployment",
           "video": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video4-Full.webm"
         },
@@ -67,7 +67,7 @@
         {
           "bullets": ["Retrieval of PC and peripherals"],
           "id": "6",
-          "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image5-Diamond.webp",
+          "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Image5-Full.webp",
           "title": "Device reverse logistics",
           "video": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/04+-+Custom+Interactive/CU-Video6-Full.webm"
         }
