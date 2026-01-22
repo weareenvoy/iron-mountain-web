@@ -217,19 +217,8 @@ export const parseKioskData = (kioskData: null | Record<string, unknown> | undef
       if (!isCustomInteractiveContent(validated)) {
         if (process.env.NODE_ENV === 'development') {
           console.warn('[parseKioskData] customInteractive1 object has invalid shape:', validated);
-          console.warn('[parseKioskData] customInteractive1 validation details:', {
-            hasImage: 'image' in (validated as object),
-            imageValue: (validated as Record<string, unknown>).image,
-            imageType: typeof (validated as Record<string, unknown>).image
-          });
         }
         return undefined;
-      }
-      if (process.env.NODE_ENV === 'development') {
-        console.log('[parseKioskData] customInteractive1 validated successfully:', {
-          hasImage: 'image' in (validated as object),
-          imageValue: (validated as Record<string, unknown>).image
-        });
       }
       return validated;
     });
