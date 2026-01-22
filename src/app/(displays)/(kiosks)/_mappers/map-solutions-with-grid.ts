@@ -18,7 +18,8 @@ export type DiamondMapping = {
 };
 
 /**
- * Validates that diamondList contains only strings
+ * Validates that diamondList contains 4-5 string entries.
+ * The solution grid UI is designed for a balanced layout with 4-5 diamonds.
  */
 const validateDiamondList = (value: unknown): readonly string[] => {
   if (!Array.isArray(value)) {
@@ -26,6 +27,12 @@ const validateDiamondList = (value: unknown): readonly string[] => {
   }
   if (!value.every(item => typeof item === 'string')) {
     throw new Error('diamondList must contain only strings');
+  }
+  if (value.length < 4 || value.length > 5) {
+    throw new Error(
+      `diamondList must contain 4-5 entries for solution grid, got ${value.length}. ` +
+        'The UI supports: center, topLeft, topRight (required), bottomLeft (required), bottomRight (required).'
+    );
   }
   return value;
 };
