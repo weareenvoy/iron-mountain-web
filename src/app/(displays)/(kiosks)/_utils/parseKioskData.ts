@@ -67,10 +67,15 @@ const isCustomInteractiveContent = (value: unknown): value is CustomInteractiveC
   if (typeof value !== 'object' || value === null) return false;
   const obj = value as Record<string, unknown>;
   return (
+    (obj.backCTA === undefined || typeof obj.backCTA === 'string') &&
+    (obj.body === undefined || typeof obj.body === 'string') &&
+    (obj.body2 === undefined || typeof obj.body2 === 'string') &&
+    (obj.diamondCarouselItems === undefined || Array.isArray(obj.diamondCarouselItems)) &&
     (obj.headline === undefined || typeof obj.headline === 'string') &&
+    (obj.headline2 === undefined || typeof obj.headline2 === 'string') &&
+    (obj.image === undefined || typeof obj.image === 'string') &&
     (obj.mainCTA === undefined || typeof obj.mainCTA === 'string') &&
     (obj.secondaryCTA === undefined || typeof obj.secondaryCTA === 'string') &&
-    (obj.diamondCarouselItems === undefined || Array.isArray(obj.diamondCarouselItems)) &&
     (obj.tapCarousel === undefined || Array.isArray(obj.tapCarousel))
   );
 };
