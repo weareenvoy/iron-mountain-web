@@ -429,13 +429,23 @@ export interface ApiResponseItem<T> {
 export type ApiResponse<T> = readonly ApiResponseItem<T>[];
 
 // Specific API response types
-export type BasecampApiResponse = ApiResponse<BasecampData>;
+// BasecampApiResponse is a single locale response (not an array)
+// Format: { locale: "en", data: {...} }
+export interface BasecampApiResponse {
+  readonly data: BasecampData;
+  readonly locale: Locale;
+}
 // DocentInitialApiResponse is the data-wrapped locale response from /api/docent-initial
 // Format: { data: [{ locale: "en", data: {...} }, { locale: "pt", data: {...} }] }
 export interface DocentInitialApiResponse {
   readonly data: ApiResponse<DocentData>;
 }
-export type SummitApiResponse = ApiResponse<SummitData>;
+// SummitApiResponse is a single locale response
+// Format: { locale: "en", data: {...} }
+export interface SummitApiResponse {
+  readonly data: SummitData;
+  readonly locale: Locale;
+}
 export type WelcomeWallApiResponse = ApiResponse<WelcomeWallData>;
 export type KioskApiResponse = ApiResponse<KioskData>;
 

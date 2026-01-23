@@ -449,14 +449,6 @@ const SummitSlidesScreen = ({
     return <PlaceholderSlide description="" heading={heading} />;
   }
 
-  const requiredMeta = (label: string) => {
-    const match = data.meta.find(item => item.label.toLowerCase() === label.toLowerCase());
-    if (!match) {
-      throw new Error(`Missing meta label: ${label}`);
-    }
-    return match;
-  };
-
   const summitSlides = data.summitSlides;
 
   if (screen === 'primary') {
@@ -467,9 +459,9 @@ const SummitSlidesScreen = ({
 
     return (
       <StaticWelcomeSlide
-        elevation={requiredMeta('elevation').value}
-        location={requiredMeta('location').value}
-        site={requiredMeta('site').value}
+        elevation={data.locationDetails.elevation}
+        location={data.locationDetails.name}
+        site={data.locationDetails.exhibit}
         title={journeyIntroSlide.title}
         videoUrl={journeyIntroSlide.backgroundVideoUrl}
       />

@@ -1,3 +1,9 @@
+export interface SummitLocationDetails {
+  readonly elevation: string;
+  readonly exhibit: string;
+  readonly name: string;
+}
+
 export interface SummitData {
   readonly activateTitle: string;
   readonly basecamp: SummitBasecamp;
@@ -5,6 +11,7 @@ export interface SummitData {
   readonly kiosk1: SummitKiosk;
   readonly kiosk2: SummitKiosk;
   readonly kiosk3: SummitKiosk;
+  readonly locationDetails: SummitLocationDetails;
   readonly meta: SummitMeta;
   readonly overlook: SummitOverlook;
   readonly protectTitle: string;

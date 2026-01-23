@@ -1,4 +1,4 @@
-import { getLocaleForTesting, shouldUseStaticPlaceholderData } from '@/flags/flags';
+import { shouldUseStaticPlaceholderData } from '@/flags/flags';
 import type { BasecampApiResponse, BasecampDataResponse } from '@/lib/internal/types';
 
 export async function getBasecampData(): Promise<BasecampDataResponse> {
@@ -12,17 +12,7 @@ export async function getBasecampData(): Promise<BasecampDataResponse> {
       const res = await fetch('/api/basecamp.json', { cache: 'force-cache' });
       clearTimeout(timeout);
       const rawData = (await res.json()) as BasecampApiResponse;
-      const locale = getLocaleForTesting();
-      const data = rawData.find(item => item.locale === locale)?.data;
-
-      if (!data) {
-        throw new Error(`Missing data for locale: ${locale}`);
-      }
-
-      return {
-        data,
-        locale,
-      };
+      return { data: rawData.data, locale: rawData.locale };
     }
 
     // Online first
@@ -33,32 +23,12 @@ export async function getBasecampData(): Promise<BasecampDataResponse> {
     clearTimeout(timeout);
     if (!res.ok) throw new Error(`Bad status: ${res.status}`);
     const rawData = (await res.json()) as BasecampApiResponse;
-    const locale = getLocaleForTesting();
-    const data = rawData.find(item => item.locale === locale)?.data;
-
-    if (!data) {
-      throw new Error(`Missing data for locale: ${locale}`);
-    }
-
-    return {
-      data,
-      locale,
-    };
+    return { data: rawData.data, locale: rawData.locale };
   } catch {
     clearTimeout(timeout);
     // Offline/static fallback
     const res = await fetch('/api/basecamp.json', { cache: 'force-cache' });
     const rawData = (await res.json()) as BasecampApiResponse;
-    const locale = getLocaleForTesting();
-    const data = rawData.find(item => item.locale === locale)?.data;
-
-    if (!data) {
-      throw new Error(`Missing data for locale: ${locale}`);
-    }
-
-    return {
-      data,
-      locale,
-    };
+    return { data: rawData.data, locale: rawData.locale };
   }
 }

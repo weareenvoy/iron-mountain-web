@@ -1,13 +1,10 @@
-[
 {
     "locale": "en",
     "data": {
       "meta": [
         { "label": "Company", "value": "Boyer-Boyer" },
         { "label": "Date of engagement", "value": "24/12/2025" },
-        { "label": "Elevation", "value": "Elevation 760 m (2,493.4 ft)" },
-        { "label": "Location", "value": "São Paulo, BR" },
-        { "label": "Site", "value": "Executive Innovation Center" }
+        { "label": "Location", "value": "São Paulo, Brazil" }
       ],
       "basecamp": {
         "possibilities": { "title": "Discover new possibilities" },
@@ -159,9 +156,13 @@
         { "handle": "journey-5", "title": "Unlock your future" },
         { "handle": "journey-6", "title": "Stories of impact" }
       ],
+      "locationDetails": {
+        "name": "São Paulo, Brazil",
+        "elevation": "Elevation 760 m (2,493.4 ft)",
+        "exhibit": "Executive Briefing Center"
+      },
       "protectTitle": "Protect",
       "connectTitle": "Connect",
       "activateTitle": "Activate"
   }
 }
-]
