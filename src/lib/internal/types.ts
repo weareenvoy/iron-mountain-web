@@ -185,6 +185,7 @@ export interface BasecampData {
     readonly exhibit: string;
     readonly name: string;
   };
+  // Note: ambient section intentionally has no music
   readonly music?: {
     readonly [key in BasecampSection]?: string;
   };
