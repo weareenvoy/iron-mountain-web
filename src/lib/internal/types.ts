@@ -180,7 +180,7 @@ export interface BasecampData {
       readonly url: string;
     };
   };
-  readonly music: {
+  readonly music?: {
     readonly [key in BasecampSection]?: string;
   };
   readonly possibilities: {
@@ -234,7 +234,7 @@ export interface BasecampData {
     };
     readonly title: string;
   };
-  readonly sfx: {
+  readonly sfx?: {
     readonly beat: string;
     readonly moment: string;
     readonly text: string;

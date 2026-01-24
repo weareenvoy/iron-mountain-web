@@ -14,7 +14,7 @@ type UseAnimationStartSfxArgs = Readonly<{
 export const useAnimationStartSfx = ({ containerRef, selector }: UseAnimationStartSfxArgs): void => {
   const audio = useAudio();
   const { data } = useBasecamp();
-  const sfxUrl = data?.sfx.text;
+  const sfxUrl = data?.sfx?.text;
 
   // Track which elements have already played SFX (prevents double-fire)
   const playedRef = useRef<Set<Element>>(new Set());

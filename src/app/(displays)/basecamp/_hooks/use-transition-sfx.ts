@@ -14,8 +14,8 @@ export const useTransitionSfx = (displayedBeatId: BasecampBeatId | null): void =
   const { data } = useBasecamp();
 
   // Extract URLs to prevent effect re-runs
-  const beatSfxUrl = data?.sfx.beat;
-  const momentSfxUrl = data?.sfx.moment;
+  const beatSfxUrl = data?.sfx?.beat;
+  const momentSfxUrl = data?.sfx?.moment;
 
   const prevBeatIdRef = useRef<BasecampBeatId | null>(null);
 
