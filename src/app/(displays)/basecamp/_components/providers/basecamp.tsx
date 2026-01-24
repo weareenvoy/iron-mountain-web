@@ -21,7 +21,7 @@ import {
   type Locale,
 } from '@/lib/internal/types';
 import { parseBasecampBeatId } from '@/lib/internal/utils/parse-beat-id';
-import { mqttCommands } from '@/lib/mqtt/constants';
+import { mqttCommands, mqttStateTopics } from '@/lib/mqtt/constants';
 import { useExhibitSetVolume } from '@/lib/mqtt/utils/use-exhibit-set-volume';
 import type { ExhibitMqttStateBase } from '@/lib/mqtt/types';
 
@@ -121,7 +121,9 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     setLoading(true);
 
     try {
+      // getBasecampData validates music/sfx at the boundary
       const basecampData = await getBasecampData();
+
       setData(basecampData.data);
       setLocale(basecampData.locale);
       setError(null);
@@ -269,17 +271,17 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
         // Fetch content if we have a tour loaded
         fetchData();
         // We just need to get retained state once, so unsubscribe after we got the state
-        client.unsubscribeFromTopic('state/basecamp', handleOwnState);
+        client.unsubscribeFromTopic(mqttStateTopics.basecamp, handleOwnState);
       } catch (error) {
         console.error('Basecamp: Error parsing own state:', error);
       }
     };
 
     // Subscribe on mount to get retained state + future updates
-    client.subscribeToTopic('state/basecamp', handleOwnState);
+    client.subscribeToTopic(mqttStateTopics.basecamp, handleOwnState);
 
     return () => {
-      client.unsubscribeFromTopic('state/basecamp', handleOwnState);
+      client.unsubscribeFromTopic(mqttStateTopics.basecamp, handleOwnState);
     };
   }, [audio, client, fetchData]);
 
