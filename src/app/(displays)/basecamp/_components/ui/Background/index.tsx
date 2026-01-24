@@ -36,6 +36,29 @@ const Background = () => {
   const b = useRef<HTMLVideoElement>(null);
   const lastBeat = useRef<BasecampBeatId | null>(null);
 
+  // Unmute videos on first user interaction (required for browsers without kiosk flags)
+  useEffect(() => {
+    const unmute = () => {
+      if (a.current) a.current.muted = false;
+      if (b.current) b.current.muted = false;
+      console.info('[Video] Audio unlocked via user gesture');
+      // Remove all listeners after first interaction
+      document.removeEventListener('click', unmute);
+      document.removeEventListener('keydown', unmute);
+      document.removeEventListener('touchstart', unmute);
+    };
+
+    document.addEventListener('click', unmute, { once: true });
+    document.addEventListener('keydown', unmute, { once: true });
+    document.addEventListener('touchstart', unmute, { once: true });
+
+    return () => {
+      document.removeEventListener('click', unmute);
+      document.removeEventListener('keydown', unmute);
+      document.removeEventListener('touchstart', unmute);
+    };
+  }, []);
+
   // Helper to update active video and sync debug display
   const updateActiveDisplay = (value: 'a' | 'b') => {
     active.current = value;
@@ -205,6 +228,7 @@ const Background = () => {
 
   return (
     <div className="relative h-full w-full overflow-hidden">
+      {/* Videos start muted for autoplay compliance; unmuted on first user gesture */}
       <video
         className="absolute inset-0 h-full w-full object-cover"
         muted
