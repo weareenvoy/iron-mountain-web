@@ -6,7 +6,7 @@ export type Ambient = {
   readonly headline?: string;
   readonly mainCTA?: string;
   readonly quoteSource?: string;
-  readonly title?: string;
+  readonly title: string; // Required - used as subheadline/eyebrow throughout kiosks
 };
 
 export type IdleContent = {

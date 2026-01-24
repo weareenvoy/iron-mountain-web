@@ -48,13 +48,17 @@ const DIAMOND_TRANSITION = {
 /**
  * StepCarousel - Horizontally scrolling carousel of diamond-shaped steps
  * Features staggered entrance animations, size/color transitions, and modal integration
+ *
+ * NOTE: This component is designed specifically for kiosk-1 with exactly 5 steps.
+ * Layout offsets and sizing are hardcoded for the 5-item diamond configuration.
+ * If dynamic item counts are needed, consider refactoring the layout math.
  */
 const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
   const [selectedIndex, setSelectedIndex] = useState(() => Math.min(steps.length - 1, LAYOUT.INITIAL_CENTER_INDEX));
   const [shouldAnimate, setShouldAnimate] = useState(false);
   const [pressedIndex, setPressedIndex] = useState<null | number>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const transitionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const transitionTimeoutRef = useRef<null | ReturnType<typeof setTimeout>>(null);
   const selectedIndexRef = useRef(selectedIndex);
   const isTransitioningRef = useRef(false);
   const totalSlides = steps.length;

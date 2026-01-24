@@ -9,7 +9,6 @@ import {
   useRef,
   useState,
   type PropsWithChildren,
-  type RefObject,
 } from 'react';
 import { DEFAULT_KIOSK_BEAT_ID, type KioskId, type KioskMqttState } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import { useAudio } from '@/components/providers/audio-provider';
@@ -18,7 +17,6 @@ import { getKioskData } from '@/lib/internal/data/get-kiosk';
 import { mqttCommands } from '@/lib/mqtt/constants';
 import { useExhibitSetVolume } from '@/lib/mqtt/utils/use-exhibit-set-volume';
 import type { KioskData } from '@/lib/internal/types';
-import type { ExhibitMqttStateBase } from '@/lib/mqtt/types';
 
 // This file is used to access data from the Kiosk Provider and make it available to components in the Kiosk setup.
 
@@ -119,7 +117,8 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
     setLoading(true);
 
     try {
-      const kioskData = await getKioskData(kioskId);
+      // Pass abort signal to getKioskData for proper cancellation
+      const kioskData = await getKioskData(kioskId, abortController.signal);
 
       // Check if this fetch was aborted (component unmounted or new fetch started)
       if (abortController.signal.aborted) {
@@ -278,8 +277,8 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
     appId,
     audio,
     client,
-    reportStateRef: reportStateRef as RefObject<(next: Partial<ExhibitMqttStateBase>) => void>,
-    stateRef: mqttStateRef as RefObject<ExhibitMqttStateBase>,
+    reportStateRef,
+    stateRef: mqttStateRef,
   });
 
   const contextValue = useMemo<KioskContextType>(
