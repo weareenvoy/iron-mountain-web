@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useBasecamp } from '@/app/(displays)/basecamp/_components/providers/basecamp';
 import { getNextBeatId, isBackgroundSeamlessTransition } from '@/app/(displays)/basecamp/_utils';
 import { BasecampBeatId, isValidBasecampBeatId } from '@/lib/internal/types';
@@ -35,6 +35,27 @@ const Background = () => {
   const activeDisplayRef = useRef<HTMLSpanElement>(null);
   const b = useRef<HTMLVideoElement>(null);
   const lastBeat = useRef<BasecampBeatId | null>(null);
+
+  // Track muted state
+  const [isMuted, setIsMuted] = useState(true);
+
+  // Unmute videos on first user interaction (required for browsers without kiosk flags)
+  useEffect(() => {
+    const unmute = () => {
+      setIsMuted(false);
+      console.info('[Video] Audio unlocked via user gesture');
+    };
+
+    document.addEventListener('click', unmute, { once: true });
+    document.addEventListener('keydown', unmute, { once: true });
+    document.addEventListener('touchstart', unmute, { once: true });
+
+    return () => {
+      document.removeEventListener('click', unmute);
+      document.removeEventListener('keydown', unmute);
+      document.removeEventListener('touchstart', unmute);
+    };
+  }, []);
 
   // Helper to update active video and sync debug display
   const updateActiveDisplay = (value: 'a' | 'b') => {
@@ -205,9 +226,10 @@ const Background = () => {
 
   return (
     <div className="relative h-full w-full overflow-hidden">
+      {/* Videos start muted for autoplay compliance; unmuted on first user gesture */}
       <video
         className="absolute inset-0 h-full w-full object-cover"
-        muted
+        muted={isMuted}
         onTimeUpdate={handleTimeUpdate}
         playsInline
         preload="auto"
@@ -216,7 +238,7 @@ const Background = () => {
       />
       <video
         className="absolute inset-0 h-full w-full object-cover"
-        muted
+        muted={isMuted}
         onTimeUpdate={handleTimeUpdate}
         playsInline
         preload="auto"
