@@ -2,6 +2,7 @@
 
 import { startTransition, useEffect, useState } from 'react';
 import { useBasecamp } from '@/app/(displays)/basecamp/_components/providers/basecamp';
+import { useTransitionSfx } from '@/app/(displays)/basecamp/_hooks/use-transition-sfx';
 import { isForegroundSeamlessTransition } from '@/app/(displays)/basecamp/_utils';
 import { BasecampBeatId, BasecampData, isValidBasecampBeatId } from '@/lib/internal/types';
 import AmbientView from './views/AmbientView';
@@ -44,6 +45,9 @@ const Foreground = () => {
   const [displayedBeatId, setDisplayedBeatId] = useState<BasecampBeatId | null>(null);
   // True when fade-out completed but video wasn't ready yet
   const [fadedOut, setFadedOut] = useState(false);
+
+  // Play SFX when displayedBeatId changes (i.e., when video is ready)
+  useTransitionSfx(displayedBeatId);
 
   const isReady = targetBeatId !== null && readyBeatId === targetBeatId;
   const isValid = targetBeatId !== null;
