@@ -86,10 +86,15 @@
         "welcome-4":       { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Welcome_01_Part_4.webm" }
       },
       "music": {
-        "ascend": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/music/Basecamp_05_Possibilities1_Music_v2.mp3",
-        "possibilities": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/music/Basecamp_03_Problem1_Music_v2.mp3",
-        "problem": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/music/Basecamp_01_Welcome1_Music_v2.mp3",
+        "ascend": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/music/Basecamp_07_Ascend_Music_v2.mp3",
+        "possibilities": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/music/Basecamp_05_Possibilities1_Music_v2.mp3",
+        "problem": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/music/Basecamp_03_Problem1_Music_v2.mp3",
         "welcome": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/music/Basecamp_01_Welcome1_Music_v2.mp3"
+      },
+      "sfx": {
+        "beat": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/sfx/ENVOY_IRM_SFX_Whoosh2.mp3",
+        "moment": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/sfx/ENVOY_IRM_SFX_Whoosh1.mp3",
+        "text": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/sfx/ENVOY_IRM_SFX_Appear1.mp3"
       },
       "locationDetails": {
         "name": "São Paulo, Brazil",
