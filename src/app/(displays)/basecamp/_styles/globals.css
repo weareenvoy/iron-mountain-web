@@ -116,23 +116,6 @@
   }
 }
 
-/* WelcomeView: Fade in, hold, move left and exit */
-@keyframes welcome-sequence {
-  0% {
-    opacity: 1;
-    transform: translateX(10%);
-  }
-  /* Adjust start time per design */
-  70% {
-    opacity: 1;
-    transform: translateX(10%);
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(-100%);
-  }
-}
-
 .animate-char-in {
   animation: char-in 0.4s ease-out both;
   opacity: 0;
@@ -163,6 +146,33 @@
   animation: scale-fade-in 0.7s ease-out both;
 }
 
-.animate-welcome {
-  animation: welcome-sequence 7s ease-in-out forwards;
+/* WelcomeView exit animations (no hold phase) for welcome-2 beat */
+@keyframes welcome-exit {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-110%);
+  }
+}
+
+@keyframes location-details-exit {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-16%);
+  }
+}
+
+.animate-welcome-exit {
+  animation: welcome-exit 3s ease-in-out forwards;
+}
+
+.animate-location-details-exit {
+  animation: location-details-exit 3s ease-in-out forwards;
 }
