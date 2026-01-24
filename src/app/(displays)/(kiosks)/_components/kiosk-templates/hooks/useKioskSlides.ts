@@ -69,7 +69,16 @@ export const useKioskSlides = ({
   } = slideBuilders;
 
   // Parse kiosk data with type safety using extracted utility
-  const kioskContent = useMemo(() => parseKioskData(kioskData), [kioskData]);
+  const kioskContent = useMemo(() => {
+    try {
+      return parseKioskData(kioskData);
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[useKioskSlides] Failed to parse kiosk data:', error);
+      }
+      return null;
+    }
+  }, [kioskData]);
 
   // Map challenges
   const challenges = useMemo(() => {

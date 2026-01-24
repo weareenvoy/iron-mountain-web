@@ -3,16 +3,22 @@ import type { AudioController } from '@/lib/audio/types';
 import type { ExhibitMqttStateBase, VolumeControllableExhibit } from '@/lib/mqtt/types';
 import type { MqttService } from '@/lib/mqtt/utils/mqtt-service';
 
-interface UseExhibitSetVolumeArgs {
+interface UseExhibitSetVolumeArgs<TState extends ExhibitMqttStateBase = ExhibitMqttStateBase> {
   readonly appId: VolumeControllableExhibit;
   readonly audio: AudioController;
   readonly client: MqttService | undefined;
-  readonly reportStateRef: RefObject<(next: Partial<ExhibitMqttStateBase>) => void>;
-  readonly stateRef: RefObject<ExhibitMqttStateBase>;
+  readonly reportStateRef: RefObject<(next: Partial<TState>) => void>;
+  readonly stateRef: RefObject<TState>;
 }
 
 // Shared hook to handle set-volume commands for all exhibits. This is used only in basecamp now.
-export function useExhibitSetVolume({ appId, audio, client, reportStateRef, stateRef }: UseExhibitSetVolumeArgs) {
+export function useExhibitSetVolume<TState extends ExhibitMqttStateBase = ExhibitMqttStateBase>({
+  appId,
+  audio,
+  client,
+  reportStateRef,
+  stateRef,
+}: UseExhibitSetVolumeArgs<TState>) {
   useEffect(() => {
     if (!client) return;
 
@@ -34,7 +40,7 @@ export function useExhibitSetVolume({ appId, audio, client, reportStateRef, stat
         reportState({
           'volume-level': typeof level === 'number' ? level : state['volume-level'],
           'volume-muted': typeof muted === 'boolean' ? muted : state['volume-muted'],
-        });
+        } as Partial<TState>);
       } catch (error) {
         console.error(`${appId}: Error parsing set-volume command:`, error);
       }

@@ -101,7 +101,7 @@ export const mapCustomInteractiveKiosk3 = (
 
           return {
             bullets: item.bullets ?? [],
-            eyebrow: ambient.title ?? '',
+            eyebrow: ambient.title,
             headline: item.title ?? '',
             id,
             primaryImageAlt: '',
