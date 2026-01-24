@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useBasecamp } from '@/app/(displays)/basecamp/_components/providers/basecamp';
 import { getNextBeatId, isBackgroundSeamlessTransition } from '@/app/(displays)/basecamp/_utils';
 import { BasecampBeatId, isValidBasecampBeatId } from '@/lib/internal/types';
@@ -35,6 +35,27 @@ const Background = () => {
   const activeDisplayRef = useRef<HTMLSpanElement>(null);
   const b = useRef<HTMLVideoElement>(null);
   const lastBeat = useRef<BasecampBeatId | null>(null);
+
+  // Track muted state
+  const [isMuted, setIsMuted] = useState(true);
+
+  // Unmute videos on first user interaction (required for browsers without kiosk flags)
+  useEffect(() => {
+    const unmute = () => {
+      setIsMuted(false);
+      console.info('[Video] Audio unlocked via user gesture');
+    };
+
+    document.addEventListener('click', unmute, { once: true });
+    document.addEventListener('keydown', unmute, { once: true });
+    document.addEventListener('touchstart', unmute, { once: true });
+
+    return () => {
+      document.removeEventListener('click', unmute);
+      document.removeEventListener('keydown', unmute);
+      document.removeEventListener('touchstart', unmute);
+    };
+  }, []);
 
   // Helper to update active video and sync debug display
   const updateActiveDisplay = (value: 'a' | 'b') => {
@@ -79,6 +100,7 @@ const Background = () => {
     // First beat after page reload → force into A
     const isFirstLoad = lastBeatId === null;
     const isAmbient = momentId === 'ambient';
+    const seamless = !isFirstLoad && isBackgroundSeamlessTransition(lastBeatId, beatId);
 
     // Determine visible and invisible
     const visible = active.current === 'a' ? a.current : b.current;
@@ -92,10 +114,15 @@ const Background = () => {
 
     // Configure the incoming video
     const setupIncomingVideo = (video: HTMLVideoElement) => {
-      video.src = url;
       video.currentTime = 0;
       video.loop = isAmbient;
-      video.load();
+
+      // Only set src and load if URL is different
+      // If URL matches, the video is already loading/loaded from preload - don't restart
+      if (video.getAttribute('src') !== url) {
+        video.src = url;
+        video.load();
+      }
     };
 
     const startPlaybackAndSignalReady = (video: HTMLVideoElement) => {
@@ -109,6 +136,16 @@ const Background = () => {
       cleanupFns.push(() => video.removeEventListener('playing', handlePlaying));
     };
 
+    // Preload next beat into the video that will be hidden after current switch
+    const preloadNextBeat = (target: HTMLVideoElement) => {
+      const nextBeatId = getNextBeatId(beatId, isAmbient);
+      if (nextBeatId && dataRef.current?.beats[nextBeatId].url) {
+        if (lastBeat.current === beatId) {
+          target.src = dataRef.current.beats[nextBeatId].url;
+        }
+      }
+    };
+
     if (isFirstLoad) {
       // First load: use video A directly
       setupIncomingVideo(a.current!);
@@ -117,10 +154,12 @@ const Background = () => {
       const handleCanPlayThrough = () => startPlaybackAndSignalReady(a.current!);
       a.current!.addEventListener('canplaythrough', handleCanPlayThrough, { once: true });
       cleanupFns.push(() => a.current?.removeEventListener('canplaythrough', handleCanPlayThrough));
+
+      // Preload next beat into B (hidden)
+      preloadNextBeat(b.current!);
     } else {
       // Subsequent beats
       setupIncomingVideo(hidden);
-      const seamless = isBackgroundSeamlessTransition(lastBeatId, beatId);
 
       const performSwitch = () => {
         if (lastBeat.current !== beatId) return;
@@ -139,6 +178,13 @@ const Background = () => {
 
         startPlaybackAndSignalReady(hidden);
         updateActiveDisplay(active.current === 'a' ? 'b' : 'a');
+
+        // Preload next beat AFTER switch (visible is now hidden)
+        // NOTE: For seamless (0ms) transitions, CSS `transitionend` event may not fire.
+        // We preload immediately here instead of waiting for transitionend.
+        if (seamless) {
+          preloadNextBeat(visible);
+        }
       };
 
       if (hidden.readyState >= 3) {
@@ -148,24 +194,12 @@ const Background = () => {
         hidden.addEventListener('canplaythrough', performSwitch, { once: true });
         cleanupFns.push(() => hidden.removeEventListener('canplaythrough', performSwitch));
       }
-    }
 
-    // Preload next beat into the now-visible (soon-to-be-hidden) video
-    const nextBeatId = getNextBeatId(beatId, isAmbient);
-
-    if (nextBeatId && dataRef.current?.beats[nextBeatId].url) {
-      // For first load: preload into B immediately
-      // For transitions: preload into the video that will be hidden next (i.e. current visible)
-      const preloadTarget = isFirstLoad ? b.current! : visible;
-
-      if (isFirstLoad) {
-        preloadTarget.src = dataRef.current.beats[nextBeatId].url;
-      } else {
-        // Wait until crossfade ends
+      // Non-seamless: wait for crossfade to complete before preloading.
+      // NOTE: transitionend reliably fires for non-zero duration transitions,
+      if (!seamless) {
         const handleTransitionEnd = () => {
-          if (lastBeat.current === beatId) {
-            preloadTarget.src = dataRef.current!.beats[nextBeatId].url;
-          }
+          preloadNextBeat(visible);
         };
         visible.addEventListener('transitionend', handleTransitionEnd, { once: true });
         cleanupFns.push(() => visible.removeEventListener('transitionend', handleTransitionEnd));
@@ -192,9 +226,10 @@ const Background = () => {
 
   return (
     <div className="relative h-full w-full overflow-hidden">
+      {/* Videos start muted for autoplay compliance; unmuted on first user gesture */}
       <video
         className="absolute inset-0 h-full w-full object-cover"
-        muted
+        muted={isMuted}
         onTimeUpdate={handleTimeUpdate}
         playsInline
         preload="auto"
@@ -203,7 +238,7 @@ const Background = () => {
       />
       <video
         className="absolute inset-0 h-full w-full object-cover"
-        muted
+        muted={isMuted}
         onTimeUpdate={handleTimeUpdate}
         playsInline
         preload="auto"
@@ -211,6 +246,7 @@ const Background = () => {
         style={{ opacity: 0, transition: `opacity ${CROSSFADE_DURATION_MS}ms ease` }}
       />
 
+      {/* For debugging only */}
       <div className="pointer-events-none absolute top-4 left-4 rounded bg-black/60 px-3 py-2 font-mono text-sm text-white">
         <div>{beatId}</div>
         <div>
