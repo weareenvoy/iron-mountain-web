@@ -96,6 +96,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     // Wait for data to load before playing music
     if (!data?.music) return;
 
+    // Note: ambient section intentionally has no music - musicUrl will be undefined
     const momentId = exhibitState.momentId as BasecampSection;
     const musicUrl = data.music[momentId];
 
