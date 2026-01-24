@@ -78,7 +78,7 @@
     "eslint-plugin-turbo": "^2.7.4",
     "globals": "^17.0.0",
     "only-allow": "^1.2.2",
-    "prettier": "^3.7.4",
+    "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^4.1.18",
     "turbo": "^2.7.1",
