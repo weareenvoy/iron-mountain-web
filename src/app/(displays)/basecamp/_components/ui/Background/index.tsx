@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useBasecamp } from '@/app/(displays)/basecamp/_components/providers/basecamp';
 import { getNextBeatId, isBackgroundSeamlessTransition } from '@/app/(displays)/basecamp/_utils';
 import { BasecampBeatId, isValidBasecampBeatId } from '@/lib/internal/types';
@@ -36,16 +36,14 @@ const Background = () => {
   const b = useRef<HTMLVideoElement>(null);
   const lastBeat = useRef<BasecampBeatId | null>(null);
 
+  // Track muted state
+  const [isMuted, setIsMuted] = useState(true);
+
   // Unmute videos on first user interaction (required for browsers without kiosk flags)
   useEffect(() => {
     const unmute = () => {
-      if (a.current) a.current.muted = false;
-      if (b.current) b.current.muted = false;
+      setIsMuted(false);
       console.info('[Video] Audio unlocked via user gesture');
-      // Remove all listeners after first interaction
-      document.removeEventListener('click', unmute);
-      document.removeEventListener('keydown', unmute);
-      document.removeEventListener('touchstart', unmute);
     };
 
     document.addEventListener('click', unmute, { once: true });
@@ -231,7 +229,7 @@ const Background = () => {
       {/* Videos start muted for autoplay compliance; unmuted on first user gesture */}
       <video
         className="absolute inset-0 h-full w-full object-cover"
-        muted
+        muted={isMuted}
         onTimeUpdate={handleTimeUpdate}
         playsInline
         preload="auto"
@@ -240,7 +238,7 @@ const Background = () => {
       />
       <video
         className="absolute inset-0 h-full w-full object-cover"
-        muted
+        muted={isMuted}
         onTimeUpdate={handleTimeUpdate}
         playsInline
         preload="auto"
