@@ -3,21 +3,38 @@
 import type { BasecampData } from '@/lib/internal/types';
 
 type Props = {
-  readonly data: BasecampData['welcome'];
+  readonly beatId: 'welcome-1' | 'welcome-2';
+  readonly locationDetails: BasecampData['locationDetails'];
+  readonly welcome: BasecampData['welcome'];
 };
 
-// Text appears on the left side, then slowly moves left until it disappears
+// welcome-1: Text appears and stays static
+// welcome-2: Text moves left and fades out
 
-const WelcomeView = ({ data }: Props) => {
+const WelcomeView = ({ beatId, locationDetails, welcome }: Props) => {
+  const isExiting = beatId === 'welcome-2';
+
   return (
-    <div className="absolute top-1/2 left-8 flex -translate-y-1/2 items-center">
-      <div
-        className="animate-welcome w-130 font-geometria text-[68px] leading-tight font-bold tracking-[-3.4px] text-white"
-        key={data.text}
-      >
-        {data.text}
+    <>
+      {/* Welcome text - vertically centered */}
+      <div className="absolute top-1/2 left-20 flex -translate-y-1/2 items-center">
+        <div
+          className={`w-130 font-geometria text-[68px] leading-tight font-bold tracking-[-3.4px] text-white ${isExiting ? 'animate-welcome-exit' : ''}`}
+          key={welcome.text}
+        >
+          {welcome.text}
+        </div>
       </div>
-    </div>
+
+      {/* Location details at the bottom */}
+      <div
+        className={`absolute bottom-17 flex w-full items-center justify-between pr-170 pl-35 font-interstate text-[34px] text-white ${isExiting ? 'animate-location-details-exit' : ''}`}
+      >
+        <span>{locationDetails.exhibit}</span>
+        <span className="mr-50 tracking-[-1.7px]">{locationDetails.name}</span>
+        <span>{locationDetails.elevation}</span>
+      </div>
+    </>
   );
 };
 

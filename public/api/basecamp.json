@@ -66,30 +66,39 @@
         "text": "Welcome to Iron Mountain"
       },
       "beats": {
-        "ambient-1":    { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Ambient_loop_00.webm" },
-        "welcome-1":    { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Welcome_01_part_1.webm" },
-        "welcome-2":    { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Welcome_01_part_2.webm" },
-        "welcome-3":    { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Welcome_01_part_3.webm" },
-        "welcome-4":    { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Welcome_01_part_4.webm" },
-        "problem-1":    { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Problem_02_part_1.webm" },
-        "problem-2":    { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Problem_02_part_2.webm" },
-        "problem-3":    { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Problem_02_part_3.webm" },
-        "problem-4":    { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Problem_02_part_4.webm" },
-        "possibilities-1": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Possibilities_03_part_1.webm" },
-        "possibilities-2": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Possibilities_03_part_2.webm" },
-        "possibilities-3": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Possibilities_03_part_3.webm" },
-        "possibilities-4": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Possibilities_03_part_4.webm" },
-        "possibilities-5": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Possibilities_03_part_5.webm" },
-        "ascend-1": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Ascend_04_part_1.webm" },
-        "ascend-2": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Ascend_04_part_2.webm" },
-        "ascend-3": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/Basecamp_Ascend_04_part_3.webm" }
+        "ambient-1":       { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/Basecamp_Ambient_loop_00.webm" },
+        "ascend-1":        { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Ascend_04_Part_1.webm" },
+        "ascend-2":        { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Ascend_04_Part_2.webm" },
+        "ascend-3":        { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Ascend_04_Part_3.webm" },
+        "possibilities-1": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Possibilities_03_Part_1.webm" },
+        "possibilities-2": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Possibilities_03_Part_2.webm" },
+        "possibilities-3": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Possibilities_03_Part_3.webm" },
+        "possibilities-4": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Possibilities_03_Part_4.webm" },
+        "possibilities-5": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Possibilities_03_Part_5.webm" },
+        "problem-1":       { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Problem_02_Part_1.webm" },
+        "problem-2":       { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Problem_02_Part_2.webm" },
+        "problem-3":       { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Problem_02_Part_3.webm" },
+        "problem-4":       { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Problem_02_Part_4.webm" },
+        "welcome-1":       { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Welcome_01_Part_1.webm" },
+        "welcome-2":       { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Welcome_01_Part_2.webm" },
+        "welcome-3":       { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Welcome_01_Part_3.webm" },
+        "welcome-4":       { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Welcome_01_Part_4.webm" }
       },
       "music": {
-        "ambient": "https://cdn.pixabay.com/audio/2022/03/13/audio_d0add212b7.mp3",
-        "ascend": "https://cdn.pixabay.com/audio/2025/11/19/audio_8a5dad516a.mp3",
-        "possibilities": "https://cdn.pixabay.com/audio/2025/01/31/audio_352d34e739.mp3",
-        "problem": "https://cdn.pixabay.com/audio/2023/04/04/audio_8ff7bcf37b.mp3",
-        "welcome": "https://cdn.pixabay.com/audio/2025/08/08/audio_8e1c201162.mp3"
+        "ascend": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/music/Basecamp_07_Ascend_Music_v2.mp3",
+        "possibilities": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/music/Basecamp_05_Possibilities1_Music_v2.mp3",
+        "problem": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/music/Basecamp_03_Problem1_Music_v2.mp3",
+        "welcome": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/music/Basecamp_01_Welcome1_Music_v2.mp3"
+      },
+      "sfx": {
+        "beat": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/sfx/ENVOY_IRM_SFX_Whoosh2.mp3",
+        "moment": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/sfx/ENVOY_IRM_SFX_Whoosh1.mp3",
+        "text": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/sfx/ENVOY_IRM_SFX_Appear1.mp3"
+      },
+      "locationDetails": {
+        "name": "São Paulo, Brazil",
+        "exhibit": "Executive Briefing Center",
+        "elevation": "Elevation 760 m (2,493.4 ft)"
       }
     }
   }
