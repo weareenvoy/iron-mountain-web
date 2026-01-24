@@ -180,6 +180,12 @@ export interface BasecampData {
       readonly url: string;
     };
   };
+  readonly locationDetails: {
+    readonly elevation: string;
+    readonly exhibit: string;
+    readonly name: string;
+  };
+  // Note: ambient section intentionally has no music
   readonly music?: {
     readonly [key in BasecampSection]?: string;
   };
@@ -233,6 +239,11 @@ export interface BasecampData {
       readonly title: string;
     };
     readonly title: string;
+  };
+  readonly sfx?: {
+    readonly beat: string;
+    readonly moment: string;
+    readonly text: string;
   };
   readonly welcome: {
     readonly text: string;

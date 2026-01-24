@@ -1,18 +1,26 @@
 'use client';
 
+import { useRef } from 'react';
+import { useAnimationStartSfx } from '@/app/(displays)/basecamp/_hooks/use-animation-start-sfx';
+
 type Props = {
   readonly data: readonly string[];
 };
 
-// Animation timing constants
+// Animation timing constants (single source of truth for CSS)
 const BLOCK_DELAYS_MS = [2000, 3400, 4800] as const;
 const WORD_STAGGER_MS = 100 as const;
 
 // 3 blocks of text. First shows up in left, second in center, third in right
 
 const PossibilitiesDetailsTitles = ({ data }: Props) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Play SFX when elements with data-sfx="appear" start animating
+  useAnimationStartSfx({ containerRef, selector: '[data-sfx="appear"]' });
+
   return (
-    <div className="absolute inset-0 flex">
+    <div className="absolute inset-0 flex" ref={containerRef}>
       {data.map((title, index) => {
         const baseDelay = BLOCK_DELAYS_MS[index] ?? 0;
         const titleWords = title.split(' ');
@@ -28,6 +36,8 @@ const PossibilitiesDetailsTitles = ({ data }: Props) => {
                 {titleWords.map((word, i) => (
                   <span
                     className="animate-char-in inline-block"
+                    // First word of each block triggers SFX
+                    data-sfx={i === 0 ? 'appear' : undefined}
                     key={i}
                     style={{ animationDelay: `${baseDelay + i * WORD_STAGGER_MS}ms` }}
                   >
