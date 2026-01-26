@@ -50,7 +50,6 @@ export type SolutionsAccordion = {
   }[];
   readonly headline?: string;
   readonly image?: string;
-  readonly labelText?: string;
 };
 
 export type ValueContent = {

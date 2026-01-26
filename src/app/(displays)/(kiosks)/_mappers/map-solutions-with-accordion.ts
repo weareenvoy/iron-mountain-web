@@ -42,7 +42,7 @@ export const mapSolutionsWithAccordion = (
       })),
       headline: solutionAccordion.headline,
       image: solutionAccordion.image,
-      labelText: solutionAccordion.labelText,
+      labelText: solutionsMain.labelText,
       mediaDiamondSolidSrc: solutionAccordion.image,
       subheadline: ambient.title,
     },
