@@ -23,7 +23,6 @@ export const KIOSK_1_CONFIG: KioskConfig = {
     topRight: 1,
   },
   kioskId: 'kiosk-1',
-  usesAccordion: false,
 };
 
 /**
@@ -46,7 +45,6 @@ export const KIOSK_2_CONFIG: KioskConfig = {
     topRight: 2,
   },
   kioskId: 'kiosk-2',
-  usesAccordion: false,
 };
 
 /**
@@ -61,7 +59,6 @@ export const KIOSK_3_CONFIG: KioskConfig = {
     positionRight: '120px',
     positionTop: '1945px',
   },
-  diamondMapping: undefined, // Kiosk 3 uses accordion, not diamond grid
+  diamondMapping: undefined, // Kiosk 3 has no grid data, will use accordion
   kioskId: 'kiosk-3',
-  usesAccordion: true,
 };

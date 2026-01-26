@@ -50,16 +50,9 @@ type UseKioskSlidesConfig = {
   readonly kioskData: KioskData;
   readonly kioskId: KioskId;
   readonly slideBuilders: SlideBuilders;
-  readonly usesAccordion?: boolean;
 };
 
-export const useKioskSlides = ({
-  diamondMapping,
-  kioskData,
-  kioskId,
-  slideBuilders,
-  usesAccordion = false,
-}: UseKioskSlidesConfig) => {
+export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilders }: UseKioskSlidesConfig) => {
   const {
     globalHandlers,
     handleInitialButtonClick,
@@ -93,12 +86,29 @@ export const useKioskSlides = ({
     }
   }, [kioskContent]);
 
-  // Map solutions
+  // Map solutions - dynamically choose between accordion and grid based on data presence
   const solutions = useMemo(() => {
     if (!kioskContent?.solutionMain || !kioskContent.ambient) return null;
 
     try {
-      if (usesAccordion && kioskContent.solutionAccordion) {
+      // Check if solutionAccordion has actual data (items with content)
+      const hasAccordionData =
+        kioskContent.solutionAccordion &&
+        typeof kioskContent.solutionAccordion === 'object' &&
+        Array.isArray(kioskContent.solutionAccordion.accordion) &&
+        kioskContent.solutionAccordion.accordion.some(
+          item => item.title?.trim() || (item.bullets && item.bullets.length > 0)
+        );
+
+      // Check if solutionGrid has actual data (non-empty diamondList with content)
+      const hasGridData =
+        kioskContent.solutionGrid &&
+        typeof kioskContent.solutionGrid === 'object' &&
+        Array.isArray(kioskContent.solutionGrid.diamondList) &&
+        kioskContent.solutionGrid.diamondList.some(item => item?.trim());
+
+      // Prefer accordion if it has data, otherwise use grid if it has data
+      if (hasAccordionData) {
         return mapSolutionsWithAccordion(
           kioskContent.solutionMain,
           kioskContent.solutionAccordion,
@@ -106,7 +116,7 @@ export const useKioskSlides = ({
         );
       }
 
-      if (!usesAccordion && kioskContent.solutionGrid && diamondMapping) {
+      if (hasGridData && diamondMapping) {
         return mapSolutionsWithGrid(
           kioskContent.solutionMain,
           kioskContent.solutionGrid,
@@ -122,7 +132,7 @@ export const useKioskSlides = ({
       }
       return null;
     }
-  }, [kioskContent, usesAccordion, diamondMapping]);
+  }, [kioskContent, diamondMapping]);
 
   // Map values
   const values = useMemo(() => {

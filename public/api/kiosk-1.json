@@ -86,6 +86,17 @@
         "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Image2-Full.webp"
       ]
     },
+    "solutionAccordion": {
+      "accordion": [
+        {
+          "bullets": [],
+          "title": ""
+        }
+      ],
+      "headline": "",
+      "image": "",
+      "labelText": ""
+    },
     "solutionMain": {
       "body": "With a focus on physical storage and a secure digital archive, Iron Mountain provided climate-controlled, private vaults for physical artifacts and implemented Smart Vault for digital preservation.",
       "headline": "A partnership with Iron Mountain",

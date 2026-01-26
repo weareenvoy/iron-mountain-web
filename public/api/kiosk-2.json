@@ -50,6 +50,17 @@
         "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image2-Full.webp"
       ]
     },
+    "solutionAccordion": {
+      "accordion": [
+        {
+          "bullets": [],
+          "title": ""
+        }
+      ],
+      "headline": "",
+      "image": "",
+      "labelText": ""
+    },
     "solutionMain": {
       "body": "The organization turned to Iron Mountain for help, implementing InSightⓇ DXP. This created a unified platform for newly digitized documents and digitally-native records gathered from various departments and prior acquisitions.",
       "headline": "A partnership with Iron Mountain",

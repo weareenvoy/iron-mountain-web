@@ -28,7 +28,7 @@ type BaseKioskViewProps = {
 };
 
 export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
-  const { arrowConfig, diamondMapping, kioskId, usesAccordion } = config;
+  const { arrowConfig, diamondMapping, kioskId } = config;
   const { data: kioskData } = useKiosk();
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -73,7 +73,6 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
       handleRegisterListHandlers,
       scrollToSectionById,
     },
-    usesAccordion,
   });
 
   // Determine current section using utility function - AFTER slides built

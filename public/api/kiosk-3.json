@@ -123,6 +123,11 @@
       "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/02+-+Solution/Solution-Image2-Full.webp",
       "labelText": "Solution"
     },
+    "solutionGrid": {
+      "diamondList": [],
+      "headline": "",
+      "images": []
+    },
     "solutionMain": {
       "body": "Iron Mountain's expansive operating footprint, comprehensive reporting, and technology integration capabilities solved the customer's core challenges. Implementing a streamlined device retrieval and redeployment solution, in addition to a data center decommissioning solution, allowed for improvements across the board.",
       "headline": "A partnership with Iron Mountain",
