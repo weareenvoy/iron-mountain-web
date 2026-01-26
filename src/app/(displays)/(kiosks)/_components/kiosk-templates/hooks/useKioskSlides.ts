@@ -52,6 +52,27 @@ type UseKioskSlidesConfig = {
   readonly slideBuilders: SlideBuilders;
 };
 
+/**
+ * Helper to check if an object has meaningful content.
+ * Recursively checks for non-empty strings, non-empty arrays, or nested objects with content.
+ */
+const hasContent = (obj: unknown): boolean => {
+  if (!obj || typeof obj !== 'object') return false;
+
+  if (Array.isArray(obj)) {
+    return obj.some(item => hasContent(item) || (typeof item === 'string' && item.trim().length > 0));
+  }
+
+  return Object.values(obj).some(value => {
+    if (typeof value === 'string') return value.trim().length > 0;
+    if (typeof value === 'number') return true;
+    if (typeof value === 'boolean') return true;
+    if (Array.isArray(value)) return value.length > 0 && hasContent(value);
+    if (typeof value === 'object' && value !== null) return hasContent(value);
+    return false;
+  });
+};
+
 export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilders }: UseKioskSlidesConfig) => {
   const {
     globalHandlers,
@@ -73,9 +94,11 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
     }
   }, [kioskData]);
 
-  // Map challenges
+  // Map challenges - only if challengeMain has content
   const challenges = useMemo(() => {
-    if (!kioskContent?.challengeMain || !kioskContent.ambient) return null;
+    if (!kioskContent?.ambient) return null;
+    if (!kioskContent.challengeMain || !hasContent(kioskContent.challengeMain)) return null;
+
     try {
       return parseKioskChallenges(mapChallenges(kioskContent.challengeMain, kioskContent.ambient));
     } catch (error) {
@@ -88,7 +111,8 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
 
   // Map solutions - dynamically choose between accordion and grid based on data presence
   const solutions = useMemo(() => {
-    if (!kioskContent?.solutionMain || !kioskContent.ambient) return null;
+    if (!kioskContent?.ambient) return null;
+    if (!kioskContent.solutionMain || !hasContent(kioskContent.solutionMain)) return null;
 
     try {
       // Check if solutionAccordion has actual data (items with content)
@@ -134,9 +158,11 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
     }
   }, [kioskContent, diamondMapping]);
 
-  // Map values
+  // Map values - only if valueMain has content
   const values = useMemo(() => {
-    if (!kioskContent?.valueMain || !kioskContent.ambient) return null;
+    if (!kioskContent?.ambient) return null;
+    if (!kioskContent.valueMain || !hasContent(kioskContent.valueMain)) return null;
+
     try {
       return mapValue(kioskContent.valueMain, kioskContent.ambient, kioskId);
     } catch (error) {
@@ -161,7 +187,7 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
     }
   };
 
-  // Map custom interactive
+  // Map custom interactive - only if customInteractive data has content
   const customInteractive = useMemo(() => {
     if (!kioskContent?.ambient) return null;
 
@@ -173,7 +199,7 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
           : 'customInteractive3';
 
     const customInteractiveData = kioskContent[customInteractiveKey];
-    if (!customInteractiveData) return null;
+    if (!customInteractiveData || !hasContent(customInteractiveData)) return null;
 
     const mapper = getCustomInteractiveMapper(kioskId);
 
