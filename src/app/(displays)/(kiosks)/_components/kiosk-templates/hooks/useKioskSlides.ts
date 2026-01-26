@@ -109,8 +109,8 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
     }
   }, [kioskContent]);
 
-  // Map solutions - dynamically choose between accordion and grid based on data presence
-  const solutions = useMemo(() => {
+  // Map solutions - show accordion, grid, or both based on data presence
+  const solutionAccordion = useMemo(() => {
     if (!kioskContent?.ambient) return null;
     if (!kioskContent.solutionMain || !hasContent(kioskContent.solutionMain)) return null;
 
@@ -124,6 +124,23 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
           item => item.title?.trim() || (item.bullets && item.bullets.length > 0)
         );
 
+      if (!hasAccordionData) return null;
+
+      return mapSolutionsWithAccordion(kioskContent.solutionMain, kioskContent.solutionAccordion, kioskContent.ambient);
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[useKioskSlides] Failed to map solution accordion:', error);
+      }
+      return null;
+    }
+  }, [kioskContent]);
+
+  const solutionGrid = useMemo(() => {
+    if (!kioskContent?.ambient) return null;
+    if (!kioskContent.solutionMain || !hasContent(kioskContent.solutionMain)) return null;
+    if (!diamondMapping) return null;
+
+    try {
       // Check if solutionGrid has actual data (non-empty diamondList with content)
       const hasGridData =
         kioskContent.solutionGrid &&
@@ -131,28 +148,17 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
         Array.isArray(kioskContent.solutionGrid.diamondList) &&
         kioskContent.solutionGrid.diamondList.some(item => item?.trim());
 
-      // Prefer accordion if it has data, otherwise use grid if it has data
-      if (hasAccordionData) {
-        return mapSolutionsWithAccordion(
-          kioskContent.solutionMain,
-          kioskContent.solutionAccordion,
-          kioskContent.ambient
-        );
-      }
+      if (!hasGridData) return null;
 
-      if (hasGridData && diamondMapping) {
-        return mapSolutionsWithGrid(
-          kioskContent.solutionMain,
-          kioskContent.solutionGrid,
-          kioskContent.ambient,
-          diamondMapping
-        );
-      }
-
-      return null;
+      return mapSolutionsWithGrid(
+        kioskContent.solutionMain,
+        kioskContent.solutionGrid,
+        kioskContent.ambient,
+        diamondMapping
+      );
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
-        console.error('[useKioskSlides] Failed to map solutions:', error);
+        console.error('[useKioskSlides] Failed to map solution grid:', error);
       }
       return null;
     }
@@ -238,19 +244,19 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
   const missingSections = useMemo(() => {
     const missing: string[] = [];
     if (!challenges) missing.push('challenges');
-    if (!solutions) missing.push('solutions');
+    if (!solutionAccordion && !solutionGrid) missing.push('solutions');
     if (!values) missing.push('values');
     if (!customInteractive) missing.push('customInteractive');
     return missing;
-  }, [challenges, customInteractive, solutions, values]);
+  }, [challenges, customInteractive, solutionAccordion, solutionGrid, values]);
 
   // Build slides
   const slides = useMemo(() => {
     // Log missing sections for debugging
-    if (!challenges || !solutions || !values || !customInteractive) {
+    if (!challenges || (!solutionAccordion && !solutionGrid) || !values || !customInteractive) {
       const missing: string[] = [];
       if (!challenges) missing.push('challenges');
-      if (!solutions) missing.push('solutions');
+      if (!solutionAccordion && !solutionGrid) missing.push('solutions');
       if (!values) missing.push('values');
       if (!customInteractive) missing.push('customInteractive');
 
@@ -268,10 +274,20 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
         },
         onInitialButtonClick: handleInitialButtonClick,
       }),
-      ...buildSolutionSlides(solutions, kioskId, {
-        ...globalHandlers,
-        onRegisterListHandlers: handleRegisterListHandlers,
-      }),
+      // Build accordion slides if accordion has content
+      ...(solutionAccordion
+        ? buildSolutionSlides(solutionAccordion, kioskId, {
+            ...globalHandlers,
+            onRegisterListHandlers: handleRegisterListHandlers,
+          })
+        : []),
+      // Build grid slides if grid has content
+      ...(solutionGrid
+        ? buildSolutionSlides(solutionGrid, kioskId, {
+            ...globalHandlers,
+            onRegisterListHandlers: handleRegisterListHandlers,
+          })
+        : []),
       ...buildValueSlides(values, kioskId, globalHandlers, {
         registerCarouselHandlers: handleRegisterCarouselHandlers,
       }),
@@ -287,7 +303,8 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
     kioskContent,
     kioskId,
     scrollToSectionById,
-    solutions,
+    solutionAccordion,
+    solutionGrid,
     values,
   ]);
 
@@ -296,7 +313,8 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
     customInteractive,
     missingSections: missingSections.length > 0 ? missingSections : null,
     slides,
-    solutions,
+    solutionAccordion,
+    solutionGrid,
     values,
   };
 };
