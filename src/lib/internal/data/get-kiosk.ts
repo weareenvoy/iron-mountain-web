@@ -2,6 +2,22 @@ import { getLocaleForTesting, shouldUseStaticPlaceholderData } from '@/flags/fla
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import type { KioskApiResponse, KioskDataResponse } from '@/lib/internal/types';
 
+/**
+ * Fetches centralized custom interactive data from simplCMS
+ */
+async function getSimplCMSData(): Promise<Record<string, unknown>> {
+  try {
+    const res = await fetch('/api/kiosk-simplCMS.JSON', { cache: 'force-cache' });
+    const rawData = (await res.json()) as Array<Record<string, unknown>>;
+    return rawData[0] ?? {};
+  } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Failed to fetch simplCMS data:', error);
+    }
+    return {};
+  }
+}
+
 export async function getKioskData(kioskId: KioskId, externalSignal?: AbortSignal): Promise<KioskDataResponse> {
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
 
@@ -13,6 +29,9 @@ export async function getKioskData(kioskId: KioskId, externalSignal?: AbortSigna
   const combinedSignal = externalSignal
     ? AbortSignal.any([externalSignal, internalController.signal])
     : internalController.signal;
+
+  // Fetch centralized custom interactive data upfront
+  const simplCMSData = await getSimplCMSData();
 
   try {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -28,8 +47,16 @@ export async function getKioskData(kioskId: KioskId, externalSignal?: AbortSigna
         throw new Error(`Missing data for locale: ${locale}`);
       }
 
+      // Merge simplCMS custom interactive data
+      const mergedData = {
+        ...data,
+        customInteractive1: simplCMSData.customInteractive1 ?? data.customInteractive1,
+        customInteractive2: simplCMSData.customInteractive2 ?? data.customInteractive2,
+        customInteractive3: simplCMSData.customInteractive3 ?? data.customInteractive3,
+      };
+
       return {
-        data,
+        data: mergedData,
         locale,
       };
     }
@@ -71,8 +98,16 @@ export async function getKioskData(kioskId: KioskId, externalSignal?: AbortSigna
         throw new Error(`Missing data for locale: ${locale}`);
       }
 
+      // Merge simplCMS custom interactive data
+      const mergedData = {
+        ...data,
+        customInteractive1: simplCMSData.customInteractive1 ?? data.customInteractive1,
+        customInteractive2: simplCMSData.customInteractive2 ?? data.customInteractive2,
+        customInteractive3: simplCMSData.customInteractive3 ?? data.customInteractive3,
+      };
+
       return {
-        data,
+        data: mergedData,
         locale,
       };
     } catch (fallbackError) {

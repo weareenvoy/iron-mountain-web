@@ -23,11 +23,6 @@
       "labelText": "Challenge",
       "mainVideo": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/01+-+Challenge/Challenge-header.webm"
     },
-    "customInteractive2": {
-      "headline": "Learn more about how we unlocked new possibilities for our partners",
-      "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/04+-+Custom+Interactive/CU-Image1-Full.webp",
-      "secondaryCTA": "Launch demo"
-    },
     "demoMain": {
       "headline": "Lorem ipsum dolor sit amet consectetur",
       "iframeLink": "https://www.cyark.org/projects/jaigarh-fort/tapestry2",
@@ -106,7 +101,7 @@
       "mainVideo": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/03+-+Value/Value-header.webm"
     },
     "customInteractiveChoice": {
-      "customInteractive1": "",
+      "customInteractive1": "Interactive 1",
       "customInteractive2": "Interactive 2",
       "customInteractive3": ""
     }

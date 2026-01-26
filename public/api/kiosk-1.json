@@ -24,47 +24,6 @@
       "labelText": "Challenge",
       "mainVideo": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/01+-+Challenge/Challenge-Header.webm"
     },
-    "customInteractive1": {
-      "backCTA": "Back",
-      "body2": "Explore each section to learn how Iron Mountain can transform your enterprise",
-      "diamondCarouselItems": [
-        {
-          "ModalBody": "Assets, whether film, audio, digital, or physical, are logged, evaluated for condition and risk, and prioritized based on preservation and activation potential.",
-          "ModalHeadline": "Intake and assessment",
-          "ModalImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Intake+and+assessment.webp",
-          "id": "1"
-        },
-        {
-          "ModalBody": "Physical media is digitized to archival standards, with restoration applied as needed and metadata extracted to ensure assets are searchable, playable, and accessible.",
-          "ModalHeadline": "Digitization and remediation",
-          "ModalImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Digitization+and+remediation.webp",
-          "id": "2"
-        },
-        {
-          "ModalBody": "Iron Mountain's digital preservation platform provides a fully managed digital repository with triple-redundant geo-distributed storage, secure access, and intuitive navigation.",
-          "ModalHeadline": "Digital preservation",
-          "ModalImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Digital+preservation.webp",
-          "id": "3"
-        },
-        {
-          "ModalBody": "The entire archive becomes searchable through AI-powered metadata, custom filters, and integrated preview tools, enabling fast discovery from any location.",
-          "ModalHeadline": "Search and discover",
-          "ModalImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Search+and+discover.webp",
-          "id": "4"
-        },
-        {
-          "ModalBody": "Digitized content is ready for licensing, streaming, and storytelling, unlocking new value across platforms while maintaining archival integrity.",
-          "ModalHeadline": "Share, stream and monetize",
-          "ModalImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/Illustrations/Share%2C+stream+and+monetize.webp",
-          "id": "5"
-        }
-      ],
-      "headline": "Learn more about how we unlocked new possibilities for our partners",
-      "headline2": "From archive to access",
-      "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/04+-+Custom+Interactive/CU-Image1-Full.webp",
-      "mainCTA": "From archive to access",
-      "secondaryCTA": "Virtual walkthrough"
-    },
     "demoMain": {
       "headline": "Lorem ipsum dolor sit amet consectetur",
       "iframeLink": "https://www.cyark.org/projects/ouro-preto/tapestry2",
