@@ -168,6 +168,11 @@
       "headline": "Expanding possibilities",
       "labelText": "Value",
       "mainVideo": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/03+-+Value/Value-header.webm"
+    },
+    "customInteractiveChoice": {
+      "customInteractive1": "",
+      "customInteractive2": "",
+      "customInteractive3": "Interactive 3"
     }
   }
 }]
