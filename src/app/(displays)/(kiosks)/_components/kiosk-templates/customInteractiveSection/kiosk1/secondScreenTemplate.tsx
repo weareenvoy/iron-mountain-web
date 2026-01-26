@@ -97,24 +97,32 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
     : null;
 
   const handleSecondaryClick = useCallback(() => {
-    playSfx(sfx.open);
+    if (sfx.open) {
+      playSfx(sfx.open);
+    }
     setShowOverlay(true);
     onSecondaryCta?.();
   }, [onSecondaryCta, playSfx, sfx.open]);
 
   const handleEndTour = useCallback(() => {
-    playSfx(sfx.close);
+    if (sfx.close) {
+      playSfx(sfx.close);
+    }
     setShowOverlay(false);
   }, [playSfx, sfx.close]);
 
   const handleModalClose = useCallback(() => {
-    playSfx(sfx.close);
+    if (sfx.close) {
+      playSfx(sfx.close);
+    }
     setOpenModalIndex(null);
   }, [playSfx, sfx.close]);
 
   const handleModalOpen = useCallback(
     (index: number) => {
-      playSfx(sfx.open);
+      if (sfx.open) {
+        playSfx(sfx.open);
+      }
       setOpenModalIndex(index);
     },
     [playSfx, sfx.open]

@@ -5,22 +5,23 @@ import type { KioskAudio } from '@/lib/internal/types';
 /**
  * Audio URLs for kiosk sound effects and background music.
  * These are loaded from the kiosk JSON data and point to external assets.
+ * URLs will be undefined if the kiosk data hasn't loaded yet.
  */
 interface KioskAudioUrls {
   /** Background music tracks for different sections */
   readonly music: {
-    readonly ambient: string;
-    readonly challenge: string;
-    readonly customInteractive: string;
-    readonly solution: string;
-    readonly value: string;
+    readonly ambient: string | undefined;
+    readonly challenge: string | undefined;
+    readonly customInteractive: string | undefined;
+    readonly solution: string | undefined;
+    readonly value: string | undefined;
   };
   /** Sound effect URLs for user interactions */
   readonly sfx: {
-    readonly back: string;
-    readonly close: string;
-    readonly next: string;
-    readonly open: string;
+    readonly back: string | undefined;
+    readonly close: string | undefined;
+    readonly next: string | undefined;
+    readonly open: string | undefined;
   };
 }
 
@@ -44,26 +45,20 @@ export const useKioskAudio = (): KioskAudioUrls => {
   return useMemo<KioskAudioUrls>(() => {
     const audio: KioskAudio | undefined = data?.audio;
 
-    // Log warning if audio data is missing
-    if (!audio) {
-      console.warn('[useKioskAudio] Audio data not available in kiosk data. Audio will not play until data is loaded.');
-      console.warn('[useKioskAudio] Available data keys:', data ? Object.keys(data) : 'no data');
-    }
-
-    // Return URLs from data or empty strings as fallback
+    // Return URLs from data or undefined if not available
     return {
       music: {
-        ambient: audio?.ambient ?? '',
-        challenge: audio?.challenge ?? '',
-        customInteractive: audio?.customInteractive ?? '',
-        solution: audio?.solution ?? '',
-        value: audio?.value ?? '',
+        ambient: audio?.ambient,
+        challenge: audio?.challenge,
+        customInteractive: audio?.customInteractive,
+        solution: audio?.solution,
+        value: audio?.value,
       },
       sfx: {
-        back: audio?.back ?? '',
-        close: audio?.close ?? '',
-        next: audio?.next ?? '',
-        open: audio?.open ?? '',
+        back: audio?.back,
+        close: audio?.close,
+        next: audio?.next,
+        open: audio?.open,
       },
     };
   }, [data]);

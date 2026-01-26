@@ -17,12 +17,16 @@ const CarouselNavigation = ({ onNext, onPrev }: CarouselNavigationProps) => {
   const { playSfx } = useSfx();
 
   const handlePrev = () => {
-    playSfx(sfx.back);
+    if (sfx.back) {
+      playSfx(sfx.back);
+    }
     onPrev();
   };
 
   const handleNext = () => {
-    playSfx(sfx.next);
+    if (sfx.next) {
+      playSfx(sfx.next);
+    }
     onNext();
   };
 

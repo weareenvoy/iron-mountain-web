@@ -84,12 +84,16 @@ export function useKiosk3SecondScreenState() {
   }, []);
 
   const handleShowOverlay = useCallback(() => {
-    playSfx(sfx.open);
+    if (sfx.open) {
+      playSfx(sfx.open);
+    }
     dispatch({ type: 'SHOW_OVERLAY' });
   }, [playSfx, sfx.open]);
 
   const handleHideOverlay = useCallback(() => {
-    playSfx(sfx.close);
+    if (sfx.close) {
+      playSfx(sfx.close);
+    }
     dispatch({ type: 'HIDE_OVERLAY' });
   }, [playSfx, sfx.close]);
 

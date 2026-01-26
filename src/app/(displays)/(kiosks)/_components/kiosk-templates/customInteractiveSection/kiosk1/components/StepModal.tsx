@@ -51,21 +51,26 @@ const StepModal = ({ backLabel, content, onClose }: StepModalProps) => {
 
   // Stable backdrop click handler to prevent memory leaks
   const handleBackdropClick = useCallback(() => {
-    playSfx(sfx.close);
+    if (sfx.close) {
+      playSfx(sfx.close);
+    }
     onCloseRef.current();
   }, [playSfx, sfx.close]);
 
-  // Add escape key support - uses ref to avoid memory leak
+  // Add escape key support with close SFX - uses ref to avoid memory leak
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
+        if (sfx.close) {
+          playSfx(sfx.close);
+        }
         onCloseRef.current();
       }
     };
 
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
-  }, []); // Empty deps - listener never recreated
+  }, [playSfx, sfx.close]);
 
   if (!content) return null;
 

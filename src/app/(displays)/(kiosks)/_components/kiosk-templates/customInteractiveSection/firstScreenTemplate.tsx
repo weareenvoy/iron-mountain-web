@@ -71,7 +71,9 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   const secondaryIconOffset = isKiosk3 ? 'left-[-330px]' : 'left-[-70px]';
 
   const handleSecondaryClick = () => {
-    playSfx(sfx.open);
+    if (sfx.open) {
+      playSfx(sfx.open);
+    }
     setShowOverlay(true);
     onSecondaryCta?.();
   };
@@ -81,7 +83,9 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   };
 
   const handleCloseOverlay = () => {
-    playSfx(sfx.close);
+    if (sfx.close) {
+      playSfx(sfx.close);
+    }
     setShowOverlay(false);
   };
 

@@ -84,7 +84,9 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
     // Prevent rapid clicks during transition
     if (isTransitioning) return;
 
-    playSfx(sfx.next);
+    if (sfx.next) {
+      playSfx(sfx.next);
+    }
     setIsTransitioning(true);
     setIsExiting(true);
 
@@ -101,7 +103,9 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
     // Prevent rapid clicks during transition
     if (isTransitioning) return;
 
-    playSfx(sfx.back);
+    if (sfx.back) {
+      playSfx(sfx.back);
+    }
     setIsTransitioning(true);
     setIsExiting(true);
 

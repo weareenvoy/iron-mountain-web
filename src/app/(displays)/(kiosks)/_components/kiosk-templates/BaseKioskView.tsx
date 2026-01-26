@@ -58,14 +58,16 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
 
   // Wrap navigation handlers with sound effects
   const handleNavigateUpWithSound = useCallback(() => {
-    console.info('[Audio] Playing back sound:', sfx.back);
-    playSfx(sfx.back);
+    if (sfx.back) {
+      playSfx(sfx.back);
+    }
     handleNavigateUp();
   }, [handleNavigateUp, playSfx, sfx.back]);
 
   const handleNavigateDownWithSound = useCallback(() => {
-    console.info('[Audio] Playing next sound:', sfx.next);
-    playSfx(sfx.next);
+    if (sfx.next) {
+      playSfx(sfx.next);
+    }
     handleNavigateDown();
   }, [handleNavigateDown, playSfx, sfx.next]);
 
@@ -114,51 +116,37 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
   // Section-based background music
   useEffect(() => {
     // Determine which music to play based on current section
-    let musicUrl: null | string = null;
-    let sectionName = '';
+    let musicUrl: null | string | undefined = null;
 
     // Check if idle video is complete before playing music
     const initialScreenElement = containerRef.current?.querySelector('[data-scroll-section="cover-ambient-initial"]');
     const idleComplete = initialScreenElement?.getAttribute('data-idle-complete') === 'true';
-
-    console.info('[Audio Debug] Current state:', {
-      currentScrollTarget,
-      idleComplete,
-      isCustomInteractiveSection,
-      isInitialScreen,
-      isValueSection,
-    });
 
     // Prioritize actual scroll target over boolean flags to ensure music changes as you scroll
     if (!currentScrollTarget || currentScrollTarget === 'cover-ambient-initial') {
       // Only play initial music if we're on the initial screen AND idle video is complete
       if (idleComplete) {
         musicUrl = music.ambient;
-        sectionName = 'Initial';
       }
     } else if (currentScrollTarget.startsWith('customInteractive')) {
       // Custom Interactive sections
       musicUrl = music.customInteractive;
-      sectionName = 'Custom Interactive';
     } else if (currentScrollTarget.startsWith('value') || currentScrollTarget === 'value-carousel') {
       // Value section and carousel
       musicUrl = music.value;
-      sectionName = 'Value';
     } else if (currentScrollTarget.startsWith('solution')) {
       // Solution sections
       musicUrl = music.solution;
-      sectionName = 'Solution';
     } else if (currentScrollTarget.startsWith('challenge') || currentScrollTarget === 'main-description') {
       // Challenge sections
       musicUrl = music.challenge;
-      sectionName = 'Challenge';
     }
 
     if (musicUrl) {
-      console.info(`[Audio] Setting music for ${sectionName} section:`, musicUrl);
       setMusic(musicUrl, { fadeMs: 1000 });
     } else {
-      console.warn('[Audio] No music mapped for section:', currentScrollTarget);
+      // Clear music when no track is mapped or track is undefined
+      setMusic(null, { fadeMs: 1000 });
     }
   }, [currentScrollTarget, isCustomInteractiveSection, isInitialScreen, isValueSection, music, setMusic]);
 

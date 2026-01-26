@@ -97,7 +97,9 @@ const InitialState = memo(
     const { playSfx } = useSfx();
 
     const handleBackClick = () => {
-      playSfx(sfx.back);
+      if (sfx.back) {
+        playSfx(sfx.back);
+      }
       onBack?.();
     };
 
