@@ -280,7 +280,7 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
       // AudioEngine handles queueing if audio isn't unlocked yet
       console.info('[Music Effect] Calling setMusic with:', musicUrl);
       setMusic(musicUrl, { fadeMs: 1000 });
-    } else if (currentScrollTarget && currentScrollTarget !== 'cover-ambient-initial') {
+    } else if (currentScrollTarget !== 'cover-ambient-initial') {
       // Clear music when no track is mapped (but not on initial screen)
       console.info('[Music Effect] Clearing music');
       setMusic(null, { fadeMs: 1000 });
