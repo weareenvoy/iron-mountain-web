@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowDown, ArrowUp } from 'lucide-react';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useCarouselDelegation } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useCarouselDelegation';
 import { useGlobalParagraphNavigation } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useGlobalParagraphNavigation';
 import { useKioskArrowState } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useKioskArrowState';
@@ -12,7 +12,7 @@ import { useKioskAudio } from '@/app/(displays)/(kiosks)/_components/providers/u
 import { SCROLL_DURATION_MS } from '@/app/(displays)/(kiosks)/_constants/timing';
 import { useKioskArrowStore } from '@/app/(displays)/(kiosks)/_stores/useKioskArrowStore';
 import { determineCurrentSection } from '@/app/(displays)/(kiosks)/_utils/section-utils';
-import { useMusic, useSfx } from '@/components/providers/audio-provider';
+import { useAudio, useMusic, useSfx } from '@/components/providers/audio-provider';
 import type { KioskConfig } from '@/app/(displays)/(kiosks)/_types/kiosk-config';
 
 // Base component shared by all three kiosks. Accepts a config object that defines kiosk-specific settings (diamond mapping, arrow positioning, etc.)
@@ -35,6 +35,7 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { playSfx } = useSfx();
   const { setMusic } = useMusic();
+  const audioController = useAudio();
 
   // Global paragraph navigation
   const {
@@ -113,42 +114,171 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
     kioskId,
   });
 
-  // Section-based background music
+  // Track idle video completion state
+  const [idleComplete, setIdleComplete] = useState(false);
+
+  // Track current scroll target in a ref for accurate checks in async callbacks
+  const currentScrollTargetRef = useRef(currentScrollTarget);
   useEffect(() => {
+    currentScrollTargetRef.current = currentScrollTarget;
+  }, [currentScrollTarget]);
+
+  // Track if we should play ambient music (only once when idle completes)
+  const shouldPlayAmbientRef = useRef(false);
+
+  // Eagerly try to unlock audio on mount (for kiosk mode with --autoplay-policy=no-user-gesture-required)
+  useEffect(() => {
+    console.info('[Early Unlock] ==========================================');
+    console.info('[Early Unlock] Attempting to unlock audio on mount');
+    console.info('[Early Unlock] User agent:', navigator.userAgent);
+    
+    // Try to unlock immediately
+    audioController.unlock()
+      .then(() => {
+        console.info('[Early Unlock] ✅ Successfully unlocked on mount!');
+        console.info('[Early Unlock] Kiosk flags are working correctly');
+      })
+      .catch(() => {
+        console.warn('[Early Unlock] ❌ Failed to unlock on mount');
+        console.warn('[Early Unlock] This is expected without kiosk flags');
+        console.warn('[Early Unlock] Click the idle screen to enable audio');
+      });
+    
+    console.info('[Early Unlock] ==========================================');
+  }, [audioController]);
+
+  // Play ambient music when idle completes
+  useEffect(() => {
+    if (idleComplete && music.ambient && !shouldPlayAmbientRef.current) {
+      // Only run this once
+      shouldPlayAmbientRef.current = true;
+      
+      console.info('[Ambient Music] ========================================');
+      console.info('[Ambient Music] Idle complete! Starting ambient music flow...');
+      console.info('[Ambient Music] Ambient URL:', music.ambient);
+      console.info('[Ambient Music] Current scroll target:', currentScrollTarget);
+      
+      const ambientUrl = music.ambient; // Capture in closure to satisfy TypeScript
+      
+      // Always try to unlock first, then play
+      console.info('[Ambient Music] Calling audioController.unlock()...');
+      audioController.unlock()
+        .then(() => {
+          console.info('[Ambient Music] ✅ Unlock successful!');
+          
+          // Check if we're still on initial screen
+          const latestScrollTarget = currentScrollTargetRef.current;
+          const stillOnInitialScreen = !latestScrollTarget || latestScrollTarget === 'cover-ambient-initial';
+          
+          console.info('[Ambient Music] Latest scroll target:', latestScrollTarget);
+          console.info('[Ambient Music] Still on initial screen?', stillOnInitialScreen);
+          
+          if (stillOnInitialScreen) {
+            console.info('[Ambient Music] ✅ Calling setMusic() with ambient URL...');
+            setMusic(ambientUrl, { fadeMs: 1000 });
+            console.info('[Ambient Music] ✅ setMusic() called!');
+          } else {
+            console.warn('[Ambient Music] ❌ User navigated away, skipping ambient music');
+          }
+        })
+        .catch((err) => {
+          console.error('[Ambient Music] ❌ Unlock failed:', err);
+        });
+      
+      console.info('[Ambient Music] ========================================');
+    }
+  }, [audioController, currentScrollTarget, idleComplete, music.ambient, setMusic]);
+
+  // Observe when idle video completes
+  useEffect(() => {
+    let observer: MutationObserver | null = null;
+    let pollInterval: NodeJS.Timeout | null = null;
+
+    const checkIdleComplete = () => {
+      const initialScreenElement = containerRef.current?.querySelector('[data-scroll-section="cover-ambient-initial"]');
+      if (!initialScreenElement) return null;
+
+      const isComplete = initialScreenElement.getAttribute('data-idle-complete') === 'true';
+      setIdleComplete(isComplete);
+      return initialScreenElement;
+    };
+
+    const setupObserver = (element: Element) => {
+      observer = new MutationObserver(() => {
+        checkIdleComplete();
+      });
+
+      observer.observe(element, { attributes: true, attributeFilter: ['data-idle-complete'] });
+    };
+
+    // Check initial state
+    const element = checkIdleComplete();
+
+    // If element exists, watch for changes
+    if (element) {
+      setupObserver(element);
+    } else {
+      // If element doesn't exist yet, poll for it
+      pollInterval = setInterval(() => {
+        const foundElement = checkIdleComplete();
+        if (foundElement) {
+          clearInterval(pollInterval!);
+          pollInterval = null;
+          setupObserver(foundElement);
+        }
+      }, 100);
+    }
+
+    return () => {
+      if (observer) observer.disconnect();
+      if (pollInterval) clearInterval(pollInterval);
+    };
+  }, []);
+
+  // Section-based background music (for non-initial sections)
+  useEffect(() => {
+    // Skip if we're on initial screen - ambient music is handled by unlock effect
+    if (!currentScrollTarget || currentScrollTarget === 'cover-ambient-initial') {
+      console.info('[Music Effect] Initial screen, skipping (handled by unlock effect)');
+      return;
+    }
+
     // Determine which music to play based on current section
     let musicUrl: null | string | undefined = null;
+    let sectionName = '';
 
-    // Check if idle video is complete before playing music
-    const initialScreenElement = containerRef.current?.querySelector('[data-scroll-section="cover-ambient-initial"]');
-    const idleComplete = initialScreenElement?.getAttribute('data-idle-complete') === 'true';
-
-    // Prioritize actual scroll target over boolean flags to ensure music changes as you scroll
-    if (!currentScrollTarget || currentScrollTarget === 'cover-ambient-initial') {
-      // Only play initial music if we're on the initial screen AND idle video is complete
-      if (idleComplete) {
-        musicUrl = music.ambient;
-      }
-    } else if (currentScrollTarget.startsWith('customInteractive')) {
+    if (currentScrollTarget.startsWith('customInteractive')) {
       // Custom Interactive sections
       musicUrl = music.customInteractive;
+      sectionName = 'customInteractive';
     } else if (currentScrollTarget.startsWith('value') || currentScrollTarget === 'value-carousel') {
       // Value section and carousel
       musicUrl = music.value;
+      sectionName = 'value';
     } else if (currentScrollTarget.startsWith('solution')) {
       // Solution sections
       musicUrl = music.solution;
+      sectionName = 'solution';
     } else if (currentScrollTarget.startsWith('challenge') || currentScrollTarget === 'main-description') {
       // Challenge sections
       musicUrl = music.challenge;
+      sectionName = 'challenge';
     }
 
+    console.info('[Music Effect] Section:', sectionName, 'musicUrl:', musicUrl ? 'SET' : 'NULL', 'idleComplete:', idleComplete);
+
     if (musicUrl) {
+      // AudioEngine handles queueing if audio isn't unlocked yet
+      console.info('[Music Effect] Calling setMusic with:', musicUrl);
       setMusic(musicUrl, { fadeMs: 1000 });
-    } else {
-      // Clear music when no track is mapped or track is undefined
+    } else if (currentScrollTarget && currentScrollTarget !== 'cover-ambient-initial') {
+      // Clear music when no track is mapped (but not on initial screen)
+      console.info('[Music Effect] Clearing music');
       setMusic(null, { fadeMs: 1000 });
+    } else {
+      console.info('[Music Effect] No action (waiting or initial screen)');
     }
-  }, [currentScrollTarget, isCustomInteractiveSection, isInitialScreen, isValueSection, music, setMusic]);
+  }, [currentScrollTarget, idleComplete, isCustomInteractiveSection, isInitialScreen, isValueSection, music, setMusic]);
 
   // Improved empty slides state handling
   if (slides.length === 0) {

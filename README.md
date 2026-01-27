@@ -7,6 +7,7 @@ flows.
 
 - [**Architecture Overview**](./docs/architecture.md): System design, MQTT topics, and device roles.
 - [**Coding Patterns**](./docs/patterns.md): State management, component guidelines, and styling.
+- [**Kiosk Deployment**](./docs/kiosk-deployment.md): Production deployment guide with systemd, PM2, and Docker options.
 
 ## Getting Started
 
@@ -37,6 +38,28 @@ The development server runs on port 3000 by default.
 pnpm build
 pnpm start
 ```
+
+### Kiosk Deployment
+
+For kiosk hardware deployment, launch Chrome/Chromium with these flags to enable autoplay audio without user gestures:
+
+```bash
+chromium-browser \
+  --kiosk \
+  --autoplay-policy=no-user-gesture-required \
+  --user-data-dir="/tmp/chrome_signage" \
+  --disable-features=TranslateUI \
+  --no-first-run \
+  --fast \
+  --fast-start \
+  --disable-infobars \
+  --disable-session-crashed-bubble \
+  http://localhost:3000/kiosk-1
+```
+
+Replace `kiosk-1` with `kiosk-2` or `kiosk-3` as needed.
+
+**Required flag for audio**: `--autoplay-policy=no-user-gesture-required` allows background music and sound effects to play immediately when triggered by MQTT commands (e.g., when the idle video dismisses).
 
 ## Project Structure
 
