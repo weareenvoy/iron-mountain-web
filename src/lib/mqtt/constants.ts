@@ -23,6 +23,24 @@ export const getMqttBrokerUrl = (): string => {
   return `${scheme}://localhost:9001/mqtt`;
 };
 
+/**
+ * Get the current environment for MQTT topic isolation.
+ * - Production: 'production' (Vercel production deployments)
+ * - Preview: 'preview' (Vercel PR preview deployments)
+ * - Local: 'local' (local development, default)
+ *
+ * This ensures MQTT messages are isolated per environment even when sharing
+ * the same broker infrastructure.
+ */
+export const getMqttEnvironment = (): string => {
+  const env = process.env.NEXT_PUBLIC_ENVIRONMENT;
+  if (env === 'production' || env === 'preview' || env === 'local') {
+    return env;
+  }
+  // Default to 'local' for development
+  return 'local';
+};
+
 export const MQTT_BASE_OPTIONS: Readonly<Omit<IClientOptions, 'clientId' | 'will'>> = {
   clean: false,
   keepalive: 30,
@@ -30,37 +48,64 @@ export const MQTT_BASE_OPTIONS: Readonly<Omit<IClientOptions, 'clientId' | 'will
   // connectTimeout: 2 * 1000,
 } as const;
 
-export const mqttCommands = {
-  basecamp: {
-    gotoBeat: 'cmd/dev/basecamp/goto-beat',
-  },
-  broadcast: {
-    endTour: 'cmd/dev/all/end-tour',
-    goIdle: 'cmd/dev/all/go-idle',
-    loadTour: 'cmd/dev/all/load-tour',
-  },
-  docent: {
-    endTour: 'cmd/dev/all/end-tour',
-    loadTour: 'cmd/dev/gec/load-tour',
-    republishSettings: 'cmd/dev/gec/republish-settings',
-    sync: 'cmd/dev/gec/sync',
-  },
-  overlook: {
-    gotoBeat: 'cmd/dev/overlook/goto-beat',
-  },
-  summit: {
-    gotoBeat: 'cmd/dev/summit/goto-beat',
-  },
-  welcomeWall: {
-    endTour: 'cmd/dev/all/end-tour',
-    loadTour: 'cmd/dev/all/load-tour',
-  },
-} as const;
+/**
+ * Get MQTT command topics with environment isolation.
+ * Topics are prefixed with environment (local/preview/production) to prevent
+ * cross-environment interference when sharing the same broker.
+ */
+export const getMqttCommands = () => {
+  const env = getMqttEnvironment();
+  return {
+    basecamp: {
+      gotoBeat: `cmd/${env}/basecamp/goto-beat`,
+    },
+    broadcast: {
+      endTour: `cmd/${env}/all/end-tour`,
+      goIdle: `cmd/${env}/all/go-idle`,
+      loadTour: `cmd/${env}/all/load-tour`,
+    },
+    docent: {
+      endTour: `cmd/${env}/all/end-tour`,
+      loadTour: `cmd/${env}/gec/load-tour`,
+      republishSettings: `cmd/${env}/gec/republish-settings`,
+      sync: `cmd/${env}/gec/sync`,
+    },
+    overlook: {
+      gotoBeat: `cmd/${env}/overlook/goto-beat`,
+    },
+    summit: {
+      gotoBeat: `cmd/${env}/summit/goto-beat`,
+    },
+    welcomeWall: {
+      endTour: `cmd/${env}/all/end-tour`,
+      loadTour: `cmd/${env}/all/load-tour`,
+    },
+  } as const;
+};
 
-export const mqttStateTopics = {
-  basecamp: 'state/basecamp',
-  gec: 'state/gec',
-  summit: 'state/summit',
-  sync: 'state/sync',
-  welcomeWall: 'state/welcome-wall',
-} as const;
+/**
+ * Singleton instance of MQTT commands for the current environment.
+ * Lazily initialized on first access.
+ */
+export const mqttCommands = getMqttCommands();
+
+/**
+ * Get MQTT state topics with environment isolation.
+ * State topics are prefixed with environment to isolate state reporting.
+ */
+export const getMqttStateTopics = () => {
+  const env = getMqttEnvironment();
+  return {
+    basecamp: `state/${env}/basecamp`,
+    gec: `state/${env}/gec`,
+    summit: `state/${env}/summit`,
+    sync: `state/${env}/sync`,
+    welcomeWall: `state/${env}/welcome-wall`,
+  } as const;
+};
+
+/**
+ * Singleton instance of MQTT state topics for the current environment.
+ * Lazily initialized on first access.
+ */
+export const mqttStateTopics = getMqttStateTopics();

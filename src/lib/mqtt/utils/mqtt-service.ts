@@ -1,5 +1,5 @@
 import mqtt, { MqttClient, type IClientOptions } from 'mqtt';
-import { getMqttBrokerUrl, MQTT_BASE_OPTIONS, mqttCommands } from '../constants';
+import { getMqttBrokerUrl, getMqttEnvironment, MQTT_BASE_OPTIONS, mqttCommands } from '../constants';
 import { createAvailabilityMessage } from './create-avaiability-message';
 import { createMqttMessage } from './create-mqtt-message';
 import { generateClientId } from './generate-client-id';
@@ -243,7 +243,7 @@ export class MqttService {
   }
 
   // Exhibit → State: Report full exhibit state (retained)
-  // This publishes the complete state to state/<exhibit>
+  // This publishes the complete state to state/<env>/<exhibit>
   // Note: MQTT topics use 'overlook' but we accept 'overlook-wall' for consistency with other methods
   public reportExhibitState(
     exhibit: 'basecamp' | 'kiosk-01' | 'kiosk-02' | 'kiosk-03' | 'overlook-wall' | 'summit',
@@ -259,10 +259,11 @@ export class MqttService {
     // Map 'overlook-wall' to 'overlook' for MQTT topic (broker uses 'overlook' for state topic)
     const topicExhibit = exhibit === 'overlook-wall' ? 'overlook' : exhibit;
     const message = createMqttMessage(topicExhibit, state);
+    const env = getMqttEnvironment();
 
     console.info(`${exhibit} reporting full state:`, state);
     this.publish(
-      `state/${topicExhibit}`,
+      `state/${env}/${topicExhibit}`,
       JSON.stringify(message),
       { qos: 1, retain: true }, // Retained
       config
@@ -275,10 +276,11 @@ export class MqttService {
     config?: PublishArgsConfig
   ): void {
     const message = createMqttMessage(exhibit, state);
+    const env = getMqttEnvironment();
 
     console.info(`${exhibit} reporting full state:`, state);
     this.publish(
-      `state/${exhibit}`,
+      `state/${env}/${exhibit}`,
       JSON.stringify(message),
       { qos: 1, retain: true }, // Retained
       config

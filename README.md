@@ -64,6 +64,13 @@ Create a `.env.local` file in the root directory:
 # Required: MQTT broker WebSocket URL for real-time communication
 NEXT_PUBLIC_MQTT_BROKER_URL=wss://...
 
+# Required: Environment for MQTT topic isolation
+# - local: Local development (default if not set)
+# - preview: Vercel PR preview deployments
+# - production: Production deployment
+# This prevents MQTT messages from crossing environments when sharing the same broker
+NEXT_PUBLIC_ENVIRONMENT=local
+
 # Optional: Use GEC (Global Experience Controller) relay for MQTT messages
 # - true: Send to GEC, which relays to exhibits (production)
 # - false: Direct broadcast to exhibits (development, default)
