@@ -157,8 +157,8 @@ independently, but **all kiosks activate when any tour starts** to provide a syn
 
 1. Docent app calls `client.loadTour(tourId)` with the selected tour ID (e.g., `'tour-001'`)
 2. Message broadcasts to:
-   - `cmd/dev/gec/load-tour` (for GEC in production)
-   - `cmd/dev/all/load-tour` (direct to exhibits for development)
+   - `cmd/{env}/gec/load-tour` (for GEC relay in production)
+   - `cmd/{env}/all/load-tour` (direct to exhibits, environment-isolated)
 3. **All kiosks** receive the broadcast (regardless of tour ID)
 4. Each kiosk's idle screen dismisses with fade-out animation
 5. Each kiosk fetches fresh data and reports initial state
@@ -181,8 +181,9 @@ useEffect(() => {
     // ... trigger fade-out animation
   };
 
-  client.subscribeToTopic('cmd/dev/all/load-tour', handleLoadTour);
-  return () => client.unsubscribeFromTopic('cmd/dev/all/load-tour', handleLoadTour);
+  // Note: mqttCommands automatically includes environment prefix (e.g., cmd/production/all/load-tour)
+  client.subscribeToTopic(mqttCommands.broadcast.loadTour, handleLoadTour);
+  return () => client.unsubscribeFromTopic(mqttCommands.broadcast.loadTour, handleLoadTour);
 }, [client, isConnected, idleVideoSrc]);
 ```
 
@@ -192,7 +193,7 @@ useEffect(() => {
 
 **Flow**:
 
-1. All kiosks receive `cmd/dev/all/end-tour` broadcast
+1. All kiosks receive `cmd/{env}/all/end-tour` broadcast (environment-isolated)
 2. Each kiosk reports idle state to MQTT: `{ 'beat-id': 'kiosk-idle' }`
 3. After 100ms delay (ensures MQTT message is sent), kiosk refreshes: `window.location.reload()`
 
@@ -229,11 +230,17 @@ const handleEndTour = () => {
 
 ### MQTT Topics
 
+All topics are **environment-isolated** using `{env}` prefix (local/preview/production).
+
 - **Subscriptions**:
-  - `cmd/dev/all/load-tour` - Tour start commands (all kiosks respond to any tour)
-  - `cmd/dev/all/end-tour` - Tour end commands (all kiosks respond)
+  - `cmd/{env}/all/load-tour` - Tour start commands (all kiosks respond to any tour)
+  - `cmd/{env}/all/end-tour` - Tour end commands (all kiosks respond)
+  - `cmd/{env}/kiosk-0X/set-volume` - Volume control commands
 - **Publications**:
-  - `state/kiosk-XX` - State reporting for persistence and availability
+  - `state/{env}/kiosk-0X` - State reporting for persistence and availability
+  - `state/{env}/kiosk-0X/availability` - Availability heartbeat
+
+**Environment isolation ensures local/preview/production kiosks cannot interfere with each other even when sharing the same MQTT broker.**
 
 ## Data Structure
 

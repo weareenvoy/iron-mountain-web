@@ -1,4 +1,5 @@
 import { useEffect, type RefObject } from 'react';
+import { getMqttEnvironment } from '@/lib/mqtt/constants';
 import type { AudioController } from '@/lib/audio/types';
 import type { ExhibitMqttStateBase, VolumeControllableExhibit } from '@/lib/mqtt/types';
 import type { MqttService } from '@/lib/mqtt/utils/mqtt-service';
@@ -22,7 +23,8 @@ export function useExhibitSetVolume<TState extends ExhibitMqttStateBase = Exhibi
   useEffect(() => {
     if (!client) return;
 
-    const topic = `cmd/dev/${appId}/set-volume`;
+    const env = getMqttEnvironment();
+    const topic = `cmd/${env}/${appId}/set-volume`;
 
     const handler = (message: Buffer) => {
       try {

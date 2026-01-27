@@ -71,6 +71,12 @@ NEXT_PUBLIC_MQTT_BROKER_URL=wss://...
 # This prevents MQTT messages from crossing environments when sharing the same broker
 NEXT_PUBLIC_ENVIRONMENT=local
 
+# Optional: Strict mode for MQTT environment validation
+# - true: Throw errors if NEXT_PUBLIC_ENVIRONMENT is invalid or missing
+# - false: Log warnings and default to 'local' (default)
+# Use in CI/testing to catch misconfiguration early
+NEXT_PUBLIC_MQTT_STRICT_MODE=false
+
 # Optional: Use GEC (Global Experience Controller) relay for MQTT messages
 # - true: Send to GEC, which relays to exhibits (production)
 # - false: Direct broadcast to exhibits (development, default)

@@ -137,7 +137,7 @@ export class MqttService {
 
     console.info('Sending end-tour command to all exhibits');
     this.publish(
-      mqttCommands.docent.endTour, // cmd/dev/all/end-tour
+      mqttCommands.docent.endTour, // cmd/{env}/all/end-tour (environment-specific)
       JSON.stringify(message),
       { qos: 1, retain: false },
       config
@@ -162,10 +162,11 @@ export class MqttService {
     }
     const message = createMqttMessage('docent-app', messageBody);
 
+    const env = getMqttEnvironment();
     console.info(
       `Sending goto-beat to ${exhibit}: ${beatId}${presentationMode !== undefined ? ` (presentation-mode: ${presentationMode})` : ''}`
     );
-    this.publish(`cmd/dev/${exhibit}/goto-beat`, JSON.stringify(message), { qos: 1, retain: false }, config);
+    this.publish(`cmd/${env}/${exhibit}/goto-beat`, JSON.stringify(message), { qos: 1, retain: false }, config);
   }
 
   // Video beat play/pause control
@@ -190,8 +191,9 @@ export class MqttService {
       messageBody['presentation-mode'] = presentationMode;
     }
     const message = createMqttMessage('docent-app', messageBody);
+    const env = getMqttEnvironment();
 
-    this.publish(`cmd/dev/${exhibit}/goto-beat`, JSON.stringify(message), { qos: 1, retain: false }, config);
+    this.publish(`cmd/${env}/${exhibit}/goto-beat`, JSON.stringify(message), { qos: 1, retain: false }, config);
   }
 
   // Docent App → GEC or Broadcast: Load tour
@@ -205,7 +207,7 @@ export class MqttService {
     const useGEC = process.env.NEXT_PUBLIC_USE_GEC === 'true';
 
     if (useGEC) {
-      // Production: Send to GEC, which relays to cmd/dev/all/load-tour
+      // Production: Send to GEC, which relays to cmd/{env}/all/load-tour
       console.info('[GEC Mode] Sending load-tour to GEC:', tourId);
       this.publish(mqttCommands.docent.loadTour, JSON.stringify(message), { qos: 1, retain: false }, config);
     } else {
@@ -311,8 +313,9 @@ export class MqttService {
       'presentation-mode': presentationMode,
     });
 
+    const env = getMqttEnvironment();
     console.info(`Sending presentation-mode to ${exhibit}: ${presentationMode}`);
-    this.publish(`cmd/dev/${exhibit}/goto-beat`, JSON.stringify(message), { qos: 1, retain: false }, config);
+    this.publish(`cmd/${env}/${exhibit}/goto-beat`, JSON.stringify(message), { qos: 1, retain: false }, config);
   }
 
   // Docent App → Exhibit: Set mute unmute for an exhibit

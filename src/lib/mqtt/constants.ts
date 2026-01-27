@@ -35,6 +35,7 @@ export const MQTT_ENVIRONMENTS: readonly MqttEnvironment[] = ['local', 'preview'
 
 /**
  * Track if environment has been logged to avoid spam.
+ * Only logs once per process lifecycle.
  */
 let environmentLogged = false;
 
@@ -47,17 +48,21 @@ let environmentLogged = false;
  * This ensures MQTT messages are isolated per environment even when sharing
  * the same broker infrastructure.
  *
- * @throws {Error} In production if NEXT_PUBLIC_ENVIRONMENT is not set
+ * @throws {Error} If NEXT_PUBLIC_MQTT_STRICT_MODE=true and environment is invalid
  */
 export const getMqttEnvironment = (): MqttEnvironment => {
   const env = process.env.NEXT_PUBLIC_ENVIRONMENT;
-  const isProduction = typeof window !== 'undefined' && window.location.hostname !== 'localhost';
+  const strictMode = process.env.NEXT_PUBLIC_MQTT_STRICT_MODE === 'true';
 
   // Validate environment value
   if (env !== undefined && !MQTT_ENVIRONMENTS.includes(env as MqttEnvironment)) {
-    console.error(
-      `[MQTT Environment] ❌ Invalid NEXT_PUBLIC_ENVIRONMENT: "${env}". Must be one of: ${MQTT_ENVIRONMENTS.join(', ')}`
-    );
+    const errorMsg = `[MQTT Environment] ❌ Invalid NEXT_PUBLIC_ENVIRONMENT: "${env}". Must be one of: ${MQTT_ENVIRONMENTS.join(', ')}`;
+    console.error(errorMsg);
+    
+    // Strict mode throws error instead of defaulting
+    if (strictMode) {
+      throw new Error(errorMsg);
+    }
   }
 
   // Determine resolved environment
@@ -65,19 +70,18 @@ export const getMqttEnvironment = (): MqttEnvironment => {
     ? (env as MqttEnvironment)
     : 'local';
 
-  // CRITICAL: In production, env var MUST be explicitly set
-  if (isProduction && env === undefined) {
-    const errorMsg = `[MQTT Environment] 🚨 CRITICAL: NEXT_PUBLIC_ENVIRONMENT not set in production! Defaulting to 'local' which will cause communication failure. Set this in Vercel environment variables.`;
-    console.error(errorMsg);
-    // In production builds, this is a critical misconfiguration
-    if (process.env.NODE_ENV === 'production') {
-      // Log prominently but don't throw (would break the app)
-      // Ops team should monitor for this error
-      console.error('[MQTT Environment] ⚠️  Application will not function correctly without proper environment configuration');
+  // Warn if environment not explicitly set
+  if (env === undefined) {
+    const warnMsg = '[MQTT Environment] ⚠️  NEXT_PUBLIC_ENVIRONMENT not set, defaulting to "local". Set this in Vercel environment variables for production/preview.';
+    console.warn(warnMsg);
+    
+    // Strict mode throws error for missing env var
+    if (strictMode) {
+      throw new Error('[MQTT Environment] NEXT_PUBLIC_ENVIRONMENT is required when NEXT_PUBLIC_MQTT_STRICT_MODE=true');
     }
   }
 
-  // Log environment once on startup for observability
+  // Log environment once on first call for observability
   if (!environmentLogged) {
     const wasDefaulted = env === undefined || !MQTT_ENVIRONMENTS.includes(env as MqttEnvironment);
     const emoji = resolvedEnv === 'production' ? '🏭' : resolvedEnv === 'preview' ? '🔍' : '💻';

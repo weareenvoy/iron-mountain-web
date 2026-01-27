@@ -17,7 +17,7 @@ export type DeviceId =
   | 'summit'
   | 'welcome-wall';
 
-// Exhibits that can receive set-volume commands (cmd/dev/<exhibit>/set-volume)
+// Exhibits that can receive set-volume commands (cmd/{env}/<exhibit>/set-volume)
 export type VolumeControllableExhibit = 'basecamp' | 'kiosk-01' | 'kiosk-02' | 'kiosk-03' | 'overlook-wall' | 'summit';
 
 // All exhibits for mute/unmute all
