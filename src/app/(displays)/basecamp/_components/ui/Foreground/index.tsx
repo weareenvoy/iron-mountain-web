@@ -2,6 +2,7 @@
 
 import { startTransition, useEffect, useState } from 'react';
 import { useBasecamp } from '@/app/(displays)/basecamp/_components/providers/basecamp';
+import { useTransitionSfx } from '@/app/(displays)/basecamp/_hooks/use-transition-sfx';
 import { isForegroundSeamlessTransition } from '@/app/(displays)/basecamp/_utils';
 import { BasecampBeatId, BasecampData, isValidBasecampBeatId } from '@/lib/internal/types';
 import AmbientView from './views/AmbientView';
@@ -30,7 +31,20 @@ const VIEWS: Partial<Record<BasecampBeatId, ViewRenderer>> = {
   'problem-2': (data, beatId) => <ProblemIntro beatId={beatId as 'problem-1' | 'problem-2'} data={data.problem1} />,
   'problem-3': data => <Problem3 data={data.problem2} />,
   'problem-4': data => <Problem4 data={data.problem3} />,
-  'welcome-1': data => <WelcomeView data={data.welcome} />,
+  'welcome-1': (data, beatId) => (
+    <WelcomeView
+      beatId={beatId as 'welcome-1' | 'welcome-2'}
+      locationDetails={data.locationDetails}
+      welcome={data.welcome}
+    />
+  ),
+  'welcome-2': (data, beatId) => (
+    <WelcomeView
+      beatId={beatId as 'welcome-1' | 'welcome-2'}
+      locationDetails={data.locationDetails}
+      welcome={data.welcome}
+    />
+  ),
 };
 
 const Foreground = () => {
@@ -44,6 +58,9 @@ const Foreground = () => {
   const [displayedBeatId, setDisplayedBeatId] = useState<BasecampBeatId | null>(null);
   // True when fade-out completed but video wasn't ready yet
   const [fadedOut, setFadedOut] = useState(false);
+
+  // Play SFX when displayedBeatId changes (i.e., when video is ready)
+  useTransitionSfx(displayedBeatId);
 
   const isReady = targetBeatId !== null && readyBeatId === targetBeatId;
   const isValid = targetBeatId !== null;

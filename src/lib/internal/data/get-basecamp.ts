@@ -1,5 +1,5 @@
 import { getLocaleForTesting, shouldUseStaticPlaceholderData } from '@/flags/flags';
-import type { BasecampApiResponse, BasecampDataResponse } from '@/lib/internal/types';
+import type { BasecampApiResponse, BasecampData, BasecampDataResponse } from '@/lib/internal/types';
 
 export async function getBasecampData(): Promise<BasecampDataResponse> {
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
@@ -18,6 +18,8 @@ export async function getBasecampData(): Promise<BasecampDataResponse> {
       if (!data) {
         throw new Error(`Missing data for locale: ${locale}`);
       }
+
+      validateBasecampData(data);
 
       return {
         data,
@@ -40,6 +42,8 @@ export async function getBasecampData(): Promise<BasecampDataResponse> {
       throw new Error(`Missing data for locale: ${locale}`);
     }
 
+    validateBasecampData(data);
+
     return {
       data,
       locale,
@@ -56,9 +60,21 @@ export async function getBasecampData(): Promise<BasecampDataResponse> {
       throw new Error(`Missing data for locale: ${locale}`);
     }
 
+    validateBasecampData(data);
+
     return {
       data,
       locale,
     };
+  }
+}
+
+// Validates that required fields (music, sfx) are present in BasecampData.
+function validateBasecampData(data: BasecampData): void {
+  if (!data.music) {
+    throw new Error('[basecamp] Missing music data. Populate CMS.');
+  }
+  if (!data.sfx) {
+    throw new Error('[basecamp] Missing sfx data. Populate CMS.');
   }
 }
