@@ -131,9 +131,10 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
     console.info('[Early Unlock] ==========================================');
     console.info('[Early Unlock] Attempting to unlock audio on mount');
     console.info('[Early Unlock] User agent:', navigator.userAgent);
-    
+
     // Try to unlock immediately
-    audioController.unlock()
+    audioController
+      .unlock()
       .then(() => {
         console.info('[Early Unlock] ✅ Successfully unlocked on mount!');
         console.info('[Early Unlock] Kiosk flags are working correctly');
@@ -143,7 +144,7 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
         console.warn('[Early Unlock] This is expected without kiosk flags');
         console.warn('[Early Unlock] Click the idle screen to enable audio');
       });
-    
+
     console.info('[Early Unlock] ==========================================');
   }, [audioController]);
 
@@ -152,27 +153,28 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
     if (idleComplete && music.ambient && !shouldPlayAmbientRef.current) {
       // Only run this once
       shouldPlayAmbientRef.current = true;
-      
+
       console.info('[Ambient Music] ========================================');
       console.info('[Ambient Music] Idle complete! Starting ambient music flow...');
       console.info('[Ambient Music] Ambient URL:', music.ambient);
       console.info('[Ambient Music] Current scroll target:', currentScrollTarget);
-      
+
       const ambientUrl = music.ambient; // Capture in closure to satisfy TypeScript
-      
+
       // Always try to unlock first, then play
       console.info('[Ambient Music] Calling audioController.unlock()...');
-      audioController.unlock()
+      audioController
+        .unlock()
         .then(() => {
           console.info('[Ambient Music] ✅ Unlock successful!');
-          
+
           // Check if we're still on initial screen
           const latestScrollTarget = currentScrollTargetRef.current;
           const stillOnInitialScreen = !latestScrollTarget || latestScrollTarget === 'cover-ambient-initial';
-          
+
           console.info('[Ambient Music] Latest scroll target:', latestScrollTarget);
           console.info('[Ambient Music] Still on initial screen?', stillOnInitialScreen);
-          
+
           if (stillOnInitialScreen) {
             console.info('[Ambient Music] ✅ Calling setMusic() with ambient URL...');
             setMusic(ambientUrl, { fadeMs: 1000 });
@@ -181,10 +183,10 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
             console.warn('[Ambient Music] ❌ User navigated away, skipping ambient music');
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.error('[Ambient Music] ❌ Unlock failed:', err);
         });
-      
+
       console.info('[Ambient Music] ========================================');
     }
   }, [audioController, currentScrollTarget, idleComplete, music.ambient, setMusic]);
@@ -208,7 +210,7 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
         checkIdleComplete();
       });
 
-      observer.observe(element, { attributes: true, attributeFilter: ['data-idle-complete'] });
+      observer.observe(element, { attributeFilter: ['data-idle-complete'], attributes: true });
     };
 
     // Check initial state
@@ -265,7 +267,14 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
       sectionName = 'challenge';
     }
 
-    console.info('[Music Effect] Section:', sectionName, 'musicUrl:', musicUrl ? 'SET' : 'NULL', 'idleComplete:', idleComplete);
+    console.info(
+      '[Music Effect] Section:',
+      sectionName,
+      'musicUrl:',
+      musicUrl ? 'SET' : 'NULL',
+      'idleComplete:',
+      idleComplete
+    );
 
     if (musicUrl) {
       // AudioEngine handles queueing if audio isn't unlocked yet

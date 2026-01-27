@@ -59,7 +59,8 @@ chromium-browser \
 
 Replace `kiosk-1` with `kiosk-2` or `kiosk-3` as needed.
 
-**Required flag for audio**: `--autoplay-policy=no-user-gesture-required` allows background music and sound effects to play immediately when triggered by MQTT commands (e.g., when the idle video dismisses).
+**Required flag for audio**: `--autoplay-policy=no-user-gesture-required` allows background music and sound effects to
+play immediately when triggered by MQTT commands (e.g., when the idle video dismisses).
 
 ## Project Structure
 

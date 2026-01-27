@@ -4,11 +4,13 @@
 
 ### macOS Development (Current Setup)
 
-⚠️ **Important**: macOS has stricter audio autoplay policies than Linux. Even with Chrome flags, macOS may still require a user interaction before audio can play. This is a macOS limitation, not a code issue.
+⚠️ **Important**: macOS has stricter audio autoplay policies than Linux. Even with Chrome flags, macOS may still require
+a user interaction before audio can play. This is a macOS limitation, not a code issue.
 
 **For development on macOS**, you have two options:
 
 **Option 1: Accept the click requirement (recommended)**
+
 ```bash
 # Run dev server normally
 pnpm dev
@@ -21,6 +23,7 @@ open http://localhost:3000/kiosk-2
 ```
 
 **Option 2: Try kiosk mode (may still need click on macOS)**
+
 ```bash
 # Make sure Next.js is running first
 pnpm dev
@@ -45,6 +48,7 @@ On Linux, the kiosk mode works perfectly:
 ### Hardware Requirements
 
 **Production Kiosk Specifications (Iron Mountain Exhibition):**
+
 - **Display**: Jupiter Pana 81T (81", 2160x5120 @ 60Hz, portrait orientation)
 - **Touch**: Touchscreen enabled
 - **Audio**: Mono pendant speaker, DVS
@@ -52,12 +56,14 @@ On Linux, the kiosk mode works perfectly:
 - **Quantity**: 3 kiosks
 
 **Recommended OS**: Ubuntu 22.04 LTS (Long Term Support)
+
 - ✅ Best Chrome autoplay support with flags
 - ✅ Stable and well-supported
 - ✅ Excellent Nvidia driver support for RTX 4000 Ada
 - ✅ Free and open source
 
 **Alternative OS Options**:
+
 - Ubuntu 24.04 LTS (newer, also good)
 - Debian 12 (more conservative, very stable)
 - Chrome OS Flex (purpose-built for kiosks, but less flexible)
@@ -125,6 +131,7 @@ WantedBy=graphical.target
 ```
 
 **Enable and start:**
+
 ```bash
 sudo systemctl daemon-reload
 sudo systemctl enable kiosk-2.service kiosk-2-chrome.service
@@ -142,11 +149,13 @@ sudo journalctl -u kiosk-2-chrome.service -f
 #### Option 2: PM2 + Startup Script (Cross-platform)
 
 **Install PM2:**
+
 ```bash
 npm install -g pm2
 ```
 
 **Start the Next.js app:**
+
 ```bash
 cd /opt/iron-mountain-web
 pnpm build
@@ -158,6 +167,7 @@ pm2 startup  # Follow the instructions to enable auto-start
 **Create Chrome autostart:**
 
 For Linux (add to `~/.config/autostart/kiosk-2.desktop`):
+
 ```desktop
 [Desktop Entry]
 Type=Application
@@ -168,6 +178,7 @@ X-GNOME-Autostart-enabled=true
 ```
 
 For macOS (create `~/Library/LaunchAgents/com.ironmountain.kiosk2.plist`):
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -189,6 +200,7 @@ For macOS (create `~/Library/LaunchAgents/com.ironmountain.kiosk2.plist`):
 ```
 
 Load the service:
+
 ```bash
 launchctl load ~/Library/LaunchAgents/com.ironmountain.kiosk2.plist
 ```
@@ -204,7 +216,7 @@ services:
   kiosk-app:
     build: .
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - NODE_ENV=production
       - NEXT_PUBLIC_MQTT_BROKER_URL=${MQTT_BROKER_URL}
@@ -213,8 +225,8 @@ services:
   kiosk-browser:
     image: selenium/standalone-chromium:latest
     ports:
-      - "4444:4444"
-      - "7900:7900"  # VNC for debugging
+      - '4444:4444'
+      - '7900:7900' # VNC for debugging
     environment:
       - SE_OPTS=--kiosk http://kiosk-app:3000/kiosk-2
       - START_XVFB=true
@@ -228,6 +240,7 @@ services:
 ### Environment Variables
 
 Production `.env.production`:
+
 ```env
 # MQTT Configuration
 NEXT_PUBLIC_MQTT_BROKER_URL=wss://your-mqtt-broker.com
@@ -322,6 +335,7 @@ EOF
 ```
 
 **Hide cursor (optional):**
+
 ```bash
 # Install unclutter
 sudo apt install unclutter
@@ -332,18 +346,19 @@ sudo apt install unclutter
 
 ### Monitoring & Maintenance
 
-**Health check endpoint:**
-Add to your Next.js app (`/api/health`):
+**Health check endpoint:** Add to your Next.js app (`/api/health`):
+
 ```typescript
 export async function GET() {
-  return Response.json({ 
-    status: 'ok', 
-    timestamp: new Date().toISOString() 
+  return Response.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
   });
 }
 ```
 
 **Watchdog script:**
+
 ```bash
 #!/bin/bash
 # Check if app is running and restart if needed
@@ -358,6 +373,7 @@ Add to crontab: `*/5 * * * * /opt/iron-mountain-web/scripts/watchdog.sh`
 ### Remote Management
 
 For production kiosks, consider:
+
 - **TeamViewer** or **AnyDesk** for remote access
 - **Portainer** if using Docker
 - **PM2 Plus** for monitoring if using PM2
