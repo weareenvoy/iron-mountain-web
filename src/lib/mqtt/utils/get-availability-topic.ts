@@ -4,14 +4,14 @@ import type { DeviceId } from '../types';
 
 /**
  * Generate environment-specific availability topic for a device.
- * 
+ *
  * @param deviceId - The device identifier
  * @returns Topic string in format: state/{env}/{deviceId}/availability
- * 
+ *
  * @example
  * // In production:
  * getAvailabilityTopic('kiosk-01') // => 'state/production/kiosk-01/availability'
- * 
+ *
  * // In local:
  * getAvailabilityTopic('kiosk-01') // => 'state/local/kiosk-01/availability'
  */

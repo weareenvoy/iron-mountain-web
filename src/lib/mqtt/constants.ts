@@ -58,7 +58,7 @@ export const getMqttEnvironment = (): MqttEnvironment => {
   if (env !== undefined && !MQTT_ENVIRONMENTS.includes(env as MqttEnvironment)) {
     const errorMsg = `[MQTT Environment] ❌ Invalid NEXT_PUBLIC_ENVIRONMENT: "${env}". Must be one of: ${MQTT_ENVIRONMENTS.join(', ')}`;
     console.error(errorMsg);
-    
+
     // Strict mode throws error instead of defaulting
     if (strictMode) {
       throw new Error(errorMsg);
@@ -72,9 +72,10 @@ export const getMqttEnvironment = (): MqttEnvironment => {
 
   // Warn if environment not explicitly set
   if (env === undefined) {
-    const warnMsg = '[MQTT Environment] ⚠️  NEXT_PUBLIC_ENVIRONMENT not set, defaulting to "local". Set this in Vercel environment variables for production/preview.';
+    const warnMsg =
+      '[MQTT Environment] ⚠️  NEXT_PUBLIC_ENVIRONMENT not set, defaulting to "local". Set this in Vercel environment variables for production/preview.';
     console.warn(warnMsg);
-    
+
     // Strict mode throws error for missing env var
     if (strictMode) {
       throw new Error('[MQTT Environment] NEXT_PUBLIC_ENVIRONMENT is required when NEXT_PUBLIC_MQTT_STRICT_MODE=true');

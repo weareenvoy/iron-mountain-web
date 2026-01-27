@@ -2,7 +2,8 @@
 
 ## ✅ What Was Implemented
 
-Environment-prefixed MQTT topics now ensure complete isolation between local, preview, and production environments even when sharing the same MQTT broker.
+Environment-prefixed MQTT topics now ensure complete isolation between local, preview, and production environments even
+when sharing the same MQTT broker.
 
 ### Changes Made
 
@@ -20,9 +21,9 @@ Go to: **https://vercel.com/[your-team]/iron-mountain-web/settings/environment-v
 
 Add the following variable:
 
-| Variable Name | Production Value | Preview Value | Development Value |
-|---------------|------------------|---------------|-------------------|
-| `NEXT_PUBLIC_ENVIRONMENT` | `production` | `preview` | `local` |
+| Variable Name             | Production Value | Preview Value | Development Value |
+| ------------------------- | ---------------- | ------------- | ----------------- |
+| `NEXT_PUBLIC_ENVIRONMENT` | `production`     | `preview`     | `local`           |
 
 #### How to Add:
 
@@ -49,16 +50,19 @@ After adding the environment variable, you need to redeploy:
 Open your deployed apps and check the console logs when MQTT connects:
 
 **Local (http://localhost:3000):**
+
 ```
 Topics will show: cmd/local/all/load-tour
 ```
 
 **Preview (https://your-pr-preview.vercel.app):**
+
 ```
 Topics will show: cmd/preview/all/load-tour
 ```
 
 **Production (https://your-production.vercel.app):**
+
 ```
 Topics will show: cmd/production/all/load-tour
 ```
@@ -68,11 +72,13 @@ Topics will show: cmd/production/all/load-tour
 ### Before Deploy (Local):
 
 1. Add to your `.env.local`:
+
    ```env
    NEXT_PUBLIC_ENVIRONMENT=local
    ```
 
 2. Start your local dev server:
+
    ```bash
    pnpm dev
    ```
@@ -98,6 +104,7 @@ This is a **breaking change** for MQTT topics. After deploying:
 ### All Devices Must Update
 
 Ensure these are all deployed with the same environment value:
+
 - Docent app
 - All kiosks (1, 2, 3)
 - Basecamp
@@ -108,6 +115,7 @@ Ensure these are all deployed with the same environment value:
 ### Rollback Plan
 
 If you need to rollback:
+
 1. Remove `NEXT_PUBLIC_ENVIRONMENT` from Vercel
 2. Topics will default to `local` environment
 3. Redeploy affected environments
@@ -115,6 +123,7 @@ If you need to rollback:
 ## 📊 Before vs After
 
 ### Before:
+
 ```
 Local docent sends: cmd/dev/all/load-tour
    ↓
@@ -124,6 +133,7 @@ Local docent sends: cmd/dev/all/load-tour
 ```
 
 ### After:
+
 ```
 Local docent sends: cmd/local/all/load-tour
    ↓
@@ -163,4 +173,5 @@ Production docent sends: cmd/production/all/load-tour
 
 ---
 
-**Ready to proceed?** Once you've added the Vercel environment variable and redeployed, your environments will be fully isolated! 🎉
+**Ready to proceed?** Once you've added the Vercel environment variable and redeployed, your environments will be fully
+isolated! 🎉

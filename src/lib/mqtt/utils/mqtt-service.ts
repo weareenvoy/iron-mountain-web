@@ -346,9 +346,11 @@ export class MqttService {
           const isEnvPrefixed = topic.startsWith(`cmd/${env}/`) || topic.startsWith(`state/${env}/`);
           const envEmoji = isEnvPrefixed ? '✅' : '⚠️';
           console.info(`[MQTT] ${envEmoji} Subscribed to: ${topic}`);
-          
+
           if (!isEnvPrefixed && process.env.NODE_ENV === 'development') {
-            console.warn(`[MQTT] Topic "${topic}" does not include environment prefix. Expected: cmd/${env}/... or state/${env}/...`);
+            console.warn(
+              `[MQTT] Topic "${topic}" does not include environment prefix. Expected: cmd/${env}/... or state/${env}/...`
+            );
           }
         }
       });

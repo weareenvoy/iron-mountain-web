@@ -2,7 +2,8 @@
 
 ## Overview
 
-All environments (local, preview, production) can share the same MQTT broker infrastructure while maintaining complete isolation through environment-prefixed topics.
+All environments (local, preview, production) can share the same MQTT broker infrastructure while maintaining complete
+isolation through environment-prefixed topics.
 
 ## How It Works
 
@@ -11,6 +12,7 @@ All environments (local, preview, production) can share the same MQTT broker inf
 All MQTT topics are automatically prefixed with the current environment:
 
 **Before (cross-environment interference):**
+
 ```
 cmd/dev/all/load-tour
 cmd/dev/all/end-tour
@@ -18,6 +20,7 @@ state/kiosk-01
 ```
 
 **After (isolated per environment):**
+
 ```
 cmd/local/all/load-tour      → Local development
 cmd/preview/all/load-tour    → Vercel PR previews
@@ -28,17 +31,18 @@ cmd/production/all/load-tour → Production
 
 Set `NEXT_PUBLIC_ENVIRONMENT` in your deployment:
 
-| Environment | Value | Where to Set |
-|-------------|-------|--------------|
-| **Local** | `local` (default) | `.env.local` file or omit (auto-defaults) |
-| **Preview** | `preview` | Vercel → Settings → Environment Variables → Preview |
-| **Production** | `production` | Vercel → Settings → Environment Variables → Production |
+| Environment    | Value             | Where to Set                                           |
+| -------------- | ----------------- | ------------------------------------------------------ |
+| **Local**      | `local` (default) | `.env.local` file or omit (auto-defaults)              |
+| **Preview**    | `preview`         | Vercel → Settings → Environment Variables → Preview    |
+| **Production** | `production`      | Vercel → Settings → Environment Variables → Production |
 
 ## Setup Instructions
 
 ### 1. Local Development
 
 Add to your `.env.local`:
+
 ```env
 NEXT_PUBLIC_ENVIRONMENT=local
 ```
@@ -57,7 +61,8 @@ In your Vercel dashboard:
 
 ### 3. Verify Isolation
 
-You can verify the environment is isolated by checking the console logs when MQTT messages are sent/received. They'll show the full topic path including the environment prefix.
+You can verify the environment is isolated by checking the console logs when MQTT messages are sent/received. They'll
+show the full topic path including the environment prefix.
 
 ## Architecture Impact
 
@@ -98,11 +103,10 @@ state/production/kiosk-01/availability
 
 ## Benefits
 
-✅ **Same broker infrastructure** - No need for separate brokers per environment
-✅ **Complete isolation** - Local testing won't affect production
-✅ **PR preview safety** - Each preview is isolated from production and other previews
-✅ **Cost effective** - One broker serves all environments
-✅ **Easy debugging** - Clear environment prefix in all topic names
+✅ **Same broker infrastructure** - No need for separate brokers per environment ✅ **Complete isolation** - Local
+testing won't affect production ✅ **PR preview safety** - Each preview is isolated from production and other previews
+✅ **Cost effective** - One broker serves all environments ✅ **Easy debugging** - Clear environment prefix in all topic
+names
 
 ## Migration Notes
 
@@ -111,13 +115,15 @@ state/production/kiosk-01/availability
 This is a **breaking change** if you have existing MQTT subscribers expecting the old topic format (`cmd/dev/...`).
 
 **Action Required:**
+
 1. Set `NEXT_PUBLIC_ENVIRONMENT` in all Vercel environments
 2. Update any external MQTT subscribers (if any) to use the new topic format
 3. Verify docent app and all exhibits are using the same environment value
 
 ### Backward Compatibility
 
-The code defaults to `local` environment if `NEXT_PUBLIC_ENVIRONMENT` is not set, providing a safe fallback for development.
+The code defaults to `local` environment if `NEXT_PUBLIC_ENVIRONMENT` is not set, providing a safe fallback for
+development.
 
 ## Troubleshooting
 
@@ -126,6 +132,7 @@ The code defaults to `local` environment if `NEXT_PUBLIC_ENVIRONMENT` is not set
 **Cause:** Both environments using the same `NEXT_PUBLIC_ENVIRONMENT` value
 
 **Fix:** Verify Vercel environment variables are set correctly:
+
 - Production should be `production`
 - Preview should be `preview`
 - Local `.env.local` should be `local` or omitted

@@ -240,7 +240,8 @@ All topics are **environment-isolated** using `{env}` prefix (local/preview/prod
   - `state/{env}/kiosk-0X` - State reporting for persistence and availability
   - `state/{env}/kiosk-0X/availability` - Availability heartbeat
 
-**Environment isolation ensures local/preview/production kiosks cannot interfere with each other even when sharing the same MQTT broker.**
+**Environment isolation ensures local/preview/production kiosks cannot interfere with each other even when sharing the
+same MQTT broker.**
 
 ## Data Structure
 
