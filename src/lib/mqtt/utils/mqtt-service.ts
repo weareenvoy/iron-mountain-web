@@ -324,8 +324,9 @@ export class MqttService {
       'volume-muted': muted,
     });
 
+    const env = getMqttEnvironment();
     console.info(`Setting volume for ${subject}: ${muted ? 'muted' : 'unmuted'} (volume-level: ${volumeLevel})`);
-    this.publish(`cmd/dev/${subject}/set-volume`, JSON.stringify(message), { qos: 1, retain: false }, config);
+    this.publish(`cmd/${env}/${subject}/set-volume`, JSON.stringify(message), { qos: 1, retain: false }, config);
   }
 
   // Custom subscription methods for route-specific topics
@@ -335,9 +336,17 @@ export class MqttService {
       // Only subscribe to the broker if this is the first handler for this topic
       this.client?.subscribe(topic, err => {
         if (err) {
-          console.error(`Failed to subscribe to ${topic}:`, err);
+          console.error(`[MQTT] ❌ Failed to subscribe to ${topic}:`, err);
         } else {
-          console.info(`Subscribed to custom topic: ${topic}`);
+          // Enhanced logging for observability - shows full topic with environment
+          const env = getMqttEnvironment();
+          const isEnvPrefixed = topic.startsWith(`cmd/${env}/`) || topic.startsWith(`state/${env}/`);
+          const envEmoji = isEnvPrefixed ? '✅' : '⚠️';
+          console.info(`[MQTT] ${envEmoji} Subscribed to: ${topic}`);
+          
+          if (!isEnvPrefixed && process.env.NODE_ENV === 'development') {
+            console.warn(`[MQTT] Topic "${topic}" does not include environment prefix. Expected: cmd/${env}/... or state/${env}/...`);
+          }
         }
       });
     }
