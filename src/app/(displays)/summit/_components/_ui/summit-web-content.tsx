@@ -14,6 +14,7 @@ import { transformToSummitTours, type SolutionItem } from '@/app/(displays)/summ
 import PrintIcon from '@/components/ui/icons/PrintIcon';
 import { getSummitData } from '@/lib/internal/data/get-summit';
 import { getToursData } from '@/lib/internal/data/get-tours';
+import { getUTCTourMonth, getUTCTourYear } from '@/lib/utils/iso-date';
 import type { SummitFuturescaping, SummitKioskAmbient, SummitPossibility } from '@/app/(displays)/summit/_types';
 import type { SummitTourSummary } from '@/lib/internal/types';
 
@@ -68,15 +69,6 @@ const RECAP_TONES_BY_INDEX: readonly (RecapTone | undefined)[] = [
 const SECTION_WRAPPER_CLASS = 'lg:px-12 max-w-[1200px] mx-auto px-4 sm:px-8 w-full';
 const STRATEGY_ACCENT_COLORS = ['#8A0D71', '#00A88E', '#F7931E', '#1B75BC'] as const;
 
-const getYearFromDate = (dateString: string): null | number => {
-  const date = new Date(dateString);
-  if (Number.isNaN(date.getTime())) {
-    console.warn('Invalid summit tour date:', dateString);
-    return null;
-  }
-  return date.getFullYear();
-};
-
 const SummitWebContent = () => {
   const { data, error, loading } = useSummit();
   const printableRef = useRef<HTMLDivElement>(null);
@@ -108,7 +100,7 @@ const SummitWebContent = () => {
         setTours(tourList);
         if (tourList.length > 0) {
           const years = Array.from(
-            new Set(tourList.map(tour => getYearFromDate(tour.date)).filter((year): year is number => year !== null))
+            new Set(tourList.map(tour => getUTCTourYear(tour.date)).filter((year): year is number => year !== null))
           ).sort((a, b) => a - b);
           const latestYear = years.at(-1) ?? '';
           setSelectedYear(latestYear);
@@ -134,7 +126,7 @@ const SummitWebContent = () => {
   // Include all years from 2025 to current, even if no tours exist yet, so users can see the full range for planning.
   const availableYears = useMemo(() => {
     const yearsFromTours = Array.from(
-      new Set(tours.map(tour => getYearFromDate(tour.date)).filter((year): year is number => year !== null))
+      new Set(tours.map(tour => getUTCTourYear(tour.date)).filter((year): year is number => year !== null))
     );
     const currentYear = new Date().getFullYear();
     const startYear = 2025;
@@ -148,18 +140,17 @@ const SummitWebContent = () => {
 
   const toursByYear = useMemo(() => {
     if (!selectedYear) return [];
-    return tours.filter(tour => new Date(tour.date).getFullYear() === selectedYear);
+    return tours.filter(tour => getUTCTourYear(tour.date) === selectedYear);
   }, [selectedYear, tours]);
 
   const monthAvailability = useMemo(() => {
     const availability = new Map<number, number>();
     toursByYear.forEach(tour => {
-      const date = new Date(tour.date);
-      if (Number.isNaN(date.getTime())) {
+      const monthIndex = getUTCTourMonth(tour.date);
+      if (monthIndex === null) {
         console.warn('Invalid date in tour:', tour);
         return;
       }
-      const monthIndex = date.getMonth();
       availability.set(monthIndex, (availability.get(monthIndex) ?? 0) + 1);
     });
     return availability;
@@ -168,7 +159,8 @@ const SummitWebContent = () => {
   const toursByYearAndMonth = useMemo(() => {
     if (!selectedYear) return [];
     return toursByYear.filter(tour => {
-      const monthIndex = new Date(tour.date).getMonth();
+      const monthIndex = getUTCTourMonth(tour.date);
+      if (monthIndex === null) return false;
       if (selectedMonth === '') return true;
       return monthIndex === selectedMonth;
     });

@@ -8,6 +8,7 @@ import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { cn } from '@/lib/tailwind/utils/cn';
+import { formatUTCDayOfWeek, formatUTCTourDisplayDate, getUTCTourDateKey } from '@/lib/utils/iso-date';
 import type { ApiTour } from '@/lib/internal/types';
 
 interface TourByDate {
@@ -41,19 +42,15 @@ const SchedulePageClient = () => {
     return tours.reduce(
       (acc, tour) => {
         // Parse ISO datetime string
-        const tourDate = new Date(tour.date);
-
-        if (Number.isNaN(tourDate.getTime())) {
+        const dateKey = getUTCTourDateKey(tour.date);
+        if (!dateKey) {
           return acc;
         }
 
-        const date = tourDate.toDateString();
-        const dayOfWeek = tourDate.toLocaleDateString('en-US', {
-          weekday: 'long',
-        });
+        const dayOfWeek = formatUTCDayOfWeek(tour.date);
 
         // Group tours by date, and also save a dayOfWeek to use for display later.
-        const group = (acc[date] ??= { dayOfWeek, tours: [] });
+        const group = (acc[dateKey] ??= { dayOfWeek, tours: [] });
         group.tours.push(tour);
 
         // sort tours by time
@@ -97,13 +94,6 @@ const SchedulePageClient = () => {
     });
   };
 
-  const formatScheduleDate = (dateString: string): string => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      day: 'numeric',
-      month: 'long',
-    });
-  };
-
   const handleLoadButtonClick =
     (tourId: string): MouseEventHandler<HTMLButtonElement> =>
     event => {
@@ -112,11 +102,16 @@ const SchedulePageClient = () => {
     };
 
   const filteredTours = useMemo(() => {
-    return Object.entries(toursByDate).filter(([date]) => {
-      const tourDate = new Date(date);
-      return (
-        tourDate.getMonth() === currentMonthDate.getMonth() && tourDate.getFullYear() === currentMonthDate.getFullYear()
-      );
+    return Object.entries(toursByDate).filter(([dateKey]) => {
+      const [yearStr, monthStr] = dateKey.split('-');
+      const year = Number(yearStr);
+      const month = Number(monthStr);
+
+      if (Number.isNaN(year) || Number.isNaN(month)) {
+        return false;
+      }
+
+      return year === currentMonthDate.getFullYear() && month - 1 === currentMonthDate.getMonth();
     });
   }, [toursByDate, currentMonthDate]);
 
@@ -196,7 +191,7 @@ const SchedulePageClient = () => {
                   {/* Day of week and date */}
                   <p className="text-primary-im-mid-blue ml-7.5 text-[18px] leading-loose">
                     <span>{dayOfWeek}, </span>
-                    <span className="text-primary-im-dark-blue">{formatScheduleDate(date)}</span>
+                    <span className="text-primary-im-dark-blue">{formatUTCTourDisplayDate(date)}</span>
                   </p>
 
                   {/* Tours for the date */}
