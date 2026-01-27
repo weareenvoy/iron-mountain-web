@@ -62,6 +62,10 @@ export class AudioEngine implements AudioController {
     return this.settings;
   }
 
+  public isUnlocked(): boolean {
+    return this.audioContext?.state === 'running';
+  }
+
   public playSfx(idOrUrl: string, options?: PlaySfxOptions): void {
     const play = async () => {
       const ctx = this.ensureContext();
@@ -140,6 +144,7 @@ export class AudioEngine implements AudioController {
   }
 
   public setMusic(idOrUrl: null | string, options?: LoopOptions): void {
+    console.info('[AudioEngine] setMusic called', idOrUrl, options);
     this.setLoop('music', idOrUrl, options);
   }
 

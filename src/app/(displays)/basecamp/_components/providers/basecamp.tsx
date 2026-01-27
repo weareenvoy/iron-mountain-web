@@ -29,6 +29,7 @@ interface BasecampContextType {
   readonly data: BasecampData | null;
   readonly error: null | string;
   readonly exhibitState: ExhibitNavigationState;
+  readonly isMuted: boolean; // Videos have sfx baked in.
   readonly loading: boolean;
   readonly locale: Locale;
   readonly readyBeatId: BasecampBeatId | null;
@@ -105,9 +106,10 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
 
     currentMusicUrlRef.current = musicUrl ?? null;
     if (musicUrl) {
-      console.info(`[Music] Playing: ${momentId}`);
+      console.info('[Basecamp] setMusic(url)', { momentId, musicUrl });
       audio.setMusic(musicUrl, { fadeMs: 1000 });
     } else {
+      console.info('[Basecamp] setMusic(null)', { momentId });
       audio.setMusic(null, { fadeMs: 1000 });
     }
   }, [audio, data?.music, exhibitState.momentId, hasReceivedMqttState]);
@@ -290,6 +292,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     data,
     error,
     exhibitState,
+    isMuted: mqttState['volume-muted'],
     loading,
     locale,
     readyBeatId,
