@@ -38,14 +38,6 @@ const LAYOUT = {
 } as const;
 
 /**
- * Animation configuration for diamond transitions
- */
-const DIAMOND_TRANSITION = {
-  DURATION: 0.5,
-  EASE: [0.3, 0, 0.6, 1] as const,
-} as const;
-
-/**
  * StepCarousel - Horizontally scrolling carousel of diamond-shaped steps
  * Features staggered entrance animations, size/color transitions, and modal integration
  *
@@ -58,7 +50,6 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
   const [shouldAnimate, setShouldAnimate] = useState(false);
   const [pressedIndex, setPressedIndex] = useState<null | number>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const transitionTimeoutRef = useRef<null | ReturnType<typeof setTimeout>>(null);
   const selectedIndexRef = useRef(selectedIndex);
   const isTransitioningRef = useRef(false);
   const totalSlides = steps.length;
@@ -69,28 +60,25 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
   }, [selectedIndex]);
 
   // Track transition state when selectedIndex changes
+  // Uses transitionend event for accurate transition completion detection
   useEffect(() => {
     isTransitioningRef.current = true;
 
-    // Clear any existing timeout
-    if (transitionTimeoutRef.current) {
-      clearTimeout(transitionTimeoutRef.current);
-    }
+    const container = containerRef.current;
+    if (!container) return;
 
-    // Clear transition state after animation completes
-    transitionTimeoutRef.current = setTimeout(
-      () => {
+    // Listen for transitionend on any diamond element
+    const handleTransitionEnd = (e: TransitionEvent) => {
+      // Only respond to transform transitions on diamond containers
+      if (e.propertyName === 'transform' && (e.target as HTMLElement).classList.contains('absolute')) {
         isTransitioningRef.current = false;
-        transitionTimeoutRef.current = null;
-      },
-      DIAMOND_TRANSITION.DURATION * 1000 + 100
-    );
+      }
+    };
+
+    container.addEventListener('transitionend', handleTransitionEnd);
 
     return () => {
-      if (transitionTimeoutRef.current) {
-        clearTimeout(transitionTimeoutRef.current);
-        transitionTimeoutRef.current = null;
-      }
+      container.removeEventListener('transitionend', handleTransitionEnd);
     };
   }, [selectedIndex]);
 
