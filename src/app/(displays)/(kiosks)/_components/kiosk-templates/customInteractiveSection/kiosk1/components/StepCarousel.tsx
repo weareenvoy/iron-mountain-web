@@ -194,13 +194,12 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
 
             return (
               <div
-                className="absolute left-1/2"
+                className="absolute left-1/2 transition-[transform,opacity] duration-500 ease-[cubic-bezier(0.3,0,0.6,1)]"
                 key={`${idx}-${step.label}`}
                 style={{
                   opacity: relativePos >= -2 && relativePos <= 2 ? 1 : 0,
                   pointerEvents: relativePos >= -2 && relativePos <= 2 ? 'auto' : 'none',
                   transform: `translateX(calc(-50% + ${getOffset()}px))`,
-                  transition: 'transform 0.5s cubic-bezier(0.3, 0, 0.6, 1), opacity 0.5s cubic-bezier(0.3, 0, 0.6, 1)',
                   zIndex: isActive ? 10 : isOuter ? 5 : 1,
                 }}
               >
