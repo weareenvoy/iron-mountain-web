@@ -3,7 +3,7 @@
   "data": {
     "meta": [
       { "label": "Company", "value": "Boyer-Boyer" },
-      { "label": "Date of engagement", "value": "24/12/2025" },
+      { "label": "Start Date", "value": "24/12/2025" },
       { "label": "Location", "value": "São Paulo, Brazil" }
     ],
     "basecamp": {

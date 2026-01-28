@@ -3,7 +3,6 @@ import type { SummitApiResponse, SummitDataResponse } from '@/lib/internal/types
 
 export async function getSummitData(tourId?: string): Promise<SummitDataResponse> {
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
-  const API_KEY = process.env.NEXT_PUBLIC_API_AUTH_KEY;
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 3500);
 
@@ -36,16 +35,11 @@ export async function getSummitData(tourId?: string): Promise<SummitDataResponse
       return { data: rawData.data, locale: rawData.locale };
     }
 
-    if (!API_KEY) {
-      throw new Error('API_KEY is not defined');
-    }
-
     // Online first
-    const res = await fetch(`${API_BASE}/summit${tourId ? `/${tourId}` : ''}`, {
+    // TODO BE ask. We need to get each tour's summit data for summit website.
+    // const res = await fetch(`${API_BASE}/summit${tourId ? `/${tourId}` : ''}`, {
+    const res = await fetch(`${API_BASE}/summit_room`, {
       cache: 'no-store',
-      headers: {
-        'X-API-Key': API_KEY,
-      },
       signal: controller.signal,
     });
     clearTimeout(timeout);

@@ -187,9 +187,9 @@ const useSlideRegistry = () => {
     if (!data) return [];
 
     const basecamp = data.basecamp;
-    const kiosk1 = data.kiosk1;
-    const kiosk2 = data.kiosk2;
-    const kiosk3 = data.kiosk3;
+    const kiosk_1 = data.kiosk_1;
+    const kiosk_2 = data.kiosk_2;
+    const kiosk_3 = data.kiosk_3;
     const meta = data.meta;
     const overlook = data.overlook;
     const summitSlides = data.summit_slides;
@@ -203,7 +203,7 @@ const useSlideRegistry = () => {
     };
 
     const companyMeta = requiredMeta('company');
-    const dateMeta = requiredMeta('date of engagement');
+    const dateMeta = requiredMeta('start date');
     const locationMeta = requiredMeta('location');
 
     const company = companyMeta.value;
@@ -251,7 +251,7 @@ const useSlideRegistry = () => {
       overlook.futurescaping_3,
     ];
 
-    const storyItems: readonly SummitKioskAmbient[] = [kiosk1.ambient, kiosk2.ambient, kiosk3.ambient];
+    const storyItems: readonly SummitKioskAmbient[] = [kiosk_1.ambient, kiosk_2.ambient, kiosk_3.ambient];
 
     const registry: SlideDefinition[] = [
       {

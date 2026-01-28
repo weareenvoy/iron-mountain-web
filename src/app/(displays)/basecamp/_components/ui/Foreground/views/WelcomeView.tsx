@@ -20,9 +20,9 @@ const WelcomeView = ({ beatId, locationDetails, welcome }: Props) => {
       <div className="absolute top-1/2 left-20 flex -translate-y-1/2 items-center">
         <div
           className={`w-130 font-geometria text-[68px] leading-tight font-bold tracking-[-3.4px] text-white ${isExiting ? 'animate-welcome-exit' : ''}`}
-          key={welcome.text}
+          key={welcome.title}
         >
-          {welcome.text}
+          {welcome.title}
         </div>
       </div>
 

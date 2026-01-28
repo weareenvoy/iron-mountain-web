@@ -421,7 +421,7 @@ const SummitWebContent = () => {
     );
   }
 
-  const { basecamp, kiosk1, kiosk2, kiosk3, meta, overlook } = contentData;
+  const { basecamp, kiosk_1, kiosk_2, kiosk_3, meta, overlook } = contentData;
 
   const handlePrintClick = async () => {
     setPrintError(null);
@@ -459,7 +459,7 @@ const SummitWebContent = () => {
     overlook.futurescaping_3,
   ];
 
-  const storiesItems: readonly SummitKioskAmbient[] = [kiosk1.ambient, kiosk2.ambient, kiosk3.ambient];
+  const storiesItems: readonly SummitKioskAmbient[] = [kiosk_1.ambient, kiosk_2.ambient, kiosk_3.ambient];
 
   // Render sections
   const renderMetrics = () => (

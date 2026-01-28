@@ -3,7 +3,6 @@ import type { BasecampApiResponse, BasecampData, BasecampDataResponse } from '@/
 
 export async function getBasecampData(): Promise<BasecampDataResponse> {
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
-  const API_KEY = process.env.NEXT_PUBLIC_API_AUTH_KEY;
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 3500);
 
@@ -18,17 +17,9 @@ export async function getBasecampData(): Promise<BasecampDataResponse> {
       return { data: rawData.data, locale: rawData.locale };
     }
 
-    if (!API_KEY) {
-      throw new Error('API_KEY is not defined');
-    }
-
     // Online first
-    const url = `${API_BASE.replace(/\/$/, '')}/basecamp`;
-    const res = await fetch(url, {
+    const res = await fetch(`${API_BASE}/basecamp`, {
       cache: 'no-store',
-      headers: {
-        'X-API-Key': API_KEY,
-      },
       signal: controller.signal,
     });
 

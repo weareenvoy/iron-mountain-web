@@ -254,7 +254,7 @@ export interface BasecampData {
     readonly text: string;
   };
   readonly welcome: {
-    readonly text: string;
+    readonly title: string;
   };
 }
 

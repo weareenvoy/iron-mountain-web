@@ -8,9 +8,9 @@ export interface SummitData {
   readonly activate_title: string;
   readonly basecamp: SummitBasecamp;
   readonly connect_title: string;
-  readonly kiosk1: SummitKiosk;
-  readonly kiosk2: SummitKiosk;
-  readonly kiosk3: SummitKiosk;
+  readonly kiosk_1: SummitKiosk;
+  readonly kiosk_2: SummitKiosk;
+  readonly kiosk_3: SummitKiosk;
   readonly location_details: SummitLocationDetails;
   readonly meta: SummitMeta;
   readonly overlook: SummitOverlook;
