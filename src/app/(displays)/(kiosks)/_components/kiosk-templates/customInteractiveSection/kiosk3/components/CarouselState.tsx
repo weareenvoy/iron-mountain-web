@@ -12,7 +12,6 @@ import {
   getDecorativeSVGVariant,
   getPrimaryDiamondClass,
   getSecondaryDiamondClass,
-  SLIDE_ID,
   TRANSITIONS,
 } from '../constants';
 import DecorativeSVGGroup from './DecorativeSVGGroup';
