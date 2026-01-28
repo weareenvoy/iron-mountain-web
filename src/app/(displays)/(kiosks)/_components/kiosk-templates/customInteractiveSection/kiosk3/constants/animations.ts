@@ -107,8 +107,8 @@ export const MORPHING_DIAMOND = {
   CAROUSEL: {
     opacity: 1,
     scale: ANIMATION_VALUES.MORPHING_SCALE_FACTOR,
-    x: -1095,
-    y: -875,
+    x: -1005,
+    y: -785,
   },
   /** Exit state: Moves diagonally off-screen with fade */
   EXIT: {
@@ -132,8 +132,10 @@ export const MORPHING_DIAMOND = {
  * Different slides have different layouts requiring repositioning.
  */
 export const PRIMARY_DIAMOND_POSITIONS = {
-  /** Default position for slides 1 & 4 */
+  /** Default position for slide 4 */
   DEFAULT: 'absolute left-[700px] bottom-[1120px] h-[830px] w-[830px] rotate-45 overflow-hidden rounded-[90px]',
+  /** Lower position for slide 1 */
+  SLIDE_1: 'absolute left-[1400px] bottom-[420px] h-[830px] w-[830px] rotate-45 overflow-hidden rounded-[90px]',
   /** Larger, repositioned for slides 2 & 5 */
   SLIDE_2_5: 'absolute left-[510px] bottom-[670px] h-[1200px] w-[1200px] rotate-45 overflow-hidden rounded-[90px]',
   /** Lower position for slides 3 & 6 */
@@ -212,6 +214,9 @@ export function getMorphingDiamondAnimation(
  * @returns Tailwind CSS class string for positioning
  */
 export function getPrimaryDiamondClass(slideId: SlideId): string {
+  if (slideId === SLIDE_ID.SLIDE_1) {
+    return PRIMARY_DIAMOND_POSITIONS.SLIDE_1;
+  }
   if (slideId === SLIDE_ID.SLIDE_2 || slideId === SLIDE_ID.SLIDE_5) {
     return PRIMARY_DIAMOND_POSITIONS.SLIDE_2_5;
   }

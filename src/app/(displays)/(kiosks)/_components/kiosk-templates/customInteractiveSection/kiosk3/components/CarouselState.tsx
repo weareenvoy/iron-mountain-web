@@ -127,39 +127,44 @@ const CarouselState = memo(
                   </AnimatePresence>
                 </div>
 
-                {/* Primary diamond (video or image) - Hidden for slide 1 since background morphs into it */}
-                {current.id !== SLIDE_ID.SLIDE_1 && (
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      animate={
-                        isExiting
-                          ? {
-                              opacity: DIAMOND_ANIMATIONS.ENTRY.exit.opacity,
-                              scale: DIAMOND_ANIMATIONS.ENTRY.exit.scale,
-                              x: DIAMOND_ANIMATIONS.ENTRY.exit.x,
-                              y: DIAMOND_ANIMATIONS.ENTRY.exit.y,
-                            }
-                          : DIAMOND_ANIMATIONS.ENTRY.animate
-                      }
-                      className={primaryDiamondClass}
-                      exit={DIAMOND_ANIMATIONS.ENTRY.exit}
-                      initial={DIAMOND_ANIMATIONS.ENTRY.initial}
-                      key={`primary-${index}`}
-                      transition={TRANSITIONS.CAROUSEL}
-                    >
-                      {current.primaryVideoSrc && (
-                        <video
-                          autoPlay
-                          className="h-full w-full origin-center scale-[1.35] -rotate-45 object-cover"
-                          loop
-                          muted
-                          playsInline
-                          src={current.primaryVideoSrc}
-                        />
-                      )}
-                    </motion.div>
-                  </AnimatePresence>
-                )}
+                {/* Primary diamond (video or image) */}
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    animate={
+                      isExiting
+                        ? {
+                            opacity: DIAMOND_ANIMATIONS.ENTRY.exit.opacity,
+                            scale: DIAMOND_ANIMATIONS.ENTRY.exit.scale,
+                            x: DIAMOND_ANIMATIONS.ENTRY.exit.x,
+                            y: DIAMOND_ANIMATIONS.ENTRY.exit.y,
+                          }
+                        : DIAMOND_ANIMATIONS.ENTRY.animate
+                    }
+                    className={primaryDiamondClass}
+                    exit={DIAMOND_ANIMATIONS.ENTRY.exit}
+                    initial={DIAMOND_ANIMATIONS.ENTRY.initial}
+                    key={`primary-${index}`}
+                    transition={TRANSITIONS.CAROUSEL}
+                  >
+                    {current.primaryVideoSrc && (
+                      <video
+                        autoPlay
+                        className="h-full w-full origin-center scale-[1.35] -rotate-45 object-cover"
+                        loop
+                        muted
+                        playsInline
+                        src={current.primaryVideoSrc}
+                      />
+                    )}
+                    {!current.primaryVideoSrc && current.primaryImageSrc && (
+                      <img
+                        alt={current.primaryImageAlt}
+                        className="h-full w-full origin-center scale-[1.35] -rotate-45 object-cover"
+                        src={current.primaryImageSrc}
+                      />
+                    )}
+                  </motion.div>
+                </AnimatePresence>
 
                 {/* Secondary diamond (decorative SVG or image) */}
                 {current.secondaryImageSrc && (
