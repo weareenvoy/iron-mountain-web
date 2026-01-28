@@ -64,7 +64,8 @@ const SVG_GROUP_CONFIG: Record<DecorativeSVGGroupProps['variant'], SVGConfig[]> 
       Component: HCFilledOrangeDiamond,
     },
     {
-      className: 'pointer-events-none absolute bottom-[-1650px] left-[-120px] h-[2400px] w-[2400px] scale-x-[-1] overflow-visible',
+      className:
+        'pointer-events-none absolute bottom-[-1650px] left-[-120px] h-[2400px] w-[2400px] scale-x-[-1] overflow-visible',
       Component: HCHollowBlueDiamond2,
     },
     {
