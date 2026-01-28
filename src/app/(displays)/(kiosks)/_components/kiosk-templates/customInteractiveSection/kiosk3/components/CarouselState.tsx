@@ -156,9 +156,11 @@ const CarouselState = memo(
                       />
                     )}
                     {!current.primaryVideoSrc && current.primaryImageSrc && (
-                      <img
+                      <Image
                         alt={current.primaryImageAlt}
-                        className="h-full w-full origin-center scale-[1.35] -rotate-45 object-cover"
+                        className="origin-center scale-[1.35] -rotate-45 object-cover"
+                        fill
+                        sizes="800px"
                         src={current.primaryImageSrc}
                       />
                     )}
