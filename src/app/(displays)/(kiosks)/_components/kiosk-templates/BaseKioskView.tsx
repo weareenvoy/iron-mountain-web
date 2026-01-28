@@ -7,6 +7,7 @@ import { useCarouselDelegation } from '@/app/(displays)/(kiosks)/_components/kio
 import { useGlobalParagraphNavigation } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useGlobalParagraphNavigation';
 import { useKioskArrowState } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useKioskArrowState';
 import { useKioskSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useKioskSlides';
+import { GradientHeightsProvider } from '@/app/(displays)/(kiosks)/_components/providers/gradient-heights-provider';
 import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers/kiosk-provider';
 import { SCROLL_DURATION_MS } from '@/app/(displays)/(kiosks)/_constants/timing';
 import { useKioskArrowStore } from '@/app/(displays)/(kiosks)/_stores/useKioskArrowStore';
@@ -59,7 +60,7 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
   const handleInitialButtonClick = useMemo(() => () => handleButtonClick(kioskId), [handleButtonClick, kioskId]);
 
   // Build slides with the memoized button click handler
-  const { missingSections, slides } = useKioskSlides({
+  const { gradientHeights, missingSections, slides } = useKioskSlides({
     diamondMapping,
     kioskData,
     kioskId,
@@ -132,25 +133,26 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
   }
 
   return (
-    <div
-      className="group/kiosk relative h-screen w-full overflow-y-auto bg-black"
-      data-kiosk={kioskId}
-      ref={containerRef}
-    >
-      <div className="flex w-full flex-col overflow-x-hidden">
-        {/* Render ALL slides, always visible, stacked vertically */}
-        {slides.map((slide, idx) => {
-          let heightClass = 'h-screen';
-          if (slide.id === 'challenge-second') heightClass = 'h-[50vh]';
-          if (slide.id === 'challenge-third') heightClass = 'h-[150vh]';
+    <GradientHeightsProvider heights={gradientHeights}>
+      <div
+        className="group/kiosk relative h-screen w-full overflow-y-auto bg-black"
+        data-kiosk={kioskId}
+        ref={containerRef}
+      >
+        <div className="flex w-full flex-col overflow-x-hidden">
+          {/* Render ALL slides, always visible, stacked vertically */}
+          {slides.map((slide, idx) => {
+            let heightClass = 'h-screen';
+            if (slide.id === 'challenge-second') heightClass = 'h-[50vh]';
+            if (slide.id === 'challenge-third') heightClass = 'h-[150vh]';
 
-          return (
-            <div className={cn(heightClass, 'w-full flex-shrink-0')} data-slide-index={idx} key={slide.id}>
-              {slide.render()}
-            </div>
-          );
-        })}
-      </div>
+            return (
+              <div className={cn(heightClass, 'w-full flex-shrink-0')} data-slide-index={idx} key={slide.id}>
+                {slide.render()}
+              </div>
+            );
+          })}
+        </div>
 
       {/* Global Navigation Arrows */}
       <AnimatePresence>
@@ -216,6 +218,7 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+      </div>
+    </GradientHeightsProvider>
   );
 };

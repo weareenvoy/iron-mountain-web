@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useGradientHeights } from '@/app/(displays)/(kiosks)/_components/providers/gradient-heights-provider';
 import BlueDiamondMain from '@/components/ui/icons/Kiosks/Solutions/BlueDiamondMain';
 import GreenDiamondMain from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondMain';
 import OrangeDiamondMain from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondMain';
@@ -26,6 +27,7 @@ export type SolutionFirstScreenTemplateProps = {
 const SolutionFirstScreenTemplate = ({
   body,
   headline,
+  kioskId,
   labelText,
   mainVideo,
   subheadline,
@@ -35,6 +37,9 @@ const SolutionFirstScreenTemplate = ({
   const { labelRef, sectionRef, showStickyHeader, stickyHeaderRef } = useStickyHeader<HTMLDivElement>({
     sectionName: SECTION_NAMES.SOLUTION,
   });
+
+  // Get dynamic gradient height for Solution section
+  const { solution: gradientHeight } = useGradientHeights();
 
   return (
     <div
@@ -60,8 +65,14 @@ const SolutionFirstScreenTemplate = ({
         </div>
       </div>
 
-      {/* Gradient body */}
-      <div className="bg-gradient-kiosk-solution absolute top-[1058px] left-0 z-[1] h-[14575px] w-full rounded-[100px] group-data-[kiosk=kiosk-2]/kiosk:top-[1110px] group-data-[kiosk=kiosk-2]/kiosk:h-[14515px] group-data-[kiosk=kiosk-3]/kiosk:top-[1060px]" />
+      {/* Gradient body - height calculated dynamically based on rendered templates */}
+      <div 
+        className="bg-gradient-kiosk-solution absolute left-0 z-[1] w-full rounded-[100px]"
+        style={{ 
+          height: gradientHeight > 0 ? `${gradientHeight}px` : undefined,
+          top: kioskId === 'kiosk-2' ? '1110px' : kioskId === 'kiosk-3' ? '1060px' : '1058px'
+        }}
+      />
 
       {/* Subheadline - Initial Position */}
       <motion.h2

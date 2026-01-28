@@ -72,10 +72,11 @@ export const buildCustomInteractiveSlides = (
     };
 
     slides.push({
-      id: 'customInteractive-first',
+      id: `${idPrefix}-first`,
       render: () => (
         <SectionSlide>
           <CustomInteractiveFirstScreenTemplate
+            customInteractiveIndex={index ?? 0}
             kioskId={kioskId}
             {...customInteractive.firstScreen}
             onEndTour={handleEndTour}
@@ -85,7 +86,7 @@ export const buildCustomInteractiveSlides = (
           />
         </SectionSlide>
       ),
-      title: 'CustomInteractive First',
+      title: `CustomInteractive ${index !== undefined ? index + 1 : ''} First`,
     });
   }
 

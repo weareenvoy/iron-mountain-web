@@ -3,6 +3,7 @@ import { SquarePlay } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
+import { useGradientHeights } from '@/app/(displays)/(kiosks)/_components/providers/gradient-heights-provider';
 import ArrowIcon from '@/components/ui/icons/Kiosks/CustomInteractive/ArrowIcon';
 import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCFilledOrangeDiamond';
 import HCHollowBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowBlueDiamond';
@@ -15,6 +16,7 @@ import { SECTION_NAMES, useStickyHeader } from '../hooks/useStickyHeader';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 export interface CustomInteractiveKiosk1FirstScreenTemplateProps {
+  readonly customInteractiveIndex?: number;
   readonly demoIframeSrc?: string;
   readonly eyebrow?: string;
   readonly headline?: string;
@@ -32,6 +34,7 @@ export interface CustomInteractiveKiosk1FirstScreenTemplateProps {
 }
 
 const CustomInteractiveKiosk1FirstScreenTemplate = ({
+  customInteractiveIndex = 0,
   demoIframeSrc,
   eyebrow,
   headline,
@@ -58,6 +61,10 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   } = useStickyHeader<HTMLHeadingElement>({
     sectionName: SECTION_NAMES.CUSTOM_INTERACTIVE,
   });
+
+  // Get dynamic gradient height for this custom interactive instance
+  const { getCustomInteractiveHeight } = useGradientHeights();
+  const gradientHeight = getCustomInteractiveHeight(customInteractiveIndex);
 
   const isKiosk1 = kioskId === 'kiosk-1';
   const eyebrowText = eyebrow;
@@ -90,8 +97,11 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       data-section={SECTION_NAMES.CUSTOM_INTERACTIVE}
       ref={sectionRef}
     >
-      {/* Background gradient - defined in globals.css for readability and ease of future updates */}
-      <div className="bg-gradient-kiosk-blue pointer-events-none absolute inset-0 group-data-[kiosk=kiosk-1]/kiosk:h-[10530px] group-data-[kiosk=kiosk-2]/kiosk:h-[10390px] group-data-[kiosk=kiosk-3]/kiosk:h-[10430px]" />
+      {/* Background gradient - height calculated dynamically based on rendered templates */}
+      <div 
+        className="bg-gradient-kiosk-blue pointer-events-none absolute inset-0"
+        style={{ height: gradientHeight > 0 ? `${gradientHeight}px` : undefined }}
+      />
 
       {/* Overlay - Demo Screen */}
       <div
@@ -160,16 +170,18 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
           ctaWidthClass
         )}
       >
-        <button
-          className="group flex h-[200px] items-center justify-between rounded-[999px] bg-[#ededed] px-[100px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-[#14477d] shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-[19px] transition-transform duration-150 group-data-[kiosk=kiosk-2]/kiosk:hidden hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
-          onClick={handlePrimaryClick}
-          type="button"
-        >
-          <span className="pt-[10px] pl-[10px]">{renderRegisteredMark(primaryCtaLabel)}</span>
-          <div>
-            <ArrowIcon />
-          </div>
-        </button>
+        {primaryCtaLabel && (
+          <button
+            className="group flex h-[200px] items-center justify-between rounded-[999px] bg-[#ededed] px-[100px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-[#14477d] shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-[19px] transition-transform duration-150 hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+            onClick={handlePrimaryClick}
+            type="button"
+          >
+            <span className="pt-[10px] pl-[10px]">{renderRegisteredMark(primaryCtaLabel)}</span>
+            <div>
+              <ArrowIcon />
+            </div>
+          </button>
+        )}
         {/* CTA button gradient - defined in globals.css for readability and ease of future updates */}
         <button
           className="group bg-gradient-kiosk-magenta flex h-[200px] items-center justify-between rounded-[999px] px-[100px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-transform duration-150 hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"

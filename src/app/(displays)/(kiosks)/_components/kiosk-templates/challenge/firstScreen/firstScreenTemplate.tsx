@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { Diamond } from 'lucide-react';
 import { memo } from 'react';
+import { useGradientHeights } from '@/app/(displays)/(kiosks)/_components/providers/gradient-heights-provider';
 import { cn } from '@/lib/tailwind/utils/cn';
 import { getVideoMimeType } from '@/lib/utils/get-video-mime-type';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
@@ -24,7 +25,7 @@ export type FirstScreenTemplateProps = {
 };
 
 const FirstScreenTemplate = memo(
-  ({ body, featuredStat1, featuredStat1Body, labelText, mainVideo, subheadline }: FirstScreenTemplateProps) => {
+  ({ body, featuredStat1, featuredStat1Body, kioskId, labelText, mainVideo, subheadline }: FirstScreenTemplateProps) => {
     const { shouldAnimate, triggerRef: animationTriggerRef } = useScrollAnimation<HTMLDivElement>();
 
     const {
@@ -40,14 +41,23 @@ const FirstScreenTemplate = memo(
       sectionName: SECTION_NAMES.CHALLENGE,
     });
 
+    // Get dynamic gradient height for Challenge section
+    const { challenge: gradientHeight } = useGradientHeights();
+
     return (
       <div
         className="relative flex h-screen w-full flex-col overflow-visible bg-black"
         data-section={SECTION_NAMES.CHALLENGE}
         ref={sectionRef}
       >
-        {/* Background gradient - defined in globals.css for readability and ease of future updates */}
-        <div className="bg-gradient-challenge-section pointer-events-none absolute inset-0 top-[1290px] z-[1] h-[14340px] rounded-[100px] group-data-[kiosk=kiosk-2]/kiosk:top-[1240px] group-data-[kiosk=kiosk-2]/kiosk:h-[14390px]" />
+        {/* Background gradient - height calculated dynamically based on rendered templates */}
+        <div 
+          className="bg-gradient-challenge-section pointer-events-none absolute left-0 z-[1] w-full rounded-[100px]"
+          style={{ 
+            height: gradientHeight > 0 ? `${gradientHeight}px` : undefined,
+            top: kioskId === 'kiosk-2' ? '1240px' : '1290px'
+          }}
+        />
 
         {/* Video Header Section */}
         <div

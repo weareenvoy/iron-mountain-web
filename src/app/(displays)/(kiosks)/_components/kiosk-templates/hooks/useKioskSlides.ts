@@ -11,6 +11,7 @@ import { mapSolutionsWithGrid, type DiamondMapping } from '@/app/(displays)/(kio
 import { mapValue } from '@/app/(displays)/(kiosks)/_mappers/map-value';
 import { parseKioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
 import { parseKioskData } from '@/app/(displays)/(kiosks)/_utils/parseKioskData';
+import { calculateSectionGradientHeights, type SectionHeights } from '@/app/(displays)/(kiosks)/_utils/calculate-section-heights';
 import type { CarouselHandlers } from '@/app/(displays)/(kiosks)/_types/carousel-types';
 import type { CustomInteractiveContent } from '@/app/(displays)/(kiosks)/_types/content-types';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
@@ -336,9 +337,23 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
     values,
   ]);
 
+  // Calculate gradient heights based on rendered slides
+  const gradientHeights = useMemo(() => {
+    if (slides.length === 0) {
+      return {
+        challenge: 0,
+        customInteractive: [],
+        solution: 0,
+        value: 0,
+      };
+    }
+    return calculateSectionGradientHeights(slides, kioskId);
+  }, [slides, kioskId]);
+
   return {
     challenges,
     customInteractives,
+    gradientHeights,
     missingSections: missingSections.length > 0 ? missingSections : null,
     slides,
     solutionAccordion,
