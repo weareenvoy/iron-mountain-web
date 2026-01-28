@@ -11,7 +11,12 @@ type MetricsSectionProps = {
 
 const MetricsSection = ({ challenges, stats, title, variant = 'default' }: MetricsSectionProps) => {
   const isSlide = variant === 'slide';
-  const challengeItems = [challenges.challenge_1, challenges.challenge_2, challenges.challenge_3, challenges.challenge_4];
+  const challengeItems = [
+    challenges.challenge_1,
+    challenges.challenge_2,
+    challenges.challenge_3,
+    challenges.challenge_4,
+  ];
 
   return (
     <section className={cn('flex flex-col', isSlide ? 'gap-5' : 'gap-12')}>

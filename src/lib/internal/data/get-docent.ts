@@ -33,7 +33,7 @@ export async function getDocentInitialData(): Promise<DocentInitialDataResponse>
     }
 
     // Online first
-    const res = await fetch(`${API_BASE}/docent_intial`, {
+    const res = await fetch(`${API_BASE}/docent_initial`, {
       cache: 'no-store',
       signal: controller.signal,
     });
