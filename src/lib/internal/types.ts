@@ -401,7 +401,7 @@ export interface KioskData {
 }
 
 /**
- * ISO 8601 date string (YYYY-MM-DD)
+ * ISO 8601 datetime string (e.g., "2026-01-15T00:00:00+00:00")
  */
 export interface SummitTourSummary {
   readonly date: string;

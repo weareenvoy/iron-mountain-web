@@ -45,7 +45,7 @@ export const renderStory = (item: SummitKioskAmbient) => (
 // Transforms ToursApiResponse to SummitTourSummary format
 export const transformToSummitTours = (toursResponse: ToursApiResponse): readonly SummitTourSummary[] => {
   return toursResponse.tours.map(tour => ({
-    date: tour.date.split('T')[0] ?? tour.date, // Extract YYYY-MM-DD from ISO datetime
+    date: tour.date, // Keep original ISO datetime string
     id: String(tour.id), // Convert number to string
     name: tour.name,
   }));
