@@ -55,12 +55,26 @@ export async function getKioskData(kioskId: KioskId, externalSignal?: AbortSigna
   } catch (originalError) {
     clearTimeout(timeout);
 
+    // If externally aborted (user cancelled or newer request), skip fallback
+    if (externalSignal?.aborted) {
+      throw originalError;
+    }
+
+    // If the error is an AbortError, check if it's from external signal
+    if (originalError instanceof Error && originalError.name === 'AbortError') {
+      // If we have an external signal and it's aborted, this was intentional
+      if (externalSignal?.aborted) {
+        throw originalError;
+      }
+      // Otherwise, it was a timeout - proceed to fallback
+    }
+
     // Log original error for debugging
     if (process.env.NODE_ENV === 'development') {
       console.error(`Failed to fetch ${kioskId} from API:`, originalError);
     }
 
-    // Offline/static fallback
+    // Offline/static fallback - use a fresh signal (not the aborted one)
     try {
       const res = await fetch(`/api/${kioskId}.json`, { cache: 'force-cache' });
       const rawData = (await res.json()) as KioskApiResponse;
