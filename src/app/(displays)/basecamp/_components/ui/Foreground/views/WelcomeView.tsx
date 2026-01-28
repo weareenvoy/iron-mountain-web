@@ -4,7 +4,7 @@ import type { BasecampData } from '@/lib/internal/types';
 
 type Props = {
   readonly beatId: 'welcome-1' | 'welcome-2';
-  readonly locationDetails: BasecampData['locationDetails'];
+  readonly locationDetails: BasecampData['location_details'];
   readonly welcome: BasecampData['welcome'];
 };
 

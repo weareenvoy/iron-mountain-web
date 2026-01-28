@@ -134,8 +134,8 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
 
   // Design update. Get journey-1 title from basecamp data if available, otherwise use default from summitSlides
   const getSlideTitle = (slide: { handle: string; title: string }): string => {
-    if (slide.handle === 'journey-1' && basecampData?.problem1.text) {
-      return basecampData.problem1.text;
+    if (slide.handle === 'journey-1' && basecampData?.problem_1.title) {
+      return basecampData.problem_1.title;
     }
     return slide.title;
   };

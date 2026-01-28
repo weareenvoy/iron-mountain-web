@@ -6,7 +6,7 @@ import { useAnimationStartSfx } from '@/app/(displays)/basecamp/_hooks/use-anima
 import type { BasecampData } from '@/lib/internal/types';
 
 type Props = {
-  readonly data: BasecampData['problem3'];
+  readonly data: BasecampData['problem_3'];
 };
 
 // Animation timing constants (single source of truth for CSS)
@@ -37,7 +37,7 @@ const getCardTitleDelay = (blockStart: number, wordIndex: number): number =>
 
 const Problem4 = ({ data }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const challenges = [data.challenge1, data.challenge2, data.challenge3, data.challenge4];
+  const challenges = [data.challenge_1, data.challenge_2, data.challenge_3, data.challenge_4];
   const mainTitleWords = data.title.split(' ');
 
   // Play SFX when elements with data-sfx="appear" start animating

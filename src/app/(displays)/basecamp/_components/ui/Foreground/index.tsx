@@ -21,27 +21,27 @@ const VIEWS: Partial<Record<BasecampBeatId, ViewRenderer>> = {
   'possibilities-1': data => <PossibilitiesTitle data={data.possibilities} />,
   'possibilities-2': data => (
     <PossibilitiesDetailsTitles
-      data={[data.possibilitiesA.title, data.possibilitiesB.title, data.possibilitiesC.title]}
+      data={[data.possibilities_a.title, data.possibilities_b.title, data.possibilities_c.title]}
     />
   ),
-  'possibilities-3': data => <PossibilitiesDetail data={data.possibilitiesA} />,
-  'possibilities-4': data => <PossibilitiesDetail data={data.possibilitiesB} />,
-  'possibilities-5': data => <PossibilitiesDetail data={data.possibilitiesC} />,
-  'problem-1': (data, beatId) => <ProblemIntro beatId={beatId as 'problem-1' | 'problem-2'} data={data.problem1} />,
-  'problem-2': (data, beatId) => <ProblemIntro beatId={beatId as 'problem-1' | 'problem-2'} data={data.problem1} />,
-  'problem-3': data => <Problem3 data={data.problem2} />,
-  'problem-4': data => <Problem4 data={data.problem3} />,
+  'possibilities-3': data => <PossibilitiesDetail data={data.possibilities_a} />,
+  'possibilities-4': data => <PossibilitiesDetail data={data.possibilities_b} />,
+  'possibilities-5': data => <PossibilitiesDetail data={data.possibilities_c} />,
+  'problem-1': (data, beatId) => <ProblemIntro beatId={beatId as 'problem-1' | 'problem-2'} data={data.problem_1} />,
+  'problem-2': (data, beatId) => <ProblemIntro beatId={beatId as 'problem-1' | 'problem-2'} data={data.problem_1} />,
+  'problem-3': data => <Problem3 data={data.problem_2} />,
+  'problem-4': data => <Problem4 data={data.problem_3} />,
   'welcome-1': (data, beatId) => (
     <WelcomeView
       beatId={beatId as 'welcome-1' | 'welcome-2'}
-      locationDetails={data.locationDetails}
+      locationDetails={data.location_details}
       welcome={data.welcome}
     />
   ),
   'welcome-2': (data, beatId) => (
     <WelcomeView
       beatId={beatId as 'welcome-1' | 'welcome-2'}
-      locationDetails={data.locationDetails}
+      locationDetails={data.location_details}
       welcome={data.welcome}
     />
   ),

@@ -5,6 +5,7 @@ import type { ToursApiResponse } from '@/lib/internal/types';
 // Fetches the tour schedule data from /api/tours endpoint
 export async function getToursData(): Promise<ToursApiResponse> {
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
+  const API_KEY = process.env.NEXT_PUBLIC_API_AUTH_KEY;
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 3500);
 
@@ -15,9 +16,16 @@ export async function getToursData(): Promise<ToursApiResponse> {
       return toursStatic as ToursApiResponse;
     }
 
+    if (!API_KEY) {
+      throw new Error('API_KEY is not defined');
+    }
+
     // Online first
     const res = await fetch(`${API_BASE}/tours`, {
       cache: 'no-store',
+      headers: {
+        'X-API-Key': API_KEY,
+      },
       signal: controller.signal,
     });
     clearTimeout(timeout);

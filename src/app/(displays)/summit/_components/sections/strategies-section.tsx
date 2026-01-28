@@ -76,8 +76,8 @@ const processItem = (
       const typedItem = item as SummitKioskAmbient;
       return {
         content: renderStory(typedItem),
-        itemKey: typedItem.solutionTitle,
-        itemTitle: typedItem.solutionTitle,
+        itemKey: typedItem.solution_title,
+        itemTitle: typedItem.solution_title,
       };
     }
   }

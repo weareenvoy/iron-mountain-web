@@ -8,6 +8,7 @@ export { getToursData } from '@/lib/internal/data/get-tours';
 // Does NOT include tours - use getToursData() for tour schedule.
 export async function getDocentInitialData(): Promise<DocentInitialDataResponse> {
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
+  const API_KEY = process.env.NEXT_PUBLIC_API_AUTH_KEY;
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 3500);
 
@@ -32,9 +33,16 @@ export async function getDocentInitialData(): Promise<DocentInitialDataResponse>
       };
     }
 
+    if (!API_KEY) {
+      throw new Error('API_KEY is not defined');
+    }
+
     // Online first
-    const res = await fetch(`${API_BASE}/docent-initial`, {
+    const res = await fetch(`${API_BASE}/basecamp`, {
       cache: 'no-store',
+      headers: {
+        'X-API-Key': API_KEY,
+      },
       signal: controller.signal,
     });
     clearTimeout(timeout);

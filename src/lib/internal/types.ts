@@ -188,7 +188,7 @@ export interface BasecampData {
       readonly url: string;
     };
   };
-  readonly locationDetails: {
+  readonly location_details: {
     readonly elevation: string;
     readonly exhibit: string;
     readonly name: string;
@@ -200,48 +200,48 @@ export interface BasecampData {
   readonly possibilities: {
     readonly title: string;
   };
-  readonly possibilitiesA: {
-    readonly body1: string;
-    readonly body2: string;
-    readonly body3: string;
+  readonly possibilities_a: {
+    readonly body_1: string;
+    readonly body_2: string;
+    readonly body_3: string;
     readonly title: string;
   };
-  readonly possibilitiesB: {
-    readonly body1: string;
-    readonly body2: string;
-    readonly body3: string;
+  readonly possibilities_b: {
+    readonly body_1: string;
+    readonly body_2: string;
+    readonly body_3: string;
     readonly title: string;
   };
-  readonly possibilitiesC: {
-    readonly body1: string;
-    readonly body2: string;
-    readonly body3: string;
+  readonly possibilities_c: {
+    readonly body_1: string;
+    readonly body_2: string;
+    readonly body_3: string;
     readonly title: string;
   };
-  readonly problem1: {
-    readonly text: string;
+  readonly problem_1: {
+    readonly title: string;
   };
-  readonly problem2: {
-    readonly percent: string;
-    readonly percentSubtitle: string;
+  readonly problem_2: {
+    readonly subtitle: string;
+    readonly title: string;
   }[];
-  readonly problem3: {
-    readonly challenge1: {
+  readonly problem_3: {
+    readonly challenge_1: {
       readonly body: string;
       readonly icon: string;
       readonly title: string;
     };
-    readonly challenge2: {
+    readonly challenge_2: {
       readonly body: string;
       readonly icon: string;
       readonly title: string;
     };
-    readonly challenge3: {
+    readonly challenge_3: {
       readonly body: string;
       readonly icon: string;
       readonly title: string;
     };
-    readonly challenge4: {
+    readonly challenge_4: {
       readonly body: string;
       readonly icon: string;
       readonly title: string;

@@ -236,7 +236,7 @@ const SummitWebContent = () => {
     if (!contentData) {
       throw new Error('Missing summit data');
     }
-    const slide = contentData.summitSlides.find(item => item.handle === handle);
+    const slide = contentData.summit_slides.find(item => item.handle === handle);
     if (!slide) {
       throw new Error(`Missing summit slide: ${handle}`);
     }
@@ -442,28 +442,28 @@ const SummitWebContent = () => {
   const journey6Title = requireSlideTitle('journey-6');
 
   const possibilitiesItems: readonly SummitPossibility[] = [
-    basecamp.possibilitiesA,
-    basecamp.possibilitiesB,
-    basecamp.possibilitiesC,
+    basecamp.possibilities_a,
+    basecamp.possibilities_b,
+    basecamp.possibilities_c,
   ];
 
   const solutionItems: readonly SolutionItem[] = [
-    { locations: overlook.protect, title: contentData.protectTitle },
-    { locations: overlook.connect, title: contentData.connectTitle },
-    { locations: overlook.activate, title: contentData.activateTitle },
+    { locations: overlook.protect, title: contentData.protect_title },
+    { locations: overlook.connect, title: contentData.connect_title },
+    { locations: overlook.activate, title: contentData.activate_title },
   ];
 
   const futurescapingItems: readonly SummitFuturescaping[] = [
-    overlook.futurescaping1,
-    overlook.futurescaping2,
-    overlook.futurescaping3,
+    overlook.futurescaping_1,
+    overlook.futurescaping_2,
+    overlook.futurescaping_3,
   ];
 
   const storiesItems: readonly SummitKioskAmbient[] = [kiosk1.ambient, kiosk2.ambient, kiosk3.ambient];
 
   // Render sections
   const renderMetrics = () => (
-    <MetricsSection challenges={basecamp.problem3} stats={basecamp.problem2} title={basecamp.problem1.title} />
+    <MetricsSection challenges={basecamp.problem_3} stats={basecamp.problem_2} title={basecamp.problem_1.title} />
   );
 
   const renderPossibilities = () => (
