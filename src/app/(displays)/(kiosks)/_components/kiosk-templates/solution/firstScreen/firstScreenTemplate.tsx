@@ -66,11 +66,11 @@ const SolutionFirstScreenTemplate = ({
       </div>
 
       {/* Gradient body - height calculated dynamically based on rendered templates */}
-      <div 
+      <div
         className="bg-gradient-kiosk-solution absolute left-0 z-[1] w-full rounded-[100px]"
-        style={{ 
+        style={{
           height: gradientHeight > 0 ? `${gradientHeight}px` : undefined,
-          top: kioskId === 'kiosk-2' ? '1110px' : kioskId === 'kiosk-3' ? '1060px' : '1058px'
+          top: kioskId === 'kiosk-2' ? '1110px' : kioskId === 'kiosk-3' ? '1060px' : '1058px',
         }}
       />
 

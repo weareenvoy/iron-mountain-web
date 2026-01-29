@@ -25,7 +25,15 @@ export type FirstScreenTemplateProps = {
 };
 
 const FirstScreenTemplate = memo(
-  ({ body, featuredStat1, featuredStat1Body, kioskId, labelText, mainVideo, subheadline }: FirstScreenTemplateProps) => {
+  ({
+    body,
+    featuredStat1,
+    featuredStat1Body,
+    kioskId,
+    labelText,
+    mainVideo,
+    subheadline,
+  }: FirstScreenTemplateProps) => {
     const { shouldAnimate, triggerRef: animationTriggerRef } = useScrollAnimation<HTMLDivElement>();
 
     const {
@@ -51,11 +59,11 @@ const FirstScreenTemplate = memo(
         ref={sectionRef}
       >
         {/* Background gradient - height calculated dynamically based on rendered templates */}
-        <div 
+        <div
           className="bg-gradient-challenge-section pointer-events-none absolute left-0 z-[1] w-full rounded-[100px]"
-          style={{ 
+          style={{
             height: gradientHeight > 0 ? `${gradientHeight}px` : undefined,
-            top: kioskId === 'kiosk-2' ? '1240px' : '1290px'
+            top: kioskId === 'kiosk-2' ? '1240px' : '1290px',
           }}
         />
 

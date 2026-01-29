@@ -1,6 +1,6 @@
 /**
  * Utilities for calculating dynamic gradient heights based on rendered templates.
- * 
+ *
  * Gradients need to span the entire section height, which varies based on:
  * - Which templates are present in the data
  * - The kiosk variant (kiosk-1, kiosk-2, kiosk-3)
@@ -28,7 +28,7 @@ export type SectionHeights = {
  */
 export const calculateChallengeGradientHeight = (slides: Slide[], kioskId: KioskId): number => {
   const challengeSlides = slides.filter(slide => slide.id.startsWith('challenge-') && slide.id !== 'challenge-initial');
-  
+
   if (challengeSlides.length === 0) return 0;
 
   const heights = CHALLENGE_HEIGHTS[kioskId];
@@ -53,12 +53,12 @@ export const calculateChallengeGradientHeight = (slides: Slide[], kioskId: Kiosk
  */
 export const calculateSolutionGradientHeight = (slides: Slide[], kioskId: KioskId): number => {
   const solutionSlides = slides.filter(slide => slide.id.startsWith('solution-'));
-  
+
   if (solutionSlides.length === 0) return 0;
 
   const heights = SOLUTION_HEIGHTS[kioskId];
   const hasThirdScreen = solutionSlides.some(slide => slide.id === 'solution-third');
-  
+
   let totalHeight = 0;
 
   // Add heights for each rendered solution screen
@@ -92,7 +92,7 @@ export const calculateCustomInteractiveGradientHeights = (slides: Slide[]): numb
   //         customInteractive-0-first-ci2, customInteractive-0-second-ci2
   //         OR customInteractive-first, customInteractive-second (legacy single instance)
   const customInteractiveIndices = new Set<number>();
-  
+
   slides.forEach(slide => {
     if (slide.id.startsWith('customInteractive-')) {
       // Try to extract index from format: customInteractive-{index}-{screen}-ci{number}
@@ -128,39 +128,16 @@ export const calculateCustomInteractiveGradientHeights = (slides: Slide[]): numb
         }
       }
 
-      // Log for debugging (can be removed later)
-      if (process.env.NODE_ENV === 'development') {
-        console.log('[calculateCustomInteractiveGradientHeights]', {
-          index,
-          customInteractiveNumber,
-          slideIds: instanceSlides.map(s => s.id),
-        });
-      }
-
       // Get heights specific to this custom interactive number
       const heights = CUSTOM_INTERACTIVE_HEIGHTS[customInteractiveNumber];
       let totalHeight = 0;
-      
+
       // Check which screens exist in the instanceSlides array
-      const hasFirstScreen = instanceSlides.some(s => 
-        s.id.includes('-first') || s.id === 'customInteractive-first'
-      );
-      const hasSecondScreen = instanceSlides.some(s => 
-        s.id.includes('-second') || s.id === 'customInteractive-second'
-      );
+      const hasFirstScreen = instanceSlides.some(s => s.id.includes('-first') || s.id === 'customInteractive-first');
+      const hasSecondScreen = instanceSlides.some(s => s.id.includes('-second') || s.id === 'customInteractive-second');
 
       if (hasFirstScreen) totalHeight += heights.firstScreen;
       if (hasSecondScreen) totalHeight += heights.secondScreen;
-
-      if (process.env.NODE_ENV === 'development') {
-        console.log('[calculateCustomInteractiveGradientHeights] Height calculation:', {
-          hasFirstScreen,
-          hasSecondScreen,
-          firstScreenHeight: heights.firstScreen,
-          secondScreenHeight: heights.secondScreen,
-          totalHeight,
-        });
-      }
 
       if (totalHeight > 0) {
         gradientHeights.push(totalHeight);
@@ -181,24 +158,17 @@ export const calculateSectionGradientHeights = (slides: Slide[], kioskId: KioskI
     value: 0, // Value section handles its own height dynamically
   };
 
-  // Log calculated heights in development for debugging
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`[Gradient Heights - ${kioskId}]`, {
-      challenge: `${heights.challenge}px`,
-      customInteractive: heights.customInteractive.map((h, i) => `[${i}]: ${h}px`),
-      solution: `${heights.solution}px`,
-      slideIds: slides.map(s => s.id),
-    });
-  }
-
   return heights;
 };
 
 /**
  * Get the gradient start position (top offset) for a section
  */
-export const getGradientStartPosition = (section: 'challenge' | 'solution' | 'customInteractive' | 'value', kioskId: KioskId): number => {
+export const getGradientStartPosition = (
+  section: 'challenge' | 'customInteractive' | 'solution' | 'value',
+  kioskId: KioskId
+): number => {
   const sectionPositions = GRADIENT_START_POSITIONS[section];
   if (!sectionPositions) return 0;
-  return sectionPositions[kioskId] ?? 0;
+  return sectionPositions[kioskId];
 };

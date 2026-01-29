@@ -5,7 +5,7 @@ import type { SectionHeights } from '@/app/(displays)/(kiosks)/_utils/calculate-
 
 /**
  * Context for providing dynamically calculated gradient heights to kiosk templates.
- * 
+ *
  * Gradient backgrounds need to span the full height of their section, which varies
  * based on which templates are present in the data. This context makes those
  * calculated heights available to any template that needs them.
@@ -38,7 +38,7 @@ export const GradientHeightsProvider = ({ children, heights }: GradientHeightsPr
 
 /**
  * Hook to access gradient heights in kiosk templates.
- * 
+ *
  * @throws Error if used outside of GradientHeightsProvider
  * @returns Object containing gradient heights for all sections
  */

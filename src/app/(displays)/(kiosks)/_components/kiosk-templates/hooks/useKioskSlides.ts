@@ -10,8 +10,8 @@ import { mapSolutionsWithAccordion } from '@/app/(displays)/(kiosks)/_mappers/ma
 import { mapSolutionsWithGrid, type DiamondMapping } from '@/app/(displays)/(kiosks)/_mappers/map-solutions-with-grid';
 import { mapValue } from '@/app/(displays)/(kiosks)/_mappers/map-value';
 import { parseKioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
+import { calculateSectionGradientHeights } from '@/app/(displays)/(kiosks)/_utils/calculate-section-heights';
 import { parseKioskData } from '@/app/(displays)/(kiosks)/_utils/parseKioskData';
-import { calculateSectionGradientHeights, type SectionHeights } from '@/app/(displays)/(kiosks)/_utils/calculate-section-heights';
 import type { CarouselHandlers } from '@/app/(displays)/(kiosks)/_types/carousel-types';
 import type { CustomInteractiveContent } from '@/app/(displays)/(kiosks)/_types/content-types';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
@@ -202,7 +202,7 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
 
     // Check customInteractiveChoice to see which interactives should be shown
     const choice = kioskContent.customInteractiveChoice;
-    
+
     // Find the first non-empty custom interactive and return only that one
     // CustomInteractive 1
     if (choice?.customInteractive1 && choice.customInteractive1.trim() !== '') {
@@ -236,14 +236,12 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
     // Helper function to process a single custom interactive
     function processCustomInteractive(item: { data: CustomInteractiveContent; number: 1 | 2 | 3 }) {
       if (!kioskContent?.ambient) return null;
-      
+
       const mapper = getCustomInteractiveMapper(item.number);
 
       try {
         if (!mapper) {
           // Interactive 2 uses direct object construction
-          if (!kioskContent) return null;
-          
           const demo = kioskContent.demoMain;
           const ambient = kioskContent.ambient;
 
@@ -264,10 +262,8 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
           };
         }
 
-        if (!kioskContent) return null;
-        
         const mapped = mapper(item.data, kioskContent.ambient, kioskContent.demoMain);
-        return mapped ? { ...mapped, number: item.number } : null;
+        return { ...mapped, number: item.number };
       } catch (error) {
         if (process.env.NODE_ENV === 'development') {
           console.error(`[useKioskSlides] Failed to map custom interactive ${item.number}:`, error);

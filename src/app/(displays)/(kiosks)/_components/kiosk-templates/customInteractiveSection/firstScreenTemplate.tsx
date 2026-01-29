@@ -66,7 +66,6 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   const { getCustomInteractiveHeight } = useGradientHeights();
   const gradientHeight = getCustomInteractiveHeight(customInteractiveIndex);
 
-  const isKiosk1 = kioskId === 'kiosk-1';
   const eyebrowText = eyebrow;
   const headlineText = headline;
   const isKiosk3 = kioskId === 'kiosk-3';
@@ -95,8 +94,8 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       ref={sectionRef}
     >
       {/* Background gradient - height calculated dynamically based on rendered templates */}
-      <div 
-        className="bg-gradient-kiosk-blue pointer-events-none absolute top-0 left-0 right-0"
+      <div
+        className="bg-gradient-kiosk-blue pointer-events-none absolute top-0 right-0 left-0"
         style={{ height: gradientHeight > 0 ? `${gradientHeight}px` : undefined }}
       />
 

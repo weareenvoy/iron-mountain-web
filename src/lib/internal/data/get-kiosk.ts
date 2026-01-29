@@ -2,22 +2,6 @@ import { getLocaleForTesting, shouldUseStaticPlaceholderData } from '@/flags/fla
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import type { KioskApiResponse, KioskDataResponse } from '@/lib/internal/types';
 
-/**
- * Fetches centralized custom interactive data from simplCMS
- */
-async function getSimplCMSData(): Promise<Record<string, unknown>> {
-  try {
-    const res = await fetch('/api/kiosk-simplCMS.json', { cache: 'force-cache' });
-    const rawData = (await res.json()) as Array<Record<string, unknown>>;
-    return rawData[0] ?? {};
-  } catch (error) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Failed to fetch simplCMS data:', error);
-    }
-    return {};
-  }
-}
-
 export async function getKioskData(kioskId: KioskId, externalSignal?: AbortSignal): Promise<KioskDataResponse> {
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
 
@@ -123,5 +107,21 @@ export async function getKioskData(kioskId: KioskId, externalSignal?: AbortSigna
     }
   } finally {
     clearTimeout(timeout);
+  }
+}
+
+/**
+ * Fetches centralized custom interactive data from simplCMS
+ */
+async function getSimplCMSData(): Promise<Record<string, unknown>> {
+  try {
+    const res = await fetch('/api/kiosk-simplCMS.json', { cache: 'force-cache' });
+    const rawData = (await res.json()) as Array<Record<string, unknown>>;
+    return rawData[0] ?? {};
+  } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Failed to fetch simplCMS data:', error);
+    }
+    return {};
   }
 }
