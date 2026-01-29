@@ -71,7 +71,7 @@ const SolutionFirstScreenTemplate = ({
         style={{
           height: gradientHeight > 0 ? `${gradientHeight}px` : undefined,
           top: kioskId === 'kiosk-2' ? '1110px' : kioskId === 'kiosk-3' ? '1060px' : '1058px',
-        }}
+        }} // Inline due to dynamic calculation
       />
 
       {/* Subheadline - Initial Position */}
