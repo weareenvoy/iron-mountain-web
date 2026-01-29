@@ -10,11 +10,12 @@ import RecapPrintSection from '@/app/(displays)/summit/_components/sections/reca
 import RecapSection, { type RecapTone } from '@/app/(displays)/summit/_components/sections/recap-section';
 import StrategiesSection from '@/app/(displays)/summit/_components/sections/strategies-section';
 import SummitPrintableDocument from '@/app/(displays)/summit/_components/summit-printable-document';
+import { transformToSummitTours, type SolutionItem } from '@/app/(displays)/summit/_utils';
 import PrintIcon from '@/components/ui/icons/PrintIcon';
 import { getSummitData } from '@/lib/internal/data/get-summit';
-import { getSummitTours } from '@/lib/internal/data/get-summit-tours';
+import { getToursData } from '@/lib/internal/data/get-tours';
+import { getUTCTourMonth, getUTCTourYear } from '@/lib/utils/iso-date';
 import type { SummitFuturescaping, SummitKioskAmbient, SummitPossibility } from '@/app/(displays)/summit/_types';
-import type { SolutionItem } from '@/app/(displays)/summit/_utils';
 import type { SummitTourSummary } from '@/lib/internal/types';
 
 const PAGE_CONTAINER_CLASS = 'flex flex-col gap-14 py-10';
@@ -68,15 +69,6 @@ const RECAP_TONES_BY_INDEX: readonly (RecapTone | undefined)[] = [
 const SECTION_WRAPPER_CLASS = 'lg:px-12 max-w-[1200px] mx-auto px-4 sm:px-8 w-full';
 const STRATEGY_ACCENT_COLORS = ['#8A0D71', '#00A88E', '#F7931E', '#1B75BC'] as const;
 
-const getYearFromDate = (dateString: string): null | number => {
-  const date = new Date(dateString);
-  if (Number.isNaN(date.getTime())) {
-    console.warn('Invalid summit tour date:', dateString);
-    return null;
-  }
-  return date.getFullYear();
-};
-
 const SummitWebContent = () => {
   const { data, error, loading } = useSummit();
   const printableRef = useRef<HTMLDivElement>(null);
@@ -102,12 +94,13 @@ const SummitWebContent = () => {
       setToursLoading(true);
       setToursError(null);
       try {
-        const tourList = await getSummitTours();
+        const toursData = await getToursData();
+        const tourList = transformToSummitTours(toursData);
         if (!isMounted) return;
         setTours(tourList);
         if (tourList.length > 0) {
           const years = Array.from(
-            new Set(tourList.map(tour => getYearFromDate(tour.date)).filter((year): year is number => year !== null))
+            new Set(tourList.map(tour => getUTCTourYear(tour.date)).filter((year): year is number => year !== null))
           ).sort((a, b) => a - b);
           const latestYear = years.at(-1) ?? '';
           setSelectedYear(latestYear);
@@ -133,7 +126,7 @@ const SummitWebContent = () => {
   // Include all years from 2025 to current, even if no tours exist yet, so users can see the full range for planning.
   const availableYears = useMemo(() => {
     const yearsFromTours = Array.from(
-      new Set(tours.map(tour => getYearFromDate(tour.date)).filter((year): year is number => year !== null))
+      new Set(tours.map(tour => getUTCTourYear(tour.date)).filter((year): year is number => year !== null))
     );
     const currentYear = new Date().getFullYear();
     const startYear = 2025;
@@ -147,18 +140,17 @@ const SummitWebContent = () => {
 
   const toursByYear = useMemo(() => {
     if (!selectedYear) return [];
-    return tours.filter(tour => new Date(tour.date).getFullYear() === selectedYear);
+    return tours.filter(tour => getUTCTourYear(tour.date) === selectedYear);
   }, [selectedYear, tours]);
 
   const monthAvailability = useMemo(() => {
     const availability = new Map<number, number>();
     toursByYear.forEach(tour => {
-      const date = new Date(tour.date);
-      if (Number.isNaN(date.getTime())) {
+      const monthIndex = getUTCTourMonth(tour.date);
+      if (monthIndex === null) {
         console.warn('Invalid date in tour:', tour);
         return;
       }
-      const monthIndex = date.getMonth();
       availability.set(monthIndex, (availability.get(monthIndex) ?? 0) + 1);
     });
     return availability;
@@ -167,7 +159,8 @@ const SummitWebContent = () => {
   const toursByYearAndMonth = useMemo(() => {
     if (!selectedYear) return [];
     return toursByYear.filter(tour => {
-      const monthIndex = new Date(tour.date).getMonth();
+      const monthIndex = getUTCTourMonth(tour.date);
+      if (monthIndex === null) return false;
       if (selectedMonth === '') return true;
       return monthIndex === selectedMonth;
     });
@@ -243,7 +236,7 @@ const SummitWebContent = () => {
     if (!contentData) {
       throw new Error('Missing summit data');
     }
-    const slide = contentData.summitSlides.find(item => item.handle === handle);
+    const slide = contentData.summit_slides.find(item => item.handle === handle);
     if (!slide) {
       throw new Error(`Missing summit slide: ${handle}`);
     }
@@ -428,7 +421,7 @@ const SummitWebContent = () => {
     );
   }
 
-  const { basecamp, kiosk1, kiosk2, kiosk3, meta, overlook } = contentData;
+  const { basecamp, kiosk_1, kiosk_2, kiosk_3, meta, overlook } = contentData;
 
   const handlePrintClick = async () => {
     setPrintError(null);
@@ -449,28 +442,28 @@ const SummitWebContent = () => {
   const journey6Title = requireSlideTitle('journey-6');
 
   const possibilitiesItems: readonly SummitPossibility[] = [
-    basecamp.possibilitiesA,
-    basecamp.possibilitiesB,
-    basecamp.possibilitiesC,
+    basecamp.possibilities_a,
+    basecamp.possibilities_b,
+    basecamp.possibilities_c,
   ];
 
   const solutionItems: readonly SolutionItem[] = [
-    { locations: overlook.protect, title: contentData.protectTitle },
-    { locations: overlook.connect, title: contentData.connectTitle },
-    { locations: overlook.activate, title: contentData.activateTitle },
+    { locations: overlook.protect, title: contentData.protect_title },
+    { locations: overlook.connect, title: contentData.connect_title },
+    { locations: overlook.activate, title: contentData.activate_title },
   ];
 
   const futurescapingItems: readonly SummitFuturescaping[] = [
-    overlook.futurescaping1,
-    overlook.futurescaping2,
-    overlook.futurescaping3,
+    overlook.futurescaping_1,
+    overlook.futurescaping_2,
+    overlook.futurescaping_3,
   ];
 
-  const storiesItems: readonly SummitKioskAmbient[] = [kiosk1.ambient, kiosk2.ambient, kiosk3.ambient];
+  const storiesItems: readonly SummitKioskAmbient[] = [kiosk_1.ambient, kiosk_2.ambient, kiosk_3.ambient];
 
   // Render sections
   const renderMetrics = () => (
-    <MetricsSection challenges={basecamp.problem3} stats={basecamp.problem2} title={basecamp.problem1.title} />
+    <MetricsSection challenges={basecamp.problem_3} stats={basecamp.problem_2} title={basecamp.problem_1.title} />
   );
 
   const renderPossibilities = () => (

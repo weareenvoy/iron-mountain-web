@@ -1,0 +1,658 @@
+{
+  "data": [
+    {
+      "locale": "en",
+      "data": {
+        "basecampMoments": [
+        {
+          "beats": [
+            {
+              "handle": "ambient-1"
+            }
+          ],
+          "handle": "ambient",
+          "title": "Ambient"
+        },
+        {
+          "beats": [
+            {
+              "handle": "welcome-1"
+            },
+            {
+              "handle": "welcome-2"
+            },
+            {
+              "handle": "welcome-3"
+            },
+            {
+              "handle": "welcome-4"
+            }
+          ],
+          "handle": "welcome",
+          "title": "Welcome"
+        },
+        {
+          "beats": [
+            {
+              "handle": "problem-1"
+            },
+            {
+              "handle": "problem-2"
+            },
+            {
+              "handle": "problem-3"
+            },
+            {
+              "handle": "problem-4"
+            }
+          ],
+          "handle": "problem",
+          "title": "Problem"
+        },
+        {
+          "beats": [
+            {
+              "handle": "possibilities-1"
+            },
+            {
+              "handle": "possibilities-2"
+            },
+            {
+              "handle": "possibilities-3"
+            },
+            {
+              "handle": "possibilities-4"
+            },
+            {
+              "handle": "possibilities-5"
+            }
+          ],
+          "handle": "possibilities",
+          "title": "Possibilities"
+        },
+        {
+          "beats": [
+            {
+              "handle": "ascend-1"
+            },
+            {
+              "handle": "ascend-2"
+            },
+            {
+              "handle": "ascend-3"
+            }
+          ],
+          "handle": "ascend",
+          "title": "Ascend"
+        }
+      ],
+      "connection": {
+        "connecting": "Connecting to MQTT..."
+      },
+      "docent": {
+        "actions": {
+          "back": "Back",
+          "close": "Close",
+          "launchJourneyMap": "Launch journey map",
+          "load": "Load",
+          "settings": "Settings",
+          "startPresenting": "Start presenting",
+          "startTour": "Launch calendar",
+          "stopPresenting": "Stop presenting",
+          "today": "Today"
+        },
+        "home": {
+          "description": "Manage and direct the Iron Mountain EBC experience.",
+          "subtitle": "EBC Controls",
+          "title": "Iron Mountain"
+        },
+        "navigation": {
+          "backToHome": "Back to home",
+          "backToMenu": "Back to menu",
+          "backToSchedule": "Back to schedule",
+          "endTour": "End tour"
+        },
+        "notFound": {
+          "description": "The tour you're looking for doesn't exist or is no longer available.",
+          "title": "Tour not found"
+        },
+        "schedule": {
+          "loading": "Loading...",
+          "noTours": "No tours available for this month.",
+          "title": "EBC schedule"
+        }
+      },
+      "loading": {
+        "basecamp": "Loading basecamp…",
+        "default": "Loading…",
+        "overlook": "Loading overlook…",
+        "schedule": "Loading schedule…",
+        "summit": "Loading summit experience…",
+        "summitRoom": "Loading summit room…",
+        "tour": "Loading tour…"
+      },
+      "overlookMoments": [
+        {
+          "beats": [
+            {
+              "handle": "ambient-1"
+            }
+          ],
+          "handle": "ambient",
+          "title": "Ambient"
+        },
+        {
+          "beats": [
+            {
+              "handle": "unlock-1"
+            },
+            {
+              "handle": "unlock-2"
+            }
+          ],
+          "handle": "unlock",
+          "title": "Unlock"
+        },
+        {
+          "beats": [
+            {
+              "handle": "protect-1"
+            },
+            {
+              "handle": "protect-2"
+            }
+          ],
+          "handle": "protect",
+          "title": "Protect"
+        },
+        {
+          "beats": [
+            {
+              "handle": "connect-1"
+            },
+            {
+              "handle": "connect-2"
+            }
+          ],
+          "handle": "connect",
+          "title": "Connect"
+        },
+        {
+          "beats": [
+            {
+              "handle": "activate-1"
+            },
+            {
+              "handle": "activate-2"
+            },
+            {
+              "handle": "activate-3"
+            }
+          ],
+          "handle": "activate",
+          "title": "Activate"
+        },
+        {
+          "beats": [
+            {
+              "handle": "insightdxp-1"
+            },
+            {
+              "handle": "insightdxp-2"
+            },
+            {
+              "handle": "insightdxp-3"
+            },
+            {
+              "handle": "insightdxp-4"
+            }
+          ],
+          "handle": "insightdxp",
+          "title": "InSight DXP"
+        },
+        {
+          "beats": [
+            {
+              "handle": "impact-1"
+            },
+            {
+              "handle": "impact-2",
+              "type": "video"
+            }
+          ],
+          "handle": "impact",
+          "title": "Impact (case study)"
+        },
+        {
+          "beats": [
+            {
+              "handle": "futurescaping-1"
+            },
+            {
+              "handle": "futurescaping-2"
+            },
+            {
+              "handle": "futurescaping-3"
+            },
+            {
+              "handle": "futurescaping-4"
+            }
+          ],
+          "handle": "futurescaping",
+          "title": "Futurescaping"
+        }
+      ],
+      "settings": {
+        "ebcLights": "EBC Lights",
+        "endTourButton": "End tour & activate idle",
+        "endTourDescription": "Tap to end the experience and bring all screens back to idle mode.",
+        "exhibits": {
+          "basecamp": "Basecamp",
+          "entryWay": "Entry Way",
+          "overlook": "Overlook",
+          "solutionPathways": "Solution Pathways",
+          "summitRoom": "Summit Room"
+        },
+        "openManual": "Open EBC Manual",
+        "status": {
+          "offline": "Offline"
+        },
+        "title": "Settings"
+      },
+      "summit": {
+        "errors": {
+          "loadFailed": "Unable to load summit content."
+        },
+        "footerStats": [
+          "Executive Innovation Center",
+          "São Paulo, Brazil",
+          "Elevation 760 m (2,493.4 ft)"
+        ],
+        "hero": {
+          "labels": {
+            "company": "Company",
+            "dateOfEngagement": "Date of engagement",
+            "location": "Location"
+          },
+          "title": "Your personalized journey map"
+        },
+        "recap": {
+          "placeholder": "Type your notes here"
+        },
+        "sections": {
+          "consideringPossibilities": "Considering possibilities",
+          "relevantSolutions": "Relevant solutions",
+          "storiesOfImpact": "Stories of impact",
+          "unlockYourFuture": "Unlock your future"
+        }
+      },
+      "summitSlides": [
+        {
+          "handle": "journey-intro",
+          "title": "Launch your journey"
+        },
+        {
+          "handle": "journey-1",
+          "title": "Your personalized journey map"
+        },
+        {
+          "handle": "journey-2",
+          "title": "What's standing in your way?"
+        },
+        {
+          "handle": "journey-3",
+          "title": "Considering possibilities"
+        },
+        {
+          "handle": "journey-4",
+          "title": "Relevant solutions"
+        },
+        {
+          "handle": "journey-5",
+          "title": "Unlock your future"
+        },
+        {
+          "handle": "journey-6",
+          "title": "Stories of impact"
+        }
+      ],
+      "ui": {
+        "display": "Display",
+        "off": "Off",
+        "on": "On",
+        "onOff": "On/Off",
+        "pause": "Pause",
+        "play": "Play",
+        "tablet": "Tablet"
+      }
+    }
+  },
+  {
+    "locale": "pt",
+    "data": {
+      "basecampMoments": [
+        {
+          "beats": [
+            {
+              "handle": "ambient-1"
+            }
+          ],
+          "handle": "ambient",
+          "title": "Estado ambiente"
+        },
+        {
+          "beats": [
+            {
+              "handle": "welcome-1"
+            },
+            {
+              "handle": "welcome-2"
+            },
+            {
+              "handle": "welcome-3"
+            },
+            {
+              "handle": "welcome-4"
+            }
+          ],
+          "handle": "welcome",
+          "title": "Bem-vindo"
+        },
+        {
+          "beats": [
+            {
+              "handle": "problem-1"
+            },
+            {
+              "handle": "problem-2"
+            },
+            {
+              "handle": "problem-3"
+            },
+            {
+              "handle": "problem-4"
+            }
+          ],
+          "handle": "problem",
+          "title": "Problema"
+        },
+        {
+          "beats": [
+            {
+              "handle": "possibilities-1"
+            },
+            {
+              "handle": "possibilities-2"
+            },
+            {
+              "handle": "possibilities-3"
+            },
+            {
+              "handle": "possibilities-4"
+            },
+            {
+              "handle": "possibilities-5"
+            }
+          ],
+          "handle": "possibilities",
+          "title": "Possibilidades"
+        },
+        {
+          "beats": [
+            {
+              "handle": "ascend-1"
+            },
+            {
+              "handle": "ascend-2"
+            },
+            {
+              "handle": "ascend-3"
+            }
+          ],
+          "handle": "ascend",
+          "title": "Ascender"
+        }
+      ],
+      "connection": {
+        "connecting": "Conectando ao MQTT..."
+      },
+      "docent": {
+        "actions": {
+          "back": "Voltar",
+          "close": "Fechar",
+          "launchJourneyMap": "Iniciar mapa da jornada",
+          "load": "Carregar",
+          "settings": "Configurações",
+          "startPresenting": "Iniciar apresentação",
+          "startTour": "Iniciar calendário",
+          "stopPresenting": "Parar apresentação",
+          "today": "Hoje"
+        },
+        "home": {
+          "description": "Gerencie e direcione a experiência EBC da Iron Mountain.",
+          "subtitle": "Controles EBC",
+          "title": "Iron Mountain"
+        },
+        "navigation": {
+          "backToHome": "Voltar ao início",
+          "backToMenu": "Voltar ao menu",
+          "backToSchedule": "Voltar à agenda",
+          "endTour": "Encerrar tour"
+        },
+        "notFound": {
+          "description": "O tour que você está procurando não existe ou não está mais disponível.",
+          "title": "Tour não encontrado"
+        },
+        "schedule": {
+          "loading": "Carregando...",
+          "noTours": "Nenhum tour disponível para este mês.",
+          "title": "Agenda EBC"
+        }
+      },
+      "loading": {
+        "basecamp": "Carregando basecamp…",
+        "default": "Carregando…",
+        "overlook": "Carregando visão geral…",
+        "schedule": "Carregando agenda…",
+        "summit": "Carregando experiência do Summit…",
+        "summitRoom": "Carregando sala do cume…",
+        "tour": "Carregando tour…"
+      },
+      "overlookMoments": [
+        {
+          "beats": [
+            {
+              "handle": "ambient-1"
+            }
+          ],
+          "handle": "ambient",
+          "title": "Estado ambiente"
+        },
+        {
+          "beats": [
+            {
+              "handle": "unlock-1"
+            },
+            {
+              "handle": "unlock-2"
+            }
+          ],
+          "handle": "unlock",
+          "title": "Desbloquear"
+        },
+        {
+          "beats": [
+            {
+              "handle": "protect-1"
+            },
+            {
+              "handle": "protect-2"
+            }
+          ],
+          "handle": "protect",
+          "title": "Proteger"
+        },
+        {
+          "beats": [
+            {
+              "handle": "connect-1"
+            },
+            {
+              "handle": "connect-2"
+            }
+          ],
+          "handle": "connect",
+          "title": "Conectar"
+        },
+        {
+          "beats": [
+            {
+              "handle": "activate-1"
+            },
+            {
+              "handle": "activate-2"
+            },
+            {
+              "handle": "activate-3"
+            }
+          ],
+          "handle": "activate",
+          "title": "Ativar"
+        },
+        {
+          "beats": [
+            {
+              "handle": "insightdxp-1"
+            },
+            {
+              "handle": "insightdxp-2"
+            },
+            {
+              "handle": "insightdxp-3"
+            },
+            {
+              "handle": "insightdxp-4"
+            }
+          ],
+          "handle": "insightdxp",
+          "title": "InSight DXP"
+        },
+        {
+          "beats": [
+            {
+              "handle": "impact-1"
+            },
+            {
+              "handle": "impact-2",
+              "type": "video"
+            }
+          ],
+          "handle": "impact",
+          "title": "Impacto (estudo de caso)"
+        },
+        {
+          "beats": [
+            {
+              "handle": "futurescaping-1"
+            },
+            {
+              "handle": "futurescaping-2"
+            },
+            {
+              "handle": "futurescaping-3"
+            },
+            {
+              "handle": "futurescaping-4"
+            }
+          ],
+          "handle": "futurescaping",
+          "title": "Futurescaping"
+        }
+      ],
+      "settings": {
+        "ebcLights": "Luzes EBC",
+        "endTourButton": "Encerrar tour & ativar idle",
+        "endTourDescription": "Toque para encerrar a experiência e voltar todas as telas ao modo idle.",
+        "exhibits": {
+          "basecamp": "Basecamp",
+          "entryWay": "Entry Way",
+          "overlook": "Overlook",
+          "solutionPathways": "Solution Pathways",
+          "summitRoom": "Summit Room"
+        },
+        "openManual": "Abrir Manual EBC",
+        "status": {
+          "offline": "Offline"
+        },
+        "title": "Configurações"
+      },
+      "summit": {
+        "errors": {
+          "loadFailed": "Não foi possível carregar o conteúdo do Summit."
+        },
+        "footerStats": [
+          "Centro de Inovação Executiva",
+          "São Paulo, Brasil",
+          "Altitude 760 m (2.493,4 pés)"
+        ],
+        "hero": {
+          "labels": {
+            "company": "Empresa",
+            "dateOfEngagement": "Data do encontro",
+            "location": "Local"
+          },
+          "title": "Seu mapa de jornada personalizado"
+        },
+        "recap": {
+          "placeholder": "Digite suas anotações aqui"
+        },
+        "sections": {
+          "consideringPossibilities": "Considerando possibilidades",
+          "relevantSolutions": "Soluções relevantes",
+          "storiesOfImpact": "Histórias de impacto",
+          "unlockYourFuture": "Liberte seu futuro"
+        }
+      },
+      "summitSlides": [
+        {
+          "handle": "journey-intro",
+          "title": "Inicie sua jornada"
+        },
+        {
+          "handle": "journey-1",
+          "title": "Seu mapa de jornada personalizado"
+        },
+        {
+          "handle": "journey-2",
+          "title": "O que está impedindo você?"
+        },
+        {
+          "handle": "journey-3",
+          "title": "Considerando possibilidades"
+        },
+        {
+          "handle": "journey-4",
+          "title": "Soluções relevantes"
+        },
+        {
+          "handle": "journey-5",
+          "title": "Desbloqueie seu futuro"
+        },
+        {
+          "handle": "journey-6",
+          "title": "Histórias de impacto"
+        }
+      ],
+      "ui": {
+        "display": "Tela",
+        "off": "Desligado",
+        "on": "Ligado",
+        "onOff": "Ligado/Desligado",
+        "pause": "Pausar",
+        "play": "Reproduzir",
+        "tablet": "Tablet"
+      }
+    }
+  }
+  ]
+}

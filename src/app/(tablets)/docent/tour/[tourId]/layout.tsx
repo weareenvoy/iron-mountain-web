@@ -1,11 +1,10 @@
-import docent from '@public/api/docent.json';
-import type { DocentApiResponse } from '@/lib/internal/types';
+import tours from '@public/api/tours.json';
+import type { ToursApiResponse } from '@/lib/internal/types';
 
 export const generateStaticParams = async () => {
-  const docentData = docent as DocentApiResponse;
-  // Get tours from the first locale (en) - tours should be the same across locales
-  const allTours = docentData[0]?.data.tours ?? [];
-  return allTours.map(t => ({ tourId: t.id }));
+  const toursData = tours as ToursApiResponse;
+  // Tour IDs are numbers in the API, convert to strings for URL params
+  return toursData.tours.map(t => ({ tourId: String(t.id) }));
 };
 
 const DocentTourLayout = ({ children }: LayoutProps<'/docent/tour/[tourId]'>) => {

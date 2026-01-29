@@ -54,6 +54,10 @@ const nextConfig: NextConfig = {
         hostname: '*.googleusercontent.com',
         protocol: 'https',
       },
+      {
+        hostname: '*.envoyctrl.com',
+        protocol: 'https',
+      },
     ],
     unoptimized: true,
   },

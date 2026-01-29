@@ -8,62 +8,62 @@ import { Button } from '@/app/(tablets)/docent/_components/ui/Button';
 import Header, { type HeaderProps } from '@/app/(tablets)/docent/_components/ui/Header';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { cn } from '@/lib/tailwind/utils/cn';
-import type { Tour } from '@/lib/internal/types';
+import { formatUTCDayOfWeek, formatUTCTourDisplayDate, getUTCTourDateKey } from '@/lib/utils/iso-date';
+import type { ApiTour } from '@/lib/internal/types';
 
 interface TourByDate {
   readonly dayOfWeek: string;
-  readonly tours: Tour[];
+  readonly tours: ApiTour[];
 }
+
+// Format time from "HH:MM:SS.ssssss" to "HH:MM AM/PM"
+const formatTime = (time: string): string => {
+  const [hours, minutes] = time.split(':');
+  const hour = Number.parseInt(hours ?? '0', 10);
+  const minute = minutes ?? '00';
+  const ampm = hour >= 12 ? 'PM' : 'AM';
+  const hour12 = hour % 12 || 12;
+  return `${hour12}:${minute} ${ampm}`;
+};
 
 const SchedulePageClient = () => {
   const router = useRouter();
   const { client } = useMqtt();
-  const { data, isConnected, isTourDataLoading, refreshData } = useDocent();
+  const { data, isConnected, isTourDataLoading, refreshData, tours } = useDocent();
 
   const [selectedTourId, setSelectedTourId] = useState<null | string>(null);
   const [currentMonthDate, setCurrentMonthDate] = useState(new Date());
 
   const toursByDate = useMemo<Record<string, TourByDate>>(() => {
-    const allTours = data?.tours ?? [];
-
-    if (allTours.length === 0) {
+    if (tours.length === 0) {
       return {};
     }
 
-    return allTours.reduce(
+    return tours.reduce(
       (acc, tour) => {
-        // Parse date string as local date
-        const [yearStr, monthStr, dayStr] = tour.date.split('-');
-        const year = Number.parseInt(yearStr ?? '', 10);
-        const month = Number.parseInt(monthStr ?? '', 10);
-        const day = Number.parseInt(dayStr ?? '', 10);
-
-        if (!Number.isFinite(year) || !Number.isFinite(month) || !Number.isFinite(day)) {
+        // Parse ISO datetime string
+        const dateKey = getUTCTourDateKey(tour.date);
+        if (!dateKey) {
           return acc;
         }
 
-        const tourDate = new Date(year, month - 1, day); // month is 0-indexed
-        const date = tourDate.toDateString();
-        const dayOfWeek = tourDate.toLocaleDateString('en-US', {
-          weekday: 'long',
-        });
+        const dayOfWeek = formatUTCDayOfWeek(tour.date);
 
         // Group tours by date, and also save a dayOfWeek to use for display later.
-        const group = (acc[date] ??= { dayOfWeek, tours: [] });
+        const group = (acc[dateKey] ??= { dayOfWeek, tours: [] });
         group.tours.push(tour);
 
-        // sort tours by startTime
+        // sort tours by time
         group.tours.sort((a, b) => {
-          const startTimeA = new Date(`${tour.date} ${a.startTime}`);
-          const startTimeB = new Date(`${tour.date} ${b.startTime}`);
-          return startTimeA.getTime() - startTimeB.getTime();
+          // Compare time strings directly (HH:MM:SS format sorts correctly)
+          return a.time.localeCompare(b.time);
         });
 
         return acc;
       },
       {} as Record<string, TourByDate>
     );
-  }, [data?.tours]);
+  }, [tours]);
 
   // For the 4 buttons in header
   const handlePreviousMonth = () => {
@@ -94,13 +94,6 @@ const SchedulePageClient = () => {
     });
   };
 
-  const formatScheduleDate = (dateString: string): string => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      day: 'numeric',
-      month: 'long',
-    });
-  };
-
   const handleLoadButtonClick =
     (tourId: string): MouseEventHandler<HTMLButtonElement> =>
     event => {
@@ -109,11 +102,16 @@ const SchedulePageClient = () => {
     };
 
   const filteredTours = useMemo(() => {
-    return Object.entries(toursByDate).filter(([date]) => {
-      const tourDate = new Date(date);
-      return (
-        tourDate.getMonth() === currentMonthDate.getMonth() && tourDate.getFullYear() === currentMonthDate.getFullYear()
-      );
+    return Object.entries(toursByDate).filter(([dateKey]) => {
+      const [yearStr, monthStr] = dateKey.split('-');
+      const year = Number(yearStr);
+      const month = Number(monthStr);
+
+      if (Number.isNaN(year) || Number.isNaN(month)) {
+        return false;
+      }
+
+      return year === currentMonthDate.getFullYear() && month - 1 === currentMonthDate.getMonth();
     });
   }, [toursByDate, currentMonthDate]);
 
@@ -153,7 +151,7 @@ const SchedulePageClient = () => {
         <div className="bg-primary-bg-grey relative flex w-full flex-col gap-[87px] rounded-t-[20px] px-6 py-11">
           <div className="text-primary-im-dark-blue relative flex items-center justify-between">
             <Button
-              className="border-primary-im-dark-blue text-primary-im-dark-blue h-13 min-w-24.5 text-xl leading-[1.4] tracking-[-1px]"
+              className="border-primary-im-dark-blue text-primary-im-dark-blue h-13 min-w-24.5 text-xl leading-snug tracking-[-1px]"
               onClick={handleToday}
               size="sm"
               variant="outline"
@@ -188,18 +186,19 @@ const SchedulePageClient = () => {
                 {data?.docent.schedule.noTours ?? 'No tours available for this month.'}
               </div>
             ) : (
-              filteredTours.map(([date, { dayOfWeek, tours }]) => (
+              filteredTours.map(([date, { dayOfWeek, tours: toursForDate }]) => (
                 <div className="flex flex-col gap-5 border-t border-[#C9C9C9] py-5" key={date}>
                   {/* Day of week and date */}
                   <p className="text-primary-im-mid-blue ml-7.5 text-[18px] leading-loose">
                     <span>{dayOfWeek}, </span>
-                    <span className="text-primary-im-dark-blue">{formatScheduleDate(date)}</span>
+                    <span className="text-primary-im-dark-blue">{formatUTCTourDisplayDate(date)}</span>
                   </p>
 
                   {/* Tours for the date */}
                   <div className="flex-1">
-                    {tours.map(tour => {
-                      const isSelected = selectedTourId === tour.id;
+                    {toursForDate.map(tour => {
+                      const tourIdStr = String(tour.id);
+                      const isSelected = selectedTourId === tourIdStr;
                       return (
                         <div
                           className={cn(
@@ -207,52 +206,34 @@ const SchedulePageClient = () => {
                             isSelected ? 'bg-white' : ''
                           )}
                           key={tour.id}
-                          onClick={handleTourSelect(tour.id)}
+                          onClick={handleTourSelect(tourIdStr)}
                         >
                           <div className="flex flex-1 items-center gap-6">
-                            <div className="flex items-center gap-0">
-                              <span
-                                className={cn(
-                                  'w-[117px] text-center text-xl leading-[1.2] tracking-[-0.8px]',
-                                  isSelected ? 'font-normal' : 'font-light',
-                                  isSelected ? 'text-primary-im-dark-blue' : 'text-primary-im-grey'
-                                )}
-                              >
-                                {tour.startTime}
-                              </span>
-                              <span
-                                className={cn(
-                                  'text-[23px] leading-[1.2]',
-                                  isSelected ? 'font-normal' : 'font-light',
-                                  isSelected ? 'text-primary-im-dark-blue' : 'text-primary-im-grey'
-                                )}
-                              >
-                                -
-                              </span>
-                              <span
-                                className={cn(
-                                  'w-[117px] text-center text-xl leading-[1.2] tracking-[-0.8px]',
-                                  isSelected ? 'font-normal' : 'font-light',
-                                  isSelected ? 'text-primary-im-dark-blue' : 'text-primary-im-grey'
-                                )}
-                              >
-                                {tour.endTime}
-                              </span>
-                            </div>
+                            {/* Time display - only start time now */}
                             <span
                               className={cn(
-                                'w-[228px] text-xl leading-[1.2] tracking-[-0.8px]',
+                                'w-[150px] text-center text-xl leading-[1.2] tracking-[-0.8px]',
                                 isSelected ? 'font-normal' : 'font-light',
                                 isSelected ? 'text-primary-im-dark-blue' : 'text-primary-im-grey'
                               )}
                             >
-                              {tour.guestName}
+                              {formatTime(tour.time)}
+                            </span>
+                            {/* Tour name */}
+                            <span
+                              className={cn(
+                                'flex-1 text-xl leading-[1.2] tracking-[-0.8px]',
+                                isSelected ? 'font-normal' : 'font-light',
+                                isSelected ? 'text-primary-im-dark-blue' : 'text-primary-im-grey'
+                              )}
+                            >
+                              {tour.name}
                             </span>
                           </div>
                           {isSelected && (
                             <Button
-                              className="h-[52px] w-[97px] text-xl tracking-[-1px]"
-                              onClick={handleLoadButtonClick(tour.id)}
+                              className="h-[52px] w-[97px] text-xl leading-snug tracking-[-1px]"
+                              onClick={handleLoadButtonClick(tourIdStr)}
                               size="sm"
                               variant="secondary"
                             >

@@ -1,0 +1,127 @@
+{
+  "_meta": {
+    "total": 12
+  },
+  "tours": [
+    {
+      "date": "2025-11-12T00:00:00+00:00",
+      "day_formatted_EN": "11-12-2025",
+      "day_formatted_PT": "12-11-2025",
+      "day_formatted_plain_language_EN": "November 12, 2025",
+      "day_formatted_plain_language_PT": "12 de Novembro de 2025",
+      "id": 1,
+      "name": "Test Tour 1",
+      "time": "09:00:00.000000"
+    },
+    {
+      "date": "2025-11-18T00:00:00+00:00",
+      "day_formatted_EN": "11-18-2025",
+      "day_formatted_PT": "18-11-2025",
+      "day_formatted_plain_language_EN": "November 18, 2025",
+      "day_formatted_plain_language_PT": "18 de Novembro de 2025",
+      "id": 2,
+      "name": "Test Tour 2",
+      "time": "10:30:00.000000"
+    },
+    {
+      "date": "2025-11-18T00:00:00+00:00",
+      "day_formatted_EN": "11-18-2025",
+      "day_formatted_PT": "18-11-2025",
+      "day_formatted_plain_language_EN": "November 18, 2025",
+      "day_formatted_plain_language_PT": "18 de Novembro de 2025",
+      "id": 3,
+      "name": "GlobalBank Team",
+      "time": "14:00:00.000000"
+    },
+    {
+      "date": "2025-12-03T00:00:00+00:00",
+      "day_formatted_EN": "12-3-2025",
+      "day_formatted_PT": "3-12-2025",
+      "day_formatted_plain_language_EN": "December 3, 2025",
+      "day_formatted_plain_language_PT": "3 de Dezembro de 2025",
+      "id": 4,
+      "name": "Test Tour 4",
+      "time": "11:00:00.000000"
+    },
+    {
+      "date": "2025-12-10T00:00:00+00:00",
+      "day_formatted_EN": "12-10-2025",
+      "day_formatted_PT": "10-12-2025",
+      "day_formatted_plain_language_EN": "December 10, 2025",
+      "day_formatted_plain_language_PT": "10 de Dezembro de 2025",
+      "id": 5,
+      "name": "Retail Group",
+      "time": "09:30:00.000000"
+    },
+    {
+      "date": "2025-12-10T00:00:00+00:00",
+      "day_formatted_EN": "12-10-2025",
+      "day_formatted_PT": "10-12-2025",
+      "day_formatted_plain_language_EN": "December 10, 2025",
+      "day_formatted_plain_language_PT": "10 de Dezembro de 2025",
+      "id": 6,
+      "name": "Test Tour 6",
+      "time": "15:00:00.000000"
+    },
+    {
+      "date": "2026-01-15T00:00:00+00:00",
+      "day_formatted_EN": "1-15-2026",
+      "day_formatted_PT": "15-1-2026",
+      "day_formatted_plain_language_EN": "January 15, 2026",
+      "day_formatted_plain_language_PT": "15 de Janeiro de 2026",
+      "id": 7,
+      "name": "Testtest Industries",
+      "time": "09:00:00.000000"
+    },
+    {
+      "date": "2026-01-15T00:00:00+00:00",
+      "day_formatted_EN": "1-15-2026",
+      "day_formatted_PT": "15-1-2026",
+      "day_formatted_plain_language_EN": "January 15, 2026",
+      "day_formatted_plain_language_PT": "15 de Janeiro de 2026",
+      "id": 8,
+      "name": "Test Tour 8",
+      "time": "10:30:00.000000"
+    },
+    {
+      "date": "2026-01-21T00:00:00+00:00",
+      "day_formatted_EN": "1-21-2026",
+      "day_formatted_PT": "21-1-2026",
+      "day_formatted_plain_language_EN": "January 21, 2026",
+      "day_formatted_plain_language_PT": "21 de Janeiro de 2026",
+      "id": 9,
+      "name": "Test Tour 9",
+      "time": "14:00:00.000000"
+    },
+    {
+      "date": "2026-02-05T00:00:00+00:00",
+      "day_formatted_EN": "2-5-2026",
+      "day_formatted_PT": "5-2-2026",
+      "day_formatted_plain_language_EN": "February 5, 2026",
+      "day_formatted_plain_language_PT": "5 de Fevereiro de 2026",
+      "id": 10,
+      "name": "Test Tour 10",
+      "time": "10:00:00.000000"
+    },
+    {
+      "date": "2026-02-12T00:00:00+00:00",
+      "day_formatted_EN": "2-12-2026",
+      "day_formatted_PT": "12-2-2026",
+      "day_formatted_plain_language_EN": "February 12, 2026",
+      "day_formatted_plain_language_PT": "12 de Fevereiro de 2026",
+      "id": 11,
+      "name": "Energy Corp",
+      "time": "09:30:00.000000"
+    },
+    {
+      "date": "2026-02-12T00:00:00+00:00",
+      "day_formatted_EN": "2-12-2026",
+      "day_formatted_PT": "12-2-2026",
+      "day_formatted_plain_language_EN": "February 12, 2026",
+      "day_formatted_plain_language_PT": "12 de Fevereiro de 2026",
+      "id": 12,
+      "name": "Test Tour 12",
+      "time": "14:30:00.000000"
+    }
+  ]
+}
