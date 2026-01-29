@@ -63,22 +63,22 @@ export const SOLUTION_HEIGHTS: Record<KioskId, {
   fourthScreen: number;
 }> = {
   'kiosk-1': {
-    firstScreen: 3644, // Base height for first screen
+    firstScreen: 4230, // Content extends to decorative diamond at ~4230px
     secondScreen: 3644, // Height per numbered list screen
-    thirdScreen: 3644,
-    fourthScreen: 3644,
+    thirdScreen: 3644, // Diamond grid layout
+    fourthScreen: 5560, // Accordion with decorative elements extending to ~5560px
   },
   'kiosk-2': {
-    firstScreen: 3629, // Slightly different per kiosk
-    secondScreen: 3629,
-    thirdScreen: 3629,
-    fourthScreen: 3629,
+    firstScreen: 4230, // Content extends to decorative diamond at ~4230px
+    secondScreen: 3629, // Slightly different vertical spacing
+    thirdScreen: 3629, // Diamond grid layout
+    fourthScreen: 5560, // Accordion with decorative elements extending to ~5560px
   },
   'kiosk-3': {
-    firstScreen: 3644,
-    secondScreen: 3644,
-    thirdScreen: 3644,
-    fourthScreen: 3644,
+    firstScreen: 4230, // Content extends to decorative diamond at ~4230px
+    secondScreen: 3644, // Numbered list with timeline steps
+    thirdScreen: 3644, // Diamond grid layout
+    fourthScreen: 6766, // Accordion with decorative elements extending to ~5560px
   },
 };
 
