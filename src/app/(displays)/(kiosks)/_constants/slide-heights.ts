@@ -29,15 +29,15 @@ export const CHALLENGE_HEIGHTS: Record<KioskId, {
 }> = {
   'kiosk-1': {
     initialScreen: SCREEN_HEIGHT,
-    firstScreen: 4780, // Includes extended content
+    firstScreen: 4780,
     secondScreen: 4780,
     thirdScreen: 4780,
   },
   'kiosk-2': {
     initialScreen: SCREEN_HEIGHT,
-    firstScreen: 4797, // Slightly different per kiosk
-    secondScreen: 4797,
-    thirdScreen: 4796,
+    firstScreen: 4780,
+    secondScreen: 4780,
+    thirdScreen: 4830,
   },
   'kiosk-3': {
     initialScreen: SCREEN_HEIGHT,
@@ -63,22 +63,22 @@ export const SOLUTION_HEIGHTS: Record<KioskId, {
   fourthScreen: number;
 }> = {
   'kiosk-1': {
-    firstScreen: 4230, // Content extends to decorative diamond at ~4230px
-    secondScreen: 3644, // Height per numbered list screen
-    thirdScreen: 3644, // Diamond grid layout
-    fourthScreen: 5560, // Accordion with decorative elements extending to ~5560px
+    firstScreen: 4230,
+    secondScreen: 3644,
+    thirdScreen: 6645,
+    fourthScreen: 6695,
   },
   'kiosk-2': {
-    firstScreen: 4230, // Content extends to decorative diamond at ~4230px
-    secondScreen: 3629, // Slightly different vertical spacing
-    thirdScreen: 3629, // Diamond grid layout
-    fourthScreen: 5560, // Accordion with decorative elements extending to ~5560px
+    firstScreen: 4230,
+    secondScreen: 3644,
+    thirdScreen: 6645,
+    fourthScreen: 6695,
   },
   'kiosk-3': {
-    firstScreen: 4230, // Content extends to decorative diamond at ~4230px
-    secondScreen: 3644, // Numbered list with timeline steps
-    thirdScreen: 3644, // Diamond grid layout
-    fourthScreen: 6766, // Accordion with decorative elements extending to ~5560px
+    firstScreen: 4230,
+    secondScreen: 3644,
+    thirdScreen: 6645,
+    fourthScreen: 6695,
   },
 };
 
@@ -94,12 +94,12 @@ export const CUSTOM_INTERACTIVE_HEIGHTS: Record<KioskId, {
   secondScreen: number;
 }> = {
   'kiosk-1': {
-    firstScreen: 5265, // First screen with CTA buttons
-    secondScreen: 5265, // Second screen with carousel
+    firstScreen: 5215,
+    secondScreen: 5215,
   },
   'kiosk-2': {
-    firstScreen: 5195,
-    secondScreen: 5195,
+    firstScreen: 5215,
+    secondScreen: 5215,
   },
   'kiosk-3': {
     firstScreen: 5215,
@@ -143,12 +143,12 @@ export const VALUE_HEIGHTS: Record<KioskId, {
 export const GRADIENT_START_POSITIONS: Record<string, Record<KioskId, number>> = {
   challenge: {
     'kiosk-1': 1290,
-    'kiosk-2': 1240,
+    'kiosk-2': 1290,
     'kiosk-3': 1290,
   },
   solution: {
-    'kiosk-1': 1058,
-    'kiosk-2': 1110,
+    'kiosk-1': 1060,
+    'kiosk-2': 1060,
     'kiosk-3': 1060,
   },
   customInteractive: {
