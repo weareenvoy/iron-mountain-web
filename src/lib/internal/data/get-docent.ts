@@ -14,7 +14,7 @@ export async function getDocentInitialData(): Promise<DocentInitialDataResponse>
   try {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (shouldUseStaticPlaceholderData()) {
-      const res = await fetch('/api/docent-initial.json', { cache: 'force-cache' });
+      const res = await fetch('/api/docent_initial.json', { cache: 'force-cache' });
       clearTimeout(timeout);
       const rawData = (await res.json()) as DocentInitialApiResponse;
       const enData = rawData.data.find(item => item.locale === 'en')?.data;
@@ -56,7 +56,7 @@ export async function getDocentInitialData(): Promise<DocentInitialDataResponse>
   } catch {
     clearTimeout(timeout);
     // Offline/static fallback
-    const res = await fetch('/api/docent-initial.json', { cache: 'force-cache' });
+    const res = await fetch('/api/docent_initial.json', { cache: 'force-cache' });
     const rawData = (await res.json()) as DocentInitialApiResponse;
     const enData = rawData.data.find(item => item.locale === 'en')?.data;
     const ptData = rawData.data.find(item => item.locale === 'pt')?.data;

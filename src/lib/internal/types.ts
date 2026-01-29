@@ -446,7 +446,7 @@ export interface BasecampApiResponse {
   readonly data: BasecampData;
   readonly locale: Locale;
 }
-// DocentInitialApiResponse is the data-wrapped locale response from /api/docent-initial
+// DocentInitialApiResponse is the data-wrapped locale response from /api/docent_initial
 // Format: { data: [{ locale: "en", data: {...} }, { locale: "pt", data: {...} }] }
 export interface DocentInitialApiResponse {
   readonly data: ApiResponse<DocentData>;
