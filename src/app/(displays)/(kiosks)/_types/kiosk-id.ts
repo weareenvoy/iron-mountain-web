@@ -1,3 +1,5 @@
+import type { ExhibitMqttStateBase } from '@/lib/mqtt/types';
+
 export type KioskId = 'kiosk-1' | 'kiosk-2' | 'kiosk-3';
 export const DEFAULT_KIOSK_ID: KioskId = 'kiosk-1';
 
@@ -13,10 +15,8 @@ export const DEFAULT_KIOSK_BEAT_ID: KioskBeatId = 'kiosk-idle'; // The type abov
  * Complete MQTT state structure for kiosks.
  * Used for state reporting and volume control.
  */
-export interface KioskMqttState {
+export interface KioskMqttState extends ExhibitMqttStateBase {
   'beat-id': 'kiosk-active' | 'kiosk-idle';
-  'volume-level': number; // 0.0 to 1.0
-  'volume-muted': boolean;
 }
 
 // This file is used to identify the Kiosk setup and is used to determine which Kiosk to display.

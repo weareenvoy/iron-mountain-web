@@ -124,11 +124,13 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
   // If you need dynamic dot counts, refactor to calculate positions programmatically.
   // Validation after hooks to comply with Rules of Hooks
   if (slides.length !== 6) {
-    console.error(
-      '[CircularCarousel] Expected exactly 6 slides for circular dot layout, got',
-      slides.length,
-      '. Fix CMS data or update carousel UI to support dynamic slide counts.'
-    );
+    if (process.env.NODE_ENV === 'development') {
+      console.error(
+        '[CircularCarousel] Expected exactly 6 slides for circular dot layout, got',
+        slides.length,
+        '. Fix CMS data or update carousel UI to support dynamic slide counts.'
+      );
+    }
     return <CarouselConfigError slideCount={slides.length} />;
   }
 
@@ -158,7 +160,7 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
               animate={{ opacity: currentIndex >= 0 ? 1 : 0.2 }}
               className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]"
               initial={{ opacity: 0.2 }}
-              transition={{ duration: currentIndex >= 0 ? 0.06 : 0.03, ease: currentIndex >= 0 ? 'easeIn' : 'easeOut' }}
+              transition={{ duration: currentIndex >= 0 ? 0.06 : 0.03, ease: [0.3, 0, 0.6, 1] }}
             />
           </div>
           {/* Dot 2 - Top Right */}
@@ -167,7 +169,7 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
               animate={{ opacity: currentIndex >= 1 ? 1 : 0.2 }}
               className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]"
               initial={{ opacity: 0.2 }}
-              transition={{ duration: currentIndex >= 1 ? 0.06 : 0.03, ease: currentIndex >= 1 ? 'easeIn' : 'easeOut' }}
+              transition={{ duration: currentIndex >= 1 ? 0.06 : 0.03, ease: [0.3, 0, 0.6, 1] }}
             />
           </div>
           {/* Dot 3 - Bottom Right */}
@@ -176,7 +178,7 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
               animate={{ opacity: currentIndex >= 2 ? 1 : 0.2 }}
               className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]"
               initial={{ opacity: 0.2 }}
-              transition={{ duration: currentIndex >= 2 ? 0.06 : 0.03, ease: currentIndex >= 2 ? 'easeIn' : 'easeOut' }}
+              transition={{ duration: currentIndex >= 2 ? 0.06 : 0.03, ease: [0.3, 0, 0.6, 1] }}
             />
           </div>
           {/* Dot 4 - Bottom */}
@@ -185,7 +187,7 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
               animate={{ opacity: currentIndex >= 3 ? 1 : 0.2 }}
               className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]"
               initial={{ opacity: 0.2 }}
-              transition={{ duration: currentIndex >= 3 ? 0.06 : 0.03, ease: currentIndex >= 3 ? 'easeIn' : 'easeOut' }}
+              transition={{ duration: currentIndex >= 3 ? 0.06 : 0.03, ease: [0.3, 0, 0.6, 1] }}
             />
           </div>
           {/* Dot 5 - Bottom Left */}
@@ -194,7 +196,7 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
               animate={{ opacity: currentIndex >= 4 ? 1 : 0.2 }}
               className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]"
               initial={{ opacity: 0.2 }}
-              transition={{ duration: currentIndex >= 4 ? 0.06 : 0.03, ease: currentIndex >= 4 ? 'easeIn' : 'easeOut' }}
+              transition={{ duration: currentIndex >= 4 ? 0.06 : 0.03, ease: [0.3, 0, 0.6, 1] }}
             />
           </div>
           {/* Dot 6 - Top Left */}
@@ -203,7 +205,7 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
               animate={{ opacity: currentIndex >= 5 ? 1 : 0.2 }}
               className="h-[49px] w-[49px] rounded-full bg-[#6dcff6]"
               initial={{ opacity: 0.2 }}
-              transition={{ duration: currentIndex >= 5 ? 0.06 : 0.03, ease: currentIndex >= 5 ? 'easeIn' : 'easeOut' }}
+              transition={{ duration: currentIndex >= 5 ? 0.06 : 0.03, ease: [0.3, 0, 0.6, 1] }}
             />
           </div>
 

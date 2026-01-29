@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { getDiamondIcon } from '@/app/(displays)/(kiosks)/_utils/get-diamond-icon';
+import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import type { ValueDiamondCard } from '@/app/(displays)/(kiosks)/_types/value-types';
 
@@ -65,7 +66,7 @@ const DiamondStack = memo(({ cards, variant = 'overview' }: DiamondStackProps) =
   const layout = diamondLayouts[variant];
 
   return (
-    <div className={`relative flex h-[565px] w-[920px] items-center ${layout.className ?? ''}`}>
+    <div className={cn('relative flex h-[565px] w-[920px] items-center', layout.className)}>
       {cards.map((card, index) => {
         const Icon = getDiamondIcon(card);
         const leftOffset = layout.positions[index];

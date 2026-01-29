@@ -2,18 +2,24 @@ import { getLocaleForTesting, shouldUseStaticPlaceholderData } from '@/flags/fla
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import type { KioskApiResponse, KioskDataResponse } from '@/lib/internal/types';
 
-export async function getKioskData(kioskId: KioskId): Promise<KioskDataResponse> {
+export async function getKioskData(kioskId: KioskId, externalSignal?: AbortSignal): Promise<KioskDataResponse> {
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 3500);
-  let controllerUsed = false;
+
+  // Create internal controller for timeout, but respect external signal
+  const internalController = new AbortController();
+  const timeout = setTimeout(() => internalController.abort(), 3500);
+
+  // Combine external and internal signals
+  const combinedSignal = externalSignal
+    ? AbortSignal.any([externalSignal, internalController.signal])
+    : internalController.signal;
 
   try {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (shouldUseStaticPlaceholderData()) {
       clearTimeout(timeout);
       // Controller not used - early return with static data
-      const res = await fetch(`/api/${kioskId}.json`, { cache: 'force-cache' });
+      const res = await fetch(`/api/${kioskId}.json`, { cache: 'force-cache', signal: combinedSignal });
       const rawData = (await res.json()) as KioskApiResponse;
       const locale = getLocaleForTesting();
       const data = rawData.find(item => item.locale === locale)?.data;
@@ -28,11 +34,9 @@ export async function getKioskData(kioskId: KioskId): Promise<KioskDataResponse>
       };
     }
 
-    // Mark that controller is being used for API fetch
-    controllerUsed = true;
     const res = await fetch(`${API_BASE}/${kioskId}`, {
       cache: 'no-store',
-      signal: controller.signal,
+      signal: combinedSignal,
     });
     clearTimeout(timeout);
     if (!res.ok) throw new Error(`Bad status: ${res.status}`);
@@ -51,12 +55,26 @@ export async function getKioskData(kioskId: KioskId): Promise<KioskDataResponse>
   } catch (originalError) {
     clearTimeout(timeout);
 
+    // If externally aborted (user cancelled or newer request), skip fallback
+    if (externalSignal?.aborted) {
+      throw originalError;
+    }
+
+    // If the error is an AbortError, check if it's from external signal
+    if (originalError instanceof Error && originalError.name === 'AbortError') {
+      // If we have an external signal and it's aborted, this was intentional
+      if (externalSignal?.aborted) {
+        throw originalError;
+      }
+      // Otherwise, it was a timeout - proceed to fallback
+    }
+
     // Log original error for debugging
     if (process.env.NODE_ENV === 'development') {
       console.error(`Failed to fetch ${kioskId} from API:`, originalError);
     }
 
-    // Offline/static fallback
+    // Offline/static fallback - use a fresh signal (not the aborted one)
     try {
       const res = await fetch(`/api/${kioskId}.json`, { cache: 'force-cache' });
       const rawData = (await res.json()) as KioskApiResponse;
@@ -83,9 +101,6 @@ export async function getKioskData(kioskId: KioskId): Promise<KioskDataResponse>
       );
     }
   } finally {
-    // Only abort if controller was actually used
-    if (controllerUsed) {
-      controller.abort();
-    }
+    clearTimeout(timeout);
   }
 }

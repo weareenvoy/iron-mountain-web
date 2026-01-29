@@ -23,6 +23,7 @@ export interface CustomInteractiveKiosk1FirstScreenTemplateProps {
   readonly heroImageAlt?: string;
   readonly heroImageSrc?: string;
   readonly kioskId?: KioskId;
+  readonly onEndTour?: () => void;
   readonly onPrimaryCta?: () => void;
   readonly onSecondaryCta?: () => void;
   readonly overlayCardLabel?: string;
@@ -107,7 +108,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       <div
         className={cn(
           'absolute inset-0 transition-opacity duration-700',
-          showOverlay ? 'pointer-events-auto z-[9999] opacity-100' : 'pointer-events-none -z-10 opacity-0'
+          showOverlay ? 'pointer-events-auto z-9999 opacity-100' : 'pointer-events-none -z-10 opacity-0'
         )}
       >
         <CustomInteractiveDemoScreenTemplate
@@ -134,7 +135,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
 
       {/* Sticky Section Header - Fixed Position - gradient defined in globals.css for readability and ease of future updates */}
       <div
-        className={`bg-gradient-sticky-custom-interactive pointer-events-none fixed top-0 left-0 z-[100] h-[769px] w-full transition-opacity duration-300 motion-reduce:transition-none ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
+        className={`bg-gradient-sticky-custom-interactive pointer-events-none fixed top-0 left-0 z-100 h-[769px] w-full transition-opacity duration-300 motion-reduce:transition-none ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
         data-custominteractive-sticky-header
         data-visible={showStickyHeader}
         ref={stickyHeaderRef}
