@@ -292,7 +292,7 @@ export const BasecampProvider = ({ children }: BasecampProviderProps) => {
     data,
     error,
     exhibitState,
-    isMuted: mqttState['volume-muted'],
+    isMuted: hasReceivedMqttState ? mqttState['volume-muted'] : true,
     loading,
     locale,
     readyBeatId,
