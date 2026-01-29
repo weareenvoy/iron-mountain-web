@@ -91,6 +91,4 @@ const CarouselDiamond = memo(
   }
 );
 
-CarouselDiamond.displayName = 'CarouselDiamond';
-
 export default CarouselDiamond;

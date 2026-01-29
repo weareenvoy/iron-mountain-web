@@ -9,7 +9,6 @@ import {
   useRef,
   useState,
   type PropsWithChildren,
-  type RefObject,
 } from 'react';
 import { DEFAULT_KIOSK_BEAT_ID, type KioskId, type KioskMqttState } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import { useAudio } from '@/components/providers/audio-provider';
@@ -18,7 +17,6 @@ import { getKioskData } from '@/lib/internal/data/get-kiosk';
 import { mqttCommands } from '@/lib/mqtt/constants';
 import { useExhibitSetVolume } from '@/lib/mqtt/utils/use-exhibit-set-volume';
 import type { KioskData } from '@/lib/internal/types';
-import type { ExhibitMqttStateBase } from '@/lib/mqtt/types';
 
 // This file is used to access data from the Kiosk Provider and make it available to components in the Kiosk setup.
 
@@ -92,7 +90,11 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
 
       // Report state using the centralized method
       client.reportExhibitState(appId, updated, {
-        onError: err => console.error(`${kioskId}: Failed to report state:`, err),
+        onError: err => {
+          if (process.env.NODE_ENV === 'development') {
+            console.error(`${kioskId}: Failed to report state:`, err);
+          }
+        },
       });
     },
     [appId, client, isConnected, kioskId]
@@ -115,7 +117,8 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
     setLoading(true);
 
     try {
-      const kioskData = await getKioskData(kioskId);
+      // Pass abort signal to getKioskData for proper cancellation
+      const kioskData = await getKioskData(kioskId, abortController.signal);
 
       // Check if this fetch was aborted (component unmounted or new fetch started)
       if (abortController.signal.aborted) {
@@ -163,7 +166,9 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
     const handleLoadTour = async (message: Buffer) => {
       // Prevent concurrent loadTour operations (Fix #2)
       if (isLoadingTourRef.current) {
-        console.warn(`${kioskId}: Ignoring loadTour - already loading tour`);
+        if (process.env.NODE_ENV === 'development') {
+          console.warn(`${kioskId}: Ignoring loadTour - already loading tour`);
+        }
         return;
       }
 
@@ -171,7 +176,9 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
         const msg = JSON.parse(message.toString());
         const tourId = msg.body?.['tour-id'];
 
-        console.info(`${kioskId}: Received load-tour command (tour: ${tourId}) - activating kiosk`);
+        if (process.env.NODE_ENV === 'development') {
+          console.info(`${kioskId}: Received load-tour command (tour: ${tourId}) - activating kiosk`);
+        }
 
         // Mark as loading to prevent concurrent operations
         isLoadingTourRef.current = true;
@@ -183,10 +190,14 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
         if (success) {
           reportStateRef.current({ 'beat-id': 'kiosk-active' });
         } else {
-          console.error(`${kioskId}: Failed to load tour data`);
+          if (process.env.NODE_ENV === 'development') {
+            console.error(`${kioskId}: Failed to load tour data`);
+          }
         }
       } catch (error) {
-        console.error(`${kioskId}: Error handling load-tour command:`, error);
+        if (process.env.NODE_ENV === 'development') {
+          console.error(`${kioskId}: Error handling load-tour command:`, error);
+        }
       } finally {
         // Always clear loading flag
         isLoadingTourRef.current = false;
@@ -199,7 +210,9 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
     const handleEndTour = () => {
       // Fix #3: Check if tour is currently loading
       if (isLoadingTourRef.current) {
-        console.warn(`${kioskId}: Delaying endTour - tour is still loading`);
+        if (process.env.NODE_ENV === 'development') {
+          console.warn(`${kioskId}: Delaying endTour - tour is still loading`);
+        }
 
         // Clear any existing interval before creating a new one
         if (endTourIntervalRef.current) {
@@ -224,7 +237,9 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
     };
 
     const performEndTour = () => {
-      console.info(`${kioskId}: Received end-tour command - resetting kiosk`);
+      if (process.env.NODE_ENV === 'development') {
+        console.info(`${kioskId}: Received end-tour command - resetting kiosk`);
+      }
 
       // Report idle state before refresh (tour has ended, returning to attract screen)
       reportStateRef.current({ 'beat-id': DEFAULT_KIOSK_BEAT_ID }); // 'kiosk-idle'
@@ -262,8 +277,8 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
     appId,
     audio,
     client,
-    reportStateRef: reportStateRef as RefObject<(next: Partial<ExhibitMqttStateBase>) => void>,
-    stateRef: mqttStateRef as RefObject<ExhibitMqttStateBase>,
+    reportStateRef,
+    stateRef: mqttStateRef,
   });
 
   const contextValue = useMemo<KioskContextType>(

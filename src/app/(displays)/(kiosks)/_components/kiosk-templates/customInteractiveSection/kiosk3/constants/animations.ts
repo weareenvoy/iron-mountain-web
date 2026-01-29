@@ -22,14 +22,13 @@ export type SlideId = (typeof SLIDE_ID)[keyof typeof SLIDE_ID];
  * Standard easing curves for animations.
  * Extracted for reusability and consistency across all animations.
  *
- * All animations in this branch use the 30-60 easing curve [0.3, 0, 0.6, 1]
+ * All animations use the 30-60 easing curve [0.3, 0, 0.6, 1]
  * for consistency, except:
  * - Ring rotations use 'linear' for continuous spinning
- * - Carousel indicator dots use 'easeIn'/'easeOut' for snappier UI feedback
  */
 export const EASING = {
-  /** Slightly snappier ease for carousel transitions - 30ms ease-in, 40ms ease-out */
-  EASE_CAROUSEL: [0.3, 0, 0.4, 1] as const,
+  /** Smooth ease for carousel transitions - 30ms ease-in, 60ms ease-out */
+  EASE_CAROUSEL: [0.3, 0, 0.6, 1] as const,
   /** Smooth ease in-out for general animations - 30ms ease-in, 60ms ease-out */
   EASE_IN_OUT: [0.3, 0, 0.6, 1] as const,
 } as const;
@@ -108,8 +107,8 @@ export const MORPHING_DIAMOND = {
   CAROUSEL: {
     opacity: 1,
     scale: ANIMATION_VALUES.MORPHING_SCALE_FACTOR,
-    x: -1095,
-    y: -875,
+    x: -1005,
+    y: -785,
   },
   /** Exit state: Moves diagonally off-screen with fade */
   EXIT: {
@@ -133,15 +132,14 @@ export const MORPHING_DIAMOND = {
  * Different slides have different layouts requiring repositioning.
  */
 export const PRIMARY_DIAMOND_POSITIONS = {
-  /** Default position for slides 1 & 4 */
-  DEFAULT:
-    'absolute left-[700px] bottom-[1120px] h-[830px] w-[830px] rotate-45 overflow-hidden rounded-[90px] shadow-[0_30px_90px_rgba(0,0,0,0.35)]',
+  /** Default position for slide 4 */
+  DEFAULT: 'absolute left-[700px] bottom-[1120px] h-[830px] w-[830px] rotate-45 overflow-hidden rounded-[90px]',
+  /** Lower position for slide 1 */
+  SLIDE_1: 'absolute left-[1400px] bottom-[420px] h-[830px] w-[830px] rotate-45 overflow-hidden rounded-[90px]',
   /** Larger, repositioned for slides 2 & 5 */
-  SLIDE_2_5:
-    'absolute left-[510px] bottom-[670px] h-[1200px] w-[1200px] rotate-45 overflow-hidden rounded-[90px] shadow-[0_30px_90px_rgba(0,0,0,0.35)]',
+  SLIDE_2_5: 'absolute left-[510px] bottom-[670px] h-[1200px] w-[1200px] rotate-45 overflow-hidden rounded-[90px]',
   /** Lower position for slides 3 & 6 */
-  SLIDE_3_6:
-    'absolute left-[340px] bottom-[340px] h-[1130px] w-[1130px] rotate-45 overflow-hidden rounded-[90px] shadow-[0_30px_90px_rgba(0,0,0,0.35)]',
+  SLIDE_3_6: 'absolute left-[340px] bottom-[340px] h-[1130px] w-[1130px] rotate-45 overflow-hidden rounded-[90px]',
 } as const;
 
 /**
@@ -149,11 +147,9 @@ export const PRIMARY_DIAMOND_POSITIONS = {
  */
 export const SECONDARY_DIAMOND_POSITIONS = {
   /** Default position for most slides */
-  DEFAULT:
-    'absolute left-[1380px] bottom-[400px] h-[880px] w-[880px] rotate-45 overflow-hidden rounded-[80px] shadow-[0_24px_70px_rgba(0,0,0,0.32)]',
+  DEFAULT: 'absolute left-[1380px] bottom-[400px] h-[880px] w-[880px] rotate-45 overflow-hidden rounded-[80px]',
   /** Higher position for slides 3 & 6 */
-  SLIDE_3_6:
-    'absolute left-[1390px] bottom-[1150px] h-[800px] w-[800px] rotate-45 overflow-hidden rounded-[80px] shadow-[0_24px_70px_rgba(0,0,0,0.32)]',
+  SLIDE_3_6: 'absolute left-[1390px] bottom-[1150px] h-[800px] w-[800px] rotate-45 overflow-hidden rounded-[80px]',
 } as const;
 
 /**
@@ -218,6 +214,9 @@ export function getMorphingDiamondAnimation(
  * @returns Tailwind CSS class string for positioning
  */
 export function getPrimaryDiamondClass(slideId: SlideId): string {
+  if (slideId === SLIDE_ID.SLIDE_1) {
+    return PRIMARY_DIAMOND_POSITIONS.SLIDE_1;
+  }
   if (slideId === SLIDE_ID.SLIDE_2 || slideId === SLIDE_ID.SLIDE_5) {
     return PRIMARY_DIAMOND_POSITIONS.SLIDE_2_5;
   }

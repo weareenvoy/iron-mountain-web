@@ -5,6 +5,7 @@ import BlueDiamondMain from '@/components/ui/icons/Kiosks/Solutions/BlueDiamondM
 import GreenDiamondMain from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondMain';
 import OrangeDiamondMain from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondMain';
 import OutlinedDiamond from '@/components/ui/icons/Kiosks/Solutions/OutlinedDiamond';
+import { cn } from '@/lib/tailwind/utils/cn';
 import { getVideoMimeType } from '@/lib/utils/get-video-mime-type';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import { TITLE_ANIMATION_TRANSFORMS } from '../../constants/animations';
@@ -60,7 +61,7 @@ const SolutionFirstScreenTemplate = ({
       </div>
 
       {/* Gradient body */}
-      <div className="absolute top-[1058px] left-0 z-[1] h-[14575px] w-full rounded-[100px] bg-gradient-to-b from-[#A2115E] to-[#8A0D71] group-data-[kiosk=kiosk-2]/kiosk:top-[1110px] group-data-[kiosk=kiosk-3]/kiosk:top-[1060px]" />
+      <div className="bg-gradient-kiosk-solution absolute top-[1058px] left-0 z-[1] h-[14575px] w-full rounded-[100px] group-data-[kiosk=kiosk-2]/kiosk:top-[1110px] group-data-[kiosk=kiosk-2]/kiosk:h-[14515px] group-data-[kiosk=kiosk-3]/kiosk:top-[1060px]" />
 
       {/* Subheadline - Initial Position */}
       <motion.h2
@@ -97,7 +98,10 @@ const SolutionFirstScreenTemplate = ({
 
       {/* Sticky Section Header - Fixed Position - gradient defined in globals.css for readability and ease of future updates */}
       <div
-        className={`bg-gradient-sticky-solution pointer-events-none fixed top-0 left-0 z-[100] h-[1369px] w-full transition-opacity duration-300 motion-reduce:transition-none ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
+        className={cn(
+          'bg-gradient-sticky-solution pointer-events-none fixed top-0 left-0 z-[100] h-[1369px] w-full transition-opacity duration-300 motion-reduce:transition-none',
+          showStickyHeader ? 'opacity-100' : 'opacity-0'
+        )}
         data-solution-sticky-header
         data-visible={showStickyHeader}
         ref={stickyHeaderRef}

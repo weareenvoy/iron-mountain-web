@@ -12,7 +12,7 @@ export const mapChallenges = (challenge: ChallengeContent, ambient: Ambient): Ki
     featuredStat1Body: challenge.featuredStat1Body ?? '',
     labelText: challenge.labelText ?? '',
     mainVideo: challenge.mainVideo ?? '',
-    subheadline: ambient.title ?? '',
+    subheadline: ambient.title,
   },
   initialScreen: {
     attribution: ambient.quoteSource ?? '',
@@ -20,13 +20,13 @@ export const mapChallenges = (challenge: ChallengeContent, ambient: Ambient): Ki
     buttonText: ambient.mainCTA ?? '',
     headline: ambient.headline ?? '',
     quote: ambient.body ?? '',
-    subheadline: ambient.title ?? '',
+    subheadline: ambient.title,
   },
   secondScreen: {
     item1Body: challenge.item1Body ?? '',
     item1Image: challenge.item1Image ?? '',
     labelText: challenge.labelText,
-    subheadline: ambient.title ?? '',
+    subheadline: ambient.title,
   },
   thirdScreen: {
     featuredStat2: challenge.featuredStat2 ?? '',
@@ -34,6 +34,6 @@ export const mapChallenges = (challenge: ChallengeContent, ambient: Ambient): Ki
     item2Body: challenge.item2Body ?? '',
     item2Image: challenge.item2Image ?? '',
     labelText: challenge.labelText,
-    subheadline: ambient.title ?? '',
+    subheadline: ambient.title,
   },
 });

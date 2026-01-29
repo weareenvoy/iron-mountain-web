@@ -371,26 +371,14 @@ export interface DocentData {
   };
 }
 
-export interface KioskData {
-  // Kiosk 2/3 flat structure
-  readonly ambient?: unknown;
-  readonly challenge?: unknown;
-  readonly challenges?: unknown;
-  // Kiosk 1 nested structure
-  readonly customInteractive?: unknown;
-  readonly data?: {
-    readonly ambient?: unknown;
-    readonly challenge?: unknown;
-    readonly customInteractive?: unknown;
-    readonly solutions?: unknown;
-    readonly value?: unknown;
-  };
-  readonly locale?: string;
-  // Allow any other properties
-  readonly [key: string]: unknown;
-  readonly solutions?: unknown;
-  readonly value?: unknown;
-}
+/**
+ * Raw kiosk data from API response
+ * Uses Record<string, unknown> for flexibility since different kiosks have different schemas
+ * Should be parsed with parseKioskData() for type-safe access
+ *
+ * @see ParsedKioskData in _utils/parseKioskData.ts for the typed version after parsing
+ */
+export type KioskData = Record<string, unknown>;
 
 /**
  * ISO 8601 date string (YYYY-MM-DD)

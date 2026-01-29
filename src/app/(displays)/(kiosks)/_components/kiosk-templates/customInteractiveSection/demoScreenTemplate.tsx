@@ -51,7 +51,11 @@ const CustomInteractiveDemoScreenTemplate = ({
       {/* End tour button */}
       <button
         className="group absolute top-[2618px] left-[240px] z-[10] flex h-[200px] items-center gap-[46px] rounded-[1000px] bg-[#ededed] px-[90px] py-[60px] transition-transform duration-150 hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
-        onClick={onEndTour}
+        onClick={() => {
+          if (onEndTour) {
+            onEndTour();
+          }
+        }}
         type="button"
       >
         <span className="text-center text-[54.545px] leading-[1.4] font-normal tracking-[-2.7273px] whitespace-nowrap text-[#14477d]">
@@ -60,7 +64,7 @@ const CustomInteractiveDemoScreenTemplate = ({
         <LogOut aria-hidden className="h-[54.55px] w-[54.55px]" color="#14477d" strokeWidth={2} />
       </button>
 
-      <div className="absolute top-[1290px] left-[120px] z-[10] h-[1080px] w-[1920px] rounded-[20px] bg-[#e0e0e0] shadow-[0_40px_120px_rgba(0,0,0,0.45)]">
+      <div className="absolute top-[1290px] z-[10] h-[1080px] w-full rounded-[20px] bg-[#e0e0e0]">
         {autoplayUrl ? (
           <iframe
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
