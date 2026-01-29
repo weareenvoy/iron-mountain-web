@@ -31,11 +31,11 @@ type SVGConfig = {
 const SVG_GROUP_CONFIG: Record<DecorativeSVGGroupProps['variant'], SVGConfig[]> = {
   'default': [
     {
-      className: 'pointer-events-none absolute bottom-[590px] left-[490px] h-[510px] w-[560px]',
+      className: 'pointer-events-none absolute bottom-[580px] left-[510px] h-[510px] w-[560px]',
       Component: HCBlueFilledDiamond,
     },
     {
-      className: 'pointer-events-none absolute bottom-[-1755px] left-[650px] h-[2400px] w-[2400px] overflow-visible',
+      className: 'pointer-events-none absolute bottom-[-1670px] left-[670px] h-[2400px] w-[2400px] overflow-visible',
       Component: HCHollowOrangeDiamond,
     },
   ],
@@ -64,7 +64,8 @@ const SVG_GROUP_CONFIG: Record<DecorativeSVGGroupProps['variant'], SVGConfig[]> 
       Component: HCFilledOrangeDiamond,
     },
     {
-      className: 'pointer-events-none absolute bottom-[-1650px] left-[1290px] h-[2400px] w-[2400px] overflow-visible',
+      className:
+        'pointer-events-none absolute bottom-[-1650px] left-[-120px] h-[2400px] w-[2400px] scale-x-[-1] overflow-visible',
       Component: HCHollowBlueDiamond2,
     },
     {

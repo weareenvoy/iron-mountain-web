@@ -69,38 +69,72 @@ export const useKioskSlides = ({
   } = slideBuilders;
 
   // Parse kiosk data with type safety using extracted utility
-  const kioskContent = useMemo(() => parseKioskData(kioskData), [kioskData]);
+  const kioskContent = useMemo(() => {
+    try {
+      return parseKioskData(kioskData);
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[useKioskSlides] Failed to parse kiosk data:', error);
+      }
+      return null;
+    }
+  }, [kioskData]);
 
   // Map challenges
   const challenges = useMemo(() => {
     if (!kioskContent?.challengeMain || !kioskContent.ambient) return null;
-    return parseKioskChallenges(mapChallenges(kioskContent.challengeMain, kioskContent.ambient));
+    try {
+      return parseKioskChallenges(mapChallenges(kioskContent.challengeMain, kioskContent.ambient));
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[useKioskSlides] Failed to map challenges:', error);
+      }
+      return null;
+    }
   }, [kioskContent]);
 
   // Map solutions
   const solutions = useMemo(() => {
     if (!kioskContent?.solutionMain || !kioskContent.ambient) return null;
 
-    if (usesAccordion && kioskContent.solutionAccordion) {
-      return mapSolutionsWithAccordion(kioskContent.solutionMain, kioskContent.solutionAccordion, kioskContent.ambient);
-    }
+    try {
+      if (usesAccordion && kioskContent.solutionAccordion) {
+        return mapSolutionsWithAccordion(
+          kioskContent.solutionMain,
+          kioskContent.solutionAccordion,
+          kioskContent.ambient
+        );
+      }
 
-    if (!usesAccordion && kioskContent.solutionGrid && diamondMapping) {
-      return mapSolutionsWithGrid(
-        kioskContent.solutionMain,
-        kioskContent.solutionGrid,
-        kioskContent.ambient,
-        diamondMapping
-      );
-    }
+      if (!usesAccordion && kioskContent.solutionGrid && diamondMapping) {
+        return mapSolutionsWithGrid(
+          kioskContent.solutionMain,
+          kioskContent.solutionGrid,
+          kioskContent.ambient,
+          diamondMapping
+        );
+      }
 
-    return null;
+      return null;
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[useKioskSlides] Failed to map solutions:', error);
+      }
+      return null;
+    }
   }, [kioskContent, usesAccordion, diamondMapping]);
 
   // Map values
   const values = useMemo(() => {
     if (!kioskContent?.valueMain || !kioskContent.ambient) return null;
-    return mapValue(kioskContent.valueMain, kioskContent.ambient, kioskId);
+    try {
+      return mapValue(kioskContent.valueMain, kioskContent.ambient, kioskId);
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[useKioskSlides] Failed to map values:', error);
+      }
+      return null;
+    }
   }, [kioskContent, kioskId]);
 
   // Helper to get appropriate custom interactive mapper by kiosk ID
@@ -123,7 +157,7 @@ export const useKioskSlides = ({
 
     const customInteractiveKey =
       kioskId === 'kiosk-1'
-        ? 'customInteractive1Main'
+        ? 'customInteractive1'
         : kioskId === 'kiosk-2'
           ? 'customInteractive2'
           : 'customInteractive3';
@@ -133,28 +167,35 @@ export const useKioskSlides = ({
 
     const mapper = getCustomInteractiveMapper(kioskId);
 
-    if (!mapper) {
-      // Kiosk 2 uses direct object construction with proper type extraction
-      const demo = kioskContent.demoMain;
-      const ambient = kioskContent.ambient;
+    try {
+      if (!mapper) {
+        // Kiosk 2 uses direct object construction with proper type extraction
+        const demo = kioskContent.demoMain;
+        const ambient = kioskContent.ambient;
 
-      return {
-        firstScreen: {
-          demoIframeSrc: demo?.iframeLink,
-          eyebrow: ambient.title,
-          headline: customInteractiveData.headline,
-          heroImageAlt: '',
-          heroImageSrc: customInteractiveData.image,
-          overlayCardLabel: demo?.demoText,
-          overlayEndTourLabel: demo?.mainCTA,
-          overlayHeadline: demo?.headline,
-          primaryCtaLabel: undefined,
-          secondaryCtaLabel: customInteractiveData.secondaryCTA,
-        },
-      };
+        return {
+          firstScreen: {
+            demoIframeSrc: demo?.iframeLink,
+            eyebrow: ambient.title,
+            headline: customInteractiveData.headline,
+            heroImageAlt: '',
+            heroImageSrc: customInteractiveData.image,
+            overlayCardLabel: demo?.demoText,
+            overlayEndTourLabel: demo?.mainCTA,
+            overlayHeadline: demo?.headline,
+            primaryCtaLabel: undefined,
+            secondaryCtaLabel: customInteractiveData.secondaryCTA,
+          },
+        };
+      }
+
+      return mapper(customInteractiveData, kioskContent.ambient, kioskContent.demoMain);
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[useKioskSlides] Failed to map custom interactive:', error);
+      }
+      return null;
     }
-
-    return mapper(customInteractiveData, kioskContent.ambient, kioskContent.demoMain);
   }, [kioskContent, kioskId]);
 
   // Track missing sections for better error reporting
