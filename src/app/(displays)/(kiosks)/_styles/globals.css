@@ -5,6 +5,32 @@
 
   /* Custom (Kiosks-only) */
   /* e.g. --kiosks-accent: #...; */
+
+  /* Disable text selection */
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+
+  /* Hide scrollbars */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+/* Hide scrollbars for WebKit browsers (Chrome, Safari) */
+[data-app='displays-kiosks']::-webkit-scrollbar,
+[data-app='displays-kiosks'] *::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Ensure all child elements inherit the no-select behavior */
+[data-app='displays-kiosks'] * {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 [data-theme='dark'] [data-app='displays-kiosks'],
