@@ -128,24 +128,32 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
 
   // Eagerly try to unlock audio on mount (for kiosk mode with --autoplay-policy=no-user-gesture-required)
   useEffect(() => {
-    console.info('[Early Unlock] ==========================================');
-    console.info('[Early Unlock] Attempting to unlock audio on mount');
-    console.info('[Early Unlock] User agent:', navigator.userAgent);
+    if (process.env.NODE_ENV === 'development') {
+      console.info('[Early Unlock] ==========================================');
+      console.info('[Early Unlock] Attempting to unlock audio on mount');
+      console.info('[Early Unlock] User agent:', navigator.userAgent);
+    }
 
     // Try to unlock immediately
     audioController
       .unlock()
       .then(() => {
-        console.info('[Early Unlock] ✅ Successfully unlocked on mount!');
-        console.info('[Early Unlock] Kiosk flags are working correctly');
+        if (process.env.NODE_ENV === 'development') {
+          console.info('[Early Unlock] ✅ Successfully unlocked on mount!');
+          console.info('[Early Unlock] Kiosk flags are working correctly');
+        }
       })
       .catch(() => {
-        console.warn('[Early Unlock] ❌ Failed to unlock on mount');
-        console.warn('[Early Unlock] This is expected without kiosk flags');
-        console.warn('[Early Unlock] Click the idle screen to enable audio');
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('[Early Unlock] ❌ Failed to unlock on mount');
+          console.warn('[Early Unlock] This is expected without kiosk flags');
+          console.warn('[Early Unlock] Click the idle screen to enable audio');
+        }
       });
 
-    console.info('[Early Unlock] ==========================================');
+    if (process.env.NODE_ENV === 'development') {
+      console.info('[Early Unlock] ==========================================');
+    }
   }, [audioController]);
 
   // Play ambient music when idle completes
@@ -154,40 +162,58 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
       // Only run this once
       shouldPlayAmbientRef.current = true;
 
-      console.info('[Ambient Music] ========================================');
-      console.info('[Ambient Music] Idle complete! Starting ambient music flow...');
-      console.info('[Ambient Music] Ambient URL:', music.ambient);
-      console.info('[Ambient Music] Current scroll target:', currentScrollTarget);
+      if (process.env.NODE_ENV === 'development') {
+        console.info('[Ambient Music] ========================================');
+        console.info('[Ambient Music] Idle complete! Starting ambient music flow...');
+        console.info('[Ambient Music] Ambient URL:', music.ambient);
+        console.info('[Ambient Music] Current scroll target:', currentScrollTarget);
+      }
 
       const ambientUrl = music.ambient; // Capture in closure to satisfy TypeScript
 
       // Always try to unlock first, then play
-      console.info('[Ambient Music] Calling audioController.unlock()...');
+      if (process.env.NODE_ENV === 'development') {
+        console.info('[Ambient Music] Calling audioController.unlock()...');
+      }
       audioController
         .unlock()
         .then(() => {
-          console.info('[Ambient Music] ✅ Unlock successful!');
+          if (process.env.NODE_ENV === 'development') {
+            console.info('[Ambient Music] ✅ Unlock successful!');
+          }
 
           // Check if we're still on initial screen
           const latestScrollTarget = currentScrollTargetRef.current;
           const stillOnInitialScreen = !latestScrollTarget || latestScrollTarget === 'cover-ambient-initial';
 
-          console.info('[Ambient Music] Latest scroll target:', latestScrollTarget);
-          console.info('[Ambient Music] Still on initial screen?', stillOnInitialScreen);
+          if (process.env.NODE_ENV === 'development') {
+            console.info('[Ambient Music] Latest scroll target:', latestScrollTarget);
+            console.info('[Ambient Music] Still on initial screen?', stillOnInitialScreen);
+          }
 
           if (stillOnInitialScreen) {
-            console.info('[Ambient Music] ✅ Calling setMusic() with ambient URL...');
+            if (process.env.NODE_ENV === 'development') {
+              console.info('[Ambient Music] ✅ Calling setMusic() with ambient URL...');
+            }
             setMusic(ambientUrl, { fadeMs: 1000 });
-            console.info('[Ambient Music] ✅ setMusic() called!');
+            if (process.env.NODE_ENV === 'development') {
+              console.info('[Ambient Music] ✅ setMusic() called!');
+            }
           } else {
-            console.warn('[Ambient Music] ❌ User navigated away, skipping ambient music');
+            if (process.env.NODE_ENV === 'development') {
+              console.warn('[Ambient Music] ❌ User navigated away, skipping ambient music');
+            }
           }
         })
         .catch(err => {
-          console.error('[Ambient Music] ❌ Unlock failed:', err);
+          if (process.env.NODE_ENV === 'development') {
+            console.error('[Ambient Music] ❌ Unlock failed:', err);
+          }
         });
 
-      console.info('[Ambient Music] ========================================');
+      if (process.env.NODE_ENV === 'development') {
+        console.info('[Ambient Music] ========================================');
+      }
     }
   }, [audioController, currentScrollTarget, idleComplete, music.ambient, setMusic]);
 
@@ -241,7 +267,9 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
   useEffect(() => {
     // Skip if we're on initial screen - ambient music is handled by unlock effect
     if (!currentScrollTarget || currentScrollTarget === 'cover-ambient-initial') {
-      console.info('[Music Effect] Initial screen, skipping (handled by unlock effect)');
+      if (process.env.NODE_ENV === 'development') {
+        console.info('[Music Effect] Initial screen, skipping (handled by unlock effect)');
+      }
       return;
     }
 
@@ -267,25 +295,33 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
       sectionName = 'challenge';
     }
 
-    console.info(
-      '[Music Effect] Section:',
-      sectionName,
-      'musicUrl:',
-      musicUrl ? 'SET' : 'NULL',
-      'idleComplete:',
-      idleComplete
-    );
+    if (process.env.NODE_ENV === 'development') {
+      console.info(
+        '[Music Effect] Section:',
+        sectionName,
+        'musicUrl:',
+        musicUrl ? 'SET' : 'NULL',
+        'idleComplete:',
+        idleComplete
+      );
+    }
 
     if (musicUrl) {
       // AudioEngine handles queueing if audio isn't unlocked yet
-      console.info('[Music Effect] Calling setMusic with:', musicUrl);
+      if (process.env.NODE_ENV === 'development') {
+        console.info('[Music Effect] Calling setMusic with:', musicUrl);
+      }
       setMusic(musicUrl, { fadeMs: 1000 });
     } else if (currentScrollTarget !== 'cover-ambient-initial') {
       // Clear music when no track is mapped (but not on initial screen)
-      console.info('[Music Effect] Clearing music');
+      if (process.env.NODE_ENV === 'development') {
+        console.info('[Music Effect] Clearing music');
+      }
       setMusic(null, { fadeMs: 1000 });
     } else {
-      console.info('[Music Effect] No action (waiting or initial screen)');
+      if (process.env.NODE_ENV === 'development') {
+        console.info('[Music Effect] No action (waiting or initial screen)');
+      }
     }
   }, [currentScrollTarget, idleComplete, isCustomInteractiveSection, isInitialScreen, isValueSection, music, setMusic]);
 
