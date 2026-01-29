@@ -176,8 +176,9 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
             let relativePos = idx - selectedIndex;
 
             // Wrap around: normalize to range -2 to +2
-            if (relativePos > 2) relativePos -= totalSlides;
-            if (relativePos < -2) relativePos += totalSlides;
+            // For a 5-item carousel, we want items to wrap smoothly
+            if (relativePos > totalSlides / 2) relativePos -= totalSlides;
+            if (relativePos < -totalSlides / 2) relativePos += totalSlides;
 
             const isActive = relativePos === 0;
             const isLeftEdge = relativePos === -2;
@@ -185,6 +186,22 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
             const isMiddle = relativePos === -1 || relativePos === 1;
             const inactiveSize = isLeftEdge || isRightEdge ? LAYOUT.DIAMOND_SIZE_EDGE : LAYOUT.DIAMOND_SIZE_MIDDLE;
             const isOuter = isLeftEdge || isRightEdge;
+
+            // Calculate z-index based on distance from center (closer = higher z-index)
+            const getZIndex = () => {
+              switch (relativePos) {
+                case 0:
+                  return 50; // Active (center)
+                case -1:
+                case 1:
+                  return 30; // Middle (directly adjacent)
+                case -2:
+                case 2:
+                  return 10; // Edge (far left/right)
+                default:
+                  return 0;
+              }
+            };
 
             // Calculate horizontal offset based on position
             const getOffset = () => {
@@ -213,7 +230,7 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
                   pointerEvents: relativePos >= -2 && relativePos <= 2 ? 'auto' : 'none',
                   transform: `translateX(calc(-50% + ${getOffset()}px))`,
                   transition: 'transform 0.5s cubic-bezier(0.3, 0, 0.6, 1), opacity 0.5s cubic-bezier(0.3, 0, 0.6, 1)',
-                  zIndex: isActive ? 10 : isOuter ? 5 : 1,
+                  zIndex: getZIndex(),
                 }}
               >
                 <DiamondCarouselItem
