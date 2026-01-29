@@ -96,7 +96,7 @@
       "mainVideo": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/03+-+Value/Value-header.webm"
     },
     "customInteractiveChoice": {
-      "customInteractive1": "Interactive 1",
+      "customInteractive1": "",
       "customInteractive2": "Interactive 2",
       "customInteractive3": ""
     }

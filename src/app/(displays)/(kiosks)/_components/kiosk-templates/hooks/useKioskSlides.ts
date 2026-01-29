@@ -196,19 +196,20 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
   };
 
   // Map custom interactives - check customInteractiveChoice to determine which to show
+  // Only display the FIRST non-empty custom interactive
   const customInteractives = useMemo(() => {
     if (!kioskContent?.ambient) return [];
-
-    const result: Array<{ data: CustomInteractiveContent; number: 1 | 2 | 3 }> = [];
 
     // Check customInteractiveChoice to see which interactives should be shown
     const choice = kioskContent.customInteractiveChoice;
     
+    // Find the first non-empty custom interactive and return only that one
     // CustomInteractive 1
     if (choice?.customInteractive1 && choice.customInteractive1.trim() !== '') {
       const data = kioskContent.customInteractive1;
       if (data && hasContent(data)) {
-        result.push({ data: data as CustomInteractiveContent, number: 1 });
+        const mapped = processCustomInteractive({ data: data as CustomInteractiveContent, number: 1 });
+        return mapped ? [mapped] : [];
       }
     }
 
@@ -216,7 +217,8 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
     if (choice?.customInteractive2 && choice.customInteractive2.trim() !== '') {
       const data = kioskContent.customInteractive2;
       if (data && hasContent(data)) {
-        result.push({ data: data as CustomInteractiveContent, number: 2 });
+        const mapped = processCustomInteractive({ data: data as CustomInteractiveContent, number: 2 });
+        return mapped ? [mapped] : [];
       }
     }
 
@@ -224,46 +226,47 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
     if (choice?.customInteractive3 && choice.customInteractive3.trim() !== '') {
       const data = kioskContent.customInteractive3;
       if (data && hasContent(data)) {
-        result.push({ data: data as CustomInteractiveContent, number: 3 });
+        const mapped = processCustomInteractive({ data: data as CustomInteractiveContent, number: 3 });
+        return mapped ? [mapped] : [];
       }
     }
 
-    // Map each custom interactive to its proper structure
-    return result
-      .map(({ data, number }) => {
-        const mapper = getCustomInteractiveMapper(number);
+    return [];
 
-        try {
-          if (!mapper) {
-            // Interactive 2 uses direct object construction
-            const demo = kioskContent.demoMain;
-            const ambient = kioskContent.ambient!; // Safe because we checked at the start
+    // Helper function to process a single custom interactive
+    function processCustomInteractive(item: { data: CustomInteractiveContent; number: 1 | 2 | 3 }) {
+      const mapper = getCustomInteractiveMapper(item.number);
 
-            return {
-              firstScreen: {
-                demoIframeSrc: demo?.iframeLink,
-                eyebrow: ambient.title,
-                headline: data.headline,
-                heroImageAlt: '',
-                heroImageSrc: data.image,
-                overlayCardLabel: demo?.demoText,
-                overlayEndTourLabel: demo?.mainCTA,
-                overlayHeadline: demo?.headline,
-                primaryCtaLabel: undefined,
-                secondaryCtaLabel: data.secondaryCTA,
-              },
-            };
-          }
+      try {
+        if (!mapper) {
+          // Interactive 2 uses direct object construction
+          const demo = kioskContent.demoMain;
+          const ambient = kioskContent.ambient!; // Safe because we checked at the start
 
-          return mapper(data, kioskContent.ambient!, kioskContent.demoMain);
-        } catch (error) {
-          if (process.env.NODE_ENV === 'development') {
-            console.error(`[useKioskSlides] Failed to map custom interactive ${number}:`, error);
-          }
-          return null;
+          return {
+            firstScreen: {
+              demoIframeSrc: demo?.iframeLink,
+              eyebrow: ambient.title,
+              headline: item.data.headline,
+              heroImageAlt: '',
+              heroImageSrc: item.data.image,
+              overlayCardLabel: demo?.demoText,
+              overlayEndTourLabel: demo?.mainCTA,
+              overlayHeadline: demo?.headline,
+              primaryCtaLabel: undefined,
+              secondaryCtaLabel: item.data.secondaryCTA,
+            },
+          };
         }
-      })
-      .filter((item): item is NonNullable<typeof item> => item !== null);
+
+        return mapper(item.data, kioskContent.ambient!, kioskContent.demoMain);
+      } catch (error) {
+        if (process.env.NODE_ENV === 'development') {
+          console.error(`[useKioskSlides] Failed to map custom interactive ${item.number}:`, error);
+        }
+        return null;
+      }
+    }
   }, [kioskContent]);
 
   // Track missing sections for better error reporting
