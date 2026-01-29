@@ -89,17 +89,14 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
 
   return (
     <div
-      className={cn(
-        'group/kiosk relative flex h-screen w-full flex-col',
-        isKiosk1 || isKiosk3 ? 'overflow-visible' : 'overflow-hidden'
-      )}
+      className="group/kiosk relative flex h-screen w-full flex-col overflow-visible"
       data-scroll-section="customInteractive-first-screen"
       data-section={SECTION_NAMES.CUSTOM_INTERACTIVE}
       ref={sectionRef}
     >
       {/* Background gradient - height calculated dynamically based on rendered templates */}
       <div 
-        className="bg-gradient-kiosk-blue pointer-events-none absolute inset-0"
+        className="bg-gradient-kiosk-blue pointer-events-none absolute top-0 left-0 right-0"
         style={{ height: gradientHeight > 0 ? `${gradientHeight}px` : undefined }}
       />
 

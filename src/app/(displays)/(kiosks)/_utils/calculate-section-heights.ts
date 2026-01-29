@@ -83,20 +83,20 @@ export const calculateSolutionGradientHeight = (slides: Slide[], kioskId: KioskI
 /**
  * Calculate the gradient height for Custom Interactive sections
  * Returns an array since there can be multiple custom interactives
+ * Heights are based on the custom interactive number (1, 2, 3) not the kiosk ID
  */
 export const calculateCustomInteractiveGradientHeights = (slides: Slide[], kioskId: KioskId): number[] => {
-  const heights = CUSTOM_INTERACTIVE_HEIGHTS[kioskId];
   const gradientHeights: number[] = [];
 
   // Find all custom interactive instances by their index
-  // Format: customInteractive-0-first, customInteractive-0-second
-  //         customInteractive-1-first, customInteractive-1-second
+  // Format: customInteractive-0-first-ci1, customInteractive-0-second-ci1
+  //         customInteractive-0-first-ci2, customInteractive-0-second-ci2
   //         OR customInteractive-first, customInteractive-second (legacy single instance)
   const customInteractiveIndices = new Set<number>();
   
   slides.forEach(slide => {
     if (slide.id.startsWith('customInteractive-')) {
-      // Try to extract index from format: customInteractive-{index}-{screen}
+      // Try to extract index from format: customInteractive-{index}-{screen}-ci{number}
       const match = slide.id.match(/customInteractive-(\d+)-/);
       if (match) {
         customInteractiveIndices.add(parseInt(match[1], 10));
@@ -111,11 +111,31 @@ export const calculateCustomInteractiveGradientHeights = (slides: Slide[], kiosk
   Array.from(customInteractiveIndices)
     .sort((a, b) => a - b)
     .forEach(index => {
+      // Find slides for this instance to extract custom interactive number
+      const instanceSlides = slides.filter(slide => {
+        if (index === 0 && (slide.id === 'customInteractive-first' || slide.id === 'customInteractive-second')) {
+          return true;
+        }
+        return slide.id.startsWith(`customInteractive-${index}-`);
+      });
+
+      // Extract custom interactive number from slide ID (e.g., -ci1, -ci2, -ci3)
+      let customInteractiveNumber: '1' | '2' | '3' = '1'; // Default to 1
+      for (const slide of instanceSlides) {
+        const ciMatch = slide.id.match(/-ci(\d)/);
+        if (ciMatch) {
+          customInteractiveNumber = ciMatch[1] as '1' | '2' | '3';
+          break;
+        }
+      }
+
+      // Get heights specific to this custom interactive number
+      const heights = CUSTOM_INTERACTIVE_HEIGHTS[customInteractiveNumber];
       let totalHeight = 0;
       
-      // Check for indexed format (customInteractive-0-first) or legacy format (customInteractive-first)
-      const hasIndexedFirst = slides.some(s => s.id === `customInteractive-${index}-first`);
-      const hasIndexedSecond = slides.some(s => s.id === `customInteractive-${index}-second`);
+      // Check for indexed format (customInteractive-0-first-ci1) or legacy format (customInteractive-first)
+      const hasIndexedFirst = slides.some(s => s.id === `customInteractive-${index}-first-ci${customInteractiveNumber}`);
+      const hasIndexedSecond = slides.some(s => s.id === `customInteractive-${index}-second-ci${customInteractiveNumber}`);
       const hasLegacyFirst = index === 0 && slides.some(s => s.id === 'customInteractive-first');
       const hasLegacySecond = index === 0 && slides.some(s => s.id === 'customInteractive-second');
 

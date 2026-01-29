@@ -84,24 +84,24 @@ export const SOLUTION_HEIGHTS: Record<KioskId, {
 
 /**
  * Heights for Custom Interactive section templates
- * Note: Custom interactives can have multiple instances (1-3)
- * Each instance has first and second screens
+ * Organized by custom interactive number (1, 2, 3) since each custom interactive
+ * has its own specific heights regardless of which kiosk it's displayed on
  */
-export const CUSTOM_INTERACTIVE_HEIGHTS: Record<KioskId, {
+export const CUSTOM_INTERACTIVE_HEIGHTS: Record<'1' | '2' | '3', {
   /** Height of the first screen */
   firstScreen: number;
-  /** Height of the second screen (varies by kiosk type) */
+  /** Height of the second screen */
   secondScreen: number;
 }> = {
-  'kiosk-1': {
+  '1': {
     firstScreen: 5215,
     secondScreen: 5215,
   },
-  'kiosk-2': {
+  '2': {
     firstScreen: 5215,
     secondScreen: 5215,
   },
-  'kiosk-3': {
+  '3': {
     firstScreen: 5215,
     secondScreen: 5215,
   },

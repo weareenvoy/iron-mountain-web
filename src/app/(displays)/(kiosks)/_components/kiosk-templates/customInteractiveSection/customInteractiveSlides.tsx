@@ -28,10 +28,13 @@ export const buildCustomInteractiveSlides = (
   customInteractive: CustomInteractiveScreens,
   kioskId: KioskId,
   scrollToSection?: (sectionId: string) => void,
-  index?: number
+  index?: number,
+  customInteractiveNumber?: 1 | 2 | 3
 ): Slide[] => {
   // Create unique ID prefix for this custom interactive instance
+  // Include the custom interactive number for gradient height calculations
   const idPrefix = index !== undefined ? `customInteractive-${index}` : 'customInteractive';
+  const idSuffix = customInteractiveNumber ? `-ci${customInteractiveNumber}` : '';
   // Handler for closing demo - refreshes page and skips idle video
   const handleEndTour = () => {
     if (typeof window !== 'undefined') {
@@ -72,7 +75,7 @@ export const buildCustomInteractiveSlides = (
     };
 
     slides.push({
-      id: `${idPrefix}-first`,
+      id: `${idPrefix}-first${idSuffix}`,
       render: () => (
         <SectionSlide>
           <CustomInteractiveFirstScreenTemplate
@@ -110,7 +113,7 @@ export const buildCustomInteractiveSlides = (
   } else if (customInteractive.secondScreen) {
     // Kiosk 1 style second screen (diamond carousel with modals)
     slides.push({
-      id: `${idPrefix}-second`,
+      id: `${idPrefix}-second${idSuffix}`,
       render: () => (
         <SectionSlide>
           <CustomInteractiveKiosk1SecondScreenTemplate

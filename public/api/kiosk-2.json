@@ -97,8 +97,8 @@
     },
     "customInteractiveChoice": {
       "customInteractive1": "",
-      "customInteractive2": "Interactive 2",
-      "customInteractive3": ""
+      "customInteractive2": "",
+      "customInteractive3": "Interactive 3"
     }
   }
 }]

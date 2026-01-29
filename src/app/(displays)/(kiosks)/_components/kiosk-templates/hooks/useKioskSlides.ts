@@ -235,13 +235,17 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
 
     // Helper function to process a single custom interactive
     function processCustomInteractive(item: { data: CustomInteractiveContent; number: 1 | 2 | 3 }) {
+      if (!kioskContent?.ambient) return null;
+      
       const mapper = getCustomInteractiveMapper(item.number);
 
       try {
         if (!mapper) {
           // Interactive 2 uses direct object construction
+          if (!kioskContent) return null;
+          
           const demo = kioskContent.demoMain;
-          const ambient = kioskContent.ambient!; // Safe because we checked at the start
+          const ambient = kioskContent.ambient;
 
           return {
             firstScreen: {
@@ -256,10 +260,14 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
               primaryCtaLabel: undefined,
               secondaryCtaLabel: item.data.secondaryCTA,
             },
+            number: item.number,
           };
         }
 
-        return mapper(item.data, kioskContent.ambient!, kioskContent.demoMain);
+        if (!kioskContent) return null;
+        
+        const mapped = mapper(item.data, kioskContent.ambient, kioskContent.demoMain);
+        return mapped ? { ...mapped, number: item.number } : null;
       } catch (error) {
         if (process.env.NODE_ENV === 'development') {
           console.error(`[useKioskSlides] Failed to map custom interactive ${item.number}:`, error);
@@ -322,8 +330,9 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
         registerCarouselHandlers: handleRegisterCarouselHandlers,
       }),
       // Build slides for all enabled custom interactives with unique IDs
+      // Pass the custom interactive number (1, 2, or 3) for proper gradient height calculation
       ...customInteractives.flatMap((customInteractive, index) =>
-        buildCustomInteractiveSlides(customInteractive, kioskId, scrollToSectionById, index)
+        buildCustomInteractiveSlides(customInteractive, kioskId, scrollToSectionById, index, customInteractive.number)
       ),
     ];
   }, [
