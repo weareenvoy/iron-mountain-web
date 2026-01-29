@@ -1,98 +1,87 @@
 import type { CustomInteractiveScreens } from '../_components/kiosk-templates/customInteractiveSection/customInteractiveSlides';
-import type { Ambient, CustomInteractiveContent } from '../_types/content-types';
+import type { Ambient, CustomInteractiveContent, DemoConfig } from '../_types/content-types';
 
 /**
  * Maps CMS content for Custom Interactive Kiosk 1 to the Kiosk Custom Interactive structure.
- * Handles dynamic modal content access using index-based keys (ModalHeadline1, ModalBody1, ModalImage1, etc.)
+ * Extracts carousel labels and modal content from diamondCarouselItems array.
  */
-
-type DemoConfig = {
-  readonly demoText?: string;
-  readonly headline?: string;
-  readonly iframeLink?: string;
-  readonly mainCTA?: string;
-};
 
 /**
- * Type-safe accessor for modal properties with runtime validation
+ * Expected carousel item count for Kiosk 1
+ * UI diamond carousel is designed for exactly 5 steps
  */
-const getModalProperty = (
-  customInteractive: CustomInteractiveContent,
-  property: 'Body' | 'Headline' | 'Image',
-  index: number
-): string | undefined => {
-  const key = `Modal${property}${index + 1}` as keyof CustomInteractiveContent;
-
-  // Check if key exists
-  if (!(key in customInteractive)) {
-    return undefined;
-  }
-
-  const value = customInteractive[key];
-
-  // Validate value is string or undefined
-  if (value !== undefined && typeof value !== 'string') {
-    if (process.env.NODE_ENV === 'development') {
-      console.warn(`Modal${property}${index + 1} is not a string:`, value);
-    }
-    return undefined;
-  }
-
-  return value;
-};
+const EXPECTED_CAROUSEL_ITEM_COUNT = 5;
 
 export const mapCustomInteractiveKiosk1 = (
   customInteractive: CustomInteractiveContent,
   ambient: Ambient,
   demo?: DemoConfig
-): CustomInteractiveScreens => ({
-  firstScreen: {
-    demoIframeSrc: demo?.iframeLink,
-    eyebrow: ambient.title,
-    headline: customInteractive.headline,
-    heroImageAlt: '',
-    heroImageSrc: customInteractive.image,
-    overlayCardLabel: demo?.demoText,
-    overlayEndTourLabel: demo?.mainCTA,
-    overlayHeadline: demo?.headline,
-    primaryCtaLabel: customInteractive.mainCTA,
-    secondaryCtaLabel: customInteractive.secondaryCTA,
-  },
-  secondScreen: {
-    backLabel: customInteractive.backCTA,
-    bodyText: customInteractive.body2,
-    demoIframeSrc: demo?.iframeLink,
-    eyebrow: ambient.title,
-    headline: customInteractive.headline2,
-    heroImageAlt: '',
-    heroImageSrc: customInteractive.image,
-    overlayCardLabel: demo?.demoText,
-    overlayEndTourLabel: demo?.mainCTA,
-    overlayHeadline: demo?.headline,
-    secondaryCtaLabel: customInteractive.secondaryCTA,
-    steps: customInteractive.diamondCarouselItems?.map((item, index) => {
-      // Use type-safe accessor with validation
-      const modalBody = getModalProperty(customInteractive, 'Body', index);
-      const modalHeadline = getModalProperty(customInteractive, 'Headline', index);
-      const modalImage = getModalProperty(customInteractive, 'Image', index);
+): CustomInteractiveScreens => {
+  // Validate carousel item count upfront (fail fast before rendering)
+  const itemCount = customInteractive.diamondCarouselItems?.length ?? 0;
+  if (itemCount !== EXPECTED_CAROUSEL_ITEM_COUNT) {
+    const error = new Error(
+      `[mapCustomInteractiveKiosk1] Invalid carousel item count: expected ${EXPECTED_CAROUSEL_ITEM_COUNT}, got ${itemCount}. ` +
+        `Kiosk 1 diamond carousel UI requires exactly ${EXPECTED_CAROUSEL_ITEM_COUNT} items. ` +
+        'Fix CMS data or update StepCarousel component to support dynamic item counts.'
+    );
+    if (process.env.NODE_ENV === 'development') {
+      console.error(error.message, {
+        ambient: ambient.title,
+        expected: EXPECTED_CAROUSEL_ITEM_COUNT,
+        received: itemCount,
+      });
+    }
+    throw error;
+  }
 
-      return {
-        label: item,
-        modal: {
-          body: modalBody ?? '',
-          heading: modalHeadline ?? '',
-          imageAlt: '',
-          imageSrc: modalImage,
-        },
-      };
-    }),
-  },
-  thirdScreen: {
-    cardLabel: demo?.demoText,
-    demoIframeSrc: demo?.iframeLink,
-    endTourLabel: demo?.mainCTA,
-    headline: demo?.headline,
-    heroImageAlt: '',
-    heroImageSrc: customInteractive.image,
-  },
-});
+  // Map steps - diamondCarouselItems is an array of objects containing label and modal data
+  const mappedSteps = customInteractive.diamondCarouselItems?.map(item => {
+    return {
+      label: item.ModalHeadline ?? '',
+      modal: {
+        body: item.ModalBody ?? '',
+        heading: item.ModalHeadline ?? '',
+        imageAlt: '',
+        imageSrc: item.ModalImage ?? '',
+      },
+    };
+  });
+
+  return {
+    firstScreen: {
+      demoIframeSrc: demo?.iframeLink,
+      eyebrow: ambient.title,
+      headline: customInteractive.headline,
+      heroImageAlt: '',
+      heroImageSrc: customInteractive.image,
+      overlayCardLabel: demo?.demoText,
+      overlayEndTourLabel: demo?.mainCTA,
+      overlayHeadline: demo?.headline,
+      primaryCtaLabel: customInteractive.mainCTA,
+      secondaryCtaLabel: customInteractive.secondaryCTA,
+    },
+    secondScreen: {
+      backLabel: customInteractive.backCTA,
+      bodyText: customInteractive.body2,
+      demoIframeSrc: demo?.iframeLink,
+      eyebrow: ambient.title,
+      headline: customInteractive.headline2,
+      heroImageAlt: '',
+      heroImageSrc: customInteractive.image,
+      overlayCardLabel: demo?.demoText,
+      overlayEndTourLabel: demo?.mainCTA,
+      overlayHeadline: demo?.headline,
+      secondaryCtaLabel: customInteractive.secondaryCTA,
+      steps: mappedSteps,
+    },
+    thirdScreen: {
+      cardLabel: demo?.demoText,
+      demoIframeSrc: demo?.iframeLink,
+      endTourLabel: demo?.mainCTA,
+      headline: demo?.headline,
+      heroImageAlt: '',
+      heroImageSrc: customInteractive.image,
+    },
+  };
+};

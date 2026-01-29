@@ -1,4 +1,5 @@
 import { type ComponentType, type SVGProps } from 'react';
+import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 
 export type DiamondProps = {
@@ -19,17 +20,18 @@ const Diamond = ({
   textWrapperClassName,
 }: DiamondProps) => {
   return (
-    <div className={`absolute ${className}`}>
-      <div className={`relative ${sizeClass}`}>
+    <div className={cn('absolute', className)}>
+      <div className={cn('relative', sizeClass)}>
         {OutlineComponent ? (
           <OutlineComponent aria-hidden="true" className="block h-full w-full object-contain" focusable="false" />
         ) : null}
         <div
-          className={`absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center text-center ${
+          className={cn(
+            'absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center text-center',
             textWrapperClassName ?? 'w-[600px]'
-          }`}
+          )}
         >
-          <span className={`text-[67px] leading-[1.4] font-normal tracking-[-3.3px] ${textColorClass}`}>
+          <span className={cn('text-[67px] leading-[1.4] font-normal tracking-[-3.3px]', textColorClass)}>
             {renderRegisteredMark(label)}
           </span>
         </div>

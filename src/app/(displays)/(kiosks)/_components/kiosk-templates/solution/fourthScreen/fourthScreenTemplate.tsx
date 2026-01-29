@@ -51,7 +51,7 @@ const SolutionFourthScreenTemplate = ({
       </div>
 
       {/* Solution cards */}
-      <div className="absolute top-[1740px] left-[240px] w-[1379px] rounded-[80px] bg-[#ededed] shadow-[0_20px_80px_rgba(0,0,0,0.25)]">
+      <div className="absolute top-[1740px] left-[240px] w-[1379px] rounded-[80px] bg-[#ededed]">
         <Accordion
           className="space-y-0 overflow-hidden rounded-[80px]"
           collapsible
@@ -63,7 +63,7 @@ const SolutionFourthScreenTemplate = ({
             const prevAccordionColor = index > 0 ? (entries[index - 1]?.color ?? 'white') : null;
             const hasContent = Boolean(item.contentList?.length);
             const roundedClass =
-              index === 0 ? 'rounded-t-[80px]' : index === entries.length - 1 ? 'rounded-b-[80px]' : 'rounded-none';
+              index === 0 ? 'rounded-t-[40px]' : index === entries.length - 1 ? 'rounded-b-[40px]' : 'rounded-none';
             const triggerRoundedClass =
               index === 0 ? 'rounded-t-[50px]' : index === entries.length - 1 ? 'rounded-b-[50px]' : 'rounded-none';
 
@@ -91,10 +91,10 @@ const SolutionFourthScreenTemplate = ({
                 <AccordionTrigger
                   className={cn(
                     'group/accordion-trigger relative z-[1] flex h-[120px] min-h-[240px] items-center',
-                    'rounded-t-[50px] px-[80px] pt-[30px] pb-[20px]',
+                    'rounded-t-[40px] px-[80px] pt-[30px] pb-[20px]',
                     'text-left text-[52px] leading-[1.4] tracking-[-2.6px]',
                     'transition-none hover:no-underline focus-visible:outline-none',
-                    index === entries.length - 1 && 'rounded-b-[50px]',
+                    index === entries.length - 1 && 'rounded-b-[40px]',
                     triggerRoundedClass,
                     'data-[accordion-color=blue]:bg-[#1b75bc] data-[accordion-color=blue]:text-[#ededed]',
                     'data-[accordion-color=lightBlue]:bg-[#6dcff6] data-[accordion-color=lightBlue]:text-[#14477d]',

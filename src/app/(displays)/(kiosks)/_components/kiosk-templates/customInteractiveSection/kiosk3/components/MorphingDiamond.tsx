@@ -69,7 +69,7 @@ const MorphingDiamond = memo(({ carouselIndex, isCarouselExiting, showCarousel, 
       {(!showCarousel || carouselIndex === 0) && (
         <motion.div
           animate={diamondAnimation}
-          className="pointer-events-none absolute bottom-[-1000px] left-[50px] z-1 h-[2500px] w-[2500px] rotate-45 overflow-hidden rounded-[200px] border border-white/10 shadow-[0_40px_120px_rgba(0,0,0,0.45)]"
+          className="pointer-events-none absolute bottom-[-1000px] left-[50px] z-1 h-[2500px] w-[2500px] rotate-45 overflow-hidden rounded-[200px] border border-white/10"
           exit={MORPHING_DIAMOND.EXIT}
           initial={
             showCarousel

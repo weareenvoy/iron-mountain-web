@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { cn } from '@/lib/tailwind/utils/cn';
 
 export type MediaDiamondProps = {
   readonly className: string;
@@ -9,8 +10,8 @@ export type MediaDiamondProps = {
 
 const MediaDiamond = ({ className, imageAlt, imageSrc, sizeClass = 'size-[666px]' }: MediaDiamondProps) => {
   return (
-    <div className={`absolute ${className}`}>
-      <div className={`relative ${sizeClass}`}>
+    <div className={cn('absolute', className)}>
+      <div className={cn('relative', sizeClass)}>
         {imageSrc ? (
           <Image
             alt={imageAlt ?? ''}

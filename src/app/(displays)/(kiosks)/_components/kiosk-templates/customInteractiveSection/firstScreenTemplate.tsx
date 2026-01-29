@@ -21,6 +21,7 @@ export interface CustomInteractiveKiosk1FirstScreenTemplateProps {
   readonly heroImageAlt?: string;
   readonly heroImageSrc?: string;
   readonly kioskId?: KioskId;
+  readonly onEndTour?: () => void;
   readonly onPrimaryCta?: () => void;
   readonly onSecondaryCta?: () => void;
   readonly overlayCardLabel?: string;
@@ -75,6 +76,10 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
     onPrimaryCta?.();
   };
 
+  const handleCloseOverlay = () => {
+    setShowOverlay(false);
+  };
+
   return (
     <div
       className={cn(
@@ -102,7 +107,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
           headline={overlayHeadline}
           heroImageAlt={heroImageAlt}
           heroImageSrc={heroImageSrc}
-          onEndTour={() => setShowOverlay(false)}
+          onEndTour={handleCloseOverlay}
         />
       </div>
 
@@ -119,7 +124,10 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
 
       {/* Sticky Section Header - Fixed Position - gradient defined in globals.css for readability and ease of future updates */}
       <div
-        className={`bg-gradient-sticky-custom-interactive pointer-events-none fixed top-0 left-0 z-[100] h-[769px] w-full transition-opacity duration-300 motion-reduce:transition-none ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
+        className={cn(
+          'bg-gradient-sticky-custom-interactive pointer-events-none fixed top-0 left-0 z-[100] h-[769px] w-full transition-opacity duration-300 motion-reduce:transition-none',
+          showStickyHeader ? 'opacity-100' : 'opacity-0'
+        )}
         data-custominteractive-sticky-header
         data-visible={showStickyHeader}
         ref={stickyHeaderRef}

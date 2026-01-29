@@ -18,7 +18,8 @@ export type DiamondMapping = {
 };
 
 /**
- * Validates that diamondList contains only strings
+ * Validates that diamondList contains 4-5 string entries.
+ * The solution grid UI is designed for a balanced layout with 4-5 diamonds.
  */
 const validateDiamondList = (value: unknown): readonly string[] => {
   if (!Array.isArray(value)) {
@@ -26,6 +27,12 @@ const validateDiamondList = (value: unknown): readonly string[] => {
   }
   if (!value.every(item => typeof item === 'string')) {
     throw new Error('diamondList must contain only strings');
+  }
+  if (value.length < 4 || value.length > 5) {
+    throw new Error(
+      `diamondList must contain 4-5 entries for solution grid, got ${value.length}. ` +
+        'The UI supports: center, topLeft, topRight (required), bottomLeft (required), bottomRight (required).'
+    );
   }
   return value;
 };
@@ -40,6 +47,14 @@ export const mapSolutionsWithGrid = (
   const diamondList = validateDiamondList(solutionsGrid.diamondList);
   const diamondPositions = mapArrayToPositions<string>(diamondList, diamondMapping);
 
+  // Validate numbered list has required items
+  const numberedList = solutionsMain.numberedList ?? [];
+  if (numberedList.length < 4) {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn(`[mapSolutionsWithGrid] numberedList should have at least 4 items, got ${numberedList.length}`);
+    }
+  }
+
   return {
     firstScreen: {
       body: solutionsMain.body,
@@ -53,13 +68,13 @@ export const mapSolutionsWithGrid = (
       image: solutionsMain.image,
       labelText: solutionsMain.labelText,
       numberedListHeadline: solutionsMain.numberedListHeadline,
-      stepFourDescription: solutionsMain.numberedList?.[3],
+      stepFourDescription: numberedList[3],
       stepFourLabel: '04.',
-      stepOneDescription: solutionsMain.numberedList?.[0],
+      stepOneDescription: numberedList[0],
       stepOneLabel: '01.',
-      stepThreeDescription: solutionsMain.numberedList?.[2],
+      stepThreeDescription: numberedList[2],
       stepThreeLabel: '03.',
-      stepTwoDescription: solutionsMain.numberedList?.[1],
+      stepTwoDescription: numberedList[1],
       stepTwoLabel: '02.',
       subheadline: ambient.title,
     },

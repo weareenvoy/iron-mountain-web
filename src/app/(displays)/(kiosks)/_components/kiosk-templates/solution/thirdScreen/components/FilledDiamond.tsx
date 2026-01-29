@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import TealGradientDiamondThird from '@/components/ui/icons/Kiosks/Solutions/TealGradientDiamondThird';
+import { cn } from '@/lib/tailwind/utils/cn';
 
 type FilledDiamondProps = {
   readonly className: string;
@@ -9,7 +10,7 @@ type FilledDiamondProps = {
 
 const FilledDiamond = ({ className, imageAlt, imageSrc }: FilledDiamondProps) => {
   return (
-    <div className={`absolute ${className}`}>
+    <div className={cn('absolute', className)}>
       <div className="relative size-[390px]">
         {imageSrc ? (
           <Image
