@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import { memo } from 'react';
+import { useKioskAudio } from '@/app/(displays)/(kiosks)/_components/providers/useKioskAudio';
+import { useSfx } from '@/components/providers/audio-provider';
 import BlueDot from '@/components/ui/icons/Kiosks/CustomInteractive/BlueDot';
 import InnerRing from '@/components/ui/icons/Kiosks/CustomInteractive/InnerRing';
 import OuterRing from '@/components/ui/icons/Kiosks/CustomInteractive/OuterRing';
@@ -91,6 +93,16 @@ const InitialState = memo(
     showCarousel,
     tapToBeginLabel,
   }: InitialStateProps) => {
+    const { sfx } = useKioskAudio();
+    const { playSfx } = useSfx();
+
+    const handleBackClick = () => {
+      if (sfx.back) {
+        playSfx(sfx.back);
+      }
+      onBack?.();
+    };
+
     return (
       <motion.div
         animate={{ opacity: showCarousel ? 0 : 1 }}
@@ -110,7 +122,7 @@ const InitialState = memo(
         <div className="absolute top-[240px] right-[120px]">
           <button
             className="group relative top-[1070px] flex h-[200px] items-center gap-[20px] rounded-[999px] bg-[#ededed] px-[120px] text-[54px] leading-[1.4] font-normal tracking-[-2px] text-[#14477d] transition hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
-            onClick={onBack}
+            onClick={handleBackClick}
             type="button"
           >
             <ArrowLeft aria-hidden className="h-[32px] w-[32px]" color="#14477d" strokeWidth={2} />
