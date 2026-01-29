@@ -3,6 +3,8 @@ import { SquarePlay } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
+import { useKioskAudio } from '@/app/(displays)/(kiosks)/_components/providers/useKioskAudio';
+import { useSfx } from '@/components/providers/audio-provider';
 import ArrowIcon from '@/components/ui/icons/Kiosks/CustomInteractive/ArrowIcon';
 import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCFilledOrangeDiamond';
 import HCHollowBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowBlueDiamond';
@@ -47,6 +49,8 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   secondaryCtaLabel,
 }: CustomInteractiveKiosk1FirstScreenTemplateProps) => {
   const { shouldAnimate, triggerRef: animationTriggerRef } = useScrollAnimation<HTMLHeadingElement>();
+  const { sfx } = useKioskAudio();
+  const { playSfx } = useSfx();
 
   const [showOverlay, setShowOverlay] = useState(false);
 
@@ -68,6 +72,9 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   const secondaryIconOffset = isKiosk3 ? 'left-[-330px]' : 'left-[-70px]';
 
   const handleSecondaryClick = () => {
+    if (sfx.open) {
+      playSfx(sfx.open);
+    }
     setShowOverlay(true);
     onSecondaryCta?.();
   };
@@ -77,6 +84,9 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   };
 
   const handleCloseOverlay = () => {
+    if (sfx.close) {
+      playSfx(sfx.close);
+    }
     setShowOverlay(false);
   };
 
@@ -86,6 +96,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
         'group/kiosk relative flex h-screen w-full flex-col',
         isKiosk1 || isKiosk3 ? 'overflow-visible' : 'overflow-hidden'
       )}
+      data-kiosk={kioskId}
       data-scroll-section="customInteractive-first-screen"
       data-section={SECTION_NAMES.CUSTOM_INTERACTIVE}
       ref={sectionRef}
@@ -97,7 +108,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       <div
         className={cn(
           'absolute inset-0 transition-opacity duration-700',
-          showOverlay ? 'pointer-events-auto z-[9999] opacity-100' : 'pointer-events-none -z-10 opacity-0'
+          showOverlay ? 'pointer-events-auto z-9999 opacity-100' : 'pointer-events-none -z-10 opacity-0'
         )}
       >
         <CustomInteractiveDemoScreenTemplate
@@ -124,10 +135,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
 
       {/* Sticky Section Header - Fixed Position - gradient defined in globals.css for readability and ease of future updates */}
       <div
-        className={cn(
-          'bg-gradient-sticky-custom-interactive pointer-events-none fixed top-0 left-0 z-[100] h-[769px] w-full transition-opacity duration-300 motion-reduce:transition-none',
-          showStickyHeader ? 'opacity-100' : 'opacity-0'
-        )}
+        className={`bg-gradient-sticky-custom-interactive pointer-events-none fixed top-0 left-0 z-100 h-[769px] w-full transition-opacity duration-300 motion-reduce:transition-none ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
         data-custominteractive-sticky-header
         data-visible={showStickyHeader}
         ref={stickyHeaderRef}

@@ -27,12 +27,17 @@ jobs:
           node-version: '24'
           # don't set cache: 'pnpm' here because pnpm isn't activated yet
 
-      # Activate pnpm via Corepack. If you later add "packageManager": "pnpm@x.y.z",
-      # corepack use will pick it up; otherwise we fall back to pnpm@10.
+      # Activate pnpm via Corepack using the repo's pinned version.
       - name: Enable Corepack & activate pnpm
         run: |
           corepack enable
-          corepack use || corepack prepare pnpm@10 --activate
+          # Pin to package.json#packageManager to avoid "latest 10.x" flakiness.
+          # Retry because npmjs can intermittently return 503.
+          for i in 1 2 3 4 5; do
+            corepack prepare pnpm@10.23.0 --activate && break
+            echo "pnpm activate failed (attempt $i/5). Retrying..." >&2
+            sleep 5
+          done
           pnpm -v
 
       # Fail fast on wrong lockfiles (before we spend time installing)

@@ -35,23 +35,32 @@ export const useAudioSettings = (): AudioSettings => {
 
 export const useAmbience = () => {
   const audio = useAudio();
-  return {
-    setAmbience: audio.setAmbience,
-  };
+  return useMemo(
+    () => ({
+      setAmbience: audio.setAmbience.bind(audio),
+    }),
+    [audio]
+  );
 };
 
 export const useMusic = () => {
   const audio = useAudio();
-  return {
-    setMusic: audio.setMusic,
-  };
+  return useMemo(
+    () => ({
+      setMusic: audio.setMusic.bind(audio),
+    }),
+    [audio]
+  );
 };
 
 export const useSfx = () => {
   const audio = useAudio();
-  return {
-    playSfx: audio.playSfx,
-  };
+  return useMemo(
+    () => ({
+      playSfx: audio.playSfx.bind(audio),
+    }),
+    [audio]
+  );
 };
 
 export const AudioProvider = ({ appId, children }: AudioProviderProps) => {
@@ -66,12 +75,16 @@ export const AudioProvider = ({ appId, children }: AudioProviderProps) => {
     return controller.subscribeToSettings(next => setSettings(next));
   }, [controller]);
 
-  // Attempt to unlock audio on first user gesture.
+  // Attempt to unlock audio immediately (works in kiosk mode) and on first user gesture.
   useEffect(() => {
-    const unlock = () => {
-      void controller.unlock();
-      window.removeEventListener('keydown', unlock);
-      window.removeEventListener('pointerdown', unlock);
+    void controller.unlock();
+
+    const unlock = async () => {
+      await controller.unlock();
+      if (controller.isUnlocked()) {
+        window.removeEventListener('keydown', unlock);
+        window.removeEventListener('pointerdown', unlock);
+      }
     };
 
     window.addEventListener('keydown', unlock);

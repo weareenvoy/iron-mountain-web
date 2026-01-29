@@ -3,6 +3,8 @@
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useKioskAudio } from '@/app/(displays)/(kiosks)/_components/providers/useKioskAudio';
+import { useSfx } from '@/components/providers/audio-provider';
 import { ANIMATION_DURATION_MS, type SlideId } from '../constants';
 
 export type CarouselSlide = {
@@ -55,6 +57,8 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
   const [isExiting, setIsExiting] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const timeoutRef = useRef<number | undefined>(undefined);
+  const { sfx } = useKioskAudio();
+  const { playSfx } = useSfx();
   const total = slides.length;
   const currentIndex = total > 0 ? index % total : 0;
   const current = slides[currentIndex];
@@ -80,6 +84,9 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
     // Prevent rapid clicks during transition
     if (isTransitioning) return;
 
+    if (sfx.next) {
+      playSfx(sfx.next);
+    }
     setIsTransitioning(true);
     setIsExiting(true);
 
@@ -90,12 +97,15 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
       setIsExiting(false);
       setIsTransitioning(false);
     }, ANIMATION_DURATION_MS.CAROUSEL);
-  }, [isTransitioning, slides.length]);
+  }, [isTransitioning, playSfx, sfx.next, slides.length]);
 
   const goPrev = useCallback(() => {
     // Prevent rapid clicks during transition
     if (isTransitioning) return;
 
+    if (sfx.back) {
+      playSfx(sfx.back);
+    }
     setIsTransitioning(true);
     setIsExiting(true);
 
@@ -106,7 +116,7 @@ const CircularCarousel = ({ children, onIndexChange, onIsExitingChange, slides }
       setIsExiting(false);
       setIsTransitioning(false);
     }, ANIMATION_DURATION_MS.CAROUSEL);
-  }, [isTransitioning, slides.length]);
+  }, [isTransitioning, playSfx, sfx.back, slides.length]);
 
   // Enforce 6-slide contract - UI is designed for exactly 6 dots in specific positions
   // NOTE: Positions are hardcoded for 6-slide circular layout.
