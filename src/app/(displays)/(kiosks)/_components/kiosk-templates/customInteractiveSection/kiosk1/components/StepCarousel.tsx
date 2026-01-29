@@ -1,11 +1,8 @@
 'use client';
 
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
-import { Carousel, CarouselContent } from '@/components/shadcn/carousel';
 import CarouselNavigation from './CarouselNavigation';
 import DiamondCarouselItem from './DiamondCarouselItem';
-import { useDiamondScaling } from '../hooks/useDiamondScaling';
-import type { UseEmblaCarouselType } from 'embla-carousel-react';
 
 /**
  * Step configuration for carousel items
@@ -26,8 +23,6 @@ export type Step = {
   };
 };
 
-type EmblaApi = UseEmblaCarouselType[1];
-
 type StepCarouselProps = {
   readonly onStepClick: (index: number) => void;
   readonly steps: readonly Step[];
@@ -43,97 +38,49 @@ const LAYOUT = {
 } as const;
 
 /**
- * Animation configuration for diamond transitions
- */
-const DIAMOND_TRANSITION = {
-  DURATION: 0.5,
-  EASE: [0.3, 0, 0.4, 1] as const,
-} as const;
-
-/**
- * Distance from center to identify edge slides
- */
-const EDGE_OFFSET = 2;
-
-/**
  * StepCarousel - Horizontally scrolling carousel of diamond-shaped steps
  * Features staggered entrance animations, size/color transitions, and modal integration
+ *
+ * NOTE: This component is designed specifically for kiosk-1 with exactly 5 steps.
+ * Layout offsets and sizing are hardcoded for the 5-item diamond configuration.
+ * If dynamic item counts are needed, consider refactoring the layout math.
  */
 const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
-  const [emblaApi, setEmblaApi] = useState<EmblaApi | undefined>(undefined);
-  const hasAppliedInitialAlignment = useRef(false);
   const [selectedIndex, setSelectedIndex] = useState(() => Math.min(steps.length - 1, LAYOUT.INITIAL_CENTER_INDEX));
   const [shouldAnimate, setShouldAnimate] = useState(false);
   const [pressedIndex, setPressedIndex] = useState<null | number>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const transitionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const selectedIndexRef = useRef(selectedIndex);
   const isTransitioningRef = useRef(false);
   const totalSlides = steps.length;
-
-  // Use diamond scaling hook for edge transforms
-  const applyEdgeTransforms = useDiamondScaling(emblaApi, totalSlides);
 
   // Keep selectedIndexRef in sync
   useEffect(() => {
     selectedIndexRef.current = selectedIndex;
   }, [selectedIndex]);
 
-  // Embla event listeners - update selectedIndex only on snap changes (not continuous scroll)
+  // Track transition state when selectedIndex changes
+  // Uses transitionend event for accurate transition completion detection
   useEffect(() => {
-    if (!emblaApi) return undefined;
-    const handleSelect = () => {
-      const nextIndex = emblaApi.selectedScrollSnap();
-      const prevIndex = selectedIndexRef.current;
+    isTransitioningRef.current = true;
 
-      // Only update state if index actually changed
-      if (nextIndex !== prevIndex) {
-        setSelectedIndex(nextIndex);
+    const container = containerRef.current;
+    if (!container) return;
 
-        // Mark as transitioning when selection changes
-        isTransitioningRef.current = true;
-
-        // Clear any existing timeout
-        if (transitionTimeoutRef.current) {
-          clearTimeout(transitionTimeoutRef.current);
-        }
-
-        // Clear transition state after animation completes
-        transitionTimeoutRef.current = setTimeout(
-          () => {
-            isTransitioningRef.current = false;
-            transitionTimeoutRef.current = null;
-          },
-          DIAMOND_TRANSITION.DURATION * 1000 + 100
-        );
+    // Listen for transitionend on any diamond element
+    const handleTransitionEnd = (e: TransitionEvent) => {
+      // Only respond to transform transitions on diamond containers
+      if (e.propertyName === 'transform' && (e.target as HTMLElement).classList.contains('absolute')) {
+        isTransitioningRef.current = false;
       }
     };
-    emblaApi.on('reInit', handleSelect);
-    emblaApi.on('select', handleSelect);
-    handleSelect(); // Initial call
+
+    container.addEventListener('transitionend', handleTransitionEnd);
+
     return () => {
-      emblaApi.off('select', handleSelect);
-      emblaApi.off('reInit', handleSelect);
-      if (transitionTimeoutRef.current) {
-        clearTimeout(transitionTimeoutRef.current);
-        transitionTimeoutRef.current = null;
-      }
+      container.removeEventListener('transitionend', handleTransitionEnd);
     };
-  }, [emblaApi]);
-
-  // Initial alignment and transform application
-  useEffect(() => {
-    if (!emblaApi || totalSlides === 0 || hasAppliedInitialAlignment.current) return;
-    const desiredIndex = Math.min(totalSlides - 1, LAYOUT.INITIAL_CENTER_INDEX);
-    hasAppliedInitialAlignment.current = true;
-    emblaApi.scrollTo(desiredIndex, true);
-
-    // Apply edge transforms after scroll completes
-    // Use RAF to ensure Embla has finished positioning
-    requestAnimationFrame(() => {
-      applyEdgeTransforms(desiredIndex);
-    });
-  }, [applyEdgeTransforms, emblaApi, totalSlides]);
+  }, [selectedIndex]);
 
   /**
    * Detect when carousel becomes visible to trigger animations
@@ -169,24 +116,15 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
     };
   }, []);
 
-  // Cleanup: Destroy Embla instance on unmount to prevent memory leaks
-  useEffect(() => {
-    return () => {
-      emblaApi?.destroy();
-    };
-  }, [emblaApi]);
-
   const handlePrev = useCallback(() => {
-    if (!emblaApi || totalSlides === 0) return;
-    const target = (selectedIndex - 1 + totalSlides) % totalSlides;
-    emblaApi.scrollTo(target);
-  }, [emblaApi, selectedIndex, totalSlides]);
+    if (totalSlides === 0) return;
+    setSelectedIndex(prev => (prev - 1 + totalSlides) % totalSlides);
+  }, [totalSlides]);
 
   const handleNext = useCallback(() => {
-    if (!emblaApi || totalSlides === 0) return;
-    const target = (selectedIndex + 1) % totalSlides;
-    emblaApi.scrollTo(target);
-  }, [emblaApi, selectedIndex, totalSlides]);
+    if (totalSlides === 0) return;
+    setSelectedIndex(prev => (prev + 1) % totalSlides);
+  }, [totalSlides]);
 
   /**
    * Handle diamond click - navigates to inactive diamonds, opens modal for active
@@ -202,14 +140,10 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
       if (idx === selectedIndexRef.current && !isTransitioningRef.current) {
         onStepClick(idx);
       } else if (idx !== selectedIndexRef.current) {
-        // Otherwise, navigate to this diamond
-        if (!emblaApi) {
-          return;
-        }
-        emblaApi.scrollTo(idx);
+        setSelectedIndex(idx);
       }
     },
-    [emblaApi, onStepClick]
+    [onStepClick]
   );
 
   // Early return for empty steps (after all hooks)
@@ -223,57 +157,75 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
 
   return (
     <div className="absolute top-[1980px] left-0 w-full overflow-visible" ref={containerRef}>
-      <Carousel
-        className="w-full overflow-visible [&_.embla__container]:overflow-visible [&_.embla__viewport]:overflow-visible [&>div]:overflow-visible"
-        opts={{
-          align: 'center',
-          containScroll: false,
-          dragFree: false,
-          loop: true,
-          slidesToScroll: 1,
-          startIndex: Math.min(steps.length - 1, LAYOUT.INITIAL_CENTER_INDEX),
-        }}
-        setApi={setEmblaApi}
-      >
-        <CarouselContent className="flex items-center gap-[60px] overflow-visible px-0">
+      <div className="relative flex w-full items-center justify-center">
+        <div className="relative flex h-[800px] w-full items-center justify-center">
           {steps.map((step, idx) => {
-            const isActive = idx === selectedIndex;
-            const leftIndex = (selectedIndex - EDGE_OFFSET + totalSlides) % totalSlides;
-            const rightIndex = (selectedIndex + EDGE_OFFSET) % totalSlides;
-            const isLeftEdge = idx === leftIndex;
-            const isRightEdge = idx === rightIndex;
-            const inactiveSize = isLeftEdge || isRightEdge ? LAYOUT.DIAMOND_SIZE_EDGE : LAYOUT.DIAMOND_SIZE_MIDDLE;
+            // Calculate circular position relative to selected index
+            let relativePos = idx - selectedIndex;
 
-            // Determine animation config based on position relative to center
-            const leftMiddleIndex = (selectedIndex - 1 + totalSlides) % totalSlides;
-            const rightMiddleIndex = (selectedIndex + 1) % totalSlides;
-            const isMiddle = idx === leftMiddleIndex || idx === rightMiddleIndex;
+            // Wrap around: normalize to range -2 to +2
+            if (relativePos > 2) relativePos -= totalSlides;
+            if (relativePos < -2) relativePos += totalSlides;
+
+            const isActive = relativePos === 0;
+            const isLeftEdge = relativePos === -2;
+            const isRightEdge = relativePos === 2;
+            const isMiddle = relativePos === -1 || relativePos === 1;
+            const inactiveSize = isLeftEdge || isRightEdge ? LAYOUT.DIAMOND_SIZE_EDGE : LAYOUT.DIAMOND_SIZE_MIDDLE;
             const isOuter = isLeftEdge || isRightEdge;
 
+            // Calculate horizontal offset based on position
+            const getOffset = () => {
+              switch (relativePos) {
+                case -2:
+                  return -1000;
+                case -1:
+                  return -600;
+                case 0:
+                  return 0;
+                case 1:
+                  return 600;
+                case 2:
+                  return 1000;
+                default:
+                  return 0;
+              }
+            };
+
             return (
-              <DiamondCarouselItem
-                idx={idx}
-                inactiveSize={inactiveSize}
-                isActive={isActive}
-                isLeftEdge={isLeftEdge}
-                isMiddle={isMiddle}
-                isOuter={isOuter}
-                isRightEdge={isRightEdge}
+              <div
+                className="absolute left-1/2 transition-[transform,opacity] duration-500 ease-[cubic-bezier(0.3,0,0.6,1)]"
                 key={`${idx}-${step.label}`}
-                onClick={handleDiamondClickOrOpen}
-                onPointerCancel={() => setPressedIndex(null)}
-                onPointerDown={() => isActive && setPressedIndex(idx)}
-                onPointerLeave={() => setPressedIndex(null)}
-                onPointerUp={() => setPressedIndex(null)}
-                pressedIndex={pressedIndex}
-                shouldAnimate={shouldAnimate}
-                step={step}
-              />
+                style={{
+                  opacity: relativePos >= -2 && relativePos <= 2 ? 1 : 0,
+                  pointerEvents: relativePos >= -2 && relativePos <= 2 ? 'auto' : 'none',
+                  transform: `translateX(calc(-50% + ${getOffset()}px))`,
+                  zIndex: isActive ? 10 : isOuter ? 5 : 1,
+                }}
+              >
+                <DiamondCarouselItem
+                  idx={idx}
+                  inactiveSize={inactiveSize}
+                  isActive={isActive}
+                  isLeftEdge={isLeftEdge}
+                  isMiddle={isMiddle}
+                  isOuter={isOuter}
+                  isRightEdge={isRightEdge}
+                  onClick={handleDiamondClickOrOpen}
+                  onPointerCancel={() => setPressedIndex(null)}
+                  onPointerDown={() => isActive && setPressedIndex(idx)}
+                  onPointerLeave={() => setPressedIndex(null)}
+                  onPointerUp={() => setPressedIndex(null)}
+                  pressedIndex={pressedIndex}
+                  shouldAnimate={shouldAnimate}
+                  step={step}
+                />
+              </div>
             );
           })}
-        </CarouselContent>
+        </div>
         <CarouselNavigation onNext={handleNext} onPrev={handlePrev} />
-      </Carousel>
+      </div>
     </div>
   );
 };

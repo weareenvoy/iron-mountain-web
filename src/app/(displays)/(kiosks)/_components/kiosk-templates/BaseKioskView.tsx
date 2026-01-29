@@ -11,6 +11,7 @@ import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers/kiosk-
 import { SCROLL_DURATION_MS } from '@/app/(displays)/(kiosks)/_constants/timing';
 import { useKioskArrowStore } from '@/app/(displays)/(kiosks)/_stores/useKioskArrowStore';
 import { determineCurrentSection } from '@/app/(displays)/(kiosks)/_utils/section-utils';
+import { cn } from '@/lib/tailwind/utils/cn';
 import type { KioskConfig } from '@/app/(displays)/(kiosks)/_types/kiosk-config';
 
 // Base component shared by all three kiosks. Accepts a config object that defines kiosk-specific settings (diamond mapping, arrow positioning, etc.)
@@ -93,6 +94,12 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
     kioskId,
   });
 
+  // Disable up arrow when on challenge first video or initial screen
+  // Rationale: The button click animation on the cover screen (cover-ambient-initial) removes all visible content,
+  // making it impossible to navigate back to that section. Disabling navigation back ensures smooth UX.
+  const canNavigateUp =
+    currentScrollTarget !== 'challenge-first-video' && currentScrollTarget !== 'cover-ambient-initial';
+
   // Improved empty slides state handling
   if (slides.length === 0) {
     if (!kioskData) {
@@ -139,7 +146,7 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
           if (slide.id === 'challenge-third') heightClass = 'h-[150vh]';
 
           return (
-            <div className={`${heightClass} w-full flex-shrink-0`} data-slide-index={idx} key={slide.id}>
+            <div className={cn(heightClass, 'w-full flex-shrink-0')} data-slide-index={idx} key={slide.id}>
               {slide.render()}
             </div>
           );
@@ -161,12 +168,18 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
               right: arrowConfig.positionRight,
               top: arrowConfig.positionTop,
             }}
-            transition={{ duration: arrowConfig.fadeDuration, ease: 'easeOut' }}
+            transition={{ duration: arrowConfig.fadeDuration, ease: [0.3, 0, 0.6, 1] }}
           >
             <div
+              aria-disabled={!canNavigateUp}
               aria-label="Previous"
-              className="flex cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95 active:opacity-40 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
-              onPointerDown={handleNavigateUp}
+              className={cn(
+                'flex items-center justify-center transition-transform',
+                canNavigateUp
+                  ? 'cursor-pointer hover:scale-110 active:scale-95 active:opacity-40 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]'
+                  : 'cursor-not-allowed opacity-30'
+              )}
+              onPointerDown={canNavigateUp ? handleNavigateUp : undefined}
               role="button"
               style={{
                 // Inline because Tailwind will not include styles from runtime config

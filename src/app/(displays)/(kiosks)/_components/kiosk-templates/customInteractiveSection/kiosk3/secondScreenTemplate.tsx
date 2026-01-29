@@ -1,7 +1,7 @@
 'use client';
 
 import { useInView } from 'framer-motion';
-import { memo, useRef } from 'react';
+import { memo, useCallback, useRef } from 'react';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
 import CarouselState from './components/CarouselState';
 import InitialState from './components/InitialState';
@@ -34,6 +34,8 @@ export type Kiosk3SecondScreenProps = {
   readonly launchDemoLabel?: string;
   /** Callback when back button is clicked */
   readonly onBack?: () => void;
+  /** Callback when demo is closed */
+  readonly onEndTour?: () => void;
   /** Demo overlay configuration */
   readonly overlay?: {
     readonly cardLabel?: string;
@@ -86,6 +88,7 @@ const Kiosk3SecondScreenTemplate = memo(
     headline,
     launchDemoLabel,
     onBack,
+    onEndTour,
     overlay,
     slides,
     tapToBeginLabel,
@@ -111,6 +114,12 @@ const Kiosk3SecondScreenTemplate = memo(
     // Use constant empty array to prevent unnecessary re-renders when slides is undefined
     const safeSlides = slides ?? EMPTY_SLIDES;
     const hasValidVideo = Boolean(videoAsset && videoAsset.trim().length > 0);
+
+    // Handler for demo end tour
+    const handleDemoEndTour = useCallback(() => {
+      handleHideOverlay();
+      onEndTour?.();
+    }, [handleHideOverlay, onEndTour]);
 
     // Early return for invalid data - no cleanup needed as component won't mount
     if (safeSlides.length === 0 || !headline || !hasValidVideo || !videoAsset) {
@@ -179,7 +188,7 @@ const Kiosk3SecondScreenTemplate = memo(
               headline={overlay?.headline}
               heroImageAlt={overlay?.heroImageAlt}
               heroImageSrc={overlay?.heroImageSrc}
-              onEndTour={handleHideOverlay}
+              onEndTour={handleDemoEndTour}
             />
           </div>
         )}

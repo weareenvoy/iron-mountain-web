@@ -137,7 +137,9 @@ export function useIntersectionDetection({
       sectionEndObserver.observe(lastScreen);
       observers.push(sectionEndObserver);
     } catch (error) {
-      console.error(`[useIntersectionDetection] Failed to setup observers for section "${sectionName}":`, error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error(`[useIntersectionDetection] Failed to setup observers for section "${sectionName}":`, error);
+      }
       return undefined;
     }
 

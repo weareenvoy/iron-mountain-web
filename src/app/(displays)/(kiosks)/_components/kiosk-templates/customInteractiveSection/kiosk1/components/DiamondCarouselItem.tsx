@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { CirclePlus } from 'lucide-react';
 import { memo } from 'react';
 import { CarouselItem } from '@/components/shadcn/carousel';
 import HCBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCBlueDiamond';
@@ -22,7 +23,7 @@ const LAYOUT = {
 const DIAMOND_ANIMATION = {
   CENTER: { delay: 0.3, startY: -120 },
   DURATION: 0.8,
-  EASE: [0.3, 0, 0.4, 1] as const,
+  EASE: [0.3, 0, 0.6, 1] as const,
   MIDDLE: { delay: 0.15, startY: -350 },
   OUTER: { delay: 0, startY: -550 },
 } as const;
@@ -32,7 +33,7 @@ const DIAMOND_ANIMATION = {
  */
 const DIAMOND_TRANSITION = {
   DURATION: 0.5,
-  EASE: [0.3, 0, 0.4, 1] as const,
+  EASE: [0.3, 0, 0.6, 1] as const,
 } as const;
 
 /**
@@ -93,7 +94,12 @@ const DiamondCarouselItem = ({
 
   return (
     <CarouselItem
-      className={cn('shrink-0 grow-0 basis-[560px] pl-0', isActive && 'z-10')}
+      className={cn(
+        'shrink-0 grow-0 basis-[560px] pl-0',
+        isActive && 'z-10',
+        isOuter && !isActive && 'z-[5]',
+        !isActive && !isOuter && 'z-[1]'
+      )}
       data-slide-index={idx}
       key={`${idx}-${step.label}`}
     >
@@ -176,8 +182,8 @@ const DiamondCarouselItem = ({
                 }}
                 className={
                   isActive
-                    ? 'w-[340px] origin-center text-[61px] leading-[1.3] tracking-[-3px]'
-                    : 'w-[300px] origin-center text-[61px] leading-[1.3] tracking-[-2.1px]'
+                    ? 'w-[420px] origin-center text-[61px] leading-[1.3] tracking-[-3px]'
+                    : 'w-[420px] origin-center text-[61px] leading-[1.3] tracking-[-2.1px]'
                 }
                 transition={{
                   duration: DIAMOND_TRANSITION.DURATION,
@@ -188,6 +194,12 @@ const DiamondCarouselItem = ({
               </motion.span>
             </div>
           </button>
+          {/* CirclePlus icon for active diamond - indicates clickability */}
+          {isActive && (
+            <div className="pointer-events-none absolute right-[390px] bottom-[160px] z-[100] flex items-center justify-center">
+              <CirclePlus aria-hidden="true" className="h-[100px] w-[100px]" color="#14477d" strokeWidth={2} />
+            </div>
+          )}
         </div>
       </motion.div>
     </CarouselItem>
