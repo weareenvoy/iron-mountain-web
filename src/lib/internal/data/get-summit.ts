@@ -36,9 +36,7 @@ export async function getSummitData(tourId?: string): Promise<SummitDataResponse
     }
 
     // Online first
-    // TODO BE ask. We need to get each tour's summit data for summit website.
-    // const res = await fetch(`${API_BASE}/summit${tourId ? `/${tourId}` : ''}`, {
-    const res = await fetch(`${API_BASE}/summit_room`, {
+    const res = await fetch(`${API_BASE}/summit_room?tour_id=${tourId}`, {
       cache: 'no-store',
       signal: controller.signal,
     });
