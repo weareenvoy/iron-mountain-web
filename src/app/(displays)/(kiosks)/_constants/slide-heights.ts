@@ -7,25 +7,8 @@
  *
  * ARCHITECTURE DECISION: Dynamic Gradient Heights via CMS Content
  *
- * Problem:
- * - Kiosk content is managed through a CMS and varies per kiosk instance
- * - Different kiosks may show/hide different sections (grid, accordion, custom interactives)
- * - Background gradients must extend to cover all visible content
- * - Cannot use CSS-only solutions due to absolute positioning and stacked sections
- *
- * Solution:
- * - Hardcoded height constants for each slide template type
- * - Runtime calculation based on which slides are actually rendered
- * - Heights are additive (sum of all rendered templates in a section)
- *
- * Trade-offs:
- * - ✅ Gradients always match content height regardless of CMS configuration
- * - ✅ No layout shift or visual gaps between sections
- * - ✅ Supports dynamic content insertion/removal via CMS
- * - ❌ Heights must be measured and maintained manually
- * - ❌ Design changes require updating constants
- * - ❌ Not responsive to different display resolutions (2160p fixed)
- *
+ * Dynamic Gradient heights are in place to have the build respond to CMS content being added or removed from the API payload.
+ *  
  * Future Improvements:
  * - Consider IntersectionObserver-based dynamic measurement
  * - Add validation/warnings for missing or outdated height values
