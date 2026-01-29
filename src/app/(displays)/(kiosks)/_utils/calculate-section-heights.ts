@@ -5,6 +5,11 @@
  * - Which templates are present in the data
  * - The kiosk variant (kiosk-1, kiosk-2, kiosk-3)
  * - Content-specific height variations (e.g., animated vs static carousels)
+ *
+ * Error Handling:
+ * - Returns 0 for missing/invalid sections (graceful degradation)
+ * - Logs warnings in development for debugging
+ * - Production behavior: silent fallback to prevent display errors
  */
 
 import {
@@ -12,6 +17,8 @@ import {
   CUSTOM_INTERACTIVE_HEIGHTS,
   GRADIENT_START_POSITIONS,
   SOLUTION_HEIGHTS,
+  type CustomInteractiveNumber,
+  type GradientSection,
 } from '@/app/(displays)/(kiosks)/_constants/slide-heights';
 import type { Slide } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/slides';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
@@ -119,17 +126,31 @@ export const calculateCustomInteractiveGradientHeights = (slides: Slide[]): numb
       });
 
       // Extract custom interactive number from slide ID (e.g., -ci1, -ci2, -ci3)
-      let customInteractiveNumber: '1' | '2' | '3' = '1'; // Default to 1
+      let customInteractiveNumber: CustomInteractiveNumber = '1'; // Default to 1
       for (const slide of instanceSlides) {
         const ciMatch = slide.id.match(/-ci(\d)/);
-        if (ciMatch) {
-          customInteractiveNumber = ciMatch[1] as '1' | '2' | '3';
-          break;
+        if (ciMatch?.[1]) {
+          const extractedNumber = ciMatch[1];
+          // Validate extracted number is valid
+          if (extractedNumber === '1' || extractedNumber === '2' || extractedNumber === '3') {
+            customInteractiveNumber = extractedNumber;
+            break;
+          }
         }
       }
 
       // Get heights specific to this custom interactive number
       const heights = CUSTOM_INTERACTIVE_HEIGHTS[customInteractiveNumber];
+
+      if (!heights) {
+        if (process.env.NODE_ENV === 'development') {
+          console.warn(
+            `[calculateCustomInteractiveGradientHeights] Missing height config for CI${customInteractiveNumber}`
+          );
+        }
+        return; // Skip this instance
+      }
+
       let totalHeight = 0;
 
       // Check which screens exist in the instanceSlides array
@@ -164,10 +185,7 @@ export const calculateSectionGradientHeights = (slides: Slide[], kioskId: KioskI
 /**
  * Get the gradient start position (top offset) for a section
  */
-export const getGradientStartPosition = (
-  section: 'challenge' | 'customInteractive' | 'solution' | 'value',
-  kioskId: KioskId
-): number => {
+export const getGradientStartPosition = (section: GradientSection, kioskId: KioskId): number => {
   const sectionPositions = GRADIENT_START_POSITIONS[section];
   if (!sectionPositions) return 0;
   return sectionPositions[kioskId];

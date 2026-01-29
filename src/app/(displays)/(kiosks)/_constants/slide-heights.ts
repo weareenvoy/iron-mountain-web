@@ -4,9 +4,49 @@
  *
  * These values are used to calculate dynamic gradient background heights
  * that adapt to which templates are present in the content.
+ *
+ * ARCHITECTURE DECISION: Dynamic Gradient Heights via CMS Content
+ *
+ * Problem:
+ * - Kiosk content is managed through a CMS and varies per kiosk instance
+ * - Different kiosks may show/hide different sections (grid, accordion, custom interactives)
+ * - Background gradients must extend to cover all visible content
+ * - Cannot use CSS-only solutions due to absolute positioning and stacked sections
+ *
+ * Solution:
+ * - Hardcoded height constants for each slide template type
+ * - Runtime calculation based on which slides are actually rendered
+ * - Heights are additive (sum of all rendered templates in a section)
+ *
+ * Trade-offs:
+ * - ✅ Gradients always match content height regardless of CMS configuration
+ * - ✅ No layout shift or visual gaps between sections
+ * - ✅ Supports dynamic content insertion/removal via CMS
+ * - ❌ Heights must be measured and maintained manually
+ * - ❌ Design changes require updating constants
+ * - ❌ Not responsive to different display resolutions (2160p fixed)
+ *
+ * Future Improvements:
+ * - Consider IntersectionObserver-based dynamic measurement
+ * - Add validation/warnings for missing or outdated height values
+ * - Document measurement process for designers/developers
  */
 
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
+
+/**
+ * Section identifiers for gradient positioning
+ */
+export type GradientSection = 'challenge' | 'customInteractive' | 'solution' | 'value';
+
+/**
+ * Custom Interactive identifier (string for JSON compatibility)
+ * Uses string literals '1', '2', '3' instead of numbers to match:
+ * - JSON content structure where customInteractive1/2/3 are keys
+ * - Regex extraction from slide IDs (e.g., "customInteractive-0-first-ci3")
+ * - CMS field naming conventions
+ */
+export type CustomInteractiveNumber = '1' | '2' | '3';
 
 /**
  * Standard screen height (100vh equivalent in pixels at 2160p)
@@ -17,6 +57,13 @@ export const SCREEN_HEIGHT = 2160;
  * Heights for Challenge section templates
  * Note: These values include content that extends beyond viewport height
  */
+const CHALLENGE_HEIGHTS_COMMON = {
+  firstScreen: 4780,
+  initialScreen: SCREEN_HEIGHT,
+  secondScreen: 4780,
+  thirdScreen: 4780,
+};
+
 export const CHALLENGE_HEIGHTS: Record<
   KioskId,
   {
@@ -30,24 +77,12 @@ export const CHALLENGE_HEIGHTS: Record<
     thirdScreen: number;
   }
 > = {
-  'kiosk-1': {
-    firstScreen: 4780,
-    initialScreen: SCREEN_HEIGHT,
-    secondScreen: 4780,
-    thirdScreen: 4780,
-  },
+  'kiosk-1': CHALLENGE_HEIGHTS_COMMON,
   'kiosk-2': {
-    firstScreen: 4780,
-    initialScreen: SCREEN_HEIGHT,
-    secondScreen: 4780,
-    thirdScreen: 4830,
+    ...CHALLENGE_HEIGHTS_COMMON,
+    thirdScreen: 4830, // Override: Kiosk 2 has slightly taller third screen
   },
-  'kiosk-3': {
-    firstScreen: 4780,
-    initialScreen: SCREEN_HEIGHT,
-    secondScreen: 4780,
-    thirdScreen: 4780,
-  },
+  'kiosk-3': CHALLENGE_HEIGHTS_COMMON,
 };
 
 /**
@@ -55,6 +90,13 @@ export const CHALLENGE_HEIGHTS: Record<
  * Note: These are averaged heights based on typical content configurations
  * Actual heights will vary based on number of secondScreen instances
  */
+const SOLUTION_HEIGHTS_COMMON = {
+  firstScreen: 4230,
+  fourthScreen: 5210,
+  secondScreen: 3644,
+  thirdScreen: 6695,
+};
+
 export const SOLUTION_HEIGHTS: Record<
   KioskId,
   {
@@ -69,32 +111,32 @@ export const SOLUTION_HEIGHTS: Record<
   }
 > = {
   'kiosk-1': {
-    firstScreen: 4230,
-    fourthScreen: 5215,
-    secondScreen: 3644,
-    thirdScreen: 6695,
+    ...SOLUTION_HEIGHTS_COMMON,
+    fourthScreen: 5215, // Override: Kiosk 1 has slightly taller accordion
+    thirdScreen: 6695, // Override: Kiosk 1 has taller grid
   },
   'kiosk-2': {
-    firstScreen: 4230,
-    fourthScreen: 5210,
-    secondScreen: 3644,
-    thirdScreen: 6645,
+    ...SOLUTION_HEIGHTS_COMMON,
+    thirdScreen: 6645, // Override: Kiosk 2 has shorter grid
   },
-  'kiosk-3': {
-    firstScreen: 4230,
-    fourthScreen: 5210,
-    secondScreen: 3644,
-    thirdScreen: 6695,
-  },
+  'kiosk-3': SOLUTION_HEIGHTS_COMMON,
 };
 
 /**
  * Heights for Custom Interactive section templates
  * Organized by custom interactive number (1, 2, 3) since each custom interactive
  * has its own specific heights regardless of which kiosk it's displayed on
+ *
+ * Note: All custom interactives currently share the same height values, but are
+ * separated to allow future customization per interactive without code changes
  */
+const CUSTOM_INTERACTIVE_HEIGHTS_COMMON = {
+  firstScreen: 5215,
+  secondScreen: 5215,
+};
+
 export const CUSTOM_INTERACTIVE_HEIGHTS: Record<
-  '1' | '2' | '3',
+  CustomInteractiveNumber,
   {
     /** Height of the first screen */
     firstScreen: number;
@@ -102,24 +144,22 @@ export const CUSTOM_INTERACTIVE_HEIGHTS: Record<
     secondScreen: number;
   }
 > = {
-  '1': {
-    firstScreen: 5215,
-    secondScreen: 5215,
-  },
-  '2': {
-    firstScreen: 5215,
-    secondScreen: 5215,
-  },
-  '3': {
-    firstScreen: 5215,
-    secondScreen: 5215,
-  },
+  '1': CUSTOM_INTERACTIVE_HEIGHTS_COMMON,
+  '2': CUSTOM_INTERACTIVE_HEIGHTS_COMMON,
+  '3': CUSTOM_INTERACTIVE_HEIGHTS_COMMON,
 };
 
 /**
  * Heights for Value section templates
  * Note: Value section has dynamic height based on carousel type
+ * All kiosks currently share identical value section heights
  */
+const VALUE_HEIGHTS_COMMON = {
+  animatedCarouselHeight: 4150,
+  baseHeight: 1060,
+  staticCarouselHeight: 9360,
+};
+
 export const VALUE_HEIGHTS: Record<
   KioskId,
   {
@@ -131,28 +171,16 @@ export const VALUE_HEIGHTS: Record<
     staticCarouselHeight: number;
   }
 > = {
-  'kiosk-1': {
-    animatedCarouselHeight: 4150,
-    baseHeight: 1060,
-    staticCarouselHeight: 9360,
-  },
-  'kiosk-2': {
-    animatedCarouselHeight: 4150,
-    baseHeight: 1060,
-    staticCarouselHeight: 9360,
-  },
-  'kiosk-3': {
-    animatedCarouselHeight: 4150,
-    baseHeight: 1060,
-    staticCarouselHeight: 9360,
-  },
+  'kiosk-1': VALUE_HEIGHTS_COMMON,
+  'kiosk-2': VALUE_HEIGHTS_COMMON,
+  'kiosk-3': VALUE_HEIGHTS_COMMON,
 };
 
 /**
  * Gradient start positions (top offset) for each section
  * These determine where the gradient background begins
  */
-export const GRADIENT_START_POSITIONS: Record<string, Record<KioskId, number>> = {
+export const GRADIENT_START_POSITIONS: Record<GradientSection, Record<KioskId, number>> = {
   challenge: {
     'kiosk-1': 1290,
     'kiosk-2': 1290,

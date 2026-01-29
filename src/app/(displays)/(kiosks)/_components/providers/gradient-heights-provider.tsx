@@ -15,7 +15,7 @@ type GradientHeightsContextValue = SectionHeights & {
   /**
    * Get the gradient height for a specific custom interactive instance
    * @param index - The index of the custom interactive (0-based)
-   * @returns The gradient height in pixels, or 0 if not found
+   * @returns The gradient height in pixels, or 0 if index is out of bounds
    */
   getCustomInteractiveHeight: (index: number) => number;
 };
@@ -30,7 +30,29 @@ type GradientHeightsProviderProps = {
 export const GradientHeightsProvider = ({ children, heights }: GradientHeightsProviderProps) => {
   const value: GradientHeightsContextValue = {
     ...heights,
-    getCustomInteractiveHeight: (index: number) => heights.customInteractive[index] ?? 0,
+    getCustomInteractiveHeight: (index: number) => {
+      // Validate index bounds
+      if (index < 0 || index >= heights.customInteractive.length) {
+        if (process.env.NODE_ENV === 'development') {
+          console.warn(
+            `[GradientHeightsProvider] Custom interactive index ${index} out of bounds (0-${heights.customInteractive.length - 1})`
+          );
+        }
+        return 0;
+      }
+
+      const height = heights.customInteractive[index];
+
+      // Additional safety check for undefined values
+      if (height === undefined || height === null) {
+        if (process.env.NODE_ENV === 'development') {
+          console.warn(`[GradientHeightsProvider] No height found for custom interactive at index ${index}`);
+        }
+        return 0;
+      }
+
+      return height;
+    },
   };
 
   return <GradientHeightsContext.Provider value={value}>{children}</GradientHeightsContext.Provider>;

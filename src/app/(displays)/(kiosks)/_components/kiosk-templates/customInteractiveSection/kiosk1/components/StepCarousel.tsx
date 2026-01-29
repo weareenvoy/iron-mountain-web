@@ -49,9 +49,13 @@ const DIAMOND_TRANSITION = {
  * StepCarousel - Horizontally scrolling carousel of diamond-shaped steps
  * Features staggered entrance animations, size/color transitions, and modal integration
  *
- * NOTE: This component is designed specifically for kiosk-1 with exactly 5 steps.
- * Layout offsets and sizing are hardcoded for the 5-item diamond configuration.
- * If dynamic item counts are needed, consider refactoring the layout math.
+ * DESIGN CONSTRAINT: This component is designed specifically for kiosk-1 with exactly 5 steps.
+ * Layout offsets and sizing are hardcoded for the 5-item diamond configuration to match
+ * the approved design specifications.
+ *
+ * IMPLEMENTATION NOTE: While wrap-around math uses totalSlides for flexibility, the component
+ * is optimized and tested for 5 items only. Different item counts may produce unexpected
+ * positioning or z-index layering behavior.
  */
 const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
   const [selectedIndex, setSelectedIndex] = useState(() => Math.min(steps.length - 1, LAYOUT.INITIAL_CENTER_INDEX));
@@ -188,16 +192,17 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
             const isOuter = isLeftEdge || isRightEdge;
 
             // Calculate z-index based on distance from center (closer = higher z-index)
+            // This ensures clicking on middle diamonds doesn't accidentally trigger edge diamonds
             const getZIndex = () => {
               switch (relativePos) {
                 case 0:
-                  return 50; // Active (center)
+                  return 10; // Active (center)
                 case -1:
                 case 1:
-                  return 30; // Middle (directly adjacent)
+                  return 7; // Middle (directly adjacent)
                 case -2:
                 case 2:
-                  return 10; // Edge (far left/right)
+                  return 4; // Edge (far left/right)
                 default:
                   return 0;
               }
