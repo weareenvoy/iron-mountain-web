@@ -36,7 +36,7 @@ export async function getSummitData(tourId?: string): Promise<SummitDataResponse
     }
 
     // Online first
-    const res = await fetch(`${API_BASE}/summit_room?tour_id=${tourId}`, {
+    const res = await fetch(`${API_BASE}/summit_room${tourId ? `?tour_id=${tourId}` : ''}`, {
       cache: 'no-store',
       signal: controller.signal,
     });
