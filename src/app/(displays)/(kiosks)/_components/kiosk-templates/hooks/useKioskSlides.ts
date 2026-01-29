@@ -278,16 +278,6 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
 
   // Build slides
   const slides = useMemo(() => {
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`[useKioskSlides] ${kioskId} - Building slides...`, {
-        hasChallenges: !!challenges,
-        hasSolutionAccordion: !!solutionAccordion,
-        hasSolutionGrid: !!solutionGrid,
-        hasValues: !!values,
-        customInteractivesCount: customInteractives.length,
-      });
-    }
-
     // Log missing sections for debugging
     if (!challenges || (!solutionAccordion && !solutionGrid) || !values || customInteractives.length === 0) {
       const missing: string[] = [];
@@ -297,15 +287,20 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
       if (customInteractives.length === 0) missing.push('customInteractive');
 
       if (process.env.NODE_ENV === 'development') {
-        console.error(`[useKioskSlides] ${kioskId} - Missing required sections:`, missing.join(', '));
+        console.warn(`[useKioskSlides] Kiosk ${kioskId} missing sections:`, missing.join(', '));
       }
 
       return [];
     }
 
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`[useKioskSlides] ${kioskId} - All sections present, building slides...`);
-    }
+    // Merge solution screens from both grid and accordion
+    // Grid provides: firstScreen, secondScreen, thirdScreen
+    // Accordion provides: firstScreen, secondScreen, fourthScreen
+    // Result: firstScreen, secondScreen, thirdScreen (if grid exists), fourthScreen (if accordion exists)
+    const mergedSolutionScreens = {
+      ...(solutionGrid ?? {}),
+      ...(solutionAccordion ?? {}),
+    };
 
     return [
       ...buildChallengeSlides(challenges, kioskId, globalHandlers, {
@@ -314,20 +309,12 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
         },
         onInitialButtonClick: handleInitialButtonClick,
       }),
-      // Build accordion slides if accordion has content
-      ...(solutionAccordion
-        ? buildSolutionSlides(solutionAccordion, kioskId, {
-            ...globalHandlers,
-            onRegisterListHandlers: handleRegisterListHandlers,
-          })
-        : []),
-      // Build grid slides if grid has content
-      ...(solutionGrid
-        ? buildSolutionSlides(solutionGrid, kioskId, {
-            ...globalHandlers,
-            onRegisterListHandlers: handleRegisterListHandlers,
-          })
-        : []),
+      // Build solution slides from merged data
+      // Order: first, second, third (if from grid), fourth (if from accordion)
+      ...buildSolutionSlides(mergedSolutionScreens, kioskId, {
+        ...globalHandlers,
+        onRegisterListHandlers: handleRegisterListHandlers,
+      }),
       ...buildValueSlides(values, kioskId, globalHandlers, {
         registerCarouselHandlers: handleRegisterCarouselHandlers,
       }),

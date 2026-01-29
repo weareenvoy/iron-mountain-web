@@ -59,6 +59,12 @@ export const KIOSK_3_CONFIG: KioskConfig = {
     positionRight: '120px',
     positionTop: '1945px',
   },
-  diamondMapping: undefined, // Kiosk 3 has no grid data, will use accordion
+  diamondMapping: {
+    bottomLeft: 3,
+    bottomRight: 4,
+    center: 0,
+    topLeft: 1,
+    topRight: 2,
+  },
   kioskId: 'kiosk-3',
 };

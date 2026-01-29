@@ -37,7 +37,7 @@
         "Platform centralization",
         "Metadata enrichment",
         "Automated workflows",
-        "Searchable \nrepository of pension \ninformation"
+        "Searchable repository"
       ],
       "headline": "How the organization employed digital solutions:",
       "images": [
@@ -46,12 +46,7 @@
       ]
     },
     "solutionAccordion": {
-      "accordion": [
-        {
-          "bullets": [],
-          "title": ""
-        }
-      ],
+      "accordion": [],
       "headline": "",
       "image": ""
     },

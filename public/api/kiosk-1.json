@@ -34,24 +34,19 @@
     },
     "solutionGrid": {
       "diamondList": [
-        "Secure physical storage",
-        "Digital transformation",
-        "Smart Vault archiving",
-        "AI-powered search"
+        "Physical artifact storage",
+        "Media digitization",
+        "Smart Vault preservation",
+        "Advanced search"
       ],
-      "headline": "How Iron Mountain Smart Vault works:",
+      "headline": "How the Museum preserves cultural heritage:",
       "images": [
         "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Image3-Full.webp",
         "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Image2-Full.webp"
       ]
     },
     "solutionAccordion": {
-      "accordion": [
-        {
-          "bullets": [],
-          "title": ""
-        }
-      ],
+      "accordion": [],
       "headline": "",
       "image": ""
     },

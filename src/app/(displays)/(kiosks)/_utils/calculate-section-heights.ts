@@ -57,6 +57,9 @@ export const calculateSolutionGradientHeight = (slides: Slide[], kioskId: KioskI
   if (solutionSlides.length === 0) return 0;
 
   const heights = SOLUTION_HEIGHTS[kioskId];
+  const hasThirdScreen = solutionSlides.some(slide => slide.id === 'solution-third');
+  const hasFourthScreen = solutionSlides.some(slide => slide.id === 'solution-fourth');
+  
   let totalHeight = 0;
 
   // Add heights for each rendered solution screen
@@ -68,7 +71,9 @@ export const calculateSolutionGradientHeight = (slides: Slide[], kioskId: KioskI
     } else if (slide.id === 'solution-third') {
       totalHeight += heights.thirdScreen;
     } else if (slide.id === 'solution-fourth') {
-      totalHeight += heights.fourthScreen;
+      // When fourth screen appears without third screen, use the third screen's height value
+      // When both are present, add the fourth screen's height
+      totalHeight += !hasThirdScreen ? heights.thirdScreen : heights.fourthScreen;
     }
   });
 
