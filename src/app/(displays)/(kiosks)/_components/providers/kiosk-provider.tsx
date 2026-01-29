@@ -116,9 +116,17 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
 
     setLoading(true);
 
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[${kioskId}] Starting fetchData...`);
+    }
+
     try {
       // Pass abort signal to getKioskData for proper cancellation
       const kioskData = await getKioskData(kioskId, abortController.signal);
+
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`[${kioskId}] Data fetched successfully`);
+      }
 
       // Check if this fetch was aborted (component unmounted or new fetch started)
       if (abortController.signal.aborted) {
@@ -134,6 +142,10 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
         return false;
       }
 
+      if (process.env.NODE_ENV === 'development') {
+        console.error(`[${kioskId}] fetchData error:`, err);
+      }
+
       // TODO: Replace with proper logging service (DataDog, Sentry, etc.)
       // For now, errors are tracked via the error state and can be logged at a higher level
       setError(err instanceof Error ? err.message : 'Unknown error');
@@ -142,6 +154,9 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
       // Don't update loading state if aborted
       if (!abortController.signal.aborted) {
         setLoading(false);
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`[${kioskId}] fetchData completed, loading=false`);
+        }
       }
       // Clean up controller reference
       if (abortControllerRef.current === abortController) {

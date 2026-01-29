@@ -65,7 +65,7 @@ export const SOLUTION_HEIGHTS: Record<KioskId, {
   'kiosk-1': {
     firstScreen: 4230,
     secondScreen: 3644,
-    thirdScreen: 6645,
+    thirdScreen: 6695,
     fourthScreen: 6695,
   },
   'kiosk-2': {

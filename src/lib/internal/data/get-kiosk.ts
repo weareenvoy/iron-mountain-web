@@ -7,7 +7,7 @@ import type { KioskApiResponse, KioskDataResponse } from '@/lib/internal/types';
  */
 async function getSimplCMSData(): Promise<Record<string, unknown>> {
   try {
-    const res = await fetch('/api/kiosk-simplCMS.JSON', { cache: 'force-cache' });
+    const res = await fetch('/api/kiosk-simplCMS.json', { cache: 'force-cache' });
     const rawData = (await res.json()) as Array<Record<string, unknown>>;
     return rawData[0] ?? {};
   } catch (error) {

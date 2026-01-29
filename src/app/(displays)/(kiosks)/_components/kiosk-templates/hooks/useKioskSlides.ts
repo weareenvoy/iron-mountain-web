@@ -278,6 +278,16 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
 
   // Build slides
   const slides = useMemo(() => {
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[useKioskSlides] ${kioskId} - Building slides...`, {
+        hasChallenges: !!challenges,
+        hasSolutionAccordion: !!solutionAccordion,
+        hasSolutionGrid: !!solutionGrid,
+        hasValues: !!values,
+        customInteractivesCount: customInteractives.length,
+      });
+    }
+
     // Log missing sections for debugging
     if (!challenges || (!solutionAccordion && !solutionGrid) || !values || customInteractives.length === 0) {
       const missing: string[] = [];
@@ -287,10 +297,14 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
       if (customInteractives.length === 0) missing.push('customInteractive');
 
       if (process.env.NODE_ENV === 'development') {
-        console.warn(`[useKioskSlides] Kiosk ${kioskId} missing sections:`, missing.join(', '));
+        console.error(`[useKioskSlides] ${kioskId} - Missing required sections:`, missing.join(', '));
       }
 
       return [];
+    }
+
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[useKioskSlides] ${kioskId} - All sections present, building slides...`);
     }
 
     return [
