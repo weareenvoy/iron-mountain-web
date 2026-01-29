@@ -371,6 +371,18 @@ export interface DocentData {
   };
 }
 
+export interface KioskAudio {
+  readonly ambient?: string;
+  readonly back?: string;
+  readonly challenge?: string;
+  readonly close?: string;
+  readonly customInteractive?: string;
+  readonly next?: string;
+  readonly open?: string;
+  readonly solution?: string;
+  readonly value?: string;
+}
+
 /**
  * Raw kiosk data from API response
  * Uses Record<string, unknown> for flexibility since different kiosks have different schemas

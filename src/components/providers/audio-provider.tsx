@@ -35,23 +35,32 @@ export const useAudioSettings = (): AudioSettings => {
 
 export const useAmbience = () => {
   const audio = useAudio();
-  return {
-    setAmbience: audio.setAmbience,
-  };
+  return useMemo(
+    () => ({
+      setAmbience: audio.setAmbience.bind(audio),
+    }),
+    [audio]
+  );
 };
 
 export const useMusic = () => {
   const audio = useAudio();
-  return {
-    setMusic: audio.setMusic,
-  };
+  return useMemo(
+    () => ({
+      setMusic: audio.setMusic.bind(audio),
+    }),
+    [audio]
+  );
 };
 
 export const useSfx = () => {
   const audio = useAudio();
-  return {
-    playSfx: audio.playSfx,
-  };
+  return useMemo(
+    () => ({
+      playSfx: audio.playSfx.bind(audio),
+    }),
+    [audio]
+  );
 };
 
 export const AudioProvider = ({ appId, children }: AudioProviderProps) => {
