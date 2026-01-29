@@ -16,6 +16,12 @@ export const mapSolutionsWithAccordion = (
   solutionAccordion: SolutionsAccordion,
   ambient: Ambient
 ): SolutionScreens => {
+  // Check if accordion has actual data
+  const hasAccordionData = 
+    solutionAccordion.accordion && 
+    Array.isArray(solutionAccordion.accordion) && 
+    solutionAccordion.accordion.length > 0;
+
   return {
     firstScreen: {
       body: solutionsMain.body,
@@ -24,28 +30,31 @@ export const mapSolutionsWithAccordion = (
       mainVideo: solutionsMain.mainVideo,
       subheadline: ambient.title,
     },
-    fourthScreen: {
-      accordion: solutionAccordion.accordion?.map((item, index) => ({
-        color:
-          index === 0
-            ? ACCORDION_COLOR_WHITE
-            : index === 1
-              ? ACCORDION_COLOR_LIGHT_BLUE
-              : index === 2
-                ? ACCORDION_COLOR_BLUE
-                : ACCORDION_COLOR_NAVY,
-        contentList: item.bullets ? [...item.bullets] : [],
-        expanded: index === 0,
-        id: `accordion-${index}`,
-        number: `${String(index + 1).padStart(2, '0')}.`,
-        title: item.title ?? '',
-      })),
-      headline: solutionAccordion.headline,
-      image: solutionAccordion.image,
-      labelText: solutionsMain.labelText,
-      mediaDiamondSolidSrc: solutionAccordion.image,
-      subheadline: ambient.title,
-    },
+    // Only include fourthScreen if accordion data exists
+    ...(hasAccordionData && {
+      fourthScreen: {
+        accordion: solutionAccordion.accordion?.map((item, index) => ({
+          color:
+            index === 0
+              ? ACCORDION_COLOR_WHITE
+              : index === 1
+                ? ACCORDION_COLOR_LIGHT_BLUE
+                : index === 2
+                  ? ACCORDION_COLOR_BLUE
+                  : ACCORDION_COLOR_NAVY,
+          contentList: item.bullets ? [...item.bullets] : [],
+          expanded: index === 0,
+          id: `accordion-${index}`,
+          number: `${String(index + 1).padStart(2, '0')}.`,
+          title: item.title ?? '',
+        })),
+        headline: solutionAccordion.headline,
+        image: solutionAccordion.image,
+        labelText: solutionsMain.labelText,
+        mediaDiamondSolidSrc: solutionAccordion.image,
+        subheadline: ambient.title,
+      },
+    }),
     secondScreen: {
       heroImageSrc: solutionsMain.image,
       image: solutionsMain.image,
