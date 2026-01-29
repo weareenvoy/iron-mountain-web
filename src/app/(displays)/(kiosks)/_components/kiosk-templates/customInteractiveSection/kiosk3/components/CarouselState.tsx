@@ -12,7 +12,6 @@ import {
   getDecorativeSVGVariant,
   getPrimaryDiamondClass,
   getSecondaryDiamondClass,
-  SLIDE_ID,
   TRANSITIONS,
 } from '../constants';
 import DecorativeSVGGroup from './DecorativeSVGGroup';
@@ -127,39 +126,46 @@ const CarouselState = memo(
                   </AnimatePresence>
                 </div>
 
-                {/* Primary diamond (video or image) - Hidden for slide 1 since background morphs into it */}
-                {current.id !== SLIDE_ID.SLIDE_1 && (
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      animate={
-                        isExiting
-                          ? {
-                              opacity: DIAMOND_ANIMATIONS.ENTRY.exit.opacity,
-                              scale: DIAMOND_ANIMATIONS.ENTRY.exit.scale,
-                              x: DIAMOND_ANIMATIONS.ENTRY.exit.x,
-                              y: DIAMOND_ANIMATIONS.ENTRY.exit.y,
-                            }
-                          : DIAMOND_ANIMATIONS.ENTRY.animate
-                      }
-                      className={primaryDiamondClass}
-                      exit={DIAMOND_ANIMATIONS.ENTRY.exit}
-                      initial={DIAMOND_ANIMATIONS.ENTRY.initial}
-                      key={`primary-${index}`}
-                      transition={TRANSITIONS.CAROUSEL}
-                    >
-                      {current.primaryVideoSrc && (
-                        <video
-                          autoPlay
-                          className="h-full w-full origin-center scale-[1.35] -rotate-45 object-cover"
-                          loop
-                          muted
-                          playsInline
-                          src={current.primaryVideoSrc}
-                        />
-                      )}
-                    </motion.div>
-                  </AnimatePresence>
-                )}
+                {/* Primary diamond (video or image) */}
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    animate={
+                      isExiting
+                        ? {
+                            opacity: DIAMOND_ANIMATIONS.ENTRY.exit.opacity,
+                            scale: DIAMOND_ANIMATIONS.ENTRY.exit.scale,
+                            x: DIAMOND_ANIMATIONS.ENTRY.exit.x,
+                            y: DIAMOND_ANIMATIONS.ENTRY.exit.y,
+                          }
+                        : DIAMOND_ANIMATIONS.ENTRY.animate
+                    }
+                    className={primaryDiamondClass}
+                    exit={DIAMOND_ANIMATIONS.ENTRY.exit}
+                    initial={DIAMOND_ANIMATIONS.ENTRY.initial}
+                    key={`primary-${index}`}
+                    transition={TRANSITIONS.CAROUSEL}
+                  >
+                    {current.primaryVideoSrc && (
+                      <video
+                        autoPlay
+                        className="h-full w-full origin-center scale-[1.35] -rotate-45 object-cover"
+                        loop
+                        muted
+                        playsInline
+                        src={current.primaryVideoSrc}
+                      />
+                    )}
+                    {!current.primaryVideoSrc && current.primaryImageSrc && (
+                      <Image
+                        alt={current.primaryImageAlt}
+                        className="origin-center scale-[1.35] -rotate-45 object-cover"
+                        fill
+                        sizes="800px"
+                        src={current.primaryImageSrc}
+                      />
+                    )}
+                  </motion.div>
+                </AnimatePresence>
 
                 {/* Secondary diamond (decorative SVG or image) */}
                 {current.secondaryImageSrc && (
@@ -201,7 +207,7 @@ const CarouselState = memo(
 
         {/* CTA - Only visible when carousel is shown - gradient defined in globals.css for readability and ease of future updates */}
         <button
-          className="group bg-gradient-kiosk-magenta absolute top-[2630px] left-[240px] z-11 flex h-[200px] items-center gap-[18px] rounded-[999px] px-[110px] text-[55px] leading-[1.1] font-semibold tracking-[2px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+          className="group bg-gradient-kiosk-solution absolute top-[2630px] left-[240px] z-11 flex h-[200px] items-center gap-[18px] rounded-[999px] px-[110px] text-[55px] leading-[1.1] font-semibold tracking-[2px] text-white active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
           onClick={onShowOverlay}
           type="button"
         >

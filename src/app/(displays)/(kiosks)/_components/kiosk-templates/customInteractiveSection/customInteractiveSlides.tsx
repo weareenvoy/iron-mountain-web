@@ -29,6 +29,13 @@ export const buildCustomInteractiveSlides = (
   kioskId: KioskId,
   scrollToSection?: (sectionId: string) => void
 ): Slide[] => {
+  // Handler for closing demo - refreshes page and skips idle video
+  const handleEndTour = () => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('skipIdleVideo', 'true');
+      window.location.reload();
+    }
+  };
   const slides: Slide[] = [];
 
   if (customInteractive.firstScreen) {
@@ -64,6 +71,7 @@ export const buildCustomInteractiveSlides = (
           <CustomInteractiveFirstScreenTemplate
             kioskId={kioskId}
             {...customInteractive.firstScreen}
+            onEndTour={handleEndTour}
             onPrimaryCta={handlePrimaryCta}
             overlayCardLabel={overlayCardLabel}
             overlayHeadline={overlayHeadline}
@@ -83,6 +91,7 @@ export const buildCustomInteractiveSlides = (
           <CustomInteractiveKiosk3SecondScreenTemplate
             {...customInteractive.kiosk3SecondScreen}
             onBack={() => scrollToSection?.(SECTION_IDS.FIRST_SCREEN)}
+            onEndTour={handleEndTour}
           />
         </SectionSlide>
       ),
@@ -96,6 +105,7 @@ export const buildCustomInteractiveSlides = (
           <CustomInteractiveKiosk1SecondScreenTemplate
             {...customInteractive.secondScreen}
             onBack={() => scrollToSection?.(SECTION_IDS.FIRST_SCREEN)}
+            onEndTour={handleEndTour}
           />
         </SectionSlide>
       ),

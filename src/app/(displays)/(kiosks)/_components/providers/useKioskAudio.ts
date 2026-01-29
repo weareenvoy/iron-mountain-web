@@ -43,7 +43,7 @@ export const useKioskAudio = (): KioskAudioUrls => {
   const { data } = useKiosk();
 
   return useMemo<KioskAudioUrls>(() => {
-    const audio: KioskAudio | undefined = data?.audio;
+    const audio = data?.audio as KioskAudio | undefined;
 
     // Return URLs from data or undefined if not available
     return {

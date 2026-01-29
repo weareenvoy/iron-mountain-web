@@ -13,6 +13,7 @@ import { SCROLL_DURATION_MS } from '@/app/(displays)/(kiosks)/_constants/timing'
 import { useKioskArrowStore } from '@/app/(displays)/(kiosks)/_stores/useKioskArrowStore';
 import { determineCurrentSection } from '@/app/(displays)/(kiosks)/_utils/section-utils';
 import { useAudio, useMusic, useSfx } from '@/components/providers/audio-provider';
+import { cn } from '@/lib/tailwind/utils/cn';
 import type { KioskConfig } from '@/app/(displays)/(kiosks)/_types/kiosk-config';
 
 // Base component shared by all three kiosks. Accepts a config object that defines kiosk-specific settings (diamond mapping, arrow positioning, etc.)
@@ -103,6 +104,12 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
     currentSlide,
     currentScrollTarget
   );
+
+  // Disable up arrow when on challenge first video or initial screen
+  // Rationale: The button click animation on the cover screen (cover-ambient-initial) removes all visible content,
+  // making it impossible to navigate back to that section. Disabling navigation back ensures smooth UX.
+  const canNavigateUp =
+    currentScrollTarget !== 'challenge-first-video' && currentScrollTarget !== 'cover-ambient-initial';
 
   // Single hook call with correct section info
   const { arrowTheme, shouldShowArrows } = useKioskArrowState({
@@ -396,9 +403,15 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
             transition={{ duration: arrowConfig.fadeDuration, ease: 'easeOut' }}
           >
             <div
+              aria-disabled={!canNavigateUp}
               aria-label="Previous"
-              className="flex cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95 active:opacity-40 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
-              onPointerDown={handleNavigateUpWithSound}
+              className={cn(
+                'flex items-center justify-center transition-transform',
+                canNavigateUp
+                  ? 'cursor-pointer hover:scale-110 active:scale-95 active:opacity-40 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]'
+                  : 'cursor-not-allowed opacity-30'
+              )}
+              onPointerDown={canNavigateUp ? handleNavigateUpWithSound : undefined}
               role="button"
               style={{
                 // Inline because Tailwind will not include styles from runtime config

@@ -38,6 +38,8 @@ export type CustomInteractiveKiosk1SecondScreenTemplateProps = {
   readonly kioskId?: KioskId;
   /** Callback when back button is pressed */
   readonly onBack?: () => void;
+  /** Callback when end tour button is pressed */
+  readonly onEndTour?: () => void;
   /** Callback when secondary CTA is clicked */
   readonly onSecondaryCta?: () => void;
   /** Label for overlay card */

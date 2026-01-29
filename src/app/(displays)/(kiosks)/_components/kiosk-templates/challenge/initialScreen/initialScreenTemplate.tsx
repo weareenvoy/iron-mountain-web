@@ -7,6 +7,7 @@ import { useMqtt } from '@/components/providers/mqtt-provider';
 import ButtonArrow from '@/components/ui/icons/ButtonArrow';
 import WhiteLogoSimple from '@/components/ui/icons/WhiteLogoSimple';
 import { mqttCommands } from '@/lib/mqtt/constants';
+import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import { TITLE_ANIMATION_TRANSFORMS } from '../../constants/animations';
 import { SCROLL_ANIMATION_CONFIG } from '../../hooks/useScrollAnimation';
@@ -69,6 +70,21 @@ const InitialScreenTemplate = memo(
      */
     const isInView = useInView(ref, { amount: 0.3, once: true });
 
+    // Check for skip idle video flag on mount (set when closing demo)
+    useEffect(() => {
+      if (typeof window !== 'undefined') {
+        const shouldSkip = sessionStorage.getItem('skipIdleVideo');
+        if (shouldSkip === 'true' && idleVideoSrc) {
+          sessionStorage.removeItem('skipIdleVideo');
+          // Immediately skip idle video - using requestAnimationFrame to avoid setState in effect warning
+          requestAnimationFrame(() => {
+            setDismissedIdleVideoSrc(idleVideoSrc);
+            setIdleCompleteVideoSrc(idleVideoSrc);
+          });
+        }
+      }
+    }, [idleVideoSrc]);
+
     // Cleanup timeout on unmount
     useEffect(() => {
       return () => {
@@ -92,7 +108,9 @@ const InitialScreenTemplate = memo(
           const msg = JSON.parse(message.toString());
           const tourId = msg.body?.['tour-id'];
 
-          console.info(`${kioskId}: Received loadTour command (tour: ${tourId}) - dismissing idle screen`);
+          if (process.env.NODE_ENV === 'development') {
+            console.info(`${kioskId}: Received loadTour command (tour: ${tourId}) - dismissing idle screen`);
+          }
 
           // Dismiss the idle video overlay (all kiosks respond to any tour start)
           setDismissedIdleVideoSrc(idleVideoSrc);
@@ -112,7 +130,9 @@ const InitialScreenTemplate = memo(
             timeoutRef.current = null; // Always clear, not just on success path
           }, IDLE_FADE_OUT_DURATION_MS);
         } catch (error) {
-          console.error(`${kioskId}: Error handling loadTour for idle dismissal:`, error);
+          if (process.env.NODE_ENV === 'development') {
+            console.error(`${kioskId}: Error handling loadTour for idle dismissal:`, error);
+          }
         }
       };
 
@@ -170,7 +190,10 @@ const InitialScreenTemplate = memo(
 
         {/* Sticky Section Header - Fixed Position (Transparent Background) */}
         <div
-          className={`pointer-events-none fixed top-0 left-0 z-[100] w-full transition-opacity duration-300 motion-reduce:transition-none ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
+          className={cn(
+            'pointer-events-none fixed top-0 left-0 z-[100] w-full transition-opacity duration-300 motion-reduce:transition-none',
+            showStickyHeader ? 'opacity-100' : 'opacity-0'
+          )}
           data-initial-sticky-header
           data-visible={showStickyHeader}
           ref={stickyHeaderRef}
@@ -238,7 +261,7 @@ const InitialScreenTemplate = memo(
           >
             <button
               aria-label={buttonText}
-              className="group flex h-[200px] items-center justify-center gap-[60px] rounded-[999px] bg-[#ededed] px-[100px] py-[70px] text-left backdrop-blur-[19px] transition-all duration-300 ease-out group-data-[kiosk=kiosk-2]/kiosk:px-[110px] hover:scale-[1.05] hover:shadow-[0_8px_24px_rgba(0,0,0,0.15)] active:scale-[0.98] active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+              className="group flex h-[200px] items-center justify-center gap-[60px] rounded-[999px] bg-[#ededed] px-[100px] py-[70px] text-left backdrop-blur-[19px] transition-all duration-300 ease-[cubic-bezier(0.3,0,0.6,1)] group-data-[kiosk=kiosk-2]/kiosk:px-[110px] hover:scale-[1.05] active:scale-[0.98] active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
               data-name="button_default"
               onClick={handleButtonClick}
             >

@@ -59,6 +59,4 @@ const CarouselContentSection = memo(({ current }: CarouselContentSectionProps) =
   );
 });
 
-CarouselContentSection.displayName = 'CarouselContentSection';
-
 export default CarouselContentSection;
