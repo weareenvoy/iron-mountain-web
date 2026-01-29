@@ -58,7 +58,6 @@ export const calculateSolutionGradientHeight = (slides: Slide[], kioskId: KioskI
 
   const heights = SOLUTION_HEIGHTS[kioskId];
   const hasThirdScreen = solutionSlides.some(slide => slide.id === 'solution-third');
-  const hasFourthScreen = solutionSlides.some(slide => slide.id === 'solution-fourth');
   
   let totalHeight = 0;
 
@@ -85,7 +84,7 @@ export const calculateSolutionGradientHeight = (slides: Slide[], kioskId: KioskI
  * Returns an array since there can be multiple custom interactives
  * Heights are based on the custom interactive number (1, 2, 3) not the kiosk ID
  */
-export const calculateCustomInteractiveGradientHeights = (slides: Slide[], kioskId: KioskId): number[] => {
+export const calculateCustomInteractiveGradientHeights = (slides: Slide[]): number[] => {
   const gradientHeights: number[] = [];
 
   // Find all custom interactive instances by their index
@@ -98,7 +97,7 @@ export const calculateCustomInteractiveGradientHeights = (slides: Slide[], kiosk
     if (slide.id.startsWith('customInteractive-')) {
       // Try to extract index from format: customInteractive-{index}-{screen}-ci{number}
       const match = slide.id.match(/customInteractive-(\d+)-/);
-      if (match) {
+      if (match?.[1]) {
         customInteractiveIndices.add(parseInt(match[1], 10));
       } else if (slide.id === 'customInteractive-first' || slide.id === 'customInteractive-second') {
         // Handle legacy single custom interactive format (no index)
@@ -129,18 +128,39 @@ export const calculateCustomInteractiveGradientHeights = (slides: Slide[], kiosk
         }
       }
 
+      // Log for debugging (can be removed later)
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[calculateCustomInteractiveGradientHeights]', {
+          index,
+          customInteractiveNumber,
+          slideIds: instanceSlides.map(s => s.id),
+        });
+      }
+
       // Get heights specific to this custom interactive number
       const heights = CUSTOM_INTERACTIVE_HEIGHTS[customInteractiveNumber];
       let totalHeight = 0;
       
-      // Check for indexed format (customInteractive-0-first-ci1) or legacy format (customInteractive-first)
-      const hasIndexedFirst = slides.some(s => s.id === `customInteractive-${index}-first-ci${customInteractiveNumber}`);
-      const hasIndexedSecond = slides.some(s => s.id === `customInteractive-${index}-second-ci${customInteractiveNumber}`);
-      const hasLegacyFirst = index === 0 && slides.some(s => s.id === 'customInteractive-first');
-      const hasLegacySecond = index === 0 && slides.some(s => s.id === 'customInteractive-second');
+      // Check which screens exist in the instanceSlides array
+      const hasFirstScreen = instanceSlides.some(s => 
+        s.id.includes('-first') || s.id === 'customInteractive-first'
+      );
+      const hasSecondScreen = instanceSlides.some(s => 
+        s.id.includes('-second') || s.id === 'customInteractive-second'
+      );
 
-      if (hasIndexedFirst || hasLegacyFirst) totalHeight += heights.firstScreen;
-      if (hasIndexedSecond || hasLegacySecond) totalHeight += heights.secondScreen;
+      if (hasFirstScreen) totalHeight += heights.firstScreen;
+      if (hasSecondScreen) totalHeight += heights.secondScreen;
+
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[calculateCustomInteractiveGradientHeights] Height calculation:', {
+          hasFirstScreen,
+          hasSecondScreen,
+          firstScreenHeight: heights.firstScreen,
+          secondScreenHeight: heights.secondScreen,
+          totalHeight,
+        });
+      }
 
       if (totalHeight > 0) {
         gradientHeights.push(totalHeight);
@@ -156,7 +176,7 @@ export const calculateCustomInteractiveGradientHeights = (slides: Slide[], kiosk
 export const calculateSectionGradientHeights = (slides: Slide[], kioskId: KioskId): SectionHeights => {
   const heights = {
     challenge: calculateChallengeGradientHeight(slides, kioskId),
-    customInteractive: calculateCustomInteractiveGradientHeights(slides, kioskId),
+    customInteractive: calculateCustomInteractiveGradientHeights(slides),
     solution: calculateSolutionGradientHeight(slides, kioskId),
     value: 0, // Value section handles its own height dynamically
   };
@@ -178,5 +198,7 @@ export const calculateSectionGradientHeights = (slides: Slide[], kioskId: KioskI
  * Get the gradient start position (top offset) for a section
  */
 export const getGradientStartPosition = (section: 'challenge' | 'solution' | 'customInteractive' | 'value', kioskId: KioskId): number => {
-  return GRADIENT_START_POSITIONS[section][kioskId];
+  const sectionPositions = GRADIENT_START_POSITIONS[section];
+  if (!sectionPositions) return 0;
+  return sectionPositions[kioskId] ?? 0;
 };

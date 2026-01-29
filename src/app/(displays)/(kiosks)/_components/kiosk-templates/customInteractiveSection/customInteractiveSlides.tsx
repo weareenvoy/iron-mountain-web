@@ -20,6 +20,7 @@ export type CustomInteractiveScreens = {
   readonly firstScreen?: CustomInteractiveKiosk1FirstScreenTemplateProps;
   readonly kiosk3OverlayConfig?: CustomInteractiveDemoScreenTemplateProps;
   readonly kiosk3SecondScreen?: Kiosk3SecondScreenProps;
+  readonly number?: 1 | 2 | 3;
   readonly secondScreen?: CustomInteractiveKiosk1SecondScreenTemplateProps;
   readonly thirdScreen?: CustomInteractiveDemoScreenTemplateProps;
 };
@@ -34,7 +35,9 @@ export const buildCustomInteractiveSlides = (
   // Create unique ID prefix for this custom interactive instance
   // Include the custom interactive number for gradient height calculations
   const idPrefix = index !== undefined ? `customInteractive-${index}` : 'customInteractive';
-  const idSuffix = customInteractiveNumber ? `-ci${customInteractiveNumber}` : '';
+  // Use passed number or fall back to number from customInteractive object, default to 1
+  const ciNumber = customInteractiveNumber ?? customInteractive.number ?? 1;
+  const idSuffix = `-ci${ciNumber}`;
   // Handler for closing demo - refreshes page and skips idle video
   const handleEndTour = () => {
     if (typeof window !== 'undefined') {
