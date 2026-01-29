@@ -27,6 +27,8 @@ export interface PlaySfxOptions {
 export interface AudioController {
   getSettings: () => AudioSettings;
 
+  isUnlocked: () => boolean;
+
   playSfx: (idOrUrl: string, options?: PlaySfxOptions) => void;
 
   setAmbience: (idOrUrl: null | string, options?: LoopOptions) => void;

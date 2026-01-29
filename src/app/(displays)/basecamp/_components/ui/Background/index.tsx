@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useBasecamp } from '@/app/(displays)/basecamp/_components/providers/basecamp';
 import { getNextBeatId, isBackgroundSeamlessTransition } from '@/app/(displays)/basecamp/_utils';
 import { BasecampBeatId, isValidBasecampBeatId } from '@/lib/internal/types';
@@ -11,7 +11,7 @@ const CROSSFADE_DURATION_MS = 800 as const;
 const FALLBACK_VIDEO_URL = '/videos/basecamp_fallback.webm';
 
 const Background = () => {
-  const { data, error, exhibitState, loading, setReadyBeatId } = useBasecamp();
+  const { data, error, exhibitState, isMuted, loading, setReadyBeatId } = useBasecamp();
   const { beatIdx, momentId } = exhibitState;
   const rawBeatId = `${momentId}-${beatIdx + 1}`;
 
@@ -29,6 +29,11 @@ const Background = () => {
     dataRef.current = data;
   }, [data]);
 
+  const isMutedRef = useRef(isMuted);
+  useEffect(() => {
+    isMutedRef.current = isMuted;
+  }, [isMuted]);
+
   // 2 videos "ping pong" between, 1 visible, 1 invisible.
   const a = useRef<HTMLVideoElement>(null);
   const active = useRef<'a' | 'b'>('a');
@@ -36,26 +41,11 @@ const Background = () => {
   const b = useRef<HTMLVideoElement>(null);
   const lastBeat = useRef<BasecampBeatId | null>(null);
 
-  // Track muted state
-  const [isMuted, setIsMuted] = useState(true);
-
-  // Unmute videos on first user interaction (required for browsers without kiosk flags)
+  // Apply MQTT mute state
   useEffect(() => {
-    const unmute = () => {
-      setIsMuted(false);
-      console.info('[Video] Audio unlocked via user gesture');
-    };
-
-    document.addEventListener('click', unmute, { once: true });
-    document.addEventListener('keydown', unmute, { once: true });
-    document.addEventListener('touchstart', unmute, { once: true });
-
-    return () => {
-      document.removeEventListener('click', unmute);
-      document.removeEventListener('keydown', unmute);
-      document.removeEventListener('touchstart', unmute);
-    };
-  }, []);
+    if (a.current) a.current.muted = isMuted;
+    if (b.current) b.current.muted = isMuted;
+  }, [isMuted]);
 
   // Helper to update active video and sync debug display
   const updateActiveDisplay = (value: 'a' | 'b') => {
@@ -126,10 +116,13 @@ const Background = () => {
     };
 
     const startPlaybackAndSignalReady = (video: HTMLVideoElement) => {
+      // Muted autoplay first, apply MQTT mute state after `playing` fires.
+      video.muted = true;
       video.play().catch(e => console.error('Play failed:', e));
 
       const handlePlaying = () => {
         if (lastBeat.current !== beatId) return; // Stale
+        video.muted = isMutedRef.current;
         setReadyBeatId(beatId);
       };
       video.addEventListener('playing', handlePlaying, { once: true });
@@ -226,10 +219,10 @@ const Background = () => {
 
   return (
     <div className="relative h-full w-full overflow-hidden">
-      {/* Videos start muted for autoplay compliance; unmuted on first user gesture */}
+      {/* In kiosk mode, videos can play with sound. */}
+      {/* These videos have no music, but have SFX baked in. */}
       <video
         className="absolute inset-0 h-full w-full object-cover"
-        muted={isMuted}
         onTimeUpdate={handleTimeUpdate}
         playsInline
         preload="auto"
@@ -238,7 +231,6 @@ const Background = () => {
       />
       <video
         className="absolute inset-0 h-full w-full object-cover"
-        muted={isMuted}
         onTimeUpdate={handleTimeUpdate}
         playsInline
         preload="auto"
