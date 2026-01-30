@@ -169,15 +169,6 @@ export const calculateCustomInteractiveGradientHeights = (slides: Slide[]): numb
       // Get heights specific to this custom interactive number
       const heights = CUSTOM_INTERACTIVE_HEIGHTS[customInteractiveNumber];
 
-      if (!heights) {
-        if (process.env.NODE_ENV === 'development') {
-          console.warn(
-            `[calculateCustomInteractiveGradientHeights] Missing height config for CI${customInteractiveNumber}`
-          );
-        }
-        return; // Skip this instance
-      }
-
       let totalHeight = 0;
 
       // Check which screens exist in the instanceSlides array
@@ -214,6 +205,5 @@ export const calculateSectionGradientHeights = (slides: Slide[], kioskId: KioskI
  */
 export const getGradientStartPosition = (section: GradientSection, kioskId: KioskId): number => {
   const sectionPositions = GRADIENT_START_POSITIONS[section];
-  if (!sectionPositions) return 0;
   return sectionPositions[kioskId];
 };

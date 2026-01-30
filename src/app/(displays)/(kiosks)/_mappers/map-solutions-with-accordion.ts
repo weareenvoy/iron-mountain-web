@@ -37,7 +37,7 @@ export const mapSolutionsWithAccordion = (
     // Only include fourthScreen if accordion data exists
     ...(hasAccordionData && {
       fourthScreen: {
-        accordion: solutionAccordion.accordion?.map((item, index) => ({
+        accordion: solutionAccordion.accordion.map((item, index) => ({
           color:
             index === 0
               ? ACCORDION_COLOR_WHITE
@@ -66,13 +66,13 @@ export const mapSolutionsWithAccordion = (
         image: solutionsMain.image,
         labelText: solutionsMain.labelText,
         numberedListHeadline: solutionsMain.numberedListHeadline,
-        stepFourDescription: solutionsMain.numberedList?.[3],
+        stepFourDescription: solutionsMain.numberedList[3],
         stepFourLabel: '04.',
-        stepOneDescription: solutionsMain.numberedList?.[0],
+        stepOneDescription: solutionsMain.numberedList[0],
         stepOneLabel: '01.',
-        stepThreeDescription: solutionsMain.numberedList?.[2],
+        stepThreeDescription: solutionsMain.numberedList[2],
         stepThreeLabel: '03.',
-        stepTwoDescription: solutionsMain.numberedList?.[1],
+        stepTwoDescription: solutionsMain.numberedList[1],
         stepTwoLabel: '02.',
         subheadline: ambient.title,
       },

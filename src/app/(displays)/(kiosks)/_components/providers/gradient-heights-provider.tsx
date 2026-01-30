@@ -44,7 +44,7 @@ export const GradientHeightsProvider = ({ children, heights }: GradientHeightsPr
       const height = heights.customInteractive[index];
 
       // Additional safety check for undefined values
-      if (height === undefined || height === null) {
+      if (height === undefined) {
         if (process.env.NODE_ENV === 'development') {
           console.warn(`[GradientHeightsProvider] No height found for custom interactive at index ${index}`);
         }

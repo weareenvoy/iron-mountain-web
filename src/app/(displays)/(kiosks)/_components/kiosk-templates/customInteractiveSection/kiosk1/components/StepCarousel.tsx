@@ -195,14 +195,14 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
             // This ensures clicking on middle diamonds doesn't accidentally trigger edge diamonds
             const getZIndex = () => {
               switch (relativePos) {
-                case 0:
-                  return 10; // Active (center)
-                case -1:
-                case 1:
-                  return 7; // Middle (directly adjacent)
                 case -2:
                 case 2:
                   return 4; // Edge (far left/right)
+                case -1:
+                case 1:
+                  return 7; // Middle (directly adjacent)
+                case 0:
+                  return 10; // Active (center)
                 default:
                   return 0;
               }
