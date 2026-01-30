@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useReducer } from 'react';
+import { useKioskAudio } from '@/app/(displays)/(kiosks)/_components/providers/useKioskAudio';
+import { useSfx } from '@/components/providers/audio-provider';
 
 /**
  * State for Kiosk 3 Second Screen animation sequence
@@ -62,6 +64,8 @@ const BUTTON_TRANSITION_DURATION_MS = 500;
  */
 export function useKiosk3SecondScreenState() {
   const [state, dispatch] = useReducer(kiosk3SecondScreenReducer, initialState);
+  const { sfx } = useKioskAudio();
+  const { playSfx } = useSfx();
 
   // Complete button transition after animation duration
   useEffect(() => {
@@ -80,12 +84,18 @@ export function useKiosk3SecondScreenState() {
   }, []);
 
   const handleShowOverlay = useCallback(() => {
+    if (sfx.open) {
+      playSfx(sfx.open);
+    }
     dispatch({ type: 'SHOW_OVERLAY' });
-  }, []);
+  }, [playSfx, sfx.open]);
 
   const handleHideOverlay = useCallback(() => {
+    if (sfx.close) {
+      playSfx(sfx.close);
+    }
     dispatch({ type: 'HIDE_OVERLAY' });
-  }, []);
+  }, [playSfx, sfx.close]);
 
   const handleIndexChange = useCallback((index: number) => {
     dispatch({ carouselIndex: index, type: 'SET_CAROUSEL_INDEX' });

@@ -56,3 +56,11 @@ export const mqttCommands = {
     loadTour: 'cmd/dev/all/load-tour',
   },
 } as const;
+
+export const mqttStateTopics = {
+  basecamp: 'state/basecamp',
+  gec: 'state/gec',
+  summit: 'state/summit',
+  sync: 'state/sync',
+  welcomeWall: 'state/welcome-wall',
+} as const;

@@ -157,6 +157,7 @@ const InitialScreenTemplate = memo(
     return (
       <div
         className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden"
+        data-idle-complete={idleComplete ? 'true' : 'false'}
         data-scroll-section="cover-ambient-initial"
         data-section={SECTION_NAMES.INITIAL}
         data-section-end={SECTION_NAMES.INITIAL}

@@ -5,6 +5,8 @@ import { SquarePlay } from 'lucide-react';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
+import { useKioskAudio } from '@/app/(displays)/(kiosks)/_components/providers/useKioskAudio';
+import { useSfx } from '@/components/providers/audio-provider';
 import { cn } from '@/lib/tailwind/utils/cn';
 import { normalizeText } from '@/lib/utils/normalize-text';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
@@ -38,7 +40,7 @@ export type CustomInteractiveKiosk1SecondScreenTemplateProps = {
   readonly kioskId?: KioskId;
   /** Callback when back button is pressed */
   readonly onBack?: () => void;
-  /** Callback when demo ends */
+  /** Callback when end tour button is pressed */
   readonly onEndTour?: () => void;
   /** Callback when secondary CTA is clicked */
   readonly onSecondaryCta?: () => void;
@@ -81,6 +83,8 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
   // Use custom interactive number instead of kiosk ID for styling
   const isCI3 = customInteractiveNumber === 3;
   const secondaryIconOffset = isCI3 ? 'left-[-330px]' : 'left-[-70px]';
+  const { sfx } = useKioskAudio();
+  const { playSfx } = useSfx();
 
   const [openModalIndex, setOpenModalIndex] = useState<null | number>(null);
   const [showOverlay, setShowOverlay] = useState(false);
@@ -100,18 +104,36 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
     : null;
 
   const handleSecondaryClick = useCallback(() => {
+    if (sfx.open) {
+      playSfx(sfx.open);
+    }
     setShowOverlay(true);
     onSecondaryCta?.();
-  }, [onSecondaryCta]);
+  }, [onSecondaryCta, playSfx, sfx.open]);
 
   const handleEndTour = useCallback(() => {
+    if (sfx.close) {
+      playSfx(sfx.close);
+    }
     setShowOverlay(false);
-    onEndTour?.();
-  }, [onEndTour]);
+  }, [playSfx, sfx.close]);
 
   const handleModalClose = useCallback(() => {
+    if (sfx.close) {
+      playSfx(sfx.close);
+    }
     setOpenModalIndex(null);
-  }, [setOpenModalIndex]);
+  }, [playSfx, sfx.close]);
+
+  const handleModalOpen = useCallback(
+    (index: number) => {
+      if (sfx.open) {
+        playSfx(sfx.open);
+      }
+      setOpenModalIndex(index);
+    },
+    [playSfx, sfx.open]
+  );
 
   useEffect(() => {
     setPortalTarget(containerRef.current);
@@ -161,7 +183,7 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
         <div
           className={cn(
             'absolute inset-0 transition-opacity duration-700',
-            showOverlay ? 'pointer-events-auto z-[9999] opacity-100' : 'pointer-events-none opacity-0'
+            showOverlay ? 'pointer-events-auto z-9999 opacity-100' : 'pointer-events-none opacity-0'
           )}
         >
           <CustomInteractiveDemoScreenTemplate
@@ -196,7 +218,7 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
         {/* CTA button gradient - defined in globals.css for readability and ease of future updates */}
         <AnimatedText
           as="button"
-          className="group absolute top-[1330px] left-[1245px] z-0 flex h-[200px] items-center justify-between rounded-[999px] px-[70px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white backdrop-blur-[19px] transition-transform duration-150 will-change-transform hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)] bg-gradient-custom-interactive-1 group-data-[ci=ci-2]/ci:bg-gradient-custom-interactive-2 group-data-[ci=ci-3]/ci:bg-gradient-custom-interactive-3"
+          className="group absolute top-[1330px] left-[1245px] z-0 flex h-[200px] items-center justify-between rounded-[999px] px-[70px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white backdrop-blur-[19px] transition-transform duration-150 will-change-transform hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)] bg-gradient-kiosk-magenta"
           onClick={handleSecondaryClick}
           shouldAnimate={shouldAnimateText}
           type="button"
@@ -213,7 +235,7 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
         </AnimatedText>
 
         {/* Step Carousel */}
-        <StepCarousel onStepClick={setOpenModalIndex} steps={normalizedSteps} />
+        <StepCarousel onStepClick={handleModalOpen} steps={normalizedSteps} />
       </div>
 
       {/* Step Modal */}

@@ -180,6 +180,12 @@ export interface BasecampData {
       readonly url: string;
     };
   };
+  readonly locationDetails: {
+    readonly elevation: string;
+    readonly exhibit: string;
+    readonly name: string;
+  };
+  // Note: ambient section intentionally has no music
   readonly music?: {
     readonly [key in BasecampSection]?: string;
   };
@@ -233,6 +239,11 @@ export interface BasecampData {
       readonly title: string;
     };
     readonly title: string;
+  };
+  readonly sfx?: {
+    readonly beat: string;
+    readonly moment: string;
+    readonly text: string;
   };
   readonly welcome: {
     readonly text: string;
@@ -358,6 +369,18 @@ export interface DocentData {
     readonly play: string;
     readonly tablet: string;
   };
+}
+
+export interface KioskAudio {
+  readonly ambient?: string;
+  readonly back?: string;
+  readonly challenge?: string;
+  readonly close?: string;
+  readonly customInteractive?: string;
+  readonly next?: string;
+  readonly open?: string;
+  readonly solution?: string;
+  readonly value?: string;
 }
 
 /**

@@ -4,6 +4,8 @@ import Image from 'next/image';
 import { useState } from 'react';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
 import { useGradientHeights } from '@/app/(displays)/(kiosks)/_components/providers/gradient-heights-provider';
+import { useKioskAudio } from '@/app/(displays)/(kiosks)/_components/providers/useKioskAudio';
+import { useSfx } from '@/components/providers/audio-provider';
 import ArrowIcon from '@/components/ui/icons/Kiosks/CustomInteractive/ArrowIcon';
 import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCFilledOrangeDiamond';
 import HCHollowBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowBlueDiamond';
@@ -52,6 +54,8 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   secondaryCtaLabel,
 }: CustomInteractiveKiosk1FirstScreenTemplateProps) => {
   const { shouldAnimate, triggerRef: animationTriggerRef } = useScrollAnimation<HTMLHeadingElement>();
+  const { sfx } = useKioskAudio();
+  const { playSfx } = useSfx();
 
   const [showOverlay, setShowOverlay] = useState(false);
 
@@ -77,6 +81,9 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   const secondaryIconOffset = isCI3 ? 'left-[-330px]' : 'left-[-70px]';
 
   const handleSecondaryClick = () => {
+    if (sfx.open) {
+      playSfx(sfx.open);
+    }
     setShowOverlay(true);
     onSecondaryCta?.();
   };
@@ -86,6 +93,9 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   };
 
   const handleCloseOverlay = () => {
+    if (sfx.close) {
+      playSfx(sfx.close);
+    }
     setShowOverlay(false);
   };
 
@@ -107,7 +117,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       <div
         className={cn(
           'absolute inset-0 transition-opacity duration-700',
-          showOverlay ? 'pointer-events-auto z-[9999] opacity-100' : 'pointer-events-none -z-10 opacity-0'
+          showOverlay ? 'pointer-events-auto z-9999 opacity-100' : 'pointer-events-none -z-10 opacity-0'
         )}
       >
         <CustomInteractiveDemoScreenTemplate
@@ -184,7 +194,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
         )}
         {/* CTA button gradient - defined in globals.css for readability and ease of future updates */}
         <button
-          className="group flex h-[200px] items-center justify-between rounded-[999px] px-[100px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-transform duration-150 hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)] bg-gradient-custom-interactive-1 group-data-[ci=ci-2]/ci:bg-gradient-custom-interactive-2 group-data-[ci=ci-3]/ci:bg-gradient-custom-interactive-3"
+          className="group flex h-[200px] items-center justify-between rounded-[999px] px-[100px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-transform duration-150 hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)] bg-gradient-kiosk-magenta"
           onClick={handleSecondaryClick}
           type="button"
         >

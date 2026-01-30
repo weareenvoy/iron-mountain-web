@@ -6,7 +6,10 @@ export const getMomentPrefix = (beatId: string): null | string => {
 
 // Foreground and background seamless do not match.
 // Foreground checks for specific beat pairs that skip UI fade.
-const SEAMLESS_GROUPS: readonly BasecampBeatId[][] = [['problem-1', 'problem-2']];
+const SEAMLESS_GROUPS: readonly BasecampBeatId[][] = [
+  ['problem-1', 'problem-2'],
+  ['welcome-1', 'welcome-2'],
+];
 export const isForegroundSeamlessTransition = (from: BasecampBeatId | null, to: BasecampBeatId | null): boolean => {
   if (!from || !to) return true; // No fade needed when either is null
   return SEAMLESS_GROUPS.some(group => group.includes(from) && group.includes(to));
