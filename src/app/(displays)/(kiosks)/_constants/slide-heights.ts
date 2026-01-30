@@ -76,7 +76,7 @@ export const CHALLENGE_HEIGHTS: Record<
 const SOLUTION_HEIGHTS_COMMON = {
   firstScreen: 4230,
   fourthScreen: 5210,
-  secondScreen: 3644,
+  secondScreen: 5130,
   thirdScreen: 6695,
 };
 
