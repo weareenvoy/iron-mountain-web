@@ -49,7 +49,9 @@ export const mapSolutionsWithGrid = (
 
   // Validate numbered list has required items
   const numberedList = solutionsMain.numberedList ?? [];
-  if (numberedList.length < 4) {
+  const hasNumberedListData = numberedList.some(item => item && item.trim().length > 0);
+  
+  if (numberedList.length < 4 && hasNumberedListData) {
     if (process.env.NODE_ENV === 'development') {
       console.warn(`[mapSolutionsWithGrid] numberedList should have at least 4 items, got ${numberedList.length}`);
     }
@@ -63,21 +65,24 @@ export const mapSolutionsWithGrid = (
       mainVideo: solutionsMain.mainVideo,
       subheadline: ambient.title,
     },
-    secondScreen: {
-      heroImageSrc: solutionsMain.image,
-      image: solutionsMain.image,
-      labelText: solutionsMain.labelText,
-      numberedListHeadline: solutionsMain.numberedListHeadline,
-      stepFourDescription: numberedList[3],
-      stepFourLabel: '04.',
-      stepOneDescription: numberedList[0],
-      stepOneLabel: '01.',
-      stepThreeDescription: numberedList[2],
-      stepThreeLabel: '03.',
-      stepTwoDescription: numberedList[1],
-      stepTwoLabel: '02.',
-      subheadline: ambient.title,
-    },
+    // Only include secondScreen if numbered list has content
+    ...(hasNumberedListData && {
+      secondScreen: {
+        heroImageSrc: solutionsMain.image,
+        image: solutionsMain.image,
+        labelText: solutionsMain.labelText,
+        numberedListHeadline: solutionsMain.numberedListHeadline,
+        stepFourDescription: numberedList[3],
+        stepFourLabel: '04.',
+        stepOneDescription: numberedList[0],
+        stepOneLabel: '01.',
+        stepThreeDescription: numberedList[2],
+        stepThreeLabel: '03.',
+        stepTwoDescription: numberedList[1],
+        stepTwoLabel: '02.',
+        subheadline: ambient.title,
+      },
+    }),
     thirdScreen: {
       // No type assertion needed - diamondPositions is validated as string | undefined
       bottomLeftLabel: diamondPositions.bottomLeft,

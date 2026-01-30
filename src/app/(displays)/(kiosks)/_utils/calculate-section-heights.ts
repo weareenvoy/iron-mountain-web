@@ -64,6 +64,7 @@ export const calculateSolutionGradientHeight = (slides: Slide[], kioskId: KioskI
   if (solutionSlides.length === 0) return 0;
 
   const heights = SOLUTION_HEIGHTS[kioskId];
+  const hasSecondScreen = solutionSlides.some(slide => slide.id.startsWith('solution-second'));
   const hasThirdScreen = solutionSlides.some(slide => slide.id === 'solution-third');
   const hasFourthScreen = solutionSlides.some(slide => slide.id === 'solution-fourth');
 
@@ -72,7 +73,25 @@ export const calculateSolutionGradientHeight = (slides: Slide[], kioskId: KioskI
   // Add heights for each rendered solution screen
   solutionSlides.forEach(slide => {
     if (slide.id === 'solution-first') {
-      totalHeight += heights.firstScreen;
+      // Conditional firstScreen height based on which other screens are present:
+      // - When ONLY firstScreen (no other solution screens): use 4100 (kiosk-1, kiosk-3) or 4160 (kiosk-2)
+      // - When only grid present (no numbered list, no accordion): use 2665
+      // - When numbered list AND accordion present (no grid): use 5800
+      // - Otherwise: use default height from config (4230)
+      let firstScreenHeight = heights.firstScreen;
+      
+      if (!hasSecondScreen && !hasThirdScreen && !hasFourthScreen) {
+        // Only firstScreen, nothing else - kiosk-specific height
+        firstScreenHeight = kioskId === 'kiosk-2' ? 4100 : 4160;
+      } else if (!hasSecondScreen && !hasFourthScreen && hasThirdScreen) {
+        // Only grid present
+        firstScreenHeight = 2665;
+      } else if (hasSecondScreen && hasFourthScreen && !hasThirdScreen) {
+        // Numbered list + accordion, no grid
+        firstScreenHeight = 5800;
+      }
+      
+      totalHeight += firstScreenHeight;
     } else if (slide.id.startsWith('solution-second')) {
       // Use different height based on whether grid (third screen) or accordion (fourth screen) is present
       // When grid OR accordion is present, use reduced height (3644)
@@ -82,8 +101,11 @@ export const calculateSolutionGradientHeight = (slides: Slide[], kioskId: KioskI
     } else if (slide.id === 'solution-third') {
       totalHeight += heights.thirdScreen;
     } else if (slide.id === 'solution-fourth') {
-      // When fourth screen appears without third screen, use the third screen's height value
-      // When both are present, add the fourth screen's height
+      // IMPORTANT: When fourth screen (accordion) appears WITHOUT third screen (grid),
+      // we use the thirdScreen height value instead of fourthScreen.
+      // This allows per-kiosk customization of accordion height when it appears standalone.
+      // Example: Kiosk-3 uses thirdScreen: 5130 for standalone accordion
+      // When both grid and accordion are present, use the fourthScreen height
       totalHeight += !hasThirdScreen ? heights.thirdScreen : heights.fourthScreen;
     }
   });

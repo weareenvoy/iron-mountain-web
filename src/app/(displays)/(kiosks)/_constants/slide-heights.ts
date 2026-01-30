@@ -103,7 +103,14 @@ export const SOLUTION_HEIGHTS: Record<
     secondScreen: 5080, // Override: Kiosk 2 secondScreen when accordion/grid not present
     thirdScreen: 6645, // Override: Kiosk 2 has shorter grid
   },
-  'kiosk-3': SOLUTION_HEIGHTS_COMMON,
+  'kiosk-3': {
+    ...SOLUTION_HEIGHTS_COMMON,
+    // NOTE: thirdScreen value is also used for fourthScreen (accordion) height when grid is not present
+    // This is determined by the calculation logic in calculateSolutionGradientHeight
+    // When accordion appears WITHOUT grid: uses thirdScreen value (5130)
+    // When both grid and accordion appear: uses fourthScreen value (5210) for accordion
+    thirdScreen: 5130,
+  },
 };
 
 /**

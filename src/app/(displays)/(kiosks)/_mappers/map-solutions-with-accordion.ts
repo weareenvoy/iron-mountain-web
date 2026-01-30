@@ -22,6 +22,12 @@ export const mapSolutionsWithAccordion = (
     Array.isArray(solutionAccordion.accordion) && 
     solutionAccordion.accordion.length > 0;
 
+  // Check if numbered list has actual content
+  const hasNumberedListData = 
+    solutionsMain.numberedList && 
+    Array.isArray(solutionsMain.numberedList) && 
+    solutionsMain.numberedList.some(item => item && item.trim().length > 0);
+
   return {
     firstScreen: {
       body: solutionsMain.body,
@@ -55,20 +61,23 @@ export const mapSolutionsWithAccordion = (
         subheadline: ambient.title,
       },
     }),
-    secondScreen: {
-      heroImageSrc: solutionsMain.image,
-      image: solutionsMain.image,
-      labelText: solutionsMain.labelText,
-      numberedListHeadline: solutionsMain.numberedListHeadline,
-      stepFourDescription: solutionsMain.numberedList?.[3],
-      stepFourLabel: '04.',
-      stepOneDescription: solutionsMain.numberedList?.[0],
-      stepOneLabel: '01.',
-      stepThreeDescription: solutionsMain.numberedList?.[2],
-      stepThreeLabel: '03.',
-      stepTwoDescription: solutionsMain.numberedList?.[1],
-      stepTwoLabel: '02.',
-      subheadline: ambient.title,
-    },
+    // Only include secondScreen if numbered list has content
+    ...(hasNumberedListData && {
+      secondScreen: {
+        heroImageSrc: solutionsMain.image,
+        image: solutionsMain.image,
+        labelText: solutionsMain.labelText,
+        numberedListHeadline: solutionsMain.numberedListHeadline,
+        stepFourDescription: solutionsMain.numberedList?.[3],
+        stepFourLabel: '04.',
+        stepOneDescription: solutionsMain.numberedList?.[0],
+        stepOneLabel: '01.',
+        stepThreeDescription: solutionsMain.numberedList?.[2],
+        stepThreeLabel: '03.',
+        stepTwoDescription: solutionsMain.numberedList?.[1],
+        stepTwoLabel: '02.',
+        subheadline: ambient.title,
+      },
+    }),
   };
 };
