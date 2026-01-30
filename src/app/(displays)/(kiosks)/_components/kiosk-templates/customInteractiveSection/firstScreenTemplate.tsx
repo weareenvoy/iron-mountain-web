@@ -17,6 +17,7 @@ import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 export interface CustomInteractiveKiosk1FirstScreenTemplateProps {
   readonly customInteractiveIndex?: number;
+  readonly customInteractiveNumber?: 1 | 2 | 3;
   readonly demoIframeSrc?: string;
   readonly eyebrow?: string;
   readonly headline?: string;
@@ -35,6 +36,7 @@ export interface CustomInteractiveKiosk1FirstScreenTemplateProps {
 
 const CustomInteractiveKiosk1FirstScreenTemplate = ({
   customInteractiveIndex = 0,
+  customInteractiveNumber = 1,
   demoIframeSrc,
   eyebrow,
   headline,
@@ -68,10 +70,11 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
 
   const eyebrowText = eyebrow;
   const headlineText = headline;
-  const isKiosk3 = kioskId === 'kiosk-3';
-  const ctaWidthClass = isKiosk3 ? 'w-[1360px]' : 'w-[1020px]';
-  const secondaryLabelPadding = isKiosk3 ? 'pl-[320px]' : 'pl-[80px]';
-  const secondaryIconOffset = isKiosk3 ? 'left-[-330px]' : 'left-[-70px]';
+  // Use custom interactive number instead of kiosk ID for styling
+  const isCI3 = customInteractiveNumber === 3;
+  const ctaWidthClass = isCI3 ? 'w-[1360px]' : 'w-[1020px]';
+  const secondaryLabelPadding = isCI3 ? 'pl-[320px]' : 'pl-[80px]';
+  const secondaryIconOffset = isCI3 ? 'left-[-330px]' : 'left-[-70px]';
 
   const handleSecondaryClick = () => {
     setShowOverlay(true);
@@ -88,7 +91,8 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
 
   return (
     <div
-      className="group/kiosk relative flex h-screen w-full flex-col overflow-visible"
+      className="group/ci relative flex h-screen w-full flex-col overflow-visible"
+      data-ci={`ci-${customInteractiveNumber}`}
       data-scroll-section="customInteractive-first-screen"
       data-section={SECTION_NAMES.CUSTOM_INTERACTIVE}
       ref={sectionRef}
@@ -120,7 +124,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       {/* Eyebrow */}
       <motion.h2
         animate={shouldAnimate ? { y: 0 } : undefined}
-        className="absolute top-[200px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] will-change-transform group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-3]/kiosk:top-[240px]"
+        className="absolute top-[200px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] will-change-transform group-data-[ci=ci-2]/ci:left-[120px] group-data-[ci=ci-3]/ci:top-[240px]"
         initial={{ y: TITLE_ANIMATION_TRANSFORMS.SECTION_HEADER }}
         ref={eyebrowRef}
         transition={{ delay: 0, duration: SCROLL_ANIMATION_CONFIG.DURATION, ease: SCROLL_ANIMATION_CONFIG.EASING }}
@@ -153,7 +157,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
 
       {/* Headline */}
       <h1
-        className="absolute top-[1250px] left-[250px] w-full text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed] group-data-[kiosk=kiosk-3]/kiosk:top-[830px]"
+        className="absolute top-[1250px] left-[250px] w-full text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed] group-data-[ci=ci-3]/ci:top-[830px]"
         data-scroll-section="customInteractive-headline"
       >
         {renderRegisteredMark(headlineText)}
@@ -162,7 +166,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       {/* CTA buttons */}
       <div
         className={cn(
-          'absolute top-[2220px] left-[245px] z-10 flex flex-col gap-[90px] group-data-[kiosk=kiosk-3]/kiosk:top-[2350px]',
+          'absolute top-[2220px] left-[245px] z-10 flex flex-col gap-[90px] group-data-[ci=ci-3]/ci:top-[2350px]',
           ctaWidthClass
         )}
       >
@@ -180,7 +184,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
         )}
         {/* CTA button gradient - defined in globals.css for readability and ease of future updates */}
         <button
-          className="group bg-gradient-kiosk-magenta flex h-[200px] items-center justify-between rounded-[999px] px-[100px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-transform duration-150 hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+          className="group flex h-[200px] items-center justify-between rounded-[999px] px-[100px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-transform duration-150 hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)] bg-gradient-custom-interactive-1 group-data-[ci=ci-2]/ci:bg-gradient-custom-interactive-2 group-data-[ci=ci-3]/ci:bg-gradient-custom-interactive-3"
           onClick={handleSecondaryClick}
           type="button"
         >

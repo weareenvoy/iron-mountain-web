@@ -23,7 +23,7 @@ type CarouselCTAProps = {
 const CarouselCTA = memo(({ label, onClick }: CarouselCTAProps) => {
   return (
     <button
-      className="group bg-gradient-kiosk-solution absolute top-[2630px] left-[240px] z-11 flex h-[200px] items-center gap-[18px] rounded-[999px] px-[110px] text-[55px] leading-[1.1] font-semibold tracking-[2px] text-white active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+      className="group absolute top-[2630px] left-[240px] z-11 flex h-[200px] items-center gap-[18px] rounded-[999px] px-[110px] text-[55px] leading-[1.1] font-semibold tracking-[2px] text-white active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)] bg-gradient-custom-interactive-1 group-data-[ci=ci-2]/ci:bg-gradient-custom-interactive-2 group-data-[ci=ci-3]/ci:bg-gradient-custom-interactive-3"
       onClick={onClick}
       type="button"
     >

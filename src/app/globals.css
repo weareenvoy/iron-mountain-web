@@ -159,7 +159,20 @@
   }
   /* Original value is background: linear-gradient(170deg, #2481e3 -6.53%, #123e6c 125.02%, #0f355c 92.02%, #091e36 117.7%);, updated to custom gradient values at Loris' request. */
 
-  /* Custom Interactive "Launch Demo" button gradients */
+  /* Custom Interactive button gradients - tied to CI number, not kiosk */
+  .bg-gradient-custom-interactive-1 {
+    background: linear-gradient(296deg, #a2115e 28.75%, #8a0d71 82.59%);
+  }
+
+  .bg-gradient-custom-interactive-2 {
+    background: linear-gradient(296deg, #a2115e 28.75%, #8a0d71 82.59%);
+  }
+
+  .bg-gradient-custom-interactive-3 {
+    background: linear-gradient(296deg, #a2115e 28.75%, #8a0d71 82.59%);
+  }
+
+  /* Legacy Custom Interactive "Launch Demo" button gradient - kept for backwards compatibility */
   .bg-gradient-kiosk-magenta {
     background: linear-gradient(296deg, #a2115e 28.75%, #8a0d71 82.59%);
   }

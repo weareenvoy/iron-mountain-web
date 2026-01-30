@@ -83,6 +83,7 @@ export const buildCustomInteractiveSlides = (
         <SectionSlide>
           <CustomInteractiveFirstScreenTemplate
             customInteractiveIndex={index ?? 0}
+            customInteractiveNumber={ciNumber}
             kioskId={kioskId}
             {...customInteractive.firstScreen}
             onEndTour={handleEndTour}
@@ -106,6 +107,7 @@ export const buildCustomInteractiveSlides = (
         <SectionSlide>
           <CustomInteractiveKiosk3SecondScreenTemplate
             {...customInteractive.kiosk3SecondScreen}
+            customInteractiveNumber={ciNumber}
             onBack={() => scrollToSection?.(SECTION_IDS.FIRST_SCREEN)}
             onEndTour={handleEndTour}
           />
@@ -121,6 +123,7 @@ export const buildCustomInteractiveSlides = (
         <SectionSlide>
           <CustomInteractiveKiosk1SecondScreenTemplate
             {...customInteractive.secondScreen}
+            customInteractiveNumber={ciNumber}
             onBack={() => scrollToSection?.(SECTION_IDS.FIRST_SCREEN)}
             onEndTour={handleEndTour}
           />
