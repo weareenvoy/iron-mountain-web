@@ -38,18 +38,31 @@ const LAYOUT = {
 } as const;
 
 /**
+ * Animation configuration for diamond transitions
+ */
+const DIAMOND_TRANSITION = {
+  DURATION: 0.5,
+  EASE: [0.3, 0, 0.6, 1] as const,
+} as const;
+
+/**
  * StepCarousel - Horizontally scrolling carousel of diamond-shaped steps
  * Features staggered entrance animations, size/color transitions, and modal integration
  *
- * NOTE: This component is designed specifically for kiosk-1 with exactly 5 steps.
- * Layout offsets and sizing are hardcoded for the 5-item diamond configuration.
- * If dynamic item counts are needed, consider refactoring the layout math.
+ * DESIGN CONSTRAINT: This component is designed specifically for kiosk-1 with exactly 5 steps.
+ * Layout offsets and sizing are hardcoded for the 5-item diamond configuration to match
+ * the approved design specifications.
+ *
+ * IMPLEMENTATION NOTE: While wrap-around math uses totalSlides for flexibility, the component
+ * is optimized and tested for 5 items only. Different item counts may produce unexpected
+ * positioning or z-index layering behavior.
  */
 const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
   const [selectedIndex, setSelectedIndex] = useState(() => Math.min(steps.length - 1, LAYOUT.INITIAL_CENTER_INDEX));
   const [shouldAnimate, setShouldAnimate] = useState(false);
   const [pressedIndex, setPressedIndex] = useState<null | number>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const transitionTimeoutRef = useRef<null | ReturnType<typeof setTimeout>>(null);
   const selectedIndexRef = useRef(selectedIndex);
   const isTransitioningRef = useRef(false);
   const totalSlides = steps.length;
@@ -60,25 +73,28 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
   }, [selectedIndex]);
 
   // Track transition state when selectedIndex changes
-  // Uses transitionend event for accurate transition completion detection
   useEffect(() => {
     isTransitioningRef.current = true;
 
-    const container = containerRef.current;
-    if (!container) return;
+    // Clear any existing timeout
+    if (transitionTimeoutRef.current) {
+      clearTimeout(transitionTimeoutRef.current);
+    }
 
-    // Listen for transitionend on any diamond element
-    const handleTransitionEnd = (e: TransitionEvent) => {
-      // Only respond to transform transitions on diamond containers
-      if (e.propertyName === 'transform' && (e.target as HTMLElement).classList.contains('absolute')) {
+    // Clear transition state after animation completes
+    transitionTimeoutRef.current = setTimeout(
+      () => {
         isTransitioningRef.current = false;
-      }
-    };
-
-    container.addEventListener('transitionend', handleTransitionEnd);
+        transitionTimeoutRef.current = null;
+      },
+      DIAMOND_TRANSITION.DURATION * 1000 + 100
+    );
 
     return () => {
-      container.removeEventListener('transitionend', handleTransitionEnd);
+      if (transitionTimeoutRef.current) {
+        clearTimeout(transitionTimeoutRef.current);
+        transitionTimeoutRef.current = null;
+      }
     };
   }, [selectedIndex]);
 
@@ -164,8 +180,9 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
             let relativePos = idx - selectedIndex;
 
             // Wrap around: normalize to range -2 to +2
-            if (relativePos > 2) relativePos -= totalSlides;
-            if (relativePos < -2) relativePos += totalSlides;
+            // For a 5-item carousel, we want items to wrap smoothly
+            if (relativePos > totalSlides / 2) relativePos -= totalSlides;
+            if (relativePos < -totalSlides / 2) relativePos += totalSlides;
 
             const isActive = relativePos === 0;
             const isLeftEdge = relativePos === -2;
@@ -173,6 +190,23 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
             const isMiddle = relativePos === -1 || relativePos === 1;
             const inactiveSize = isLeftEdge || isRightEdge ? LAYOUT.DIAMOND_SIZE_EDGE : LAYOUT.DIAMOND_SIZE_MIDDLE;
             const isOuter = isLeftEdge || isRightEdge;
+
+            // Calculate z-index based on distance from center (closer = higher z-index)
+            // This ensures clicking on middle diamonds doesn't accidentally trigger edge diamonds
+            const getZIndex = () => {
+              switch (relativePos) {
+                case -2:
+                case 2:
+                  return 4; // Edge (far left/right)
+                case -1:
+                case 1:
+                  return 7; // Middle (directly adjacent)
+                case 0:
+                  return 10; // Active (center)
+                default:
+                  return 0;
+              }
+            };
 
             // Calculate horizontal offset based on position
             const getOffset = () => {
@@ -194,13 +228,14 @@ const StepCarousel = ({ onStepClick, steps }: StepCarouselProps) => {
 
             return (
               <div
-                className="absolute left-1/2 transition-[transform,opacity] duration-500 ease-[cubic-bezier(0.3,0,0.6,1)]"
+                className="absolute left-1/2"
                 key={`${idx}-${step.label}`}
                 style={{
                   opacity: relativePos >= -2 && relativePos <= 2 ? 1 : 0,
                   pointerEvents: relativePos >= -2 && relativePos <= 2 ? 'auto' : 'none',
                   transform: `translateX(calc(-50% + ${getOffset()}px))`,
-                  zIndex: isActive ? 10 : isOuter ? 5 : 1,
+                  transition: 'transform 0.5s cubic-bezier(0.3, 0, 0.6, 1), opacity 0.5s cubic-bezier(0.3, 0, 0.6, 1)',
+                  zIndex: getZIndex(),
                 }}
               >
                 <DiamondCarouselItem

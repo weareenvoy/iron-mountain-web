@@ -93,8 +93,8 @@ export const buildSolutionSlides = (
     );
   });
 
-  // Third screen (only if no fourth screen)
-  if (solutions.thirdScreen && !solutions.fourthScreen) {
+  // Third screen (diamond grid)
+  if (solutions.thirdScreen) {
     slides.push(
       createSlide(
         {
@@ -108,7 +108,7 @@ export const buildSolutionSlides = (
     );
   }
 
-  // Fourth screen (replaces third if present)
+  // Fourth screen (accordion)
   if (solutions.fourthScreen) {
     slides.push(
       createSlide(

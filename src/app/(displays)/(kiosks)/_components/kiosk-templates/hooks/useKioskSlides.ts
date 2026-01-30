@@ -10,8 +10,10 @@ import { mapSolutionsWithAccordion } from '@/app/(displays)/(kiosks)/_mappers/ma
 import { mapSolutionsWithGrid, type DiamondMapping } from '@/app/(displays)/(kiosks)/_mappers/map-solutions-with-grid';
 import { mapValue } from '@/app/(displays)/(kiosks)/_mappers/map-value';
 import { parseKioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
+import { calculateSectionGradientHeights } from '@/app/(displays)/(kiosks)/_utils/calculate-section-heights';
 import { parseKioskData } from '@/app/(displays)/(kiosks)/_utils/parseKioskData';
 import type { CarouselHandlers } from '@/app/(displays)/(kiosks)/_types/carousel-types';
+import type { CustomInteractiveContent } from '@/app/(displays)/(kiosks)/_types/content-types';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 // Transforms the raw CMS data into renderable Kiosk slides. Maps the data through the mapper functions for challenges, solutions, value, and customInteractive, builds the slides and returns them in a slide array ready to render.
@@ -50,16 +52,30 @@ type UseKioskSlidesConfig = {
   readonly kioskData: KioskData;
   readonly kioskId: KioskId;
   readonly slideBuilders: SlideBuilders;
-  readonly usesAccordion?: boolean;
 };
 
-export const useKioskSlides = ({
-  diamondMapping,
-  kioskData,
-  kioskId,
-  slideBuilders,
-  usesAccordion = false,
-}: UseKioskSlidesConfig) => {
+/**
+ * Helper to check if an object has meaningful content.
+ * Recursively checks for non-empty strings, non-empty arrays, or nested objects with content.
+ */
+const hasContent = (obj: unknown): boolean => {
+  if (!obj || typeof obj !== 'object') return false;
+
+  if (Array.isArray(obj)) {
+    return obj.some(item => hasContent(item) || (typeof item === 'string' && item.trim().length > 0));
+  }
+
+  return Object.values(obj).some(value => {
+    if (typeof value === 'string') return value.trim().length > 0;
+    if (typeof value === 'number') return true;
+    if (typeof value === 'boolean') return true;
+    if (Array.isArray(value)) return value.length > 0 && hasContent(value);
+    if (typeof value === 'object' && value !== null) return hasContent(value);
+    return false;
+  });
+};
+
+export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilders }: UseKioskSlidesConfig) => {
   const {
     globalHandlers,
     handleInitialButtonClick,
@@ -80,9 +96,11 @@ export const useKioskSlides = ({
     }
   }, [kioskData]);
 
-  // Map challenges
+  // Map challenges - only if challengeMain has content
   const challenges = useMemo(() => {
-    if (!kioskContent?.challengeMain || !kioskContent.ambient) return null;
+    if (!kioskContent?.ambient) return null;
+    if (!kioskContent.challengeMain || !hasContent(kioskContent.challengeMain)) return null;
+
     try {
       return parseKioskChallenges(mapChallenges(kioskContent.challengeMain, kioskContent.ambient));
     } catch (error) {
@@ -93,40 +111,74 @@ export const useKioskSlides = ({
     }
   }, [kioskContent]);
 
-  // Map solutions
-  const solutions = useMemo(() => {
-    if (!kioskContent?.solutionMain || !kioskContent.ambient) return null;
+  // Map solutions - show accordion, grid, or both based on data presence
+  const solutionAccordion = useMemo(() => {
+    if (!kioskContent?.ambient) return null;
+    if (!kioskContent.solutionMain || !hasContent(kioskContent.solutionMain)) return null;
 
     try {
-      if (usesAccordion && kioskContent.solutionAccordion) {
+      // Check if solutionAccordion has actual data (items with content)
+      const hasAccordionData =
+        kioskContent.solutionAccordion &&
+        typeof kioskContent.solutionAccordion === 'object' &&
+        Array.isArray(kioskContent.solutionAccordion.accordion) &&
+        kioskContent.solutionAccordion.accordion.some(
+          item => item.title?.trim() || (item.bullets && item.bullets.length > 0)
+        );
+
+      // If no accordion data, still generate first and second screens from solutionMain alone
+      if (!hasAccordionData) {
+        // Return only firstScreen and secondScreen (no fourthScreen without accordion data)
         return mapSolutionsWithAccordion(
           kioskContent.solutionMain,
-          kioskContent.solutionAccordion,
+          { accordion: [], headline: '', image: '' },
           kioskContent.ambient
         );
       }
 
-      if (!usesAccordion && kioskContent.solutionGrid && diamondMapping) {
-        return mapSolutionsWithGrid(
-          kioskContent.solutionMain,
-          kioskContent.solutionGrid,
-          kioskContent.ambient,
-          diamondMapping
-        );
-      }
-
-      return null;
+      return mapSolutionsWithAccordion(kioskContent.solutionMain, kioskContent.solutionAccordion, kioskContent.ambient);
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
-        console.error('[useKioskSlides] Failed to map solutions:', error);
+        console.error('[useKioskSlides] Failed to map solution accordion:', error);
       }
       return null;
     }
-  }, [kioskContent, usesAccordion, diamondMapping]);
+  }, [kioskContent]);
 
-  // Map values
+  const solutionGrid = useMemo(() => {
+    if (!kioskContent?.ambient) return null;
+    if (!kioskContent.solutionMain || !hasContent(kioskContent.solutionMain)) return null;
+    if (!diamondMapping) return null;
+
+    try {
+      // Check if solutionGrid has actual data (non-empty diamondList with content)
+      const hasGridData =
+        kioskContent.solutionGrid &&
+        typeof kioskContent.solutionGrid === 'object' &&
+        Array.isArray(kioskContent.solutionGrid.diamondList) &&
+        kioskContent.solutionGrid.diamondList.some(item => item?.trim());
+
+      if (!hasGridData) return null;
+
+      return mapSolutionsWithGrid(
+        kioskContent.solutionMain,
+        kioskContent.solutionGrid,
+        kioskContent.ambient,
+        diamondMapping
+      );
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[useKioskSlides] Failed to map solution grid:', error);
+      }
+      return null;
+    }
+  }, [kioskContent, diamondMapping]);
+
+  // Map values - only if valueMain has content
   const values = useMemo(() => {
-    if (!kioskContent?.valueMain || !kioskContent.ambient) return null;
+    if (!kioskContent?.ambient) return null;
+    if (!kioskContent.valueMain || !hasContent(kioskContent.valueMain)) return null;
+
     try {
       return mapValue(kioskContent.valueMain, kioskContent.ambient, kioskId);
     } catch (error) {
@@ -137,86 +189,117 @@ export const useKioskSlides = ({
     }
   }, [kioskContent, kioskId]);
 
-  // Helper to get appropriate custom interactive mapper by kiosk ID
-  const getCustomInteractiveMapper = (id: KioskId) => {
-    switch (id) {
-      case 'kiosk-1':
+  // Helper to get appropriate custom interactive mapper by number
+  const getCustomInteractiveMapper = (interactiveNumber: 1 | 2 | 3) => {
+    switch (interactiveNumber) {
+      case 1:
         return mapCustomInteractiveKiosk1;
-      case 'kiosk-2':
-        return null; // Kiosk 2 uses direct object construction
-      case 'kiosk-3':
+      case 2:
+        return null; // Interactive 2 uses direct object construction
+      case 3:
         return mapCustomInteractiveKiosk3;
       default:
-        throw new Error(`Invalid KioskId for custom interactive mapper: ${id}`);
+        throw new Error(`Invalid custom interactive number: ${interactiveNumber}`);
     }
   };
 
-  // Map custom interactive
-  const customInteractive = useMemo(() => {
-    if (!kioskContent?.ambient) return null;
+  // Map custom interactives - check customInteractiveChoice to determine which to show
+  // Only display the FIRST non-empty custom interactive
+  const customInteractives = useMemo(() => {
+    if (!kioskContent?.ambient) return [];
 
-    const customInteractiveKey =
-      kioskId === 'kiosk-1'
-        ? 'customInteractive1'
-        : kioskId === 'kiosk-2'
-          ? 'customInteractive2'
-          : 'customInteractive3';
+    // Check customInteractiveChoice to see which interactives should be shown
+    const choice = kioskContent.customInteractiveChoice;
 
-    const customInteractiveData = kioskContent[customInteractiveKey];
-    if (!customInteractiveData) return null;
-
-    const mapper = getCustomInteractiveMapper(kioskId);
-
-    try {
-      if (!mapper) {
-        // Kiosk 2 uses direct object construction with proper type extraction
-        const demo = kioskContent.demoMain;
-        const ambient = kioskContent.ambient;
-
-        return {
-          firstScreen: {
-            demoIframeSrc: demo?.iframeLink,
-            eyebrow: ambient.title,
-            headline: customInteractiveData.headline,
-            heroImageAlt: '',
-            heroImageSrc: customInteractiveData.image,
-            overlayCardLabel: demo?.demoText,
-            overlayEndTourLabel: demo?.mainCTA,
-            overlayHeadline: demo?.headline,
-            primaryCtaLabel: undefined,
-            secondaryCtaLabel: customInteractiveData.secondaryCTA,
-          },
-        };
+    // Find the first non-empty custom interactive and return only that one
+    // CustomInteractive 1
+    if (choice?.customInteractive1 && choice.customInteractive1.trim() !== '') {
+      const data = kioskContent.customInteractive1;
+      if (data && hasContent(data)) {
+        const mapped = processCustomInteractive({ data: data as CustomInteractiveContent, number: 1 });
+        return mapped ? [mapped] : [];
       }
-
-      return mapper(customInteractiveData, kioskContent.ambient, kioskContent.demoMain);
-    } catch (error) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('[useKioskSlides] Failed to map custom interactive:', error);
-      }
-      return null;
     }
-  }, [kioskContent, kioskId]);
+
+    // CustomInteractive 2
+    if (choice?.customInteractive2 && choice.customInteractive2.trim() !== '') {
+      const data = kioskContent.customInteractive2;
+      if (data && hasContent(data)) {
+        const mapped = processCustomInteractive({ data: data as CustomInteractiveContent, number: 2 });
+        return mapped ? [mapped] : [];
+      }
+    }
+
+    // CustomInteractive 3
+    if (choice?.customInteractive3 && choice.customInteractive3.trim() !== '') {
+      const data = kioskContent.customInteractive3;
+      if (data && hasContent(data)) {
+        const mapped = processCustomInteractive({ data: data as CustomInteractiveContent, number: 3 });
+        return mapped ? [mapped] : [];
+      }
+    }
+
+    return [];
+
+    // Helper function to process a single custom interactive
+    function processCustomInteractive(item: { data: CustomInteractiveContent; number: 1 | 2 | 3 }) {
+      if (!kioskContent?.ambient) return null;
+
+      const mapper = getCustomInteractiveMapper(item.number);
+
+      try {
+        if (!mapper) {
+          // Interactive 2 uses direct object construction
+          const demo = kioskContent.demoMain;
+          const ambient = kioskContent.ambient;
+
+          return {
+            firstScreen: {
+              demoIframeSrc: demo?.iframeLink,
+              eyebrow: ambient.title,
+              headline: item.data.headline,
+              heroImageAlt: '',
+              heroImageSrc: item.data.image,
+              overlayCardLabel: demo?.demoText,
+              overlayEndTourLabel: demo?.mainCTA,
+              overlayHeadline: demo?.headline,
+              primaryCtaLabel: undefined,
+              secondaryCtaLabel: item.data.secondaryCTA,
+            },
+            number: item.number,
+          };
+        }
+
+        const mapped = mapper(item.data, kioskContent.ambient, kioskContent.demoMain);
+        return { ...mapped, number: item.number };
+      } catch (error) {
+        if (process.env.NODE_ENV === 'development') {
+          console.error(`[useKioskSlides] Failed to map custom interactive ${item.number}:`, error);
+        }
+        return null;
+      }
+    }
+  }, [kioskContent]);
 
   // Track missing sections for better error reporting
   const missingSections = useMemo(() => {
     const missing: string[] = [];
     if (!challenges) missing.push('challenges');
-    if (!solutions) missing.push('solutions');
+    if (!solutionAccordion && !solutionGrid) missing.push('solutions');
     if (!values) missing.push('values');
-    if (!customInteractive) missing.push('customInteractive');
+    if (customInteractives.length === 0) missing.push('customInteractive');
     return missing;
-  }, [challenges, customInteractive, solutions, values]);
+  }, [challenges, customInteractives, solutionAccordion, solutionGrid, values]);
 
   // Build slides
   const slides = useMemo(() => {
     // Log missing sections for debugging
-    if (!challenges || !solutions || !values || !customInteractive) {
+    if (!challenges || (!solutionAccordion && !solutionGrid) || !values || customInteractives.length === 0) {
       const missing: string[] = [];
       if (!challenges) missing.push('challenges');
-      if (!solutions) missing.push('solutions');
+      if (!solutionAccordion && !solutionGrid) missing.push('solutions');
       if (!values) missing.push('values');
-      if (!customInteractive) missing.push('customInteractive');
+      if (customInteractives.length === 0) missing.push('customInteractive');
 
       if (process.env.NODE_ENV === 'development') {
         console.warn(`[useKioskSlides] Kiosk ${kioskId} missing sections:`, missing.join(', '));
@@ -225,6 +308,15 @@ export const useKioskSlides = ({
       return [];
     }
 
+    // Merge solution screens from both grid and accordion
+    // Grid provides: firstScreen, secondScreen, thirdScreen
+    // Accordion provides: firstScreen, secondScreen, fourthScreen
+    // Result: firstScreen, secondScreen, thirdScreen (if grid exists), fourthScreen (if accordion exists)
+    const mergedSolutionScreens = {
+      ...(solutionGrid ?? {}),
+      ...(solutionAccordion ?? {}),
+    };
+
     return [
       ...buildChallengeSlides(challenges, kioskId, globalHandlers, {
         initialScreen: {
@@ -232,18 +324,24 @@ export const useKioskSlides = ({
         },
         onInitialButtonClick: handleInitialButtonClick,
       }),
-      ...buildSolutionSlides(solutions, kioskId, {
+      // Build solution slides from merged data
+      // Order: first, second, third (if from grid), fourth (if from accordion)
+      ...buildSolutionSlides(mergedSolutionScreens, kioskId, {
         ...globalHandlers,
         onRegisterListHandlers: handleRegisterListHandlers,
       }),
       ...buildValueSlides(values, kioskId, globalHandlers, {
         registerCarouselHandlers: handleRegisterCarouselHandlers,
       }),
-      ...buildCustomInteractiveSlides(customInteractive, kioskId, scrollToSectionById),
+      // Build slides for all enabled custom interactives with unique IDs
+      // Pass the custom interactive number (1, 2, or 3) for proper gradient height calculation
+      ...customInteractives.flatMap((customInteractive, index) =>
+        buildCustomInteractiveSlides(customInteractive, kioskId, scrollToSectionById, index, customInteractive.number)
+      ),
     ];
   }, [
     challenges,
-    customInteractive,
+    customInteractives,
     globalHandlers,
     handleInitialButtonClick,
     handleRegisterCarouselHandlers,
@@ -251,16 +349,32 @@ export const useKioskSlides = ({
     kioskContent,
     kioskId,
     scrollToSectionById,
-    solutions,
+    solutionAccordion,
+    solutionGrid,
     values,
   ]);
 
+  // Calculate gradient heights based on rendered slides
+  const gradientHeights = useMemo(() => {
+    if (slides.length === 0) {
+      return {
+        challenge: 0,
+        customInteractive: [],
+        solution: 0,
+        value: 0,
+      };
+    }
+    return calculateSectionGradientHeights(slides, kioskId);
+  }, [slides, kioskId]);
+
   return {
     challenges,
-    customInteractive,
+    customInteractives,
+    gradientHeights,
     missingSections: missingSections.length > 0 ? missingSections : null,
     slides,
-    solutions,
+    solutionAccordion,
+    solutionGrid,
     values,
   };
 };

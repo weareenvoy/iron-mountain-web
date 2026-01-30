@@ -2,6 +2,7 @@ import { getOptionalProperty, validateObject } from '@/app/(displays)/(kiosks)/_
 import type {
   Ambient,
   ChallengeContent,
+  CustomInteractiveChoice,
   CustomInteractiveContent,
   DemoConfig,
   IdleContent,
@@ -95,6 +96,19 @@ const isDemoConfig = (value: unknown): value is DemoConfig => {
 };
 
 /**
+ * Type guard for CustomInteractiveChoice - validates which custom interactives should be shown
+ */
+const isCustomInteractiveChoice = (value: unknown): value is CustomInteractiveChoice => {
+  if (typeof value !== 'object' || value === null) return false;
+  const obj = value as Record<string, unknown>;
+  return (
+    (obj.customInteractive1 === undefined || typeof obj.customInteractive1 === 'string') &&
+    (obj.customInteractive2 === undefined || typeof obj.customInteractive2 === 'string') &&
+    (obj.customInteractive3 === undefined || typeof obj.customInteractive3 === 'string')
+  );
+};
+
+/**
  * Type guard for SolutionsAccordion - validates structure
  */
 const isSolutionsAccordion = (value: unknown): value is SolutionsAccordion => {
@@ -160,6 +174,7 @@ export type ParsedKioskData = {
   readonly customInteractive1?: CustomInteractiveContent;
   readonly customInteractive2?: CustomInteractiveContent;
   readonly customInteractive3?: CustomInteractiveContent;
+  readonly customInteractiveChoice?: CustomInteractiveChoice;
   readonly demoMain?: DemoConfig;
   readonly idle?: IdleContent;
   readonly solutionAccordion?: SolutionsAccordion;
@@ -300,12 +315,24 @@ export const parseKioskData = (kioskData: null | Record<string, unknown> | undef
       return validated;
     });
 
+    const customInteractiveChoice = getOptionalProperty(obj, 'customInteractiveChoice', val => {
+      const validated = validateObject(val, 'customInteractiveChoice', c => c);
+      if (!isCustomInteractiveChoice(validated)) {
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('[parseKioskData] customInteractiveChoice object has invalid shape:', validated);
+        }
+        return undefined;
+      }
+      return validated;
+    });
+
     return {
       ambient,
       challengeMain,
       customInteractive1,
       customInteractive2,
       customInteractive3,
+      customInteractiveChoice,
       demoMain,
       idle,
       solutionAccordion,

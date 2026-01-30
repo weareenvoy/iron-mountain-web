@@ -50,7 +50,6 @@ export type SolutionsAccordion = {
   }[];
   readonly headline?: string;
   readonly image?: string;
-  readonly labelText?: string;
 };
 
 export type ValueContent = {
@@ -96,4 +95,10 @@ export type DemoConfig = {
   readonly headline?: string;
   readonly iframeLink?: string;
   readonly mainCTA?: string;
+};
+
+export type CustomInteractiveChoice = {
+  readonly customInteractive1?: string;
+  readonly customInteractive2?: string;
+  readonly customInteractive3?: string;
 };

@@ -7,6 +7,7 @@ import { useCarouselDelegation } from '@/app/(displays)/(kiosks)/_components/kio
 import { useGlobalParagraphNavigation } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useGlobalParagraphNavigation';
 import { useKioskArrowState } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useKioskArrowState';
 import { useKioskSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useKioskSlides';
+import { GradientHeightsProvider } from '@/app/(displays)/(kiosks)/_components/providers/gradient-heights-provider';
 import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers/kiosk-provider';
 import { useKioskAudio } from '@/app/(displays)/(kiosks)/_components/providers/useKioskAudio';
 import { SCROLL_DURATION_MS } from '@/app/(displays)/(kiosks)/_constants/timing';
@@ -30,7 +31,7 @@ type BaseKioskViewProps = {
 };
 
 export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
-  const { arrowConfig, diamondMapping, kioskId, usesAccordion } = config;
+  const { arrowConfig, diamondMapping, kioskId } = config;
   const { data: kioskData } = useKiosk();
   const { music, sfx } = useKioskAudio();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -80,7 +81,7 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
   const handleInitialButtonClick = useMemo(() => () => handleButtonClick(kioskId), [handleButtonClick, kioskId]);
 
   // Build slides with the memoized button click handler
-  const { missingSections, slides } = useKioskSlides({
+  const { gradientHeights, missingSections, slides } = useKioskSlides({
     diamondMapping,
     kioskData,
     kioskId,
@@ -94,7 +95,6 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
       handleRegisterListHandlers,
       scrollToSectionById,
     },
-    usesAccordion,
   });
 
   // Determine current section using utility function - AFTER slides built
@@ -279,90 +279,92 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
   }
 
   return (
-    <div
-      className="group/kiosk relative h-screen w-full overflow-y-auto bg-black"
-      data-kiosk={kioskId}
-      ref={containerRef}
-    >
-      <div className="flex w-full flex-col overflow-x-hidden">
-        {/* Render ALL slides, always visible, stacked vertically */}
-        {slides.map((slide, idx) => {
-          let heightClass = 'h-screen';
-          if (slide.id === 'challenge-second') heightClass = 'h-[50vh]';
-          if (slide.id === 'challenge-third') heightClass = 'h-[150vh]';
+    <GradientHeightsProvider heights={gradientHeights}>
+      <div
+        className="group/kiosk relative h-screen w-full overflow-y-auto bg-black"
+        data-kiosk={kioskId}
+        ref={containerRef}
+      >
+        <div className="flex w-full flex-col overflow-x-hidden">
+          {/* Render ALL slides, always visible, stacked vertically */}
+          {slides.map((slide, idx) => {
+            let heightClass = 'h-screen';
+            if (slide.id === 'challenge-second') heightClass = 'h-[50vh]';
+            if (slide.id === 'challenge-third') heightClass = 'h-[150vh]';
 
-          return (
-            <div className={`${heightClass} w-full shrink-0`} data-slide-index={idx} key={slide.id}>
-              {slide.render()}
-            </div>
-          );
-        })}
+            return (
+              <div className={cn(heightClass, 'w-full flex-shrink-0')} data-slide-index={idx} key={slide.id}>
+                {slide.render()}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Global Navigation Arrows */}
+        <AnimatePresence>
+          {shouldShowArrows && (
+            <motion.div
+              animate={{ opacity: 1, scale: 1 }}
+              className="fixed z-[50] flex -translate-y-1/2 flex-col"
+              data-arrow-theme={arrowTheme}
+              exit={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              style={{
+                // Inline because Tailwind will not include styles that come from a JS config in the final CSS file
+                gap: arrowConfig.arrowGap,
+                right: arrowConfig.positionRight,
+                top: arrowConfig.positionTop,
+              }}
+              transition={{ duration: arrowConfig.fadeDuration, ease: [0.3, 0, 0.6, 1] }}
+            >
+              <div
+                aria-disabled={!canNavigateUp}
+                aria-label="Previous"
+                className={cn(
+                  'flex items-center justify-center transition-transform',
+                  canNavigateUp
+                    ? 'cursor-pointer hover:scale-110 active:scale-95 active:opacity-40 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]'
+                    : 'cursor-not-allowed opacity-30'
+                )}
+                onPointerDown={canNavigateUp ? handleNavigateUp : undefined}
+                role="button"
+                style={{
+                  // Inline because Tailwind will not include styles from runtime config
+                  height: arrowConfig.arrowHeight,
+                  width: arrowConfig.arrowWidth,
+                }}
+              >
+                <ArrowUp
+                  aria-hidden="true"
+                  className="h-full w-full data-[arrow-theme=blue]:text-[#6DCFF6] data-[arrow-theme=gray]:text-[#58595B]"
+                  data-arrow-theme={arrowTheme}
+                  focusable="false"
+                  strokeWidth={1.5}
+                />
+              </div>
+              <div
+                aria-label="Next"
+                className="flex cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95 active:opacity-40 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+                onPointerDown={handleNavigateDown}
+                role="button"
+                style={{
+                  // Inline because Tailwind will not include styles from runtime config
+                  height: arrowConfig.arrowHeight,
+                  width: arrowConfig.arrowWidth,
+                }}
+              >
+                <ArrowDown
+                  aria-hidden="true"
+                  className="h-full w-full data-[arrow-theme=blue]:text-[#6DCFF6] data-[arrow-theme=gray]:text-[#58595B]"
+                  data-arrow-theme={arrowTheme}
+                  focusable="false"
+                  strokeWidth={1.5}
+                />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-
-      {/* Global Navigation Arrows */}
-      <AnimatePresence>
-        {shouldShowArrows && (
-          <motion.div
-            animate={{ opacity: 1, scale: 1 }}
-            className="fixed z-50 flex -translate-y-1/2 flex-col"
-            data-arrow-theme={arrowTheme}
-            exit={{ opacity: 0, scale: 0.9 }}
-            initial={{ opacity: 0, scale: 0.9 }}
-            style={{
-              // Inline because Tailwind will not include styles that come from a JS config in the final CSS file
-              gap: arrowConfig.arrowGap,
-              right: arrowConfig.positionRight,
-              top: arrowConfig.positionTop,
-            }}
-            transition={{ duration: arrowConfig.fadeDuration, ease: 'easeOut' }}
-          >
-            <div
-              aria-disabled={!canNavigateUp}
-              aria-label="Previous"
-              className={cn(
-                'flex items-center justify-center transition-transform',
-                canNavigateUp
-                  ? 'cursor-pointer hover:scale-110 active:scale-95 active:opacity-40 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]'
-                  : 'cursor-not-allowed opacity-30'
-              )}
-              onPointerDown={canNavigateUp ? handleNavigateUpWithSound : undefined}
-              role="button"
-              style={{
-                // Inline because Tailwind will not include styles from runtime config
-                height: arrowConfig.arrowHeight,
-                width: arrowConfig.arrowWidth,
-              }}
-            >
-              <ArrowUp
-                aria-hidden="true"
-                className="h-full w-full data-[arrow-theme=blue]:text-[#6DCFF6] data-[arrow-theme=gray]:text-[#58595B]"
-                data-arrow-theme={arrowTheme}
-                focusable="false"
-                strokeWidth={1.5}
-              />
-            </div>
-            <div
-              aria-label="Next"
-              className="flex cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95 active:opacity-40 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
-              onPointerDown={handleNavigateDownWithSound}
-              role="button"
-              style={{
-                // Inline because Tailwind will not include styles from runtime config
-                height: arrowConfig.arrowHeight,
-                width: arrowConfig.arrowWidth,
-              }}
-            >
-              <ArrowDown
-                aria-hidden="true"
-                className="h-full w-full data-[arrow-theme=blue]:text-[#6DCFF6] data-[arrow-theme=gray]:text-[#58595B]"
-                data-arrow-theme={arrowTheme}
-                focusable="false"
-                strokeWidth={1.5}
-              />
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+    </GradientHeightsProvider>
   );
 };
