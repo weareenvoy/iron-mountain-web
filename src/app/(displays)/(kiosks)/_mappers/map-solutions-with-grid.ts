@@ -50,7 +50,7 @@ export const mapSolutionsWithGrid = (
   // Validate numbered list has required items
   const numberedList = solutionsMain.numberedList ?? [];
   const hasNumberedListData = numberedList.some(item => item && item.trim().length > 0);
-  
+
   if (numberedList.length < 4 && hasNumberedListData) {
     if (process.env.NODE_ENV === 'development') {
       console.warn(`[mapSolutionsWithGrid] numberedList should have at least 4 items, got ${numberedList.length}`);

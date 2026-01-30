@@ -8,7 +8,7 @@
  * ARCHITECTURE DECISION: Dynamic Gradient Heights via CMS Content
  *
  * Dynamic Gradient heights are in place to have the build respond to CMS content being added or removed from the API payload.
- *  
+ *
  * Future Improvements:
  * - Consider IntersectionObserver-based dynamic measurement
  * - Add validation/warnings for missing or outdated height values

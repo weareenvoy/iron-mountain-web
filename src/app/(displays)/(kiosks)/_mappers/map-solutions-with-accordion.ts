@@ -17,15 +17,13 @@ export const mapSolutionsWithAccordion = (
   ambient: Ambient
 ): SolutionScreens => {
   // Check if accordion has actual data
-  const hasAccordionData = 
-    solutionAccordion.accordion && 
-    Array.isArray(solutionAccordion.accordion) && 
-    solutionAccordion.accordion.length > 0;
+  const hasAccordionData =
+    solutionAccordion.accordion && Array.isArray(solutionAccordion.accordion) && solutionAccordion.accordion.length > 0;
 
   // Check if numbered list has actual content
-  const hasNumberedListData = 
-    solutionsMain.numberedList && 
-    Array.isArray(solutionsMain.numberedList) && 
+  const hasNumberedListData =
+    solutionsMain.numberedList &&
+    Array.isArray(solutionsMain.numberedList) &&
     solutionsMain.numberedList.some(item => item && item.trim().length > 0);
 
   return {

@@ -129,7 +129,11 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
       // If no accordion data, still generate first and second screens from solutionMain alone
       if (!hasAccordionData) {
         // Return only firstScreen and secondScreen (no fourthScreen without accordion data)
-        return mapSolutionsWithAccordion(kioskContent.solutionMain, { accordion: [], headline: '', image: '' }, kioskContent.ambient);
+        return mapSolutionsWithAccordion(
+          kioskContent.solutionMain,
+          { accordion: [], headline: '', image: '' },
+          kioskContent.ambient
+        );
       }
 
       return mapSolutionsWithAccordion(kioskContent.solutionMain, kioskContent.solutionAccordion, kioskContent.ambient);
