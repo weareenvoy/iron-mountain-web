@@ -31,9 +31,10 @@ export async function getKioskData(kioskId: KioskId, externalSignal?: AbortSigna
         throw new Error(`Missing data for locale: ${locale}`);
       }
 
-      // Merge simplCMS custom interactive data
+      // Merge simplCMS custom interactive data and audio
       const mergedData = {
         ...data,
+        audio: simplCMSData.audio ?? data.audio,
         customInteractive1: simplCMSData.customInteractive1 ?? data.customInteractive1,
         customInteractive2: simplCMSData.customInteractive2 ?? data.customInteractive2,
         customInteractive3: simplCMSData.customInteractive3 ?? data.customInteractive3,
@@ -96,9 +97,10 @@ export async function getKioskData(kioskId: KioskId, externalSignal?: AbortSigna
         throw new Error(`Missing data for locale: ${locale}`);
       }
 
-      // Merge simplCMS custom interactive data
+      // Merge simplCMS custom interactive data and audio
       const mergedData = {
         ...data,
+        audio: simplCMSData.audio ?? data.audio,
         customInteractive1: simplCMSData.customInteractive1 ?? data.customInteractive1,
         customInteractive2: simplCMSData.customInteractive2 ?? data.customInteractive2,
         customInteractive3: simplCMSData.customInteractive3 ?? data.customInteractive3,

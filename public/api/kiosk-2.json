@@ -11,18 +11,6 @@
       "title": "Information \n& data lifecycle"
     },
 
-    "audio": {
-      "ambient": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/SoundEffects/SolutionsPathways_01_TitleScreen_Music_v3.wav",
-      "back": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/SoundEffects/Back_1.wav",
-      "challenge": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/SoundEffects/SolutionsPathways_02_Challenge_Music_v3.wav",
-      "close": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/SoundEffects/Close_1.wav",
-      "customInteractive": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/SoundEffects/SolutionsPathways_05_CustomInteractive_Music_v3.wav",
-      "next": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/SoundEffects/Next_1.wav",
-      "open": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/SoundEffects/Open_1.wav",
-      "solution": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/SoundEffects/SolutionsPathways_03_Solution_Music_v3.wav",
-      "value": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/SoundEffects/SolutionsPathways_04_Value_Music_v3.wav"
-    },
-
     "challengeMain": {
       "body": "A large healthcare organization faced significant financial risk because it could not locate the appropriate documentation to confirm the eligibility of employee pension claims. The legal system ruled the organization liable to pay claims without evidence to disprove eligibility, resulting in millions of dollars paid in ineligible pension benefits.",
       "featuredStat1": "$2M+",

@@ -12,18 +12,6 @@
       "title": "Rich media & \ncultural heritage"
     },
 
-    "audio": {
-      "ambient": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/SoundEffects/SolutionsPathways_01_TitleScreen_Music_v3.wav",
-      "back": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/SoundEffects/Back_1.wav",
-      "challenge": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/SoundEffects/SolutionsPathways_02_Challenge_Music_v3.wav",
-      "close": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/SoundEffects/Close_1.wav",
-      "customInteractive": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/SoundEffects/SolutionsPathways_05_CustomInteractive_Music_v3.wav",
-      "next": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/SoundEffects/Next_1.wav",
-      "open": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/SoundEffects/Open_1.wav",
-      "solution": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/SoundEffects/SolutionsPathways_03_Solution_Music_v3.wav",
-      "value": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/SoundEffects/SolutionsPathways_04_Value_Music_v3.wav"
-    },
-
     "challengeMain": {
       "body": "The Museum needed a secure, off-site, cloud-accessible, and easily managed solution to protect its one-of-a-kind, irreplaceable footage. Storing the only master copy locally presented a high risk of losing all assets in the event of a data failure or system crash.",
       "featuredStat1": "120 TB",
