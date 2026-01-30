@@ -6,7 +6,7 @@ import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
 import { useKioskAudio } from '@/app/(displays)/(kiosks)/_components/providers/useKioskAudio';
-import { useSfx } from '@/components/providers/audio-provider';
+import { useAudio, useSfx } from '@/components/providers/audio-provider';
 import { cn } from '@/lib/tailwind/utils/cn';
 import { normalizeText } from '@/lib/utils/normalize-text';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
@@ -84,6 +84,7 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
   const secondaryIconOffset = isCI3 ? 'left-[-330px]' : 'left-[-70px]';
   const { sfx } = useKioskAudio();
   const { playSfx } = useSfx();
+  const audioController = useAudio();
 
   const [openModalIndex, setOpenModalIndex] = useState<null | number>(null);
   const [showOverlay, setShowOverlay] = useState(false);
@@ -138,6 +139,11 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
   useEffect(() => {
     setPortalTarget(containerRef.current);
   }, []);
+
+  // Mute background music when demo overlay is active
+  useEffect(() => {
+    audioController.setChannelVolume('music', showOverlay ? 0 : 1);
+  }, [audioController, showOverlay]);
 
   /**
    * Detect when text/button become visible to trigger animations

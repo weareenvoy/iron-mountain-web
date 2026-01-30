@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useReducer } from 'react';
 import { useKioskAudio } from '@/app/(displays)/(kiosks)/_components/providers/useKioskAudio';
-import { useSfx } from '@/components/providers/audio-provider';
+import { useAudio, useSfx } from '@/components/providers/audio-provider';
 
 /**
  * State for Kiosk 3 Second Screen animation sequence
@@ -66,6 +66,7 @@ export function useKiosk3SecondScreenState() {
   const [state, dispatch] = useReducer(kiosk3SecondScreenReducer, initialState);
   const { sfx } = useKioskAudio();
   const { playSfx } = useSfx();
+  const audioController = useAudio();
 
   // Complete button transition after animation duration
   useEffect(() => {
@@ -77,6 +78,11 @@ export function useKiosk3SecondScreenState() {
 
     return () => clearTimeout(timer);
   }, [state.isButtonTransitioning]);
+
+  // Mute background music when demo overlay is active
+  useEffect(() => {
+    audioController.setChannelVolume('music', state.showOverlay ? 0 : 1);
+  }, [audioController, state.showOverlay]);
 
   // Stable event handlers
   const handleTapToBegin = useCallback(() => {

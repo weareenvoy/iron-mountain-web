@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion';
 import { SquarePlay } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
 import { useGradientHeights } from '@/app/(displays)/(kiosks)/_components/providers/gradient-heights-provider';
 import { useKioskAudio } from '@/app/(displays)/(kiosks)/_components/providers/useKioskAudio';
-import { useSfx } from '@/components/providers/audio-provider';
+import { useAudio, useSfx } from '@/components/providers/audio-provider';
 import ArrowIcon from '@/components/ui/icons/Kiosks/CustomInteractive/ArrowIcon';
 import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCFilledOrangeDiamond';
 import HCHollowBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowBlueDiamond';
@@ -56,6 +56,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   const { shouldAnimate, triggerRef: animationTriggerRef } = useScrollAnimation<HTMLHeadingElement>();
   const { sfx } = useKioskAudio();
   const { playSfx } = useSfx();
+  const audioController = useAudio();
 
   const [showOverlay, setShowOverlay] = useState(false);
 
@@ -99,6 +100,11 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
     setShowOverlay(false);
     onEndTour?.();
   };
+
+  // Mute background music when demo overlay is active
+  useEffect(() => {
+    audioController.setChannelVolume('music', showOverlay ? 0 : 1);
+  }, [audioController, showOverlay]);
 
   return (
     <div
