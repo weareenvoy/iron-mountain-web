@@ -33,17 +33,9 @@
       "videoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/Idle-General.webm"
     },
     "solutionGrid": {
-      "diamondList": [
-        "Physical artifact storage",
-        "Media digitization",
-        "Smart Vault preservation",
-        "Advanced search"
-      ],
-      "headline": "How the Museum preserves cultural heritage:",
-      "images": [
-        "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Image3-Full.webp",
-        "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Image2-Full.webp"
-      ]
+      "diamondList": [],
+      "headline": "",
+      "images": []
     },
     "solutionAccordion": {
       "accordion": [],
