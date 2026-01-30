@@ -32,9 +32,18 @@
       "videoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/Idle-General.webm"
     },
     "solutionGrid": {
-      "diamondList": [],
-      "headline": "",
-      "images": []
+      "diamondList": [
+        "Document digitization",
+        "Platform centralization",
+        "Metadata enrichment",
+        "Automated workflows",
+        "Searchable \nrepository of pension \ninformation"
+      ],
+      "headline": "How the organization employed digital solutions:",
+      "images": [
+        "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image3-Full.webp",
+        "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image2-Full.webp"
+      ]
     },
     "solutionAccordion": {
       "accordion": [],
@@ -47,8 +56,12 @@
       "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-Image1-Full.webp",
       "labelText": "Solution",
       "mainVideo": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Information+%26+Data+Lifecycle/02+-+Solution/Solution-header.webm",
-      "numberedList": [],
-      "numberedListHeadline": ""
+      "numberedList": [
+        "Converted all document formats (including handwritten papers, microfilm, CD/DVD) into digital form, then identified and extracted key data to enrich the records with searchable metadata",
+        "Created a complete repository of digitized and searchable pension information",
+        "Migrated legacy systems to InSight DXP to house all pension information"
+      ],
+      "numberedListHeadline": "Together, we:"
     },
     "valueMain": {
       "body": "The partnership with Iron Mountain and implementation of InSight DXP transitioned the organization from unknown to certainty and clarity in pension administration.",
