@@ -44,6 +44,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   headline,
   heroImageAlt,
   heroImageSrc,
+  onEndTour,
   onPrimaryCta,
   onSecondaryCta,
   overlayCardLabel,
@@ -96,6 +97,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       playSfx(sfx.close);
     }
     setShowOverlay(false);
+    onEndTour?.();
   };
 
   return (
