@@ -76,7 +76,7 @@ export const CHALLENGE_HEIGHTS: Record<
 const SOLUTION_HEIGHTS_COMMON = {
   firstScreen: 4230,
   fourthScreen: 5210,
-  secondScreen: 5130,
+  secondScreen: 5080,
   thirdScreen: 6695,
 };
 
@@ -100,6 +100,7 @@ export const SOLUTION_HEIGHTS: Record<
   },
   'kiosk-2': {
     ...SOLUTION_HEIGHTS_COMMON,
+    secondScreen: 5080, // Override: Kiosk 2 secondScreen when accordion/grid not present
     thirdScreen: 6645, // Override: Kiosk 2 has shorter grid
   },
   'kiosk-3': SOLUTION_HEIGHTS_COMMON,

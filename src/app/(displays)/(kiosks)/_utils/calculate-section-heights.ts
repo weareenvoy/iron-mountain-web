@@ -74,10 +74,10 @@ export const calculateSolutionGradientHeight = (slides: Slide[], kioskId: KioskI
     if (slide.id === 'solution-first') {
       totalHeight += heights.firstScreen;
     } else if (slide.id.startsWith('solution-second')) {
-      // Use different height based on whether accordion (fourth screen) is present
-      // When accordion is present, use reduced height (3644)
-      // Otherwise, use full height from config (5130)
-      const secondScreenHeight = hasFourthScreen ? 3644 : heights.secondScreen;
+      // Use different height based on whether grid (third screen) or accordion (fourth screen) is present
+      // When grid OR accordion is present, use reduced height (3644)
+      // When neither is present, use full height from config (5130)
+      const secondScreenHeight = hasThirdScreen || hasFourthScreen ? 3644 : heights.secondScreen;
       totalHeight += secondScreenHeight;
     } else if (slide.id === 'solution-third') {
       totalHeight += heights.thirdScreen;
