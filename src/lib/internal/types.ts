@@ -405,19 +405,21 @@ export interface WelcomeWallData {
   readonly clientTourLogo: {
     readonly url: string;
   };
+  readonly location_details: {
+    readonly elevation: string;
+    readonly exhibit: string;
+    readonly name: string;
+  };
   readonly videos: {
-    readonly ambientLoopEn: {
+    readonly ambientLoop: {
       readonly url: string;
     };
-    readonly ambientLoopPt: {
+    readonly tourLoop: {
       readonly url: string;
     };
-    readonly tourLoopEn: {
-      readonly url: string;
-    };
-    readonly tourLoopPt: {
-      readonly url: string;
-    };
+  };
+  readonly welcome: {
+    readonly title: string;
   };
 }
 
