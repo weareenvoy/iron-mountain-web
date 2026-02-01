@@ -85,22 +85,31 @@ export function useKiosk3SecondScreenState() {
     const fadeMs = 300; // Fade duration in milliseconds
     const steps = 20; // Number of steps for the fade
     const stepDuration = fadeMs / steps;
-    const volumeStep = targetVolume / steps;
+    const startVolume = state.showOverlay ? 1 : 0;
+    const volumeStep = Math.abs(targetVolume - startVolume) / steps;
 
     let currentStep = 0;
-    const startVolume = state.showOverlay ? 1 : 0;
 
     const fadeInterval = setInterval(() => {
       currentStep++;
-      const newVolume = state.showOverlay ? startVolume - volumeStep * currentStep : volumeStep * currentStep;
-      audioController.setChannelVolume('music', Math.max(0, Math.min(1, newVolume)));
+      const newVolume = state.showOverlay 
+        ? Math.max(0, startVolume - volumeStep * currentStep)
+        : Math.min(1, startVolume + volumeStep * currentStep);
+      
+      audioController.setChannelVolume('music', newVolume);
 
       if (currentStep >= steps) {
         clearInterval(fadeInterval);
+        // Ensure final volume is set correctly
+        audioController.setChannelVolume('music', targetVolume);
       }
     }, stepDuration);
 
-    return () => clearInterval(fadeInterval);
+    return () => {
+      clearInterval(fadeInterval);
+      // Immediately set target volume on cleanup to prevent partial fade states
+      audioController.setChannelVolume('music', targetVolume);
+    };
   }, [audioController, state.showOverlay]);
 
   // Stable event handlers

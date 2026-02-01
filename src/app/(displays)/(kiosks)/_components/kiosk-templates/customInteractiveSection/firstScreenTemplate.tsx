@@ -107,22 +107,31 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
     const fadeMs = 300; // Fade duration in milliseconds
     const steps = 20; // Number of steps for the fade
     const stepDuration = fadeMs / steps;
-    const volumeStep = targetVolume / steps;
+    const startVolume = showOverlay ? 1 : 0;
+    const volumeStep = Math.abs(targetVolume - startVolume) / steps;
 
     let currentStep = 0;
-    const startVolume = showOverlay ? 1 : 0;
 
     const fadeInterval = setInterval(() => {
       currentStep++;
-      const newVolume = showOverlay ? startVolume - volumeStep * currentStep : volumeStep * currentStep;
-      audioController.setChannelVolume('music', Math.max(0, Math.min(1, newVolume)));
+      const newVolume = showOverlay 
+        ? Math.max(0, startVolume - volumeStep * currentStep)
+        : Math.min(1, startVolume + volumeStep * currentStep);
+      
+      audioController.setChannelVolume('music', newVolume);
 
       if (currentStep >= steps) {
         clearInterval(fadeInterval);
+        // Ensure final volume is set correctly
+        audioController.setChannelVolume('music', targetVolume);
       }
     }, stepDuration);
 
-    return () => clearInterval(fadeInterval);
+    return () => {
+      clearInterval(fadeInterval);
+      // Immediately set target volume on cleanup to prevent partial fade states
+      audioController.setChannelVolume('music', targetVolume);
+    };
   }, [audioController, showOverlay]);
 
   return (
