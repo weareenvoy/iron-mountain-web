@@ -101,9 +101,28 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
     onEndTour?.();
   };
 
-  // Mute background music when demo overlay is active
+  // Smoothly fade background music when demo overlay is active
   useEffect(() => {
-    audioController.setChannelVolume('music', showOverlay ? 0 : 1);
+    const targetVolume = showOverlay ? 0 : 1;
+    const fadeMs = 300; // Fade duration in milliseconds
+    const steps = 20; // Number of steps for the fade
+    const stepDuration = fadeMs / steps;
+    const volumeStep = targetVolume / steps;
+
+    let currentStep = 0;
+    const startVolume = showOverlay ? 1 : 0;
+
+    const fadeInterval = setInterval(() => {
+      currentStep++;
+      const newVolume = showOverlay ? startVolume - volumeStep * currentStep : volumeStep * currentStep;
+      audioController.setChannelVolume('music', Math.max(0, Math.min(1, newVolume)));
+
+      if (currentStep >= steps) {
+        clearInterval(fadeInterval);
+      }
+    }, stepDuration);
+
+    return () => clearInterval(fadeInterval);
   }, [audioController, showOverlay]);
 
   return (
