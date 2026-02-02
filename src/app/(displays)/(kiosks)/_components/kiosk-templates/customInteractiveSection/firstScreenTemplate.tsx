@@ -92,6 +92,9 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   };
 
   const handlePrimaryClick = () => {
+    if (sfx.next) {
+      playSfx(sfx.next);
+    }
     onPrimaryCta?.();
   };
 

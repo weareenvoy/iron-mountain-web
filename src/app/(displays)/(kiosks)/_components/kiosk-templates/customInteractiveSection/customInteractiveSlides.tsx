@@ -30,7 +30,8 @@ export const buildCustomInteractiveSlides = (
   kioskId: KioskId,
   scrollToSection?: (sectionId: string) => void,
   index?: number,
-  customInteractiveNumber?: 1 | 2 | 3
+  customInteractiveNumber?: 1 | 2 | 3,
+  globalHandlers?: { onNavigateDown: () => void; onNavigateUp: () => void }
 ): Slide[] => {
   // Create unique ID prefix for this custom interactive instance
   // Include the custom interactive number for gradient height calculations
@@ -87,6 +88,8 @@ export const buildCustomInteractiveSlides = (
             kioskId={kioskId}
             {...customInteractive.firstScreen}
             onEndTour={handleEndTour}
+            onNavigateDown={globalHandlers?.onNavigateDown}
+            onNavigateUp={globalHandlers?.onNavigateUp}
             onPrimaryCta={handlePrimaryCta}
             overlayCardLabel={overlayCardLabel}
             overlayHeadline={overlayHeadline}
@@ -110,6 +113,8 @@ export const buildCustomInteractiveSlides = (
             customInteractiveNumber={ciNumber}
             onBack={() => scrollToSection?.(SECTION_IDS.FIRST_SCREEN)}
             onEndTour={handleEndTour}
+            onNavigateDown={globalHandlers?.onNavigateDown}
+            onNavigateUp={globalHandlers?.onNavigateUp}
           />
         </SectionSlide>
       ),
@@ -126,6 +131,8 @@ export const buildCustomInteractiveSlides = (
             customInteractiveNumber={ciNumber}
             onBack={() => scrollToSection?.(SECTION_IDS.FIRST_SCREEN)}
             onEndTour={handleEndTour}
+            onNavigateDown={globalHandlers?.onNavigateDown}
+            onNavigateUp={globalHandlers?.onNavigateUp}
           />
         </SectionSlide>
       ),

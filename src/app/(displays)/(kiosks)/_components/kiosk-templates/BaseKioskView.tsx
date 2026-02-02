@@ -326,7 +326,7 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
                     ? 'cursor-pointer hover:scale-110 active:scale-95 active:opacity-40 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]'
                     : 'cursor-not-allowed opacity-30'
                 )}
-                onPointerDown={canNavigateUp ? handleNavigateUp : undefined}
+                onPointerDown={canNavigateUp ? handleNavigateUpWithSound : undefined}
                 role="button"
                 style={{
                   // Inline because Tailwind will not include styles from runtime config
@@ -345,7 +345,7 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
               <div
                 aria-label="Next"
                 className="flex cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95 active:opacity-40 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
-                onPointerDown={handleNavigateDown}
+                onPointerDown={handleNavigateDownWithSound}
                 role="button"
                 style={{
                   // Inline because Tailwind will not include styles from runtime config

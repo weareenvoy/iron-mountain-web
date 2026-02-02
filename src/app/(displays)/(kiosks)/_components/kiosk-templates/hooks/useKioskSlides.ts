@@ -134,12 +134,20 @@ const buildValueSection = (
 const buildCustomInteractiveSection = (
   customInteractives: Array<{ number: 1 | 2 | 3 }>,
   kioskId: KioskId,
-  scrollToSectionById: (id: string) => void
+  scrollToSectionById: (id: string) => void,
+  globalHandlers: { onNavigateDown: () => void; onNavigateUp: () => void }
 ) => {
   if (customInteractives.length === 0) return [];
 
   return customInteractives.flatMap((customInteractive, index) =>
-    buildCustomInteractiveSlides(customInteractive, kioskId, scrollToSectionById, index, customInteractive.number)
+    buildCustomInteractiveSlides(
+      customInteractive,
+      kioskId,
+      scrollToSectionById,
+      index,
+      customInteractive.number,
+      globalHandlers
+    )
   );
 };
 
@@ -218,7 +226,12 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
 
     const valueSlides = buildValueSection(values, kioskId, globalHandlers, handleRegisterCarouselHandlers);
 
-    const customInteractiveSlides = buildCustomInteractiveSection(customInteractives, kioskId, scrollToSectionById);
+    const customInteractiveSlides = buildCustomInteractiveSection(
+      customInteractives,
+      kioskId,
+      scrollToSectionById,
+      globalHandlers
+    );
 
     return [...challengeSlides, ...solutionSlides, ...valueSlides, ...customInteractiveSlides];
   }, [
