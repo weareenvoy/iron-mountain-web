@@ -108,8 +108,39 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
   // Disable up arrow when on challenge first video or initial screen
   // Rationale: The button click animation on the cover screen (cover-ambient-initial) removes all visible content,
   // making it impossible to navigate back to that section. Disabling navigation back ensures smooth UX.
-  const canNavigateUp =
-    currentScrollTarget !== 'challenge-first-video' && currentScrollTarget !== 'cover-ambient-initial';
+  //
+  // Additional logic:
+  // - Solution first screen: disable up arrow if previous scroll section is initial screen (Challenge is missing)
+  // - Value first screen: disable up arrow if previous scroll section is initial screen (Challenge and Solution are missing)
+  const canNavigateUp = useMemo(() => {
+    // Always disable on initial screen
+    if (currentScrollTarget === 'cover-ambient-initial') {
+      return false;
+    }
+
+    // Find the previous scroll section dynamically
+    const container = containerRef.current;
+    if (container && currentScrollTarget) {
+      const allScrollSections = Array.from(
+        container.querySelectorAll<HTMLElement>('[data-scroll-section]')
+      );
+      const currentIndex = allScrollSections.findIndex(
+        el => el.getAttribute('data-scroll-section') === currentScrollTarget
+      );
+
+      if (currentIndex > 0) {
+        const previousSection = allScrollSections[currentIndex - 1];
+        const previousScrollTarget = previousSection?.getAttribute('data-scroll-section');
+
+        // If the previous scroll section is the initial screen, disable the up arrow
+        if (previousScrollTarget === 'cover-ambient-initial') {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }, [containerRef, currentScrollTarget]);
 
   // Single hook call with correct section info
   const { arrowTheme, shouldShowArrows } = useKioskArrowState({
