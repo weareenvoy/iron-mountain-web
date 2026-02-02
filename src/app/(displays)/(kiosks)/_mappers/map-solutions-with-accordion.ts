@@ -7,10 +7,13 @@ import {
 import type { SolutionScreens } from '../_components/kiosk-templates/solution/solutionSlides';
 import type { Ambient, SolutionsAccordion, SolutionsMain } from '../_types/content-types';
 
-/**
- * Maps CMS content for Solutions with Accordion to the Kiosk Solutions structure.
- * Contains business logic for accordion color assignment, number formatting, and default states.
- */
+const ACCORDION_COLORS = [
+  ACCORDION_COLOR_WHITE,
+  ACCORDION_COLOR_LIGHT_BLUE,
+  ACCORDION_COLOR_BLUE,
+  ACCORDION_COLOR_NAVY,
+] as const;
+
 export const mapSolutionsWithAccordion = (
   solutionsMain: SolutionsMain,
   solutionAccordion: SolutionsAccordion,
@@ -38,14 +41,7 @@ export const mapSolutionsWithAccordion = (
     ...(hasAccordionData && {
       fourthScreen: {
         accordion: solutionAccordion.accordion.map((item, index) => ({
-          color:
-            index === 0
-              ? ACCORDION_COLOR_WHITE
-              : index === 1
-                ? ACCORDION_COLOR_LIGHT_BLUE
-                : index === 2
-                  ? ACCORDION_COLOR_BLUE
-                  : ACCORDION_COLOR_NAVY,
+          color: ACCORDION_COLORS[index % ACCORDION_COLORS.length],
           contentList: item.bullets ? [...item.bullets] : [],
           expanded: index === 0,
           id: `accordion-${index}`,

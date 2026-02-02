@@ -89,13 +89,7 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
       setMqttState(updated);
 
       // Report state using the centralized method
-      client.reportExhibitState(appId, updated, {
-        onError: err => {
-          if (process.env.NODE_ENV === 'development') {
-            console.error(`${kioskId}: Failed to report state:`, err);
-          }
-        },
-      });
+      client.reportExhibitState(appId, updated);
     },
     [appId, client, isConnected, kioskId]
   );
@@ -165,19 +159,11 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
     const handleLoadTour = async (message: Buffer) => {
       // Prevent concurrent loadTour operations
       if (isLoadingTourRef.current) {
-        if (process.env.NODE_ENV === 'development') {
-          console.warn(`${kioskId}: Ignoring loadTour - already loading tour`);
-        }
         return;
       }
 
       try {
         const msg = JSON.parse(message.toString());
-        const tourId = msg.body?.['tour-id'];
-
-        if (process.env.NODE_ENV === 'development') {
-          console.info(`${kioskId}: Received load-tour command (tour: ${tourId}) - activating kiosk`);
-        }
 
         // Mark as loading to prevent concurrent operations
         isLoadingTourRef.current = true;
@@ -188,15 +174,9 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
         // Report active state only after successful fetch
         if (success) {
           reportStateRef.current({ 'beat-id': 'kiosk-active' });
-        } else {
-          if (process.env.NODE_ENV === 'development') {
-            console.error(`${kioskId}: Failed to load tour data`);
-          }
         }
       } catch (error) {
-        if (process.env.NODE_ENV === 'development') {
-          console.error(`${kioskId}: Error handling load-tour command:`, error);
-        }
+        // Error handling without logging
       } finally {
         // Always clear loading flag
         isLoadingTourRef.current = false;
@@ -209,10 +189,6 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
     const handleEndTour = () => {
       // Check if tour is currently loading
       if (isLoadingTourRef.current) {
-        if (process.env.NODE_ENV === 'development') {
-          console.warn(`${kioskId}: Delaying endTour - tour is still loading`);
-        }
-
         // Clear any existing interval before creating a new one
         if (endTourIntervalRef.current) {
           clearInterval(endTourIntervalRef.current);
@@ -236,10 +212,6 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
     };
 
     const performEndTour = () => {
-      if (process.env.NODE_ENV === 'development') {
-        console.info(`${kioskId}: Received end-tour command - resetting kiosk`);
-      }
-
       // Report idle state before refresh (tour has ended, returning to attract screen)
       reportStateRef.current({ 'beat-id': DEFAULT_KIOSK_BEAT_ID }); // 'kiosk-idle'
 

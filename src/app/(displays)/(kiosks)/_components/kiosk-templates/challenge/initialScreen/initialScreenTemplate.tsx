@@ -130,9 +130,7 @@ const InitialScreenTemplate = memo(
             timeoutRef.current = null; // Always clear, not just on success path
           }, IDLE_FADE_OUT_DURATION_MS);
         } catch (error) {
-          if (process.env.NODE_ENV === 'development') {
-            console.error(`${kioskId}: Error handling loadTour for idle dismissal:`, error);
-          }
+          // Error handling without logging
         }
       };
 

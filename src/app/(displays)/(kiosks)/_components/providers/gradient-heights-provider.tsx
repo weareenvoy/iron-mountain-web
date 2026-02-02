@@ -33,11 +33,6 @@ export const GradientHeightsProvider = ({ children, heights }: GradientHeightsPr
     getCustomInteractiveHeight: (index: number) => {
       // Validate index bounds
       if (index < 0 || index >= heights.customInteractive.length) {
-        if (process.env.NODE_ENV === 'development') {
-          console.warn(
-            `[GradientHeightsProvider] Custom interactive index ${index} out of bounds (0-${heights.customInteractive.length - 1})`
-          );
-        }
         return 0;
       }
 
@@ -45,9 +40,6 @@ export const GradientHeightsProvider = ({ children, heights }: GradientHeightsPr
 
       // Additional safety check for undefined values
       if (height === undefined) {
-        if (process.env.NODE_ENV === 'development') {
-          console.warn(`[GradientHeightsProvider] No height found for custom interactive at index ${index}`);
-        }
         return 0;
       }
 
