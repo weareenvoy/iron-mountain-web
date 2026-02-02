@@ -45,6 +45,7 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
     handleNavigateDown: baseHandleNavigateDown,
     handleNavigateUp: baseHandleNavigateUp,
     isScrolling,
+    previousScrollTarget,
     scrollToSectionById,
   } = useGlobalParagraphNavigation({
     containerRef,
@@ -118,29 +119,13 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
       return false;
     }
 
-    // Find the previous scroll section dynamically
-    const container = containerRef.current;
-    if (container && currentScrollTarget) {
-      const allScrollSections = Array.from(
-        container.querySelectorAll<HTMLElement>('[data-scroll-section]')
-      );
-      const currentIndex = allScrollSections.findIndex(
-        el => el.getAttribute('data-scroll-section') === currentScrollTarget
-      );
-
-      if (currentIndex > 0) {
-        const previousSection = allScrollSections[currentIndex - 1];
-        const previousScrollTarget = previousSection?.getAttribute('data-scroll-section');
-
-        // If the previous scroll section is the initial screen, disable the up arrow
-        if (previousScrollTarget === 'cover-ambient-initial') {
-          return false;
-        }
-      }
+    // If the previous scroll section is the initial screen, disable the up arrow
+    if (previousScrollTarget === 'cover-ambient-initial') {
+      return false;
     }
 
     return true;
-  }, [containerRef, currentScrollTarget]);
+  }, [currentScrollTarget, previousScrollTarget]);
 
   // Single hook call with correct section info
   const { arrowTheme, shouldShowArrows } = useKioskArrowState({
