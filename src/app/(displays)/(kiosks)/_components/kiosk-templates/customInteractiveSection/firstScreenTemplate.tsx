@@ -28,6 +28,8 @@ export interface CustomInteractiveKiosk1FirstScreenTemplateProps {
   readonly heroImageSrc?: string;
   readonly kioskId?: KioskId;
   readonly onEndTour?: () => void;
+  readonly onNavigateDown?: () => void;
+  readonly onNavigateUp?: () => void;
   readonly onPrimaryCta?: () => void;
   readonly onSecondaryCta?: () => void;
   readonly overlayCardLabel?: string;

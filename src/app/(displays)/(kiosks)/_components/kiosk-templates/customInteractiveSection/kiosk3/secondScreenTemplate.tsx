@@ -38,6 +38,10 @@ export type Kiosk3SecondScreenProps = {
   readonly onBack?: () => void;
   /** Callback when demo is closed */
   readonly onEndTour?: () => void;
+  /** Callback for downward navigation */
+  readonly onNavigateDown?: () => void;
+  /** Callback for upward navigation */
+  readonly onNavigateUp?: () => void;
   /** Demo overlay configuration */
   readonly overlay?: {
     readonly cardLabel?: string;
