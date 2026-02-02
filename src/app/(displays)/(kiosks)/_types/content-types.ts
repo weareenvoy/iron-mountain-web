@@ -43,11 +43,13 @@ export type SolutionsGrid = {
   readonly images?: readonly string[];
 };
 
+export type SolutionAccordionItem = {
+  readonly bullets?: readonly string[];
+  readonly title?: string;
+};
+
 export type SolutionsAccordion = {
-  readonly accordion?: readonly {
-    readonly bullets?: readonly string[];
-    readonly title?: string;
-  }[];
+  readonly accordion?: readonly SolutionAccordionItem[];
   readonly headline?: string;
   readonly image?: string;
 };

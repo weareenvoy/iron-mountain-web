@@ -67,10 +67,10 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
   const mqttStateRef = useRef(mqttState);
   mqttStateRef.current = mqttState;
 
-  // Guard flag to prevent concurrent loadTour operations (Fix #2)
+  // Guard flag to prevent concurrent loadTour operations
   const isLoadingTourRef = useRef(false);
 
-  // AbortController for cancellable fetch operations (Fix #4)
+  // AbortController for cancellable fetch operations
   const abortControllerRef = useRef<AbortController | null>(null);
 
   // Track endTour polling interval for cleanup
@@ -82,7 +82,7 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
   // Report state to MQTT
   const reportState = useCallback(
     (next: Partial<KioskMqttState>) => {
-      if (!client || !isConnected) return; // Fix #11: Always check both
+      if (!client || !isConnected) return;
 
       const updated = { ...mqttStateRef.current, ...next } as KioskMqttState;
       mqttStateRef.current = updated;
@@ -103,7 +103,7 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
   const reportStateRef = useRef(reportState);
   reportStateRef.current = reportState;
 
-  // Fetch kiosk content data with abort support (Fix #4)
+  // Fetch kiosk content data with abort support
   const fetchData = useCallback(async (): Promise<boolean> => {
     // Cancel any in-flight fetch
     if (abortControllerRef.current) {
@@ -158,13 +158,12 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
   // Subscribe to MQTT commands (load-tour, end-tour)
   // Note: Kiosks are standalone exhibits - each kioskId is treated as its own tour-id
   useEffect(() => {
-    if (!client || !isConnected) return undefined; // Fix #11: Always check both
+    if (!client || !isConnected) return undefined;
 
     // 1. Load tour command
     // When Docent loads ANY tour, ALL kiosks activate (fetch data, report state)
-    // Fix #2: Guard against concurrent loadTour operations
     const handleLoadTour = async (message: Buffer) => {
-      // Prevent concurrent loadTour operations (Fix #2)
+      // Prevent concurrent loadTour operations
       if (isLoadingTourRef.current) {
         if (process.env.NODE_ENV === 'development') {
           console.warn(`${kioskId}: Ignoring loadTour - already loading tour`);
@@ -186,7 +185,7 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
         // Fetch fresh kiosk data
         const success = await fetchData();
 
-        // Report active state only after successful fetch (Fix #8)
+        // Report active state only after successful fetch
         if (success) {
           reportStateRef.current({ 'beat-id': 'kiosk-active' });
         } else {
@@ -208,7 +207,7 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
     // Full page refresh returns kiosk to pristine idle state (vs stateful reset)
     // This ensures: idle overlay restored, scroll position reset, all nested state cleared
     const handleEndTour = () => {
-      // Fix #3: Check if tour is currently loading
+      // Check if tour is currently loading
       if (isLoadingTourRef.current) {
         if (process.env.NODE_ENV === 'development') {
           console.warn(`${kioskId}: Delaying endTour - tour is still loading`);
@@ -245,7 +244,6 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
       reportStateRef.current({ 'beat-id': DEFAULT_KIOSK_BEAT_ID }); // 'kiosk-idle'
 
       // Brief delay to ensure MQTT message is sent before refresh interrupts connection
-      // Fix #9: Use constant instead of magic number
       setTimeout(() => {
         window.location.reload();
       }, MQTT_STATE_REPORT_GRACE_PERIOD_MS);
@@ -265,7 +263,7 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
         endTourIntervalRef.current = null;
       }
 
-      // Cancel any in-flight fetch on unmount (Fix #4)
+      // Cancel any in-flight fetch on unmount
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
       }

@@ -123,7 +123,7 @@ const InitialScreenTemplate = memo(
           // Wait for fade out animation to complete before triggering initial screen animations
           const videoSrcAtDismiss = idleVideoSrc;
           timeoutRef.current = setTimeout(() => {
-            // Fix #10: Always clear timeout ref, even if condition fails
+            // Always clear timeout ref, even if condition fails
             if (idleVideoSrcRef.current === videoSrcAtDismiss) {
               setIdleCompleteVideoSrc(videoSrcAtDismiss);
             }

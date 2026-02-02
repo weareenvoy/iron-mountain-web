@@ -13,7 +13,7 @@ import { parseKioskChallenges } from '@/app/(displays)/(kiosks)/_types/challenge
 import { calculateSectionGradientHeights } from '@/app/(displays)/(kiosks)/_utils/calculate-section-heights';
 import { parseKioskData } from '@/app/(displays)/(kiosks)/_utils/parseKioskData';
 import type { CarouselHandlers } from '@/app/(displays)/(kiosks)/_types/carousel-types';
-import type { CustomInteractiveContent } from '@/app/(displays)/(kiosks)/_types/content-types';
+import type { CustomInteractiveContent, SolutionAccordionItem } from '@/app/(displays)/(kiosks)/_types/content-types';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 // Transforms the raw CMS data into renderable Kiosk slides. Maps the data through the mapper functions for challenges, solutions, value, and customInteractive, builds the slides and returns them in a slide array ready to render.
@@ -108,6 +108,88 @@ const hasSolutionContent = (kioskContent: ParsedKioskContent): {
   };
 };
 
+/**
+ * Builds challenge slides based on whether challenge content exists.
+ * Returns ambient cover screen if no challenge content, full challenge slides otherwise.
+ */
+const buildChallengeSection = (
+  challenges: ReturnType<typeof parseKioskChallenges> | null,
+  kioskContent: ParsedKioskContent,
+  kioskId: KioskId,
+  globalHandlers: SlideBuilders['globalHandlers'],
+  handleInitialButtonClick: () => void
+) => {
+  if (!challenges) return [];
+
+  const hasChallengeContent = kioskContent?.challengeMain && hasContent(kioskContent.challengeMain);
+  const slideOptions = {
+    initialScreen: {
+      idleVideoSrc: kioskContent?.idle?.videoSrc,
+    },
+    onInitialButtonClick: handleInitialButtonClick,
+  };
+
+  if (hasChallengeContent) {
+    return buildChallengeSlides(challenges, kioskId, globalHandlers, slideOptions);
+  }
+
+  return buildAmbientCoverScreen(challenges, kioskId, globalHandlers, slideOptions);
+};
+
+/**
+ * Builds solution slides by merging grid and accordion data.
+ */
+const buildSolutionSection = (
+  solutionAccordion: unknown,
+  solutionGrid: unknown,
+  kioskId: KioskId,
+  globalHandlers: SlideBuilders['globalHandlers'],
+  handleRegisterListHandlers?: SlideBuilders['handleRegisterListHandlers']
+) => {
+  if (!solutionAccordion && !solutionGrid) return [];
+
+  const mergedSolutionScreens = {
+    ...(solutionGrid ?? {}),
+    ...(solutionAccordion ?? {}),
+  };
+
+  return buildSolutionSlides(mergedSolutionScreens, kioskId, {
+    ...globalHandlers,
+    onRegisterListHandlers: handleRegisterListHandlers,
+  });
+};
+
+/**
+ * Builds value slides if value content exists.
+ */
+const buildValueSection = (
+  values: unknown,
+  kioskId: KioskId,
+  globalHandlers: SlideBuilders['globalHandlers'],
+  handleRegisterCarouselHandlers?: SlideBuilders['handleRegisterCarouselHandlers']
+) => {
+  if (!values) return [];
+
+  return buildValueSlides(values, kioskId, globalHandlers, {
+    registerCarouselHandlers: handleRegisterCarouselHandlers,
+  });
+};
+
+/**
+ * Builds custom interactive slides for all enabled interactives.
+ */
+const buildCustomInteractiveSection = (
+  customInteractives: Array<{ number: 1 | 2 | 3 }>,
+  kioskId: KioskId,
+  scrollToSectionById: (id: string) => void
+) => {
+  if (customInteractives.length === 0) return [];
+
+  return customInteractives.flatMap((customInteractive, index) =>
+    buildCustomInteractiveSlides(customInteractive, kioskId, scrollToSectionById, index, customInteractive.number)
+  );
+};
+
 export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilders }: UseKioskSlidesConfig) => {
   const {
     globalHandlers,
@@ -120,6 +202,10 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
   // Parse kiosk data with type safety using extracted utility
   const kioskContent: ParsedKioskContent = useMemo(() => {
     try {
+      // Early return when data hasn't loaded yet - avoid error spam during initial render
+      if (!kioskData) {
+        return null;
+      }
       return parseKioskData(kioskData);
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
@@ -156,9 +242,8 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
         kioskContent.solutionAccordion &&
         typeof kioskContent.solutionAccordion === 'object' &&
         Array.isArray(kioskContent.solutionAccordion.accordion) &&
-        kioskContent.solutionAccordion.accordion.some(
-          (item: { bullets?: string[]; title?: string }) =>
-            item.title?.trim() || (item.bullets && item.bullets.length > 0)
+        kioskContent.solutionAccordion.accordion.some((item: SolutionAccordionItem) =>
+          item.title?.trim() || (item.bullets && item.bullets.length > 0)
         );
 
       // If no accordion data, still generate first and second screens from solutionMain alone
@@ -328,87 +413,56 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
   }, [challenges, customInteractives, solutionAccordion, solutionGrid, values]);
 
   const slides = useMemo(() => {
-    // Log missing sections for debugging
-    const missing: string[] = [];
-    if (!challenges) missing.push('challenges');
-    if (!solutionAccordion && !solutionGrid) missing.push('solutions');
-    if (!values) missing.push('values');
-    if (customInteractives.length === 0) missing.push('customInteractive');
-
-    if (missing.length > 0 && process.env.NODE_ENV === 'development') {
-      console.warn(`[useKioskSlides] Kiosk ${kioskId} missing sections:`, missing.join(', '));
+    // Early return if kioskContent hasn't loaded yet - avoid error spam during initial render
+    if (!kioskContent) {
+      return [];
     }
 
     // Check if we have at least the ambient data (required for initial screen)
-    if (!kioskContent?.ambient) {
+    if (!kioskContent.ambient) {
       if (process.env.NODE_ENV === 'development') {
         console.error(`[useKioskSlides] Kiosk ${kioskId} missing required ambient data`);
       }
       return [];
     }
 
-    const slideArray = [];
+    // Only log missing sections as info if ALL sections are missing (indicates a data problem)
+    // Don't warn for intentionally optional sections (it's normal for some kiosks to skip sections)
+    if (missingSections.length === 4 && process.env.NODE_ENV === 'development') {
+      console.warn(`[useKioskSlides] Kiosk ${kioskId} has no content sections:`, missingSections.join(', '));
+    }
 
-    if (challenges) {
-      const hasChallengeContent = kioskContent.challengeMain && hasContent(kioskContent.challengeMain);
+    // Build challenge slides (required - returns empty array if no challenges)
+    const challengeSlides = buildChallengeSection(
+      challenges,
+      kioskContent,
+      kioskId,
+      globalHandlers,
+      handleInitialButtonClick
+    );
 
-      if (hasChallengeContent) {
-        slideArray.push(
-          ...buildChallengeSlides(challenges, kioskId, globalHandlers, {
-            initialScreen: {
-              idleVideoSrc: kioskContent?.idle?.videoSrc,
-            },
-            onInitialButtonClick: handleInitialButtonClick,
-          })
-        );
-      } else {
-        slideArray.push(
-          ...buildAmbientCoverScreen(challenges, kioskId, globalHandlers, {
-            initialScreen: {
-              idleVideoSrc: kioskContent?.idle?.videoSrc,
-            },
-            onInitialButtonClick: handleInitialButtonClick,
-          })
-        );
-      }
-    } else {
+    // Early return if no challenge slides (ambient data is missing)
+    if (challengeSlides.length === 0) {
       if (process.env.NODE_ENV === 'development') {
         console.error(`[useKioskSlides] Kiosk ${kioskId} has no ambient data - cannot build initial screen`);
       }
       return [];
     }
 
-    if (solutionAccordion || solutionGrid) {
-      const mergedSolutionScreens = {
-        ...(solutionGrid ?? {}),
-        ...(solutionAccordion ?? {}),
-      };
+    // Build remaining sections
+    const solutionSlides = buildSolutionSection(
+      solutionAccordion,
+      solutionGrid,
+      kioskId,
+      globalHandlers,
+      handleRegisterListHandlers
+    );
 
-      slideArray.push(
-        ...buildSolutionSlides(mergedSolutionScreens, kioskId, {
-          ...globalHandlers,
-          onRegisterListHandlers: handleRegisterListHandlers,
-        })
-      );
-    }
+    const valueSlides = buildValueSection(values, kioskId, globalHandlers, handleRegisterCarouselHandlers);
 
-    if (values) {
-      slideArray.push(
-        ...buildValueSlides(values, kioskId, globalHandlers, {
-          registerCarouselHandlers: handleRegisterCarouselHandlers,
-        })
-      );
-    }
+    const customInteractiveSlides = buildCustomInteractiveSection(customInteractives, kioskId, scrollToSectionById);
 
-    if (customInteractives.length > 0) {
-      slideArray.push(
-        ...customInteractives.flatMap((customInteractive, index) =>
-          buildCustomInteractiveSlides(customInteractive, kioskId, scrollToSectionById, index, customInteractive.number)
-        )
-      );
-    }
-
-    return slideArray;
+    return [...challengeSlides, ...solutionSlides, ...valueSlides, ...customInteractiveSlides];
   }, [
     challenges,
     customInteractives,
@@ -418,6 +472,7 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
     handleRegisterListHandlers,
     kioskContent,
     kioskId,
+    missingSections,
     scrollToSectionById,
     solutionAccordion,
     solutionGrid,

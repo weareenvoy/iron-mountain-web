@@ -33,7 +33,7 @@ export function useAudioFade(
   }
 ) {
   const audioController = useAudio();
-  const fadeIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
   const currentVolumeRef = useRef<number>(1);
 
   const {
@@ -49,37 +49,50 @@ export function useAudioFade(
     
     if (startVolume === targetVolume) return;
 
-    const stepDuration = fadeMs / steps;
     const volumeStep = Math.abs(targetVolume - startVolume) / steps;
     const direction = targetVolume > startVolume ? 1 : -1;
+    const stepDuration = fadeMs / steps;
 
     let currentStep = 0;
+    let startTime: number | null = null;
 
-    if (fadeIntervalRef.current) {
-      clearInterval(fadeIntervalRef.current);
+    // Cancel any ongoing animation
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
     }
 
-    fadeIntervalRef.current = setInterval(() => {
-      currentStep++;
-      const newVolume = Math.max(0, Math.min(1, startVolume + direction * volumeStep * currentStep));
+    const animate = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+
+      // Calculate current step based on elapsed time
+      const targetStep = Math.floor(elapsed / stepDuration);
       
-      audioController.setChannelVolume('music', newVolume);
-      currentVolumeRef.current = newVolume;
+      if (targetStep > currentStep) {
+        currentStep = targetStep;
+        const newVolume = Math.max(0, Math.min(1, startVolume + direction * volumeStep * currentStep));
+        
+        audioController.setChannelVolume('music', newVolume);
+        currentVolumeRef.current = newVolume;
+      }
 
       if (currentStep >= steps) {
-        if (fadeIntervalRef.current) {
-          clearInterval(fadeIntervalRef.current);
-          fadeIntervalRef.current = null;
-        }
+        // Animation complete - ensure we hit the exact target
         audioController.setChannelVolume('music', targetVolume);
         currentVolumeRef.current = targetVolume;
+        animationFrameRef.current = null;
+      } else {
+        // Continue animation
+        animationFrameRef.current = requestAnimationFrame(animate);
       }
-    }, stepDuration);
+    };
+
+    animationFrameRef.current = requestAnimationFrame(animate);
 
     return () => {
-      if (fadeIntervalRef.current) {
-        clearInterval(fadeIntervalRef.current);
-        fadeIntervalRef.current = null;
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
       }
     };
   }, [isActive, audioController, fadeMs, steps, targetVolumeWhenActive, targetVolumeWhenInactive]);
