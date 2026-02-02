@@ -1,32 +1,41 @@
 import type { SolutionAccordionItem } from '@/app/(displays)/(kiosks)/_types/content-types';
 import type { ParsedKioskData } from '@/app/(displays)/(kiosks)/_utils/parseKioskData';
 
+const MAX_RECURSION_DEPTH = 10;
+
 /**
  * Helper to check if an object has meaningful content.
  * Recursively checks for non-empty strings, non-empty arrays, or nested objects with content.
+ *
+ * @param obj - The object to check for content
+ * @param depth - Current recursion depth (internal, prevents stack overflow)
+ * @returns true if the object contains meaningful content
  */
-export const hasContent = (obj: unknown): boolean => {
+export const hasContent = (obj: unknown, depth = 0): boolean => {
   if (!obj || typeof obj !== 'object') return false;
+  if (depth > MAX_RECURSION_DEPTH) return false;
 
   if (Array.isArray(obj)) {
-    return obj.some(item => hasContent(item) || (typeof item === 'string' && item.trim().length > 0));
+    return obj.some(item => hasContent(item, depth + 1) || (typeof item === 'string' && item.trim().length > 0));
   }
 
   return Object.values(obj).some(value => {
     if (typeof value === 'string') return value.trim().length > 0;
     if (typeof value === 'number') return true;
     if (typeof value === 'boolean') return true;
-    if (Array.isArray(value)) return value.length > 0 && hasContent(value);
-    if (typeof value === 'object' && value !== null) return hasContent(value);
+    if (Array.isArray(value)) return value.length > 0 && hasContent(value, depth + 1);
+    if (typeof value === 'object' && value !== null) return hasContent(value, depth + 1);
     return false;
   });
 };
 
 /**
- * Checks if any solution object (solutionMain, solutionAccordion, or solutionGrid) has content.
- * Returns true if at least one solution section contains data.
+ * Analyzes solution content and returns detailed state about what content exists.
+ * Returns an object with multiple boolean flags for granular content checking.
+ *
+ * @returns Object with flags for accordion, grid, main, and overall content presence
  */
-export const hasSolutionContent = (
+export const getSolutionContentState = (
   kioskContent: null | ParsedKioskData
 ): {
   hasAccordionContent: boolean;

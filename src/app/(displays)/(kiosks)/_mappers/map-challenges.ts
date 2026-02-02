@@ -1,6 +1,11 @@
 import type { KioskChallenges } from '../_types/challengeContent';
 import type { Ambient, ChallengeContent } from '../_types/content-types';
 
+/**
+ * Combines CMS Challenge and Ambient content into the Kiosk Challenges structure.
+ * This mapper exists to merge two separate CMS data sources into a unified structure
+ * for rendering challenge screens across the kiosk experience.
+ */
 export const mapChallenges = (challenge: ChallengeContent, ambient: Ambient): KioskChallenges => ({
   firstScreen: {
     body: challenge.body ?? '',

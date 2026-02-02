@@ -193,3 +193,31 @@ export const GRADIENT_START_POSITIONS: Record<GradientSection, Record<KioskId, n
     'kiosk-3': 1060,
   },
 };
+
+/**
+ * Validates that all height values are positive numbers.
+ * Throws an error if validation fails (should only happen during development).
+ */
+const validateHeights = () => {
+  const allHeights = [
+    ...Object.values(CHALLENGE_HEIGHTS).flatMap(Object.values),
+    ...Object.values(SOLUTION_HEIGHTS).flatMap(Object.values),
+    ...Object.values(CUSTOM_INTERACTIVE_HEIGHTS).flatMap(Object.values),
+    ...Object.values(VALUE_HEIGHTS).flatMap(Object.values),
+    ...Object.values(GRADIENT_START_POSITIONS).flatMap(h => Object.values(h)),
+  ];
+
+  const invalidHeights = allHeights.filter(h => typeof h !== 'number' || h < 0 || !isFinite(h));
+
+  if (invalidHeights.length > 0 && process.env.NODE_ENV === 'development') {
+    console.error('[slide-heights] Invalid height values detected:', invalidHeights);
+    throw new Error(
+      `Invalid slide height configuration: found ${invalidHeights.length} invalid values. All heights must be positive finite numbers.`
+    );
+  }
+};
+
+// Run validation during module load in development
+if (process.env.NODE_ENV === 'development') {
+  validateHeights();
+}

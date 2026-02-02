@@ -56,9 +56,11 @@ export function useAudioFade(
     let currentStep = 0;
     let startTime: null | number = null;
 
-    // Cancel any ongoing animation
-    if (animationFrameRef.current) {
-      cancelAnimationFrame(animationFrameRef.current);
+    // Cancel any ongoing animation - store ref value to prevent race condition
+    const currentAnimationFrame = animationFrameRef.current;
+    if (currentAnimationFrame !== null) {
+      cancelAnimationFrame(currentAnimationFrame);
+      animationFrameRef.current = null;
     }
 
     const animate = (timestamp: number) => {
@@ -90,8 +92,10 @@ export function useAudioFade(
     animationFrameRef.current = requestAnimationFrame(animate);
 
     return () => {
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
+      // Store ref value to prevent race condition during cleanup
+      const frameToCancel = animationFrameRef.current;
+      if (frameToCancel !== null) {
+        cancelAnimationFrame(frameToCancel);
         animationFrameRef.current = null;
       }
     };

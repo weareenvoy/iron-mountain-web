@@ -7,14 +7,27 @@ import { mapSolutionsWithGrid, type DiamondMapping } from '@/app/(displays)/(kio
 import { mapValue } from '@/app/(displays)/(kiosks)/_mappers/map-value';
 import { parseKioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
 import {
+  getSolutionContentState,
   hasAccordionData,
   hasContent,
   hasGridData,
-  hasSolutionContent,
 } from '@/app/(displays)/(kiosks)/_utils/content-validation';
 import type { CustomInteractiveContent } from '@/app/(displays)/(kiosks)/_types/content-types';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import type { ParsedKioskData } from '@/app/(displays)/(kiosks)/_utils/parseKioskData';
+
+/**
+ * Type guard to check if data is valid CustomInteractiveContent
+ */
+const isCustomInteractiveContent = (data: unknown): data is CustomInteractiveContent => {
+  return (
+    typeof data === 'object' &&
+    data !== null &&
+    (('headline' in data && typeof data.headline === 'string') ||
+      ('image' in data && typeof data.image === 'string') ||
+      ('mainCTA' in data && typeof data.mainCTA === 'string'))
+  );
+};
 
 /**
  * Maps parsed kiosk content to challenge slides format.
@@ -25,7 +38,10 @@ export const useMappedChallenges = (kioskContent: null | ParsedKioskData) => {
 
     try {
       return parseKioskChallenges(mapChallenges(kioskContent.challengeMain ?? {}, kioskContent.ambient));
-    } catch {
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[useMappedChallenges] Failed to map challenge content:', error);
+      }
       return null;
     }
   }, [kioskContent]);
@@ -38,7 +54,7 @@ export const useMappedSolutionAccordion = (kioskContent: null | ParsedKioskData)
   return useMemo(() => {
     if (!kioskContent?.ambient) return null;
 
-    const { hasAnyContent, hasMainContent } = hasSolutionContent(kioskContent);
+    const { hasAnyContent, hasMainContent } = getSolutionContentState(kioskContent);
     if (!hasAnyContent || !hasMainContent || !kioskContent.solutionMain) return null;
 
     try {
@@ -57,7 +73,10 @@ export const useMappedSolutionAccordion = (kioskContent: null | ParsedKioskData)
         kioskContent.solutionAccordion!,
         kioskContent.ambient
       );
-    } catch {
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[useMappedSolutionAccordion] Failed to map solution accordion content:', error);
+      }
       return null;
     }
   }, [kioskContent]);
@@ -70,7 +89,7 @@ export const useMappedSolutionGrid = (kioskContent: null | ParsedKioskData, diam
   return useMemo(() => {
     if (!kioskContent?.ambient || !diamondMapping) return null;
 
-    const { hasAnyContent, hasMainContent } = hasSolutionContent(kioskContent);
+    const { hasAnyContent, hasMainContent } = getSolutionContentState(kioskContent);
     if (!hasAnyContent || !hasMainContent || !kioskContent.solutionMain) return null;
 
     try {
@@ -84,7 +103,10 @@ export const useMappedSolutionGrid = (kioskContent: null | ParsedKioskData, diam
         kioskContent.ambient,
         diamondMapping
       );
-    } catch {
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[useMappedSolutionGrid] Failed to map solution grid content:', error);
+      }
       return null;
     }
   }, [kioskContent, diamondMapping]);
@@ -100,7 +122,10 @@ export const useMappedValues = (kioskContent: null | ParsedKioskData, kioskId: K
 
     try {
       return mapValue(kioskContent.valueMain, kioskContent.ambient, kioskId);
-    } catch {
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[useMappedValues] Failed to map value content:', error);
+      }
       return null;
     }
   }, [kioskContent, kioskId]);
@@ -132,67 +157,63 @@ export const useMappedCustomInteractives = (kioskContent: null | ParsedKioskData
 
     const choice = kioskContent.customInteractiveChoice;
 
-    // Helper function to process a single custom interactive
-    function processCustomInteractive(item: { data: CustomInteractiveContent; number: 1 | 2 | 3 }) {
-      if (!kioskContent?.ambient) return null;
+    // Find the first non-empty custom interactive and return only that one
+    const interactiveChoices: Array<{ data: unknown; key: string; number: 1 | 2 | 3 }> = [
+      { data: kioskContent.customInteractive1, key: choice?.customInteractive1 ?? '', number: 1 },
+      { data: kioskContent.customInteractive2, key: choice?.customInteractive2 ?? '', number: 2 },
+      { data: kioskContent.customInteractive3, key: choice?.customInteractive3 ?? '', number: 3 },
+    ];
 
-      const mapper = getCustomInteractiveMapper(item.number);
-
-      try {
-        if (!mapper) {
-          // Interactive 2 uses direct object construction
-          const demo = kioskContent.demoMain;
-          const ambient = kioskContent.ambient;
-
-          return {
-            firstScreen: {
-              demoIframeSrc: demo?.iframeLink,
-              eyebrow: ambient.title,
-              headline: item.data.headline,
-              heroImageAlt: '',
-              heroImageSrc: item.data.image,
-              overlayCardLabel: demo?.demoText,
-              overlayEndTourLabel: demo?.mainCTA,
-              overlayHeadline: demo?.headline,
-              primaryCtaLabel: undefined,
-              secondaryCtaLabel: item.data.secondaryCTA,
-            },
-            number: item.number,
-          };
+    for (const interactive of interactiveChoices) {
+      if (interactive.key && interactive.key.trim() !== '' && interactive.data && hasContent(interactive.data)) {
+        if (!isCustomInteractiveContent(interactive.data)) {
+          if (process.env.NODE_ENV === 'development') {
+            console.warn(
+              `[useMappedCustomInteractives] Invalid custom interactive ${interactive.number} data structure`
+            );
+          }
+          continue;
         }
 
-        const mapped = mapper(item.data, kioskContent.ambient, kioskContent.demoMain);
-        return { ...mapped, number: item.number };
-      } catch {
-        return null;
-      }
-    }
+        try {
+          const mapper = getCustomInteractiveMapper(interactive.number);
 
-    // Find the first non-empty custom interactive and return only that one
-    // CustomInteractive 1
-    if (choice?.customInteractive1 && choice.customInteractive1.trim() !== '') {
-      const data = kioskContent.customInteractive1;
-      if (data && hasContent(data)) {
-        const mapped = processCustomInteractive({ data: data as CustomInteractiveContent, number: 1 });
-        return mapped ? [mapped] : [];
-      }
-    }
+          if (!mapper) {
+            // Interactive 2 uses direct object construction
+            const demo = kioskContent.demoMain;
+            const ambient = kioskContent.ambient;
 
-    // CustomInteractive 2
-    if (choice?.customInteractive2 && choice.customInteractive2.trim() !== '') {
-      const data = kioskContent.customInteractive2;
-      if (data && hasContent(data)) {
-        const mapped = processCustomInteractive({ data: data as CustomInteractiveContent, number: 2 });
-        return mapped ? [mapped] : [];
-      }
-    }
+            return [
+              {
+                firstScreen: {
+                  demoIframeSrc: demo?.iframeLink,
+                  eyebrow: ambient.title,
+                  headline: interactive.data.headline,
+                  heroImageAlt: '',
+                  heroImageSrc: interactive.data.image,
+                  overlayCardLabel: demo?.demoText,
+                  overlayEndTourLabel: demo?.mainCTA,
+                  overlayHeadline: demo?.headline,
+                  primaryCtaLabel: undefined,
+                  secondaryCtaLabel: interactive.data.secondaryCTA,
+                },
+                number: interactive.number,
+              },
+            ];
+          }
 
-    // CustomInteractive 3
-    if (choice?.customInteractive3 && choice.customInteractive3.trim() !== '') {
-      const data = kioskContent.customInteractive3;
-      if (data && hasContent(data)) {
-        const mapped = processCustomInteractive({ data: data as CustomInteractiveContent, number: 3 });
-        return mapped ? [mapped] : [];
+          const mapped = mapper(interactive.data, kioskContent.ambient, kioskContent.demoMain);
+          return [{ ...mapped, number: interactive.number }];
+        } catch (error) {
+          if (process.env.NODE_ENV === 'development') {
+            console.error(
+              `[useMappedCustomInteractives] Failed to process custom interactive ${interactive.number}:`,
+              error
+            );
+          }
+          // Continue to next interactive on error
+          continue;
+        }
       }
     }
 
