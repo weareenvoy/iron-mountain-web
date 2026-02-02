@@ -91,7 +91,7 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
       // Report state using the centralized method
       client.reportExhibitState(appId, updated);
     },
-    [appId, client, isConnected, kioskId]
+    [appId, client, isConnected]
   );
 
   const reportStateRef = useRef(reportState);
@@ -156,15 +156,13 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
 
     // 1. Load tour command
     // When Docent loads ANY tour, ALL kiosks activate (fetch data, report state)
-    const handleLoadTour = async (message: Buffer) => {
+    const handleLoadTour = async () => {
       // Prevent concurrent loadTour operations
       if (isLoadingTourRef.current) {
         return;
       }
 
       try {
-        const msg = JSON.parse(message.toString());
-
         // Mark as loading to prevent concurrent operations
         isLoadingTourRef.current = true;
 
@@ -175,7 +173,7 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
         if (success) {
           reportStateRef.current({ 'beat-id': 'kiosk-active' });
         }
-      } catch (error) {
+      } catch {
         // Error handling without logging
       } finally {
         // Always clear loading flag

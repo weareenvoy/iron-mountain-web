@@ -67,7 +67,7 @@ export function useKiosk3SecondScreenState() {
   const [state, dispatch] = useReducer(kiosk3SecondScreenReducer, initialState);
   const { sfx } = useKioskAudio();
   const { playSfx } = useSfx();
-  
+
   useAudioFade(state.showOverlay);
 
   // Complete button transition after animation duration

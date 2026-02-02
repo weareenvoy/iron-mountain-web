@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
-import { buildAmbientCoverScreen, buildChallengeSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeSlides';
+import {
+  buildAmbientCoverScreen,
+  buildChallengeSlides,
+} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeSlides';
 import { buildCustomInteractiveSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/customInteractiveSlides';
-import { buildSolutionSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/solutionSlides';
-import { buildValueSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueSlides';
 import {
   useMappedChallenges,
   useMappedCustomInteractives,
@@ -10,6 +11,9 @@ import {
   useMappedSolutionGrid,
   useMappedValues,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useMappedContent';
+import { buildSolutionSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/solutionSlides';
+import { buildValueSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueSlides';
+import { parseKioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
 import { calculateSectionGradientHeights } from '@/app/(displays)/(kiosks)/_utils/calculate-section-heights';
 import { hasContent } from '@/app/(displays)/(kiosks)/_utils/content-validation';
 import { parseKioskData } from '@/app/(displays)/(kiosks)/_utils/parseKioskData';
@@ -62,7 +66,7 @@ type ParsedKioskContent = ReturnType<typeof parseKioskData>;
  * Returns ambient cover screen if no challenge content, full challenge slides otherwise.
  */
 const buildChallengeSection = (
-  challenges: ReturnType<typeof parseKioskChallenges> | null,
+  challenges: null | ReturnType<typeof parseKioskChallenges>,
   kioskContent: ParsedKioskContent,
   kioskId: KioskId,
   globalHandlers: SlideBuilders['globalHandlers'],
@@ -156,7 +160,7 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
         return null;
       }
       return parseKioskData(kioskData);
-    } catch (error) {
+    } catch {
       return null;
     }
   }, [kioskData]);
@@ -226,7 +230,6 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
     handleRegisterListHandlers,
     kioskContent,
     kioskId,
-    missingSections,
     scrollToSectionById,
     solutionAccordion,
     solutionGrid,

@@ -27,7 +27,7 @@ export const hasContent = (obj: unknown): boolean => {
  * Returns true if at least one solution section contains data.
  */
 export const hasSolutionContent = (
-  kioskContent: ParsedKioskData | null
+  kioskContent: null | ParsedKioskData
 ): {
   hasAccordionContent: boolean;
   hasAnyContent: boolean;
@@ -58,15 +58,13 @@ export const hasSolutionContent = (
 /**
  * Checks if accordion data has actual items with content.
  */
-export const hasAccordionData = (
-  solutionAccordion: ParsedKioskData['solutionAccordion']
-): boolean => {
+export const hasAccordionData = (solutionAccordion: ParsedKioskData['solutionAccordion']): boolean => {
   return !!(
     solutionAccordion &&
     typeof solutionAccordion === 'object' &&
     Array.isArray(solutionAccordion.accordion) &&
-    solutionAccordion.accordion.some((item: SolutionAccordionItem) =>
-      item.title?.trim() || (item.bullets && item.bullets.length > 0)
+    solutionAccordion.accordion.some(
+      (item: SolutionAccordionItem) => item.title?.trim() || (item.bullets && item.bullets.length > 0)
     )
   );
 };
@@ -74,26 +72,18 @@ export const hasAccordionData = (
 /**
  * Checks if grid data has actual non-empty diamond list entries.
  */
-export const hasGridData = (
-  solutionGrid: ParsedKioskData['solutionGrid']
-): boolean => {
+export const hasGridData = (solutionGrid: ParsedKioskData['solutionGrid']): boolean => {
   return !!(
     solutionGrid &&
     typeof solutionGrid === 'object' &&
     Array.isArray(solutionGrid.diamondList) &&
-    solutionGrid.diamondList.some((item: string | null | undefined) => item?.trim())
+    solutionGrid.diamondList.some((item: null | string | undefined) => item?.trim())
   );
 };
 
 /**
  * Checks if numbered list has actual content.
  */
-export const hasNumberedListData = (
-  numberedList?: readonly (string | undefined)[]
-): boolean => {
-  return !!(
-    numberedList &&
-    Array.isArray(numberedList) &&
-    numberedList.some(item => item && item.trim().length > 0)
-  );
+export const hasNumberedListData = (numberedList?: readonly (string | undefined)[]): boolean => {
+  return !!(numberedList && Array.isArray(numberedList) && numberedList.some(item => item && item.trim().length > 0));
 };

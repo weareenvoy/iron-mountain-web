@@ -6,7 +6,12 @@ import { mapSolutionsWithAccordion } from '@/app/(displays)/(kiosks)/_mappers/ma
 import { mapSolutionsWithGrid, type DiamondMapping } from '@/app/(displays)/(kiosks)/_mappers/map-solutions-with-grid';
 import { mapValue } from '@/app/(displays)/(kiosks)/_mappers/map-value';
 import { parseKioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
-import { hasAccordionData, hasContent, hasGridData, hasSolutionContent } from '@/app/(displays)/(kiosks)/_utils/content-validation';
+import {
+  hasAccordionData,
+  hasContent,
+  hasGridData,
+  hasSolutionContent,
+} from '@/app/(displays)/(kiosks)/_utils/content-validation';
 import type { CustomInteractiveContent } from '@/app/(displays)/(kiosks)/_types/content-types';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import type { ParsedKioskData } from '@/app/(displays)/(kiosks)/_utils/parseKioskData';
@@ -14,13 +19,13 @@ import type { ParsedKioskData } from '@/app/(displays)/(kiosks)/_utils/parseKios
 /**
  * Maps parsed kiosk content to challenge slides format.
  */
-export const useMappedChallenges = (kioskContent: ParsedKioskData | null) => {
+export const useMappedChallenges = (kioskContent: null | ParsedKioskData) => {
   return useMemo(() => {
     if (!kioskContent?.ambient) return null;
 
     try {
       return parseKioskChallenges(mapChallenges(kioskContent.challengeMain ?? {}, kioskContent.ambient));
-    } catch (error) {
+    } catch {
       return null;
     }
   }, [kioskContent]);
@@ -29,7 +34,7 @@ export const useMappedChallenges = (kioskContent: ParsedKioskData | null) => {
 /**
  * Maps parsed kiosk content to solution accordion slides format.
  */
-export const useMappedSolutionAccordion = (kioskContent: ParsedKioskData | null) => {
+export const useMappedSolutionAccordion = (kioskContent: null | ParsedKioskData) => {
   return useMemo(() => {
     if (!kioskContent?.ambient) return null;
 
@@ -47,8 +52,12 @@ export const useMappedSolutionAccordion = (kioskContent: ParsedKioskData | null)
         );
       }
 
-      return mapSolutionsWithAccordion(kioskContent.solutionMain, kioskContent.solutionAccordion, kioskContent.ambient);
-    } catch (error) {
+      return mapSolutionsWithAccordion(
+        kioskContent.solutionMain,
+        kioskContent.solutionAccordion!,
+        kioskContent.ambient
+      );
+    } catch {
       return null;
     }
   }, [kioskContent]);
@@ -57,7 +66,7 @@ export const useMappedSolutionAccordion = (kioskContent: ParsedKioskData | null)
 /**
  * Maps parsed kiosk content to solution grid slides format.
  */
-export const useMappedSolutionGrid = (kioskContent: ParsedKioskData | null, diamondMapping?: DiamondMapping) => {
+export const useMappedSolutionGrid = (kioskContent: null | ParsedKioskData, diamondMapping?: DiamondMapping) => {
   return useMemo(() => {
     if (!kioskContent?.ambient || !diamondMapping) return null;
 
@@ -71,11 +80,11 @@ export const useMappedSolutionGrid = (kioskContent: ParsedKioskData | null, diam
 
       return mapSolutionsWithGrid(
         kioskContent.solutionMain,
-        kioskContent.solutionGrid,
+        kioskContent.solutionGrid!,
         kioskContent.ambient,
         diamondMapping
       );
-    } catch (error) {
+    } catch {
       return null;
     }
   }, [kioskContent, diamondMapping]);
@@ -84,14 +93,14 @@ export const useMappedSolutionGrid = (kioskContent: ParsedKioskData | null, diam
 /**
  * Maps parsed kiosk content to value slides format.
  */
-export const useMappedValues = (kioskContent: ParsedKioskData | null, kioskId: KioskId) => {
+export const useMappedValues = (kioskContent: null | ParsedKioskData, kioskId: KioskId) => {
   return useMemo(() => {
     if (!kioskContent?.ambient) return null;
     if (!kioskContent.valueMain || !hasContent(kioskContent.valueMain)) return null;
 
     try {
       return mapValue(kioskContent.valueMain, kioskContent.ambient, kioskId);
-    } catch (error) {
+    } catch {
       return null;
     }
   }, [kioskContent, kioskId]);
@@ -117,7 +126,7 @@ const getCustomInteractiveMapper = (interactiveNumber: 1 | 2 | 3) => {
  * Maps parsed kiosk content to custom interactive slides format.
  * Only displays the FIRST non-empty custom interactive.
  */
-export const useMappedCustomInteractives = (kioskContent: ParsedKioskData | null) => {
+export const useMappedCustomInteractives = (kioskContent: null | ParsedKioskData) => {
   return useMemo(() => {
     if (!kioskContent?.ambient) return [];
 
@@ -154,7 +163,7 @@ export const useMappedCustomInteractives = (kioskContent: ParsedKioskData | null
 
         const mapped = mapper(item.data, kioskContent.ambient, kioskContent.demoMain);
         return { ...mapped, number: item.number };
-      } catch (error) {
+      } catch {
         return null;
       }
     }

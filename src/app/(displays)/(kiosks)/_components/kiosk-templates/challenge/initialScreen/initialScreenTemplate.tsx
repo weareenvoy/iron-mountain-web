@@ -127,12 +127,12 @@ const InitialScreenTemplate = memo(
             if (idleVideoSrcRef.current === videoSrcAtDismiss) {
               setIdleCompleteVideoSrc(videoSrcAtDismiss);
             }
-            timeoutRef.current = null; // Always clear, not just on success path
-          }, IDLE_FADE_OUT_DURATION_MS);
-        } catch (error) {
-          // Error handling without logging
-        }
-      };
+          timeoutRef.current = null; // Always clear, not just on success path
+        }, IDLE_FADE_OUT_DURATION_MS);
+      } catch {
+        // Error handling without logging
+      }
+    };
 
       // Subscribe to broadcast loadTour commands from GEC
       client.subscribeToTopic(mqttCommands.broadcast.loadTour, handleLoadTour);

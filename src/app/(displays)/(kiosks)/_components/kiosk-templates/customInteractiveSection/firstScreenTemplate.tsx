@@ -13,9 +13,9 @@ import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractiv
 import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import { TITLE_ANIMATION_TRANSFORMS } from '../constants/animations';
+import { useAudioFade } from '../hooks/useAudioFade';
 import { SCROLL_ANIMATION_CONFIG, useScrollAnimation } from '../hooks/useScrollAnimation';
 import { SECTION_NAMES, useStickyHeader } from '../hooks/useStickyHeader';
-import { useAudioFade } from '../hooks/useAudioFade';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 export interface CustomInteractiveKiosk1FirstScreenTemplateProps {
@@ -59,7 +59,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   const { playSfx } = useSfx();
 
   const [showOverlay, setShowOverlay] = useState(false);
-  
+
   useAudioFade(showOverlay);
 
   const {

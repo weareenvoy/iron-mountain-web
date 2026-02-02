@@ -33,7 +33,7 @@ export function useAudioFade(
   }
 ) {
   const audioController = useAudio();
-  const animationFrameRef = useRef<number | null>(null);
+  const animationFrameRef = useRef<null | number>(null);
   const currentVolumeRef = useRef<number>(1);
 
   const {
@@ -46,7 +46,7 @@ export function useAudioFade(
   useEffect(() => {
     const targetVolume = isActive ? targetVolumeWhenActive : targetVolumeWhenInactive;
     const startVolume = currentVolumeRef.current;
-    
+
     if (startVolume === targetVolume) return;
 
     const volumeStep = Math.abs(targetVolume - startVolume) / steps;
@@ -54,7 +54,7 @@ export function useAudioFade(
     const stepDuration = fadeMs / steps;
 
     let currentStep = 0;
-    let startTime: number | null = null;
+    let startTime: null | number = null;
 
     // Cancel any ongoing animation
     if (animationFrameRef.current) {
@@ -67,11 +67,11 @@ export function useAudioFade(
 
       // Calculate current step based on elapsed time
       const targetStep = Math.floor(elapsed / stepDuration);
-      
+
       if (targetStep > currentStep) {
         currentStep = targetStep;
         const newVolume = Math.max(0, Math.min(1, startVolume + direction * volumeStep * currentStep));
-        
+
         audioController.setChannelVolume('music', newVolume);
         currentVolumeRef.current = newVolume;
       }
