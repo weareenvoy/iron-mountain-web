@@ -50,18 +50,24 @@ const SolutionFirstScreenTemplate = ({
       {/* Background video */}
       <div className="absolute top-[-5px] left-0 h-[1545px] w-full" data-section-video="solution">
         <div className="relative h-full w-full">
-          <video
-            autoPlay
-            className="absolute h-full w-full bg-black object-cover"
-            controlsList="nodownload"
-            data-scroll-section="solution-first-video"
-            loop
-            muted
-            playsInline
-          >
-            <source src={mainVideo} type={getVideoMimeType(mainVideo)} />
-          </video>
-          <div className="pointer-events-none absolute inset-0 bg-black/20" />
+          {mainVideo ? (
+            <>
+              <video
+                autoPlay
+                className="absolute h-full w-full bg-black object-cover"
+                controlsList="nodownload"
+                data-scroll-section="solution-first-video"
+                loop
+                muted
+                playsInline
+              >
+                <source src={mainVideo} type={getVideoMimeType(mainVideo)} />
+              </video>
+              <div className="pointer-events-none absolute inset-0 bg-black/20" />
+            </>
+          ) : (
+            <div className="absolute h-full w-full bg-[#a2115e]" />
+          )}
         </div>
       </div>
 

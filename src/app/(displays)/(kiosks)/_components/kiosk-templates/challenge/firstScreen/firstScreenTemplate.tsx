@@ -72,18 +72,24 @@ const FirstScreenTemplate = memo(
           className="relative flex h-[1284px] w-full flex-col items-center justify-center px-[120px] py-[200px]"
           data-section-video="challenge"
         >
-          <video
-            autoPlay
-            className="absolute inset-0 top-[230px] h-full w-full object-cover object-center"
-            controlsList="nodownload"
-            data-scroll-section="challenge-first-video"
-            loop
-            muted
-            playsInline
-          >
-            <source src={mainVideo} type={getVideoMimeType(mainVideo)} />
-          </video>
-          <div className="pointer-events-none absolute inset-0 top-[230px] bg-black/20" />
+          {mainVideo ? (
+            <>
+              <video
+                autoPlay
+                className="absolute inset-0 top-[230px] h-full w-full object-cover object-center"
+                controlsList="nodownload"
+                data-scroll-section="challenge-first-video"
+                loop
+                muted
+                playsInline
+              >
+                <source src={mainVideo} type={getVideoMimeType(mainVideo)} />
+              </video>
+              <div className="pointer-events-none absolute inset-0 top-[230px] bg-black/20" />
+            </>
+          ) : (
+            <div className="absolute inset-0 top-[230px] h-full w-full bg-[#1b75bc]" />
+          )}
 
           {/* Subheadline - Initial Position */}
           <motion.div
