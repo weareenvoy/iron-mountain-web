@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useReducer } from 'react';
 import { useKioskAudio } from '@/app/(displays)/(kiosks)/_components/providers/useKioskAudio';
-import { useAudio, useSfx } from '@/components/providers/audio-provider';
+import { useSfx } from '@/components/providers/audio-provider';
+import { useAudioFade } from '../../../hooks/useAudioFade';
 
 /**
  * State for Kiosk 3 Second Screen animation sequence
@@ -66,7 +67,8 @@ export function useKiosk3SecondScreenState() {
   const [state, dispatch] = useReducer(kiosk3SecondScreenReducer, initialState);
   const { sfx } = useKioskAudio();
   const { playSfx } = useSfx();
-  const audioController = useAudio();
+  
+  useAudioFade(state.showOverlay);
 
   // Complete button transition after animation duration
   useEffect(() => {
@@ -78,39 +80,6 @@ export function useKiosk3SecondScreenState() {
 
     return () => clearTimeout(timer);
   }, [state.isButtonTransitioning]);
-
-  // Smoothly fade background music when demo overlay is active
-  useEffect(() => {
-    const targetVolume = state.showOverlay ? 0 : 1;
-    const fadeMs = 300; // Fade duration in milliseconds
-    const steps = 20; // Number of steps for the fade
-    const stepDuration = fadeMs / steps;
-    const startVolume = state.showOverlay ? 1 : 0;
-    const volumeStep = Math.abs(targetVolume - startVolume) / steps;
-
-    let currentStep = 0;
-
-    const fadeInterval = setInterval(() => {
-      currentStep++;
-      const newVolume = state.showOverlay 
-        ? Math.max(0, startVolume - volumeStep * currentStep)
-        : Math.min(1, startVolume + volumeStep * currentStep);
-      
-      audioController.setChannelVolume('music', newVolume);
-
-      if (currentStep >= steps) {
-        clearInterval(fadeInterval);
-        // Ensure final volume is set correctly
-        audioController.setChannelVolume('music', targetVolume);
-      }
-    }, stepDuration);
-
-    return () => {
-      clearInterval(fadeInterval);
-      // Immediately set target volume on cleanup to prevent partial fade states
-      audioController.setChannelVolume('music', targetVolume);
-    };
-  }, [audioController, state.showOverlay]);
 
   // Stable event handlers
   const handleTapToBegin = useCallback(() => {

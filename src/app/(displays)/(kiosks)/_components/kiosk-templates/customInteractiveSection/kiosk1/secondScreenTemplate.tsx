@@ -6,7 +6,7 @@ import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
 import { useKioskAudio } from '@/app/(displays)/(kiosks)/_components/providers/useKioskAudio';
-import { useAudio, useSfx } from '@/components/providers/audio-provider';
+import { useSfx } from '@/components/providers/audio-provider';
 import { cn } from '@/lib/tailwind/utils/cn';
 import { normalizeText } from '@/lib/utils/normalize-text';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
@@ -14,6 +14,7 @@ import { AnimatedText } from './components/AnimatedText';
 import { StepCarousel, type Step } from './components/StepCarousel';
 import { StepModal, type ModalContent } from './components/StepModal';
 import { SECTION_NAMES } from '../../hooks/useStickyHeader';
+import { useAudioFade } from '../../hooks/useAudioFade';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 /**
@@ -84,7 +85,6 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
   const secondaryIconOffset = isCI3 ? 'left-[-330px]' : 'left-[-70px]';
   const { sfx } = useKioskAudio();
   const { playSfx } = useSfx();
-  const audioController = useAudio();
 
   const [openModalIndex, setOpenModalIndex] = useState<null | number>(null);
   const [showOverlay, setShowOverlay] = useState(false);
@@ -92,6 +92,8 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
   const [shouldAnimateText, setShouldAnimateText] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
+  
+  useAudioFade(showOverlay);
 
   const activeStep = (openModalIndex !== null && normalizedSteps[openModalIndex]) ?? null;
   const activeModalContent: ModalContent | null = activeStep
@@ -139,39 +141,6 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
   useEffect(() => {
     setPortalTarget(containerRef.current);
   }, []);
-
-  // Smoothly fade background music when demo overlay is active
-  useEffect(() => {
-    const targetVolume = showOverlay ? 0 : 1;
-    const fadeMs = 300; // Fade duration in milliseconds
-    const steps = 20; // Number of steps for the fade
-    const stepDuration = fadeMs / steps;
-    const startVolume = showOverlay ? 1 : 0;
-    const volumeStep = Math.abs(targetVolume - startVolume) / steps;
-
-    let currentStep = 0;
-
-    const fadeInterval = setInterval(() => {
-      currentStep++;
-      const newVolume = showOverlay 
-        ? Math.max(0, startVolume - volumeStep * currentStep)
-        : Math.min(1, startVolume + volumeStep * currentStep);
-      
-      audioController.setChannelVolume('music', newVolume);
-
-      if (currentStep >= steps) {
-        clearInterval(fadeInterval);
-        // Ensure final volume is set correctly
-        audioController.setChannelVolume('music', targetVolume);
-      }
-    }, stepDuration);
-
-    return () => {
-      clearInterval(fadeInterval);
-      // Immediately set target volume on cleanup to prevent partial fade states
-      audioController.setChannelVolume('music', targetVolume);
-    };
-  }, [audioController, showOverlay]);
 
   /**
    * Detect when text/button become visible to trigger animations

@@ -8,6 +8,8 @@ import OrangeDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/OrangeDi
 import OrangeGradientDiamondFourth from '@/components/ui/icons/Kiosks/Solutions/OrangeGradientDiamondFourth';
 import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
+import { useSfx } from '@/components/providers/audio-provider';
+import { useKioskAudio } from '../../../providers/useKioskAudio';
 import { SECTION_NAMES } from '../../hooks/useStickyHeader';
 import PhotoDiamond from './PhotoDiamond';
 import PlusMinusIcon from './PlusMinusIcon';
@@ -33,6 +35,8 @@ const SolutionFourthScreenTemplate = ({
   mediaDiamondSolidSrc,
 }: SolutionFourthScreenTemplateProps) => {
   const entries = accordion?.length ? accordion : [];
+  const { playSfx } = useSfx();
+  const { sfx } = useKioskAudio();
 
   return (
     <div
@@ -57,6 +61,15 @@ const SolutionFourthScreenTemplate = ({
           collapsible
           defaultValue={entries.find(entry => entry.expanded)?.id ?? entries[0]?.id ?? 'item-1'}
           type="single"
+          onValueChange={(value) => {
+            // Play open sound when an item is opened (value is set)
+            // Play close sound when an item is closed (value is empty string)
+            if (value) {
+              if (sfx.open) playSfx(sfx.open);
+            } else {
+              if (sfx.close) playSfx(sfx.close);
+            }
+          }}
         >
           {entries.map((item, index) => {
             const accordionColor = item.color ?? 'white';

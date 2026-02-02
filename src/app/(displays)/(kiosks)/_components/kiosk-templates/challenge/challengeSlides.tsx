@@ -31,10 +31,10 @@ export type ChallengeScreens = {
 };
 
 /**
- * Builds only the initial screen slide (cover screen with idle video).
- * Used when challenge content is empty but we still need the initial screen.
+ * Builds only the ambient cover screen slide (initial screen with idle video).
+ * Used when challenge content data is empty but ambient data exists for the cover screen.
  */
-export const buildInitialScreenOnly = (
+export const buildAmbientCoverScreen = (
   challenges: KioskChallenges,
   kioskId: KioskId,
   handlers: { onNavigateDown: () => void; onNavigateUp: () => void },

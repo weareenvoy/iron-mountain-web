@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion';
 import { SquarePlay } from 'lucide-react';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
 import { useGradientHeights } from '@/app/(displays)/(kiosks)/_components/providers/gradient-heights-provider';
 import { useKioskAudio } from '@/app/(displays)/(kiosks)/_components/providers/useKioskAudio';
-import { useAudio, useSfx } from '@/components/providers/audio-provider';
+import { useSfx } from '@/components/providers/audio-provider';
 import ArrowIcon from '@/components/ui/icons/Kiosks/CustomInteractive/ArrowIcon';
 import HCFilledOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCFilledOrangeDiamond';
 import HCHollowBlueDiamond from '@/components/ui/icons/Kiosks/CustomInteractive/HCHollowBlueDiamond';
@@ -15,6 +15,7 @@ import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import { TITLE_ANIMATION_TRANSFORMS } from '../constants/animations';
 import { SCROLL_ANIMATION_CONFIG, useScrollAnimation } from '../hooks/useScrollAnimation';
 import { SECTION_NAMES, useStickyHeader } from '../hooks/useStickyHeader';
+import { useAudioFade } from '../hooks/useAudioFade';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 export interface CustomInteractiveKiosk1FirstScreenTemplateProps {
@@ -56,9 +57,10 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   const { shouldAnimate, triggerRef: animationTriggerRef } = useScrollAnimation<HTMLHeadingElement>();
   const { sfx } = useKioskAudio();
   const { playSfx } = useSfx();
-  const audioController = useAudio();
 
   const [showOverlay, setShowOverlay] = useState(false);
+  
+  useAudioFade(showOverlay);
 
   const {
     labelRef: eyebrowRef,
@@ -100,39 +102,6 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
     setShowOverlay(false);
     onEndTour?.();
   };
-
-  // Smoothly fade background music when demo overlay is active
-  useEffect(() => {
-    const targetVolume = showOverlay ? 0 : 1;
-    const fadeMs = 300; // Fade duration in milliseconds
-    const steps = 20; // Number of steps for the fade
-    const stepDuration = fadeMs / steps;
-    const startVolume = showOverlay ? 1 : 0;
-    const volumeStep = Math.abs(targetVolume - startVolume) / steps;
-
-    let currentStep = 0;
-
-    const fadeInterval = setInterval(() => {
-      currentStep++;
-      const newVolume = showOverlay 
-        ? Math.max(0, startVolume - volumeStep * currentStep)
-        : Math.min(1, startVolume + volumeStep * currentStep);
-      
-      audioController.setChannelVolume('music', newVolume);
-
-      if (currentStep >= steps) {
-        clearInterval(fadeInterval);
-        // Ensure final volume is set correctly
-        audioController.setChannelVolume('music', targetVolume);
-      }
-    }, stepDuration);
-
-    return () => {
-      clearInterval(fadeInterval);
-      // Immediately set target volume on cleanup to prevent partial fade states
-      audioController.setChannelVolume('music', targetVolume);
-    };
-  }, [audioController, showOverlay]);
 
   return (
     <div

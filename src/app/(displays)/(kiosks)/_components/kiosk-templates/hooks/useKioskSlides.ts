@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { buildChallengeSlides, buildInitialScreenOnly } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeSlides';
+import { buildAmbientCoverScreen, buildChallengeSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeSlides';
 import { buildCustomInteractiveSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/customInteractiveSlides';
 import { buildSolutionSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/solutionSlides';
 import { buildValueSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueSlides';
@@ -75,6 +75,39 @@ const hasContent = (obj: unknown): boolean => {
   });
 };
 
+type ParsedKioskContent = ReturnType<typeof parseKioskData>;
+
+/**
+ * Checks if any solution object (solutionMain, solutionAccordion, or solutionGrid) has content.
+ * Returns true if at least one solution section contains data.
+ */
+const hasSolutionContent = (kioskContent: ParsedKioskContent): {
+  hasAccordionContent: boolean;
+  hasAnyContent: boolean;
+  hasGridContent: boolean;
+  hasMainContent: boolean;
+} => {
+  if (!kioskContent) {
+    return {
+      hasAccordionContent: false,
+      hasAnyContent: false,
+      hasGridContent: false,
+      hasMainContent: false,
+    };
+  }
+
+  const hasMainContent = !!(kioskContent.solutionMain && hasContent(kioskContent.solutionMain));
+  const hasAccordionContent = !!(kioskContent.solutionAccordion && hasContent(kioskContent.solutionAccordion));
+  const hasGridContent = !!(kioskContent.solutionGrid && hasContent(kioskContent.solutionGrid));
+
+  return {
+    hasAccordionContent,
+    hasAnyContent: hasMainContent || hasAccordionContent || hasGridContent,
+    hasGridContent,
+    hasMainContent,
+  };
+};
+
 export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilders }: UseKioskSlidesConfig) => {
   const {
     globalHandlers,
@@ -85,7 +118,7 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
   } = slideBuilders;
 
   // Parse kiosk data with type safety using extracted utility
-  const kioskContent = useMemo(() => {
+  const kioskContent: ParsedKioskContent = useMemo(() => {
     try {
       return parseKioskData(kioskData);
     } catch (error) {
@@ -97,13 +130,9 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
   }, [kioskData]);
 
   // Map challenges - Build initial screen from ambient even if challenge content is empty
-  // The initial screen (cover) is always needed and uses ambient data
-  // Only skip challenge content screens (first, second, third) if challengeMain is empty
   const challenges = useMemo(() => {
     if (!kioskContent?.ambient) return null;
 
-    // Always map challenges to get the initial screen from ambient data
-    // Even if challengeMain is empty, we need the initial screen
     try {
       return parseKioskChallenges(mapChallenges(kioskContent.challengeMain ?? {}, kioskContent.ambient));
     } catch (error) {
@@ -115,22 +144,11 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
   }, [kioskContent]);
 
   // Map solutions - only show if at least one solution object has content
-  // Skip solution section entirely if all solution objects (solutionMain, solutionAccordion, solutionGrid) are empty
   const solutionAccordion = useMemo(() => {
     if (!kioskContent?.ambient) return null;
-    
-    // Check if ANY solution object has content
-    const hasSolutionMainContent = kioskContent.solutionMain && hasContent(kioskContent.solutionMain);
-    const hasSolutionAccordionContent = kioskContent.solutionAccordion && hasContent(kioskContent.solutionAccordion);
-    const hasSolutionGridContent = kioskContent.solutionGrid && hasContent(kioskContent.solutionGrid);
-    
-    // If ALL solution objects are empty, don't show any solution templates
-    if (!hasSolutionMainContent && !hasSolutionAccordionContent && !hasSolutionGridContent) {
-      return null;
-    }
-    
-    // If we have solutionMain content, proceed with accordion mapping
-    if (!hasSolutionMainContent) return null;
+
+    const { hasAnyContent, hasMainContent } = hasSolutionContent(kioskContent);
+    if (!hasAnyContent || !hasMainContent || !kioskContent.solutionMain) return null;
 
     try {
       // Check if solutionAccordion has actual data (items with content)
@@ -139,7 +157,8 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
         typeof kioskContent.solutionAccordion === 'object' &&
         Array.isArray(kioskContent.solutionAccordion.accordion) &&
         kioskContent.solutionAccordion.accordion.some(
-          item => item.title?.trim() || (item.bullets && item.bullets.length > 0)
+          (item: { bullets?: string[]; title?: string }) =>
+            item.title?.trim() || (item.bullets && item.bullets.length > 0)
         );
 
       // If no accordion data, still generate first and second screens from solutionMain alone
@@ -162,21 +181,10 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
   }, [kioskContent]);
 
   const solutionGrid = useMemo(() => {
-    if (!kioskContent?.ambient) return null;
-    
-    // Check if ANY solution object has content
-    const hasSolutionMainContent = kioskContent.solutionMain && hasContent(kioskContent.solutionMain);
-    const hasSolutionAccordionContent = kioskContent.solutionAccordion && hasContent(kioskContent.solutionAccordion);
-    const hasSolutionGridContent = kioskContent.solutionGrid && hasContent(kioskContent.solutionGrid);
-    
-    // If ALL solution objects are empty, don't show any solution templates
-    if (!hasSolutionMainContent && !hasSolutionAccordionContent && !hasSolutionGridContent) {
-      return null;
-    }
-    
-    // If we have solutionMain content and diamondMapping, proceed with grid mapping
-    if (!hasSolutionMainContent) return null;
-    if (!diamondMapping) return null;
+    if (!kioskContent?.ambient || !diamondMapping) return null;
+
+    const { hasAnyContent, hasMainContent } = hasSolutionContent(kioskContent);
+    if (!hasAnyContent || !hasMainContent || !kioskContent.solutionMain) return null;
 
     try {
       // Check if solutionGrid has actual data (non-empty diamondList with content)
@@ -184,7 +192,7 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
         kioskContent.solutionGrid &&
         typeof kioskContent.solutionGrid === 'object' &&
         Array.isArray(kioskContent.solutionGrid.diamondList) &&
-        kioskContent.solutionGrid.diamondList.some(item => item?.trim());
+        kioskContent.solutionGrid.diamondList.some((item: string | null | undefined) => item?.trim());
 
       if (!hasGridData) return null;
 
@@ -203,7 +211,6 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
   }, [kioskContent, diamondMapping]);
 
   // Map values - only if valueMain has content
-  // Skip value section entirely if the entire value object is empty
   const values = useMemo(() => {
     if (!kioskContent?.ambient) return null;
     if (!kioskContent.valueMain || !hasContent(kioskContent.valueMain)) return null;
@@ -320,7 +327,6 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
     return missing;
   }, [challenges, customInteractives, solutionAccordion, solutionGrid, values]);
 
-  // Build slides - now flexible to build slides for whatever sections have content
   const slides = useMemo(() => {
     // Log missing sections for debugging
     const missing: string[] = [];
@@ -341,17 +347,12 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
       return [];
     }
 
-    // Build slides for sections that have content
     const slideArray = [];
 
-    // Include challenge slides or just initial screen based on content
-    // Note: Initial screen is always needed (built from ambient data)
-    // Challenge content screens (first, second, third) only if challengeMain has content
     if (challenges) {
       const hasChallengeContent = kioskContent.challengeMain && hasContent(kioskContent.challengeMain);
-      
+
       if (hasChallengeContent) {
-        // Build all challenge slides including initial screen
         slideArray.push(
           ...buildChallengeSlides(challenges, kioskId, globalHandlers, {
             initialScreen: {
@@ -361,9 +362,8 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
           })
         );
       } else {
-        // Build only initial screen (no challenge content)
         slideArray.push(
-          ...buildInitialScreenOnly(challenges, kioskId, globalHandlers, {
+          ...buildAmbientCoverScreen(challenges, kioskId, globalHandlers, {
             initialScreen: {
               idleVideoSrc: kioskContent?.idle?.videoSrc,
             },
@@ -372,19 +372,13 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
         );
       }
     } else {
-      // No challenges data at all (missing ambient) - can't build anything
       if (process.env.NODE_ENV === 'development') {
         console.error(`[useKioskSlides] Kiosk ${kioskId} has no ambient data - cannot build initial screen`);
       }
       return [];
     }
 
-    // Include solution slides if at least one solution object has content
     if (solutionAccordion || solutionGrid) {
-      // Merge solution screens from both grid and accordion
-      // Grid provides: firstScreen, secondScreen, thirdScreen
-      // Accordion provides: firstScreen, secondScreen, fourthScreen
-      // Result: firstScreen, secondScreen, thirdScreen (if grid exists), fourthScreen (if accordion exists)
       const mergedSolutionScreens = {
         ...(solutionGrid ?? {}),
         ...(solutionAccordion ?? {}),
@@ -398,7 +392,6 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
       );
     }
 
-    // Include value slides if data exists
     if (values) {
       slideArray.push(
         ...buildValueSlides(values, kioskId, globalHandlers, {
@@ -407,11 +400,8 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
       );
     }
 
-    // Include custom interactive slides if any are enabled
     if (customInteractives.length > 0) {
       slideArray.push(
-        // Build slides for all enabled custom interactives with unique IDs
-        // Pass the custom interactive number (1, 2, or 3) for proper gradient height calculation
         ...customInteractives.flatMap((customInteractive, index) =>
           buildCustomInteractiveSlides(customInteractive, kioskId, scrollToSectionById, index, customInteractive.number)
         )
