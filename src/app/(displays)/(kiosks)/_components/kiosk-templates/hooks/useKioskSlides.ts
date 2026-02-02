@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { buildChallengeSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeSlides';
+import { buildChallengeSlides, buildInitialScreenOnly } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeSlides';
 import { buildCustomInteractiveSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/customInteractiveSlides';
 import { buildSolutionSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/solutionSlides';
 import { buildValueSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueSlides';
@@ -96,13 +96,16 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
     }
   }, [kioskData]);
 
-  // Map challenges - only if challengeMain has content
+  // Map challenges - Build initial screen from ambient even if challenge content is empty
+  // The initial screen (cover) is always needed and uses ambient data
+  // Only skip challenge content screens (first, second, third) if challengeMain is empty
   const challenges = useMemo(() => {
     if (!kioskContent?.ambient) return null;
-    if (!kioskContent.challengeMain || !hasContent(kioskContent.challengeMain)) return null;
 
+    // Always map challenges to get the initial screen from ambient data
+    // Even if challengeMain is empty, we need the initial screen
     try {
-      return parseKioskChallenges(mapChallenges(kioskContent.challengeMain, kioskContent.ambient));
+      return parseKioskChallenges(mapChallenges(kioskContent.challengeMain ?? {}, kioskContent.ambient));
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
         console.error('[useKioskSlides] Failed to map challenges:', error);
@@ -111,10 +114,23 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
     }
   }, [kioskContent]);
 
-  // Map solutions - show accordion, grid, or both based on data presence
+  // Map solutions - only show if at least one solution object has content
+  // Skip solution section entirely if all solution objects (solutionMain, solutionAccordion, solutionGrid) are empty
   const solutionAccordion = useMemo(() => {
     if (!kioskContent?.ambient) return null;
-    if (!kioskContent.solutionMain || !hasContent(kioskContent.solutionMain)) return null;
+    
+    // Check if ANY solution object has content
+    const hasSolutionMainContent = kioskContent.solutionMain && hasContent(kioskContent.solutionMain);
+    const hasSolutionAccordionContent = kioskContent.solutionAccordion && hasContent(kioskContent.solutionAccordion);
+    const hasSolutionGridContent = kioskContent.solutionGrid && hasContent(kioskContent.solutionGrid);
+    
+    // If ALL solution objects are empty, don't show any solution templates
+    if (!hasSolutionMainContent && !hasSolutionAccordionContent && !hasSolutionGridContent) {
+      return null;
+    }
+    
+    // If we have solutionMain content, proceed with accordion mapping
+    if (!hasSolutionMainContent) return null;
 
     try {
       // Check if solutionAccordion has actual data (items with content)
@@ -147,7 +163,19 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
 
   const solutionGrid = useMemo(() => {
     if (!kioskContent?.ambient) return null;
-    if (!kioskContent.solutionMain || !hasContent(kioskContent.solutionMain)) return null;
+    
+    // Check if ANY solution object has content
+    const hasSolutionMainContent = kioskContent.solutionMain && hasContent(kioskContent.solutionMain);
+    const hasSolutionAccordionContent = kioskContent.solutionAccordion && hasContent(kioskContent.solutionAccordion);
+    const hasSolutionGridContent = kioskContent.solutionGrid && hasContent(kioskContent.solutionGrid);
+    
+    // If ALL solution objects are empty, don't show any solution templates
+    if (!hasSolutionMainContent && !hasSolutionAccordionContent && !hasSolutionGridContent) {
+      return null;
+    }
+    
+    // If we have solutionMain content and diamondMapping, proceed with grid mapping
+    if (!hasSolutionMainContent) return null;
     if (!diamondMapping) return null;
 
     try {
@@ -175,6 +203,7 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
   }, [kioskContent, diamondMapping]);
 
   // Map values - only if valueMain has content
+  // Skip value section entirely if the entire value object is empty
   const values = useMemo(() => {
     if (!kioskContent?.ambient) return null;
     if (!kioskContent.valueMain || !hasContent(kioskContent.valueMain)) return null;
@@ -291,54 +320,105 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
     return missing;
   }, [challenges, customInteractives, solutionAccordion, solutionGrid, values]);
 
-  // Build slides
+  // Build slides - now flexible to build slides for whatever sections have content
   const slides = useMemo(() => {
     // Log missing sections for debugging
-    if (!challenges || (!solutionAccordion && !solutionGrid) || !values || customInteractives.length === 0) {
-      const missing: string[] = [];
-      if (!challenges) missing.push('challenges');
-      if (!solutionAccordion && !solutionGrid) missing.push('solutions');
-      if (!values) missing.push('values');
-      if (customInteractives.length === 0) missing.push('customInteractive');
+    const missing: string[] = [];
+    if (!challenges) missing.push('challenges');
+    if (!solutionAccordion && !solutionGrid) missing.push('solutions');
+    if (!values) missing.push('values');
+    if (customInteractives.length === 0) missing.push('customInteractive');
 
+    if (missing.length > 0 && process.env.NODE_ENV === 'development') {
+      console.warn(`[useKioskSlides] Kiosk ${kioskId} missing sections:`, missing.join(', '));
+    }
+
+    // Check if we have at least the ambient data (required for initial screen)
+    if (!kioskContent?.ambient) {
       if (process.env.NODE_ENV === 'development') {
-        console.warn(`[useKioskSlides] Kiosk ${kioskId} missing sections:`, missing.join(', '));
+        console.error(`[useKioskSlides] Kiosk ${kioskId} missing required ambient data`);
       }
-
       return [];
     }
 
-    // Merge solution screens from both grid and accordion
-    // Grid provides: firstScreen, secondScreen, thirdScreen
-    // Accordion provides: firstScreen, secondScreen, fourthScreen
-    // Result: firstScreen, secondScreen, thirdScreen (if grid exists), fourthScreen (if accordion exists)
-    const mergedSolutionScreens = {
-      ...(solutionGrid ?? {}),
-      ...(solutionAccordion ?? {}),
-    };
+    // Build slides for sections that have content
+    const slideArray = [];
 
-    return [
-      ...buildChallengeSlides(challenges, kioskId, globalHandlers, {
-        initialScreen: {
-          idleVideoSrc: kioskContent?.idle?.videoSrc,
-        },
-        onInitialButtonClick: handleInitialButtonClick,
-      }),
-      // Build solution slides from merged data
-      // Order: first, second, third (if from grid), fourth (if from accordion)
-      ...buildSolutionSlides(mergedSolutionScreens, kioskId, {
-        ...globalHandlers,
-        onRegisterListHandlers: handleRegisterListHandlers,
-      }),
-      ...buildValueSlides(values, kioskId, globalHandlers, {
-        registerCarouselHandlers: handleRegisterCarouselHandlers,
-      }),
-      // Build slides for all enabled custom interactives with unique IDs
-      // Pass the custom interactive number (1, 2, or 3) for proper gradient height calculation
-      ...customInteractives.flatMap((customInteractive, index) =>
-        buildCustomInteractiveSlides(customInteractive, kioskId, scrollToSectionById, index, customInteractive.number)
-      ),
-    ];
+    // Include challenge slides or just initial screen based on content
+    // Note: Initial screen is always needed (built from ambient data)
+    // Challenge content screens (first, second, third) only if challengeMain has content
+    if (challenges) {
+      const hasChallengeContent = kioskContent.challengeMain && hasContent(kioskContent.challengeMain);
+      
+      if (hasChallengeContent) {
+        // Build all challenge slides including initial screen
+        slideArray.push(
+          ...buildChallengeSlides(challenges, kioskId, globalHandlers, {
+            initialScreen: {
+              idleVideoSrc: kioskContent?.idle?.videoSrc,
+            },
+            onInitialButtonClick: handleInitialButtonClick,
+          })
+        );
+      } else {
+        // Build only initial screen (no challenge content)
+        slideArray.push(
+          ...buildInitialScreenOnly(challenges, kioskId, globalHandlers, {
+            initialScreen: {
+              idleVideoSrc: kioskContent?.idle?.videoSrc,
+            },
+            onInitialButtonClick: handleInitialButtonClick,
+          })
+        );
+      }
+    } else {
+      // No challenges data at all (missing ambient) - can't build anything
+      if (process.env.NODE_ENV === 'development') {
+        console.error(`[useKioskSlides] Kiosk ${kioskId} has no ambient data - cannot build initial screen`);
+      }
+      return [];
+    }
+
+    // Include solution slides if at least one solution object has content
+    if (solutionAccordion || solutionGrid) {
+      // Merge solution screens from both grid and accordion
+      // Grid provides: firstScreen, secondScreen, thirdScreen
+      // Accordion provides: firstScreen, secondScreen, fourthScreen
+      // Result: firstScreen, secondScreen, thirdScreen (if grid exists), fourthScreen (if accordion exists)
+      const mergedSolutionScreens = {
+        ...(solutionGrid ?? {}),
+        ...(solutionAccordion ?? {}),
+      };
+
+      slideArray.push(
+        ...buildSolutionSlides(mergedSolutionScreens, kioskId, {
+          ...globalHandlers,
+          onRegisterListHandlers: handleRegisterListHandlers,
+        })
+      );
+    }
+
+    // Include value slides if data exists
+    if (values) {
+      slideArray.push(
+        ...buildValueSlides(values, kioskId, globalHandlers, {
+          registerCarouselHandlers: handleRegisterCarouselHandlers,
+        })
+      );
+    }
+
+    // Include custom interactive slides if any are enabled
+    if (customInteractives.length > 0) {
+      slideArray.push(
+        // Build slides for all enabled custom interactives with unique IDs
+        // Pass the custom interactive number (1, 2, or 3) for proper gradient height calculation
+        ...customInteractives.flatMap((customInteractive, index) =>
+          buildCustomInteractiveSlides(customInteractive, kioskId, scrollToSectionById, index, customInteractive.number)
+        )
+      );
+    }
+
+    return slideArray;
   }, [
     challenges,
     customInteractives,
