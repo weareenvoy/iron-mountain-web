@@ -33,9 +33,43 @@
       "videoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/Idle-General.webm"
     },
     "solutionAccordion": {
-      "accordion": [],
-      "headline": "",
-      "image": ""
+      "accordion": [
+        {
+          "bullets": [
+            "Automated and scalable",
+            "Custom packaging",
+            "Real-time tracking",
+            "Redeployment of devices and peripherals"
+          ],
+          "title": "Device retrieval and redeployment services"
+        },
+        {
+          "bullets": [
+            "Secure chain of custody",
+            "Guaranteed data sanitization",
+            "Maximized value recovery",
+            "Clear sustainability reporting"
+          ],
+          "title": "IT asset disposition (ITAD) for end-user devices"
+        },
+        {
+          "bullets": [
+            "Data destruction",
+            "Flexible data sanitization",
+            "Secure media destruction"
+          ],
+          "title": "Data center decommissioning & ITAD"
+        },
+        {
+          "bullets": [
+            "Onsite inventory and removal",
+            "Secure logistics"
+          ],
+          "title": "Decommissioning and logistics"
+        }
+      ],
+      "headline": "Iron Mountain's Asset Lifecycle Management",
+      "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/02+-+Solution/Solution-Image2-Full.webp"
     },
     "solutionGrid": {
       "diamondList": [],
@@ -43,13 +77,18 @@
       "images": []
     },
     "solutionMain": {
-      "body": "",
-      "headline": "",
-      "image": "",
-      "labelText": "",
-      "mainVideo": "",
-      "numberedList": [],
-      "numberedListHeadline": ""
+      "body": "Iron Mountain's expansive operating footprint, comprehensive reporting, and technology integration capabilities solved the customer's core challenges. Implementing a streamlined device retrieval and redeployment solution, in addition to a data center decommissioning solution, allowed for improvements across the board.",
+      "headline": "A partnership with Iron Mountain",
+      "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/02+-+Solution/Solution-Image1-Full.webp",
+      "labelText": "Solution",
+      "mainVideo": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/IT+assets+%26+data+centers/02+-+Solution/Solution-header.webm",
+      "numberedList": [
+        "Improved logistical costs due to extensive global footprint and in-house logistics",
+        "Optimized delivery and transparency with end-to-end chain of custody, visibility through technology integration, and comprehensive reporting",
+        "Helped maintain consistency and compliance across locations in North America, Europe, and APAC",
+        "Stored 1,000 cubic feet total of physical, historic assets in climate-controlled, private vaults"
+      ],
+      "numberedListHeadline": "Together, we:"
     },
     "valueMain": {
       "body": "Through its collaboration with Iron Mountain, a global healthcare customer improved compliance, visibility, and consistency in IT asset disposition across worldwide locations, while maximizing value recovery from retired end-user devices and data center components.",
