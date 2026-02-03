@@ -8,12 +8,14 @@ import { useGlobalParagraphNavigation } from '@/app/(displays)/(kiosks)/_compone
 import { useKioskArrowState } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useKioskArrowState';
 import { useKioskSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useKioskSlides';
 import { GradientHeightsProvider } from '@/app/(displays)/(kiosks)/_components/providers/gradient-heights-provider';
+import { useKioskOverlay } from '@/app/(displays)/(kiosks)/_components/providers/kiosk-overlay-provider';
 import { useKiosk } from '@/app/(displays)/(kiosks)/_components/providers/kiosk-provider';
 import { useKioskAudio } from '@/app/(displays)/(kiosks)/_components/providers/useKioskAudio';
 import { SCROLL_DURATION_MS } from '@/app/(displays)/(kiosks)/_constants/timing';
 import { useKioskArrowStore } from '@/app/(displays)/(kiosks)/_stores/useKioskArrowStore';
 import { determineCurrentSection } from '@/app/(displays)/(kiosks)/_utils/section-utils';
 import { useAudio, useMusic, useSfx } from '@/components/providers/audio-provider';
+import { useChannelDucking } from '@/lib/audio/hooks/use-channel-ducking';
 import { cn } from '@/lib/tailwind/utils/cn';
 import type { KioskConfig } from '@/app/(displays)/(kiosks)/_types/kiosk-config';
 
@@ -38,6 +40,11 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
   const { playSfx } = useSfx();
   const { setMusic } = useMusic();
   const audioController = useAudio();
+  const { overlayDepth } = useKioskOverlay();
+
+  // Centralized audio ducking: duck music when any overlay is open
+  const isAnyOverlayOpen = overlayDepth > 0;
+  useChannelDucking('music', isAnyOverlayOpen, { duckTo: 0.0, fadeMs: 300 });
 
   // Global paragraph navigation
   const {

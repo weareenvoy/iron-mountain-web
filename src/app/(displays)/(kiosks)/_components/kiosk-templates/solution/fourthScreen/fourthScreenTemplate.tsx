@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { useCallback, useRef } from 'react';
 import { type AccordionEntry } from '@/app/(displays)/(kiosks)/_types/accordion-types';
 import { useSfx } from '@/components/providers/audio-provider';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/shadcn/accordion';
@@ -37,6 +38,26 @@ const SolutionFourthScreenTemplate = ({
   const entries = accordion?.length ? accordion : [];
   const { playSfx } = useSfx();
   const { sfx } = useKioskAudio();
+  const prevValueRef = useRef<string>('');
+
+  const handleAccordionValueChange = useCallback(
+    (nextValue: string) => {
+      const prevValue = prevValueRef.current;
+      prevValueRef.current = nextValue;
+
+      // Close all (Radix uses '' for "none selected")
+      if (!nextValue) {
+        if (sfx.close) playSfx(sfx.close);
+        return;
+      }
+
+      // Open initial or switching between items
+      if (nextValue !== prevValue) {
+        if (sfx.open) playSfx(sfx.open);
+      }
+    },
+    [playSfx, sfx.close, sfx.open]
+  );
 
   return (
     <div
@@ -60,15 +81,7 @@ const SolutionFourthScreenTemplate = ({
           className="space-y-0 overflow-hidden rounded-[80px]"
           collapsible
           defaultValue={entries.find(entry => entry.expanded)?.id ?? entries[0]?.id ?? 'item-1'}
-          onValueChange={value => {
-            // Play open sound when an item is opened (value is set)
-            // Play close sound when an item is closed (value is empty string)
-            if (value) {
-              if (sfx.open) playSfx(sfx.open);
-            } else {
-              if (sfx.close) playSfx(sfx.close);
-            }
-          }}
+          onValueChange={handleAccordionValueChange}
           type="single"
         >
           {entries.map((item, index) => {

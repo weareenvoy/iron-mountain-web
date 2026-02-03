@@ -14,122 +14,58 @@ export async function getKioskData(kioskId: KioskId, externalSignal?: AbortSigna
     ? AbortSignal.any([externalSignal, internalController.signal])
     : internalController.signal;
 
-  // Fetch centralized custom interactive data upfront
-  const simplCMSData = await getSimplCMSData();
-
   try {
+    const locale = getLocaleForTesting();
+
+    // Kick off simplCMS fetch concurrently with the combined signal
+    const simplCMSPromise = getSimplCMSData(combinedSignal);
+
+    const fetchStatic = async (): Promise<KioskApiResponse> => {
+      const res = await fetch(`/api/${kioskId}.json`, { cache: 'force-cache', signal: combinedSignal });
+      if (!res.ok) throw new Error(`Bad status: ${res.status}`);
+      return (await res.json()) as KioskApiResponse;
+    };
+
+    const fetchApi = async (): Promise<KioskApiResponse> => {
+      const res = await fetch(`${API_BASE}/${kioskId}`, { cache: 'no-store', signal: combinedSignal });
+      if (!res.ok) throw new Error(`Bad status: ${res.status}`);
+      return (await res.json()) as KioskApiResponse;
+    };
+
+    // Primary path: honor placeholder mode (static). Otherwise prefer API.
+    let rawData: KioskApiResponse;
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (shouldUseStaticPlaceholderData()) {
-      clearTimeout(timeout);
-      // Controller not used - early return with static data
-      const res = await fetch(`/api/${kioskId}.json`, { cache: 'force-cache', signal: combinedSignal });
-      const rawData = (await res.json()) as KioskApiResponse;
-      const locale = getLocaleForTesting();
-      const data = rawData.find(item => item.locale === locale)?.data;
+      rawData = await fetchStatic();
+    } else {
+      try {
+        rawData = await fetchApi();
+      } catch (originalError) {
+        // If externally aborted (user cancelled or newer request), skip fallback.
+        if (externalSignal?.aborted) {
+          throw originalError;
+        }
 
-      if (!data) {
-        throw new Error(`Missing data for locale: ${locale}`);
+        // Timeout/transport fallback to static JSON.
+        rawData = await fetchStatic();
       }
-
-      // Merge simplCMS custom interactive data and audio
-      const mergedData = {
-        ...data,
-        audio: simplCMSData.audio ?? data.audio,
-        customInteractive1: simplCMSData.customInteractive1 ?? data.customInteractive1,
-        customInteractive2: simplCMSData.customInteractive2 ?? data.customInteractive2,
-        customInteractive3: simplCMSData.customInteractive3 ?? data.customInteractive3,
-      };
-
-      return {
-        data: mergedData,
-        locale,
-      };
     }
 
-    const res = await fetch(`${API_BASE}/${kioskId}`, {
-      cache: 'no-store',
-      signal: combinedSignal,
-    });
-    clearTimeout(timeout);
-    if (!res.ok) throw new Error(`Bad status: ${res.status}`);
-    const rawData = (await res.json()) as KioskApiResponse;
-    const locale = getLocaleForTesting();
     const data = rawData.find(item => item.locale === locale)?.data;
+    if (!data) throw new Error(`Missing data for locale: ${locale}`);
 
-    if (!data) {
-      throw new Error(`Missing data for locale: ${locale}`);
-    }
-
-    // Merge simplCMS custom interactive data and audio
-    const mergedData = {
-      ...data,
-      audio: simplCMSData.audio ?? data.audio,
-      customInteractive1: simplCMSData.customInteractive1 ?? data.customInteractive1,
-      customInteractive2: simplCMSData.customInteractive2 ?? data.customInteractive2,
-      customInteractive3: simplCMSData.customInteractive3 ?? data.customInteractive3,
-    };
+    const simplCMSData = await simplCMSPromise;
 
     return {
-      data: mergedData,
-      locale,
-    };
-  } catch (originalError) {
-    clearTimeout(timeout);
-
-    // If externally aborted (user cancelled or newer request), skip fallback
-    if (externalSignal?.aborted) {
-      throw originalError;
-    }
-
-    // If the error is an AbortError, check if it's from external signal
-    if (originalError instanceof Error && originalError.name === 'AbortError') {
-      // If we have an external signal and it's aborted, this was intentional
-      if (externalSignal?.aborted) {
-        throw originalError;
-      }
-      // Otherwise, it was a timeout - proceed to fallback
-    }
-
-    // Log original error for debugging
-    if (process.env.NODE_ENV === 'development') {
-      console.error(`Failed to fetch ${kioskId} from API:`, originalError);
-    }
-
-    // Offline/static fallback - use a fresh signal (not the aborted one)
-    try {
-      const res = await fetch(`/api/${kioskId}.json`, { cache: 'force-cache' });
-      const rawData = (await res.json()) as KioskApiResponse;
-      const locale = getLocaleForTesting();
-      const data = rawData.find(item => item.locale === locale)?.data;
-
-      if (!data) {
-        throw new Error(`Missing data for locale: ${locale}`);
-      }
-
-      // Merge simplCMS custom interactive data and audio
-      const mergedData = {
+      data: {
         ...data,
         audio: simplCMSData.audio ?? data.audio,
         customInteractive1: simplCMSData.customInteractive1 ?? data.customInteractive1,
         customInteractive2: simplCMSData.customInteractive2 ?? data.customInteractive2,
         customInteractive3: simplCMSData.customInteractive3 ?? data.customInteractive3,
-      };
-
-      return {
-        data: mergedData,
-        locale,
-      };
-    } catch (fallbackError) {
-      // Both API and static fallback failed - provide detailed error
-      if (process.env.NODE_ENV === 'development') {
-        console.error(`Failed to fetch ${kioskId} from static fallback:`, fallbackError);
-      }
-      const originalMsg = originalError instanceof Error ? originalError.message : 'Unknown error';
-      const fallbackMsg = fallbackError instanceof Error ? fallbackError.message : 'Unknown error';
-      throw new Error(
-        `Unable to load kiosk data for ${kioskId}. API error: ${originalMsg}. Fallback error: ${fallbackMsg}`
-      );
-    }
+      },
+      locale,
+    };
   } finally {
     clearTimeout(timeout);
   }
@@ -138,9 +74,10 @@ export async function getKioskData(kioskId: KioskId, externalSignal?: AbortSigna
 /**
  * Fetches centralized custom interactive data from simplCMS
  */
-async function getSimplCMSData(): Promise<Record<string, unknown>> {
+async function getSimplCMSData(signal?: AbortSignal): Promise<Record<string, unknown>> {
   try {
-    const res = await fetch('/api/kiosk-simplCMS.json', { cache: 'force-cache' });
+    const res = await fetch('/api/kiosk-simplCMS.json', { cache: 'force-cache', signal });
+    if (!res.ok) throw new Error(`Bad status: ${res.status}`);
     const rawData = (await res.json()) as Array<Record<string, unknown>>;
     return rawData[0] ?? {};
   } catch (error) {

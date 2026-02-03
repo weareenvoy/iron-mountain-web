@@ -5,28 +5,33 @@ const MAX_RECURSION_DEPTH = 10;
 
 /**
  * Helper to check if an object has meaningful content.
- * Recursively checks for non-empty strings, non-empty arrays, or nested objects with content.
+ * Recursively checks for non-empty strings, finite numbers, or nested objects with content.
+ * Booleans are ignored to prevent `{ enabled: false }` from counting as content.
  *
  * @param obj - The object to check for content
  * @param depth - Current recursion depth (internal, prevents stack overflow)
  * @returns true if the object contains meaningful content
  */
 export const hasContent = (obj: unknown, depth = 0): boolean => {
-  if (!obj || typeof obj !== 'object') return false;
+  if (obj === null || obj === undefined) return false;
   if (depth > MAX_RECURSION_DEPTH) return false;
 
+  // Strings: meaningful if non-empty after trim
+  if (typeof obj === 'string') return obj.trim().length > 0;
+
+  // Numbers: meaningful if finite (treat 0 as content; adjust if needed)
+  if (typeof obj === 'number') return Number.isFinite(obj);
+
+  // Booleans: ignore by default (prevents `{ enabled: false }` from counting as content)
+  if (typeof obj === 'boolean') return false;
+
   if (Array.isArray(obj)) {
-    return obj.some(item => hasContent(item, depth + 1) || (typeof item === 'string' && item.trim().length > 0));
+    return obj.some(item => hasContent(item, depth + 1));
   }
 
-  return Object.values(obj).some(value => {
-    if (typeof value === 'string') return value.trim().length > 0;
-    if (typeof value === 'number') return true;
-    if (typeof value === 'boolean') return true;
-    if (Array.isArray(value)) return value.length > 0 && hasContent(value, depth + 1);
-    if (typeof value === 'object' && value !== null) return hasContent(value, depth + 1);
-    return false;
-  });
+  if (typeof obj !== 'object') return false;
+
+  return Object.values(obj as Record<string, unknown>).some(value => hasContent(value, depth + 1));
 };
 
 /**

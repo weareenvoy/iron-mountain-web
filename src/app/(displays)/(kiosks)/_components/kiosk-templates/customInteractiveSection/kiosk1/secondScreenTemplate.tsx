@@ -5,6 +5,7 @@ import { SquarePlay } from 'lucide-react';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
+import { useKioskOverlay } from '@/app/(displays)/(kiosks)/_components/providers/kiosk-overlay-provider';
 import { useKioskAudio } from '@/app/(displays)/(kiosks)/_components/providers/useKioskAudio';
 import { useSfx } from '@/components/providers/audio-provider';
 import { cn } from '@/lib/tailwind/utils/cn';
@@ -13,7 +14,6 @@ import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import { AnimatedText } from './components/AnimatedText';
 import { StepCarousel, type Step } from './components/StepCarousel';
 import { StepModal, type ModalContent } from './components/StepModal';
-import { useAudioFade } from '../../hooks/useAudioFade';
 import { SECTION_NAMES } from '../../hooks/useStickyHeader';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
@@ -89,6 +89,7 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
   const secondaryIconOffset = isCI3 ? 'left-[-330px]' : 'left-[-70px]';
   const { sfx } = useKioskAudio();
   const { playSfx } = useSfx();
+  const { closeOverlay, openOverlay } = useKioskOverlay();
 
   const [openModalIndex, setOpenModalIndex] = useState<null | number>(null);
   const [showOverlay, setShowOverlay] = useState(false);
@@ -96,8 +97,6 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
   const [shouldAnimateText, setShouldAnimateText] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
-
-  useAudioFade(showOverlay);
 
   const activeStep = (openModalIndex !== null && normalizedSteps[openModalIndex]) ?? null;
   const activeModalContent: ModalContent | null = activeStep
@@ -113,33 +112,37 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
     if (sfx.open) {
       playSfx(sfx.open);
     }
+    openOverlay();
     setShowOverlay(true);
     onSecondaryCta?.();
-  }, [onSecondaryCta, playSfx, sfx.open]);
+  }, [onSecondaryCta, openOverlay, playSfx, sfx.open]);
 
   const handleEndTour = useCallback(() => {
     if (sfx.close) {
       playSfx(sfx.close);
     }
+    closeOverlay();
     setShowOverlay(false);
     onEndTour?.();
-  }, [onEndTour, playSfx, sfx.close]);
+  }, [closeOverlay, onEndTour, playSfx, sfx.close]);
 
   const handleModalClose = useCallback(() => {
     if (sfx.close) {
       playSfx(sfx.close);
     }
+    closeOverlay();
     setOpenModalIndex(null);
-  }, [playSfx, sfx.close]);
+  }, [closeOverlay, playSfx, sfx.close]);
 
   const handleModalOpen = useCallback(
     (index: number) => {
       if (sfx.open) {
         playSfx(sfx.open);
       }
+      openOverlay();
       setOpenModalIndex(index);
     },
-    [playSfx, sfx.open]
+    [openOverlay, playSfx, sfx.open]
   );
 
   useEffect(() => {

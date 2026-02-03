@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
 import { useGradientHeights } from '@/app/(displays)/(kiosks)/_components/providers/gradient-heights-provider';
+import { useKioskOverlay } from '@/app/(displays)/(kiosks)/_components/providers/kiosk-overlay-provider';
 import { useKioskAudio } from '@/app/(displays)/(kiosks)/_components/providers/useKioskAudio';
 import { useSfx } from '@/components/providers/audio-provider';
 import ArrowIcon from '@/components/ui/icons/Kiosks/CustomInteractive/ArrowIcon';
@@ -13,7 +14,6 @@ import HCHollowOrangeDiamond from '@/components/ui/icons/Kiosks/CustomInteractiv
 import { cn } from '@/lib/tailwind/utils/cn';
 import renderRegisteredMark from '@/lib/utils/render-registered-mark';
 import { TITLE_ANIMATION_TRANSFORMS } from '../constants/animations';
-import { useAudioFade } from '../hooks/useAudioFade';
 import { SCROLL_ANIMATION_CONFIG, useScrollAnimation } from '../hooks/useScrollAnimation';
 import { SECTION_NAMES, useStickyHeader } from '../hooks/useStickyHeader';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
@@ -59,10 +59,9 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   const { shouldAnimate, triggerRef: animationTriggerRef } = useScrollAnimation<HTMLHeadingElement>();
   const { sfx } = useKioskAudio();
   const { playSfx } = useSfx();
+  const { closeOverlay, openOverlay } = useKioskOverlay();
 
   const [showOverlay, setShowOverlay] = useState(false);
-
-  useAudioFade(showOverlay);
 
   const {
     labelRef: eyebrowRef,
@@ -89,6 +88,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
     if (sfx.open) {
       playSfx(sfx.open);
     }
+    openOverlay();
     setShowOverlay(true);
     onSecondaryCta?.();
   };
@@ -104,6 +104,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
     if (sfx.close) {
       playSfx(sfx.close);
     }
+    closeOverlay();
     setShowOverlay(false);
     onEndTour?.();
   };
