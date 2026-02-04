@@ -1,17 +1,44 @@
 // Simple service worker for kiosk/offline-first
 // Receives config from the app via postMessage: { type: 'CONFIG', apiBase: string, offlineFirst: boolean }
 
-const VERSION = 'v1';
+const VERSION = 'v2';
 const PRECACHE = `precache-${VERSION}`;
 const RUNTIME = `runtime-${VERSION}`;
 
-// Keep list small and stable; assets under /public/ are served same-origin
+// Precache all static routes, API data, fonts, and fallback videos
 const PRECACHE_URLS = [
+  // Routes - displays
   '/',
-  '/favicon.ico',
+  '/basecamp/',
+  '/overlook/',
+  '/welcome-wall/',
+  '/summit/',
+  '/summit/print/',
+  '/summit/slides/',
+  '/kiosk-1/',
+  '/kiosk-2/',
+  '/kiosk-3/',
+  // Routes - tablets
+  '/docent/',
+  '/docent/schedule/',
+  // Static API data (offline fallback)
+  '/api/basecamp.json',
+  '/api/welcome-wall.json',
+  '/api/docent.json',
+  '/api/summit.json',
+  '/api/summit-tours.json',
+  '/api/kiosk-1.json',
+  '/api/kiosk-2.json',
+  '/api/kiosk-3.json',
+  // Fonts
   '/fonts/Geometria.woff2',
   '/fonts/InterstateRegular.woff2',
-  '/api/basecamp.json',
+  '/fonts/Interstate-Light.woff2',
+  // Fallback videos
+  '/videos/basecamp_fallback.webm',
+  '/videos/summit_fallback.webm',
+  // Other
+  '/favicon.ico',
 ];
 
 self.__CONFIG = {

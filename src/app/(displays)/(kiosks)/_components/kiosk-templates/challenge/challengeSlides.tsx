@@ -30,6 +30,36 @@ export type ChallengeScreens = {
   readonly thirdScreen?: ThirdScreenTemplateProps;
 };
 
+/**
+ * Builds only the ambient cover screen slide (initial screen with idle video).
+ * Used when challenge content data is empty but ambient data exists for the cover screen.
+ */
+export const buildAmbientCoverScreen = (
+  challenges: KioskChallenges,
+  kioskId: KioskId,
+  handlers: { onNavigateDown: () => void; onNavigateUp: () => void },
+  overrides?: Partial<ChallengeScreens> & { onInitialButtonClick?: () => void }
+): Slide[] => {
+  const initialScreen = { ...challenges.initialScreen, ...overrides?.initialScreen };
+
+  const handleInitialButtonClick = () => {
+    overrides?.onInitialButtonClick?.();
+    handlers.onNavigateDown();
+  };
+
+  return [
+    createSlideWithoutHandlers(
+      {
+        component: InitialScreenTemplate,
+        id: 'challenge-initial',
+        props: { ...initialScreen, onButtonClick: handleInitialButtonClick },
+        title: 'Challenge Intro',
+      },
+      kioskId
+    ),
+  ];
+};
+
 export const buildChallengeSlides = (
   challenges: KioskChallenges,
   kioskId: KioskId,

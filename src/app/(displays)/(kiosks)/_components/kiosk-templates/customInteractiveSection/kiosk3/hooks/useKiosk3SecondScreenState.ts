@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useReducer } from 'react';
+import { useKioskOverlay } from '@/app/(displays)/(kiosks)/_components/providers/kiosk-overlay-provider';
 import { useKioskAudio } from '@/app/(displays)/(kiosks)/_components/providers/useKioskAudio';
 import { useSfx } from '@/components/providers/audio-provider';
 
@@ -66,6 +67,16 @@ export function useKiosk3SecondScreenState() {
   const [state, dispatch] = useReducer(kiosk3SecondScreenReducer, initialState);
   const { sfx } = useKioskAudio();
   const { playSfx } = useSfx();
+  const { closeOverlay, openOverlay } = useKioskOverlay();
+
+  // Notify overlay provider when overlay state changes
+  useEffect(() => {
+    if (state.showOverlay) {
+      openOverlay();
+    } else {
+      closeOverlay();
+    }
+  }, [closeOverlay, openOverlay, state.showOverlay]);
 
   // Complete button transition after animation duration
   useEffect(() => {
