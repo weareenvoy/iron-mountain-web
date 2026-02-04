@@ -1,7 +1,7 @@
 'use client';
 
 import { animate } from 'framer-motion';
-import { useCallback, useEffect, useRef, useState, type RefObject } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type RefObject } from 'react';
 import {
   OBSERVER_SETUP_RETRY_MS,
   PARAGRAPH_DETECTION_RETRY_MS,
@@ -21,6 +21,7 @@ export interface UseGlobalParagraphNavigationReturn {
   handleNavigateDown: () => void;
   handleNavigateUp: () => void;
   isScrolling: boolean;
+  previousScrollTarget: null | string;
   scrollToSectionById: (sectionId: string) => void;
 }
 
@@ -270,11 +271,21 @@ export function useGlobalParagraphNavigation({
     };
   }, []);
 
+  // Compute the previous scroll target based on current index
+  const previousScrollTarget = useMemo(() => {
+    if (currentIndex > 0 && currentIndex <= allParagraphs.length) {
+      const prevParagraph = allParagraphs[currentIndex - 1];
+      return prevParagraph?.getAttribute('data-scroll-section') ?? null;
+    }
+    return null;
+  }, [allParagraphs, currentIndex]);
+
   return {
     currentScrollTarget,
     handleNavigateDown,
     handleNavigateUp,
     isScrolling,
+    previousScrollTarget,
     scrollToSectionById,
   };
 }

@@ -3,6 +3,8 @@ import { SquarePlay } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
+import { useGradientHeights } from '@/app/(displays)/(kiosks)/_components/providers/gradient-heights-provider';
+import { useKioskOverlay } from '@/app/(displays)/(kiosks)/_components/providers/kiosk-overlay-provider';
 import { useKioskAudio } from '@/app/(displays)/(kiosks)/_components/providers/useKioskAudio';
 import { useSfx } from '@/components/providers/audio-provider';
 import ArrowIcon from '@/components/ui/icons/Kiosks/CustomInteractive/ArrowIcon';
@@ -17,6 +19,8 @@ import { SECTION_NAMES, useStickyHeader } from '../hooks/useStickyHeader';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 
 export interface CustomInteractiveKiosk1FirstScreenTemplateProps {
+  readonly customInteractiveIndex?: number;
+  readonly customInteractiveNumber?: 1 | 2 | 3;
   readonly demoIframeSrc?: string;
   readonly eyebrow?: string;
   readonly headline?: string;
@@ -24,6 +28,8 @@ export interface CustomInteractiveKiosk1FirstScreenTemplateProps {
   readonly heroImageSrc?: string;
   readonly kioskId?: KioskId;
   readonly onEndTour?: () => void;
+  readonly onNavigateDown?: () => void;
+  readonly onNavigateUp?: () => void;
   readonly onPrimaryCta?: () => void;
   readonly onSecondaryCta?: () => void;
   readonly overlayCardLabel?: string;
@@ -34,12 +40,14 @@ export interface CustomInteractiveKiosk1FirstScreenTemplateProps {
 }
 
 const CustomInteractiveKiosk1FirstScreenTemplate = ({
+  customInteractiveIndex = 0,
+  customInteractiveNumber = 1,
   demoIframeSrc,
   eyebrow,
   headline,
   heroImageAlt,
   heroImageSrc,
-  kioskId,
+  onEndTour,
   onPrimaryCta,
   onSecondaryCta,
   overlayCardLabel,
@@ -51,6 +59,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
   const { shouldAnimate, triggerRef: animationTriggerRef } = useScrollAnimation<HTMLHeadingElement>();
   const { sfx } = useKioskAudio();
   const { playSfx } = useSfx();
+  const { closeOverlay, openOverlay } = useKioskOverlay();
 
   const [showOverlay, setShowOverlay] = useState(false);
 
@@ -63,23 +72,31 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
     sectionName: SECTION_NAMES.CUSTOM_INTERACTIVE,
   });
 
-  const isKiosk1 = kioskId === 'kiosk-1';
+  // Get dynamic gradient height for this custom interactive instance
+  const { getCustomInteractiveHeight } = useGradientHeights();
+  const gradientHeight = getCustomInteractiveHeight(customInteractiveIndex);
+
   const eyebrowText = eyebrow;
   const headlineText = headline;
-  const isKiosk3 = kioskId === 'kiosk-3';
-  const ctaWidthClass = isKiosk3 ? 'w-[1360px]' : 'w-[1020px]';
-  const secondaryLabelPadding = isKiosk3 ? 'pl-[320px]' : 'pl-[80px]';
-  const secondaryIconOffset = isKiosk3 ? 'left-[-330px]' : 'left-[-70px]';
+  // Use custom interactive number instead of kiosk ID for styling
+  const isCI3 = customInteractiveNumber === 3;
+  const ctaWidthClass = isCI3 ? 'w-[1360px]' : 'w-[1020px]';
+  const secondaryLabelPadding = isCI3 ? 'pl-[320px]' : 'pl-[80px]';
+  const secondaryIconOffset = isCI3 ? 'left-[-330px]' : 'left-[-70px]';
 
   const handleSecondaryClick = () => {
     if (sfx.open) {
       playSfx(sfx.open);
     }
+    openOverlay();
     setShowOverlay(true);
     onSecondaryCta?.();
   };
 
   const handlePrimaryClick = () => {
+    if (sfx.next) {
+      playSfx(sfx.next);
+    }
     onPrimaryCta?.();
   };
 
@@ -87,22 +104,24 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
     if (sfx.close) {
       playSfx(sfx.close);
     }
+    closeOverlay();
     setShowOverlay(false);
+    onEndTour?.();
   };
 
   return (
     <div
-      className={cn(
-        'group/kiosk relative flex h-screen w-full flex-col',
-        isKiosk1 || isKiosk3 ? 'overflow-visible' : 'overflow-hidden'
-      )}
-      data-kiosk={kioskId}
+      className="group/ci relative flex h-screen w-full flex-col overflow-visible"
+      data-ci={`ci-${customInteractiveNumber}`}
       data-scroll-section="customInteractive-first-screen"
       data-section={SECTION_NAMES.CUSTOM_INTERACTIVE}
       ref={sectionRef}
     >
-      {/* Background gradient - defined in globals.css for readability and ease of future updates */}
-      <div className="bg-gradient-kiosk-blue pointer-events-none absolute inset-0 group-data-[kiosk=kiosk-1]/kiosk:h-[10530px] group-data-[kiosk=kiosk-2]/kiosk:h-[10390px] group-data-[kiosk=kiosk-3]/kiosk:h-[10430px]" />
+      {/* Background gradient - height calculated dynamically based on rendered templates */}
+      <div
+        className="bg-gradient-kiosk-blue pointer-events-none absolute top-0 right-0 left-0"
+        style={{ height: gradientHeight > 0 ? `${gradientHeight}px` : undefined }}
+      />
 
       {/* Overlay - Demo Screen */}
       <div
@@ -125,7 +144,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       {/* Eyebrow */}
       <motion.h2
         animate={shouldAnimate ? { y: 0 } : undefined}
-        className="absolute top-[200px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] will-change-transform group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-3]/kiosk:top-[240px]"
+        className="absolute top-[200px] left-[120px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] will-change-transform group-data-[ci=ci-2]/ci:left-[120px] group-data-[ci=ci-3]/ci:top-[240px]"
         initial={{ y: TITLE_ANIMATION_TRANSFORMS.SECTION_HEADER }}
         ref={eyebrowRef}
         transition={{ delay: 0, duration: SCROLL_ANIMATION_CONFIG.DURATION, ease: SCROLL_ANIMATION_CONFIG.EASING }}
@@ -135,7 +154,10 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
 
       {/* Sticky Section Header - Fixed Position - gradient defined in globals.css for readability and ease of future updates */}
       <div
-        className={`bg-gradient-sticky-custom-interactive pointer-events-none fixed top-0 left-0 z-100 h-[769px] w-full transition-opacity duration-300 motion-reduce:transition-none ${showStickyHeader ? 'opacity-100' : 'opacity-0'}`}
+        className={cn(
+          'bg-gradient-sticky-custom-interactive pointer-events-none fixed top-0 left-0 z-[100] h-[769px] w-full transition-opacity duration-300 motion-reduce:transition-none',
+          showStickyHeader ? 'opacity-100' : 'opacity-0'
+        )}
         data-custominteractive-sticky-header
         data-visible={showStickyHeader}
         ref={stickyHeaderRef}
@@ -155,7 +177,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
 
       {/* Headline */}
       <h1
-        className="absolute top-[1250px] left-[250px] w-full text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed] group-data-[kiosk=kiosk-3]/kiosk:top-[830px]"
+        className="absolute top-[1250px] left-[250px] w-full text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line text-[#ededed] group-data-[ci=ci-3]/ci:top-[830px]"
         data-scroll-section="customInteractive-headline"
       >
         {renderRegisteredMark(headlineText)}
@@ -164,20 +186,22 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       {/* CTA buttons */}
       <div
         className={cn(
-          'absolute top-[2220px] left-[245px] z-10 flex flex-col gap-[90px] group-data-[kiosk=kiosk-3]/kiosk:top-[2350px]',
+          'absolute top-[2220px] left-[245px] z-10 flex flex-col gap-[90px] group-data-[ci=ci-3]/ci:top-[2350px]',
           ctaWidthClass
         )}
       >
-        <button
-          className="group flex h-[200px] items-center justify-between rounded-[999px] bg-[#ededed] px-[100px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-[#14477d] shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-[19px] transition-transform duration-150 group-data-[kiosk=kiosk-2]/kiosk:hidden hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
-          onClick={handlePrimaryClick}
-          type="button"
-        >
-          <span className="pt-[10px] pl-[10px]">{renderRegisteredMark(primaryCtaLabel)}</span>
-          <div>
-            <ArrowIcon />
-          </div>
-        </button>
+        {primaryCtaLabel && (
+          <button
+            className="group flex h-[200px] items-center justify-between rounded-[999px] bg-[#ededed] px-[100px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-[#14477d] shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-[19px] transition-transform duration-150 hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+            onClick={handlePrimaryClick}
+            type="button"
+          >
+            <span className="pt-[10px] pl-[10px]">{renderRegisteredMark(primaryCtaLabel)}</span>
+            <div>
+              <ArrowIcon />
+            </div>
+          </button>
+        )}
         {/* CTA button gradient - defined in globals.css for readability and ease of future updates */}
         <button
           className="group bg-gradient-kiosk-magenta flex h-[200px] items-center justify-between rounded-[999px] px-[100px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-transform duration-150 hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"

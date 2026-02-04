@@ -22,6 +22,8 @@ const EMPTY_SLIDES: readonly CarouselSlide[] = [];
 export type Kiosk3SecondScreenProps = {
   /** Label for the back button */
   readonly backLabel?: string;
+  /** Custom interactive number for styling (1, 2, or 3) */
+  readonly customInteractiveNumber?: 1 | 2 | 3;
   /** URL for the demo iframe */
   readonly demoIframeSrc?: string;
   /** Description text shown in initial state */
@@ -36,6 +38,10 @@ export type Kiosk3SecondScreenProps = {
   readonly onBack?: () => void;
   /** Callback when demo is closed */
   readonly onEndTour?: () => void;
+  /** Callback for downward navigation */
+  readonly onNavigateDown?: () => void;
+  /** Callback for upward navigation */
+  readonly onNavigateUp?: () => void;
   /** Demo overlay configuration */
   readonly overlay?: {
     readonly cardLabel?: string;
@@ -82,6 +88,7 @@ export type Kiosk3SecondScreenProps = {
 const Kiosk3SecondScreenTemplate = memo(
   ({
     backLabel,
+    customInteractiveNumber = 3,
     demoIframeSrc,
     description,
     eyebrow,
@@ -136,7 +143,8 @@ const Kiosk3SecondScreenTemplate = memo(
 
     return (
       <div
-        className="relative flex h-screen w-full flex-col overflow-hidden"
+        className="group/ci relative flex h-screen w-full flex-col overflow-hidden"
+        data-ci={`ci-${customInteractiveNumber}`}
         data-scroll-section={SECTION_IDS.SECOND_SCREEN}
         data-section-end={SECTION_NAMES.CUSTOM_INTERACTIVE}
         ref={ref}

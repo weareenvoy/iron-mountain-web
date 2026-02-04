@@ -99,21 +99,23 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
     >
       <div className="absolute top-0 left-0 z-0 h-[1284px] w-full overflow-hidden" data-section-video="value">
         {heroVideo ? (
-          <video
-            autoPlay
-            className="absolute h-full w-full bg-black object-cover object-center"
-            controlsList="nodownload"
-            loop
-            muted
-            playsInline
-            poster={heroVideoPosterSrc}
-          >
-            <source src={heroVideo} type={getVideoMimeType(heroVideo)} />
-          </video>
+          <>
+            <video
+              autoPlay
+              className="absolute h-full w-full bg-black object-cover object-center"
+              controlsList="nodownload"
+              loop
+              muted
+              playsInline
+              poster={heroVideoPosterSrc}
+            >
+              <source src={heroVideo} type={getVideoMimeType(heroVideo)} />
+            </video>
+            <div className="absolute inset-0 bg-black/20" />
+          </>
         ) : (
-          <div className="h-full w-full bg-neutral-800" />
+          <div className="h-full w-full bg-[#ededed]" />
         )}
-        <div className="absolute inset-0 bg-black/20" />
       </div>
 
       {/* Header Section - Initial Position */}

@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useGradientHeights } from '@/app/(displays)/(kiosks)/_components/providers/gradient-heights-provider';
 import BlueDiamondMain from '@/components/ui/icons/Kiosks/Solutions/BlueDiamondMain';
 import GreenDiamondMain from '@/components/ui/icons/Kiosks/Solutions/GreenDiamondMain';
 import OrangeDiamondMain from '@/components/ui/icons/Kiosks/Solutions/OrangeDiamondMain';
@@ -26,6 +27,7 @@ export type SolutionFirstScreenTemplateProps = {
 const SolutionFirstScreenTemplate = ({
   body,
   headline,
+  kioskId,
   labelText,
   mainVideo,
   subheadline,
@@ -36,6 +38,9 @@ const SolutionFirstScreenTemplate = ({
     sectionName: SECTION_NAMES.SOLUTION,
   });
 
+  // Get dynamic gradient height for Solution section
+  const { solution: gradientHeight } = useGradientHeights();
+
   return (
     <div
       className="relative flex h-screen w-full flex-col overflow-visible bg-black"
@@ -45,23 +50,35 @@ const SolutionFirstScreenTemplate = ({
       {/* Background video */}
       <div className="absolute top-[-5px] left-0 h-[1545px] w-full" data-section-video="solution">
         <div className="relative h-full w-full">
-          <video
-            autoPlay
-            className="absolute h-full w-full bg-black object-cover"
-            controlsList="nodownload"
-            data-scroll-section="solution-first-video"
-            loop
-            muted
-            playsInline
-          >
-            <source src={mainVideo} type={getVideoMimeType(mainVideo)} />
-          </video>
-          <div className="pointer-events-none absolute inset-0 bg-black/20" />
+          {mainVideo ? (
+            <>
+              <video
+                autoPlay
+                className="absolute h-full w-full bg-black object-cover"
+                controlsList="nodownload"
+                data-scroll-section="solution-first-video"
+                loop
+                muted
+                playsInline
+              >
+                <source src={mainVideo} type={getVideoMimeType(mainVideo)} />
+              </video>
+              <div className="pointer-events-none absolute inset-0 bg-black/20" />
+            </>
+          ) : (
+            <div className="absolute h-full w-full bg-[#a2115e]" />
+          )}
         </div>
       </div>
 
-      {/* Gradient body */}
-      <div className="bg-gradient-kiosk-solution absolute top-[1058px] left-0 z-[1] h-[14575px] w-full rounded-[100px] group-data-[kiosk=kiosk-2]/kiosk:top-[1110px] group-data-[kiosk=kiosk-2]/kiosk:h-[14515px] group-data-[kiosk=kiosk-3]/kiosk:top-[1060px]" />
+      {/* Gradient body - height calculated dynamically based on rendered templates */}
+      <div
+        className="bg-gradient-kiosk-solution absolute left-0 z-[1] w-full rounded-[100px]"
+        style={{
+          height: gradientHeight > 0 ? `${gradientHeight}px` : undefined,
+          top: kioskId === 'kiosk-2' ? '1110px' : kioskId === 'kiosk-3' ? '1060px' : '1058px',
+        }} // Inline due to dynamic calculation
+      />
 
       {/* Subheadline - Initial Position */}
       <motion.h2
