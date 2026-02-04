@@ -42,7 +42,6 @@ type LoopSlot = null | {
 type DuckState = {
   duckTo: number;
   isDucked: boolean;
-  requestId: number;
 };
 
 export class AudioEngine implements AudioController {
@@ -55,9 +54,9 @@ export class AudioEngine implements AudioController {
   private channelGains: null | Record<AudioChannel, GainNode> = null;
 
   private readonly duckState: Record<AudioChannel, DuckState> = {
-    ambience: { duckTo: 0, isDucked: false, requestId: 0 },
-    music: { duckTo: 0, isDucked: false, requestId: 0 },
-    sfx: { duckTo: 0, isDucked: false, requestId: 0 },
+    ambience: { duckTo: 0, isDucked: false },
+    music: { duckTo: 0, isDucked: false },
+    sfx: { duckTo: 0, isDucked: false },
   };
 
   private isUnlockAttempted = false;
@@ -90,9 +89,7 @@ export class AudioEngine implements AudioController {
       const duckTo = clamp01(options?.duckTo ?? 0);
       const nextMultiplier = isDucked ? duckTo : 1;
 
-      // Last-call-wins guard
-      const nextRequestId = this.duckState[channel].requestId + 1;
-      this.duckState[channel] = { duckTo, isDucked, requestId: nextRequestId };
+      this.duckState[channel] = { duckTo, isDucked };
 
       const gain = duckGains[channel].gain;
 
@@ -202,7 +199,6 @@ export class AudioEngine implements AudioController {
   }
 
   public setMusic(idOrUrl: null | string, options?: LoopOptions): void {
-    console.info('[AudioEngine] setMusic called', idOrUrl, options);
     this.setLoop('music', idOrUrl, options);
   }
 
