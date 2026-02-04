@@ -82,6 +82,27 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
     handleNavigateDown();
   }, [handleNavigateDown, playSfx, sfx.next]);
 
+  // Keyboard handlers for arrow navigation
+  const handleUpArrowKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handleNavigateUpWithSound();
+      }
+    },
+    [handleNavigateUpWithSound]
+  );
+
+  const handleDownArrowKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handleNavigateDownWithSound();
+      }
+    },
+    [handleNavigateDownWithSound]
+  );
+
   // Get store action directly to avoid double hook call
   const handleButtonClick = useKioskArrowStore(state => state.handleButtonClick);
 
@@ -344,11 +365,12 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
                 aria-disabled={!canNavigateUp}
                 aria-label="Previous"
                 className={cn(
-                  'flex items-center justify-center transition-transform',
+                  'flex items-center justify-center transition-transform outline-none focus-visible:rounded-full focus-visible:ring-2 focus-visible:ring-white/50',
                   canNavigateUp
                     ? 'cursor-pointer hover:scale-110 active:scale-95 active:opacity-40 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]'
                     : 'cursor-not-allowed opacity-30'
                 )}
+                onKeyDown={canNavigateUp ? handleUpArrowKeyDown : undefined}
                 onPointerDown={canNavigateUp ? handleNavigateUpWithSound : undefined}
                 role="button"
                 style={{
@@ -356,6 +378,7 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
                   height: arrowConfig.arrowHeight,
                   width: arrowConfig.arrowWidth,
                 }}
+                tabIndex={canNavigateUp ? 0 : -1}
               >
                 <ArrowUp
                   aria-hidden="true"
@@ -367,7 +390,8 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
               </div>
               <div
                 aria-label="Next"
-                className="flex cursor-pointer items-center justify-center transition-transform hover:scale-110 active:scale-95 active:opacity-40 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+                className="flex cursor-pointer items-center justify-center transition-transform outline-none hover:scale-110 focus-visible:rounded-full focus-visible:ring-2 focus-visible:ring-white/50 active:scale-95 active:opacity-40 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+                onKeyDown={handleDownArrowKeyDown}
                 onPointerDown={handleNavigateDownWithSound}
                 role="button"
                 style={{
@@ -375,6 +399,7 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
                   height: arrowConfig.arrowHeight,
                   width: arrowConfig.arrowWidth,
                 }}
+                tabIndex={0}
               >
                 <ArrowDown
                   aria-hidden="true"
