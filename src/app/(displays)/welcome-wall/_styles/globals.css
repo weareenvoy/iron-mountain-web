@@ -7,6 +7,7 @@
   /* e.g. --welcome-accent: #...; */
   --IM-dark-blue: #14477d;
   --primary-bg-grey: #ededed;
+  --primary-im-dark-blue: #14477d;
 }
 
 [data-theme='dark'] [data-app='displays-welcome-wall'],
@@ -16,6 +17,10 @@
 
   /* Custom (Welcome-wall-only, dark) */
   /* e.g. --welcome-wall-accent: #...; */
+}
+
+@theme inline {
+  --color-primary-im-dark-blue: var(--primary-im-dark-blue);
 }
 
 @source '../**/**/**/*.{ts,tsx}';
