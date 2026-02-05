@@ -26,7 +26,7 @@ export async function getWelcomeWallData(): Promise<WelcomeWallDataResponse> {
     }
 
     // Online first
-    const res = await fetch(`${API_BASE}/welcome-wall`, {
+    const res = await fetch(`${API_BASE}/welcome_wall`, {
       cache: 'no-store',
       signal: controller.signal,
     });
