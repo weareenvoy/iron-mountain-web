@@ -1,30 +1,5 @@
-import { getLocaleForTesting, shouldUseStaticPlaceholderData } from '@/flags/flags';
+import { shouldUseStaticPlaceholderData } from '@/flags/flags';
 import type { SummitApiResponse, SummitDataResponse } from '@/lib/internal/types';
-
-const pickSummitData = (
-  rawData: SummitApiResponse | { readonly data: unknown; readonly locale?: string },
-  locale: string
-) => {
-  if (Array.isArray(rawData)) {
-    const matchingData = rawData.find(item => item.locale === locale)?.data;
-    if (!matchingData) {
-      throw new Error(`Missing summit data for locale: ${locale}`);
-    }
-    return matchingData as SummitDataResponse['data'];
-  }
-  if ('data' in rawData) {
-    return rawData.data as SummitDataResponse['data'];
-  }
-  throw new Error('Invalid summit API response shape');
-};
-
-const resolveSummitData = (
-  rawData: SummitApiResponse | { readonly data: unknown; readonly locale?: string },
-  locale: string
-) => {
-  const data = pickSummitData(rawData, locale);
-  return data;
-};
 
 export async function getSummitData(tourId?: string): Promise<SummitDataResponse> {
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
@@ -36,12 +11,12 @@ export async function getSummitData(tourId?: string): Promise<SummitDataResponse
     if (!res.ok) {
       throw new Error(`Bad status: ${res.status}`);
     }
-    return (await res.json()) as SummitApiResponse | { readonly data: unknown; readonly locale?: string };
+    return (await res.json()) as SummitApiResponse;
   };
 
   // NOTE: Temporary path fallback while we rely on static mocks and before the API exists.
   // Some tour IDs (e.g., summit-tour-XYZ) may not have a dedicated JSON file yet;
-  // in that case we fall back to the base summit.json. This ONLY relaxes file lookup,
+  // in that case we fall back to the base summit_room.json. This ONLY relaxes file lookup,
   // not data requirements—missing required fields still throw.
   const fetchStaticWithFallback = async (primaryPath: string, fallbackPath: string) => {
     try {
@@ -55,37 +30,25 @@ export async function getSummitData(tourId?: string): Promise<SummitDataResponse
   try {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (shouldUseStaticPlaceholderData()) {
-      const primaryPath = tourId ? `/api/summit-${tourId}.json` : '/api/summit.json';
-      const rawData = await fetchStaticWithFallback(primaryPath, '/api/summit.json');
-      const locale = getLocaleForTesting();
-      return {
-        data: resolveSummitData(rawData, locale),
-        locale,
-      };
+      const primaryPath = tourId ? `/api/summit-${tourId}.json` : '/api/summit_room.json';
+      const rawData = await fetchStaticWithFallback(primaryPath, '/api/summit_room.json');
+      return { data: rawData.data, locale: rawData.locale };
     }
 
     // Online first
-    const res = await fetch(`${API_BASE}/summit${tourId ? `/${tourId}` : ''}`, {
+    const res = await fetch(`${API_BASE}/summit_room${tourId ? `?tour_id=${tourId}` : ''}`, {
       cache: 'no-store',
       signal: controller.signal,
     });
     clearTimeout(timeout);
     if (!res.ok) throw new Error(`Bad status: ${res.status}`);
-    const rawData = (await res.json()) as SummitApiResponse | { readonly data: unknown; readonly locale?: string };
-    const locale = getLocaleForTesting();
-    return {
-      data: resolveSummitData(rawData, locale),
-      locale,
-    };
+    const rawData = (await res.json()) as SummitApiResponse;
+    return { data: rawData.data, locale: rawData.locale };
   } catch {
     clearTimeout(timeout);
     // Offline/static fallback
-    const primaryPath = tourId ? `/api/summit-${tourId}.json` : '/api/summit.json';
-    const rawData = await fetchStaticWithFallback(primaryPath, '/api/summit.json');
-    const locale = getLocaleForTesting();
-    return {
-      data: resolveSummitData(rawData, locale),
-      locale,
-    };
+    const primaryPath = tourId ? `/api/summit-${tourId}.json` : '/api/summit_room.json';
+    const rawData = await fetchStaticWithFallback(primaryPath, '/api/summit_room.json');
+    return { data: rawData.data, locale: rawData.locale };
   }
 }

@@ -3,7 +3,7 @@
 import type { BasecampData } from '@/lib/internal/types';
 
 type Props = {
-  readonly data: BasecampData['possibilitiesA'] | BasecampData['possibilitiesB'] | BasecampData['possibilitiesC'];
+  readonly data: BasecampData['possibilities_a'] | BasecampData['possibilities_b'] | BasecampData['possibilities_c'];
 };
 
 // Animation timing constants
@@ -11,7 +11,7 @@ const BODY_BLOCK_DELAYS_MS = [2500, 4000, 5500] as const;
 const WORD_STAGGER_MS = 80 as const;
 
 const PossibilitiesDetail = ({ data }: Props) => {
-  const bodyItems = [data.body1, data.body2, data.body3];
+  const bodyItems = [data.body_1, data.body_2, data.body_3];
 
   return (
     // Use key to force remount when data changes
