@@ -23,7 +23,7 @@ const PRECACHE_URLS = [
   '/docent/schedule/',
   // Static API data (offline fallback)
   '/api/basecamp.json',
-  '/api/welcome-wall.json',
+  '/api/welcome_wall.json',
   '/api/docent.json',
   '/api/summit.json',
   '/api/summit-tours.json',
