@@ -2,8 +2,9 @@
   Referrer-Policy: strict-origin-when-cross-origin
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://ground-ctrl-api-ironmountain.envoyctrl.com wss://*.cloud.shiftr.io; img-src 'self' data: blob: https://*.amazonaws.com https://*.envoyctrl.net https://*.envoyctrl.com https://*.googleusercontent.com; font-src 'self'; media-src 'self' blob: data:; worker-src 'self' blob:
 
 /sw.js
   Cache-Control: no-cache, no-store, must-revalidate
-  Content-Security-Policy: default-src 'self'; script-src 'self'; connect-src 'self' https://ground-ctrl-api-ironmountain.envoyctrl.com
+  Content-Security-Policy: default-src 'self'; script-src 'self'; connect-src 'self' https://ground-ctrl-api-ironmountain.envoyctrl.com wss://*.cloud.shiftr.io
   Content-Type: application/javascript; charset=utf-8
