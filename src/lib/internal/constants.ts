@@ -20,6 +20,7 @@ type AppRoute =
   | '/kiosk-3'
   | '/overlook'
   | '/summit'
+  | '/summit/slides'
   | '/welcome-wall';
 
 export const APPS: Readonly<{ readonly route: AppRoute; readonly title: string }[]> = [
@@ -34,6 +35,10 @@ export const APPS: Readonly<{ readonly route: AppRoute; readonly title: string }
   {
     route: '/summit',
     title: 'Summit',
+  },
+  {
+    route: '/summit/slides',
+    title: 'Slides',
   },
   {
     route: '/overlook',
