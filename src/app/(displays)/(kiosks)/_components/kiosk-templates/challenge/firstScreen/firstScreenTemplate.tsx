@@ -60,10 +60,10 @@ const FirstScreenTemplate = memo(
       >
         {/* Background gradient - height calculated dynamically based on rendered templates */}
         <div
-          className="bg-gradient-challenge-section pointer-events-none absolute left-0 z-[1] w-full rounded-[100px]"
+          className="bg-gradient-challenge-section pointer-events-none absolute top-0 left-0 z-[1] w-full rounded-[100px]"
           style={{
             height: gradientHeight > 0 ? `${gradientHeight}px` : undefined,
-            top: kioskId === 'kiosk\_2' ? '1240px' : '1290px',
+            transform: kioskId === 'kiosk_2' ? 'translateY(1240px)' : 'translateY(1290px)',
           }}
         />
 
@@ -169,10 +169,12 @@ const FirstScreenTemplate = memo(
         {/* Bottom Fixed Gradient - Rotated 180 degrees for fade effect at bottom - gradient defined in globals.css for readability and ease of future updates */}
         <div
           className={cn(
-            'bg-gradient-sticky-challenge pointer-events-none fixed left-0 z-[100] h-[1369px] w-full rotate-180 transition-opacity duration-300 motion-reduce:transition-none',
-            bottomGradientPosition ? 'bottom-[-900px]' : 'bottom-0',
+            'bg-gradient-sticky-challenge pointer-events-none fixed bottom-0 left-0 z-[100] h-[1369px] w-full transition-opacity duration-300 motion-reduce:transition-none',
             showBottomGradient ? 'opacity-100' : 'opacity-0'
           )}
+          style={{
+            transform: bottomGradientPosition ? 'rotate(180deg) translateY(-900px)' : 'rotate(180deg)',
+          }}
           data-challenge-sticky-footer
           data-visible={showBottomGradient}
           ref={bottomGradientRef}
