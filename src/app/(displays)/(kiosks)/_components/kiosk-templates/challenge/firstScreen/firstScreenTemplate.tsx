@@ -63,7 +63,7 @@ const FirstScreenTemplate = memo(
           className="bg-gradient-challenge-section pointer-events-none absolute left-0 z-[1] w-full rounded-[100px]"
           style={{
             height: gradientHeight > 0 ? `${gradientHeight}px` : undefined,
-            top: kioskId === 'kiosk_2' ? '1240px' : '1290px',
+            top: kioskId === 'kiosk\_2' ? '1240px' : '1290px',
           }}
         />
 
@@ -94,7 +94,7 @@ const FirstScreenTemplate = memo(
           {/* Subheadline - Initial Position */}
           <motion.div
             animate={shouldAnimate ? { opacity: 1, y: 0 } : undefined}
-            className="relative top-[120px] left-[-760px] z-[2] px-[120px] pb-[400px] will-change-[transform,opacity] group-data-[kiosk=kiosk-3]/kiosk:top-[50px] group-data-[kiosk=kiosk-3]/kiosk:left-[-800px]"
+            className="relative top-[120px] left-[-760px] z-[2] px-[120px] pb-[400px] will-change-[transform,opacity] group-data-[kiosk=kiosk\_3]/kiosk:top-[50px] group-data-[kiosk=kiosk\_3]/kiosk:left-[-800px]"
             initial={{ opacity: 0, y: TITLE_ANIMATION_TRANSFORMS.CHALLENGE_SUBHEADLINE }}
             transition={{ delay: 0, duration: SCROLL_ANIMATION_CONFIG.DURATION, ease: SCROLL_ANIMATION_CONFIG.EASING }}
           >
@@ -108,7 +108,7 @@ const FirstScreenTemplate = memo(
         <div ref={animationTriggerRef}>
           <motion.div
             animate={shouldAnimate ? { opacity: 1, y: 0 } : undefined}
-            className="relative top-[-260px] z-[0] flex items-center gap-[41px] px-[128px] pb-[200px] will-change-[transform,opacity] group-data-[kiosk=kiosk-2]/kiosk:top-[-260px] group-data-[kiosk=kiosk-2]/kiosk:left-[10px] group-data-[kiosk=kiosk-3]/kiosk:top-[-320px] group-data-[kiosk=kiosk-3]/kiosk:left-[10px]"
+            className="relative top-[-260px] z-[0] flex items-center gap-[41px] px-[128px] pb-[200px] will-change-[transform,opacity] group-data-[kiosk=kiosk\_2]/kiosk:top-[-260px] group-data-[kiosk=kiosk\_2]/kiosk:left-[10px] group-data-[kiosk=kiosk\_3]/kiosk:top-[-320px] group-data-[kiosk=kiosk\_3]/kiosk:left-[10px]"
             data-section-label="challenge"
             initial={{ opacity: 0, y: TITLE_ANIMATION_TRANSFORMS.CHALLENGE_LABEL }}
             ref={labelRef}
@@ -150,7 +150,7 @@ const FirstScreenTemplate = memo(
           </div>
 
           {/* Challenge Label */}
-          <div className="flex items-center gap-[41px] px-[128px] pb-[20px] pl-[180px] group-data-[kiosk=kiosk-2]/kiosk:left-[10px] group-data-[kiosk=kiosk-3]/kiosk:left-[10px]">
+          <div className="flex items-center gap-[41px] px-[128px] pb-[20px] pl-[180px] group-data-[kiosk=kiosk\_2]/kiosk:left-[10px] group-data-[kiosk=kiosk\_3]/kiosk:left-[10px]">
             <div className="relative mr-[5px] flex h-[86px] w-[86px] items-center justify-center">
               <Diamond
                 aria-hidden="true"
@@ -179,18 +179,18 @@ const FirstScreenTemplate = memo(
         />
 
         {/* Problem Description Section */}
-        <div className="relative top-[-140px] left-[-10px] z-[2] px-[120px] group-data-[kiosk=kiosk-2]/kiosk:top-[-150px] group-data-[kiosk=kiosk-2]/kiosk:left-[10px] group-data-[kiosk=kiosk-3]/kiosk:top-[-210px] group-data-[kiosk=kiosk-3]/kiosk:left-[0]">
+        <div className="relative top-[-140px] left-[-10px] z-[2] px-[120px] group-data-[kiosk=kiosk\_2]/kiosk:top-[-150px] group-data-[kiosk=kiosk\_2]/kiosk:left-[10px] group-data-[kiosk=kiosk\_3]/kiosk:top-[-210px] group-data-[kiosk=kiosk\_3]/kiosk:left-[0]">
           <p className="max-w-[1380px] text-[80px] leading-[1.4] font-normal tracking-[-4px] text-white">
             {renderRegisteredMark(body)}
           </p>
         </div>
 
         {/* Savings Metrics Section */}
-        <div className="relative top-[30px] left-[-430px] z-[2] flex w-full flex-col items-center py-[490px] group-data-[kiosk=kiosk-2]/kiosk:top-[-220px] group-data-[kiosk=kiosk-2]/kiosk:left-[-490px] group-data-[kiosk=kiosk-3]/kiosk:top-[70px] group-data-[kiosk=kiosk-3]/kiosk:left-[-400px]">
+        <div className="relative top-[30px] left-[-430px] z-[2] flex w-full flex-col items-center py-[490px] group-data-[kiosk=kiosk\_2]/kiosk:top-[-220px] group-data-[kiosk=kiosk\_2]/kiosk:left-[-490px] group-data-[kiosk=kiosk\_3]/kiosk:top-[70px] group-data-[kiosk=kiosk\_3]/kiosk:left-[-400px]">
           <span className="text-center text-[400px] leading-[1.3] font-[300] tracking-[-20px] whitespace-nowrap text-[#6dcff6]">
             {renderRegisteredMark(featuredStat1)}
           </span>
-          <p className="relative top-[40px] left-[-20px] mt-[-40px] w-[1030px] text-[60px] leading-[1.3] font-normal tracking-[-3px] whitespace-pre-line text-[#6dcff6] group-data-[kiosk=kiosk-2]/kiosk:top-[30px] group-data-[kiosk=kiosk-2]/kiosk:left-[60px] group-data-[kiosk=kiosk-3]/kiosk:top-[50px] group-data-[kiosk=kiosk-3]/kiosk:left-[-20px] group-data-[kiosk=kiosk-3]/kiosk:w-[1070px]">
+          <p className="relative top-[40px] left-[-20px] mt-[-40px] w-[1030px] text-[60px] leading-[1.3] font-normal tracking-[-3px] whitespace-pre-line text-[#6dcff6] group-data-[kiosk=kiosk\_2]/kiosk:top-[30px] group-data-[kiosk=kiosk\_2]/kiosk:left-[60px] group-data-[kiosk=kiosk\_3]/kiosk:top-[50px] group-data-[kiosk=kiosk\_3]/kiosk:left-[-20px] group-data-[kiosk=kiosk\_3]/kiosk:w-[1070px]">
             {renderRegisteredMark(featuredStat1Body)}
           </p>
         </div>

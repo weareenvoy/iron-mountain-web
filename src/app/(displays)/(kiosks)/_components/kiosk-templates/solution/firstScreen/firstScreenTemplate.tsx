@@ -76,14 +76,14 @@ const SolutionFirstScreenTemplate = ({
         className="bg-gradient-kiosk-solution absolute left-0 z-[1] w-full rounded-[100px]"
         style={{
           height: gradientHeight > 0 ? `${gradientHeight}px` : undefined,
-          top: kioskId === 'kiosk_2' ? '1110px' : kioskId === 'kiosk_3' ? '1060px' : '1058px',
+          top: kioskId === 'kiosk\_2' ? '1110px' : kioskId === 'kiosk\_3' ? '1060px' : '1058px',
         }} // Inline due to dynamic calculation
       />
 
       {/* Subheadline - Initial Position */}
       <motion.h2
         animate={shouldAnimate ? { y: 0 } : undefined}
-        className="absolute top-[240px] left-[120px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] will-change-transform group-data-[kiosk=kiosk-2]/kiosk:top-[290px] group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-2]/kiosk:w-[450px] group-data-[kiosk=kiosk-3]/kiosk:top-[300px] group-data-[kiosk=kiosk-3]/kiosk:left-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[330px]"
+        className="absolute top-[240px] left-[120px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] will-change-transform group-data-[kiosk=kiosk\_2]/kiosk:top-[290px] group-data-[kiosk=kiosk\_2]/kiosk:left-[120px] group-data-[kiosk=kiosk\_2]/kiosk:w-[450px] group-data-[kiosk=kiosk\_3]/kiosk:top-[300px] group-data-[kiosk=kiosk\_3]/kiosk:left-[240px] group-data-[kiosk=kiosk\_3]/kiosk:w-[330px]"
         initial={{ y: TITLE_ANIMATION_TRANSFORMS.SECTION_HEADER }}
         transition={{ delay: 0, duration: SCROLL_ANIMATION_CONFIG.DURATION, ease: SCROLL_ANIMATION_CONFIG.EASING }}
       >
@@ -94,7 +94,7 @@ const SolutionFirstScreenTemplate = ({
       <div ref={animationTriggerRef}>
         <motion.div
           animate={shouldAnimate ? { opacity: 1, y: 0 } : undefined}
-          className="absolute top-[790px] left-[140px] flex items-center gap-[41px] will-change-[transform,opacity] group-data-[kiosk=kiosk-2]/kiosk:top-[830px] group-data-[kiosk=kiosk-3]/kiosk:top-[860px] group-data-[kiosk=kiosk-3]/kiosk:left-[260px]"
+          className="absolute top-[790px] left-[140px] flex items-center gap-[41px] will-change-[transform,opacity] group-data-[kiosk=kiosk\_2]/kiosk:top-[830px] group-data-[kiosk=kiosk\_3]/kiosk:top-[860px] group-data-[kiosk=kiosk\_3]/kiosk:left-[260px]"
           data-section-label="solution"
           initial={{ opacity: 0, y: TITLE_ANIMATION_TRANSFORMS.SECTION_HEADER }}
           ref={labelRef}
@@ -124,12 +124,12 @@ const SolutionFirstScreenTemplate = ({
         ref={stickyHeaderRef}
       >
         {/* Subheadline */}
-        <h2 className="w-[700px] px-[120px] pt-[240px] pb-[375px] pl-[150px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:w-[650px] group-data-[kiosk=kiosk-3]/kiosk:ml-[120px] group-data-[kiosk=kiosk-3]/kiosk:w-[630px]">
+        <h2 className="w-[700px] px-[120px] pt-[240px] pb-[375px] pl-[150px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk\_2]/kiosk:w-[650px] group-data-[kiosk=kiosk\_3]/kiosk:ml-[120px] group-data-[kiosk=kiosk\_3]/kiosk:w-[630px]">
           {renderRegisteredMark(subheadline)}
         </h2>
 
         {/* Solution label */}
-        <div className="flex items-center gap-[41px] px-[140px] pb-[20px] group-data-[kiosk=kiosk-3]/kiosk:ml-[120px]">
+        <div className="flex items-center gap-[41px] px-[140px] pb-[20px] group-data-[kiosk=kiosk\_3]/kiosk:ml-[120px]">
           <div className="relative top-[-25px] left-[-55px] flex h-[200px] w-[200px] items-center justify-center">
             <OutlinedDiamond aria-hidden="true" focusable="false" />
           </div>
@@ -140,7 +140,7 @@ const SolutionFirstScreenTemplate = ({
       </div>
 
       {/* Body copy */}
-      <div className="absolute top-[1270px] left-[120px] z-[1] flex w-auto max-w-[1271px] flex-col gap-[80px] text-white group-data-[kiosk=kiosk-2]/kiosk:top-[1300px] group-data-[kiosk=kiosk-2]/kiosk:left-[120px] group-data-[kiosk=kiosk-3]/kiosk:top-[1260px] group-data-[kiosk=kiosk-3]/kiosk:left-[120px]">
+      <div className="absolute top-[1270px] left-[120px] z-[1] flex w-auto max-w-[1271px] flex-col gap-[80px] text-white group-data-[kiosk=kiosk\_2]/kiosk:top-[1300px] group-data-[kiosk=kiosk\_2]/kiosk:left-[120px] group-data-[kiosk=kiosk\_3]/kiosk:top-[1260px] group-data-[kiosk=kiosk\_3]/kiosk:left-[120px]">
         <p className="w-[900px] text-[100px] leading-[1.3] font-normal tracking-[-5px]">
           {renderRegisteredMark(headline)}
         </p>
@@ -148,13 +148,13 @@ const SolutionFirstScreenTemplate = ({
       </div>
 
       {/* Decorative diamonds */}
-      <div className="pointer-events-none absolute top-[2420px] left-[-170px] z-[3] h-[1770px] w-[1770px] opacity-60 group-data-[kiosk=kiosk-2]/kiosk:top-[2420px] group-data-[kiosk=kiosk-2]/kiosk:top-[2450px] group-data-[kiosk=kiosk-3]/kiosk:top-[2420px] group-data-[kiosk=kiosk-3]/kiosk:left-[-180px] group-data-[kiosk=kiosk-3]/kiosk:size-[1780px]">
+      <div className="pointer-events-none absolute top-[2420px] left-[-170px] z-[3] h-[1770px] w-[1770px] opacity-60 group-data-[kiosk=kiosk\_2]/kiosk:top-[2420px] group-data-[kiosk=kiosk\_2]/kiosk:top-[2450px] group-data-[kiosk=kiosk\_3]/kiosk:top-[2420px] group-data-[kiosk=kiosk\_3]/kiosk:left-[-180px] group-data-[kiosk=kiosk\_3]/kiosk:size-[1780px]">
         <BlueDiamondMain aria-hidden="true" className="h-full w-full" focusable="false" />
       </div>
-      <div className="pointer-events-none absolute top-[2400px] left-[1250px] z-[3] h-[800px] w-[800px] opacity-70 group-data-[kiosk=kiosk-2]/kiosk:top-[2420px] group-data-[kiosk=kiosk-2]/kiosk:left-[1240px] group-data-[kiosk=kiosk-2]/kiosk:size-[805px] group-data-[kiosk=kiosk-3]/kiosk:top-[2390px] group-data-[kiosk=kiosk-3]/kiosk:left-[1250px] group-data-[kiosk=kiosk-3]/kiosk:size-[810px]">
+      <div className="pointer-events-none absolute top-[2400px] left-[1250px] z-[3] h-[800px] w-[800px] opacity-70 group-data-[kiosk=kiosk\_2]/kiosk:top-[2420px] group-data-[kiosk=kiosk\_2]/kiosk:left-[1240px] group-data-[kiosk=kiosk\_2]/kiosk:size-[805px] group-data-[kiosk=kiosk\_3]/kiosk:top-[2390px] group-data-[kiosk=kiosk\_3]/kiosk:left-[1250px] group-data-[kiosk=kiosk\_3]/kiosk:size-[810px]">
         <GreenDiamondMain aria-hidden="true" className="h-full w-full" focusable="false" />
       </div>
-      <div className="pointer-events-none absolute top-[3440px] left-[1250px] z-[3] h-[795px] w-[795px] opacity-70 group-data-[kiosk=kiosk-3]/kiosk:top-[3420px] group-data-[kiosk=kiosk-3]/kiosk:left-[1250px] group-data-[kiosk=kiosk-3]/kiosk:size-[810px]">
+      <div className="pointer-events-none absolute top-[3440px] left-[1250px] z-[3] h-[795px] w-[795px] opacity-70 group-data-[kiosk=kiosk\_3]/kiosk:top-[3420px] group-data-[kiosk=kiosk\_3]/kiosk:left-[1250px] group-data-[kiosk=kiosk\_3]/kiosk:size-[810px]">
         <OrangeDiamondMain aria-hidden="true" className="h-full w-full" focusable="false" />
       </div>
     </div>

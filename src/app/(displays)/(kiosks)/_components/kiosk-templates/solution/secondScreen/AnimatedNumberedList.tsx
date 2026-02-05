@@ -108,7 +108,7 @@ const AnimatedNumberedList = ({
   return (
     <motion.div
       animate={{ y: getYOffset() }}
-      className="absolute top-[1890px] left-[240px] z-2 flex w-[1010px] flex-col gap-[60px] text-[60px] leading-[1.3] tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk-2]/kiosk:top-[1860px] group-data-[kiosk=kiosk-2]/kiosk:left-[250px]"
+      className="absolute top-[1890px] left-[240px] z-2 flex w-[1010px] flex-col gap-[60px] text-[60px] leading-[1.3] tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk\_2]/kiosk:top-[1860px] group-data-[kiosk=kiosk\_2]/kiosk:left-[250px]"
       transition={{
         duration: 0.6,
         ease: [0.3, 0, 0.6, 1],

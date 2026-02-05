@@ -99,7 +99,7 @@ const SolutionThirdScreenTemplate = ({
       <div className="absolute top-[-296px] left-0 h-[5416px] w-full rounded-t-[100px] bg-transparent" />
 
       {/* Title */}
-      <div className="absolute top-[1390px] left-[240px] w-[1300px] text-white group-data-[kiosk=kiosk-2]/kiosk:w-[1400px] group-data-[kiosk=kiosk-3]/kiosk:top-[400px]">
+      <div className="absolute top-[1390px] left-[240px] w-[1300px] text-white group-data-[kiosk=kiosk\_2]/kiosk:w-[1400px] group-data-[kiosk=kiosk\_3]/kiosk:top-[400px]">
         <p className="text-[100px] leading-[1.3] font-normal tracking-[-5px] whitespace-pre-line">
           {renderRegisteredMark(headline)}
         </p>

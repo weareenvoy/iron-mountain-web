@@ -103,12 +103,12 @@ const SolutionSecondScreenTemplate = memo(
         <div className="pointer-events-none absolute top-[1080px] left-[-100px] z-[1] h-[1790px] w-[1790px]">
           <BlueDiamondSecond aria-hidden="true" className="h-full w-full" focusable="false" />
         </div>
-        <div className="pointer-events-none absolute top-[970px] left-[1270px] z-[1] h-[890px] w-[890px] group-data-[kiosk=kiosk-2]/kiosk:top-[1040px] group-data-[kiosk=kiosk-2]/kiosk:left-[1330px] group-data-[kiosk=kiosk-2]/kiosk:size-[800px] group-data-[kiosk=kiosk-3]/kiosk:top-[1050px] group-data-[kiosk=kiosk-3]/kiosk:left-[1330px] group-data-[kiosk=kiosk-3]/kiosk:size-[810px]">
+        <div className="pointer-events-none absolute top-[970px] left-[1270px] z-[1] h-[890px] w-[890px] group-data-[kiosk=kiosk\_2]/kiosk:top-[1040px] group-data-[kiosk=kiosk\_2]/kiosk:left-[1330px] group-data-[kiosk=kiosk\_2]/kiosk:size-[800px] group-data-[kiosk=kiosk\_3]/kiosk:top-[1050px] group-data-[kiosk=kiosk\_3]/kiosk:left-[1330px] group-data-[kiosk=kiosk\_3]/kiosk:size-[810px]">
           <GreenDiamondSecond aria-hidden="true" className="h-full w-full" focusable="false" />
         </div>
 
         {/* Title */}
-        <p className="absolute top-[1600px] left-[240px] z-[1] text-[100px] leading-[1.3] font-normal tracking-[-5px] text-white group-data-[kiosk=kiosk-2]/kiosk:top-[1570px] group-data-[kiosk=kiosk-2]/kiosk:left-[250px]">
+        <p className="absolute top-[1600px] left-[240px] z-[1] text-[100px] leading-[1.3] font-normal tracking-[-5px] text-white group-data-[kiosk=kiosk\_2]/kiosk:top-[1570px] group-data-[kiosk=kiosk\_2]/kiosk:left-[250px]">
           {renderRegisteredMark(numberedListHeadline)}
         </p>
 
@@ -122,7 +122,7 @@ const SolutionSecondScreenTemplate = memo(
 
         {/* Hero media diamond */}
         <div className="absolute top-[2210px] left-[1500px] z-[2]">
-          <div className="relative top-[-140px] left-[-230px] h-[900px] w-[900px] group-data-[kiosk=kiosk-2]/kiosk:top-[-160px] group-data-[kiosk=kiosk-2]/kiosk:left-[-180px] group-data-[kiosk=kiosk-2]/kiosk:size-[810px] group-data-[kiosk=kiosk-3]/kiosk:top-[-130px] group-data-[kiosk=kiosk-3]/kiosk:left-[-160px] group-data-[kiosk=kiosk-3]/kiosk:size-[800px]">
+          <div className="relative top-[-140px] left-[-230px] h-[900px] w-[900px] group-data-[kiosk=kiosk\_2]/kiosk:top-[-160px] group-data-[kiosk=kiosk\_2]/kiosk:left-[-180px] group-data-[kiosk=kiosk\_2]/kiosk:size-[810px] group-data-[kiosk=kiosk\_3]/kiosk:top-[-130px] group-data-[kiosk=kiosk\_3]/kiosk:left-[-160px] group-data-[kiosk=kiosk\_3]/kiosk:size-[800px]">
             {heroImageSrc && (
               <Image
                 alt={heroImageAlt || ''}
