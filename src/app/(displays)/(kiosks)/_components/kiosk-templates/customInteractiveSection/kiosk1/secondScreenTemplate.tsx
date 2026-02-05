@@ -5,6 +5,7 @@ import { SquarePlay } from 'lucide-react';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import CustomInteractiveDemoScreenTemplate from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/demoScreenTemplate';
+import { useKioskOverlay } from '@/app/(displays)/(kiosks)/_components/providers/kiosk-overlay-provider';
 import { useKioskAudio } from '@/app/(displays)/(kiosks)/_components/providers/useKioskAudio';
 import { useSfx } from '@/components/providers/audio-provider';
 import { cn } from '@/lib/tailwind/utils/cn';
@@ -24,6 +25,8 @@ export type CustomInteractiveKiosk1SecondScreenTemplateProps = {
   readonly backLabel?: string;
   /** Body text below headline (extracted from hardcoded string) */
   readonly bodyText?: string;
+  /** Custom interactive number for styling (1, 2, or 3) */
+  readonly customInteractiveNumber?: 1 | 2 | 3;
   /** URL for demo iframe content */
   readonly demoIframeSrc?: string;
   /** Small heading above main headline */
@@ -40,6 +43,10 @@ export type CustomInteractiveKiosk1SecondScreenTemplateProps = {
   readonly onBack?: () => void;
   /** Callback when end tour button is pressed */
   readonly onEndTour?: () => void;
+  /** Callback for downward navigation */
+  readonly onNavigateDown?: () => void;
+  /** Callback for upward navigation */
+  readonly onNavigateUp?: () => void;
   /** Callback when secondary CTA is clicked */
   readonly onSecondaryCta?: () => void;
   /** Label for overlay card */
@@ -61,11 +68,12 @@ export type CustomInteractiveKiosk1SecondScreenTemplateProps = {
 const CustomInteractiveKiosk1SecondScreenTemplate = ({
   backLabel,
   bodyText,
+  customInteractiveNumber = 1,
   demoIframeSrc,
   headline,
   heroImageAlt,
   heroImageSrc,
-  kioskId,
+  onEndTour,
   onSecondaryCta,
   overlayCardLabel,
   overlayEndTourLabel,
@@ -76,10 +84,12 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
   const headlineText: string = normalizeText(headline);
   const normalizedBodyText = bodyText ?? '';
   const normalizedSteps = steps ?? [];
-  const isKiosk3 = kioskId === 'kiosk-3';
-  const secondaryIconOffset = isKiosk3 ? 'left-[-330px]' : 'left-[-70px]';
+  // Use custom interactive number instead of kiosk ID for styling
+  const isCI3 = customInteractiveNumber === 3;
+  const secondaryIconOffset = isCI3 ? 'left-[-330px]' : 'left-[-70px]';
   const { sfx } = useKioskAudio();
   const { playSfx } = useSfx();
+  const { closeOverlay, openOverlay } = useKioskOverlay();
 
   const [openModalIndex, setOpenModalIndex] = useState<null | number>(null);
   const [showOverlay, setShowOverlay] = useState(false);
@@ -102,32 +112,37 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
     if (sfx.open) {
       playSfx(sfx.open);
     }
+    openOverlay();
     setShowOverlay(true);
     onSecondaryCta?.();
-  }, [onSecondaryCta, playSfx, sfx.open]);
+  }, [onSecondaryCta, openOverlay, playSfx, sfx.open]);
 
   const handleEndTour = useCallback(() => {
     if (sfx.close) {
       playSfx(sfx.close);
     }
+    closeOverlay();
     setShowOverlay(false);
-  }, [playSfx, sfx.close]);
+    onEndTour?.();
+  }, [closeOverlay, onEndTour, playSfx, sfx.close]);
 
   const handleModalClose = useCallback(() => {
     if (sfx.close) {
       playSfx(sfx.close);
     }
+    closeOverlay();
     setOpenModalIndex(null);
-  }, [playSfx, sfx.close]);
+  }, [closeOverlay, playSfx, sfx.close]);
 
   const handleModalOpen = useCallback(
     (index: number) => {
       if (sfx.open) {
         playSfx(sfx.open);
       }
+      openOverlay();
       setOpenModalIndex(index);
     },
-    [playSfx, sfx.open]
+    [openOverlay, playSfx, sfx.open]
   );
 
   useEffect(() => {
@@ -166,7 +181,8 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
   return (
     <>
       <div
-        className="relative flex h-screen w-full flex-col overflow-visible bg-transparent"
+        className="group/ci relative flex h-screen w-full flex-col overflow-visible bg-transparent"
+        data-ci={`ci-${customInteractiveNumber}`}
         data-scroll-section="customInteractive-second-screen"
         data-section-end={SECTION_NAMES.CUSTOM_INTERACTIVE}
         ref={containerRef}
@@ -212,7 +228,7 @@ const CustomInteractiveKiosk1SecondScreenTemplate = ({
         {/* CTA button gradient - defined in globals.css for readability and ease of future updates */}
         <AnimatedText
           as="button"
-          className="group bg-gradient-kiosk-magenta absolute top-[1330px] left-[1245px] z-0 flex h-[200px] items-center justify-between rounded-[999px] px-[70px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-[19px] transition-transform duration-150 will-change-transform hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-60 active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+          className="group bg-gradient-kiosk-magenta absolute top-[1330px] left-[1245px] z-0 flex h-[200px] items-center justify-between rounded-[999px] px-[70px] py-[70px] text-[60px] leading-[1.2] font-normal tracking-[-1.8px] text-white backdrop-blur-[19px] transition-transform duration-150 will-change-transform hover:scale-[1.01] active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
           onClick={handleSecondaryClick}
           shouldAnimate={shouldAnimateText}
           type="button"

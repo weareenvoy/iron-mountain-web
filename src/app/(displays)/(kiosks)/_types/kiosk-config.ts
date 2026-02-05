@@ -23,5 +23,4 @@ export type KioskConfig = {
   readonly arrowConfig: KioskArrowConfig;
   readonly diamondMapping?: DiamondMapping;
   readonly kioskId: KioskId;
-  readonly usesAccordion: boolean;
 };

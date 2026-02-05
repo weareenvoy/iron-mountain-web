@@ -6,10 +6,16 @@
         "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/welcome-wall/MclarenLogo.png"
       },
       "videos": {
-        "ambientLoopEn":  { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/welcome-wall/IRM_Entryway_AmbientLoop.mp4" },
-        "ambientLoopPt":  { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/welcome-wall/IRM_Entryway_AmbientLoop.mp4" },
-        "tourLoopEn":  { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/welcome-wall/IRM_Entryway_Loop_V1.mp4" },
-        "tourLoopPt":  { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/welcome-wall/IRM_Entryway_Loop_V1_BR.mp4" }
+        "ambientLoop":  { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/welcome-wall/Main_EntryWay_Ambient_1.webm" },
+        "tourLoop":  { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/welcome-wall/IRM_Entryway_Loop_Blank.webm" }
+      },
+      "welcome": {
+        "title": "Welcome to the Iron Mountain Executive Briefing Center"
+      },
+      "location_details": {
+        "name": "Sao, Paulo Brazil",
+        "exhibit": "Executive Briefing Center",
+        "elevation": "Elevation 760 m (2,493.4 ft)"
       }
     }
   }

@@ -1,8 +1,17 @@
-import type { AudioChannel, AudioController, AudioSettings, LoopOptions, PlaySfxOptions } from '@/lib/audio/types';
+import type {
+  AudioChannel,
+  AudioController,
+  AudioSettings,
+  DuckChannelOptions,
+  LoopOptions,
+  PlaySfxOptions,
+} from '@/lib/audio/types';
 
 const clamp01 = (value: number): number => {
   return Math.max(0, Math.min(1, value));
 };
+
+const DEFAULT_DUCK_FADE_MS = 300;
 
 const defaultSettings: AudioSettings = {
   channels: {
@@ -30,12 +39,25 @@ type LoopSlot = null | {
   url: string;
 };
 
+type DuckState = {
+  duckTo: number;
+  isDucked: boolean;
+};
+
 export class AudioEngine implements AudioController {
   private audioContext: AudioContext | null = null;
 
   private readonly buffers = new Map<string, AudioBuffer>();
 
+  private channelDuckGains: null | Record<AudioChannel, GainNode> = null;
+
   private channelGains: null | Record<AudioChannel, GainNode> = null;
+
+  private readonly duckState: Record<AudioChannel, DuckState> = {
+    ambience: { duckTo: 0, isDucked: false },
+    music: { duckTo: 0, isDucked: false },
+    sfx: { duckTo: 0, isDucked: false },
+  };
 
   private isUnlockAttempted = false;
 
@@ -57,6 +79,39 @@ export class AudioEngine implements AudioController {
   private settings: AudioSettings = defaultSettings;
 
   private readonly settingsListeners = new Set<(settings: AudioSettings) => void>();
+
+  public duckChannel(channel: AudioChannel, isDucked: boolean, options?: DuckChannelOptions): void {
+    const run = () => {
+      const ctx = this.ensureContext();
+      const duckGains = this.ensureChannelDuckGains();
+
+      const fadeMs = options?.fadeMs ?? DEFAULT_DUCK_FADE_MS;
+      const duckTo = clamp01(options?.duckTo ?? 0);
+      const nextMultiplier = isDucked ? duckTo : 1;
+
+      this.duckState[channel] = { duckTo, isDucked };
+
+      const gain = duckGains[channel].gain;
+
+      // WebAudio ramp (no RAF, no React loops)
+      const now = ctx.currentTime;
+      const durationS = Math.max(0, fadeMs) / 1000;
+
+      // Cancel any scheduled automation and ramp from the current value.
+      gain.cancelScheduledValues(now);
+      gain.setValueAtTime(gain.value, now);
+
+      if (durationS === 0) {
+        gain.setValueAtTime(nextMultiplier, now);
+        return;
+      }
+
+      // Smooth linear ramp; `setTargetAtTime` is also fine, linear is more deterministic for short fades.
+      gain.linearRampToValueAtTime(nextMultiplier, now + durationS);
+    };
+
+    this.runOrQueue(run);
+  }
 
   public getSettings(): AudioSettings {
     return this.settings;
@@ -144,7 +199,6 @@ export class AudioEngine implements AudioController {
   }
 
   public setMusic(idOrUrl: null | string, options?: LoopOptions): void {
-    console.info('[AudioEngine] setMusic called', idOrUrl, options);
     this.setLoop('music', idOrUrl, options);
   }
 
@@ -186,25 +240,47 @@ export class AudioEngine implements AudioController {
     });
   }
 
+  private ensureChannelDuckGains(): Record<AudioChannel, GainNode> {
+    // Created alongside channelGains, but keep this accessor for clarity.
+    this.ensureChannelGains();
+    if (!this.channelDuckGains) {
+      throw new Error('AudioEngine: channelDuckGains not initialized');
+    }
+    return this.channelDuckGains;
+  }
+
   private ensureChannelGains(): Record<AudioChannel, GainNode> {
     if (this.channelGains) return this.channelGains;
 
     const ctx = this.ensureContext();
     const master = this.ensureMasterGain();
 
+    // Settings gains
     const ambience = ctx.createGain();
     const music = ctx.createGain();
     const sfx = ctx.createGain();
 
-    ambience.connect(master);
-    music.connect(master);
-    sfx.connect(master);
+    // Duck gains
+    const ambienceDuck = ctx.createGain();
+    const musicDuck = ctx.createGain();
+    const sfxDuck = ctx.createGain();
 
-    this.channelGains = {
-      ambience,
-      music,
-      sfx,
-    };
+    // Default duck = 1 (no ducking)
+    ambienceDuck.gain.value = 1;
+    musicDuck.gain.value = 1;
+    sfxDuck.gain.value = 1;
+
+    // Connect: settingsGain -> duckGain -> master
+    ambience.connect(ambienceDuck);
+    music.connect(musicDuck);
+    sfx.connect(sfxDuck);
+
+    ambienceDuck.connect(master);
+    musicDuck.connect(master);
+    sfxDuck.connect(master);
+
+    this.channelGains = { ambience, music, sfx };
+    this.channelDuckGains = { ambience: ambienceDuck, music: musicDuck, sfx: sfxDuck };
 
     this.applyGains();
 

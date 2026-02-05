@@ -24,7 +24,14 @@ export interface PlaySfxOptions {
   readonly volume?: number; // 0..1 multiplier for this play
 }
 
+export interface DuckChannelOptions {
+  readonly duckTo?: number; // 0..1 multiplier applied to channel output while ducked (default: 0)
+  readonly fadeMs?: number; // default: 300
+}
+
 export interface AudioController {
+  duckChannel: (channel: AudioChannel, isDucked: boolean, options?: DuckChannelOptions) => void;
+
   getSettings: () => AudioSettings;
 
   isUnlocked: () => boolean;

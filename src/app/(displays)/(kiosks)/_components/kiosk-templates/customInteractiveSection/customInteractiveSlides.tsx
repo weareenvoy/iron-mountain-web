@@ -20,6 +20,7 @@ export type CustomInteractiveScreens = {
   readonly firstScreen?: CustomInteractiveKiosk1FirstScreenTemplateProps;
   readonly kiosk3OverlayConfig?: CustomInteractiveDemoScreenTemplateProps;
   readonly kiosk3SecondScreen?: Kiosk3SecondScreenProps;
+  readonly number?: 1 | 2 | 3;
   readonly secondScreen?: CustomInteractiveKiosk1SecondScreenTemplateProps;
   readonly thirdScreen?: CustomInteractiveDemoScreenTemplateProps;
 };
@@ -27,8 +28,17 @@ export type CustomInteractiveScreens = {
 export const buildCustomInteractiveSlides = (
   customInteractive: CustomInteractiveScreens,
   kioskId: KioskId,
-  scrollToSection?: (sectionId: string) => void
+  scrollToSection?: (sectionId: string) => void,
+  index?: number,
+  customInteractiveNumber?: 1 | 2 | 3,
+  globalHandlers?: { onNavigateDown: () => void; onNavigateUp: () => void }
 ): Slide[] => {
+  // Create unique ID prefix for this custom interactive instance
+  // Include the custom interactive number for gradient height calculations
+  const idPrefix = index !== undefined ? `customInteractive-${index}` : 'customInteractive';
+  // Use passed number or fall back to number from customInteractive object, default to 1
+  const ciNumber = customInteractiveNumber ?? customInteractive.number ?? 1;
+  const idSuffix = `-ci${ciNumber}`;
   // Handler for closing demo - refreshes page and skips idle video
   const handleEndTour = () => {
     if (typeof window !== 'undefined') {
@@ -39,19 +49,23 @@ export const buildCustomInteractiveSlides = (
   const slides: Slide[] = [];
 
   if (customInteractive.firstScreen) {
-    // Extract overlay configuration based on kiosk variant
+    // Extract overlay configuration based on custom interactive structure
+    // Check for data presence rather than kiosk ID to support centralized custom interactives
     let overlayCardLabel: string | undefined;
     let overlayHeadline: string | undefined;
 
-    if (kioskId === 'kiosk-1' && customInteractive.thirdScreen) {
+    if (customInteractive.thirdScreen) {
+      // Custom Interactive 1 style (has thirdScreen with demo overlay)
       overlayCardLabel = customInteractive.thirdScreen.cardLabel;
       overlayHeadline = customInteractive.thirdScreen.headline;
-    } else if (kioskId === 'kiosk-2') {
-      overlayCardLabel = customInteractive.firstScreen.overlayCardLabel;
-      overlayHeadline = customInteractive.firstScreen.overlayHeadline;
-    } else if (kioskId === 'kiosk-3' && customInteractive.kiosk3OverlayConfig) {
+    } else if (customInteractive.kiosk3OverlayConfig) {
+      // Custom Interactive 3 style (has kiosk3OverlayConfig)
       overlayCardLabel = customInteractive.kiosk3OverlayConfig.cardLabel;
       overlayHeadline = customInteractive.kiosk3OverlayConfig.headline;
+    } else {
+      // Custom Interactive 2 style (overlay config in firstScreen)
+      overlayCardLabel = customInteractive.firstScreen.overlayCardLabel;
+      overlayHeadline = customInteractive.firstScreen.overlayHeadline;
     }
 
     // Determine navigation target based on kiosk
@@ -65,51 +79,64 @@ export const buildCustomInteractiveSlides = (
     };
 
     slides.push({
-      id: 'customInteractive-first',
+      id: `${idPrefix}-first${idSuffix}`,
       render: () => (
         <SectionSlide>
           <CustomInteractiveFirstScreenTemplate
+            customInteractiveIndex={index ?? 0}
+            customInteractiveNumber={ciNumber}
             kioskId={kioskId}
             {...customInteractive.firstScreen}
             onEndTour={handleEndTour}
+            onNavigateDown={globalHandlers?.onNavigateDown}
+            onNavigateUp={globalHandlers?.onNavigateUp}
             onPrimaryCta={handlePrimaryCta}
             overlayCardLabel={overlayCardLabel}
             overlayHeadline={overlayHeadline}
           />
         </SectionSlide>
       ),
-      title: 'CustomInteractive First',
+      title: `CustomInteractive ${index !== undefined ? index + 1 : ''} First`,
     });
   }
 
-  // Second screen: kiosk-3 has its own, kiosk-1 has its own
-  if (kioskId === 'kiosk-3' && customInteractive.kiosk3SecondScreen) {
+  // Second screen: Check for data structure rather than kiosk ID
+  // This allows custom interactives to be shared across kiosks
+  if (customInteractive.kiosk3SecondScreen) {
+    // Kiosk 3 style second screen (tap carousel)
     slides.push({
-      id: 'customInteractive-second',
+      id: `${idPrefix}-second`,
       render: () => (
         <SectionSlide>
           <CustomInteractiveKiosk3SecondScreenTemplate
             {...customInteractive.kiosk3SecondScreen}
+            customInteractiveNumber={ciNumber}
             onBack={() => scrollToSection?.(SECTION_IDS.FIRST_SCREEN)}
             onEndTour={handleEndTour}
+            onNavigateDown={globalHandlers?.onNavigateDown}
+            onNavigateUp={globalHandlers?.onNavigateUp}
           />
         </SectionSlide>
       ),
-      title: 'CustomInteractive Second',
+      title: `CustomInteractive ${index !== undefined ? index + 1 : ''} Second`,
     });
-  } else if (customInteractive.secondScreen && kioskId === 'kiosk-1') {
+  } else if (customInteractive.secondScreen) {
+    // Kiosk 1 style second screen (diamond carousel with modals)
     slides.push({
-      id: 'customInteractive-second',
+      id: `${idPrefix}-second${idSuffix}`,
       render: () => (
         <SectionSlide>
           <CustomInteractiveKiosk1SecondScreenTemplate
             {...customInteractive.secondScreen}
+            customInteractiveNumber={ciNumber}
             onBack={() => scrollToSection?.(SECTION_IDS.FIRST_SCREEN)}
             onEndTour={handleEndTour}
+            onNavigateDown={globalHandlers?.onNavigateDown}
+            onNavigateUp={globalHandlers?.onNavigateUp}
           />
         </SectionSlide>
       ),
-      title: 'CustomInteractive Second',
+      title: `CustomInteractive ${index !== undefined ? index + 1 : ''} Second`,
     });
   }
 
