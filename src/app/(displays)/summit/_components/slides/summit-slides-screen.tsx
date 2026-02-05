@@ -187,12 +187,12 @@ const useSlideRegistry = () => {
     if (!data) return [];
 
     const basecamp = data.basecamp;
-    const kiosk1 = data.kiosk1;
-    const kiosk2 = data.kiosk2;
-    const kiosk3 = data.kiosk3;
+    const kiosk_1 = data.kiosk_1;
+    const kiosk_2 = data.kiosk_2;
+    const kiosk_3 = data.kiosk_3;
     const meta = data.meta;
     const overlook = data.overlook;
-    const summitSlides = data.summitSlides;
+    const summitSlides = data.summit_slides;
 
     const requiredMeta = (label: string) => {
       const match = meta.find(item => item.label.toLowerCase() === label.toLowerCase());
@@ -203,7 +203,7 @@ const useSlideRegistry = () => {
     };
 
     const companyMeta = requiredMeta('company');
-    const dateMeta = requiredMeta('date of engagement');
+    const dateMeta = requiredMeta('start date');
     const locationMeta = requiredMeta('location');
 
     const company = companyMeta.value;
@@ -230,28 +230,28 @@ const useSlideRegistry = () => {
     const journey5Title = getSlideTitle('journey-5');
     const journey6Title = getSlideTitle('journey-6');
 
-    const challenges = basecamp.problem3;
+    const challenges = basecamp.problem_3;
     const possibilitiesItems: readonly SummitPossibility[] = [
-      basecamp.possibilitiesA,
-      basecamp.possibilitiesB,
-      basecamp.possibilitiesC,
+      basecamp.possibilities_a,
+      basecamp.possibilities_b,
+      basecamp.possibilities_c,
     ];
 
-    const stats = basecamp.problem2;
+    const stats = basecamp.problem_2;
 
     const solutionItems: readonly SolutionItem[] = [
-      { locations: overlook.protect, title: data.protectTitle },
-      { locations: overlook.connect, title: data.connectTitle },
-      { locations: overlook.activate, title: data.activateTitle },
+      { locations: overlook.protect, title: data.protect_title },
+      { locations: overlook.connect, title: data.connect_title },
+      { locations: overlook.activate, title: data.activate_title },
     ];
 
     const futurescapingItems: readonly SummitFuturescaping[] = [
-      overlook.futurescaping1,
-      overlook.futurescaping2,
-      overlook.futurescaping3,
+      overlook.futurescaping_1,
+      overlook.futurescaping_2,
+      overlook.futurescaping_3,
     ];
 
-    const storyItems: readonly SummitKioskAmbient[] = [kiosk1.ambient, kiosk2.ambient, kiosk3.ambient];
+    const storyItems: readonly SummitKioskAmbient[] = [kiosk_1.ambient, kiosk_2.ambient, kiosk_3.ambient];
 
     const registry: SlideDefinition[] = [
       {
@@ -271,10 +271,10 @@ const useSlideRegistry = () => {
         id: 'metrics',
         render: () => (
           <SlideFrame showDiamonds>
-            <MetricsSection challenges={challenges} stats={stats} title={basecamp.problem1.title} variant="slide" />
+            <MetricsSection challenges={challenges} stats={stats} title={basecamp.problem_1.title} variant="slide" />
           </SlideFrame>
         ),
-        title: basecamp.problem1.title,
+        title: basecamp.problem_1.title,
       },
       {
         id: 'possibilities',
@@ -449,29 +449,21 @@ const SummitSlidesScreen = ({
     return <PlaceholderSlide description="" heading={heading} />;
   }
 
-  const requiredMeta = (label: string) => {
-    const match = data.meta.find(item => item.label.toLowerCase() === label.toLowerCase());
-    if (!match) {
-      throw new Error(`Missing meta label: ${label}`);
-    }
-    return match;
-  };
-
-  const summitSlides = data.summitSlides;
+  const summitSlides = data.summit_slides;
 
   if (screen === 'primary') {
     const journeyIntroSlide = summitSlides.find(slide => slide.handle === 'journey-intro');
-    if (!journeyIntroSlide || !journeyIntroSlide.backgroundVideoUrl) {
+    if (!journeyIntroSlide || !journeyIntroSlide.background_video_url) {
       throw new Error('Missing journey-intro slide video');
     }
 
     return (
       <StaticWelcomeSlide
-        elevation={requiredMeta('elevation').value}
-        location={requiredMeta('location').value}
-        site={requiredMeta('site').value}
+        elevation={data.location_details.elevation}
+        location={data.location_details.name}
+        site={data.location_details.exhibit}
         title={journeyIntroSlide.title}
-        videoUrl={journeyIntroSlide.backgroundVideoUrl}
+        videoUrl={journeyIntroSlide.background_video_url}
       />
     );
   }

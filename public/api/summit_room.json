@@ -1,0 +1,166 @@
+{
+  "locale": "en",
+  "data": {
+    "meta": [
+      { "label": "Company", "value": "Boyer-Boyer" },
+      { "label": "Start Date", "value": "24/12/2025" },
+      { "label": "Location", "value": "São Paulo, Brazil" }
+    ],
+    "basecamp": {
+      "possibilities": { "title": "Discover new possibilities" },
+      "possibilities_a": {
+        "body_1": "Inventory and prioritize high-value content collections.",
+        "body_2": "Retire redundant repositories to reduce cost and risk.",
+        "body_3": "Establish metadata guardrails for AI readiness.",
+        "title": "Making data accessible"
+      },
+      "possibilities_b": {
+        "body_1": "Pair digitization with workflow automation pilots.",
+        "body_2": "Co-develop business cases tied to KPIs.",
+        "body_3": "Stage data for analytics and AI services.",
+        "title": "Unlocking new value streams"
+      },
+      "possibilities_c": {
+        "body_1": "Modernize storage tiers for performance and compliance.",
+        "body_2": "Automate retention and defensible disposition.",
+        "body_3": "Extend zero-trust controls across hybrid estates.",
+        "title": "Optimizing your assets"
+      },
+      "problem_1": { "title": "What's standing in your way?" },
+      "problem_2": [
+        { "subtitle": "of data remains dark", "title": "80%" },
+        { "subtitle": "of new data is unstructured", "title": "80-90%" },
+        { "subtitle": "of enterprise data is leveraged for AI", "title": "< 1%" }
+      ],
+      "problem_3": {
+        "challenge_1": {
+          "body": "1,300 exabytes of enterprise data created daily—scattered across systems and formats",
+          "icon": "/images/summit/icons/icon-complexity.svg",
+          "title": "Too much complexity"
+        },
+        "challenge_2": {
+          "body": "Modernization business cases stall because value capture is unclear or far from execution.",
+          "icon": "/images/summit/icons/icon-roi.svg",
+          "title": "Cost, Uncertain ROI"
+        },
+        "challenge_3": {
+          "body": "AI and regulatory pressure raise the stakes for every decision, slowing innovation cycles.",
+          "icon": "/images/summit/icons/icon-risk.svg",
+          "title": "Too many risks"
+        },
+        "challenge_4": {
+          "body": "Teams juggle day jobs with transformation initiatives and rely on a small bench of specialists.",
+          "icon": "/images/summit/icons/icon-talent.svg",
+          "title": "Too few skills"
+        },
+        "title": "What's holding you back?"
+      }
+    },
+    "kiosk_1": {
+      "ambient": {
+        "attribution": "- Michael Rohrabacher, Technical Director at the GRAMMY Museum",
+        "body": "\"It's been a pleasure working with Iron Mountain. We feel very confident that the GRAMMY Museum's physical artifacts and digital content are safely protected. Iron Mountain's digital preservation platform also provides significant reassurance that our iconic artist performances and interviews will remain preserved and accessible, which is a huge benefit to the GRAMMY Museum.\"",
+        "headline": "The GRAMMY Museum® preserves the soundtrack of history.",
+        "solution_title": "Large Global Bank",
+        "subheader": ""
+      }
+    },
+    "kiosk_2": {
+      "ambient": {
+        "attribution": "",
+        "body": "Our digital solutions centralized this healthcare organization's unstructured \"dark data.\" This enterprise-wide visibility prevented erroneous pension payments, elevated records management, and created a searchable, compliant digital core for ongoing operational improvement.",
+        "headline": "A global healthcare company mitigates risk and saves millions by finding certainty and clarity in its pension administration.",
+        "solution_title": "Information & data lifecycle",
+        "subheader": ""
+      }
+    },
+    "kiosk_3": {
+      "ambient": {
+        "attribution": "",
+        "body": "",
+        "headline": "A global healthcare company optimizes IT asset management, improves transparency, and boosts remarketing returns by partnering with Iron Mountain Asset Lifecycle Management.",
+        "solution_title": "Rich media & cultural heritage",
+        "subheader": ""
+      }
+    },
+    "overlook": {
+      "activate": {
+        "mapLocation_1": {
+          "body": "Find new ways forward in document driven processes.",
+          "title": "Discover new efficiencies through Intelligent Business Process Management (iBPM)"
+        },
+        "mapLocation_2": {
+          "body": "Innovative tokenization and blockchain technology to authenticate and verify access rights, while being able to monetize more content.",
+          "title": "Generate new revenue streams with Asset Monetization Platform (AMP)"
+        },
+        "mapLocation_3": {
+          "body": "Uses primary and secondary resale paths for retired IT assets.",
+          "title": "Maximize value recovery and lower TCO"
+        }
+      },
+      "connect": {
+        "mapLocation_1": {
+          "body": "Intelligent document processing has 97% accuracy.",
+          "title": "AI-powered document processing"
+        },
+        "mapLocation_2": {
+          "body": "Incorporates asset receiving, tagging, tracking, and storage.",
+          "title": "Deploy IT assets at any moment"
+        },
+        "mapLocation_3": {
+          "body": "Archival-quality imaging, digitization, and restoration transform media and connect with audiences of all types.",
+          "title": "Digitize, organize, and access assets"
+        }
+      },
+      "futurescaping_1": {
+        "body": "How can you safeguard your most critical assets against emerging threats?",
+        "image": "/images/summit/futurescaping/protect.jpg",
+        "title": "Protect"
+      },
+      "futurescaping_2": {
+        "body": "How can you prepare your data infrastructure to unlock new possibilities?",
+        "image": "/images/summit/futurescaping/connect.jpg",
+        "title": "Connect"
+      },
+      "futurescaping_3": {
+        "body": "What if every archived asset could generate new value for your organization?",
+        "image": "/images/summit/futurescaping/activate.jpg",
+        "title": "Activate"
+      },
+      "protect": {
+        "mapLocation_1": {
+          "body": "Enhanced with certifications, including GDPR, SOC 2 Type II, ISO, HIPAA, and FedRamp.",
+          "title": "Secure chain of custody"
+        },
+        "mapLocation_2": {
+          "body": "Ensures your data is protected, along with onsite and offsite destruction for all media types.",
+          "title": "World-class data sanitization"
+        },
+        "mapLocation_3": {
+          "body": "Secure content with a digital preservation platform purpose-built for rich media workflows.",
+          "title": "Museum-grade security"
+        }
+      }
+    },
+    "summit_slides": [
+      {
+        "background_video_url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/summit/IRM_Summit_MountainLoop_V1.webm",
+        "handle": "journey-intro",
+        "title": "Launch your journey"
+      },
+      { "handle": "journey-1", "title": "Your personalized journey map" },
+      { "handle": "journey-3", "title": "Considering possibilities" },
+      { "handle": "journey-4", "title": "Relevant solutions" },
+      { "handle": "journey-5", "title": "Unlock your future" },
+      { "handle": "journey-6", "title": "Stories of impact" }
+    ],
+    "location_details": {
+      "elevation": "Elevation 760 m (2,493.4 ft)",
+      "exhibit": "Executive Briefing Center",
+      "name": "São Paulo, Brazil"
+    },
+    "protect_title": "Protect",
+    "connect_title": "Connect",
+    "activate_title": "Activate"
+  }
+}

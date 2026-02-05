@@ -162,16 +162,24 @@ export interface Moment {
   readonly title: string; // e.g., "Ambient", "Welcome"
 }
 
-// Mock data structure.
-export interface Tour {
-  // date and startTime are 1 field or 2 fields?
-  readonly date: string;
-  readonly endTime: string; // We might not have endTime.
-  readonly guestLogo: null | string;
-  readonly guestName: string;
-  readonly id: string;
-  readonly startTime: string;
-  readonly title: string; // Is this needed?
+// New API tour structure
+export interface ApiTour {
+  readonly date: string; // ISO datetime e.g., "2026-01-15T00:00:00+00:00"
+  readonly day_formatted_EN: string; // e.g., "1-15-2026"
+  readonly day_formatted_plain_language_EN: string; // e.g., "January 15, 2026"
+  readonly day_formatted_plain_language_PT: string; // e.g., "15 de Janeiro de 2026"
+  readonly day_formatted_PT: string; // e.g., "15-1-2026"
+  readonly id: number;
+  readonly name: string;
+  readonly time: string; // e.g., "22:32:17.37318"
+}
+
+// Tours API response structure (from /api/docent/tours endpoint)
+export interface ToursApiResponse {
+  readonly _meta: {
+    readonly total: number;
+  };
+  readonly tours: readonly ApiTour[];
 }
 
 export interface BasecampData {
@@ -180,7 +188,7 @@ export interface BasecampData {
       readonly url: string;
     };
   };
-  readonly locationDetails: {
+  readonly location_details: {
     readonly elevation: string;
     readonly exhibit: string;
     readonly name: string;
@@ -192,48 +200,48 @@ export interface BasecampData {
   readonly possibilities: {
     readonly title: string;
   };
-  readonly possibilitiesA: {
-    readonly body1: string;
-    readonly body2: string;
-    readonly body3: string;
+  readonly possibilities_a: {
+    readonly body_1: string;
+    readonly body_2: string;
+    readonly body_3: string;
     readonly title: string;
   };
-  readonly possibilitiesB: {
-    readonly body1: string;
-    readonly body2: string;
-    readonly body3: string;
+  readonly possibilities_b: {
+    readonly body_1: string;
+    readonly body_2: string;
+    readonly body_3: string;
     readonly title: string;
   };
-  readonly possibilitiesC: {
-    readonly body1: string;
-    readonly body2: string;
-    readonly body3: string;
+  readonly possibilities_c: {
+    readonly body_1: string;
+    readonly body_2: string;
+    readonly body_3: string;
     readonly title: string;
   };
-  readonly problem1: {
-    readonly text: string;
+  readonly problem_1: {
+    readonly title: string;
   };
-  readonly problem2: {
-    readonly percent: string;
-    readonly percentSubtitle: string;
+  readonly problem_2: {
+    readonly subtitle: string;
+    readonly title: string;
   }[];
-  readonly problem3: {
-    readonly challenge1: {
+  readonly problem_3: {
+    readonly challenge_1: {
       readonly body: string;
       readonly icon: string;
       readonly title: string;
     };
-    readonly challenge2: {
+    readonly challenge_2: {
       readonly body: string;
       readonly icon: string;
       readonly title: string;
     };
-    readonly challenge3: {
+    readonly challenge_3: {
       readonly body: string;
       readonly icon: string;
       readonly title: string;
     };
-    readonly challenge4: {
+    readonly challenge_4: {
       readonly body: string;
       readonly icon: string;
       readonly title: string;
@@ -246,7 +254,7 @@ export interface BasecampData {
     readonly text: string;
   };
   readonly welcome: {
-    readonly text: string;
+    readonly title: string;
   };
 }
 
@@ -359,7 +367,7 @@ export interface DocentData {
     };
   };
   readonly summitSlides: readonly SummitSlide[];
-  readonly tours: readonly Tour[];
+  // tours are now fetched from separate /api/tours endpoint - see ApiTour and ToursApiResponse
   readonly ui: {
     readonly display: string;
     readonly off: string;
@@ -393,7 +401,7 @@ export interface KioskAudio {
 export type KioskData = Record<string, unknown>;
 
 /**
- * ISO 8601 date string (YYYY-MM-DD)
+ * ISO 8601 datetime string (e.g., "2026-01-15T00:00:00+00:00")
  */
 export interface SummitTourSummary {
   readonly date: string;
@@ -434,14 +442,28 @@ export interface ApiResponseItem<T> {
 export type ApiResponse<T> = readonly ApiResponseItem<T>[];
 
 // Specific API response types
-export type BasecampApiResponse = ApiResponse<BasecampData>;
-export type DocentApiResponse = ApiResponse<DocentData>;
-export type SummitApiResponse = ApiResponse<SummitData>;
+// BasecampApiResponse is a single locale response (not an array)
+// Format: { locale: "en", data: {...} }
+export interface BasecampApiResponse {
+  readonly data: BasecampData;
+  readonly locale: Locale;
+}
+// DocentInitialApiResponse is the data-wrapped locale response from /api/docent_initial
+// Format: { data: [{ locale: "en", data: {...} }, { locale: "pt", data: {...} }] }
+export interface DocentInitialApiResponse {
+  readonly data: ApiResponse<DocentData>;
+}
+// SummitApiResponse is a single locale response
+// Format: { locale: "en", data: {...} }
+export interface SummitApiResponse {
+  readonly data: SummitData;
+  readonly locale: Locale;
+}
 export type WelcomeWallApiResponse = ApiResponse<WelcomeWallData>;
 export type KioskApiResponse = ApiResponse<KioskData>;
 
 // Function return types (transformed from API responses)
-export interface DocentDataResponse {
+export interface DocentInitialDataResponse {
   readonly data: {
     readonly en: DocentData;
     readonly pt: DocentData;

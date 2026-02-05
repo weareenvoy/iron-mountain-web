@@ -5,7 +5,7 @@ import { useAnimationStartSfx } from '@/app/(displays)/basecamp/_hooks/use-anima
 import type { BasecampData } from '@/lib/internal/types';
 
 type Props = {
-  readonly data: BasecampData['problem2'];
+  readonly data: BasecampData['problem_2'];
 };
 
 // Animation timing constants (single source of truth for CSS)
@@ -30,7 +30,7 @@ const Problem3 = ({ data }: Props) => {
         return (
           <div
             className="flex flex-1 flex-col items-center justify-center font-geometria text-white"
-            key={`${item.percent}-${item.percentSubtitle}`}
+            key={`${item.title}-${item.subtitle}`}
           >
             {/* Add margin-left to last div to match design */}
             <div
@@ -43,11 +43,11 @@ const Problem3 = ({ data }: Props) => {
                 data-sfx="appear"
                 style={{ animationDelay: `${baseDelay}ms` }}
               >
-                {item.percent}
+                {item.title}
               </div>
               {/* Subtitle: word by word with small jump */}
               <div className="min-h-22 w-80 text-center font-interstate text-[33px] leading-[1.3] tracking-[-1.6px]">
-                {item.percentSubtitle.split(' ').map((word, i, arr) => (
+                {item.subtitle.split(' ').map((word, i, arr) => (
                   <span
                     className="animate-char-in inline-block"
                     key={i}
