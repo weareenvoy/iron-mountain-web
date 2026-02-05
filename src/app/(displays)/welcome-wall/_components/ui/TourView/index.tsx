@@ -28,7 +28,9 @@ const TourView = () => {
   useEffect(() => {
     if (!data || !backgroundVideoRef.current) return;
 
-    const bgVideoUrl = dataRef.current?.videos['tourLoop'].url;
+    const hasClientLogo = Boolean(dataRef.current?.clientTourLogo.url);
+    const videoKey = hasClientLogo ? 'tourLoop' : 'tourLoopNoLogo';
+    const bgVideoUrl = dataRef.current?.videos[videoKey].url;
 
     if (!bgVideoUrl) return;
 
@@ -46,7 +48,7 @@ const TourView = () => {
 
   if (!data) return null;
 
-  const clientTourLogoUrl = data.clientTourLogo.url;
+  const clientTourLogoUrl = data.clientTourLogo.url ?? undefined;
 
   const handleTimeUpdate = (video: HTMLVideoElement) => {
     const shouldShowLogo = video.currentTime >= SHOW_LOGO_AT_SECONDS && video.currentTime <= HIDE_LOGO_AT_SECONDS;
@@ -67,14 +69,17 @@ const TourView = () => {
         ref={backgroundVideoRef}
       />
 
-      <Image
-        alt="Client logo"
-        className="absolute top-1/2 left-1/2 z-10 h-auto w-[28%] -translate-y-1/2"
-        height={50}
-        src={clientTourLogoUrl}
-        style={{ opacity: showLogo, transition: `opacity ${LOGO_FADE_DURATION_MS}ms ease` }}
-        width={50}
-      />
+      {/* It is possible to create a tour without setting a client logo so only render image if data returns a url */}
+      {clientTourLogoUrl ? (
+        <Image
+          alt="Client logo"
+          className="absolute top-1/2 left-1/2 z-10 h-auto w-[28%] -translate-y-1/2"
+          height={50}
+          src={clientTourLogoUrl}
+          style={{ opacity: showLogo, transition: `opacity ${LOGO_FADE_DURATION_MS}ms ease` }}
+          width={50}
+        />
+      ) : null}
 
       <div
         className="absolute inset-0 z-20 flex flex-col justify-between"

@@ -6,17 +6,32 @@
         "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/welcome-wall/MclarenLogo.png"
       },
       "videos": {
-        "ambientLoop":  { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/welcome-wall/Main_EntryWay_Ambient_1.webm" },
-        "tourLoop":  { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/welcome-wall/IRM_Entryway_Loop_Blank.webm" }
+        "ambientLoop": {
+          "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/welcome-wall/Main_EntryWay_Ambient_1.webm"
+        },
+        "tourLoop": {
+          "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/welcome-wall/IRM_Entryway_Loop_Blank.webm"
+        },
+        "tourLoopNoLogo": {
+          "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/welcome-wall/IRM_Entryway_Loop_NoLogo.webm"
+        }
       },
       "welcome": {
         "title": "Welcome to the Iron Mountain Executive Briefing Center"
       },
       "location_details": {
-        "name": "Sao, Paulo Brazil",
+        "name": "Sao Paulo, Brazil",
         "exhibit": "Executive Briefing Center",
         "elevation": "Elevation 760 m (2,493.4 ft)"
       }
+    },
+    "_meta": {
+      "eventId": 2,
+      "sceneId": 28,
+      "processedCtrlFields": 2,
+      "simpleCmsVideosFound": 2,
+      "locationDetailsFound": true,
+      "missingFields": []
     }
   }
 ]

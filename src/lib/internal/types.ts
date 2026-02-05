@@ -403,7 +403,7 @@ export interface SummitTourSummary {
 
 export interface WelcomeWallData {
   readonly clientTourLogo: {
-    readonly url: string;
+    readonly url: null | string;
   };
   readonly location_details: {
     readonly elevation: string;
@@ -415,6 +415,9 @@ export interface WelcomeWallData {
       readonly url: string;
     };
     readonly tourLoop: {
+      readonly url: string;
+    };
+    readonly tourLoopNoLogo: {
       readonly url: string;
     };
   };
