@@ -76,7 +76,12 @@ const SolutionFirstScreenTemplate = ({
         className="bg-gradient-kiosk-solution absolute top-0 left-0 z-[1] w-full rounded-[100px]"
         style={{
           height: gradientHeight > 0 ? `${gradientHeight}px` : undefined,
-          transform: kioskId === 'kiosk_2' ? 'translateY(1110px)' : kioskId === 'kiosk_3' ? 'translateY(1060px)' : 'translateY(1058px)',
+          transform:
+            kioskId === 'kiosk_2'
+              ? 'translateY(1110px)'
+              : kioskId === 'kiosk_3'
+                ? 'translateY(1060px)'
+                : 'translateY(1058px)',
         }} // Inline due to dynamic calculation
       />
 
@@ -143,7 +148,12 @@ const SolutionFirstScreenTemplate = ({
       <div
         className="absolute top-0 left-[120px] z-[1] flex w-auto max-w-[1271px] flex-col gap-[80px] text-white group-data-[kiosk=kiosk\_2]/kiosk:left-[120px] group-data-[kiosk=kiosk\_3]/kiosk:left-[120px]"
         style={{
-          transform: kioskId === 'kiosk_2' ? 'translateY(1300px)' : kioskId === 'kiosk_3' ? 'translateY(1260px)' : 'translateY(1270px)',
+          transform:
+            kioskId === 'kiosk_2'
+              ? 'translateY(1300px)'
+              : kioskId === 'kiosk_3'
+                ? 'translateY(1260px)'
+                : 'translateY(1270px)',
         }}
       >
         <p className="w-[900px] text-[100px] leading-[1.3] font-normal tracking-[-5px]">

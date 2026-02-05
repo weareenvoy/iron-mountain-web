@@ -172,12 +172,12 @@ const FirstScreenTemplate = memo(
             'bg-gradient-sticky-challenge pointer-events-none fixed bottom-0 left-0 z-[100] h-[1369px] w-full transition-opacity duration-300 motion-reduce:transition-none',
             showBottomGradient ? 'opacity-100' : 'opacity-0'
           )}
-          style={{
-            transform: bottomGradientPosition ? 'rotate(180deg) translateY(-900px)' : 'rotate(180deg)',
-          }}
           data-challenge-sticky-footer
           data-visible={showBottomGradient}
           ref={bottomGradientRef}
+          style={{
+            transform: bottomGradientPosition ? 'rotate(180deg) translateY(-900px)' : 'rotate(180deg)',
+          }}
         />
 
         {/* Problem Description Section */}
