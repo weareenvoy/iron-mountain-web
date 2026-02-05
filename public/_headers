@@ -6,5 +6,5 @@
 
 /sw.js
   Cache-Control: no-cache, no-store, must-revalidate
-  Content-Security-Policy: default-src 'self'; script-src 'self'; connect-src 'self' https://ground-ctrl-api-ironmountain.envoyctrl.com
+  Content-Security-Policy: default-src 'self'; script-src 'self'; connect-src 'self' https://ground-ctrl-api-ironmountain.envoyctrl.com wss://*.cloud.shiftr.io
   Content-Type: application/javascript; charset=utf-8
