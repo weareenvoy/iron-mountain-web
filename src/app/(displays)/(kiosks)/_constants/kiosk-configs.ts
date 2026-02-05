@@ -22,7 +22,7 @@ export const KIOSK_1_CONFIG: KioskConfig = {
     topLeft: undefined,
     topRight: 1,
   },
-  kioskId: 'kiosk-1',
+  kioskId: 'kiosk_1',
 };
 
 /**
@@ -44,7 +44,7 @@ export const KIOSK_2_CONFIG: KioskConfig = {
     topLeft: 1,
     topRight: 2,
   },
-  kioskId: 'kiosk-2',
+  kioskId: 'kiosk_2',
 };
 
 /**
@@ -66,5 +66,5 @@ export const KIOSK_3_CONFIG: KioskConfig = {
     topLeft: 1,
     topRight: 2,
   },
-  kioskId: 'kiosk-3',
+  kioskId: 'kiosk_3',
 };

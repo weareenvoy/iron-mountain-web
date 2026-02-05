@@ -7,7 +7,7 @@ const Kiosk3Layout = ({ children }: LayoutProps<'/kiosk-3'>) => {
   return (
     <MqttProvider topic="kiosk-03">
       <AudioProvider appId="kiosk-03">
-        <KioskProvider kioskId="kiosk-3">
+        <KioskProvider kioskId="kiosk_3">
           <KioskOverlayProvider>{children}</KioskOverlayProvider>
         </KioskProvider>
       </AudioProvider>

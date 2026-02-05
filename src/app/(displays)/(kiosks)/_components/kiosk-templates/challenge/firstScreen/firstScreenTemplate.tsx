@@ -63,7 +63,7 @@ const FirstScreenTemplate = memo(
           className="bg-gradient-challenge-section pointer-events-none absolute left-0 z-[1] w-full rounded-[100px]"
           style={{
             height: gradientHeight > 0 ? `${gradientHeight}px` : undefined,
-            top: kioskId === 'kiosk-2' ? '1240px' : '1290px',
+            top: kioskId === 'kiosk_2' ? '1240px' : '1290px',
           }}
         />
 

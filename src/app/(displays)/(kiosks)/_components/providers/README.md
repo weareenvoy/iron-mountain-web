@@ -27,7 +27,7 @@ View Component (renders slides + publishes state)
 
 ## Features
 
-- **Data fetching**: Loads kiosk JSON data from `/api/<kioskId>.json` (ex: `/api/kiosk-2.json`) with online API
+- **Data fetching**: Loads kiosk JSON data from `/api/<kioskId>.json` (ex: `/api/kiosk_2.json`) with online API
   fallback.
 - **Resilience**: Times out quickly and falls back to static JSON if the API is unavailable/offline.
 - **MQTT Integration**: Connects to MQTT broker for state persistence and availability tracking.
@@ -46,7 +46,7 @@ import { MqttProvider } from '@/components/providers/mqtt-provider';
 const Kiosk3Layout = ({ children }: LayoutProps) => {
   return (
     <MqttProvider topic="kiosk-03">
-      <KioskProvider kioskId="kiosk-3">{children}</KioskProvider>
+      <KioskProvider kioskId="kiosk_3">{children}</KioskProvider>
     </MqttProvider>
   );
 };

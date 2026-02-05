@@ -43,7 +43,7 @@ const SolutionThirdScreenTemplate = ({
   topLeftLabel,
   topRightLabel,
 }: SolutionThirdScreenTemplateProps) => {
-  const isKiosk1 = kioskId === 'kiosk-1';
+  const isKiosk1 = kioskId === 'kiosk_1';
   const accentDiamondImageSrc = isKiosk1 ? undefined : accentDiamondSrc;
 
   type TextDiamondConfig = {

@@ -60,12 +60,12 @@ export const CHALLENGE_HEIGHTS: Record<
     thirdScreen: number;
   }
 > = {
-  'kiosk-1': CHALLENGE_HEIGHTS_COMMON,
-  'kiosk-2': {
+  kiosk_1: CHALLENGE_HEIGHTS_COMMON,
+  kiosk_2: {
     ...CHALLENGE_HEIGHTS_COMMON,
     thirdScreen: 4830, // Override: Kiosk 2 has slightly taller third screen
   },
-  'kiosk-3': CHALLENGE_HEIGHTS_COMMON,
+  kiosk_3: CHALLENGE_HEIGHTS_COMMON,
 };
 
 /**
@@ -93,17 +93,17 @@ export const SOLUTION_HEIGHTS: Record<
     thirdScreen: number;
   }
 > = {
-  'kiosk-1': {
+  kiosk_1: {
     ...SOLUTION_HEIGHTS_COMMON,
     fourthScreen: 5215, // Override: Kiosk 1 has slightly taller accordion
     thirdScreen: 6695, // Override: Kiosk 1 has taller grid
   },
-  'kiosk-2': {
+  kiosk_2: {
     ...SOLUTION_HEIGHTS_COMMON,
     secondScreen: 5080, // Override: Kiosk 2 secondScreen when accordion/grid not present
     thirdScreen: 6645, // Override: Kiosk 2 has shorter grid
   },
-  'kiosk-3': {
+  kiosk_3: {
     ...SOLUTION_HEIGHTS_COMMON,
     // NOTE: thirdScreen value is also used for fourthScreen (accordion) height when grid is not present
     // This is determined by the calculation logic in calculateSolutionGradientHeight
@@ -162,9 +162,9 @@ export const VALUE_HEIGHTS: Record<
     staticCarouselHeight: number;
   }
 > = {
-  'kiosk-1': VALUE_HEIGHTS_COMMON,
-  'kiosk-2': VALUE_HEIGHTS_COMMON,
-  'kiosk-3': VALUE_HEIGHTS_COMMON,
+  kiosk_1: VALUE_HEIGHTS_COMMON,
+  kiosk_2: VALUE_HEIGHTS_COMMON,
+  kiosk_3: VALUE_HEIGHTS_COMMON,
 };
 
 /**
@@ -173,24 +173,24 @@ export const VALUE_HEIGHTS: Record<
  */
 export const GRADIENT_START_POSITIONS: Record<GradientSection, Record<KioskId, number>> = {
   challenge: {
-    'kiosk-1': 1290,
-    'kiosk-2': 1290,
-    'kiosk-3': 1290,
+    kiosk_1: 1290,
+    kiosk_2: 1290,
+    kiosk_3: 1290,
   },
   customInteractive: {
-    'kiosk-1': 0,
-    'kiosk-2': 0,
-    'kiosk-3': 0,
+    kiosk_1: 0,
+    kiosk_2: 0,
+    kiosk_3: 0,
   },
   solution: {
-    'kiosk-1': 1060,
-    'kiosk-2': 1060,
-    'kiosk-3': 1060,
+    kiosk_1: 1060,
+    kiosk_2: 1060,
+    kiosk_3: 1060,
   },
   value: {
-    'kiosk-1': 1060,
-    'kiosk-2': 1060,
-    'kiosk-3': 1060,
+    kiosk_1: 1060,
+    kiosk_2: 1060,
+    kiosk_3: 1060,
   },
 };
 

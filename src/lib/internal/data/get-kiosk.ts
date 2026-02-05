@@ -9,10 +9,12 @@ export async function getKioskData(kioskId: KioskId, externalSignal?: AbortSigna
   const internalController = new AbortController();
   const timeout = setTimeout(() => internalController.abort(), 3500);
 
-  // Combine external and internal signals
-  const combinedSignal = externalSignal
-    ? AbortSignal.any([externalSignal, internalController.signal])
-    : internalController.signal;
+  // Combine external and internal signals (AbortSignal.any requires ES2024)
+  const combinedController = new AbortController();
+  const abortCombined = () => combinedController.abort();
+  internalController.signal.addEventListener('abort', abortCombined);
+  externalSignal?.addEventListener('abort', abortCombined);
+  const combinedSignal = combinedController.signal;
 
   try {
     const locale = getLocaleForTesting();
@@ -68,6 +70,8 @@ export async function getKioskData(kioskId: KioskId, externalSignal?: AbortSigna
     };
   } finally {
     clearTimeout(timeout);
+    internalController.signal.removeEventListener('abort', abortCombined);
+    externalSignal?.removeEventListener('abort', abortCombined);
   }
 }
 
