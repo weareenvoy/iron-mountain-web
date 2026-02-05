@@ -16,7 +16,7 @@ export async function getSummitData(tourId?: string): Promise<SummitDataResponse
 
   // NOTE: Temporary path fallback while we rely on static mocks and before the API exists.
   // Some tour IDs (e.g., summit-tour-XYZ) may not have a dedicated JSON file yet;
-  // in that case we fall back to the base summit.json. This ONLY relaxes file lookup,
+  // in that case we fall back to the base summit_room.json. This ONLY relaxes file lookup,
   // not data requirements—missing required fields still throw.
   const fetchStaticWithFallback = async (primaryPath: string, fallbackPath: string) => {
     try {
@@ -30,8 +30,8 @@ export async function getSummitData(tourId?: string): Promise<SummitDataResponse
   try {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (shouldUseStaticPlaceholderData()) {
-      const primaryPath = tourId ? `/api/summit-${tourId}.json` : '/api/summit.json';
-      const rawData = await fetchStaticWithFallback(primaryPath, '/api/summit.json');
+      const primaryPath = tourId ? `/api/summit-${tourId}.json` : '/api/summit_room.json';
+      const rawData = await fetchStaticWithFallback(primaryPath, '/api/summit_room.json');
       return { data: rawData.data, locale: rawData.locale };
     }
 
@@ -47,8 +47,8 @@ export async function getSummitData(tourId?: string): Promise<SummitDataResponse
   } catch {
     clearTimeout(timeout);
     // Offline/static fallback
-    const primaryPath = tourId ? `/api/summit-${tourId}.json` : '/api/summit.json';
-    const rawData = await fetchStaticWithFallback(primaryPath, '/api/summit.json');
+    const primaryPath = tourId ? `/api/summit-${tourId}.json` : '/api/summit_room.json';
+    const rawData = await fetchStaticWithFallback(primaryPath, '/api/summit_room.json');
     return { data: rawData.data, locale: rawData.locale };
   }
 }

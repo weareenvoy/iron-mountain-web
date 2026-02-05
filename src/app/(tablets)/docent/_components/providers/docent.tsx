@@ -91,12 +91,12 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
   const fetchDocentData = useCallback(async () => {
     setIsTourDataLoading(true);
     try {
-      // Fetch all endpoints in parallel
-      const [basecampResponse, initialData, toursData] = await Promise.all([
-        getBasecampData(),
-        getDocentInitialData(),
-        getToursData(),
-      ]);
+      // Fetch docent endpoints in parallel. Basecamp is best-effort and should not block docent.
+      const [initialData, toursData] = await Promise.all([getDocentInitialData(), getToursData()]);
+      const basecampResult = await getBasecampData().catch(error => {
+        console.error('Failed to fetch basecamp data:', error);
+        return null;
+      });
 
       // Validate CMS data at the boundary - fail fast if required fields are missing
       // This ensures components can trust data is complete without optional chaining
@@ -108,7 +108,7 @@ export const DocentProvider = ({ children }: DocentProviderProps) => {
         pt: validatedPt,
       });
       setTours(toursData.tours);
-      setBasecampData(basecampResponse.data);
+      setBasecampData(basecampResult?.data ?? null);
       setLastUpdated(new Date());
 
       // Clear tourId if the tour no longer exists in the data
