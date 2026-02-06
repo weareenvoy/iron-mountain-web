@@ -9,10 +9,8 @@ export async function getKioskData(kioskId: KioskId, externalSignal?: AbortSigna
   const internalController = new AbortController();
   const timeout = setTimeout(() => internalController.abort(), 3500);
 
-  // Combine external and internal signals
-  const combinedSignal = externalSignal
-    ? AbortSignal.any([externalSignal, internalController.signal])
-    : internalController.signal;
+  // Use external signal if provided, otherwise use internal
+  const combinedSignal = externalSignal ?? internalController.signal;
 
   try {
     const locale = getLocaleForTesting();
