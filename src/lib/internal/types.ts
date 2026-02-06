@@ -462,7 +462,12 @@ export interface SummitApiResponse {
   readonly data: SummitData;
   readonly locale: Locale;
 }
-export type WelcomeWallApiResponse = ApiResponse<WelcomeWallData>;
+
+export interface WelcomeWallApiResponse {
+  readonly data: WelcomeWallData;
+  readonly locale: Locale;
+}
+
 export type KioskApiResponse = ApiResponse<KioskData>;
 
 // Function return types (transformed from API responses)
