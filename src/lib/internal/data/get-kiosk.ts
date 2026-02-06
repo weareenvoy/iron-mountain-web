@@ -9,21 +9,10 @@ export async function getKioskData(kioskId: KioskId, externalSignal?: AbortSigna
   const internalController = new AbortController();
   const timeout = setTimeout(() => internalController.abort(), 3500);
 
-  // Combine external and internal signals with fallback for older browsers
-  let combinedSignal: AbortSignal;
-  if (!externalSignal) {
-    combinedSignal = internalController.signal;
-  } else if (typeof AbortSignal.any === 'function') {
-    // Use native implementation if available
-    combinedSignal = AbortSignal.any([externalSignal, internalController.signal]);
-  } else {
-    // Polyfill: create a controller that aborts when either signal aborts
-    const combinedController = new AbortController();
-    const onAbort = () => combinedController.abort();
-    internalController.signal.addEventListener('abort', onAbort, { once: true });
-    externalSignal.addEventListener('abort', onAbort, { once: true });
-    combinedSignal = combinedController.signal;
-  }
+  // Combine external and internal signals
+  const combinedSignal = externalSignal
+    ? AbortSignal.any([externalSignal, internalController.signal])
+    : internalController.signal;
 
   try {
     const locale = getLocaleForTesting();
