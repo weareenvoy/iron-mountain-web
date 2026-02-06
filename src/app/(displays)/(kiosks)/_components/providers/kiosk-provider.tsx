@@ -76,8 +76,8 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
   // Track endTour polling interval for cleanup
   const endTourIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Get kiosk-specific app ID for MQTT (kiosk-1 → kiosk-01)
-  const appId = `kiosk-0${kioskId.replace('kiosk-', '')}` as 'kiosk-01' | 'kiosk-02' | 'kiosk-03';
+  // Get kiosk-specific app ID for MQTT (kiosk_1 → kiosk-01)
+  const appId = `kiosk-0${kioskId.replace('kiosk_', '')}` as 'kiosk-01' | 'kiosk-02' | 'kiosk-03';
 
   // Report state to MQTT
   const reportState = useCallback(

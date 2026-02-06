@@ -1,7 +1,7 @@
 import type { ExhibitMqttStateBase } from '@/lib/mqtt/types';
 
-export type KioskId = 'kiosk-1' | 'kiosk-2' | 'kiosk-3';
-export const DEFAULT_KIOSK_ID: KioskId = 'kiosk-1';
+export type KioskId = 'kiosk_1' | 'kiosk_2' | 'kiosk_3';
+export const DEFAULT_KIOSK_ID: KioskId = 'kiosk_1';
 
 /**
  * Kiosk beat-id states for MQTT state reporting.

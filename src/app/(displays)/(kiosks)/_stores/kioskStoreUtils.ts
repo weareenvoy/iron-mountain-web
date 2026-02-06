@@ -47,14 +47,14 @@ export const isCrossingSectionBoundary = (currentTarget: null | string, previous
  */
 export const getStoreKey = (kioskId: KioskId): 'kiosk1' | 'kiosk2' | 'kiosk3' => {
   switch (kioskId) {
-    case 'kiosk-1':
+    case 'kiosk_1':
       return 'kiosk1';
-    case 'kiosk-2':
+    case 'kiosk_2':
       return 'kiosk2';
-    case 'kiosk-3':
+    case 'kiosk_3':
       return 'kiosk3';
     default:
       // Unreachable if kioskId is correctly typed, but kept as a runtime guard
-      throw new Error(`Invalid kioskId: ${kioskId}. Expected 'kiosk-1', 'kiosk-2', or 'kiosk-3'.`);
+      throw new Error(`Invalid kioskId: ${kioskId}. Expected 'kiosk_1', 'kiosk_2', or 'kiosk_3'.`);
   }
 };

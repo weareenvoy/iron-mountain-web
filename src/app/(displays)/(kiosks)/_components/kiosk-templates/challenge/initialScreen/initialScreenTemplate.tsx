@@ -217,13 +217,13 @@ const InitialScreenTemplate = memo(
         </div>
 
         {/* Logo - Not animated, positioned outside the animated container */}
-        <div className="absolute top-[4030px] left-[250px] z-3 flex h-[182px] w-[703px] items-center group-data-[kiosk=kiosk-3]/kiosk:hidden">
+        <div className="absolute top-[4030px] left-[250px] z-3 flex h-[182px] w-[703px] items-center group-data-[kiosk=kiosk\_3]/kiosk:hidden">
           <WhiteLogoSimple aria-hidden="true" className="h-full w-full" preserveAspectRatio="xMidYMid meet" />
         </div>
 
         <motion.div
           animate={shouldFadeOut ? { opacity: 0 } : shouldAnimate ? { opacity: 1, y: 0 } : { opacity: 0, y: 200 }}
-          className="absolute top-[1130px] left-[120px] z-2 flex w-[1920px] flex-col gap-[200px] rounded-[60px] bg-[#F7931E] px-[120px] py-[240px] pb-[430px] backdrop-blur-[30px] will-change-[transform,opacity] group-data-[kiosk=kiosk-2]/kiosk:bg-[#8DC13F] group-data-[kiosk=kiosk-2]/kiosk:py-[220px] group-data-[kiosk=kiosk-2]/kiosk:pb-[240px] group-data-[kiosk=kiosk-3]/kiosk:w-[1920px] group-data-[kiosk=kiosk-3]/kiosk:bg-[#00A88E] group-data-[kiosk=kiosk-3]/kiosk:pb-0"
+          className="absolute top-[1130px] left-[120px] z-2 flex w-[1920px] flex-col gap-[200px] rounded-[60px] bg-[#F7931E] px-[120px] py-[240px] pb-[430px] backdrop-blur-[30px] will-change-[transform,opacity] group-data-[kiosk=kiosk\_2]/kiosk:bg-[#8DC13F] group-data-[kiosk=kiosk\_2]/kiosk:py-[220px] group-data-[kiosk=kiosk\_2]/kiosk:pb-[240px] group-data-[kiosk=kiosk\_3]/kiosk:w-[1920px] group-data-[kiosk=kiosk\_3]/kiosk:bg-[#00A88E] group-data-[kiosk=kiosk\_3]/kiosk:pb-0"
           data-name="Challenge Initial Screen Content Box"
           initial={{ opacity: 0, y: 200 }}
           transition={{ delay: 0, duration: 0.5, ease: [0.3, 0, 0.6, 1] }}
@@ -243,7 +243,7 @@ const InitialScreenTemplate = memo(
             initial={{ opacity: 0, y: 150 }}
             transition={{ delay: 0.3, duration: 0.8, ease: [0.3, 0, 0.6, 1] }}
           >
-            <p className="text-[80px] leading-[1.3] font-normal tracking-[-4px] text-white group-data-[kiosk=kiosk-3]/kiosk:relative group-data-[kiosk=kiosk-3]/kiosk:top-[-230px] group-data-[kiosk=kiosk-3]/kiosk:text-[120px] group-data-[kiosk=kiosk-3]/kiosk:tracking-[-6px]">
+            <p className="text-[80px] leading-[1.3] font-normal tracking-[-4px] text-white group-data-[kiosk=kiosk\_3]/kiosk:relative group-data-[kiosk=kiosk\_3]/kiosk:top-[-230px] group-data-[kiosk=kiosk\_3]/kiosk:text-[120px] group-data-[kiosk=kiosk\_3]/kiosk:tracking-[-6px]">
               {renderRegisteredMark(quote)}
             </p>
             <p className="relative top-[180px] text-[52px] leading-[1.4] font-semibold tracking-[-2.6px] whitespace-pre-wrap text-black">
@@ -253,13 +253,13 @@ const InitialScreenTemplate = memo(
 
           <motion.div
             animate={shouldFadeOut ? { opacity: 0 } : shouldAnimate ? { opacity: 1, y: 0 } : { opacity: 0, y: 150 }}
-            className="relative top-[190px] flex w-full flex-col items-start justify-center gap-[10px] will-change-[transform,opacity] group-data-[kiosk=kiosk-2]/kiosk:top-0 group-data-[kiosk=kiosk-3]/kiosk:top-[-220px]"
+            className="relative top-[190px] flex w-full flex-col items-start justify-center gap-[10px] will-change-[transform,opacity] group-data-[kiosk=kiosk\_2]/kiosk:top-0 group-data-[kiosk=kiosk\_3]/kiosk:top-[-220px]"
             initial={{ opacity: 0, y: 150 }}
             transition={{ delay: 0.6, duration: 0.8, ease: [0.3, 0, 0.6, 1] }}
           >
             <button
               aria-label={buttonText}
-              className="group flex h-[200px] items-center justify-center gap-[60px] rounded-[999px] bg-[#ededed] px-[100px] py-[70px] text-left backdrop-blur-[19px] transition-all duration-300 ease-[cubic-bezier(0.3,0,0.6,1)] group-data-[kiosk=kiosk-2]/kiosk:px-[110px] hover:scale-[1.05] active:scale-[0.98] active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
+              className="group flex h-[200px] items-center justify-center gap-[60px] rounded-[999px] bg-[#ededed] px-[100px] py-[70px] text-left backdrop-blur-[19px] transition-all duration-300 ease-[cubic-bezier(0.3,0,0.6,1)] group-data-[kiosk=kiosk\_2]/kiosk:px-[110px] hover:scale-[1.05] active:scale-[0.98] active:opacity-70 active:transition-opacity active:duration-[60ms] active:ease-[cubic-bezier(0.3,0,0.6,1)]"
               data-name="button_default"
               onClick={handleButtonClick}
             >
