@@ -40,10 +40,7 @@ export async function getKioskData(kioskId: KioskId, externalSignal?: AbortSigna
       rawData = await fetchStatic();
     } else {
       try {
-        const apiResponse = await fetchApi();
-        // Handle both array and object responses from API
-        // API might return object directly, but static files are arrays
-        rawData = Array.isArray(apiResponse) ? apiResponse : [apiResponse];
+        rawData = await fetchApi();
       } catch (originalError) {
         // If externally aborted (user cancelled or newer request), skip fallback.
         if (externalSignal?.aborted) {
@@ -55,8 +52,11 @@ export async function getKioskData(kioskId: KioskId, externalSignal?: AbortSigna
       }
     }
 
-    const data = rawData.find(item => item.locale === locale)?.data;
-    if (!data) throw new Error(`Missing data for locale: ${locale}`);
+    // API now returns a single object with locale and data
+    if (rawData.locale !== locale) {
+      throw new Error(`Locale mismatch: expected ${locale}, got ${rawData.locale}`);
+    }
+    const data = rawData.data;
 
     const simplCMSData = await simplCMSPromise;
 

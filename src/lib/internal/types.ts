@@ -463,7 +463,12 @@ export interface SummitApiResponse {
   readonly locale: Locale;
 }
 export type WelcomeWallApiResponse = ApiResponse<WelcomeWallData>;
-export type KioskApiResponse = ApiResponse<KioskData>;
+// KioskApiResponse is a single locale response (not an array)
+// Format: { locale: "en", data: {...} }
+export interface KioskApiResponse {
+  readonly data: KioskData;
+  readonly locale: Locale;
+}
 
 // Function return types (transformed from API responses)
 export interface DocentInitialDataResponse {
