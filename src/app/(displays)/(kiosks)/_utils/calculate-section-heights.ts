@@ -80,7 +80,7 @@ const getSolutionFirstScreenHeight = (
 ): number => {
   // Only firstScreen, nothing else - kiosk-specific height
   if (!hasSecondScreen && !hasThirdScreen && !hasFourthScreen) {
-    return kioskId === 'kiosk-2'
+    return kioskId === 'kiosk_2'
       ? SOLUTION_FIRST_SCREEN_SPECIAL_HEIGHTS.STANDALONE_KIOSK_2
       : SOLUTION_FIRST_SCREEN_SPECIAL_HEIGHTS.STANDALONE_KIOSK_1_3;
   }
