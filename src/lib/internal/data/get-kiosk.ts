@@ -73,7 +73,7 @@ export async function getKioskData(kioskId: KioskId, externalSignal?: AbortSigna
     return {
       data: {
         ...data,
-        audio: simplCMSData.audio ?? data.audio,
+        // Use API audio, not simplCMS audio
         customInteractive1: simplCMSData.customInteractive1 ?? data.customInteractive1,
         customInteractive2: simplCMSData.customInteractive2 ?? data.customInteractive2,
         customInteractive3: simplCMSData.customInteractive3 ?? data.customInteractive3,
