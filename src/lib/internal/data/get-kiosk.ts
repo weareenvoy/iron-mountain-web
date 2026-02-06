@@ -50,7 +50,10 @@ export async function getKioskData(kioskId: KioskId, externalSignal?: AbortSigna
       rawData = await fetchStatic();
     } else {
       try {
-        rawData = await fetchApi();
+        const apiResponse = await fetchApi();
+        // Handle both array and object responses from API
+        // API might return object directly, but static files are arrays
+        rawData = Array.isArray(apiResponse) ? apiResponse : [apiResponse];
       } catch (originalError) {
         // If externally aborted (user cancelled or newer request), skip fallback.
         if (externalSignal?.aborted) {
