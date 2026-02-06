@@ -10,6 +10,7 @@ export async function getKioskData(kioskId: KioskId, externalSignal?: AbortSigna
   const timeout = setTimeout(() => internalController.abort(), 3500);
 
   // Combine external and internal signals
+  // AbortSignal.any() browser support: Chrome 116+, Firefox 115+, Safari 16.4+ (all released Aug 2023 or earlier)
   const combinedSignal = externalSignal
     ? AbortSignal.any([externalSignal, internalController.signal])
     : internalController.signal;
