@@ -1,4 +1,3 @@
-import toursStatic from '@public/api/tours.json';
 import { shouldUseStaticPlaceholderData } from '@/flags/flags';
 import type { ToursApiResponse } from '@/lib/internal/types';
 
@@ -11,8 +10,11 @@ export async function getToursData(): Promise<ToursApiResponse> {
   try {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (shouldUseStaticPlaceholderData()) {
+      const res = await fetch('/api/tours.json', { cache: 'force-cache' });
       clearTimeout(timeout);
-      return toursStatic as ToursApiResponse;
+      const rawData = (await res.json()) as ToursApiResponse;
+
+      return { tours: rawData.tours };
     }
 
     // Online first
@@ -21,11 +23,15 @@ export async function getToursData(): Promise<ToursApiResponse> {
       signal: controller.signal,
     });
     clearTimeout(timeout);
-    if (!res.ok) throw new Error(`Bad status: ${res.status}`);
-    return (await res.json()) as ToursApiResponse;
+    const rawData = (await res.json()) as ToursApiResponse;
+
+    return { tours: rawData.tours };
   } catch {
-    clearTimeout(timeout);
     // Offline/static fallback
-    return toursStatic as ToursApiResponse;
+    const res = await fetch('/api/tours.json', { cache: 'force-cache' });
+    clearTimeout(timeout);
+    const rawData = (await res.json()) as ToursApiResponse;
+
+    return { tours: rawData.tours };
   }
 }

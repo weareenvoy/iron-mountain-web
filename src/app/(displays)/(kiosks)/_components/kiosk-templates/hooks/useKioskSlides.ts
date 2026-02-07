@@ -4,34 +4,26 @@ import {
   buildChallengeSlides,
 } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/challenge/challengeSlides';
 import { buildCustomInteractiveSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/customInteractiveSection/customInteractiveSlides';
-import {
-  useMappedChallenges,
-  useMappedCustomInteractives,
-  useMappedSolutionAccordion,
-  useMappedSolutionGrid,
-  useMappedValues,
-} from '@/app/(displays)/(kiosks)/_components/kiosk-templates/hooks/useMappedContent';
 import { buildSolutionSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/solution/solutionSlides';
 import { buildValueSlides } from '@/app/(displays)/(kiosks)/_components/kiosk-templates/value/valueSlides';
+import { mapChallenges } from '@/app/(displays)/(kiosks)/_mappers/map-challenges';
+import { mapCustomInteractiveKiosk1 } from '@/app/(displays)/(kiosks)/_mappers/map-custom-interactive-kiosk1';
+import { mapCustomInteractiveKiosk3 } from '@/app/(displays)/(kiosks)/_mappers/map-custom-interactive-kiosk3';
+import { mapSolutionsWithAccordion } from '@/app/(displays)/(kiosks)/_mappers/map-solutions-with-accordion';
+import { mapSolutionsWithGrid, type DiamondMapping } from '@/app/(displays)/(kiosks)/_mappers/map-solutions-with-grid';
+import { mapValue } from '@/app/(displays)/(kiosks)/_mappers/map-value';
 import { parseKioskChallenges } from '@/app/(displays)/(kiosks)/_types/challengeContent';
 import { calculateSectionGradientHeights } from '@/app/(displays)/(kiosks)/_utils/calculate-section-heights';
-import { hasContent } from '@/app/(displays)/(kiosks)/_utils/content-validation';
-import { parseKioskData } from '@/app/(displays)/(kiosks)/_utils/parseKioskData';
-import type { DiamondMapping } from '@/app/(displays)/(kiosks)/_mappers/map-solutions-with-grid';
+import {
+  getSolutionContentState,
+  hasAccordionData,
+  hasContent,
+  hasGridData,
+} from '@/app/(displays)/(kiosks)/_utils/content-validation';
+import type { CustomInteractiveContent } from '@/app/(displays)/(kiosks)/_types/content-types';
 import type { CarouselHandlers } from '@/app/(displays)/(kiosks)/_types/carousel-types';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
-
-// Transforms the raw CMS data into renderable Kiosk slides. Maps the data through the mapper functions for challenges, solutions, value, and customInteractive, builds the slides and returns them in a slide array ready to render.
-
-/**
- * Hook for transforming raw CMS data into kiosk slides.
- * Handles data mapping, slide building, and memoization with strict type checking.
- *
- * This encapsulates the complex data transformation logic that was previously
- * scattered throughout the Kiosk view components.
- */
-
-type KioskData = null | Record<string, unknown> | undefined;
+import type { KioskData } from '@/lib/internal/types';
 
 type SlideBuilders = {
   readonly globalHandlers: {
@@ -54,20 +46,37 @@ type SlideBuilders = {
 
 type UseKioskSlidesConfig = {
   readonly diamondMapping?: DiamondMapping;
-  readonly kioskData: KioskData;
+  readonly kioskData: KioskData | null;
   readonly kioskId: KioskId;
   readonly slideBuilders: SlideBuilders;
 };
 
-type ParsedKioskContent = ReturnType<typeof parseKioskData>;
+const isCustomInteractiveContent = (data: unknown): data is CustomInteractiveContent => {
+  return (
+    typeof data === 'object' &&
+    data !== null &&
+    (('headline' in data && typeof data.headline === 'string') ||
+      ('image' in data && typeof data.image === 'string') ||
+      ('mainCTA' in data && typeof data.mainCTA === 'string'))
+  );
+};
 
-/**
- * Builds challenge slides based on whether challenge content exists.
- * Returns ambient cover screen if no challenge content, full challenge slides otherwise.
- */
+const getCustomInteractiveMapper = (interactiveNumber: 1 | 2 | 3) => {
+  switch (interactiveNumber) {
+    case 1:
+      return mapCustomInteractiveKiosk1;
+    case 2:
+      return null; // Interactive 2 uses direct object construction
+    case 3:
+      return mapCustomInteractiveKiosk3;
+    default:
+      throw new Error(`Invalid custom interactive number: ${interactiveNumber}`);
+  }
+};
+
 const buildChallengeSection = (
   challenges: null | ReturnType<typeof parseKioskChallenges>,
-  kioskContent: ParsedKioskContent,
+  kioskContent: KioskData | null,
   kioskId: KioskId,
   globalHandlers: SlideBuilders['globalHandlers'],
   handleInitialButtonClick: () => void
@@ -89,9 +98,6 @@ const buildChallengeSection = (
   return buildAmbientCoverScreen(challenges, kioskId, globalHandlers, slideOptions);
 };
 
-/**
- * Builds solution slides by merging grid and accordion data.
- */
 const buildSolutionSection = (
   solutionAccordion: unknown,
   solutionGrid: unknown,
@@ -112,9 +118,6 @@ const buildSolutionSection = (
   });
 };
 
-/**
- * Builds value slides if value content exists.
- */
 const buildValueSection = (
   values: unknown,
   kioskId: KioskId,
@@ -128,9 +131,6 @@ const buildValueSection = (
   });
 };
 
-/**
- * Builds custom interactive slides for all enabled interactives.
- */
 const buildCustomInteractiveSection = (
   customInteractives: Array<{ number: 1 | 2 | 3 }>,
   kioskId: KioskId,
@@ -160,27 +160,116 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
     scrollToSectionById,
   } = slideBuilders;
 
-  // Parse kiosk data with type safety using extracted utility
-  const kioskContent: ParsedKioskContent = useMemo(() => {
+  const kioskContent = kioskData;
+
+  // Map challenges
+  const challenges = useMemo(() => {
+    if (!kioskContent?.ambient) return null;
     try {
-      // Early return when data hasn't loaded yet - avoid error spam during initial render
-      if (!kioskData) {
-        return null;
-      }
-      return parseKioskData(kioskData);
+      return parseKioskChallenges(mapChallenges(kioskContent.challengeMain, kioskContent.ambient));
     } catch {
       return null;
     }
-  }, [kioskData]);
+  }, [kioskContent]);
 
-  // Map content using extracted hooks
-  const challenges = useMappedChallenges(kioskContent);
-  const solutionAccordion = useMappedSolutionAccordion(kioskContent);
-  const solutionGrid = useMappedSolutionGrid(kioskContent, diamondMapping);
-  const values = useMappedValues(kioskContent, kioskId);
-  const customInteractives = useMappedCustomInteractives(kioskContent);
+  // Map solution accordion
+  const solutionAccordion = useMemo(() => {
+    if (!kioskContent?.ambient) return null;
+    const { hasAnyContent, hasMainContent } = getSolutionContentState(kioskContent);
+    if (!hasAnyContent || !hasMainContent || !kioskContent.solutionMain) return null;
 
-  // Track missing sections for better error reporting
+    try {
+      const hasData = hasAccordionData(kioskContent.solutionAccordion);
+      if (!hasData) {
+        return mapSolutionsWithAccordion(
+          kioskContent.solutionMain,
+          { accordion: [], headline: '', image: '' },
+          kioskContent.ambient
+        );
+      }
+      return mapSolutionsWithAccordion(kioskContent.solutionMain, kioskContent.solutionAccordion, kioskContent.ambient);
+    } catch {
+      return null;
+    }
+  }, [kioskContent]);
+
+  // Map solution grid
+  const solutionGrid = useMemo(() => {
+    if (!kioskContent?.ambient || !diamondMapping) return null;
+    const { hasAnyContent, hasMainContent } = getSolutionContentState(kioskContent);
+    if (!hasAnyContent || !hasMainContent || !kioskContent.solutionMain) return null;
+
+    try {
+      const hasData = hasGridData(kioskContent.solutionGrid);
+      if (!hasData) return null;
+      return mapSolutionsWithGrid(kioskContent.solutionMain, kioskContent.solutionGrid, kioskContent.ambient, diamondMapping);
+    } catch {
+      return null;
+    }
+  }, [kioskContent, diamondMapping]);
+
+  // Map values
+  const values = useMemo(() => {
+    if (!kioskContent?.ambient) return null;
+    if (!kioskContent.valueMain || !hasContent(kioskContent.valueMain)) return null;
+    try {
+      return mapValue(kioskContent.valueMain, kioskContent.ambient, kioskId);
+    } catch {
+      return null;
+    }
+  }, [kioskContent, kioskId]);
+
+  // Map custom interactives
+  const customInteractives = useMemo(() => {
+    if (!kioskContent?.ambient) return [];
+
+    const choice = kioskContent.customInteractiveChoice;
+    const interactiveChoices: Array<{ data: unknown; key: string; number: 1 | 2 | 3 }> = [
+      { data: kioskContent.customInteractive1, key: choice?.customInteractive1 ?? '', number: 1 },
+      { data: kioskContent.customInteractive2, key: choice?.customInteractive2 ?? '', number: 2 },
+      { data: kioskContent.customInteractive3, key: choice?.customInteractive3 ?? '', number: 3 },
+    ];
+
+    for (const interactive of interactiveChoices) {
+      if (interactive.key && interactive.key.trim() !== '' && interactive.data && hasContent(interactive.data)) {
+        if (!isCustomInteractiveContent(interactive.data)) continue;
+
+        try {
+          const mapper = getCustomInteractiveMapper(interactive.number);
+
+          if (!mapper) {
+            const demo = kioskContent.demoMain;
+            const ambient = kioskContent.ambient;
+            return [
+              {
+                firstScreen: {
+                  demoIframeSrc: demo?.iframeLink,
+                  eyebrow: ambient.title,
+                  headline: interactive.data.headline,
+                  heroImageAlt: '',
+                  heroImageSrc: interactive.data.image,
+                  overlayCardLabel: undefined,
+                  overlayEndTourLabel: demo?.mainCTA,
+                  overlayHeadline: demo?.headline,
+                  primaryCtaLabel: undefined,
+                  secondaryCtaLabel: interactive.data.secondaryCTA,
+                },
+                number: interactive.number,
+              },
+            ];
+          }
+
+          const mapped = mapper(interactive.data, kioskContent.ambient, kioskContent.demoMain);
+          return [{ ...mapped, number: interactive.number }];
+        } catch {
+          continue;
+        }
+      }
+    }
+
+    return [];
+  }, [kioskContent]);
+
   const missingSections = useMemo(() => {
     const missing: string[] = [];
     if (!challenges) missing.push('challenges');
@@ -191,17 +280,8 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
   }, [challenges, customInteractives, solutionAccordion, solutionGrid, values]);
 
   const slides = useMemo(() => {
-    // Early return if kioskContent hasn't loaded yet - avoid error spam during initial render
-    if (!kioskContent) {
-      return [];
-    }
+    if (!kioskContent?.ambient) return [];
 
-    // Check if we have at least the ambient data (required for initial screen)
-    if (!kioskContent.ambient) {
-      return [];
-    }
-
-    // Build challenge slides (required - returns empty array if no challenges)
     const challengeSlides = buildChallengeSection(
       challenges,
       kioskContent,
@@ -210,12 +290,8 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
       handleInitialButtonClick
     );
 
-    // Early return if no challenge slides (ambient data is missing)
-    if (challengeSlides.length === 0) {
-      return [];
-    }
+    if (challengeSlides.length === 0) return [];
 
-    // Build remaining sections
     const solutionSlides = buildSolutionSection(
       solutionAccordion,
       solutionGrid,
@@ -249,15 +325,9 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
     values,
   ]);
 
-  // Calculate gradient heights based on rendered slides
   const gradientHeights = useMemo(() => {
     if (slides.length === 0) {
-      return {
-        challenge: 0,
-        customInteractive: [],
-        solution: 0,
-        value: 0,
-      };
+      return { challenge: 0, customInteractive: [], solution: 0, value: 0 };
     }
     return calculateSectionGradientHeights(slides, kioskId);
   }, [slides, kioskId]);
