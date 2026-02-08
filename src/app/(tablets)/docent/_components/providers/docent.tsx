@@ -16,7 +16,8 @@ import { type DocentAppState, type SyncState } from '@/app/(tablets)/docent/_typ
 import { getTourIdFromGecState, isDocentRoute, requireDocentData } from '@/app/(tablets)/docent/_utils';
 import { useMqtt } from '@/components/providers/mqtt-provider';
 import { getBasecampData } from '@/lib/internal/data/get-basecamp';
-import { getDocentInitialData, getToursData } from '@/lib/internal/data/get-docent';
+import { getDocentInitialData } from '@/lib/internal/data/get-docent';
+import { getToursData } from '@/lib/internal/data/get-tours';
 import type { ApiTour, BasecampData, DocentData, Locale } from '@/lib/internal/types';
 
 export interface DocentContextType {

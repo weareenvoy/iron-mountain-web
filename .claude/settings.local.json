@@ -1,5 +1,5 @@
 {
   "permissions": {
-    "allow": ["Bash(ls:*)", "Bash(xargs:*)", "WebFetch(domain:raw.githubusercontent.com)"]
+    "allow": ["Bash(ls:*)", "Bash(xargs:*)", "WebFetch(domain:raw.githubusercontent.com)", "Bash(npm run build:*)"]
   }
 }

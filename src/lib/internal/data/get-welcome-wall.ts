@@ -1,4 +1,4 @@
-import { getLocaleForTesting, shouldUseStaticPlaceholderData } from '@/flags/flags';
+import { shouldUseStaticPlaceholderData } from '@/flags/flags';
 import type { WelcomeWallApiResponse, WelcomeWallDataResponse } from '@/lib/internal/types';
 
 export async function getWelcomeWallData(): Promise<WelcomeWallDataResponse> {
@@ -12,53 +12,33 @@ export async function getWelcomeWallData(): Promise<WelcomeWallDataResponse> {
       const res = await fetch('/api/welcome_wall.json', { cache: 'force-cache' });
       clearTimeout(timeout);
       const rawData = (await res.json()) as WelcomeWallApiResponse;
-      const locale = getLocaleForTesting();
-      const data = rawData.find(item => item.locale === locale)?.data;
-
-      if (!data) {
-        throw new Error(`Missing data for locale: ${locale}`);
-      }
 
       return {
-        data,
-        locale,
+        data: rawData.data,
+        locale: rawData.locale,
       };
     }
 
-    // Online first
     const res = await fetch(`${API_BASE}/welcome_wall`, {
       cache: 'no-store',
       signal: controller.signal,
     });
     clearTimeout(timeout);
-    if (!res.ok) throw new Error(`Bad status: ${res.status}`);
     const rawData = (await res.json()) as WelcomeWallApiResponse;
-    const locale = getLocaleForTesting();
-    const data = rawData.find(item => item.locale === locale)?.data;
-
-    if (!data) {
-      throw new Error(`Missing data for locale: ${locale}`);
-    }
 
     return {
-      data,
-      locale,
+      data: rawData.data,
+      locale: rawData.locale,
     };
   } catch {
-    clearTimeout(timeout);
     // Offline/static fallback
     const res = await fetch('/api/welcome_wall.json', { cache: 'force-cache' });
+    clearTimeout(timeout);
     const rawData = (await res.json()) as WelcomeWallApiResponse;
-    const locale = getLocaleForTesting();
-    const data = rawData.find(item => item.locale === locale)?.data;
-
-    if (!data) {
-      throw new Error(`Missing data for locale: ${locale}`);
-    }
 
     return {
-      data,
-      locale,
+      data: rawData.data,
+      locale: rawData.locale,
     };
   }
 }
