@@ -325,7 +325,10 @@ export const BaseKioskView = ({ config }: BaseKioskViewProps) => {
   return (
     <GradientHeightsProvider heights={gradientHeights}>
       <div
-        className="group/kiosk relative h-screen w-full overflow-y-auto bg-black"
+        className={cn(
+          'group/kiosk relative h-screen w-full bg-black',
+          isAnyOverlayOpen ? 'overflow-hidden' : 'overflow-y-auto'
+        )}
         data-kiosk={kioskId}
         ref={containerRef}
       >
