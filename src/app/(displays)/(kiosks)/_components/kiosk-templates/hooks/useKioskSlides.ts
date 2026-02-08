@@ -20,8 +20,8 @@ import {
   hasContent,
   hasGridData,
 } from '@/app/(displays)/(kiosks)/_utils/content-validation';
-import type { CustomInteractiveContent } from '@/app/(displays)/(kiosks)/_types/content-types';
 import type { CarouselHandlers } from '@/app/(displays)/(kiosks)/_types/carousel-types';
+import type { CustomInteractiveContent } from '@/app/(displays)/(kiosks)/_types/content-types';
 import type { KioskId } from '@/app/(displays)/(kiosks)/_types/kiosk-id';
 import type { KioskData } from '@/lib/internal/types';
 
@@ -86,7 +86,7 @@ const buildChallengeSection = (
   const hasChallengeContent = kioskContent?.challengeMain && hasContent(kioskContent.challengeMain);
   const slideOptions = {
     initialScreen: {
-      idleVideoSrc: kioskContent?.idle?.videoSrc,
+      idleVideoSrc: kioskContent?.idle.videoSrc,
     },
     onInitialButtonClick: handleInitialButtonClick,
   };
@@ -176,7 +176,7 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
   const solutionAccordion = useMemo(() => {
     if (!kioskContent?.ambient) return null;
     const { hasAnyContent, hasMainContent } = getSolutionContentState(kioskContent);
-    if (!hasAnyContent || !hasMainContent || !kioskContent.solutionMain) return null;
+    if (!hasAnyContent || !hasMainContent) return null;
 
     try {
       const hasData = hasAccordionData(kioskContent.solutionAccordion);
@@ -197,12 +197,17 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
   const solutionGrid = useMemo(() => {
     if (!kioskContent?.ambient || !diamondMapping) return null;
     const { hasAnyContent, hasMainContent } = getSolutionContentState(kioskContent);
-    if (!hasAnyContent || !hasMainContent || !kioskContent.solutionMain) return null;
+    if (!hasAnyContent || !hasMainContent) return null;
 
     try {
       const hasData = hasGridData(kioskContent.solutionGrid);
       if (!hasData) return null;
-      return mapSolutionsWithGrid(kioskContent.solutionMain, kioskContent.solutionGrid, kioskContent.ambient, diamondMapping);
+      return mapSolutionsWithGrid(
+        kioskContent.solutionMain,
+        kioskContent.solutionGrid,
+        kioskContent.ambient,
+        diamondMapping
+      );
     } catch {
       return null;
     }
@@ -211,7 +216,7 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
   // Map values
   const values = useMemo(() => {
     if (!kioskContent?.ambient) return null;
-    if (!kioskContent.valueMain || !hasContent(kioskContent.valueMain)) return null;
+    if (!hasContent(kioskContent.valueMain)) return null;
     try {
       return mapValue(kioskContent.valueMain, kioskContent.ambient, kioskId);
     } catch {
@@ -225,49 +230,46 @@ export const useKioskSlides = ({ diamondMapping, kioskData, kioskId, slideBuilde
 
     const choice = kioskContent.customInteractiveChoice;
     const interactiveChoices: Array<{ data: unknown; key: string; number: 1 | 2 | 3 }> = [
-      { data: kioskContent.customInteractive1, key: choice?.customInteractive1 ?? '', number: 1 },
-      { data: kioskContent.customInteractive2, key: choice?.customInteractive2 ?? '', number: 2 },
-      { data: kioskContent.customInteractive3, key: choice?.customInteractive3 ?? '', number: 3 },
+      { data: kioskContent.customInteractive1, key: choice.customInteractive1, number: 1 },
+      { data: kioskContent.customInteractive2, key: choice.customInteractive2, number: 2 },
+      { data: kioskContent.customInteractive3, key: choice.customInteractive3, number: 3 },
     ];
 
-    for (const interactive of interactiveChoices) {
-      if (interactive.key && interactive.key.trim() !== '' && interactive.data && hasContent(interactive.data)) {
-        if (!isCustomInteractiveContent(interactive.data)) continue;
+    const validInteractive = interactiveChoices.find(
+      interactive =>
+        interactive.key.trim() !== '' && hasContent(interactive.data) && isCustomInteractiveContent(interactive.data)
+    );
 
-        try {
-          const mapper = getCustomInteractiveMapper(interactive.number);
-
-          if (!mapper) {
-            const demo = kioskContent.demoMain;
-            const ambient = kioskContent.ambient;
-            return [
-              {
-                firstScreen: {
-                  demoIframeSrc: demo?.iframeLink,
-                  eyebrow: ambient.title,
-                  headline: interactive.data.headline,
-                  heroImageAlt: '',
-                  heroImageSrc: interactive.data.image,
-                  overlayCardLabel: undefined,
-                  overlayEndTourLabel: demo?.mainCTA,
-                  overlayHeadline: demo?.headline,
-                  primaryCtaLabel: undefined,
-                  secondaryCtaLabel: interactive.data.secondaryCTA,
-                },
-                number: interactive.number,
-              },
-            ];
-          }
-
-          const mapped = mapper(interactive.data, kioskContent.ambient, kioskContent.demoMain);
-          return [{ ...mapped, number: interactive.number }];
-        } catch {
-          continue;
-        }
-      }
+    if (!validInteractive || !isCustomInteractiveContent(validInteractive.data)) {
+      return [];
     }
 
-    return [];
+    const mapper = getCustomInteractiveMapper(validInteractive.number);
+
+    if (!mapper) {
+      const demo = kioskContent.demoMain;
+      const ambient = kioskContent.ambient;
+      return [
+        {
+          firstScreen: {
+            demoIframeSrc: demo.iframeLink,
+            eyebrow: ambient.title,
+            headline: validInteractive.data.headline,
+            heroImageAlt: '',
+            heroImageSrc: validInteractive.data.image,
+            overlayCardLabel: undefined,
+            overlayEndTourLabel: demo.mainCTA,
+            overlayHeadline: demo.headline,
+            primaryCtaLabel: undefined,
+            secondaryCtaLabel: validInteractive.data.secondaryCTA,
+          },
+          number: validInteractive.number,
+        },
+      ];
+    }
+
+    const mapped = mapper(validInteractive.data, kioskContent.ambient, kioskContent.demoMain);
+    return [{ ...mapped, number: validInteractive.number }];
   }, [kioskContent]);
 
   const missingSections = useMemo(() => {
