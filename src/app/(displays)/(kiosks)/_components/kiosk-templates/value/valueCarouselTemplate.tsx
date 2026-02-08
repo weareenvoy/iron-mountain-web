@@ -122,7 +122,7 @@ const ValueCarouselTemplate = memo((props: ValueCarouselTemplateProps) => {
       <div className="absolute top-0 left-0 flex h-[1284px] w-full flex-col justify-between px-[120px] py-[240px]">
         <motion.p
           animate={shouldAnimate ? { y: 0 } : undefined}
-          className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] will-change-transform"
+          className="w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] will-change-transform"
           initial={{ y: TITLE_ANIMATION_TRANSFORMS.SECTION_HEADER }}
           transition={{ delay: 0, duration: SCROLL_ANIMATION_CONFIG.DURATION, ease: SCROLL_ANIMATION_CONFIG.EASING }}
         >

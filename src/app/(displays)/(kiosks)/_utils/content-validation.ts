@@ -1,5 +1,4 @@
-import type { SolutionAccordionItem } from '@/app/(displays)/(kiosks)/_types/content-types';
-import type { ParsedKioskData } from '@/app/(displays)/(kiosks)/_utils/parseKioskData';
+import type { KioskData, KioskSolutionAccordionItem } from '@/lib/internal/types';
 
 const MAX_RECURSION_DEPTH = 10;
 
@@ -41,7 +40,7 @@ export const hasContent = (obj: unknown, depth = 0): boolean => {
  * @returns Object with flags for accordion, grid, main, and overall content presence
  */
 export const getSolutionContentState = (
-  kioskContent: null | ParsedKioskData
+  kioskContent: KioskData | null
 ): {
   hasAccordionContent: boolean;
   hasAnyContent: boolean;
@@ -57,9 +56,9 @@ export const getSolutionContentState = (
     };
   }
 
-  const hasMainContent = !!(kioskContent.solutionMain && hasContent(kioskContent.solutionMain));
-  const hasAccordionContent = !!(kioskContent.solutionAccordion && hasContent(kioskContent.solutionAccordion));
-  const hasGridContent = !!(kioskContent.solutionGrid && hasContent(kioskContent.solutionGrid));
+  const hasMainContent = hasContent(kioskContent.solutionMain);
+  const hasAccordionContent = hasContent(kioskContent.solutionAccordion);
+  const hasGridContent = hasContent(kioskContent.solutionGrid);
 
   return {
     hasAccordionContent,
@@ -72,27 +71,17 @@ export const getSolutionContentState = (
 /**
  * Checks if accordion data has actual items with content.
  */
-export const hasAccordionData = (solutionAccordion: ParsedKioskData['solutionAccordion']): boolean => {
-  return !!(
-    solutionAccordion &&
-    typeof solutionAccordion === 'object' &&
-    Array.isArray(solutionAccordion.accordion) &&
-    solutionAccordion.accordion.some(
-      (item: SolutionAccordionItem) => item.title?.trim() || (item.bullets && item.bullets.length > 0)
-    )
+export const hasAccordionData = (solutionAccordion: KioskData['solutionAccordion']): boolean => {
+  return solutionAccordion.items.some(
+    (item: KioskSolutionAccordionItem) => item.title.trim() || item.bullets.length > 0
   );
 };
 
 /**
  * Checks if grid data has actual non-empty diamond list entries.
  */
-export const hasGridData = (solutionGrid: ParsedKioskData['solutionGrid']): boolean => {
-  return !!(
-    solutionGrid &&
-    typeof solutionGrid === 'object' &&
-    Array.isArray(solutionGrid.diamondList) &&
-    solutionGrid.diamondList.some((item: null | string | undefined) => item?.trim())
-  );
+export const hasGridData = (solutionGrid: KioskData['solutionGrid']): boolean => {
+  return solutionGrid.diamondList.some(item => item.trim());
 };
 
 /**

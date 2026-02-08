@@ -70,9 +70,6 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
   // Guard flag to prevent concurrent loadTour operations
   const isLoadingTourRef = useRef(false);
 
-  // AbortController for cancellable fetch operations
-  const abortControllerRef = useRef<AbortController | null>(null);
-
   // Track endTour polling interval for cleanup
   const endTourIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -97,50 +94,20 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
   const reportStateRef = useRef(reportState);
   reportStateRef.current = reportState;
 
-  // Fetch kiosk content data with abort support
+  // Fetch kiosk content data
   const fetchData = useCallback(async (): Promise<boolean> => {
-    // Cancel any in-flight fetch
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
-
-    // Create new AbortController for this fetch
-    const abortController = new AbortController();
-    abortControllerRef.current = abortController;
-
     setLoading(true);
 
     try {
-      // Pass abort signal to getKioskData for proper cancellation
-      const kioskData = await getKioskData(kioskId, abortController.signal);
-
-      // Check if this fetch was aborted (component unmounted or new fetch started)
-      if (abortController.signal.aborted) {
-        return false;
-      }
-
+      const kioskData = await getKioskData(kioskId);
       setData(kioskData.data);
       setError(null);
       return true;
     } catch (err) {
-      // Don't update state if fetch was aborted
-      if (abortController.signal.aborted) {
-        return false;
-      }
-
-      // TODO: Replace with proper logging service (DataDog, Sentry, etc.)
-      // For now, errors are tracked via the error state and can be logged at a higher level
       setError(err instanceof Error ? err.message : 'Unknown error');
       return false;
     } finally {
-      // Don't update loading state if aborted
-      if (!abortController.signal.aborted) {
-        setLoading(false);
-      }
-      // Clean up controller reference
-      if (abortControllerRef.current === abortController) {
-        abortControllerRef.current = null;
-      }
+      setLoading(false);
     }
   }, [kioskId]);
 
@@ -231,11 +198,6 @@ export const KioskProvider = ({ children, kioskId }: KioskProviderProps) => {
       if (endTourIntervalRef.current) {
         clearInterval(endTourIntervalRef.current);
         endTourIntervalRef.current = null;
-      }
-
-      // Cancel any in-flight fetch on unmount
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
       }
     };
   }, [client, fetchData, isConnected, kioskId]);

@@ -98,7 +98,7 @@ const FirstScreenTemplate = memo(
             initial={{ opacity: 0, y: TITLE_ANIMATION_TRANSFORMS.CHALLENGE_SUBHEADLINE }}
             transition={{ delay: 0, duration: SCROLL_ANIMATION_CONFIG.DURATION, ease: SCROLL_ANIMATION_CONFIG.EASING }}
           >
-            <h2 className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
+            <h2 className="w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
               {renderRegisteredMark(subheadline)}
             </h2>
           </motion.div>
@@ -143,7 +143,7 @@ const FirstScreenTemplate = memo(
           ref={stickyHeaderRef}
         >
           {/* Subheadline */}
-          <div className="px-[120px] pt-[240px] pb-[375px] pl-[150px]">
+          <div className="w-[700px] px-[120px] pt-[240px] pb-[375px] pl-[150px]">
             <h2 className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
               {renderRegisteredMark(subheadline)}
             </h2>

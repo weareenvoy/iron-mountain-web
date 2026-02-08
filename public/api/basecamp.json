@@ -1,96 +1,138 @@
-{  
+{
   "locale": "en",
   "data": {
+    "welcome": {
+      "title": "Welcome toIron Mountain"
+    },
+    "problem_1": {
+      "title": "What's standing in your way?"
+    },
+    "problem_2": [
+      {
+        "title": "80%",
+        "subtitle": "of data remains dark"
+      },
+      {
+        "title": "80-90%",
+        "subtitle": "of new data is unstructured"
+      },
+      {
+        "title": "\u003C 1%",
+        "subtitle": "of enterprise data is leveraged for AI"
+      }
+    ],
+    "problem_3": {
+      "title": "What's holding you back?",
+      "challenge_1": {
+        "title": "Too much complexity",
+        "icon": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/ctrl_media/4/media?v=1768255483265",
+        "body": "1,300 exabytes of enterprise data created daily—scattered across systems and formats"
+      },
+      "challenge_2": {
+        "title": "Cost, uncertain ROI",
+        "icon": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/ctrl_media/2/media?v=1768255483190",
+        "body": "3+ years of ROI expected for AI efforts by ~50% of business leaders"
+      },
+      "challenge_3": {
+        "title": "Too many risks",
+        "icon": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/ctrl_media/3/media?v=1768255483125",
+        "body": "$14M cost of a non-compliant event"
+      },
+      "challenge_4": {
+        "title": "Too few skills",
+        "icon": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/ctrl_media/1/media?v=1768255483062",
+        "body": "Talent gaps are the third-largest barrier to getting AI ready"
+      }
+    },
     "possibilities": {
       "title": "Discover new possibilities"
     },
     "possibilities_a": {
+      "title": "Making data accessible",
       "body_1": "Automate mortgage processing for 30% of the secondary market, for faster, lower-cost decisions",
       "body_2": "Make wills and tax forms available digitally, making vital information accessible",
-      "body_3": "Digitize blueprints for aerospace manufacturing companies, accelerating innovation for future designs",
-      "title": "Making data accessible"
+      "body_3": "Digitize blueprints for aerospace manufacturing companies, accelerating innovation for future designs"
     },
     "possibilities_b": {
+      "title": "Unlocking new value streams",
       "body_1": "Transform lab samples to train AI models, creating new revenue streams for healthcare providers",
       "body_2": "Create buzzworthy content from extensive film archives, engaging new audiences for major studios",
-      "body_3": "Preserve, restore, and digitize cultural collections, enabling greater access and revenue sources",
-      "title": "Unlocking new value streams"
+      "body_3": "Preserve, restore, and digitize cultural collections, enabling greater access and revenue sources"
     },
     "possibilities_c": {
+      "title": "Optimizing your assets",
       "body_1": "Automate retention across physical and digital formats to optimize storage and reduce compliance risks",
       "body_2": "Manage, remarket, and recycle IT devices, de-risking assets for organizations with a global workforce",
-      "body_3": "Process over 45 million kg of e-waste annually, making the IT lifecycle more sustainable",
-      "title": "Optimizing your assets"
-    },
-    "problem_1": {
-      "title": "What's the main difficulty?"
-    },
-    "problem_2": [
-      { "subtitle": "of data remains dark", "title": "80%" },
-      { "subtitle": "of new data is unstructured", "title": "80-90%" },
-      { "subtitle": "of enterprise data is leveraged for AI", "title": "< 1%" }
-    ],
-    "problem_3": {
-      "challenge_1": {
-        "body": "1,300 exabytes of enterprise data created daily—scattered across systems and formats",
-        "icon": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/complexity.png",
-        "title": "Too much complexity"
-      },
-      "challenge_2": {
-        "body": "3+ years of ROI expected for AI efforts by ~50% of business leaders",
-        "icon": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/cost.png",
-        "title": "Cost, Uncertain ROI"
-      },
-      "challenge_3": {
-        "body": "$14M cost of a non-compliant event",
-        "icon": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/risk.png",
-        "title": "Too many risks"
-      },
-      "challenge_4": {
-        "body": "Talent gaps are the third-largest barrier to getting AI ready",
-        "icon": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/skills.png",
-        "title": "Too few skills"
-      },
-      "title": "What's holding you back?"
+      "body_3": "Process over 45 million kg of e-waste annually, making the IT lifecycle more sustainable"
     },
     "beats": {
-      "ambient-1": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/Basecamp_Ambient_loop_00.webm" },
-      "ascend-1": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Ascend_04_Part_1.webm" },
-      "ascend-2": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Ascend_04_Part_2.webm" },
-      "ascend-3": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Ascend_04_Part_3.webm" },
-      "possibilities-1": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Possibilities_03_Part_1.webm" },
-      "possibilities-2": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Possibilities_03_Part_2.webm" },
-      "possibilities-3": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Possibilities_03_Part_3.webm" },
-      "possibilities-4": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Possibilities_03_Part_4.webm" },
-      "possibilities-5": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Possibilities_03_Part_5.webm" },
-      "problem-1": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Problem_02_Part_1.webm" },
-      "problem-2": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Problem_02_Part_2.webm" },
-      "problem-3": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Problem_02_Part_3.webm" },
-      "problem-4": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Problem_02_Part_4.webm" },
-      "welcome-1": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Welcome_01_Part_1.webm" },
-      "welcome-2": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Welcome_01_Part_2.webm" },
-      "welcome-3": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Welcome_01_Part_3.webm" },
-      "welcome-4": { "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/videos/en/Basecamp_Welcome_01_Part_4.webm" }
-    },
-    "welcome": {
-      "title": "Welcome to Iron Mountain"
-    },
-    "location_details": {
-      "elevation": "Elevation 760 m (2,493.4 ft)",
-      "exhibit": "Executive Briefing Center",
-      "name": "São Paulo, Brazil"
+      "ambient-1": {
+        "url": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/034340a7-b833-4d02-9cc2-0fb98a69ba84/media?v=1770223501960"
+      },
+      "welcome-1": {
+        "url": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/ba40463f-ee1d-4a29-9dde-b7a5abca08c1/media?v=1770223508460"
+      },
+      "welcome-2": {
+        "url": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/f1864eaa-1dd7-4a04-af42-322a11b12019/media?v=1770223509229"
+      },
+      "welcome-3": {
+        "url": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/481ed936-29cb-4969-b381-222093b1b69b/media?v=1770223509870"
+      },
+      "welcome-4": {
+        "url": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/0e745b99-d127-4551-8cc5-6ec3bd32bba2/media?v=1770223509928"
+      },
+      "problem-1": {
+        "url": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/9fd21885-a79f-48dd-993a-d1227a082aed/media?v=1770223506521"
+      },
+      "problem-2": {
+        "url": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/14fb7317-b4e0-4a66-8808-e1a9c3f602bb/media?v=1770223507554"
+      },
+      "problem-3": {
+        "url": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/5d389b65-489c-44c7-9428-95b9738a98e2/media?v=1770223507854"
+      },
+      "problem-4": {
+        "url": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/850465a5-4d34-4b51-8909-f711b036a4a4/media?v=1770223509918"
+      },
+      "possibilities-1": {
+        "url": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/d470b2f2-f81e-4eba-83ac-ba667f40472f/media?v=1770223521690"
+      },
+      "possibilities-2": {
+        "url": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/579a22fb-8f6b-49a2-8842-0efd8afc01db/media?v=1770223521727"
+      },
+      "possibilities-3": {
+        "url": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/41423646-4254-46ab-9310-4c07f03a4245/media?v=1770223522573"
+      },
+      "possibilities-4": {
+        "url": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/77074c60-2f43-4361-81d5-ee953ea79d22/media?v=1770223523405"
+      },
+      "possibilities-5": {
+        "url": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/33b7679e-e6ec-4cff-a209-38e52f3115b0/media?v=1770223524062"
+      },
+      "ascend-1": {
+        "url": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/8b77170d-f7d2-437f-b3f7-573544204bf7/media?v=1770223503088"
+      },
+      "ascend-2": {
+        "url": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/e412e817-d751-4ed8-a36e-30362f0faf85/media?v=1770223504707"
+      },
+      "ascend-3": {
+        "url": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/506cd804-73a9-44f3-a693-31cd96159fdd/media?v=1770223506265"
+      }
     },
     "music": {
-      "ascend": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/music/Basecamp_07_Ascend_Music_v2.mp3",
-      "possibilities": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/music/Basecamp_05_Possibilities1_Music_v2.mp3",
-      "problem": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/music/Basecamp_03_Problem1_Music_v2.mp3",
-      "welcome": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/music/Basecamp_01_Welcome1_Music_v2.mp3"
+      "ascend": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/3ce3cf0c-7415-4759-b0fb-6a967048b2df/media?v=1770223506347",
+      "possibilities": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/60dc1894-3e29-4a16-97f8-3731aa446f2d/media?v=1770223524096",
+      "problem": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/694b324c-e058-4b1b-a0fb-f9c6f90fee49/media?v=1770223509983",
+      "welcome": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/f1fba639-786a-43d5-be39-0b1d6a43391b/media?v=1770223510019"
     },
     "sfx": {
-      "beat": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/sfx/ENVOY_IRM_SFX_Whoosh2.mp3",
-      "moment": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/sfx/ENVOY_IRM_SFX_Whoosh1.mp3",
-      "text": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/basecamp/sfx/ENVOY_IRM_SFX_Appear1.mp3"
+      "beat": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/d2d51b5c-8894-4643-8a6b-0eabd911d4da/media?v=1770223500187",
+      "moment": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/644b4ce2-bd19-4df4-8402-bae35a0a0a9f/media?v=1770223500191",
+      "text": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/a4869c9c-046f-4168-859c-e003f7f3f59a/media?v=1770223500194"
+    },
+    "location_details": {
+      "name": "Sao Paulo, Brazil",
+      "exhibit": "Executive Briefing Center",
+      "elevation": "Elevation 760 m (2,493.4 ft)"
     }
   }
 }
-
