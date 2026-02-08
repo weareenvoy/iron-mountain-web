@@ -1,103 +1,260 @@
 {
   "locale": "en",
   "data": {
-      "ambient": {
-      "backgroundImage": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/Cover.webp",
-      "body": "\"It's been a pleasure working with Iron Mountain. We feel very confident that the GRAMMY Museum's physical artifacts and digital content is safely protected. Smart Vault also provides significant reassurance that our iconic artist performances and interviews will remain preserved and accessible which is a huge benefit to the GRAMMY Museum.\"",
-      "headline": "The GRAMMY Museum (R) preserves the soundtrack of history.",
-      "mainCTA": "Touch to explore",
-      "quoteSource": "- Michael Rohrabacher, Technical Director at the GRAMMY Museum",
-      "subheader": "It's been a pleasure working with...",
-      "title": "Rich media & \ncultural heritage"
-    },
-
     "challengeMain": {
+      "labelText": "Challenge",
+      "mainVideo": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/ctrl_media/35/media?v=1768255494143",
       "body": "The Museum needed a secure, off-site, cloud-accessible, and easily managed solution to protect its one-of-a-kind, irreplaceable footage. Storing the only master copy locally presented a high risk of losing all assets in the event of a data failure or system crash.",
       "featuredStat1": "120 TB",
       "featuredStat1Body": "of data is safely stored and accessible for the Museum.",
-      "featuredStat2": "40 TB",
-      "featuredStat2Body": "of existing footage of data migration from physical drives into Smart Vault.",
       "item1Body": "The Museum also needed assistance with physical storage for a collection of historical music artifacts.",
-      "item1Image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/01+-+Challenge/Challenge-Image1-Full.webp",
+      "item1Image": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/ctrl_media/32/media?v=1768255493301",
       "item2Body": "The former digital storage system was slow and inefficient, especially for remote access, which frustrated staff when they needed to retrieve content quickly.",
-      "item2Image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/01+-+Challenge/Challenge-Image2-Full.webp",
-      "labelText": "Challenge",
-      "mainVideo": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/01+-+Challenge/Challenge-Header.webm"
-    },
-    "demoMain": {
-      "headline": "Lorem ipsum dolor sit amet consectetur",
-      "iframeLink": "https://www.cyark.org/projects/ouro-preto/tapestry2",
-      "mainCTA": "Exit"
-    },
-    "idle": {
-      "videoSrc": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Global/Idle-General.webm"
-    },
-    "solutionGrid": {
-      "diamondList": [
-        "Secure physical storage",
-        "Digital transformation",
-        "Smart Vault archiving",
-        "AI-powered search"
-      ],
-      "headline": "How Iron Mountain Smart Vault works:",
-      "images": [
-        "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Image3-Full.webp",
-        "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Image2-Full.webp"
-      ]
-    },
-    "solutionAccordion": {
-      "accordion": [],
-      "headline": "",
-      "image": ""
+      "item2Image": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/ctrl_media/31/media?v=1768255493004",
+      "featuredStat2": "40 TB",
+      "featuredStat2Body": "of existing footage of data migration from physical drives into Iron Mountain’s digital preservation platform."
     },
     "solutionMain": {
-      "body": "With a focus on physical storage and a secure digital archive, Iron Mountain provided climate-controlled, private vaults for physical artifacts and implemented Smart Vault for digital preservation.",
-      "headline": "A partnership with Iron Mountain",
-      "image": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Image1-Full.webp",
       "labelText": "Solution",
-      "mainVideo": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/02+-+Solution/Solution-Header.webm",
+      "mainVideo": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/ctrl_media/34/media?v=1768255493917",
+      "headline": "A partnership with Iron Mountain",
+      "body": "With a focus on physical storage and a secure digital archive, Iron Mountain provided climate-controlled, private vaults for physical artifacts and implemented a robust repository for digital preservation.",
+      "image": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/ctrl_media/30/media?v=1768255492809",
+      "numberedListHeadline": "Together, we:",
       "numberedList": [
-        "Digitized 786 video tapes (various formats like DVC pro, Beta SP, Mini DV)",
+        "Digitized 786 videotapes (e.g., DVCPRO, Beta SP, MiniDV)",
         "Restored six hard drives (~19 TB)",
         "Restored 33 hard drives (67 TB) featuring GRAMMY Award shows",
         "Stored 1,000 cubic feet total of physical, historic assets in climate-controlled, private vaults"
+      ]
+    },
+    "solutionGrid": {
+      "headline": "How Iron Mountain’s digital preservation platform works:",
+      "images": [
+        "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/ctrl_media/29/media?v=1768255492652",
+        "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/ctrl_media/28/media?v=1768255492489"
       ],
-      "numberedListHeadline": "Together, we:"
+      "diamondList": [
+        "Secure physical storage",
+        "Digital transformation",
+        "Digital repository archiving",
+        "AI-powered search"
+      ]
+    },
+    "solutionAccordion": {
+      "headline": "",
+      "image": "",
+      "items": [
+        {
+          "title": "",
+          "bullets": []
+        },
+        {
+          "title": "",
+          "bullets": []
+        },
+        {
+          "title": "",
+          "bullets": []
+        },
+        {
+          "title": "",
+          "bullets": []
+        }
+      ]
     },
     "valueMain": {
+      "labelText": "Value",
+      "mainVideo": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/ctrl_media/33/media?v=1768255493609",
+      "headline": "Expanding possibilities",
       "body": "The partnership with Iron Mountain secured the Museum's legacy, dramatically improving its preservation workflow and content accessibility for future generations.",
       "diamondBenefits": [
         {
+          "label": "Operational benefits",
           "bullets": [
             "Improved accessibility and security of the museum's assets",
             "Simplified and made remote access efficient, allowing authorized users to access and distribute content quickly from anywhere",
-            "Post-production workflow includes automatic, immediate upload of footage to Smart Vault"
-          ],
-          "label": "Operational benefits"
+            "Post-production workflow includes automatic, immediate upload of footage to a digital preservation platform"
+          ]
         },
         {
+          "label": "Economical benefits",
           "bullets": [
             "Enabled new licensing opportunities",
             "Enhanced licensing opportunities due to the ability to easily retrieve original, high-resolution content, including multiple camera angles"
-          ],
-          "label": "Economical benefits"
+          ]
         },
         {
+          "label": "Strategic benefits",
           "bullets": [
             "Safely archived and protected unique performances against on-site disasters",
-            "Positioned the museum for future innovation through upcoming Smart Vault enhancements, including generative AI for advanced search capabilities"
-          ],
-          "label": "Strategic benefits"
+            "Positioned the museum for future innovation through Iron Mountain’s upcoming enhancements to its digital preservation platform, including generative AI for advanced search capabilities"
+          ]
         }
-      ],
-      "headline": "Expanding possibilities",
-      "labelText": "Value",
-      "mainVideo": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/Kiosks/Rich+Media+%26+Cultural+Heritage/03+-+Value/Value-header.webm"
+      ]
     },
     "customInteractiveChoice": {
       "customInteractive1": "Interactive 1",
       "customInteractive2": "",
       "customInteractive3": ""
+    },
+    "ambient": {
+      "backgroundImage": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/ctrl_media/17/media?v=1768255489606",
+      "body": "",
+      "headline": "The GRAMMY MuseumⓇ preserves the soundtrack of history.",
+      "mainCTA": "Touch to explore",
+      "quoteSource": "- Michael Rohrabacher,  Technical Director at the GRAMMY Museum",
+      "subheader": "\"It’s been a pleasure working with Iron Mountain. We feel very confident that the GRAMMY Museum’s physical artifacts and digital content are safely protected. Iron Mountain’s digital preservation platform also provides significant reassurance that our iconic artist performances and interviews will remain preserved and accessible, which is a huge benefit to the GRAMMY Museum.”",
+      "title": "Rich media & cultural heritage"
+    },
+    "demoMain": {
+      "headline": "this is iframe title",
+      "iframeLink": "https://www.cyark.org/projects/ouro-preto/tapestry2",
+      "mainCTA": "End Tour"
+    },
+    "CTA": {
+      "ambient": "Touch to explore",
+      "demo": "End Tour"
+    },
+    "customInteractive1": {
+      "headline": "Learn more about how we unlocked new possibilities for our partners",
+      "mainCTA": "From archive to access",
+      "backCTA": "Back",
+      "secondaryCTA": "Virtual walkthrough",
+      "image": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/7d6e4d43-4ea0-4a87-be06-1defe95d24b1/media?v=1770223500136",
+      "headline2": "From archive to access",
+      "body2": "Explore each section to learn how Iron Mountain can transform your enterprise",
+      "diamondCarouselItems": [
+        {
+          "id": "1",
+          "ModalHeadline": "Intake and assessment",
+          "ModalBody": "Assets, whether film, audio, digital, or physical, are logged, evaluated for condition and risk, and prioritized based on preservation and activation potential.",
+          "ModalImage": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/0938b88d-8960-408c-ade3-027e8509239b/media?v=1770223500197"
+        },
+        {
+          "id": "2",
+          "ModalHeadline": "Digitization and remediation",
+          "ModalBody": "Physical media is digitized to archival standards, with restoration applied as needed and metadata extracted to ensure assets are searchable, playable, and accessible.",
+          "ModalImage": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/0e3878f8-4211-4a8f-b49e-ffe068017c73/media?v=1770223513795"
+        },
+        {
+          "id": "3",
+          "ModalHeadline": "Digital preservation",
+          "ModalBody": "Iron Mountain's digital preservation platform provides a fully managed digital repository with triple-redundant geo-distributed storage, secure access, and intuitive navigation.",
+          "ModalImage": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/a34576dd-03e5-4abe-bf89-fe6f9471b9dd/media?v=1770223500173"
+        },
+        {
+          "id": "4",
+          "ModalHeadline": "Search and discover",
+          "ModalBody": "The entire archive becomes searchable through AI-powered metadata, custom filters, and integrated preview tools, enabling fast discovery from any location.",
+          "ModalImage": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/d3ff24e2-7766-498a-810d-14fa241d6d95/media?v=1770223500170"
+        },
+        {
+          "id": "5",
+          "ModalHeadline": "Share, stream and monetize",
+          "ModalBody": "Digitized content is ready for licensing, streaming, and storytelling, unlocking new value across platforms while maintaining archival integrity.",
+          "ModalImage": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/09e8c98c-e505-4098-8a8f-74d9b84019e4/media?v=1770223502686"
+        }
+      ]
+    },
+    "customInteractive2": {
+      "headline": "Learn more about how we unlocked new possibilities for our partners",
+      "secondaryCTA": "Launch demo",
+      "image": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/e9fd9c70-3b3c-4006-a48f-b7a5c95114da/media?v=1770223500124"
+    },
+    "customInteractive3": {
+      "headline": "Learn more about how we unlocked new possibilities for our partners",
+      "mainCTA": "Centralized management of services",
+      "secondaryCTA": "Launch demo",
+      "headline2": "Centralized management of services via API",
+      "body": "Explore each section to learn how Iron Mountain can transform your enterprise",
+      "tapCTA": "Tap to begin",
+      "backCTA": "Back",
+      "video": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/40379bfc-b5a1-4623-9314-b82afd597b00/media?v=1770223500039",
+      "image": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/66253337-dd14-48ec-bd08-5a6625f1731d/media?v=1770223500139",
+      "tapCarousel": [
+        {
+          "id": "1",
+          "title": "Data configuration",
+          "bullets": [
+            "Decommissioning services",
+            "Packaging / logistics / transportation",
+            "Data sanitization",
+            "Lease returns",
+            "ITAD"
+          ],
+          "video": "",
+          "image": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/58cd7b17-5477-46a6-980a-fb80657fd9e5/media?v=1770223500139"
+        },
+        {
+          "id": "2",
+          "title": "Device storage",
+          "bullets": [
+            "Asset tagging",
+            "Asset tracking",
+            "Inventory management",
+            "Audits",
+            "Legal holds"
+          ],
+          "video": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/c2edb3b2-ccaf-4ffc-9fe7-10a69b89cac6/media?v=1770223500066",
+          "image": ""
+        },
+        {
+          "id": "3",
+          "title": "Device configuration",
+          "bullets": [
+            "Kitting",
+            "Cleaning",
+            "Planning/scheduling",
+            "Imaging",
+            "Required upgrades"
+          ],
+          "video": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/b71dc374-8672-4b40-827a-6750ffe65339/media?v=1770223500074",
+          "image": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/3a9ff159-91ec-467f-9c2c-7ace07ddf216/media?v=1770223500146"
+        },
+        {
+          "id": "4",
+          "title": "Device deployment",
+          "bullets": [
+            "Shipment of PC and peripherals",
+            "Advanced exchange for repair or refresh"
+          ],
+          "video": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/63a85c30-7bb8-4403-b525-75e779ad77fd/media?v=1770223500084",
+          "image": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/23f8b592-f89c-4d31-9696-0b9f865fb593/media?v=1770223500156"
+        },
+        {
+          "id": "5",
+          "title": "Device maintenance",
+          "bullets": [
+            "Management of warranty and support extension, including break/fix"
+          ],
+          "video": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/a75f17d4-37fa-4b54-a845-5282308db24a/media?v=1770223500101",
+          "image": ""
+        },
+        {
+          "id": "6",
+          "title": "Device reverse logistics",
+          "bullets": [
+            "Retrieval of PC and peripherals"
+          ],
+          "video": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/6044b1bf-f658-4321-b43b-07ccd2341b41/media?v=1770223500113",
+          "image": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/dd7667af-3a0c-41b6-b7ec-99bba7a70695/media?v=1770223500164"
+        }
+      ]
+    },
+    "audio": {
+      "back": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/ea049578-7879-4c93-abc2-130afd8dd762/media?v=1770223500009",
+      "close": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/297e050e-fb85-4b7a-809a-1a478777ffb1/media?v=1770223500020",
+      "next": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/9ee0d4b7-ebdc-4834-ae8f-1cbfec447681/media?v=1770223500013",
+      "open": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/459b517d-4541-4a8a-b1cc-1dea2de45ad6/media?v=1770223500017",
+      "ambient": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/58ff33bb-c7d7-4472-a414-ff37c3896afa/media?v=1770223526551",
+      "challenge": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/5ca68d68-1cb3-4b30-a148-88007236dbce/media?v=1770223526541",
+      "solution": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/94350f5a-e816-4c70-bf33-876435b9cf31/media?v=1770223526528",
+      "value": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/17beb585-2ddd-4443-ae53-6ef20c58cf85/media?v=1770223524111",
+      "customInteractive": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/14230563-daeb-4113-bedb-f15782053e50/media?v=1770223524111"
+    },
+    "idle": {
+      "videoSrc": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/d66ce768-aa27-49f0-aba9-19991ee364cf/media?v=1770223500121"
     }
   }
 }

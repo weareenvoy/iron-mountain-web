@@ -1,5 +1,5 @@
 import { shouldUseStaticPlaceholderData } from '@/flags/flags';
-import type { BasecampApiResponse, BasecampData, BasecampDataResponse } from '@/lib/internal/types';
+import type { BasecampApiResponse, BasecampDataResponse } from '@/lib/internal/types';
 
 export async function getBasecampData(): Promise<BasecampDataResponse> {
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
@@ -13,39 +13,23 @@ export async function getBasecampData(): Promise<BasecampDataResponse> {
       clearTimeout(timeout);
       const rawData = (await res.json()) as BasecampApiResponse;
 
-      validateBasecampData(rawData.data);
       return { data: rawData.data, locale: rawData.locale };
     }
 
-    // Online first
     const res = await fetch(`${API_BASE}/basecamp`, {
       cache: 'no-store',
       signal: controller.signal,
     });
-
     clearTimeout(timeout);
-    if (!res.ok) throw new Error(`Bad status: ${res.status}`);
     const rawData = (await res.json()) as BasecampApiResponse;
 
-    validateBasecampData(rawData.data);
     return { data: rawData.data, locale: rawData.locale };
   } catch {
-    clearTimeout(timeout);
     // Offline/static fallback
     const res = await fetch('/api/basecamp.json', { cache: 'force-cache' });
+    clearTimeout(timeout);
     const rawData = (await res.json()) as BasecampApiResponse;
 
-    validateBasecampData(rawData.data);
     return { data: rawData.data, locale: rawData.locale };
-  }
-}
-
-// Validates that required fields (music, sfx) are present in BasecampData.
-function validateBasecampData(data: BasecampData): void {
-  if (!data.music) {
-    throw new Error('[basecamp] Missing music data. Populate CMS.');
-  }
-  if (!data.sfx) {
-    throw new Error('[basecamp] Missing sfx data. Populate CMS.');
   }
 }

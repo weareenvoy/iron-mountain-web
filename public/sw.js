@@ -1,7 +1,7 @@
 // Simple service worker for kiosk/offline-first
 // Receives config from the app via postMessage: { type: 'CONFIG', apiBase: string, offlineFirst: boolean }
 
-const VERSION = 'v7';
+const VERSION = 'v6';
 const PRECACHE = `precache-${VERSION}`;
 const RUNTIME = `runtime-${VERSION}`;
 
@@ -23,22 +23,25 @@ const PRECACHE_URLS = [
   '/docent/schedule/',
   // Static API data (offline fallback)
   '/api/basecamp.json',
-  '/api/welcome_wall.json',
   '/api/docent_initial.json',
-  '/api/summit_room.json',
-  '/api/tours.json',
   '/api/kiosk_1.json',
   '/api/kiosk_2.json',
   '/api/kiosk_3.json',
+  '/api/summit_room.json',
+  '/api/tours.json',
+  '/api/welcome_wall.json',
   // Fonts
   '/fonts/Geometria.woff2',
-  '/fonts/InterstateRegular.woff2',
   '/fonts/Interstate-Light.woff2',
+  '/fonts/InterstateRegular.woff2',
+  // Fallback Images
+  '/images/binary-code-circle.png',
   // Fallback videos
   '/videos/basecamp_fallback.webm',
   '/videos/summit_fallback.webm',
   // Other
   '/favicon.ico',
+  'logo.svg'
 ];
 
 self.__CONFIG = {
