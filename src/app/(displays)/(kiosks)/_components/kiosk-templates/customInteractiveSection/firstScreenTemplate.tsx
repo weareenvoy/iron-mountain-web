@@ -144,7 +144,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       {/* Eyebrow */}
       <motion.h2
         animate={shouldAnimate ? { y: 0 } : undefined}
-        className="absolute top-[200px] left-[120px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] will-change-transform group-data-[ci=ci-2]/ci:left-[120px] group-data-[ci=ci-3]/ci:top-[240px]"
+        className="absolute top-[200px] left-[120px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] will-change-transform group-data-[ci=ci-2]/ci:left-[120px] group-data-[ci=ci-3]/ci:top-[240px] group-data-[kiosk=kiosk\_2]/kiosk:w-[450px] group-data-[kiosk=kiosk\_3]/kiosk:w-[330px]"
         initial={{ y: TITLE_ANIMATION_TRANSFORMS.SECTION_HEADER }}
         ref={eyebrowRef}
         transition={{ delay: 0, duration: SCROLL_ANIMATION_CONFIG.DURATION, ease: SCROLL_ANIMATION_CONFIG.EASING }}
@@ -163,7 +163,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
         ref={stickyHeaderRef}
       >
         {/* Eyebrow */}
-        <h2 className="w-[700px] px-[120px] pt-[240px] pb-[375px] pl-[150px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
+        <h2 className="w-[720px] px-[120px] pt-[240px] pb-[375px] pl-[150px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] group-data-[kiosk=kiosk\_3]/kiosk:w-[680px]">
           {renderRegisteredMark(eyebrowText)}
         </h2>
       </div>

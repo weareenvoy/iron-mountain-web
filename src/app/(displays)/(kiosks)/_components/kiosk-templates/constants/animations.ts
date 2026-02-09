@@ -14,7 +14,7 @@ export const TITLE_ANIMATION_TRANSFORMS = {
   /** Initial screen - scale transform for sticky header */
   INITIAL_SCALE: 0.5,
   /** Initial screen - X-transform for sticky header */
-  INITIAL_X: -540,
+  INITIAL_X: -340,
 
   /** Solution, Value, Custom Interactive sections - uniform Y-transform */
   SECTION_HEADER: -1100,

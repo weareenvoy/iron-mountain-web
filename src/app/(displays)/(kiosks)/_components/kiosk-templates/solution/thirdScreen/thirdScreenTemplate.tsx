@@ -73,7 +73,7 @@ const SolutionThirdScreenTemplate = ({
       label: topRightLabel,
       outline: BlueDiamondThird,
       sizeClass: 'size-[900px]',
-      textWrapperClassName: 'w-[700px]',
+      textWrapperClassName: 'w-[720px]',
     },
     {
       className: 'left-[245px] top-[1410px]',

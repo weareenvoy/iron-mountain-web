@@ -177,7 +177,7 @@ const InitialScreenTemplate = memo(
             <div className="absolute inset-0 bg-[rgba(0,0,0,0.2)]" />
           </div>
         </div>
-        <div className="absolute top-[970px] left-[244px] z-3 w-[980px] -translate-y-full">
+        <div className="absolute top-[970px] left-[244px] z-3 w-[980px] -translate-y-full group-data-[kiosk=kiosk\_2]/kiosk:w-[950px] group-data-[kiosk=kiosk\_3]/kiosk:w-[820px]">
           <h2
             className="text-[120px] leading-[1.3] font-normal tracking-[-6px] whitespace-pre-line text-[#ededed]"
             ref={subheadlineRef}
@@ -203,7 +203,7 @@ const InitialScreenTemplate = memo(
                   ? { scale: TITLE_ANIMATION_TRANSFORMS.INITIAL_SCALE, x: TITLE_ANIMATION_TRANSFORMS.INITIAL_X }
                   : { scale: 1, x: 0 }
               }
-              className="text-[120px] leading-[1.3] font-normal tracking-[-6px] whitespace-pre-line text-[#ededed] will-change-transform"
+              className="w-[820px] text-[120px] leading-[1.3] font-normal tracking-[-6px] whitespace-pre-line text-[#ededed] will-change-transform group-data-[kiosk=kiosk\_2]/kiosk:w-[720px] group-data-[kiosk=kiosk\_3]/kiosk:w-[680px]"
               initial={{ scale: 1, x: 0 }}
               transition={{
                 delay: SCROLL_ANIMATION_CONFIG.SECONDARY_DELAY,
