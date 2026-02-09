@@ -2,17 +2,17 @@
   "locale": "en",
   "data": {
     "clientTourLogo": {
-      "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/welcome-wall/MclarenLogo.png"
+      "url": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/ctrl_media/44/media?v=1768420626434"
     },
     "videos": {
       "ambientLoop": {
-        "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/welcome-wall/Main_EntryWay_Ambient_1.webm"
+        "url": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/32368645-8bba-4f72-986b-65083cfda9d1/media?v=1770223500919"
       },
       "tourLoop": {
-        "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/welcome-wall/IRM_Entryway_Loop_Blank.webm"
+        "url": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/d594f779-8c49-411b-b7a0-b4d9ec9b48aa/media?v=1770223501702"
       },
       "tourLoopNoLogo": {
-        "url": "https://iron-mountain-assets-for-dev-testing.s3.us-east-1.amazonaws.com/welcome-wall/IRM_Entryway_Loop_NoLogo.webm"
+        "url": "https://ground-ctrl-api-ironmountain.envoyctrl.com/api/raw/simple_cms/b98a77f7-daad-470e-b37e-61f6020e7409/media?v=1770223502682"
       }
     },
     "welcome": {

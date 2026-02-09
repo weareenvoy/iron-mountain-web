@@ -16,21 +16,19 @@ export async function getWelcomeWallData(): Promise<WelcomeWallDataResponse> {
       return { data: rawData.data, locale: rawData.locale };
     }
 
-    // Online first
     const res = await fetch(`${API_BASE}/welcome_wall`, {
       cache: 'no-store',
       signal: controller.signal,
     });
 
     clearTimeout(timeout);
-    if (!res.ok) throw new Error(`Bad status: ${res.status}`);
     const rawData = (await res.json()) as WelcomeWallApiResponse;
 
     return { data: rawData.data, locale: rawData.locale };
   } catch {
-    clearTimeout(timeout);
     // Offline/static fallback
     const res = await fetch('/api/welcome_wall.json', { cache: 'force-cache' });
+    clearTimeout(timeout);
     const rawData = (await res.json()) as WelcomeWallApiResponse;
 
     return { data: rawData.data, locale: rawData.locale };

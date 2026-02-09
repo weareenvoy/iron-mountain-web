@@ -176,9 +176,6 @@ export interface ApiTour {
 
 // Tours API response structure (from /api/docent/tours endpoint)
 export interface ToursApiResponse {
-  readonly _meta: {
-    readonly total: number;
-  };
   readonly tours: readonly ApiTour[];
 }
 
@@ -391,14 +388,152 @@ export interface KioskAudio {
   readonly value?: string;
 }
 
-/**
- * Raw kiosk data from API response
- * Uses Record<string, unknown> for flexibility since different kiosks have different schemas
- * Should be parsed with parseKioskData() for type-safe access
- *
- * @see ParsedKioskData in _utils/parseKioskData.ts for the typed version after parsing
- */
-export type KioskData = Record<string, unknown>;
+export interface KioskChallengeMain {
+  readonly body: string;
+  readonly featuredStat1: string;
+  readonly featuredStat1Body: string;
+  readonly featuredStat2: string;
+  readonly featuredStat2Body: string;
+  readonly item1Body: string;
+  readonly item1Image: string;
+  readonly item2Body: string;
+  readonly item2Image: string;
+  readonly labelText: string;
+  readonly mainVideo: string;
+}
+
+export interface KioskSolutionMain {
+  readonly body: string;
+  readonly headline: string;
+  readonly image: string;
+  readonly labelText: string;
+  readonly mainVideo: string;
+  readonly numberedList: readonly string[];
+  readonly numberedListHeadline: string;
+}
+
+export interface KioskSolutionGrid {
+  readonly diamondList: readonly string[];
+  readonly headline: string;
+  readonly images: readonly string[];
+}
+
+export interface KioskSolutionAccordionItem {
+  readonly bullets: readonly string[];
+  readonly title: string;
+}
+
+export interface KioskSolutionAccordion {
+  readonly headline: string;
+  readonly image: string;
+  readonly items: readonly KioskSolutionAccordionItem[];
+}
+
+export interface KioskDiamondBenefit {
+  readonly bullets: readonly string[];
+  readonly label: string;
+}
+
+export interface KioskValueMain {
+  readonly body: string;
+  readonly diamondBenefits: readonly KioskDiamondBenefit[];
+  readonly headline: string;
+  readonly labelText: string;
+  readonly mainVideo: string;
+}
+
+export interface KioskCustomInteractiveChoice {
+  readonly customInteractive1: string;
+  readonly customInteractive2: string;
+  readonly customInteractive3: string;
+}
+
+export interface KioskAmbient {
+  readonly backgroundImage: string;
+  readonly body: string;
+  readonly headline: string;
+  readonly mainCTA: string;
+  readonly quoteSource: string;
+  readonly subheader: string;
+  readonly title: string;
+}
+
+export interface KioskDemoMain {
+  readonly headline: string;
+  readonly iframeLink: string;
+  readonly mainCTA: string;
+}
+
+export interface KioskCTA {
+  readonly ambient: string;
+  readonly demo: string;
+}
+
+export interface KioskDiamondCarouselItem {
+  readonly id: string;
+  readonly ModalBody: string;
+  readonly ModalHeadline: string;
+  readonly ModalImage: string;
+}
+
+export interface KioskCustomInteractive1 {
+  readonly backCTA: string;
+  readonly body2: string;
+  readonly diamondCarouselItems: readonly KioskDiamondCarouselItem[];
+  readonly headline: string;
+  readonly headline2: string;
+  readonly image: string;
+  readonly mainCTA: string;
+  readonly secondaryCTA: string;
+}
+
+export interface KioskCustomInteractive2 {
+  readonly headline: string;
+  readonly image: string;
+  readonly secondaryCTA: string;
+}
+
+export interface KioskTapCarouselItem {
+  readonly bullets: readonly string[];
+  readonly id: string;
+  readonly image: string;
+  readonly title: string;
+  readonly video: string;
+}
+
+export interface KioskCustomInteractive3 {
+  readonly backCTA: string;
+  readonly body: string;
+  readonly headline: string;
+  readonly headline2: string;
+  readonly image: string;
+  readonly mainCTA: string;
+  readonly secondaryCTA: string;
+  readonly tapCarousel: readonly KioskTapCarouselItem[];
+  readonly tapCTA: string;
+  readonly video: string;
+}
+
+export interface KioskIdle {
+  readonly videoSrc: string;
+}
+
+export interface KioskData {
+  readonly ambient: KioskAmbient;
+  readonly audio: KioskAudio;
+  readonly challengeMain: KioskChallengeMain;
+  readonly CTA: KioskCTA;
+  readonly customInteractive1: KioskCustomInteractive1;
+  readonly customInteractive2: KioskCustomInteractive2;
+  readonly customInteractive3: KioskCustomInteractive3;
+  readonly customInteractiveChoice: KioskCustomInteractiveChoice;
+  readonly demoMain: KioskDemoMain;
+  readonly idle: KioskIdle;
+  readonly solutionAccordion: KioskSolutionAccordion;
+  readonly solutionGrid: KioskSolutionGrid;
+  readonly solutionMain: KioskSolutionMain;
+  readonly valueMain: KioskValueMain;
+}
 
 /**
  * ISO 8601 datetime string (e.g., "2026-01-15T00:00:00+00:00")
@@ -468,7 +603,12 @@ export interface WelcomeWallApiResponse {
   readonly locale: Locale;
 }
 
-export type KioskApiResponse = ApiResponse<KioskData>;
+// KioskApiResponse is a single locale response (not an array)
+// Format: { locale: "en", data: {...} }
+export interface KioskApiResponse {
+  readonly data: KioskData;
+  readonly locale: Locale;
+}
 
 // Function return types (transformed from API responses)
 export interface DocentInitialDataResponse {
