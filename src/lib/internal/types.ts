@@ -597,7 +597,12 @@ export interface SummitApiResponse {
   readonly data: SummitData;
   readonly locale: Locale;
 }
-export type WelcomeWallApiResponse = ApiResponseItem<WelcomeWallData>;
+
+export interface WelcomeWallApiResponse {
+  readonly data: WelcomeWallData;
+  readonly locale: Locale;
+}
+
 // KioskApiResponse is a single locale response (not an array)
 // Format: { locale: "en", data: {...} }
 export interface KioskApiResponse {
