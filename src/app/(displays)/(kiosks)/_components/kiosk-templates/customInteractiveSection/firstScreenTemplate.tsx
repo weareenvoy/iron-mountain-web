@@ -144,7 +144,7 @@ const CustomInteractiveKiosk1FirstScreenTemplate = ({
       {/* Eyebrow */}
       <motion.h2
         animate={shouldAnimate ? { y: 0 } : undefined}
-        className="absolute top-[200px] left-[120px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] will-change-transform group-data-[ci=ci-2]/ci:left-[120px] group-data-[ci=ci-3]/ci:top-[240px] group-data-[kiosk=kiosk\_2]/kiosk:w-[450px] group-data-[kiosk=kiosk\_3]/kiosk:w-[330px]"
+        className="absolute top-[200px] left-[120px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] will-change-transform group-data-[ci=ci-3]/ci:top-[240px] group-data-[kiosk=kiosk\_2]/kiosk:w-[450px] group-data-[kiosk=kiosk\_3]/kiosk:w-[330px]"
         initial={{ y: TITLE_ANIMATION_TRANSFORMS.SECTION_HEADER }}
         ref={eyebrowRef}
         transition={{ delay: 0, duration: SCROLL_ANIMATION_CONFIG.DURATION, ease: SCROLL_ANIMATION_CONFIG.EASING }}

@@ -88,7 +88,7 @@ const SolutionFirstScreenTemplate = ({
       {/* Subheadline - Initial Position */}
       <motion.h2
         animate={shouldAnimate ? { y: 0 } : undefined}
-        className="absolute top-[240px] left-[120px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] will-change-transform group-data-[kiosk=kiosk\_2]/kiosk:top-[290px] group-data-[kiosk=kiosk\_2]/kiosk:left-[120px] group-data-[kiosk=kiosk\_2]/kiosk:w-[450px] group-data-[kiosk=kiosk\_3]/kiosk:top-[300px] group-data-[kiosk=kiosk\_3]/kiosk:left-[240px] group-data-[kiosk=kiosk\_3]/kiosk:w-[330px]"
+        className="absolute top-[240px] left-[120px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] will-change-transform group-data-[kiosk=kiosk\_2]/kiosk:top-[290px] group-data-[kiosk=kiosk\_2]/kiosk:w-[450px] group-data-[kiosk=kiosk\_3]/kiosk:top-[300px] group-data-[kiosk=kiosk\_3]/kiosk:left-[240px] group-data-[kiosk=kiosk\_3]/kiosk:w-[330px]"
         initial={{ y: TITLE_ANIMATION_TRANSFORMS.SECTION_HEADER }}
         transition={{ delay: 0, duration: SCROLL_ANIMATION_CONFIG.DURATION, ease: SCROLL_ANIMATION_CONFIG.EASING }}
       >
