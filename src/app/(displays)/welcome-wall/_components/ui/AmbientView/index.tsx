@@ -19,7 +19,7 @@ const AmbientView = () => {
 
     // set the background video url based on the locale - This will likely change to only one version of ambient video
     // const bgVideoUrl = dataRef.current?.videos[locale === 'en' ? 'ambientLoopEn' : 'ambientLoopPt'].url;
-    const bgVideoUrl = dataRef.current?.videos['ambientLoop'].url;
+    const bgVideoUrl = dataRef.current?.videos?.['ambientLoop']?.url;
 
     if (!bgVideoUrl) return;
 

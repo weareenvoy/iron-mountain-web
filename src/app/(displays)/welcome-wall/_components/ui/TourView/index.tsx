@@ -28,9 +28,9 @@ const TourView = () => {
   useEffect(() => {
     if (!data || !backgroundVideoRef.current) return;
 
-    const hasClientLogo = Boolean(dataRef.current?.clientTourLogo.url);
+    const hasClientLogo = Boolean(dataRef.current?.clientTourLogo?.url);
     const videoKey = hasClientLogo ? 'tourLoop' : 'tourLoopNoLogo';
-    const bgVideoUrl = dataRef.current?.videos[videoKey].url;
+    const bgVideoUrl = dataRef.current?.videos?.[videoKey]?.url;
 
     if (!bgVideoUrl) return;
 
@@ -48,7 +48,7 @@ const TourView = () => {
 
   if (!data) return null;
 
-  const clientTourLogoUrl = data.clientTourLogo.url ?? undefined;
+  const clientTourLogoUrl = data.clientTourLogo?.url ?? undefined;
 
   const handleTimeUpdate = (video: HTMLVideoElement) => {
     const shouldShowLogo = video.currentTime >= SHOW_LOGO_AT_SECONDS && video.currentTime <= HIDE_LOGO_AT_SECONDS;

@@ -1,7 +1,7 @@
 // Simple service worker for kiosk/offline-first
 // Receives config from the app via postMessage: { type: 'CONFIG', apiBase: string, offlineFirst: boolean }
 
-const VERSION = 'v7';
+const VERSION = 'v8';
 const PRECACHE = `precache-${VERSION}`;
 const RUNTIME = `runtime-${VERSION}`;
 

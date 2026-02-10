@@ -547,7 +547,7 @@ export interface SummitTourSummary {
 export interface WelcomeWallData {
   readonly clientTourLogo: {
     readonly url: null | string;
-  };
+  } | null;
   readonly location_details: {
     readonly elevation: string;
     readonly exhibit: string;
@@ -556,14 +556,14 @@ export interface WelcomeWallData {
   readonly videos: {
     readonly ambientLoop: {
       readonly url: string;
-    };
+    } | null;
     readonly tourLoop: {
       readonly url: string;
-    };
+    } | null;
     readonly tourLoopNoLogo: {
       readonly url: string;
-    };
-  };
+    } | null;
+  } | null;
   readonly welcome: {
     readonly title: string;
   };
