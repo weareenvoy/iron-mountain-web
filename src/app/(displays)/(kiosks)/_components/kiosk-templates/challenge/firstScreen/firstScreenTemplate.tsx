@@ -94,11 +94,11 @@ const FirstScreenTemplate = memo(
           {/* Subheadline - Initial Position */}
           <motion.div
             animate={shouldAnimate ? { opacity: 1, y: 0 } : undefined}
-            className="relative top-[120px] left-[-760px] z-[2] px-[120px] pb-[400px] will-change-[transform,opacity] group-data-[kiosk=kiosk\_3]/kiosk:top-[50px] group-data-[kiosk=kiosk\_3]/kiosk:left-[-800px]"
+            className="relative top-[120px] left-[-760px] z-[2] px-[120px] pb-[377px] will-change-[transform,opacity] group-data-[kiosk=kiosk\_3]/kiosk:top-[50px] group-data-[kiosk=kiosk\_3]/kiosk:left-[-800px]"
             initial={{ opacity: 0, y: TITLE_ANIMATION_TRANSFORMS.CHALLENGE_SUBHEADLINE }}
             transition={{ delay: 0, duration: SCROLL_ANIMATION_CONFIG.DURATION, ease: SCROLL_ANIMATION_CONFIG.EASING }}
           >
-            <h2 className="w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
+            <h2 className="w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed] group-data-[kiosk=kiosk\_2]/kiosk:w-[450px] group-data-[kiosk=kiosk\_3]/kiosk:w-[330px]">
               {renderRegisteredMark(subheadline)}
             </h2>
           </motion.div>
@@ -108,7 +108,7 @@ const FirstScreenTemplate = memo(
         <div ref={animationTriggerRef}>
           <motion.div
             animate={shouldAnimate ? { opacity: 1, y: 0 } : undefined}
-            className="relative top-[-260px] z-[0] flex items-center gap-[41px] px-[128px] pb-[200px] will-change-[transform,opacity] group-data-[kiosk=kiosk\_2]/kiosk:top-[-260px] group-data-[kiosk=kiosk\_2]/kiosk:left-[10px] group-data-[kiosk=kiosk\_3]/kiosk:top-[-320px] group-data-[kiosk=kiosk\_3]/kiosk:left-[10px]"
+            className="relative top-[-260px] z-[0] flex items-center gap-[41px] px-[120px] pb-[200px] will-change-[transform,opacity] group-data-[kiosk=kiosk\_2]/kiosk:top-[-260px] group-data-[kiosk=kiosk\_2]/kiosk:left-[10px] group-data-[kiosk=kiosk\_3]/kiosk:top-[-320px]"
             data-section-label="challenge"
             initial={{ opacity: 0, y: TITLE_ANIMATION_TRANSFORMS.CHALLENGE_LABEL }}
             ref={labelRef}
@@ -143,7 +143,7 @@ const FirstScreenTemplate = memo(
           ref={stickyHeaderRef}
         >
           {/* Subheadline */}
-          <div className="w-[700px] px-[120px] pt-[240px] pb-[375px] pl-[150px]">
+          <div className="w-[720px] px-[120px] pt-[240px] pb-[375px] pl-[150px] group-data-[kiosk=kiosk\_3]/kiosk:w-[680px]">
             <h2 className="text-[60px] leading-[1.4] font-normal tracking-[-3px] whitespace-pre-line text-[#ededed]">
               {renderRegisteredMark(subheadline)}
             </h2>

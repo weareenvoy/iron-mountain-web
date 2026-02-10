@@ -88,7 +88,7 @@ const SolutionFirstScreenTemplate = ({
       {/* Subheadline - Initial Position */}
       <motion.h2
         animate={shouldAnimate ? { y: 0 } : undefined}
-        className="absolute top-[240px] left-[120px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] will-change-transform group-data-[kiosk=kiosk\_2]/kiosk:top-[290px] group-data-[kiosk=kiosk\_2]/kiosk:left-[120px] group-data-[kiosk=kiosk\_2]/kiosk:w-[450px] group-data-[kiosk=kiosk\_3]/kiosk:top-[300px] group-data-[kiosk=kiosk\_3]/kiosk:left-[240px] group-data-[kiosk=kiosk\_3]/kiosk:w-[330px]"
+        className="absolute top-[240px] left-[120px] w-[500px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] will-change-transform group-data-[kiosk=kiosk\_2]/kiosk:top-[290px] group-data-[kiosk=kiosk\_2]/kiosk:w-[450px] group-data-[kiosk=kiosk\_3]/kiosk:top-[300px] group-data-[kiosk=kiosk\_3]/kiosk:left-[120px] group-data-[kiosk=kiosk\_3]/kiosk:w-[330px]"
         initial={{ y: TITLE_ANIMATION_TRANSFORMS.SECTION_HEADER }}
         transition={{ delay: 0, duration: SCROLL_ANIMATION_CONFIG.DURATION, ease: SCROLL_ANIMATION_CONFIG.EASING }}
       >
@@ -99,7 +99,7 @@ const SolutionFirstScreenTemplate = ({
       <div ref={animationTriggerRef}>
         <motion.div
           animate={shouldAnimate ? { opacity: 1, y: 0 } : undefined}
-          className="absolute top-[790px] left-[140px] flex items-center gap-[41px] will-change-[transform,opacity] group-data-[kiosk=kiosk\_2]/kiosk:top-[830px] group-data-[kiosk=kiosk\_3]/kiosk:top-[860px] group-data-[kiosk=kiosk\_3]/kiosk:left-[260px]"
+          className="absolute top-[790px] left-[140px] flex items-center gap-[41px] will-change-[transform,opacity] group-data-[kiosk=kiosk\_2]/kiosk:top-[830px] group-data-[kiosk=kiosk\_3]/kiosk:top-[860px] group-data-[kiosk=kiosk\_3]/kiosk:left-[120px]"
           data-section-label="solution"
           initial={{ opacity: 0, y: TITLE_ANIMATION_TRANSFORMS.SECTION_HEADER }}
           ref={labelRef}
@@ -129,7 +129,7 @@ const SolutionFirstScreenTemplate = ({
         ref={stickyHeaderRef}
       >
         {/* Subheadline */}
-        <h2 className="w-[700px] px-[120px] pt-[240px] pb-[375px] pl-[150px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk\_2]/kiosk:w-[650px] group-data-[kiosk=kiosk\_3]/kiosk:ml-[120px] group-data-[kiosk=kiosk\_3]/kiosk:w-[630px]">
+        <h2 className="w-[720px] px-[120px] pt-[240px] pb-[375px] pl-[150px] text-[60px] leading-[1.4] font-normal tracking-[-3px] text-[#ededed] group-data-[kiosk=kiosk\_2]/kiosk:w-[650px] group-data-[kiosk=kiosk\_3]/kiosk:ml-[120px] group-data-[kiosk=kiosk\_3]/kiosk:w-[680px]">
           {renderRegisteredMark(subheadline)}
         </h2>
 
