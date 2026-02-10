@@ -545,25 +545,25 @@ export interface SummitTourSummary {
 }
 
 export interface WelcomeWallData {
-  readonly clientTourLogo: {
+  readonly clientTourLogo: null | {
     readonly url: null | string;
-  } | null;
+  };
   readonly location_details: {
     readonly elevation: string;
     readonly exhibit: string;
     readonly name: string;
   };
-  readonly videos: {
-    readonly ambientLoop: {
+  readonly videos: null | {
+    readonly ambientLoop: null | {
       readonly url: string;
-    } | null;
-    readonly tourLoop: {
+    };
+    readonly tourLoop: null | {
       readonly url: string;
-    } | null;
-    readonly tourLoopNoLogo: {
+    };
+    readonly tourLoopNoLogo: null | {
       readonly url: string;
-    } | null;
-  } | null;
+    };
+  };
   readonly welcome: {
     readonly title: string;
   };
