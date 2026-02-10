@@ -545,7 +545,7 @@ export interface SummitTourSummary {
 }
 
 export interface WelcomeWallData {
-  readonly clientTourLogo: {
+  readonly clientTourLogo: null | {
     readonly url: null | string;
   };
   readonly location_details: {
@@ -553,14 +553,14 @@ export interface WelcomeWallData {
     readonly exhibit: string;
     readonly name: string;
   };
-  readonly videos: {
-    readonly ambientLoop: {
+  readonly videos: null | {
+    readonly ambientLoop: null | {
       readonly url: string;
     };
-    readonly tourLoop: {
+    readonly tourLoop: null | {
       readonly url: string;
     };
-    readonly tourLoopNoLogo: {
+    readonly tourLoopNoLogo: null | {
       readonly url: string;
     };
   };
