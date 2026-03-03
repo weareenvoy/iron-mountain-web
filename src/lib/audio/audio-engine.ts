@@ -25,7 +25,7 @@ const defaultSettings: AudioSettings = {
     },
     sfx: {
       muted: false,
-      volume: 1,
+      volume: 0.5,
     },
   },
   masterMuted: false,
