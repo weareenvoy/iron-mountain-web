@@ -132,9 +132,9 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
     [handleBackToMenu, data]
   );
 
-  // Design update. Get journey-1 title from basecamp data if available, otherwise use default from summitSlides
+  // Design update. Get journey-2 title from basecamp data if available, otherwise use default from summitSlides
   const getSlideTitle = (slide: { handle: string; title: string }): string => {
-    if (slide.handle === 'journey-1' && basecampData?.problem_1.title) {
+    if (slide.handle === 'journey-2' && basecampData?.problem_1.title) {
       return basecampData.problem_1.title;
     }
     return slide.title;
@@ -173,7 +173,9 @@ const SummitRoomPage = ({ params }: PageProps<'/docent/tour/[tourId]/summit-room
                         )}
                       >
                         <div className={cn('h-4.25 w-4.25 rotate-45 border', getSlideBorderColor(slide.handle))}></div>
-                        <h2 className="text-xl leading-[normal] tracking-[-1.2px] text-black">{slide.title}</h2>
+                        <h2 className="text-xl leading-[normal] tracking-[-1.2px] text-black">
+                          {getSlideTitle(slide)}
+                        </h2>
                       </div>
                     )}
                     <SummitRoomDiamonds className="absolute right-0 bottom-0 h-[159px] w-[177px]" />
