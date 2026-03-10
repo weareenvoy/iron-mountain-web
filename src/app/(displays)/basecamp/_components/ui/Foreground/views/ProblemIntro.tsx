@@ -14,7 +14,7 @@ const CHAR_STAGGER_MS = 50 as const;
 // problem-1: Text appears in center, characters fade in one by one with a small jump.
 // problem-2: Text shrinks and flies to top-left until it disappears.
 const ProblemIntro = ({ beatId, data }: Props) => {
-  const chars = data.title.split('');
+  const words = data.title.split(' ');
   const isProblem2 = beatId === 'problem-2';
 
   return (
@@ -22,13 +22,14 @@ const ProblemIntro = ({ beatId, data }: Props) => {
       <div
         className={`font-geometria text-8xl tracking-[-3.6px] text-white ${isProblem2 ? 'animate-problem-exit' : ''}`}
       >
-        {chars.map((char, i) => (
+        {words.map((word, i) => (
           <span
-            className={isProblem2 ? '' : 'animate-char-in inline-block'}
+            className={isProblem2 ? '' : 'animate-slide-up inline-block'}
             key={i}
             style={isProblem2 ? undefined : { animationDelay: `${i * CHAR_STAGGER_MS}ms` }}
           >
-            {char === ' ' ? '\u00A0' : char}
+            {word}
+            {i < words.length - 1 && '\u00A0'}
           </span>
         ))}
       </div>
