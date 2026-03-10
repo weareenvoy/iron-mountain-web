@@ -139,7 +139,7 @@
 }
 
 .animate-problem-exit {
-  animation: problem-exit 6s ease-in-out forwards;
+  animation: problem-exit 9s ease-in-out forwards;
 }
 
 .animate-scale-fade-in {
